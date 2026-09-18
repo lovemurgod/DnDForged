@@ -4,127 +4,1434 @@
     "name": "Acolyte",
     "source": "XPHB",
     "page": 178,
-    "skills": "insight, religion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Insight, Religion",
+    "tools": "Calligrapher's Supplies",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Religion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Calligrapher's Supplies"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Book (Prayers), calligrapher's supplies, holy symbol, 10x parchment, robe + 8 gp",
+              "items": [
+                {
+                  "name": "Book (Prayers)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "calligrapher's supplies",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "holy symbol",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "parchment",
+                  "quantity": 10,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "robe",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 8
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Magic Initiate - Cleric",
+        "description": "This background grants the Magic Initiate - Cleric feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Intelligence, Wisdom, Charisma\n- **Feat:** Magic Initiate (Cleric)\n- **Skill Proficiencies:** Insight, Religion\n- **Tool Proficiency:** Calligrapher's Supplies\n- **Equipment:** Choose A or B: (A) Calligrapher's Supplies, Book, Holy Symbol, Parchment (10 sheets), Robe, 8 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_artisan_xphb",
     "name": "Artisan",
     "source": "XPHB",
     "page": 179,
-    "skills": "investigation, persuasion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Investigation, Persuasion",
+    "tools": "Choose 1 from Artisan's Tools of your choice",
+    "skillsData": {
+      "fixed": [
+        "Investigation",
+        "Persuasion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Artisan's Tools of your choice"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Special Item, 2x pouch, traveler's clothes + 32 gp",
+              "items": [
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 32
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Crafter",
+        "description": "This background grants the Crafter feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Dexterity, Intelligence\n- **Feat:** Crafter\n- **Skill Proficiencies:** Investigation, Persuasion\n- **Tool Proficiency:** Choose one kind of Artisan's Tools\n- **Equipment:** Choose A or B: (A) Artisan's Tools (same as above), 2 Pouch, Traveler's Clothes, 32 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_charlatan_xphb",
     "name": "Charlatan",
     "source": "XPHB",
     "page": 180,
-    "skills": "deception, sleight of hand",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Deception, Sleight of hand",
+    "tools": "Forgery Kit",
+    "skillsData": {
+      "fixed": [
+        "Deception",
+        "Sleight of hand"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Forgery Kit"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "forgery kit, costume, fine clothes + 15 gp",
+              "items": [
+                {
+                  "name": "forgery kit",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "costume",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 15
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Skilled",
+        "description": "This background grants the Skilled feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Constitution, Charisma\n- **Feat:** Skilled\n- **Skill Proficiencies:** Deception, Sleight of Hand\n- **Tool Proficiency:** Forgery Kit\n- **Equipment:** Choose A or B: (A) Forgery Kit, Costume, Fine Clothes, 15 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_criminal_xphb",
     "name": "Criminal",
     "source": "XPHB",
     "page": 180,
-    "skills": "sleight of hand, stealth",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Sleight of hand, Stealth",
+    "tools": "Thieves' Tools",
+    "skillsData": {
+      "fixed": [
+        "Sleight of hand",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Thieves' Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "2x dagger, thieves' tools, crowbar, 2x pouch, traveler's clothes + 16 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "thieves' tools",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "crowbar",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 16
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Alert",
+        "description": "This background grants the Alert feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Constitution, Intelligence\n- **Feat:** Alert\n- **Skill Proficiencies:** Sleight of Hand, Stealth\n- **Tool Proficiency:** Thieves' Tools\n- **Equipment:** Choose A or B: (A) Dagger, Thieves' Tools, Crowbar, Pouch, Traveler's Clothes, 16 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_entertainer_xphb",
     "name": "Entertainer",
     "source": "XPHB",
     "page": 180,
-    "skills": "acrobatics, performance",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Acrobatics, Performance",
+    "tools": "Choose 1 from Musical Instrument of your choice",
+    "skillsData": {
+      "fixed": [
+        "Acrobatics",
+        "Performance"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Musical Instrument of your choice"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Special Item, 2x costume, mirror, perfume, traveler's clothes + 11 gp",
+              "items": [
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "costume",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "mirror",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "perfume",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 11
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Musician",
+        "description": "This background grants the Musician feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Dexterity, Charisma\n- **Feat:** Musician\n- **Skill Proficiencies:** Acrobatics, Performance\n- **Tool Proficiency:** Choose one kind of Musical Instrument\n- **Equipment:** Choose A or B: (A) Musical Instrument (same as above), Costume, Mirror, Perfume, Traveler's Clothes, 11 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_farmer_xphb",
     "name": "Farmer",
     "source": "XPHB",
     "page": 180,
-    "skills": "animal handling, nature",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Animal handling, Nature",
+    "tools": "Carpenter's Tools",
+    "skillsData": {
+      "fixed": [
+        "Animal handling",
+        "Nature"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Carpenter's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "sickle, carpenter's tools, healer's kit, iron pot, shovel, traveler's clothes + 30 gp",
+              "items": [
+                {
+                  "name": "sickle",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "carpenter's tools",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "healer's kit",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "iron pot",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "shovel",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 30
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Tough",
+        "description": "This background grants the Tough feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Constitution, Wisdom\n- **Feat:** Tough\n- **Skill Proficiencies:** Animal Handling, Nature\n- **Tool Proficiency:** Carpenter's Tools\n- **Equipment:** Choose A or B: (A) Sickle, Carpenter's Tools, Healer's Kit, Iron Pot, Shovel, Traveler's Clothes, 30 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_guard_xphb",
     "name": "Guard",
     "source": "XPHB",
     "page": 181,
-    "skills": "athletics, perception",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Athletics, Perception",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Athletics",
+        "Perception"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "spear, light crossbow, bolts (20), Special Item, hooded lantern, manacles, quiver, traveler's clothes + 12 gp",
+              "items": [
+                {
+                  "name": "spear",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "light crossbow",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "bolts (20)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "hooded lantern",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "manacles",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "quiver",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 12
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Alert",
+        "description": "This background grants the Alert feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Intelligence, Wisdom\n- **Feat:** Alert\n- **Skill Proficiencies:** Athletics, Perception\n- **Tool Proficiency:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Spear, Light Crossbow, 20 Bolt, Gaming Set (same as above), Hooded Lantern, Manacles, Quiver, Traveler's Clothes, 12 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_guide_xphb",
     "name": "Guide",
     "source": "XPHB",
     "page": 181,
-    "skills": "stealth, survival",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Stealth, Survival",
+    "tools": "Cartographer's Tools",
+    "skillsData": {
+      "fixed": [
+        "Stealth",
+        "Survival"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Cartographer's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "shortbow, arrows (20), cartographer's tools, bedroll, quiver, tent, traveler's clothes + 3 gp",
+              "items": [
+                {
+                  "name": "shortbow",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "arrows (20)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "cartographer's tools",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "bedroll",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "quiver",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "tent",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 3
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Magic Initiate - Druid",
+        "description": "This background grants the Magic Initiate - Druid feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Constitution, Wisdom\n- **Feat:** Magic Initiate (Druid)\n- **Skill Proficiencies:** Stealth, Survival\n- **Tool Proficiency:** Cartographer's Tools\n- **Equipment:** Choose A or B: (A) Shortbow, Arrow, Cartographer's Tools, Bedroll, Quiver, Tent, Traveler's Clothes, 3 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_hermit_xphb",
     "name": "Hermit",
     "source": "XPHB",
     "page": 182,
-    "skills": "medicine, religion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Medicine, Religion",
+    "tools": "Herbalism Kit",
+    "skillsData": {
+      "fixed": [
+        "Medicine",
+        "Religion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Herbalism Kit"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "quarterstaff, herbalism kit, bedroll, book, lamp, 3x oil, traveler's clothes + 16 gp",
+              "items": [
+                {
+                  "name": "quarterstaff",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "herbalism kit",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "bedroll",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "book",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "lamp",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "oil",
+                  "quantity": 3,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 16
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Healer",
+        "description": "This background grants the Healer feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Wisdom, Charisma\n- **Feat:** Healer\n- **Skill Proficiencies:** Medicine, Religion\n- **Tool Proficiency:** Herbalism Kit\n- **Equipment:** Choose A or B: (A) Quarterstaff, Herbalism Kit, Bedroll, Book (philosophy), Lamp, Oil (3 flasks), Traveler's Clothes, 16 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_merchant_xphb",
     "name": "Merchant",
     "source": "XPHB",
     "page": 182,
-    "skills": "animal handling, persuasion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Animal handling, Persuasion",
+    "tools": "Navigator's Tools",
+    "skillsData": {
+      "fixed": [
+        "Animal handling",
+        "Persuasion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Navigator's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "navigator's tools, 2x pouch, traveler's clothes + 22 gp",
+              "items": [
+                {
+                  "name": "navigator's tools",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 22
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Lucky",
+        "description": "This background grants the Lucky feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Intelligence, Charisma\n- **Feat:** Lucky\n- **Skill Proficiencies:** Animal Handling, Persuasion\n- **Tool Proficiency:** Navigator's Tools\n- **Equipment:** Choose A or B: (A) Navigator's Tools, Pouch, Traveler's Clothes, 22 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_noble_xphb",
     "name": "Noble",
     "source": "XPHB",
     "page": 183,
-    "skills": "history, persuasion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "History, Persuasion",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "History",
+        "Persuasion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Special Item, fine clothes, perfume + 29 gp",
+              "items": [
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "perfume",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 29
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Skilled",
+        "description": "This background grants the Skilled feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Intelligence, Charisma\n- **Feat:** Skilled\n- **Skill Proficiencies:** History, Persuasion\n- **Tool Proficiency:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Gaming Set (same as above), Fine Clothes, Perfume, 29 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_sage_xphb",
     "name": "Sage",
     "source": "XPHB",
     "page": 183,
-    "skills": "arcana, history",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Arcana, History",
+    "tools": "Calligrapher's Supplies",
+    "skillsData": {
+      "fixed": [
+        "Arcana",
+        "History"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Calligrapher's Supplies"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "quarterstaff, calligrapher's supplies, book, 8x parchment, robe + 8 gp",
+              "items": [
+                {
+                  "name": "quarterstaff",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "calligrapher's supplies",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "book",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "parchment",
+                  "quantity": 8,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "robe",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 8
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Magic Initiate - Wizard",
+        "description": "This background grants the Magic Initiate - Wizard feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Intelligence, Wisdom\n- **Feat:** Magic Initiate (Wizard)\n- **Skill Proficiencies:** Arcana, History\n- **Tool Proficiency:** Calligrapher's Supplies\n- **Equipment:** Choose A or B: (A) Quarterstaff, Calligrapher's Supplies, Book (history), Parchment (8 sheets), Robe, 8 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_sailor_xphb",
     "name": "Sailor",
     "source": "XPHB",
     "page": 184,
-    "skills": "acrobatics, perception",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Acrobatics, Perception",
+    "tools": "Navigator's Tools",
+    "skillsData": {
+      "fixed": [
+        "Acrobatics",
+        "Perception"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Navigator's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "dagger, navigator's tools, rope, traveler's clothes + 20 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "navigator's tools",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "rope",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 20
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Tavern Brawler",
+        "description": "This background grants the Tavern Brawler feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Dexterity, Wisdom\n- **Feat:** Tavern Brawler\n- **Skill Proficiencies:** Acrobatics, Perception\n- **Tool Proficiency:** Navigator's Tools\n- **Equipment:** Choose A or B: (A) Dagger, Navigator's Tools, Rope, Traveler's Clothes, 20 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_scribe_xphb",
     "name": "Scribe",
     "source": "XPHB",
     "page": 184,
-    "skills": "investigation, perception",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Investigation, Perception",
+    "tools": "Calligrapher's Supplies",
+    "skillsData": {
+      "fixed": [
+        "Investigation",
+        "Perception"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Calligrapher's Supplies"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "calligrapher's supplies, fine clothes, lamp, oil, parchment + 23 gp",
+              "items": [
+                {
+                  "name": "calligrapher's supplies",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "lamp",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "oil",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "parchment",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 23
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Skilled",
+        "description": "This background grants the Skilled feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Intelligence, Wisdom\n- **Feat:** Skilled\n- **Skill Proficiencies:** Investigation, Perception\n- **Tool Proficiency:** Calligrapher's Supplies\n- **Equipment:** Choose A or B: (A) Calligrapher's Supplies, Fine Clothes, Lamp, Oil (3 flasks), Parchment (12 sheets), 23 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_soldier_xphb",
     "name": "Soldier",
     "source": "XPHB",
     "page": 185,
-    "skills": "athletics, intimidation",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Athletics, Intimidation",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Athletics",
+        "Intimidation"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "spear, shortbow, arrows (20), Special Item, healer's kit, quiver, traveler's clothes + 14 gp",
+              "items": [
+                {
+                  "name": "spear",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "shortbow",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "arrows (20)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "healer's kit",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "quiver",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 14
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Savage Attacker",
+        "description": "This background grants the Savage Attacker feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Dexterity, Constitution\n- **Feat:** Savage Attacker\n- **Skill Proficiencies:** Athletics, Intimidation\n- **Tool Proficiency:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Spear, Shortbow, Arrow, Gaming Set (same as above), Healer's Kit, Quiver, Traveler's Clothes, 14 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_wayfarer_xphb",
     "name": "Wayfarer",
     "source": "XPHB",
     "page": 185,
-    "skills": "insight, stealth",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Insight, Stealth",
+    "tools": "Thieves' Tools",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Thieves' Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "2x dagger, thieves' tools, Special Item, bedroll, 2x pouch, traveler's clothes + 16 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "thieves' tools",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "bedroll",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 16
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Lucky",
+        "description": "This background grants the Lucky feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Wisdom, Charisma\n- **Feat:** Lucky\n- **Skill Proficiencies:** Insight, Stealth\n- **Tool Proficiency:** Thieves' Tools\n- **Equipment:** Choose A or B: (A) Dagger, Thieves' Tools, Gaming Set (any), Bedroll, Pouch, Traveler's Clothes, 16 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   }
 ]

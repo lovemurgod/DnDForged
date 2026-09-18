@@ -1,0 +1,711 @@
+[
+  {
+    "id": "creature_behemoth_xua2026villainousoptions",
+    "name": "Behemoth",
+    "source": "XUA2026VillainousOptions",
+    "edition": "2014",
+    "page": 4,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 40,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": {
+      "special": "Your Strength and Dexterity scores are equal to your Wisdom score in this form."
+    },
+    "dex": {
+      "special": "Your Strength and Dexterity scores are equal to your Wisdom score in this form."
+    },
+    "con": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "int": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "wis": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "cha": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Your languages don't change."
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_rampager__requires_druid_level_10___17x4",
+        "name": "Rampager (Requires Druid Level 10+)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When you enter the space of an enemy that is at least one size smaller than you for the first time on a turn, that creature is subjected to the following effect. str DC equals {@dcYourSpellSave}. {@actSaveFail} The target has the Prone condition. If the target already has the Prone condition, it instead takes 2d6 Bludgeoning damage.</p>",
+        "entries": [
+          "When you enter the space of an enemy that is at least one size smaller than you for the first time on a turn, that creature is subjected to the following effect. {@actSave str} DC equals {@dcYourSpellSave}. {@actSaveFail} The target has the {@condition Prone|XPHB} condition. If the target already has the {@condition Prone|XPHB} condition, it instead takes {@damage 2d6} Bludgeoning damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_siege_monster_r8on",
+        "name": "Siege Monster",
+        "actionType": "trait",
+        "descriptionHtml": "<p>You deal double damage to objects and structures.</p>",
+        "entries": [
+          "You deal double damage to objects and structures."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack__requires_druid_level_5___0uqk",
+        "name": "Multiattack (Requires Druid Level 5+)",
+        "actionType": "action",
+        "descriptionHtml": "<p>You make two Rend attacks.</p>",
+        "entries": [
+          "You make two Rend attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rend_crpo",
+        "name": "Rend",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d8 plus your Wisdom modifier Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 10 ft. {@h}{@damage 1d8} plus your Wisdom modifier Slashing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_incandescent_breath_upzh",
+        "name": "Incandescent Breath",
+        "actionType": "action",
+        "descriptionHtml": "<p>You expend a level 1+ spell slot. dex DC equals {@dcYourSpellSave}, each creature in a 5-foot-wide, 60-foot-long Line [Area of Effect]. {@actSaveFail} 2d8 Radiant damage per level of the spell slot expended plus your Wisdom modifier. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "You expend a level 1+ spell slot. {@actSave dex} DC equals {@dcYourSpellSave}, each creature in a 5-foot-wide, 60-foot-long {@variantrule Line [Area of Effect]|XPHB|Line}. {@actSaveFail} {@damage 2d8} Radiant damage per level of the spell slot expended plus your Wisdom modifier. {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2026VillainousOptions/Behemoth.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2026VillainousOptions/Behemoth.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_insectoid_xua2026villainousoptions",
+    "name": "Insectoid",
+    "source": "XUA2026VillainousOptions",
+    "edition": "2014",
+    "page": 5,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 40,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": {
+      "special": "Your Strength and Dexterity scores are equal to your Wisdom score in this form."
+    },
+    "dex": {
+      "special": "Your Strength and Dexterity scores are equal to your Wisdom score in this form."
+    },
+    "con": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "int": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "wis": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "cha": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Your languages don't change."
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_flyby_6k5r",
+        "name": "Flyby",
+        "actionType": "trait",
+        "descriptionHtml": "<p>You don't provoke an Opportunity Attack when you fly out of an enemy's reach.</p>",
+        "entries": [
+          "You don't provoke an {@action Opportunity Attack|XPHB} when you fly out of an enemy's reach."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hive_mind__requires_druid_level_10___zfqw",
+        "name": "Hive Mind (Requires Druid Level 10+)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When you assume this form, you forge a telepathic link with a number of creatures of your choice you can see and that can communicate in at least one language; the maximum number of creatures is equal to your Druid level. You and the chosen creatures can communicate telepathically with each other whether or not you share a language as long as you are on the same plane.</p>",
+        "entries": [
+          "When you assume this form, you forge a telepathic link with a number of creatures of your choice you can see and that can communicate in at least one language; the maximum number of creatures is equal to your Druid level. You and the chosen creatures can communicate telepathically with each other whether or not you share a language as long as you are on the same plane."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack__requires_level_5___myva",
+        "name": "Multiattack (Requires Level 5+)",
+        "actionType": "action",
+        "descriptionHtml": "<p>You make two Rend attacks.</p>",
+        "entries": [
+          "You make two Rend attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rend_105q",
+        "name": "Rend",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d8 plus your Wisdom modifier Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 10 ft. {@h}{@damage 1d8} plus your Wisdom modifier Piercing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_energizing_pollen_lcml",
+        "name": "Energizing Pollen",
+        "actionType": "action",
+        "descriptionHtml": "<p>You expend a level 1+ spell slot and emit a cloud of healing pollen that can restore a number of Hit Points equal to 2d8 plus five times the expended spell slot's level. Choose any number of creatures within 15 feet of yourself, and divide those Hit Points among them.</p>",
+        "entries": [
+          "You expend a level 1+ spell slot and emit a cloud of healing pollen that can restore a number of {@variantrule Hit Points|XPHB} equal to {@dice 2d8} plus five times the expended spell slot's level. Choose any number of creatures within 15 feet of yourself, and divide those {@variantrule Hit Points|XPHB} among them."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2026VillainousOptions/Insectoid.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2026VillainousOptions/Insectoid.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_leviathan_xua2026villainousoptions",
+    "name": "Leviathan",
+    "source": "XUA2026VillainousOptions",
+    "edition": "2014",
+    "page": 4,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 40,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": {
+      "special": "Your Strength and Dexterity scores are equal to your Wisdom score in this form."
+    },
+    "dex": {
+      "special": "Your Strength and Dexterity scores are equal to your Wisdom score in this form."
+    },
+    "con": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "int": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "wis": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "cha": {
+      "special": "Your Constitution, Intelligence, Wisdom, and Charisma don't change."
+    },
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Your languages don't change."
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_9jcx",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>You can breathe air and water.</p>",
+        "entries": [
+          "You can breathe air and water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_toxic_stench__requires_druid_level_10___yza4",
+        "name": "Toxic Stench (Requires Druid Level 10+)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>con DC equals {@dcYourSpellSave}, each creature of your choice that starts its turn in a 10-foot Emanation [Area of Effect] originating from you. {@actSaveFail} 2d4 Poison damage, and the target has the Poisoned condition until the start of its next turn.</p>",
+        "entries": [
+          "{@actSave con} DC equals {@dcYourSpellSave}, each creature of your choice that starts its turn in a 10-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from you. {@actSaveFail} {@damage 2d4} Poison damage, and the target has the {@condition Poisoned|XPHB} condition until the start of its next turn."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d4",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack__requires_druid_level_5___o200",
+        "name": "Multiattack (Requires Druid Level 5+)",
+        "actionType": "action",
+        "descriptionHtml": "<p>You make two Rend attacks.</p>",
+        "entries": [
+          "You make two Rend attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rend_z17m",
+        "name": "Rend",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d8 plus your Wisdom modifier Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 10 ft. {@h}{@damage 1d8} plus your Wisdom modifier Bludgeoning damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_ink_cloud_648p",
+        "name": "Ink Cloud",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} You take damage. {@actResponse} You expend a level 1+ spell slot and release an inky cloud that fills a 15-foot-radius Cube [Area of Effect] centered on yourself, and you move up to your Speed. The Cube [Area of Effect] is Heavily Obscured. It lasts for 1 minute or until a strong current or wind (such as one created by Gust of Wind) disperses it.</p>",
+        "entries": [
+          "{@actTrigger} You take damage. {@actResponse} You expend a level 1+ spell slot and release an inky cloud that fills a 15-foot-radius {@variantrule Cube [Area of Effect]|XPHB|Cube} centered on yourself, and you move up to your {@variantrule Speed|XPHB}. The {@variantrule Cube [Area of Effect]|XPHB|Cube} is {@variantrule Heavily Obscured|XPHB}. It lasts for 1 minute or until a strong current or wind (such as one created by {@spell Gust of Wind|XPHB}) disperses it."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2026VillainousOptions/Leviathan.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2026VillainousOptions/Leviathan.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

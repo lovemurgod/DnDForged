@@ -91,10 +91,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_colorful_club_hvru",
+        "id": "act_colorful_club_7lgn",
         "name": "Colorful Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -120,11 +123,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-CoI/Clown.webp",
     "tokenImg": "img/bestiary/tokens/NRH-CoI/Clown.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_imelda_nrh-coi",
@@ -217,10 +232,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reckless_merh",
+        "id": "act_reckless_wmtj",
         "name": "Reckless",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of her turn, Imelda can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against her have advantage until the start of her next turn.</p>",
+        "entries": [
+          "At the start of her turn, Imelda can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against her have advantage until the start of her next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -236,10 +254,13 @@
     ],
     "actions": [
       {
-        "id": "act_fist_5cuq",
+        "id": "act_fist_oj2k",
         "name": "Fist",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}6 (1d4 + 4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d4 + 4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d4 + 4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -265,11 +286,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-CoI/Imelda.webp",
     "tokenImg": "img/bestiary/tokens/NRH-CoI/Imelda.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_magnifico_nrh-coi",
@@ -374,10 +407,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cunning_action_6emv",
+        "id": "act_cunning_action_giq1",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>On each of his turns, Magnifico can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
+        "entries": [
+          "On each of his turns, Magnifico can use a bonus action to take the {@action Dash}, {@action Disengage}, or {@action Hide} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -393,10 +429,13 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_fupd",
+        "id": "act_shortsword_adq0",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -415,10 +454,13 @@
         }
       },
       {
-        "id": "act_hand_crossbow_7sot",
+        "id": "act_hand_crossbow_oiz5",
         "name": "Hand Crossbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 30/120 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -444,10 +486,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-CoI/Magnifico.webp",
     "tokenImg": "img/bestiary/tokens/NRH-CoI/Magnifico.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

@@ -14,6 +14,8 @@
     "build:items": "node scripts/build-item-db.mjs",
     "build:compendium": "node scripts/build-compendium-db.mjs",
     "build:dbs": "node scripts/build-spell-db.mjs && node scripts/build-creature-db.mjs && node scripts/build-item-db.mjs && node scripts/build-compendium-db.mjs",
+    "sync:content": "node scripts/sync-partnered-brew.mjs",
+    "sync:partnered": "node scripts/sync-partnered-brew.mjs --partnered-only",
     "app": "electron .",
     "dist": "electron-builder",
     "dist:portable": "electron-builder --win portable"
@@ -59,6 +61,12 @@
       "target": [
         {
           "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "dir",
           "arch": [
             "x64"
           ]

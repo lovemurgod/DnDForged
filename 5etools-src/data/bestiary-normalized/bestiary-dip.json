@@ -96,7 +96,7 @@
       {
         "id": "sc_anchorite_of_talos_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 2,
@@ -129,7 +129,9 @@
                   "formula": "2d8",
                   "type": "Thunder",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -204,7 +206,9 @@
                   "formula": "8d6",
                   "type": "Lightning",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a bit of fur and a crystal rod)",
@@ -242,10 +246,13 @@
     ],
     "traits": [
       {
-        "id": "act_shapechanger_4gqf",
+        "id": "act_shapechanger_iiox",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The anchorite can use its action to polymorph into a boar or back into its true form, which is humanoid. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
+        "entries": [
+          "The anchorite can use its action to polymorph into a boar or back into its true form, which is humanoid. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -261,10 +268,13 @@
     ],
     "actions": [
       {
-        "id": "act_clawed_gauntlet__humanoid_form_only__2525",
+        "id": "act_clawed_gauntlet__humanoid_form_only__88iz",
         "name": "Clawed Gauntlet (Humanoid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d4 + 3) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d4 + 3}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -283,10 +293,13 @@
         }
       },
       {
-        "id": "act_tusk__boar_form_only__5hyk",
+        "id": "act_tusk__boar_form_only__24g1",
         "name": "Tusk (Boar Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -312,11 +325,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DIP/Anchorite of Talos.webp",
     "tokenImg": "img/bestiary/tokens/DIP/Anchorite of Talos.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_don_jon_raskin_dip",
@@ -418,10 +443,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brave_pllp",
+        "id": "act_brave_qu2u",
         "name": "Brave",
         "actionType": "trait",
         "descriptionHtml": "<p>Don-Jon has advantage on saving throws against being frightened.</p>",
+        "entries": [
+          "Don-Jon has advantage on saving throws against being {@condition frightened}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -435,10 +463,13 @@
         }
       },
       {
-        "id": "act_not_dead_yet__recharges_after_a_long_rest__02o9",
+        "id": "act_not_dead_yet__recharges_after_a_long_rest__hlrx",
         "name": "Not Dead Yet (Recharges after a Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces Don-Jon to 0 hit points, he drops to 1 hit point instead and gains advantage on attack rolls until the end of his next turn.</p>",
+        "entries": [
+          "If damage reduces Don-Jon to 0 hit points, he drops to 1 hit point instead and gains advantage on attack rolls until the end of his next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -454,10 +485,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_mt0w",
+        "id": "act_multiattack_9myd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Don-Jon makes three melee attacks.</p>",
+        "entries": [
+          "Don-Jon makes three melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -471,10 +505,13 @@
         }
       },
       {
-        "id": "act_dagger_lvvv",
+        "id": "act_dagger_95ll",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +2 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}2 (1d4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +2 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 2 (1d4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 2} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}2 ({@damage 1d4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -493,10 +530,13 @@
         }
       },
       {
-        "id": "act_sling_srdp",
+        "id": "act_sling_8uj5",
         "name": "Sling",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +2 to hit, range 30/120 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +2 to hit, range 30/120 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 2} to hit, range 30/120 ft., one target. {@h}2 ({@damage 1d4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -522,11 +562,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DIP/Don-Jon Raskin.webp",
     "tokenImg": "img/bestiary/tokens/DIP/Don-Jon Raskin.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_falcon_the_hunter_dip",
@@ -629,10 +681,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_archer_p28e",
+        "id": "act_archer_2u3g",
         "name": "Archer",
         "actionType": "trait",
         "descriptionHtml": "<p>A longbow or shortbow deals one extra die of its damage when Falcon hits with it (included in his longbow attack).</p>",
+        "entries": [
+          "A longbow or shortbow deals one extra die of its damage when Falcon hits with it (included in his longbow attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -646,10 +701,13 @@
         }
       },
       {
-        "id": "act_sharpshooter_45nn",
+        "id": "act_sharpshooter_mujw",
         "name": "Sharpshooter",
         "actionType": "trait",
         "descriptionHtml": "<p>Falcon's ranged weapon attacks ignore Cover and Cover.</p>",
+        "entries": [
+          "Falcon's ranged weapon attacks ignore {@quickref Cover||3||half cover} and {@quickref Cover||3||three-quarters cover}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -665,10 +723,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_elzt",
+        "id": "act_multiattack_77kb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Falcon makes three melee attacks or two ranged attacks.</p>",
+        "entries": [
+          "Falcon makes three melee attacks or two ranged attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -682,10 +743,13 @@
         }
       },
       {
-        "id": "act_longsword_5y2j",
+        "id": "act_longsword_ain9",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d8 + 2}) slashing damage, or 7 ({@damage 1d10 + 2}) slashing damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -708,10 +772,13 @@
         }
       },
       {
-        "id": "act_longbow_ecym",
+        "id": "act_longbow_jw2k",
         "name": "Longbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range 150/600 ft., one target. {@h}11 (2d8 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 150/600 ft., one target. Hit: 11 (2d8 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 150/600 ft., one target. {@h}11 ({@damage 2d8 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -737,11 +804,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DIP/Falcon the Hunter.webp",
     "tokenImg": "img/bestiary/tokens/DIP/Falcon the Hunter.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_gorthok_the_thunder_boar_dip",
@@ -841,10 +920,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_relentless__recharges_after_a_short_or_long_rest__wf6x",
+        "id": "act_relentless__recharges_after_a_short_or_long_rest__26kw",
         "name": "Relentless (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Gorthok takes 27 damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead.</p>",
+        "entries": [
+          "If Gorthok takes 27 damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -860,10 +942,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_t084",
+        "id": "act_multiattack_bny7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Gorthok makes two melee attacks: one with its lightning tusks and one with its thunder hooves.</p>",
+        "entries": [
+          "Gorthok makes two melee attacks: one with its lightning tusks and one with its thunder hooves."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -877,10 +962,13 @@
         }
       },
       {
-        "id": "act_lightning_tusks_mtoq",
+        "id": "act_lightning_tusks_ht3n",
         "name": "Lightning Tusks",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target. {@h}12 (2d6 + 5) slashing damage plus 7 (2d6) lightning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 12 (2d6 + 5) slashing damage plus 7 (2d6) lightning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 10 ft., one target. {@h}12 ({@damage 2d6 + 5}) slashing damage plus 7 ({@damage 2d6}) lightning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -903,10 +991,13 @@
         }
       },
       {
-        "id": "act_thunder_hooves_g6hx",
+        "id": "act_thunder_hooves_oxio",
         "name": "Thunder Hooves",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target. {@h}12 (2d6 + 5) bludgeoning damage plus 7 (2d6) thunder damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage plus 7 (2d6) thunder damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 10 ft., one target. {@h}12 ({@damage 2d6 + 5}) bludgeoning damage plus 7 ({@damage 2d6}) thunder damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -929,10 +1020,13 @@
         }
       },
       {
-        "id": "act_lightning_bolt___recharge__hbcv",
+        "id": "act_lightning_bolt___recharge__4jul",
         "name": "Lightning Bolt {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>Gorthok shoots a bolt of lightning at one creature it can see within 120 feet of it. The target must make a DC 15 Dexterity saving throw, taking 18 (4d8) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Gorthok shoots a bolt of lightning at one creature it can see within 120 feet of it. The target must make a {@dc 15} Dexterity saving throw, taking 18 ({@damage 4d8}) lightning damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -961,11 +1055,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DIP/Gorthok the Thunder Boar.webp",
     "tokenImg": "img/bestiary/tokens/DIP/Gorthok the Thunder Boar.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_rock_gnome_recluse_dip",
@@ -1066,7 +1172,7 @@
       {
         "id": "sc_rock_gnome_recluse_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 2,
@@ -1137,7 +1243,8 @@
                     "formula": "1d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -1206,7 +1313,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1241,10 +1350,13 @@
     ],
     "traits": [
       {
-        "id": "act_gnome_cunning_ivqt",
+        "id": "act_gnome_cunning_cgd9",
         "name": "Gnome Cunning",
         "actionType": "trait",
         "descriptionHtml": "<p>The gnome has advantage on Intelligence, Wisdom, and Charisma saving throws against magic.</p>",
+        "entries": [
+          "The gnome has advantage on Intelligence, Wisdom, and Charisma saving throws against magic."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1260,10 +1372,13 @@
     ],
     "actions": [
       {
-        "id": "act_magic_missile__expends_a_1st_level_spell_slot__i834",
+        "id": "act_magic_missile__expends_a_1st_level_spell_slot__cwom",
         "name": "Magic Missile (Expends a 1st-Level Spell Slot)",
         "actionType": "action",
         "descriptionHtml": "<p>The gnome creates three magical darts. Each dart hits a creature the gnome chooses within 120 feet of it and deals 3 (1d4 + 1) force damage.</p>",
+        "entries": [
+          "The gnome creates three magical darts. Each dart hits a creature the gnome chooses within 120 feet of it and deals 3 ({@damage 1d4 + 1}) force damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1282,10 +1397,13 @@
         }
       },
       {
-        "id": "act_ray_of_frost_mkz8",
+        "id": "act_ray_of_frost_gwgv",
         "name": "Ray of Frost",
         "actionType": "action",
-        "descriptionHtml": "<p>rs +4 to hit, range 60 ft., one creature. {@h}4 (1d8) cold damage, and the target's speed is reduced by 10 feet until the start of the gnome's next turn.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: +4 to hit, range 60 ft., one creature. Hit: 4 (1d8) cold damage, and the target's speed is reduced by 10 feet until the start of the gnome's next turn.</p>",
+        "entries": [
+          "{@atk rs} {@hit 4} to hit, range 60 ft., one creature. {@h}4 ({@damage 1d8}) cold damage, and the target's speed is reduced by 10 feet until the start of the gnome's next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1311,11 +1429,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DIP/Rock Gnome Recluse.webp",
     "tokenImg": "img/bestiary/tokens/DIP/Rock Gnome Recluse.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_skeletal_riding_horse_dip",
@@ -1403,10 +1533,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_hooves_typc",
+        "id": "act_hooves_masi",
         "name": "Hooves",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}8 (2d4 + 3) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (2d4 + 3) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}8 ({@damage 2d4 + 3}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1432,10 +1565,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DIP/Skeletal Riding Horse.webp",
     "tokenImg": "img/bestiary/tokens/DIP/Skeletal Riding Horse.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

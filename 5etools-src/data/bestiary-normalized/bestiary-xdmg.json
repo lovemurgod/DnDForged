@@ -97,10 +97,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_2k17",
+        "id": "act_incorporeal_movement_fmov",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The avatar can move through other creatures and objects as if they were Difficult Terrain. It takes 5 (1d10) Force damage if it ends its turn inside an object.</p>",
+        "entries": [
+          "The avatar can move through other creatures and objects as if they were {@variantrule Difficult Terrain|XPHB}. It takes 5 ({@damage 1d10}) Force damage if it ends its turn inside an object."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -121,10 +124,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ji5j",
+        "id": "act_multiattack_4dsu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The avatar makes a number of Reaping Scythe attacks equal to half the summoner's Proficiency Bonus (rounded up).</p>",
+        "entries": [
+          "The avatar makes a number of Reaping Scythe attacks equal to half the summoner's Proficiency Bonus (rounded up)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -138,10 +144,13 @@
         }
       },
       {
-        "id": "act_reaping_scythe_2o4j",
+        "id": "act_reaping_scythe_oaxm",
         "name": "Reaping Scythe",
         "actionType": "action",
-        "descriptionHtml": "<p>m Automatic hit, reach 5 ft. {@h}7 (1d8 + 3) Slashing damage plus 4 (1d8) Necrotic damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: Automatic hit, reach 5 ft. Hit: 7 (1d8 + 3) Slashing damage plus 4 (1d8) Necrotic damage.</p>",
+        "entries": [
+          "{@atkr m} Automatic hit, reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Slashing damage plus 4 ({@damage 1d8}) Necrotic damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -171,11 +180,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/XDMG/Avatar of Death.webp",
     "tokenImg": "img/bestiary/tokens/XDMG/Avatar of Death.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_giant_fly_xdmg",
@@ -269,10 +290,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/XDMG/Giant Fly.webp",
     "tokenImg": "img/bestiary/tokens/XDMG/Giant Fly.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

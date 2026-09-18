@@ -1,0 +1,188 @@
+[
+  {
+    "id": "creature_dancing_item_ua2020subclassespt2",
+    "name": "Dancing Item",
+    "source": "UA2020SubclassesPt2",
+    "edition": "2014",
+    "page": 2,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "str": 18,
+    "dex": 14,
+    "con": 16,
+    "int": 4,
+    "wis": 10,
+    "cha": 6,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "poisoned",
+      "frightened"
+    ],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_endless_waltz_8y4z",
+        "name": "Endless Waltz",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Immediately after the item makes a slam attack, it can take the Dodge action as a bonus action.</p>",
+        "entries": [
+          "Immediately after the item makes a slam attack, it can take the Dodge action as a bonus action."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_immutable_form_ih19",
+        "name": "Immutable Form",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The item is immune to any spell or effect that would alter its form.</p>",
+        "entries": [
+          "The item is immune to any spell or effect that would alter its form."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_force_empowered_slam_hen2",
+        "name": "Force-Empowered Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: your spell attack modifier to hit, reach 5 ft., one target you can see. Hit: 1d10 + your Charisma modifier force damage.</p>",
+        "entries": [
+          "{@atk mw} your spell attack modifier to hit, reach 5 ft., one target you can see. {@h}{@damage 1d10} + your Charisma modifier force damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UA2020SubclassesPt2/Dancing Item.webp",
+    "tokenImg": "img/bestiary/tokens/UA2020SubclassesPt2/Dancing Item.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

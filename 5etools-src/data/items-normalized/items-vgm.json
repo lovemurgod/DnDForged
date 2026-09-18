@@ -314,6 +314,114 @@
     "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>"
   },
   {
+    "id": "it_mind_blade_greatsword__silver_vgm",
+    "name": "Mind Blade Greatsword, Silver",
+    "source": "VGM",
+    "page": 81,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "rare",
+    "reqAttune": "by a specific individual",
+    "weight": 6,
+    "value": "53 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Mind Blade Greatsword, Silver",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        },
+        {
+          "formula": "2d6",
+          "stat": "",
+          "type": "Psychic",
+          "label": "Extra"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, rare (by a specific individual)*\n\n**Damage:** 2d6 slashing | **Properties:** Heavy, Two-Handed | **Weight:** 6 lb | **Value:** 53 gp\n\n---\n\nMind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
+    "id": "it_mind_blade_long_sword_vgm",
+    "name": "Mind Blade Long Sword",
+    "source": "VGM",
+    "page": 81,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "rare",
+    "reqAttune": "by a specific individual",
+    "weight": 3,
+    "value": "2 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Mind Blade Long Sword",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        },
+        {
+          "formula": "2d6",
+          "stat": "",
+          "type": "Psychic",
+          "label": "Extra"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, rare (by a specific individual)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Heavy, Versatile | **Weight:** 3 lb | **Value:** 2 gp\n\n---\n\nMind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.",
+    "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>"
+  },
+  {
     "id": "it_mind_blade_longsword_vgm",
     "name": "Mind Blade Longsword",
     "source": "VGM",
@@ -367,6 +475,59 @@
     "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>"
   },
   {
+    "id": "it_mind_blade_longsword__silver_vgm",
+    "name": "Mind Blade Longsword, Silver",
+    "source": "VGM",
+    "page": 81,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "rare",
+    "reqAttune": "by a specific individual",
+    "weight": 3,
+    "value": "17 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Mind Blade Longsword, Silver",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        },
+        {
+          "formula": "2d6",
+          "stat": "",
+          "type": "Psychic",
+          "label": "Extra"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Martial Weapon, rare (by a specific individual)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb | **Value:** 17 gp\n\n---\n\nMind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
     "id": "it_mind_blade_rapier_vgm",
     "name": "Mind Blade Rapier",
     "source": "VGM",
@@ -418,6 +579,59 @@
     },
     "descriptionMarkdown": "*Melee Weapon, rare (by a specific individual)*\n\n**Damage:** 1d8 piercing | **Properties:** Finesse | **Weight:** 2 lb | **Value:** 25 gp\n\n---\n\nMind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.",
     "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>"
+  },
+  {
+    "id": "it_mind_blade_rapier__silver_vgm",
+    "name": "Mind Blade Rapier, Silver",
+    "source": "VGM",
+    "page": 81,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "rare",
+    "reqAttune": "by a specific individual",
+    "weight": 2,
+    "value": "26 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Mind Blade Rapier, Silver",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        },
+        {
+          "formula": "2d6",
+          "stat": "",
+          "type": "Psychic",
+          "label": "Extra"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, rare (by a specific individual)*\n\n**Damage:** 1d8 piercing | **Properties:** Finesse | **Weight:** 2 lb | **Value:** 26 gp\n\n---\n\nMind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
   },
   {
     "id": "it_mind_blade_scimitar_vgm",
@@ -474,6 +688,60 @@
     "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>"
   },
   {
+    "id": "it_mind_blade_scimitar__silver_vgm",
+    "name": "Mind Blade Scimitar, Silver",
+    "source": "VGM",
+    "page": 81,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "rare",
+    "reqAttune": "by a specific individual",
+    "weight": 3,
+    "value": "27 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Mind Blade Scimitar, Silver",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        },
+        {
+          "formula": "2d6",
+          "stat": "",
+          "type": "Psychic",
+          "label": "Extra"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, rare (by a specific individual)*\n\n**Damage:** 1d6 slashing | **Properties:** Finesse, Light | **Weight:** 3 lb | **Value:** 27 gp\n\n---\n\nMind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
     "id": "it_mind_blade_shortsword_vgm",
     "name": "Mind Blade Shortsword",
     "source": "VGM",
@@ -525,6 +793,114 @@
       "versatile": null
     },
     "descriptionMarkdown": "*Melee Weapon, rare (by a specific individual)*\n\n**Damage:** 1d6 piercing | **Properties:** Finesse, Light | **Weight:** 2 lb | **Value:** 10 gp\n\n---\n\nMind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.",
+    "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>"
+  },
+  {
+    "id": "it_mind_blade_shortsword__silver_vgm",
+    "name": "Mind Blade Shortsword, Silver",
+    "source": "VGM",
+    "page": 81,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "rare",
+    "reqAttune": "by a specific individual",
+    "weight": 2,
+    "value": "11 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Mind Blade Shortsword, Silver",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        },
+        {
+          "formula": "2d6",
+          "stat": "",
+          "type": "Psychic",
+          "label": "Extra"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, rare (by a specific individual)*\n\n**Damage:** 1d6 piercing | **Properties:** Finesse, Light | **Weight:** 2 lb | **Value:** 11 gp\n\n---\n\nMind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
+    "id": "it_mind_blade_sword_vgm",
+    "name": "Mind Blade Sword",
+    "source": "VGM",
+    "page": 81,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "rare",
+    "reqAttune": "by a specific individual",
+    "weight": 2,
+    "value": "1.50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Mind Blade Sword",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        },
+        {
+          "formula": "2d6",
+          "stat": "",
+          "type": "Psychic",
+          "label": "Extra"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, rare (by a specific individual)*\n\n**Damage:** 1d6 slashing (or 1d8 slashing versatile) | **Properties:** Finesse, Versatile | **Weight:** 2 lb | **Value:** 1.50 gp\n\n---\n\nMind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.",
     "descriptionHtml": "<p>Mind flayers can turn any nonmagical sword into a mind blade. Only one creature can attune to it: either a specific mind flayer or one of its thralls. In the hands of any other creature, the mind blade functions as a normal sword of its kind. In the hands of its intended wielder, the mind blade is a magic weapon that deals an extra 2d6 psychic damage to any target it hits.</p>"
   },
   {
@@ -604,6 +980,32 @@
     "macroTemplate": null,
     "descriptionMarkdown": "*Heavy Armor, uncommon (by a specific individual)*\n\n**Armor Class:** 14 | **Weight:** 40 lb | **Value:** 30 gp\n\n---\n\nAny nonmagical suit of heavy armor can be turned by mind flayers into mind carapace armor. Only one creature can attune to it: either a specific mind flayer or one of its thralls. While worn by any other creature, the mind carapace armor functions as normal armor of its kind. To its intended wearer, the armor grants advantage on Intelligence, Wisdom, and Charisma saving throws and makes its wearer immune to the frightened condition.\n\nThis armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.",
     "descriptionHtml": "<p>Any nonmagical suit of heavy armor can be turned by mind flayers into mind carapace armor. Only one creature can attune to it: either a specific mind flayer or one of its thralls. While worn by any other creature, the mind carapace armor functions as normal armor of its kind. To its intended wearer, the armor grants advantage on Intelligence, Wisdom, and Charisma saving throws and makes its wearer immune to the frightened condition.</p>\n<p>This armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.</p>"
+  },
+  {
+    "id": "it_mind_carapace_ring_mail_vgm",
+    "name": "Mind Carapace Ring-Mail",
+    "source": "VGM",
+    "page": 81,
+    "type": "Heavy Armor",
+    "rawType": "HA",
+    "rarity": "uncommon",
+    "reqAttune": "by a specific individual",
+    "weight": 50,
+    "value": "5 gp",
+    "ac": 15,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Heavy Armor, uncommon (by a specific individual)*\n\n**Armor Class:** 15 | **Weight:** 50 lb | **Value:** 5 gp\n\n---\n\nAny nonmagical suit of heavy armor can be turned by mind flayers into mind carapace armor. Only one creature can attune to it: either a specific mind flayer or one of its thralls. While worn by any other creature, the mind carapace armor functions as normal armor of its kind. To its intended wearer, the armor grants advantage on Intelligence, Wisdom, and Charisma saving throws and makes its wearer immune to the frightened condition.\n\nThis armour is leather armour with heavy rings sewn into it. The rings help reinforce the armour against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.",
+    "descriptionHtml": "<p>Any nonmagical suit of heavy armor can be turned by mind flayers into mind carapace armor. Only one creature can attune to it: either a specific mind flayer or one of its thralls. While worn by any other creature, the mind carapace armor functions as normal armor of its kind. To its intended wearer, the armor grants advantage on Intelligence, Wisdom, and Charisma saving throws and makes its wearer immune to the frightened condition.</p>\n<p>This armour is leather armour with heavy rings sewn into it. The rings help reinforce the armour against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.</p>"
   },
   {
     "id": "it_mind_carapace_splint_armor_vgm",

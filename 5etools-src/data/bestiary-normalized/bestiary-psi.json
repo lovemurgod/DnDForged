@@ -119,14 +119,14 @@
       {
         "id": "sc_avacyn_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 10,
         "casterLevel": 0,
         "dc": 25,
         "atkMod": 17,
-        "header": "The solar's spellcasting ability is Charisma (spell save DC 25). It can innately cast the following spells, requiring no material components:",
+        "header": "The Avacyn's spellcasting ability is Charisma (spell save DC 25). It can innately cast the following spells, requiring no material components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -193,7 +193,9 @@
                   "formula": "6d10",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -302,10 +304,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_kb66",
+        "id": "act_angelic_weapons_hj3d",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The solar's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra 6d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>The Avacyn's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra 6d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The Avacyn's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra {@damage 6d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -324,10 +329,13 @@
         }
       },
       {
-        "id": "act_divine_awareness_7avy",
+        "id": "act_divine_awareness_75gr",
         "name": "Divine Awareness",
         "actionType": "trait",
-        "descriptionHtml": "<p>The solar knows if it hears a lie.</p>",
+        "descriptionHtml": "<p>The Avacyn knows if it hears a lie.</p>",
+        "entries": [
+          "The Avacyn knows if it hears a lie."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -341,10 +349,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_podv",
+        "id": "act_magic_resistance_a5h3",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The solar has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The Avacyn has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The Avacyn has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -354,16 +365,47 @@
           "targets": null,
           "save": null,
           "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_moonsilver_spear_amtg",
+        "name": "Moonsilver Spear",
+        "actionType": "trait",
+        "descriptionHtml": "<p>An angel of the Flight of Moonsilver wields a spear made from a shard of the Helvault. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means. Once per turn, when the angel hits a creature with an attack using this weapon, it can wound the target. At the start of each of the wounded creature's turns, it takes 1d4 necrotic damage for each time the angel has wounded it, and it can then make a DC 15 Constitution saving throw, ending the effect of all such wounds on itself on a success. Alternatively, the wounded creature, or a creature within 5 feet of it, can use an action to make a DC 15 Wisdom (Medicine) check, ending the effect of such wounds on it on a success.</p>",
+        "entries": [
+          "An angel of the Flight of Moonsilver wields a spear made from a shard of the Helvault. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means. Once per turn, when the angel hits a creature with an attack using this weapon, it can wound the target. At the start of each of the wounded creature's turns, it takes {@damage 1d4} necrotic damage for each time the angel has wounded it, and it can then make a {@dc 15} Constitution saving throw, ending the effect of all such wounds on itself on a success. Alternatively, the wounded creature, or a creature within 5 feet of it, can use an action to make a {@dc 15} Wisdom ({@skill Medicine}) check, ending the effect of such wounds on it on a success."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d4",
+              "type": "Necrotic"
+            }
+          ],
           "recharge": null
         }
       }
     ],
     "actions": [
       {
-        "id": "act_multiattack_1p8k",
+        "id": "act_multiattack_3zyh",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The solar makes two greatsword attacks.</p>",
+        "descriptionHtml": "<p>The Avacyn makes two greatsword attacks.</p>",
+        "entries": [
+          "The Avacyn makes two greatsword attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -377,10 +419,13 @@
         }
       },
       {
-        "id": "act_greatsword_zekw",
+        "id": "act_greatsword_xo7j",
         "name": "Greatsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +15 to hit, reach 5 ft., one target. {@h}22 (4d6 + 8) slashing damage plus 27 (6d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +15 to hit, reach 5 ft., one target. Hit: 22 (4d6 + 8) slashing damage plus 27 (6d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 15} to hit, reach 5 ft., one target. {@h}22 ({@damage 4d6 + 8}) slashing damage plus 27 ({@damage 6d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -403,10 +448,13 @@
         }
       },
       {
-        "id": "act_slaying_longbow_rljk",
+        "id": "act_slaying_longbow_dwei",
         "name": "Slaying Longbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +13 to hit, range 150/600 ft., one target. {@h}15 (2d8 + 6) piercing damage plus 27 (6d8) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a DC 15 Constitution saving throw or die.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +13 to hit, range 150/600 ft., one target. Hit: 15 (2d8 + 6) piercing damage plus 27 (6d8) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a DC 15 Constitution saving throw or die.</p>",
+        "entries": [
+          "{@atk rw} {@hit 13} to hit, range 150/600 ft., one target. {@h}15 ({@damage 2d8 + 6}) piercing damage plus 27 ({@damage 6d8}) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a {@dc 15} Constitution saving throw or die."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -432,10 +480,13 @@
         }
       },
       {
-        "id": "act_flying_sword_kc8y",
+        "id": "act_flying_sword_44um",
         "name": "Flying Sword",
         "actionType": "action",
-        "descriptionHtml": "<p>The solar releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies.</p>",
+        "descriptionHtml": "<p>The Avacyn releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies.</p>",
+        "entries": [
+          "The Avacyn releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -449,10 +500,13 @@
         }
       },
       {
-        "id": "act_healing_touch__4_day__cut4",
+        "id": "act_healing_touch__4_day__1ppn",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The solar touches another creature. The target magically regains 40 (8d8 + 4) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>The Avacyn touches another creature. The target magically regains 40 (8d8 + 4) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The Avacyn touches another creature. The target magically regains 40 ({@dice 8d8 + 4}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -473,10 +527,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_teleport_a738",
+          "id": "act_teleport_ibkc",
           "name": "Teleport",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The solar magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
+          "descriptionHtml": "<p>The Avacyn magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
+          "entries": [
+            "The Avacyn magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -490,10 +547,13 @@
           }
         },
         {
-          "id": "act_searing_burst__costs_2_actions__t90d",
+          "id": "act_searing_burst__costs_2_actions__v5i7",
           "name": "Searing Burst (Costs 2 Actions)",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The solar emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a DC 23 Dexterity saving throw, taking 14 (4d6) fire damage plus 14 (4d6) radiant damage on a failed save, or half as much damage on a successful one.</p>",
+          "descriptionHtml": "<p>The Avacyn emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a DC 23 Dexterity saving throw, taking 14 (4d6) fire damage plus 14 (4d6) radiant damage on a failed save, or half as much damage on a successful one.</p>",
+          "entries": [
+            "The Avacyn emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a {@dc 23} Dexterity saving throw, taking 14 ({@damage 4d6}) fire damage plus 14 ({@damage 4d6}) radiant damage on a failed save, or half as much damage on a successful one."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -519,10 +579,13 @@
           }
         },
         {
-          "id": "act_blinding_gaze__costs_3_actions__pu1n",
+          "id": "act_blinding_gaze__costs_3_actions__hmnx",
           "name": "Blinding Gaze (Costs 3 Actions)",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The solar targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a DC 15 Constitution saving throw or be blinded until magic such as the lesser restoration spell removes the blindness.</p>",
+          "descriptionHtml": "<p>The Avacyn targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a DC 15 Constitution saving throw or be blinded until magic such as the lesser restoration spell removes the blindness.</p>",
+          "entries": [
+            "The Avacyn targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a {@dc 15} Constitution saving throw or be {@condition blinded} until magic such as the {@spell lesser restoration} spell removes the blindness."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -540,11 +603,23 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Avacyn.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Avacyn.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_bruna_psi",
@@ -662,14 +737,14 @@
       {
         "id": "sc_bruna_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 7,
         "casterLevel": 0,
         "dc": 20,
         "atkMod": 12,
-        "header": "The planetar's spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components:",
+        "header": "The Bruna's spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -736,7 +811,9 @@
                   "formula": "6d10",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -786,12 +863,16 @@
                 {
                   "formula": "5d6",
                   "type": "Fire",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "5d6",
                   "type": "Radiant",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a pinch of sulfur)",
@@ -888,7 +969,9 @@
                   "formula": "4d10",
                   "type": "Piercing",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d10",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a locust)",
@@ -907,10 +990,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_z7rq",
+        "id": "act_angelic_weapons_ys7y",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>The Bruna's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The Bruna's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra {@damage 5d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -929,10 +1015,13 @@
         }
       },
       {
-        "id": "act_divine_awareness_bdsy",
+        "id": "act_divine_awareness_43xm",
         "name": "Divine Awareness",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar knows if it hears a lie.</p>",
+        "descriptionHtml": "<p>The Bruna knows if it hears a lie.</p>",
+        "entries": [
+          "The Bruna knows if it hears a lie."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -946,10 +1035,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_mb8p",
+        "id": "act_magic_resistance_eshf",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The Bruna has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The Bruna has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -965,10 +1057,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_e082",
+        "id": "act_multiattack_euzz",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The planetar makes two melee attacks.</p>",
+        "descriptionHtml": "<p>The Bruna makes two melee attacks.</p>",
+        "entries": [
+          "The Bruna makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -982,10 +1077,13 @@
         }
       },
       {
-        "id": "act_greatsword_pfgv",
+        "id": "act_greatsword_aqi9",
         "name": "Greatsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 5 ft., one target. {@h}21 ({@damage 4d6 + 7}) slashing damage plus 22 ({@damage 5d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1008,10 +1106,13 @@
         }
       },
       {
-        "id": "act_healing_touch__4_day__5y8b",
+        "id": "act_healing_touch__4_day__47pc",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The planetar touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>The Bruna touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The Bruna touches another creature. The target magically regains 30 ({@dice 6d8 + 3}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1032,11 +1133,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Bruna.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Bruna.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_creepy_doll_psi",
@@ -1146,10 +1259,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_p7qc",
+        "id": "act_false_appearance_62jg",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the creepy doll remains motionless, it is indistinguishable from an ordinary, inanimate doll.</p>",
+        "entries": [
+          "While the creepy doll remains motionless, it is indistinguishable from an ordinary, inanimate doll."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1165,10 +1281,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5asl",
+        "id": "act_multiattack_fpun",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The creepy doll makes one attack with its scissors and uses Psychic Assault.</p>",
+        "entries": [
+          "The creepy doll makes one attack with its scissors and uses Psychic Assault."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1182,10 +1301,13 @@
         }
       },
       {
-        "id": "act_scissors_3u2g",
+        "id": "act_scissors_08mu",
         "name": "Scissors",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}7 (2d4 + 2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1204,10 +1326,13 @@
         }
       },
       {
-        "id": "act_psychic_assault_q0jw",
+        "id": "act_psychic_assault_2zxx",
         "name": "Psychic Assault",
         "actionType": "action",
         "descriptionHtml": "<p>The creepy doll targets one creature it can see within 10 feet of it that has a brain. The target must succeed on a DC 12 Intelligence saving throw or take 11 (2d10) psychic damage. Also on a failure, roll 3d6. If the total equals or exceeds the target's Intelligence score, that score is reduced to 0. The target is stunned until it regains at least one point of Intelligence, as from the greater restoration spell or similar magic.</p>",
+        "entries": [
+          "The creepy doll targets one creature it can see within 10 feet of it that has a brain. The target must succeed on a {@dc 12} Intelligence saving throw or take 11 ({@damage 2d10}) psychic damage. Also on a failure, roll {@dice 3d6}. If the total equals or exceeds the target's Intelligence score, that score is reduced to 0. The target is {@condition stunned} until it regains at least one point of Intelligence, as from the {@spell greater restoration} spell or similar magic."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1229,10 +1354,14 @@
         }
       },
       {
-        "id": "act_body_exchange_9m3k",
+        "id": "act_body_exchange_1yff",
         "name": "Body Exchange",
         "actionType": "action",
         "descriptionHtml": "<p>The creepy doll initiates an Intelligence contest with an incapacitated humanoid within 5 feet of it. If it wins the contest, the creepy doll's spirit inhabits the target's body while the target's spirit is placed into the creepy doll's body. The creepy doll controls the target's body completely. It retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being charmed and frightened. It otherwise uses the possessed target's statistics, but doesn't gain access to the target's knowledge, class features, or proficiencies. The target retains its alignment, Intelligence, Wisdom, and Charisma while inhabiting the creepy doll's body.</p><p>The body exchange lasts until the doll's spirit is forced out by magic. (The dispel evil and good spell will accomplish this, though the doll is not one of the creature types whose possession that spell normally ends.) The body and the doll must be within 5 feet of each other for such an effect to work. The target is immune to this doll's Body Exchange for 24 hours after winning the Intelligence contest or after the exchange ends.</p>",
+        "entries": [
+          "The creepy doll initiates an Intelligence contest with an {@condition incapacitated} humanoid within 5 feet of it. If it wins the contest, the creepy doll's spirit inhabits the target's body while the target's spirit is placed into the creepy doll's body. The creepy doll controls the target's body completely. It retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being {@condition charmed} and {@condition frightened}. It otherwise uses the possessed target's statistics, but doesn't gain access to the target's knowledge, class features, or proficiencies. The target retains its alignment, Intelligence, Wisdom, and Charisma while inhabiting the creepy doll's body.",
+          "The body exchange lasts until the doll's spirit is forced out by magic. (The {@spell dispel evil and good} spell will accomplish this, though the doll is not one of the creature types whose possession that spell normally ends.) The body and the doll must be within 5 feet of each other for such an effect to work. The target is immune to this doll's Body Exchange for 24 hours after winning the Intelligence contest or after the exchange ends."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1253,11 +1382,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Creepy Doll.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Creepy Doll.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_demonlord_of_ashmouth_psi",
@@ -1269,7 +1410,7 @@
     "size": "Large",
     "sizeCategory": "L",
     "type": "Fiend",
-    "subtype": "devil",
+    "subtype": "demon",
     "alignment": "L E",
     "ac": [
       {
@@ -1373,10 +1514,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_devil_s_sight_rge4",
+        "id": "act_devil_s_sight_0pbl",
         "name": "Devil's Sight",
         "actionType": "trait",
-        "descriptionHtml": "<p>Magical darkness doesn't impede the devil's darkvision.</p>",
+        "descriptionHtml": "<p>Magical darkness doesn't impede the demon's darkvision.</p>",
+        "entries": [
+          "Magical darkness doesn't impede the demon's darkvision."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1390,10 +1534,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_wm1x",
+        "id": "act_magic_resistance_axhk",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The devil has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The demon has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The demon has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1409,10 +1556,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_cq5u",
+        "id": "act_multiattack_3woj",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The devil makes three melee attacks: two with its fork and one with its tail. It can use Hurl Flame in place of any melee attack.</p>",
+        "descriptionHtml": "<p>The demon makes three melee attacks: two with its battleaxe and one with its tail. It can use Hurl Flame in place of any melee attack.</p>",
+        "entries": [
+          "The demon makes three melee attacks: two with its battleaxe and one with its tail. It can use Hurl Flame in place of any melee attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1426,10 +1576,13 @@
         }
       },
       {
-        "id": "act_fork_unim",
-        "name": "Fork",
+        "id": "act_battleaxe_2xl3",
+        "name": "Battleaxe",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}15 (2d8 + 6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 15 (2d8 + 6) slashing damage, or 17 (2d10 + 6) slashing damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 10} to hit, reach 10 ft., one target. {@h}15 ({@damage 2d8 + 6}) slashing damage, or 17 ({@damage 2d10 + 6}) slashing damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1441,17 +1594,24 @@
           "damages": [
             {
               "formula": "2d8 + 6",
-              "type": "Piercing"
+              "type": "Slashing"
+            },
+            {
+              "formula": "2d10 + 6",
+              "type": "Slashing"
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_0rhl",
+        "id": "act_tail_x9rl",
         "name": "Tail",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}10 (1d8 + 6) piercing damage. If the target is a creature other than an undead or a construct, it must succeed on a DC 17 Constitution saving throw or lose 10 (3d6) hit points at the start of each of its turns due to an infernal wound. Each time the devil hits the wounded target with this attack, the damage dealt by the wound increases by 10 (3d6). Any creature can take an action to stanch the wound with a successful DC 12 Wisdom (Medicine) check. The wound also closes if the target receives magical healing.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 10 (1d8 + 6) piercing damage. If the target is a creature other than an undead or a construct, it must succeed on a DC 17 Constitution saving throw or lose 10 (3d6) hit points at the start of each of its turns due to an infernal wound. Each time the demon hits the wounded target with this attack, the damage dealt by the wound increases by 10 (3d6). Any creature can take an action to stanch the wound with a successful DC 12 Wisdom (Medicine) check. The wound also closes if the target receives magical healing.</p>",
+        "entries": [
+          "{@atk mw} {@hit 10} to hit, reach 10 ft., one target. {@h}10 ({@damage 1d8 + 6}) piercing damage. If the target is a creature other than an undead or a construct, it must succeed on a {@dc 17} Constitution saving throw or lose 10 ({@dice 3d6}) hit points at the start of each of its turns due to an infernal wound. Each time the demon hits the wounded target with this attack, the damage dealt by the wound increases by 10 ({@damage 3d6}). Any creature can take an action to stanch the wound with a successful {@dc 12} Wisdom ({@skill Medicine}) check. The wound also closes if the target receives magical healing."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1477,10 +1637,13 @@
         }
       },
       {
-        "id": "act_hurl_flame_8m0a",
+        "id": "act_hurl_flame_djps",
         "name": "Hurl Flame",
         "actionType": "action",
-        "descriptionHtml": "<p>rs +7 to hit, range 150 ft., one target. {@h}14 (4d6) fire damage. If the target is a flammable object that isn't being worn or carried, it also catches fire.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: +7 to hit, range 150 ft., one target. Hit: 14 (4d6) fire damage. If the target is a flammable object that isn't being worn or carried, it also catches fire.</p>",
+        "entries": [
+          "{@atk rs} {@hit 7} to hit, range 150 ft., one target. {@h}14 ({@damage 4d6}) fire damage. If the target is a flammable object that isn't being worn or carried, it also catches fire."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1506,11 +1669,33 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Summon Devil (1/Day)",
+        "descriptionHtml": "<p>The demon chooses what to summon and attempts a magical summoning.</p><p>A horned demon has a 30% chance of summoning one horned demon.</p><p>A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action.</p>",
+        "entries": [
+          "The demon chooses what to summon and attempts a magical summoning.",
+          "A horned demon has a {@chance 30} chance of summoning one horned demon.",
+          "A summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 1 minute, until it or its summoner dies, or until its summoner dismisses it as an action."
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Demonlord of Ashmouth.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Demonlord of Ashmouth.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_flight_alabaster_angel_psi",
@@ -1628,14 +1813,14 @@
       {
         "id": "sc_flight_alabaster_angel_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 5,
         "casterLevel": 0,
         "dc": 17,
         "atkMod": 9,
-        "header": "The deva's spellcasting ability is Charisma (spell save DC 17). The deva can innately cast the following spells, requiring only verbal components:",
+        "header": "The angel's spellcasting ability is Charisma (spell save DC 17). The angel can innately cast the following spells, requiring only verbal components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -1715,10 +1900,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_6oyo",
+        "id": "act_angelic_weapons_dbks",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra {@damage 4d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1737,10 +1925,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_zjj0",
+        "id": "act_magic_resistance_ooud",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The angel has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1756,10 +1947,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4oal",
+        "id": "act_multiattack_emfj",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva makes two melee attacks.</p>",
+        "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
+        "entries": [
+          "The angel makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1773,10 +1967,13 @@
         }
       },
       {
-        "id": "act_mace_nv5a",
+        "id": "act_mace_qwqn",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) bludgeoning damage plus 18 ({@damage 4d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1799,10 +1996,13 @@
         }
       },
       {
-        "id": "act_healing_touch__3_day__yetz",
+        "id": "act_healing_touch__3_day__ha0k",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The angel touches another creature. The target magically regains 20 ({@dice 4d8 + 2}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1816,10 +2016,14 @@
         }
       },
       {
-        "id": "act_change_shape_ehkd",
+        "id": "act_change_shape_r5e3",
         "name": "Change Shape",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the deva retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "entries": [
+          "The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).",
+          "In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1840,11 +2044,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Flight Alabaster Angel.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Flight Alabaster Angel.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_flight_goldnight_angel_psi",
@@ -1962,14 +2178,14 @@
       {
         "id": "sc_flight_goldnight_angel_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 5,
         "casterLevel": 0,
         "dc": 17,
         "atkMod": 9,
-        "header": "The deva's spellcasting ability is Charisma (spell save DC 17). The deva can innately cast the following spells, requiring only verbal components:",
+        "header": "The angel's spellcasting ability is Charisma (spell save DC 17). The angel can innately cast the following spells, requiring only verbal components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -2049,10 +2265,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_3oeb",
+        "id": "act_angelic_weapons_5n0g",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra {@damage 4d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2071,10 +2290,33 @@
         }
       },
       {
-        "id": "act_magic_resistance_lh74",
+        "id": "act_magic_resistance_jcra",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The angel has advantage on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_goldnight_menace_mdka",
+        "name": "Goldnight Menace",
+        "actionType": "trait",
+        "descriptionHtml": "<p>As an action, an angel of Flight Goldnight can strike fear into the hearts of its enemies. Each creature of the angel's choice that is within 120 feet of it and is aware of it must succeed on a Wisdom saving throw or become frightened for 1 minute. The DC for this saving throw is the same as for the angel's Innate Spellcasting trait. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to that angel's Goldnight Menace for the next 24 hours.</p>",
+        "entries": [
+          "As an action, an angel of Flight Goldnight can strike fear into the hearts of its enemies. Each creature of the angel's choice that is within 120 feet of it and is aware of it must succeed on a Wisdom saving throw or become {@condition frightened} for 1 minute. The DC for this saving throw is the same as for the angel's Innate Spellcasting trait. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to that angel's Goldnight Menace for the next 24 hours."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2090,10 +2332,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_gt2v",
+        "id": "act_multiattack_1bh6",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva makes two melee attacks.</p>",
+        "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
+        "entries": [
+          "The angel makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2107,10 +2352,13 @@
         }
       },
       {
-        "id": "act_mace_msy3",
+        "id": "act_mace_n1uu",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) bludgeoning damage plus 18 ({@damage 4d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2133,10 +2381,13 @@
         }
       },
       {
-        "id": "act_healing_touch__3_day__d8tc",
+        "id": "act_healing_touch__3_day__vxra",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The angel touches another creature. The target magically regains 20 ({@dice 4d8 + 2}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2150,10 +2401,14 @@
         }
       },
       {
-        "id": "act_change_shape_mysv",
+        "id": "act_change_shape_8o06",
         "name": "Change Shape",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the deva retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "entries": [
+          "The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).",
+          "In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2174,11 +2429,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Flight Goldnight Angel.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Flight Goldnight Angel.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_flight_of_moonsilver_angel_psi",
@@ -2296,14 +2563,14 @@
       {
         "id": "sc_flight_of_moonsilver_angel_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 5,
         "casterLevel": 0,
         "dc": 17,
         "atkMod": 9,
-        "header": "The deva's spellcasting ability is Charisma (spell save DC 17). The deva can innately cast the following spells, requiring only verbal components:",
+        "header": "The angel's spellcasting ability is Charisma (spell save DC 17). The angel can innately cast the following spells, requiring only verbal components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -2383,10 +2650,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_40dp",
+        "id": "act_angelic_weapons_lk5q",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra {@damage 4d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2405,29 +2675,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_neyp",
+        "id": "act_magic_resistance_4qz6",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva has advantage on saving throws against spells and other magical effects.</p>",
-        "macro": {
-          "isAttack": false,
-          "attackType": null,
-          "attackBonus": null,
-          "reach": null,
-          "range": null,
-          "targets": null,
-          "save": null,
-          "damages": [],
-          "recharge": null
-        }
-      }
-    ],
-    "actions": [
-      {
-        "id": "act_multiattack_hzqg",
-        "name": "Multiattack",
-        "actionType": "action",
-        "descriptionHtml": "<p>The deva makes two melee attacks.</p>",
+        "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The angel has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2441,10 +2695,63 @@
         }
       },
       {
-        "id": "act_mace_r79y",
+        "id": "act_moonsilver_spear_a48s",
+        "name": "Moonsilver Spear",
+        "actionType": "trait",
+        "descriptionHtml": "<p>An angel of the Flight of Moonsilver wields a spear made from a shard of the Helvault. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means. Once per turn, when the angel hits a creature with an attack using this weapon, it can wound the target. At the start of each of the wounded creature's turns, it takes 1d4 necrotic damage for each time the angel has wounded it, and it can then make a DC 15 Constitution saving throw, ending the effect of all such wounds on itself on a success. Alternatively, the wounded creature, or a creature within 5 feet of it, can use an action to make a DC 15 Wisdom (Medicine) check, ending the effect of such wounds on it on a success.</p>",
+        "entries": [
+          "An angel of the Flight of Moonsilver wields a spear made from a shard of the Helvault. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means. Once per turn, when the angel hits a creature with an attack using this weapon, it can wound the target. At the start of each of the wounded creature's turns, it takes {@damage 1d4} necrotic damage for each time the angel has wounded it, and it can then make a {@dc 15} Constitution saving throw, ending the effect of all such wounds on itself on a success. Alternatively, the wounded creature, or a creature within 5 feet of it, can use an action to make a {@dc 15} Wisdom ({@skill Medicine}) check, ending the effect of such wounds on it on a success."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d4",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_ukxb",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
+        "entries": [
+          "The angel makes two melee attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_mace_vozz",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) bludgeoning damage plus 18 ({@damage 4d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2467,10 +2774,13 @@
         }
       },
       {
-        "id": "act_healing_touch__3_day__dv4b",
+        "id": "act_healing_touch__3_day__tabi",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The angel touches another creature. The target magically regains 20 ({@dice 4d8 + 2}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2484,10 +2794,14 @@
         }
       },
       {
-        "id": "act_change_shape_8bsn",
+        "id": "act_change_shape_ians",
         "name": "Change Shape",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the deva retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "entries": [
+          "The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).",
+          "In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2508,11 +2822,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Flight of Moonsilver Angel.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Flight of Moonsilver Angel.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_geist_psi",
@@ -2616,10 +2942,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ethereal_sight_sts3",
+        "id": "act_ethereal_sight_xf2z",
         "name": "Ethereal Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The geist can see 60 feet into the Ethereal Plane when it is on the Material Plane, and vice versa.</p>",
+        "entries": [
+          "The geist can see 60 feet into the Ethereal Plane when it is on the Material Plane, and vice versa."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2633,10 +2962,13 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_p1y2",
+        "id": "act_incorporeal_movement_5yf9",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The geist can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
+        "entries": [
+          "The geist can move through other creatures and objects as if they were {@quickref difficult terrain||3}. It takes 5 ({@damage 1d10}) force damage if it ends its turn inside an object."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2657,10 +2989,13 @@
     ],
     "actions": [
       {
-        "id": "act_withering_touch_py1v",
+        "id": "act_withering_touch_m3ai",
         "name": "Withering Touch",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target {@h}17 (4d6 + 3) necrotic damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target Hit: 17 (4d6 + 3) necrotic damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target {@h}17 ({@damage 4d6 + 3}) necrotic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2679,10 +3014,13 @@
         }
       },
       {
-        "id": "act_etherealness_curn",
+        "id": "act_etherealness_dlja",
         "name": "Etherealness",
         "actionType": "action",
         "descriptionHtml": "<p>The geist enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can't affect or be affected by anything on the other plane.</p>",
+        "entries": [
+          "The geist enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can't affect or be affected by anything on the other plane."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2696,10 +3034,13 @@
         }
       },
       {
-        "id": "act_possession___recharge__t5nd",
+        "id": "act_possession___recharge__30y3",
         "name": "Possession {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>One creature that the geist can see within 5 feet of it must succeed on a DC 13 Charisma saving throw or be possessed by the geist; the geist then disappears, and the target is incapacitated and loses control of its body. The geist now controls the body but doesn't deprive the target of awareness. The geist can't be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being charmed and frightened. It otherwise uses the possessed target's statistics, but doesn't gain access to the target's knowledge, class features, or proficiencies. The possession lasts until the body drops to 0 hit points, the geist ends it as a bonus action, or the geist is turned or forced out by an effect like the dispel evil and good spell. When the possession ends, the geist reappears in an unoccupied space within 5 feet of the body. The target is immune to this geist's Possession for 24 hours after succeeding on the saving throw or after the possession ends. The geist can instead target the corpse of a creature, effectively using its own life force to animate the corpse as a zombie. The animated corpse uses zombie statistics and returns to death if the geist ends the possession.</p>",
+        "entries": [
+          "One creature that the geist can see within 5 feet of it must succeed on a {@dc 13} Charisma saving throw or be possessed by the geist; the geist then disappears, and the target is {@condition incapacitated} and loses control of its body. The geist now controls the body but doesn't deprive the target of awareness. The geist can't be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being {@condition charmed} and {@condition frightened}. It otherwise uses the possessed target's statistics, but doesn't gain access to the target's knowledge, class features, or proficiencies. The possession lasts until the body drops to 0 hit points, the geist ends it as a bonus action, or the geist is turned or forced out by an effect like the {@spell dispel evil and good} spell. When the possession ends, the geist reappears in an unoccupied space within 5 feet of the body. The target is immune to this geist's Possession for 24 hours after succeeding on the saving throw or after the possession ends. The geist can instead target the corpse of a creature, effectively using its own life force to animate the corpse as a zombie. The animated corpse uses zombie statistics and returns to death if the geist ends the possession."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2723,11 +3064,45 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Geist Powers",
+        "descriptionHtml": "<p>Geists are as varied as the humans they were in life. In addition to the traits and actions all geists possess, an individual geist might have any of the following special characteristics.</p><div><strong><em>Intangible Virtue.</em></strong> <p>A living creature possessed by a white-aligned geist gains immunity to the charmed and frightened conditions, and resistance to bludgeoning, piercing, and slashing damage from nonmagical attacks. While the creature is possessed, the geist can allow it to take control of its body, but the geist can regain control at any time (no action required).</p></div><div><strong><em>Horrifying Visage.</em></strong> <p>Black-aligned geists can make themselves terrible to behold, even when they are possessing the living. Each non-undead creature within 60 feet of the geist that can see it must succeed on a DC 13 Wisdom saving throw or be frightened for 1 minute. If the save fails by 5 or more, the target also ages 1d4 × 10 years. A frightened target can repeat the saving throw at the end of each of its turns, ending the frightened condition on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to this geist's Horrifying Visage for the next 24 hours. The aging effect can be reversed with a greater restoration spell, but only within 24 hours of it occurring.</p></div>",
+        "entries": [
+          "Geists are as varied as the humans they were in life. In addition to the traits and actions all geists possess, an individual geist might have any of the following special characteristics.",
+          {
+            "name": "Intangible Virtue",
+            "type": "entries",
+            "entries": [
+              "A living creature possessed by a white-aligned geist gains immunity to the {@condition charmed} and {@condition frightened} conditions, and resistance to bludgeoning, piercing, and slashing damage from nonmagical attacks. While the creature is possessed, the geist can allow it to take control of its body, but the geist can regain control at any time (no action required)."
+            ]
+          },
+          {
+            "name": "Horrifying Visage",
+            "type": "entries",
+            "entries": [
+              "Black-aligned geists can make themselves terrible to behold, even when they are possessing the living. Each non-undead creature within 60 feet of the geist that can see it must succeed on a {@dc 13} Wisdom saving throw or be {@condition frightened} for 1 minute. If the save fails by 5 or more, the target also ages {@dice 1d4 × 10} years. A {@condition frightened} target can repeat the saving throw at the end of each of its turns, ending the {@condition frightened} condition on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to this geist's Horrifying Visage for the next 24 hours. The aging effect can be reversed with a {@spell greater restoration} spell, but only within 24 hours of it occurring."
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Geist.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Geist.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_gisela_psi",
@@ -2845,14 +3220,14 @@
       {
         "id": "sc_gisela_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 7,
         "casterLevel": 0,
         "dc": 20,
         "atkMod": 12,
-        "header": "The planetar's spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components:",
+        "header": "The Gisela's spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -2919,7 +3294,9 @@
                   "formula": "6d10",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -2969,12 +3346,16 @@
                 {
                   "formula": "5d6",
                   "type": "Fire",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "5d6",
                   "type": "Radiant",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a pinch of sulfur)",
@@ -3071,7 +3452,9 @@
                   "formula": "4d10",
                   "type": "Piercing",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d10",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a locust)",
@@ -3090,10 +3473,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_wbmr",
+        "id": "act_angelic_weapons_grwk",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>The Gisela's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The Gisela's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra {@damage 5d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3112,10 +3498,13 @@
         }
       },
       {
-        "id": "act_divine_awareness_r9s3",
+        "id": "act_divine_awareness_livv",
         "name": "Divine Awareness",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar knows if it hears a lie.</p>",
+        "descriptionHtml": "<p>The Gisela knows if it hears a lie.</p>",
+        "entries": [
+          "The Gisela knows if it hears a lie."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3129,10 +3518,33 @@
         }
       },
       {
-        "id": "act_magic_resistance_9st9",
+        "id": "act_magic_resistance_g19s",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The Gisela has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The Gisela has advantage on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_goldnight_menace_8nr9",
+        "name": "Goldnight Menace",
+        "actionType": "trait",
+        "descriptionHtml": "<p>As an action, an angel of Flight Goldnight can strike fear into the hearts of its enemies. Each creature of the angel's choice that is within 120 feet of it and is aware of it must succeed on a Wisdom saving throw or become frightened for 1 minute. The DC for this saving throw is the same as for the angel's Innate Spellcasting trait. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to that angel's Goldnight Menace for the next 24 hours.</p>",
+        "entries": [
+          "As an action, an angel of Flight Goldnight can strike fear into the hearts of its enemies. Each creature of the angel's choice that is within 120 feet of it and is aware of it must succeed on a Wisdom saving throw or become {@condition frightened} for 1 minute. The DC for this saving throw is the same as for the angel's Innate Spellcasting trait. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to that angel's Goldnight Menace for the next 24 hours."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3148,10 +3560,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tq9t",
+        "id": "act_multiattack_rx2t",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The planetar makes two melee attacks.</p>",
+        "descriptionHtml": "<p>The Gisela makes two melee attacks.</p>",
+        "entries": [
+          "The Gisela makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3165,10 +3580,13 @@
         }
       },
       {
-        "id": "act_greatsword_m88j",
+        "id": "act_greatsword_r9pd",
         "name": "Greatsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 5 ft., one target. {@h}21 ({@damage 4d6 + 7}) slashing damage plus 22 ({@damage 5d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3191,10 +3609,13 @@
         }
       },
       {
-        "id": "act_healing_touch__4_day__kixr",
+        "id": "act_healing_touch__4_day__hfom",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The planetar touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>The Gisela touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The Gisela touches another creature. The target magically regains 30 ({@dice 6d8 + 3}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3215,11 +3636,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Gisela.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Gisela.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_host_of_herons_angel_psi",
@@ -3337,14 +3770,14 @@
       {
         "id": "sc_host_of_herons_angel_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 5,
         "casterLevel": 0,
         "dc": 17,
         "atkMod": 9,
-        "header": "The deva's spellcasting ability is Charisma (spell save DC 17). The deva can innately cast the following spells, requiring only verbal components:",
+        "header": "The angel's spellcasting ability is Charisma (spell save DC 17). The angel can innately cast the following spells, requiring only verbal components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -3424,10 +3857,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_ja6j",
+        "id": "act_angelic_weapons_ny29",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra {@damage 4d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3446,10 +3882,33 @@
         }
       },
       {
-        "id": "act_magic_resistance_u1ph",
+        "id": "act_magic_resistance_owy7",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The angel has advantage on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_heron_protection_zpv5",
+        "name": "Heron Protection",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Whenever an angel of the Host of Herons or a friendly creature within 10 feet of it makes a saving throw, the creature gains a bonus to the saving throw equal to the angel's Charisma modifier. The angel must be conscious to receive or grant this bonus.</p>",
+        "entries": [
+          "Whenever an angel of the Host of Herons or a friendly creature within 10 feet of it makes a saving throw, the creature gains a bonus to the saving throw equal to the angel's Charisma modifier. The angel must be conscious to receive or grant this bonus."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3465,10 +3924,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wsnd",
+        "id": "act_multiattack_x2qk",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva makes two melee attacks.</p>",
+        "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
+        "entries": [
+          "The angel makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3482,10 +3944,13 @@
         }
       },
       {
-        "id": "act_mace_auib",
+        "id": "act_mace_2qlg",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) bludgeoning damage plus 18 ({@damage 4d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3508,10 +3973,13 @@
         }
       },
       {
-        "id": "act_healing_touch__3_day__e1id",
+        "id": "act_healing_touch__3_day__ognz",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The angel touches another creature. The target magically regains 20 ({@dice 4d8 + 2}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3525,10 +3993,14 @@
         }
       },
       {
-        "id": "act_change_shape_mvn9",
+        "id": "act_change_shape_zghc",
         "name": "Change Shape",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the deva retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "entries": [
+          "The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).",
+          "In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3549,11 +4021,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Host of Herons Angel.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Host of Herons Angel.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_keeper_of_the_feather_psi",
@@ -3649,7 +4133,7 @@
       {
         "id": "sc_keeper_of_the_feather_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 2,
@@ -3701,7 +4185,8 @@
                     "formula": "1d8",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -3808,7 +4293,9 @@
                     "formula": "2d8",
                     "type": "Thunder",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -3867,10 +4354,13 @@
     ],
     "traits": [
       {
-        "id": "act_shapechanger_jdm7",
+        "id": "act_shapechanger_pzjk",
         "name": "Shapechanger",
         "actionType": "trait",
-        "descriptionHtml": "<p>The wereraven can use its action to polymorph into a raven-humanoid hybrid or into a raven, or back into its human form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its human form if it dies.</p>",
+        "descriptionHtml": "<p>The keeper can use its action to polymorph into a raven-humanoid hybrid or into a raven, or back into its human form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its human form if it dies.</p>",
+        "entries": [
+          "The keeper can use its action to polymorph into a raven-humanoid hybrid or into a raven, or back into its human form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its human form if it dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3884,10 +4374,13 @@
         }
       },
       {
-        "id": "act_mimicry_scux",
+        "id": "act_mimicry_xqj7",
         "name": "Mimicry",
         "actionType": "trait",
-        "descriptionHtml": "<p>The wereraven can mimic simple sounds it has heard, such as a person whispering, a baby crying, or an animal chittering. A creature that hears the sounds can tell they are imitations with a successful DC 10 Wisdom (Insight) check.</p>",
+        "descriptionHtml": "<p>The keeper can mimic simple sounds it has heard, such as a person whispering, a baby crying, or an animal chittering. A creature that hears the sounds can tell they are imitations with a successful DC 10 Wisdom (Insight) check.</p>",
+        "entries": [
+          "The keeper can mimic simple sounds it has heard, such as a person whispering, a baby crying, or an animal chittering. A creature that hears the sounds can tell they are imitations with a successful {@dc 10} Wisdom ({@skill Insight}) check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3897,17 +4390,20 @@
           "targets": null,
           "save": {
             "dc": 10,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_regeneration_qavi",
+        "id": "act_regeneration_gsvm",
         "name": "Regeneration",
         "actionType": "trait",
-        "descriptionHtml": "<p>The wereraven regains 10 hit points at the start of its turn. If the wereraven takes damage from a silvered weapon or a spell, this trait doesn't function at the start of the wereraven's next turn. The wereraven dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
+        "descriptionHtml": "<p>The keeper regains 10 hit points at the start of its turn. If the keeper takes damage from a silvered weapon or a spell, this trait doesn't function at the start of the keeper's next turn. The keeper dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
+        "entries": [
+          "The keeper regains 10 hit points at the start of its turn. If the keeper takes damage from a silvered weapon or a spell, this trait doesn't function at the start of the keeper's next turn. The keeper dies only if it starts its turn with 0 hit points and doesn't regenerate."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3923,10 +4419,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__human_or_hybrid_form_only__7dds",
+        "id": "act_multiattack__human_or_hybrid_form_only__8rap",
         "name": "Multiattack (Human or Hybrid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>The wereraven makes two weapon attacks, one of which can be with its hand crossbow.</p>",
+        "descriptionHtml": "<p>The keeper makes two weapon attacks, one of which can be with its hand crossbow.</p>",
+        "entries": [
+          "The keeper makes two weapon attacks, one of which can be with its hand crossbow."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3940,10 +4439,13 @@
         }
       },
       {
-        "id": "act_beak__raven_or_hybrid_form_only__hr9s",
+        "id": "act_beak__raven_or_hybrid_form_only__gvuh",
         "name": "Beak (Raven or Hybrid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}1 piercing damage in raven form, or 4 (1d4 + 2) piercing damage in hybrid form. If the target is humanoid, it must succeed on a DC 10 Constitution saving throw or be cursed with wereraven Player Characters as Lycanthropes.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1 piercing damage in raven form, or 4 (1d4 + 2) piercing damage in hybrid form.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}1 piercing damage in raven form, or 4 ({@damage 1d4 + 2}) piercing damage in hybrid form."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3951,10 +4453,7 @@
           "reach": 5,
           "range": null,
           "targets": "one target",
-          "save": {
-            "dc": 10,
-            "ability": "CON"
-          },
+          "save": null,
           "damages": [
             {
               "formula": "1d4 + 2",
@@ -3965,10 +4464,13 @@
         }
       },
       {
-        "id": "act_shortsword__human_or_hybrid_form_only__5yrc",
+        "id": "act_shortsword__human_or_hybrid_form_only__242w",
         "name": "Shortsword (Human or Hybrid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3987,10 +4489,13 @@
         }
       },
       {
-        "id": "act_hand_crossbow__human_or_hybrid_form_only__ljge",
+        "id": "act_hand_crossbow__human_or_hybrid_form_only__u6mj",
         "name": "Hand Crossbow (Human or Hybrid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 30/120 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4016,11 +4521,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Keeper of the Feather.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Keeper of the Feather.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_necro_alchemist_psi",
@@ -4041,7 +4558,7 @@
       },
       {
         "value": 15,
-        "condition": "with {@spell mage armor}"
+        "condition": "with {@spell Necro-Alchemist armor}"
       }
     ],
     "primaryAc": 12,
@@ -4126,14 +4643,14 @@
       {
         "id": "sc_necro_alchemist_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
         "casterLevel": 9,
         "dc": 14,
         "atkMod": 6,
-        "header": "The mage is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save DC 14, +6 to hit with spell attacks). The mage has the following wizard spells prepared:",
+        "header": "The Necro-Alchemist is a 9th-level spellcaster. Its spellcasting ability is Intelligence (spell save DC 14, +6 to hit with spell attacks). The mage has the following wizard spells prepared:",
         "footer": "",
         "spellsByLevel": {
           "0": {
@@ -4159,7 +4676,8 @@
                     "formula": "1d10",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -4185,17 +4703,17 @@
                 "type": "slot"
               },
               {
-                "spellId": "sp_mage_hand_xphb",
-                "name": "Mage Hand",
-                "source": "XPHB",
+                "spellId": "sp_necro_alchemist_hand_unknown",
+                "name": "Necro-Alchemist Hand",
+                "source": "PHB",
                 "level": 0,
-                "school": "Conjuration",
+                "school": "Evocation",
                 "castingTime": "1 action",
-                "range": "30 feet",
-                "duration": "1 minute",
+                "range": "Self",
+                "duration": "Instantaneous",
                 "concentration": false,
                 "ritual": false,
-                "saveAbility": "",
+                "saveAbility": null,
                 "attackStat": "none",
                 "atkMod": null,
                 "dc": null,
@@ -4247,22 +4765,22 @@
                 "type": "slot"
               },
               {
-                "spellId": "sp_mage_armor_xphb",
-                "name": "Mage Armor",
-                "source": "XPHB",
+                "spellId": "sp_necro_alchemist_armor_unknown",
+                "name": "Necro-Alchemist Armor",
+                "source": "PHB",
                 "level": 1,
-                "school": "Abjuration",
+                "school": "Evocation",
                 "castingTime": "1 action",
-                "range": "touch",
-                "duration": "8 hours",
+                "range": "Self",
+                "duration": "Instantaneous",
                 "concentration": false,
                 "ritual": false,
-                "saveAbility": "",
+                "saveAbility": null,
                 "attackStat": "none",
                 "atkMod": null,
                 "dc": null,
                 "damageList": [],
-                "components": "V, S, M (a piece of cured leather)",
+                "components": "V, S",
                 "type": "slot"
               },
               {
@@ -4285,7 +4803,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -4397,7 +4917,9 @@
                     "formula": "8d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -4465,12 +4987,16 @@
                   {
                     "formula": "2d10",
                     "type": "Bludgeoning",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d10",
+                    "upcastScaleStep": 1
                   },
                   {
-                    "formula": "2d10",
+                    "formula": "4d6",
                     "type": "Cold",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a mitten)",
@@ -4501,7 +5027,9 @@
                     "formula": "8d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a small crystal or glass cone)",
@@ -4518,10 +5046,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_dagger_btoy",
+        "id": "act_dagger_t99p",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 5} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4547,11 +5078,31 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Familiars",
+        "descriptionHtml": "<p>Any spellcaster that can cast the find familiar spell (such as an archmage or Necro-Alchemist) is likely to have a familiar. The familiar can be one of the creatures described in the spell (see the Player's Handbook) or some other Tiny monster, such as a crawling claw, imp, pseudodragon, or quasit.</p>",
+        "entries": [
+          "Any spellcaster that can cast the {@spell find familiar} spell (such as an archmage or Necro-Alchemist) is likely to have a familiar. The familiar can be one of the creatures described in the spell (see the Player's Handbook) or some other Tiny monster, such as a {@creature crawling claw}, {@creature imp}, {@creature pseudodragon}, or {@creature quasit}."
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Necro-Alchemist.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Necro-Alchemist.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_sigarda_psi",
@@ -4669,14 +5220,14 @@
       {
         "id": "sc_sigarda_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 7,
         "casterLevel": 0,
         "dc": 20,
         "atkMod": 12,
-        "header": "The planetar's spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components:",
+        "header": "The Sigarda's spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -4743,7 +5294,9 @@
                   "formula": "6d10",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -4793,12 +5346,16 @@
                 {
                   "formula": "5d6",
                   "type": "Fire",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "5d6",
                   "type": "Radiant",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a pinch of sulfur)",
@@ -4895,7 +5452,9 @@
                   "formula": "4d10",
                   "type": "Piercing",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d10",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a locust)",
@@ -4914,10 +5473,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_4zks",
+        "id": "act_angelic_weapons_nxqw",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>The Sigarda's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The Sigarda's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra {@damage 5d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4936,10 +5498,13 @@
         }
       },
       {
-        "id": "act_divine_awareness_e0k2",
+        "id": "act_divine_awareness_ht4g",
         "name": "Divine Awareness",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar knows if it hears a lie.</p>",
+        "descriptionHtml": "<p>The Sigarda knows if it hears a lie.</p>",
+        "entries": [
+          "The Sigarda knows if it hears a lie."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4953,10 +5518,33 @@
         }
       },
       {
-        "id": "act_magic_resistance_lap0",
+        "id": "act_magic_resistance_4vrh",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The Sigarda has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The Sigarda has advantage on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_heron_protection_m474",
+        "name": "Heron Protection",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Whenever an angel of the Host of Herons or a friendly creature within 10 feet of it makes a saving throw, the creature gains a bonus to the saving throw equal to the angel's Charisma modifier. The angel must be conscious to receive or grant this bonus.</p>",
+        "entries": [
+          "Whenever an angel of the Host of Herons or a friendly creature within 10 feet of it makes a saving throw, the creature gains a bonus to the saving throw equal to the angel's Charisma modifier. The angel must be conscious to receive or grant this bonus."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4972,10 +5560,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8ypy",
+        "id": "act_multiattack_2vma",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The planetar makes two melee attacks.</p>",
+        "descriptionHtml": "<p>The Sigarda makes two melee attacks.</p>",
+        "entries": [
+          "The Sigarda makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4989,10 +5580,13 @@
         }
       },
       {
-        "id": "act_greatsword_vced",
+        "id": "act_greatsword_38ev",
         "name": "Greatsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 5 ft., one target. {@h}21 ({@damage 4d6 + 7}) slashing damage plus 22 ({@damage 5d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5015,10 +5609,13 @@
         }
       },
       {
-        "id": "act_healing_touch__4_day__3csk",
+        "id": "act_healing_touch__4_day__cdii",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The planetar touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>The Sigarda touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The Sigarda touches another creature. The target magically regains 30 ({@dice 6d8 + 3}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5039,11 +5636,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Sigarda.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Sigarda.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_skaab_psi",
@@ -5151,10 +5760,14 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_berserk_3eic",
+        "id": "act_berserk_pjlv",
         "name": "Berserk",
         "actionType": "trait",
-        "descriptionHtml": "<p>Whenever the golem starts its turn with 40 hit points or fewer, roll a d6. On a 6, the golem goes berserk. On each of its turns while berserk, the golem attacks the nearest creature it can see. If no creature is near enough to move to and attack, the golem attacks an object, with preference for an object smaller than itself. Once the golem goes berserk, it continues to do so until it is destroyed or regains all its hit points.</p><p>The golem's creator, if within 60 feet of the berserk golem, can try to calm it by speaking firmly and persuasively. The golem must be able to hear its creator, who must take an action to make a DC 15 Charisma (Persuasion) check. If the check succeeds, the golem ceases being berserk. If it takes damage while still at 40 hit points or fewer, the golem might go berserk again.</p>",
+        "descriptionHtml": "<p>Whenever the skaab starts its turn with 40 hit points or fewer, roll a d6. On a 6, the golem goes berserk. On each of its turns while berserk, the golem attacks the nearest creature it can see. If no creature is near enough to move to and attack, the golem attacks an object, with preference for an object smaller than itself. Once the golem goes berserk, it continues to do so until it is destroyed or regains all its hit points.</p><p>The skaab's creator, if within 60 feet of the berserk golem, can try to calm it by speaking firmly and persuasively. The golem must be able to hear its creator, who must take an action to make a DC 15 Charisma (Persuasion) check. If the check succeeds, the golem ceases being berserk. If it takes damage while still at 40 hit points or fewer, the golem might go berserk again.</p>",
+        "entries": [
+          "Whenever the skaab starts its turn with 40 hit points or fewer, roll a {@dice d6}. On a 6, the golem goes berserk. On each of its turns while berserk, the golem attacks the nearest creature it can see. If no creature is near enough to move to and attack, the golem attacks an object, with preference for an object smaller than itself. Once the golem goes berserk, it continues to do so until it is destroyed or regains all its hit points.",
+          "The skaab's creator, if within 60 feet of the berserk golem, can try to calm it by speaking firmly and persuasively. The golem must be able to hear its creator, who must take an action to make a {@dc 15} Charisma ({@skill Persuasion}) check. If the check succeeds, the golem ceases being berserk. If it takes damage while still at 40 hit points or fewer, the golem might go berserk again."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5164,17 +5777,20 @@
           "targets": null,
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_aversion_of_fire_j0cd",
+        "id": "act_aversion_of_fire_7ebf",
         "name": "Aversion of Fire",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the golem takes fire damage, it has disadvantage on attack rolls and ability checks until the end of its next turn.</p>",
+        "descriptionHtml": "<p>If the skaab takes fire damage, it has disadvantage on attack rolls and ability checks until the end of its next turn.</p>",
+        "entries": [
+          "If the skaab takes fire damage, it has disadvantage on attack rolls and ability checks until the end of its next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5188,10 +5804,13 @@
         }
       },
       {
-        "id": "act_immutable_form_1dox",
+        "id": "act_immutable_form_8lrb",
         "name": "Immutable Form",
         "actionType": "trait",
-        "descriptionHtml": "<p>The golem is immune to any spell or effect that would alter its form.</p>",
+        "descriptionHtml": "<p>The skaab is immune to any spell or effect that would alter its form.</p>",
+        "entries": [
+          "The skaab is immune to any spell or effect that would alter its form."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5205,10 +5824,13 @@
         }
       },
       {
-        "id": "act_lightning_absorption_o44j",
+        "id": "act_lightning_absorption_k560",
         "name": "Lightning Absorption",
         "actionType": "trait",
-        "descriptionHtml": "<p>Whenever the golem is subjected to lightning damage, it takes no damage and instead regains a number of hit points equal to the lightning damage dealt.</p>",
+        "descriptionHtml": "<p>Whenever the skaab is subjected to lightning damage, it takes no damage and instead regains a number of hit points equal to the lightning damage dealt.</p>",
+        "entries": [
+          "Whenever the skaab is subjected to lightning damage, it takes no damage and instead regains a number of hit points equal to the lightning damage dealt."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5222,10 +5844,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_vuoy",
+        "id": "act_magic_resistance_c4tu",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The golem has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The skaab has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The skaab has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5239,10 +5864,13 @@
         }
       },
       {
-        "id": "act_magic_weapons_gwmf",
+        "id": "act_magic_weapons_wnhd",
         "name": "Magic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The golem's weapon attacks are magical.</p>",
+        "descriptionHtml": "<p>The skaab's weapon attacks are magical.</p>",
+        "entries": [
+          "The skaab's weapon attacks are magical."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5258,10 +5886,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uw7m",
+        "id": "act_multiattack_viob",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The golem makes two slam attacks.</p>",
+        "descriptionHtml": "<p>The skaab makes two slam attacks.</p>",
+        "entries": [
+          "The skaab makes two slam attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5275,10 +5906,13 @@
         }
       },
       {
-        "id": "act_slam_mmy4",
+        "id": "act_slam_ruer",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}13 (2d8 + 4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}13 ({@damage 2d8 + 4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5304,11 +5938,67 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Skaabs",
+        "descriptionHtml": "<p>The most basic skaabs are simply flesh golem, as described in the Monster Manual. But the aspiration of every skaberen is to produce a truly unique masterpiece, a goal that might see a stitcher create golems with one of the following special characteristics.</p><div><strong><em>Armor Plating.</em></strong> <p>Increase the skaab's Armor Class to 14 and increase its challenge rating to 6 (2,300 XP).</p></div><div><strong><em>Six Arms.</em></strong> <p>The skaab's multiattack action allows it to make three slam attacks. Increase its challenge rating to 6 (2,300 XP).</p></div><div><strong><em>Three Heads.</em></strong> <p>The skaab has advantage on Wisdom (Perception) checks and on saving throws against being blinded, deafened, stunned, and knocked unconscious. (Its challenge rating doesn't change.)</p></div><div><strong><em>Skaab Goliath.</em></strong> <p>This skaab has three heads, six arms, and armor plating. Increase its challenge rating to 7 (2,900 XP).</p></div><div><strong><em>Winged Skaab.</em></strong> <p>The skaab has a flying speed of 30 feet.</p></div>",
+        "entries": [
+          "The most basic skaabs are simply {@creature flesh golem|MM|flesh golems}, as described in the Monster Manual. But the aspiration of every skaberen is to produce a truly unique masterpiece, a goal that might see a stitcher create golems with one of the following special characteristics.",
+          {
+            "type": "entries",
+            "name": "Armor Plating",
+            "page": 20,
+            "entries": [
+              "Increase the skaab's Armor Class to 14 and increase its challenge rating to 6 (2,300 XP)."
+            ]
+          },
+          {
+            "name": "Six Arms",
+            "type": "entries",
+            "entries": [
+              "The skaab's multiattack action allows it to make three slam attacks. Increase its challenge rating to 6 (2,300 XP)."
+            ]
+          },
+          {
+            "name": "Three Heads",
+            "type": "entries",
+            "entries": [
+              "The skaab has advantage on Wisdom ({@skill Perception}) checks and on saving throws against being {@condition blinded}, {@condition deafened}, {@condition stunned}, and knocked {@condition unconscious}. (Its challenge rating doesn't change.)"
+            ]
+          },
+          {
+            "name": "Skaab Goliath",
+            "type": "entries",
+            "entries": [
+              "This skaab has three heads, six arms, and armor plating. Increase its challenge rating to 7 (2,900 XP)."
+            ]
+          },
+          {
+            "name": "Winged Skaab",
+            "type": "entries",
+            "entries": [
+              "The skaab has a flying speed of 30 feet."
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Skaab.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Skaab.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_strefan_maurer_psi",
@@ -5432,14 +6122,14 @@
       {
         "id": "sc_strefan_maurer_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
         "casterLevel": 9,
         "dc": 18,
         "atkMod": 10,
-        "header": "Strahd is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save DC 18, +10 to hit with spell attacks). He has the following wizard spells prepared:",
+        "header": "Strefan is a 9th-level spellcaster. His spellcasting ability is Intelligence (spell save DC 18, +10 to hit with spell attacks). He has the following wizard spells prepared:",
         "footer": "",
         "spellsByLevel": {
           "0": {
@@ -5503,7 +6193,8 @@
                     "formula": "1d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -5677,7 +6368,9 @@
                     "formula": "8d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -5727,7 +6420,9 @@
                     "formula": "8d8",
                     "type": "Necrotic",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -5824,10 +6519,15 @@
     ],
     "traits": [
       {
-        "id": "act_shapechanger_hsjx",
+        "id": "act_shapechanger_2s7c",
         "name": "Shapechanger",
         "actionType": "trait",
-        "descriptionHtml": "<p>If Strahd isn't in running water or sunlight, he can use his action to polymorph into a Tiny bat, a Medium wolf, or a Medium cloud of mist, or back into his true form.</p><p>While in bat or wolf form, Strahd can't speak. In bat form, his walking speed is 5 feet, and he has a flying speed of 30 feet. In wolf form, his walking speed is 40 feet. His statistics, other than his size and speed, are unchanged. Anything he is wearing transforms with him, but nothing he is carrying does. He reverts to his true form if he dies.</p><p>While in mist form, Strahd can't take any actions, speak, or manipulate objects. He is weightless, has a flying speed of 20 feet, can hover, and can enter a hostile creature's space and stop there. In addition, if air can pass through a space, the mist can do so without squeezing, and he can't pass through water. He has advantage on Strength, Dexterity, and Constitution saving throws, and he is immune to all nonmagical damage, except the damage he takes from sunlight.</p>",
+        "descriptionHtml": "<p>If Strefan isn't in running water or sunlight, he can use his action to polymorph into a Tiny bat, a Medium wolf, or a Medium cloud of mist, or back into his true form.</p><p>While in bat or wolf form, Strefan can't speak. In bat form, his walking speed is 5 feet, and he has a flying speed of 30 feet. In wolf form, his walking speed is 40 feet. His statistics, other than his size and speed, are unchanged. Anything he is wearing transforms with him, but nothing he is carrying does. He reverts to his true form if he dies.</p><p>While in mist form, Strefan can't take any actions, speak, or manipulate objects. He is weightless, has a flying speed of 20 feet, can hover, and can enter a hostile creature's space and stop there. In addition, if air can pass through a space, the mist can do so without squeezing, and he can't pass through water. He has advantage on Strength, Dexterity, and Constitution saving throws, and he is immune to all nonmagical damage, except the damage he takes from sunlight.</p>",
+        "entries": [
+          "If Strefan isn't in running water or sunlight, he can use his action to polymorph into a Tiny bat, a Medium wolf, or a Medium cloud of mist, or back into his true form.",
+          "While in bat or wolf form, Strefan can't speak. In bat form, his walking speed is 5 feet, and he has a flying speed of 30 feet. In wolf form, his walking speed is 40 feet. His statistics, other than his size and speed, are unchanged. Anything he is wearing transforms with him, but nothing he is carrying does. He reverts to his true form if he dies.",
+          "While in mist form, Strefan can't take any actions, speak, or manipulate objects. He is weightless, has a flying speed of 20 feet, can hover, and can enter a hostile creature's space and stop there. In addition, if air can pass through a space, the mist can do so without squeezing, and he can't pass through water. He has advantage on Strength, Dexterity, and Constitution saving throws, and he is immune to all nonmagical damage, except the damage he takes from sunlight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5841,10 +6541,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__shqh",
+        "id": "act_legendary_resistance__3_day__zv7j",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
-        "descriptionHtml": "<p>If Strahd fails a saving throw, he can choose to succeed instead.</p>",
+        "descriptionHtml": "<p>If Strefan fails a saving throw, he can choose to succeed instead.</p>",
+        "entries": [
+          "If Strefan fails a saving throw, he can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5858,10 +6561,14 @@
         }
       },
       {
-        "id": "act_misty_escape_50f8",
+        "id": "act_misty_escape_y32c",
         "name": "Misty Escape",
         "actionType": "trait",
-        "descriptionHtml": "<p>When Strahd drops to 0 hit points outside his coffin, he transforms into a cloud of mist (as in the Shapechanger trait) instead of falling unconscious, provided that he isn't in running water or sunlight. If he can't transform, he is destroyed.</p><p>While he has 0 hit points in mist form, he can't revert to his vampire form, and he must reach his coffin within 2 hours or be destroyed. Once in his coffin, he reverts to his vampire form. He is then paralyzed until he regains at least 1 hit point. After 1 hour in his coffin with 0 hit points, he regains 1 hit point.</p>",
+        "descriptionHtml": "<p>When Strefan drops to 0 hit points outside his coffin, he transforms into a cloud of mist (as in the Shapechanger trait) instead of falling unconscious, provided that he isn't in running water or sunlight. If he can't transform, he is destroyed.</p><p>While he has 0 hit points in mist form, he can't revert to his vampire form, and he must reach his coffin within 2 hours or be destroyed. Once in his coffin, he reverts to his vampire form. He is then paralyzed until he regains at least 1 hit point. After 1 hour in his coffin with 0 hit points, he regains 1 hit point.</p>",
+        "entries": [
+          "When Strefan drops to 0 hit points outside his coffin, he transforms into a cloud of mist (as in the Shapechanger trait) instead of falling {@condition unconscious}, provided that he isn't in running water or sunlight. If he can't transform, he is destroyed.",
+          "While he has 0 hit points in mist form, he can't revert to his vampire form, and he must reach his coffin within 2 hours or be destroyed. Once in his coffin, he reverts to his vampire form. He is then {@condition paralyzed} until he regains at least 1 hit point. After 1 hour in his coffin with 0 hit points, he regains 1 hit point."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5875,10 +6582,13 @@
         }
       },
       {
-        "id": "act_regeneration_66kx",
+        "id": "act_regeneration_4kn3",
         "name": "Regeneration",
         "actionType": "trait",
-        "descriptionHtml": "<p>Strahd regains 20 hit points at the start of his turn if he has at least 1 hit point and isn't in running water or sunlight. If he takes radiant damage or damage from Holy Water (Flask), this trait doesn't function at the start of his next turn.</p>",
+        "descriptionHtml": "<p>Strefan regains 20 hit points at the start of his turn if he has at least 1 hit point and isn't in running water or sunlight. If he takes radiant damage or damage from Holy Water (Flask), this trait doesn't function at the start of his next turn.</p>",
+        "entries": [
+          "Strefan regains 20 hit points at the start of his turn if he has at least 1 hit point and isn't in running water or sunlight. If he takes radiant damage or damage from {@item Holy Water (Flask)|PHB|holy water}, this trait doesn't function at the start of his next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5892,10 +6602,13 @@
         }
       },
       {
-        "id": "act_spider_climb_5o33",
+        "id": "act_spider_climb_w18m",
         "name": "Spider Climb",
         "actionType": "trait",
-        "descriptionHtml": "<p>Strahd can climb difficult surfaces, including upside down on ceilings, without having to make an ability check.</p>",
+        "descriptionHtml": "<p>Strefan can climb difficult surfaces, including upside down on ceilings, without having to make an ability check.</p>",
+        "entries": [
+          "Strefan can climb difficult surfaces, including upside down on ceilings, without having to make an ability check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5909,10 +6622,13 @@
         }
       },
       {
-        "id": "act_vampire_weaknesses_n1ws",
-        "name": "Vampire Weaknesses",
+        "id": "act_vampire_vulnerabilities_so55",
+        "name": "Vampire Vulnerabilities",
         "actionType": "trait",
-        "descriptionHtml": "<p>Strahd has the following flaws:</p><ul><li></li><li></li><li></li><li></li></ul>",
+        "descriptionHtml": "<p>Weapons cut from living wood are particularly effective against vampires, though any weapon can harm or kill them. A vampire can't cross running water that shows the reflection of the moon, and water blessed by Avacyn (Holy Water (flask)) burns vampire flesh like acid. A vampire's reflection in silver (including a silver-backed glass mirror) appears as the vampire would have looked without the vampiric condition—neither its true appearance nor its glamer, but a normal human, flaws and all. For that reason, vampires go to great lengths to avoid mirrors, and the presence of silver in any form is unsettling to them.</p>",
+        "entries": [
+          "Weapons cut from living wood are particularly effective against vampires, though any weapon can harm or kill them. A vampire can't cross running water that shows the reflection of the moon, and water blessed by Avacyn ({@item Holy Water (flask)|PHB|holy water}) burns vampire flesh like acid. A vampire's reflection in silver (including a silver-backed glass mirror) appears as the vampire would have looked without the vampiric condition—neither its true appearance nor its glamer, but a normal human, flaws and all. For that reason, vampires go to great lengths to avoid mirrors, and the presence of silver in any form is unsettling to them."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5928,10 +6644,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__vampire_form_only__ae7v",
+        "id": "act_multiattack__vampire_form_only__mtk5",
         "name": "Multiattack (Vampire Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>Strahd makes two attacks, only one of which can be a bite attack.</p>",
+        "descriptionHtml": "<p>Strefan makes two attacks, only one of which can be a bite attack.</p>",
+        "entries": [
+          "Strefan makes two attacks, only one of which can be a bite attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5945,10 +6664,13 @@
         }
       },
       {
-        "id": "act_unarmed_strike__vampire_or_wolf_form_only__lo7v",
+        "id": "act_unarmed_strike__vampire_or_wolf_form_only__r9g1",
         "name": "Unarmed Strike (Vampire or Wolf Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage, plus 14 (4d6) necrotic damage. If the target is a creature, Strahd can grapple it (escape DC 18) instead of dealing the slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage, plus 14 (4d6) necrotic damage. If the target is a creature, Strefan can grapple it (escape DC 18) instead of dealing the slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d8 + 4}) slashing damage, plus 14 ({@damage 4d6}) necrotic damage. If the target is a creature, Strefan can grapple it (escape {@dc 18}) instead of dealing the slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5958,7 +6680,7 @@
           "targets": "one target",
           "save": {
             "dc": 18,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -5974,17 +6696,20 @@
         }
       },
       {
-        "id": "act_bite_6sdm",
+        "id": "act_bite_0xks",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one willing creature, or a creature that is grappled by Strahd, incapacitated, or restrained. {@h}7 (1d6 + 4) piercing damage plus 10 (3d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and Strahd regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if its hit point maximum is reduced to 0. A humanoid slain in this way and then buried in the ground rises the following night as a vampire spawn under Strahd's control.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one willing creature, or a creature that is grappled by Strefan, incapacitated, or restrained. Hit: 7 (1d6 + 4) piercing damage plus 10 (3d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and Strahd regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if its hit point maximum is reduced to 0. A humanoid slain in this way and then buried in the ground rises the following night as a vampire spawn under Strahd's control.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 5 ft., one willing creature, or a creature that is {@condition grappled} by Strefan, {@condition incapacitated}, or {@condition restrained}. {@h}7 ({@damage 1d6 + 4}) piercing damage plus 10 ({@damage 3d6}) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and Strahd regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if its hit point maximum is reduced to 0. A humanoid slain in this way and then buried in the ground rises the following night as a {@creature vampire spawn} under Strahd's control."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
           "attackBonus": 9,
           "reach": 5,
           "range": null,
-          "targets": "one willing creature, or a creature that is {@condition grappled} by Strahd, {@condition incapacitated}, or {@condition restrained}",
+          "targets": "one willing creature, or a creature that is {@condition grappled} by Strefan, {@condition incapacitated}, or {@condition restrained}",
           "save": null,
           "damages": [
             {
@@ -6000,10 +6725,14 @@
         }
       },
       {
-        "id": "act_charm_egif",
+        "id": "act_charm_ox43",
         "name": "Charm",
         "actionType": "action",
-        "descriptionHtml": "<p>Strahd targets one humanoid he can see within 30 feet of him. If the target can see Strahd, the target must succeed on a DC 17 Wisdom saving throw against this magic or be charmed. The charmed target regards Strahd as a trusted friend to be heeded and protected. The target isn't under Strahd's control, but it takes Strahd's requests and actions in the most favorable way and lets Strahd bite it.</p><p>Each time Strahd or his companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until Strahd is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect.</p>",
+        "descriptionHtml": "<p>Strefan targets one humanoid he can see within 30 feet of him. If the target can see Strahd, the target must succeed on a DC 17 Wisdom saving throw against this magic or be charmed. The charmed target regards Strahd as a trusted friend to be heeded and protected. The target isn't under Strahd's control, but it takes Strahd's requests and actions in the most favorable way and lets Strahd bite it.</p><p>Each time Strefan or his companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until Strahd is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect.</p>",
+        "entries": [
+          "Strefan targets one humanoid he can see within 30 feet of him. If the target can see Strahd, the target must succeed on a {@dc 17} Wisdom saving throw against this magic or be {@condition charmed}. The {@condition charmed} target regards Strahd as a trusted friend to be heeded and protected. The target isn't under Strahd's control, but it takes Strahd's requests and actions in the most favorable way and lets Strahd bite it.",
+          "Each time Strefan or his companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until Strahd is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6020,10 +6749,13 @@
         }
       },
       {
-        "id": "act_children_of_the_night__1_day__wz7j",
+        "id": "act_children_of_the_night__1_day__81ys",
         "name": "Children of the Night (1/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>Strahd magically calls 2d4 swarm of bats or swarm of rats, provided that the sun isn't up. While outdoors, Strahd can call 3d6 wolf instead. The called creatures arrive in 1d4 rounds, acting as allies of Strahd and obeying his spoken commands. The beasts remain for 1 hour, until Strahd dies, or until he dismisses them as a bonus action.</p>",
+        "descriptionHtml": "<p>Strefan magically calls 2d4 swarm of bats or swarm of rats, provided that the sun isn't up. While outdoors, Strahd can call 3d6 wolf instead. The called creatures arrive in 1d4 rounds, acting as allies of Strahd and obeying his spoken commands. The beasts remain for 1 hour, until Strahd dies, or until he dismisses them as a bonus action.</p>",
+        "entries": [
+          "Strefan magically calls {@dice 2d4} {@creature swarm of bats||swarms of bats} or {@creature swarm of rats||swarms of rats}, provided that the sun isn't up. While outdoors, Strahd can call {@dice 3d6} {@creature wolf||wolves} instead. The called creatures arrive in {@dice 1d4} rounds, acting as allies of Strahd and obeying his spoken commands. The beasts remain for 1 hour, until Strahd dies, or until he dismisses them as a bonus action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6044,10 +6776,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_h2no",
+          "id": "act_move_9rm2",
           "name": "Move",
           "actionType": "legendary",
-          "descriptionHtml": "<p>Strahd moves up to his speed without provoking opportunity attacks.</p>",
+          "descriptionHtml": "<p>Strefan moves up to his speed without provoking opportunity attacks.</p>",
+          "entries": [
+            "Strefan moves up to his speed without provoking opportunity attacks."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -6061,10 +6796,13 @@
           }
         },
         {
-          "id": "act_unarmed_strike_yv0q",
+          "id": "act_unarmed_strike_l0k8",
           "name": "Unarmed Strike",
           "actionType": "legendary",
-          "descriptionHtml": "<p>Strahd makes one unarmed strike.</p>",
+          "descriptionHtml": "<p>Strefan makes one unarmed strike.</p>",
+          "entries": [
+            "Strefan makes one unarmed strike."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -6078,10 +6816,13 @@
           }
         },
         {
-          "id": "act_bite__costs_2_actions__oo91",
+          "id": "act_bite__costs_2_actions__vdg3",
           "name": "Bite (Costs 2 Actions)",
           "actionType": "legendary",
-          "descriptionHtml": "<p>Strahd makes one bite attack.</p>",
+          "descriptionHtml": "<p>Strefan makes one bite attack.</p>",
+          "entries": [
+            "Strefan makes one bite attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -6096,103 +6837,26 @@
         }
       ]
     },
-    "lairActions": [
-      {
-        "id": "act_lair_action_1gr5",
-        "name": "Lair Action",
-        "actionType": "lair",
-        "descriptionHtml": "<p>While Strahd is in Castle Ravenloft, he can take lair actions as long as he isn't incapacitated.</p>",
-        "macro": {
-          "isAttack": false,
-          "attackType": null,
-          "attackBonus": null,
-          "reach": null,
-          "range": null,
-          "targets": null,
-          "save": null,
-          "damages": [],
-          "recharge": null
-        }
-      },
-      {
-        "id": "act_lair_action_tqek",
-        "name": "Lair Action",
-        "actionType": "lair",
-        "descriptionHtml": "<p>Until initiative count 20 of the next round, Strahd can pass through solid walls, doors, ceilings, and floors as if they weren't there.</p>",
-        "macro": {
-          "isAttack": false,
-          "attackType": null,
-          "attackBonus": null,
-          "reach": null,
-          "range": null,
-          "targets": null,
-          "save": null,
-          "damages": [],
-          "recharge": null
-        }
-      },
-      {
-        "id": "act_lair_action_16xt",
-        "name": "Lair Action",
-        "actionType": "lair",
-        "descriptionHtml": "<p>Strahd targets any number of doors and windows that he can see, causing each one to either open or close as he wishes. Closed doors can be magically locked (needing a successful DC 20 Strength check to force open) until Strahd chooses to end the effect, or until Strahd uses this lair action again.</p>",
-        "macro": {
-          "isAttack": false,
-          "attackType": null,
-          "attackBonus": null,
-          "reach": null,
-          "range": null,
-          "targets": null,
-          "save": {
-            "dc": 20,
-            "ability": "Save"
-          },
-          "damages": [],
-          "recharge": null
-        }
-      },
-      {
-        "id": "act_lair_action_zozx",
-        "name": "Lair Action",
-        "actionType": "lair",
-        "descriptionHtml": "<p>Strahd summons the angry spirit of one who has died in the castle. The apparition appears next to a hostile creature that Strahd can see, makes an attack against that creature, and then disappears. The apparition has the statistics of a specter.</p>",
-        "macro": {
-          "isAttack": false,
-          "attackType": null,
-          "attackBonus": null,
-          "reach": null,
-          "range": null,
-          "targets": null,
-          "save": null,
-          "damages": [],
-          "recharge": null
-        }
-      },
-      {
-        "id": "act_lair_action_orp0",
-        "name": "Lair Action",
-        "actionType": "lair",
-        "descriptionHtml": "<p>Strahd targets one Medium or smaller creature that casts a shadow. The target's shadow must be visible to Strahd and within 30 feet of him. If the target fails a DC 17 Charisma saving throw, its shadow detaches from it and becomes a shadow that obeys Strahd's commands, acting on initiative count 20. A greater restoration spell or a remove curse spell cast on the target restores its natural shadow, but only if its undead shadow has been destroyed.</p>",
-        "macro": {
-          "isAttack": false,
-          "attackType": null,
-          "attackBonus": null,
-          "reach": null,
-          "range": null,
-          "targets": null,
-          "save": {
-            "dc": 17,
-            "ability": "CHA"
-          },
-          "damages": [],
-          "recharge": null
-        }
-      }
-    ],
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Strefan Maurer.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Strefan Maurer.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": {
+      "name": "Strefan von Zarovich",
+      "source": "CoS"
+    }
   },
   {
     "id": "creature_vampire_neonate_psi",
@@ -6304,10 +6968,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration_yq93",
+        "id": "act_regeneration_ytc8",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire regains 10 hit points at the start of its turn if it has at least 1 hit point. If the vampire takes radiant damage or damage from Holy Water (Flask), this trait doesn't function at the start of the vampire's next turn.</p>",
+        "entries": [
+          "The vampire regains 10 hit points at the start of its turn if it has at least 1 hit point. If the vampire takes radiant damage or damage from {@item Holy Water (Flask)|PHB|holy water}, this trait doesn't function at the start of the vampire's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6323,10 +6990,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dgar",
+        "id": "act_multiattack_s3lc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire makes two attacks, only one of which can be a bite attack.</p>",
+        "entries": [
+          "The vampire makes two attacks, only one of which can be a bite attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6340,10 +7010,13 @@
         }
       },
       {
-        "id": "act_claws_uinj",
+        "id": "act_claws_00ks",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one creature. {@h}8 (2d4 + 3) slashing damage. Instead of dealing damage, the vampire can grapple the target (escape DC 13).</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one creature. Hit: 8 (2d4 + 3) slashing damage. Instead of dealing damage, the vampire can grapple the target (escape DC 13).</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one creature. {@h}8 ({@damage 2d4 + 3}) slashing damage. Instead of dealing damage, the vampire can grapple the target (escape {@dc 13})."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6353,7 +7026,7 @@
           "targets": "one creature",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -6365,10 +7038,13 @@
         }
       },
       {
-        "id": "act_bite_02bv",
+        "id": "act_bite_49bj",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one willing creature, or a creature that is grappled by the vampire, incapacitated, or restrained. {@h}6 (1d6 + 3) piercing damage plus 7 (2d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one willing creature, or a creature that is grappled by the vampire, incapacitated, or restrained. Hit: 6 (1d6 + 3) piercing damage plus 7 (2d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one willing creature, or a creature that is {@condition grappled} by the vampire, {@condition incapacitated}, or {@condition restrained}. {@h}6 ({@damage 1d6 + 3}) piercing damage plus 7 ({@damage 2d6}) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6391,10 +7067,13 @@
         }
       },
       {
-        "id": "act_vampiric_glamer_50li",
+        "id": "act_vampiric_glamer_9nb7",
         "name": "Vampiric Glamer",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire obscures its form with mind-affecting magic that makes others perceive it as a beautiful human of the same size and shape. The illusion ends if the vampire takes a bonus action to end it or if the vampire dies. A creature that can see the vampire can take an action to visually inspect it, ending the mental effect on itself and seeing the vampire's true form with a successful DC 20 Wisdom (Perception) check.</p>",
+        "entries": [
+          "The vampire obscures its form with mind-affecting magic that makes others perceive it as a beautiful human of the same size and shape. The illusion ends if the vampire takes a bonus action to end it or if the vampire dies. A creature that can see the vampire can take an action to visually inspect it, ending the mental effect on itself and seeing the vampire's true form with a successful {@dc 20} Wisdom ({@skill Perception}) check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6404,17 +7083,20 @@
           "targets": null,
           "save": {
             "dc": 20,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_aura_of_silence_uwpv",
+        "id": "act_aura_of_silence_vude",
         "name": "Aura of Silence",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire shrouds itself in a cloak of silence to a radius of 2 feet. Within that radius, the effect is the same as the silence spell.</p>",
+        "entries": [
+          "The vampire shrouds itself in a cloak of silence to a radius of 2 feet. Within that radius, the effect is the same as the {@spell silence} spell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6435,11 +7117,66 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Elder Vampires",
+        "descriptionHtml": "<p>The basic vampire statistics represent a \"neonate\"—a newly spawned vampire. Older vampires can learn powerful magic of many different kinds, and might have any of the following traits and abilities.</p><div><strong><em>Shapechanger.</em></strong> <p>The vampire has the Shapechanger trait of the vampire in the Monster Manual, as well as the shapechanger tag. Some vampires can turn into bat form, some can assume mist form, and a few can choose either form.</p></div><div><strong><em>Charm.</em></strong> <p>The vampire has the Charm action of the vampire in the Monster Manual.</p></div><div><strong><em>Flight.</em></strong> <p>The vampire has a flying speed of 30 feet.</p></div><div><strong><em>Gorger.</em></strong> <p>The vampire has advantage on melee attack rolls, but attack rolls against it have advantage.</p></div><div><strong><em>Spellcasting.</em></strong> <p>The vampire has the spellcasting abilities of a wizard or cleric.</p></div>",
+        "entries": [
+          "The basic vampire statistics represent a \"neonate\"—a newly spawned vampire. Older vampires can learn powerful magic of many different kinds, and might have any of the following traits and abilities.",
+          {
+            "type": "entries",
+            "name": "Shapechanger",
+            "entries": [
+              "The vampire has the Shapechanger trait of the {@creature vampire} in the Monster Manual, as well as the shapechanger tag. Some vampires can turn into bat form, some can assume mist form, and a few can choose either form."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Charm",
+            "entries": [
+              "The vampire has the Charm action of the {@creature vampire} in the Monster Manual."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Flight",
+            "entries": [
+              "The vampire has a flying speed of 30 feet."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Gorger",
+            "entries": [
+              "The vampire has advantage on melee attack rolls, but attack rolls against it have advantage."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Spellcasting",
+            "entries": [
+              "The vampire has the spellcasting abilities of a wizard or cleric."
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Vampire Neonate.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Vampire Neonate.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_werewolf__krallenhorde__psi",
@@ -6548,10 +7285,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_b90k",
+        "id": "act_shapechanger_9cid",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The werewolf polymorphs into a wolf-humanoid canid form, or back into its true human form. This change is dictated by the moon, but can also be induced by trauma or strong emotion. Its statistics, other than its AC, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
+        "entries": [
+          "The werewolf polymorphs into a wolf-humanoid canid form, or back into its true human form. This change is dictated by the moon, but can also be induced by trauma or strong emotion. Its statistics, other than its AC, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6565,10 +7305,13 @@
         }
       },
       {
-        "id": "act_keen_hearing_and_smell_91cd",
+        "id": "act_keen_hearing_and_smell_vznh",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The werewolf has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
+        "entries": [
+          "The werewolf has advantage on Wisdom ({@skill Perception}) checks that rely on hearing or smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6582,10 +7325,13 @@
         }
       },
       {
-        "id": "act_howlpack__vildin_kjck",
+        "id": "act_howlpack__vildin_dtuq",
         "name": "Howlpack: Vildin",
         "actionType": "trait",
         "descriptionHtml": "<p>Vildin Rampage (Canid Form Only). When the werewolf reduces a creature to 0 hit points with a melee attack on its turn, it can take a bonus action to move up to half its speed and make a bite attack.</p>",
+        "entries": [
+          "Vildin Rampage (Canid Form Only). When the werewolf reduces a creature to 0 hit points with a melee attack on its turn, it can take a bonus action to move up to half its speed and make a bite attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6601,10 +7347,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__canid_form_only__m0ik",
+        "id": "act_multiattack__canid_form_only__bdqj",
         "name": "Multiattack (Canid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The werewolf makes two attacks: one with its bite and one with its claws or spear.</p>",
+        "entries": [
+          "The werewolf makes two attacks: one with its bite and one with its claws or spear."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6618,10 +7367,13 @@
         }
       },
       {
-        "id": "act_bite__canid_form_only__15r0",
+        "id": "act_bite__canid_form_only__zpnd",
         "name": "Bite (Canid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d8 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6640,10 +7392,13 @@
         }
       },
       {
-        "id": "act_claws__canid_form_only__ura1",
+        "id": "act_claws__canid_form_only__0p28",
         "name": "Claws (Canid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}7 (2d4 + 2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6662,10 +7417,13 @@
         }
       },
       {
-        "id": "act_spear__human_form_only__ursb",
+        "id": "act_spear__human_form_only__ja2j",
         "name": "Spear (Human Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 (1d6 + 2) piercing damage, or 6 (1d8 + 2) piercing damage if used with two hands to make a melee attack.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d6 + 2) piercing damage, or 6 (1d8 + 2) piercing damage if used with two hands to make a melee attack.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 4} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage, or 6 ({@damage 1d8 + 2}) piercing damage if used with two hands to make a melee attack."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6695,11 +7453,52 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Howlpack Traits",
+        "descriptionHtml": "<p>The basic werewolf statistics represent a member of the Krallenhorde, Innistrad's largest howlpack. Werewolves of other packs might have additional abilities such as the following.</p><div><strong><em>Vildin Rampage (Canid Form Only).</em></strong> <p>When the werewolf reduces a creature to 0 hit points with a melee attack on its turn, it can take a bonus action to move up to half its speed and make a bite attack.</p></div><div><strong><em>Mondronen Wounded Fury.</em></strong> <p>While it has 10 hit points or fewer, the werewolf has advantage on attack rolls. In addition, it deals an extra 7 (2d6) damage to any target it hits with a melee attack.</p></div><div><strong><em>Leeraug Blood Frenzy.</em></strong> <p>The werewolf has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p></div>",
+        "entries": [
+          "The basic werewolf statistics represent a member of the Krallenhorde, Innistrad's largest howlpack. Werewolves of other packs might have additional abilities such as the following.",
+          {
+            "name": "Vildin Rampage (Canid Form Only)",
+            "type": "entries",
+            "entries": [
+              "When the werewolf reduces a creature to 0 hit points with a melee attack on its turn, it can take a bonus action to move up to half its speed and make a bite attack."
+            ]
+          },
+          {
+            "name": "Mondronen Wounded Fury",
+            "type": "entries",
+            "entries": [
+              "While it has 10 hit points or fewer, the werewolf has advantage on attack rolls. In addition, it deals an extra 7 ({@damage 2d6}) damage to any target it hits with a melee attack."
+            ]
+          },
+          {
+            "name": "Leeraug Blood Frenzy",
+            "type": "entries",
+            "entries": [
+              "The werewolf has advantage on melee attack rolls against any creature that doesn't have all its hit points."
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Werewolf (Krallenhorde).webp",
     "tokenImg": "img/bestiary/tokens/PSI/Werewolf (Krallenhorde).webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_zombie_cat_psi",
@@ -6792,10 +7591,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_m2s2",
+        "id": "act_undead_fortitude_c8ow",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the cat to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the cat drops to 1 hit point instead.</p>",
+        "entries": [
+          "If damage reduces the cat to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the cat drops to 1 hit point instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6811,10 +7613,13 @@
     ],
     "actions": [
       {
-        "id": "act_claws_b398",
+        "id": "act_claws_eu2n",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +0 to hit, reach 5 ft., one target. {@h}1 slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 0} to hit, reach 5 ft., one target. {@h}1 slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6835,11 +7640,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Zombie Cat.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Zombie Cat.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_zombie_rat_psi",
@@ -6926,10 +7743,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_1s7v",
+        "id": "act_undead_fortitude_rrlq",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the rat to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the rat drops to 1 hit point instead.</p>",
+        "entries": [
+          "If damage reduces the rat to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the rat drops to 1 hit point instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6945,10 +7765,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_60o5",
+        "id": "act_bite_7uqe",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +0 to hit, reach 5 ft., one target. {@h}1 piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 0} to hit, reach 5 ft., one target. {@h}1 piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6969,11 +7792,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Zombie Rat.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Zombie Rat.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_zombie_snake_psi",
@@ -7060,10 +7895,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_kt07",
+        "id": "act_undead_fortitude_0m7m",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the snake to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the snake drops to 1 hit point instead.</p>",
+        "entries": [
+          "If damage reduces the snake to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the snake drops to 1 hit point instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7079,10 +7917,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_rc4g",
+        "id": "act_bite_v30f",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}1 piercing damage, and the target must make a DC 10 Constitution saving throw, taking 5 (2d4) poison damage on a failed save, or half as much damage on a successful one.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1 piercing damage, and the target must make a DC 10 Constitution saving throw, taking 5 (2d4) poison damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}1 piercing damage, and the target must make a {@dc 10} Constitution saving throw, taking 5 ({@damage 2d4}) poison damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -7111,10 +7952,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSI/Zombie Snake.webp",
     "tokenImg": "img/bestiary/tokens/PSI/Zombie Snake.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

@@ -1,0 +1,162 @@
+[
+  {
+    "id": "creature_primeval_companion_ua2022giantoptions",
+    "name": "Primeval Companion",
+    "source": "UA2022GiantOptions",
+    "edition": "2014",
+    "page": 2,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 15,
+    "dex": 15,
+    "con": 17,
+    "int": 6,
+    "wis": 12,
+    "cha": 8,
+    "proficiencyBonus": 2,
+    "save": {
+      "dex": "+2 + PB",
+      "con": "+3 + PB"
+    },
+    "saves": {
+      "dex": "+2 + PB",
+      "con": "+3 + PB"
+    },
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_strike_17fz",
+        "name": "Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 plus PB to hit, reach 5 ft., one target. Hit: 1d8 plus PB bludgeoning, piercing, or slashing damage (your choice).</p>",
+        "entries": [
+          "{@atk mw} +2 plus PB to hit, reach 5 ft., one target. {@h}{@dice 1d8} plus PB bludgeoning, piercing, or slashing damage (your choice)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_intercept_attack_wg4s",
+        "name": "Intercept Attack",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When a creature the companion can see hits a target with an attack, and the target is within 5 feet of the companion, the target instead takes half the damage. The companion takes the remainder of the damage.</p>",
+        "entries": [
+          "When a creature the companion can see hits a target with an attack, and the target is within 5 feet of the companion, the target instead takes half the damage. The companion takes the remainder of the damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UA2022GiantOptions/Primeval Companion.webp",
+    "tokenImg": "img/bestiary/tokens/UA2022GiantOptions/Primeval Companion.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

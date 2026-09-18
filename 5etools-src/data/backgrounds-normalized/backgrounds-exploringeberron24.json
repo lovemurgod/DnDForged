@@ -1,0 +1,615 @@
+[
+  {
+    "id": "bg_changeling_traveler_exploringeberron24",
+    "name": "Changeling Traveler",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "skills": "Deception, Sleight of hand",
+    "tools": "Thieves' Tools",
+    "skillsData": {
+      "fixed": [
+        "Deception",
+        "Sleight of hand"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Thieves' Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "2x dagger, thieves' tools, bedroll, 2x pouch, 2x Pouches, shiftweave + 10 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "thieves' tools",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "bedroll",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "Pouches",
+                  "quantity": 2,
+                  "type": "special",
+                  "containedGp": 0
+                },
+                {
+                  "name": "shiftweave",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 10
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Focused Personas",
+        "description": "This background grants the Focused Personas feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Wisdom, Charisma\n- **Feat:** Focused Personas\n- **Skill Proficiencies:** Deception and Sleight of Hand\n- **Tool Proficiency:** Thieves' Tools\n- **Equipment:** Choose A or B: (A) 2 Dagger, Thieves' Tools, Bedroll, 2 Pouch, Shiftweave, 10 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_malenti_exploringeberron24",
+    "name": "Malenti",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "skills": "Deception, Insight",
+    "tools": "Choose 1 from Thieves' Tools, Poisoner's Kit, Forgery Kit",
+    "skillsData": {
+      "fixed": [
+        "Deception",
+        "Insight"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Thieves' Tools",
+          "Poisoner's Kit",
+          "Forgery Kit"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "The equipment of a background related to the person you consumed",
+              "items": [
+                {
+                  "name": "The equipment of a background related to the person you consumed",
+                  "quantity": 1,
+                  "type": "special",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 0
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Aquatic Adaptation",
+        "description": "This background grants the Aquatic Adaptation feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Intelligence, Charisma\n- **Feat:** Aquatic Adaptation\n- **Skill Proficiencies:** Deception and Insight\n- **Tool Proficiencies:** Choose Thieves' Tools, Poisoner's Kit, or Forgery Kit\n- **Equipment:** Choose A or B: (A) The equipment of a background related to the person you consumed; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_natural_exploringeberron24",
+    "name": "Natural",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "skills": "Insight, Stealth",
+    "tools": "Thieves' Tools",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Thieves' Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "2x dagger, thieves' tools, Special Item, bedroll, 2x pouch, traveler's clothes + 16 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "thieves' tools",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "bedroll",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 16
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Lucky",
+        "description": "This background grants the Lucky feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Wisdom, Charisma\n- **Feat:** Lucky\n- **Skill Proficiencies:** Insight, Stealth\n- **Tool Proficiency:** Thieves' Tools\n- **Equipment:** Choose A or B: (A) Dagger, Thieves' Tools, Gaming Set (any), Bedroll, Pouch, Traveler's Clothes, 16 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_savant_exploringeberron24",
+    "name": "Savant",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "skills": "Arcana, History",
+    "tools": "Calligrapher's Supplies",
+    "skillsData": {
+      "fixed": [
+        "Arcana",
+        "History"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Calligrapher's Supplies"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "quarterstaff, calligrapher's supplies, book, 8x parchment, robe + 8 gp",
+              "items": [
+                {
+                  "name": "quarterstaff",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "calligrapher's supplies",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "book",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "parchment",
+                  "quantity": 8,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "robe",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 8
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Magic Initiate - Wizard",
+        "description": "This background grants the Magic Initiate - Wizard feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Intelligence, Wisdom\n- **Feat:** Magic Initiate (Wizard)\n- **Skill Proficiencies:** Arcana, History\n- **Tool Proficiency:** Calligrapher's Supplies\n- **Equipment:** Choose A or B: (A) Quarterstaff, Calligrapher's Supplies, Book (history), Parchment (8 sheets), Robe, 8 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_siege_engineer_exploringeberron24",
+    "name": "Siege Engineer",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "skills": "Athletics, Intimidation",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Athletics",
+        "Intimidation"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "spear, shortbow, arrows (20), Special Item, healer's kit, quiver, traveler's clothes + 14 gp",
+              "items": [
+                {
+                  "name": "spear",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "shortbow",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "arrows (20)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "healer's kit",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "quiver",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 14
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Savage Attacker",
+        "description": "This background grants the Savage Attacker feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Dexterity, Constitution\n- **Feat:** Savage Attacker\n- **Skill Proficiencies:** Athletics, Intimidation\n- **Tool Proficiency:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Spear, Shortbow, Arrow, Gaming Set (same as above), Healer's Kit, Quiver, Traveler's Clothes, 14 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_technical_support_exploringeberron24",
+    "name": "Technical Support",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "skills": "Sleight of hand, Stealth",
+    "tools": "Thieves' Tools",
+    "skillsData": {
+      "fixed": [
+        "Sleight of hand",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Thieves' Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "2x dagger, thieves' tools, crowbar, 2x pouch, traveler's clothes + 16 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "thieves' tools",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "crowbar",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 16
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Alert",
+        "description": "This background grants the Alert feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Constitution, Intelligence\n- **Feat:** Alert\n- **Skill Proficiencies:** Sleight of Hand, Stealth\n- **Tool Proficiency:** Thieves' Tools\n- **Equipment:** Choose A or B: (A) Dagger, Thieves' Tools, Crowbar, Pouch, Traveler's Clothes, 16 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_wage_mage_exploringeberron24",
+    "name": "Wage Mage",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "skills": "Investigation, Persuasion",
+    "tools": "Choose 1 from Artisan's Tools of your choice",
+    "skillsData": {
+      "fixed": [
+        "Investigation",
+        "Persuasion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Artisan's Tools of your choice"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Special Item, 2x pouch, traveler's clothes + 32 gp",
+              "items": [
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 32
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Crafter",
+        "description": "This background grants the Crafter feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Dexterity, Intelligence\n- **Feat:** Crafter\n- **Skill Proficiencies:** Investigation, Persuasion\n- **Tool Proficiency:** Choose one kind of Artisan's Tools\n- **Equipment:** Choose A or B: (A) Artisan's Tools (same as above), 2 Pouch, Traveler's Clothes, 32 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  }
+]

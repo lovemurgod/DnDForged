@@ -89,10 +89,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_duergar_resilience_itua",
+        "id": "act_duergar_resilience_qt84",
         "name": "Duergar Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>The Dankwood duergar has advantage on saving throws against poison, spells, and illusions, as well as to resist being charmed or paralyzed.</p>",
+        "entries": [
+          "The Dankwood duergar has advantage on saving throws against poison, spells, and illusions, as well as to resist being {@condition charmed} or {@condition paralyzed}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -106,10 +109,13 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_bhxt",
+        "id": "act_sunlight_sensitivity_2s3h",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Dankwood duergar has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
+        "entries": [
+          "While in sunlight, the Dankwood duergar has disadvantage on attack rolls, as well as on Wisdom ({@skill Perception}) checks that rely on sight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -125,10 +131,13 @@
     ],
     "actions": [
       {
-        "id": "act_verbal_jab_1tft",
+        "id": "act_verbal_jab_8clm",
         "name": "Verbal Jab",
         "actionType": "action",
         "descriptionHtml": "<p>The duergar unleashes a string of insults laced with subtle enchantments at a creature they can see within 60 feet. If the creature can hear them (it doesn't need to understand them), it must succeed on a DC 12 Wisdom saving throw or take 1d4 psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn.</p>",
+        "entries": [
+          "The duergar unleashes a string of insults laced with subtle enchantments at a creature they can see within 60 feet. If the creature can hear them (it doesn't need to understand them), it must succeed on a {@dc 12} Wisdom saving throw or take {@damage 1d4} psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -150,10 +159,13 @@
         }
       },
       {
-        "id": "act_haymaker_1mkb",
+        "id": "act_haymaker_yq6g",
         "name": "Haymaker",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}9 (1d6 + 6) bludgeoning damage. If the duergar is enlarged, increase their damage to 10 (2d6 + 3) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 9 (1d6 + 6) bludgeoning damage. If the duergar is enlarged, increase their damage to 10 (2d6 + 3) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}9 ({@damage 1d6 + 6}) bludgeoning damage. If the duergar is enlarged, increase their damage to 10 ({@damage 2d6 + 3}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -183,11 +195,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MGELFT/Dankwood Duergar.webp",
     "tokenImg": "img/bestiary/tokens/MGELFT/Dankwood Duergar.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dankwood_grung_mgelft",
@@ -294,10 +318,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_7f8d",
+        "id": "act_amphibious_mquv",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The grung can breathe air and water.</p>",
+        "entries": [
+          "The grung can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -311,10 +338,13 @@
         }
       },
       {
-        "id": "act_poisonous_skin_hzuj",
+        "id": "act_poisonous_skin_2gv2",
         "name": "Poisonous Skin",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that grapples the grung or otherwise comes into direct contact with the grung's skin must succeed on a DC 12 Constitution saving throw or become poisoned for 1 minute. A poisoned creature no longer in direct contact with the grung can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "entries": [
+          "Any creature that grapples the grung or otherwise comes into direct contact with the grung's skin must succeed on a {@dc 12} Constitution saving throw or become {@condition poisoned} for 1 minute. A {@condition poisoned} creature no longer in direct contact with the grung can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -331,10 +361,13 @@
         }
       },
       {
-        "id": "act_standing_leap_c3l4",
+        "id": "act_standing_leap_9n1u",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>The grung's long jump is up to 25 feet and its high jump is up to 15 feet, with or without a running start.</p>",
+        "entries": [
+          "The grung's long jump is up to 25 feet and its high jump is up to 15 feet, with or without a running start."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -350,10 +383,13 @@
     ],
     "actions": [
       {
-        "id": "act_grumpy_grung_growl_sdwy",
+        "id": "act_grumpy_grung_growl_j7c9",
         "name": "Grumpy Grung Growl",
         "actionType": "action",
         "descriptionHtml": "<p>A ferocious gurgling issues from the throat of the Dankwood grung, warning those within 15 feet that they are indeed grumpy. Creatures in that area must succeed at a DC 12 Charisma saving throw or be frightened until the end of their next turn.</p>",
+        "entries": [
+          "A ferocious gurgling issues from the throat of the Dankwood grung, warning those within 15 feet that they are indeed grumpy. Creatures in that area must succeed at a {@dc 12} Charisma saving throw or be {@condition frightened} until the end of their next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -370,10 +406,13 @@
         }
       },
       {
-        "id": "act_dagger_mb3t",
+        "id": "act_dagger_byul",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +0 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage in melee, or 3 (1d4 + 1) piercing damage at range. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +0 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 3 (1d4 + 1) piercing damage in melee, or 3 (1d4 + 1) piercing damage at range. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 0} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 ({@damage 1d4 + 1}) piercing damage in melee, or 3 ({@damage 1d4 + 1}) piercing damage at range. Target must succeed on a {@dc 12} Constitution saving throw or take 5 ({@damage 2d4}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -410,11 +449,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MGELFT/Dankwood Grung.webp",
     "tokenImg": "img/bestiary/tokens/MGELFT/Dankwood Grung.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_king_robbit_the_slimy_mgelft",
@@ -522,10 +573,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_10f5",
+        "id": "act_amphibious_7hgr",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The grung can breathe air and water.</p>",
+        "entries": [
+          "The grung can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -539,10 +593,13 @@
         }
       },
       {
-        "id": "act_poisonous_skin_2zo9",
+        "id": "act_poisonous_skin_ljkj",
         "name": "Poisonous Skin",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that grapples the grung or otherwise comes into direct contact with the grung's skin must succeed on a DC 12 Constitution saving throw or become poisoned for 1 minute. A poisoned creature no longer in direct contact with the grung can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "entries": [
+          "Any creature that grapples the grung or otherwise comes into direct contact with the grung's skin must succeed on a {@dc 12} Constitution saving throw or become {@condition poisoned} for 1 minute. A {@condition poisoned} creature no longer in direct contact with the grung can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -559,10 +616,13 @@
         }
       },
       {
-        "id": "act_standing_leap_4aa7",
+        "id": "act_standing_leap_28r4",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>The grung's long jump is up to 25 feet and its high jump is up to 15 feet, with or without a running start.</p>",
+        "entries": [
+          "The grung's long jump is up to 25 feet and its high jump is up to 15 feet, with or without a running start."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -578,10 +638,13 @@
     ],
     "actions": [
       {
-        "id": "act_grumpy_grung_growl_9nwa",
+        "id": "act_grumpy_grung_growl_qpxs",
         "name": "Grumpy Grung Growl",
         "actionType": "action",
         "descriptionHtml": "<p>A ferocious gurgling issues from the throat of the Dankwood grung, warning those within 15 feet that they are indeed grumpy. Creatures in that area must succeed at a DC 12 Charisma saving throw or be frightened until the end of their next turn.</p>",
+        "entries": [
+          "A ferocious gurgling issues from the throat of the Dankwood grung, warning those within 15 feet that they are indeed grumpy. Creatures in that area must succeed at a {@dc 12} Charisma saving throw or be {@condition frightened} until the end of their next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -598,10 +661,13 @@
         }
       },
       {
-        "id": "act_dagger_uvmk",
+        "id": "act_dagger_ilbb",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +0 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage in melee, or 3 (1d4 + 1) piercing damage at range. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +0 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 3 (1d4 + 1) piercing damage in melee, or 3 (1d4 + 1) piercing damage at range. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 0} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 ({@damage 1d4 + 1}) piercing damage in melee, or 3 ({@damage 1d4 + 1}) piercing damage at range. Target must succeed on a {@dc 12} Constitution saving throw or take 5 ({@damage 2d4}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -631,10 +697,13 @@
         }
       },
       {
-        "id": "act_shortbow_5pve",
+        "id": "act_shortbow_596u",
         "name": "Shortbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +5 to hit, range 80/320 ft., one target. {@h}9 (1d6 + 6) piercing damage. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 80/320 ft., one target. Hit: 9 (1d6 + 6) piercing damage. Target must succeed on a DC 12 Constitution saving throw or take 5 (2d4) poison damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 5} to hit, range 80/320 ft., one target. {@h}9 ({@damage 1d6 + 6}) piercing damage. Target must succeed on a {@dc 12} Constitution saving throw or take 5 ({@damage 2d4}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -667,11 +736,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MGELFT/King Robbit the Slimy.webp",
     "tokenImg": "img/bestiary/tokens/MGELFT/King Robbit the Slimy.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_sludge_hag_mgelft",
@@ -773,7 +854,7 @@
       {
         "id": "sc_sludge_hag_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 1,
@@ -804,7 +885,8 @@
                 "formula": "1d6",
                 "type": "Acid",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "cantripScale": true
               }
             ],
             "components": "V, S",
@@ -862,10 +944,13 @@
     ],
     "traits": [
       {
-        "id": "act_amorphous_qtea",
+        "id": "act_amorphous_sgda",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The sludge hag can move through a space as narrow as 1 inch wide without squeezing.</p>",
+        "entries": [
+          "The sludge hag can move through a space as narrow as 1 inch wide without squeezing."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -879,10 +964,13 @@
         }
       },
       {
-        "id": "act_amphibious_u6bh",
+        "id": "act_amphibious_02n5",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The sludge hag can breathe air and water.</p>",
+        "entries": [
+          "The sludge hag can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -898,10 +986,13 @@
     ],
     "actions": [
       {
-        "id": "act_false_appearance_d2mf",
+        "id": "act_false_appearance_xhdw",
         "name": "False Appearance",
         "actionType": "action",
         "descriptionHtml": "<p>The sludge hag collapses into a oily pool of sludge. While motionless, the sludge hag is indistinguishable from any other oily pool of oozy drippiness.</p>",
+        "entries": [
+          "The sludge hag collapses into a oily pool of sludge. While motionless, the sludge hag is indistinguishable from any other oily pool of oozy drippiness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -915,10 +1006,13 @@
         }
       },
       {
-        "id": "act_sludge_slap_c52t",
+        "id": "act_sludge_slap_6li9",
         "name": "Sludge Slap",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}12 (1d8 + 8) bludgeoning damage, plus 4 (1d8) acid damage. Sludge Slap does both bludgeoning and acid damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 12 (1d8 + 8) bludgeoning damage, plus 4 (1d8) acid damage. Sludge Slap does both bludgeoning and acid damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}12 ({@damage 1d8 + 8}) bludgeoning damage, plus 4 ({@damage 1d8}) acid damage. Sludge Slap does both bludgeoning and acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -948,11 +1042,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MGELFT/Sludge Hag.webp",
     "tokenImg": "img/bestiary/tokens/MGELFT/Sludge Hag.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_spiderfrog_mgelft",
@@ -1045,10 +1151,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_rtuq",
+        "id": "act_amphibious_dkch",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The spiderfrog can breathe air and water.</p>",
+        "entries": [
+          "The spiderfrog can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1062,10 +1171,13 @@
         }
       },
       {
-        "id": "act_spider_climb_hjpr",
+        "id": "act_spider_climb_evlp",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The spiderfrog can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "entries": [
+          "The spiderfrog can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1079,10 +1191,13 @@
         }
       },
       {
-        "id": "act_standing_leap_p8vj",
+        "id": "act_standing_leap_f6uf",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>Spiderfrog's long jump is up to 20 feet and its high jump is up to 10 feet, with or without a running start.</p>",
+        "entries": [
+          "Spiderfrog's long jump is up to 20 feet and its high jump is up to 10 feet, with or without a running start."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1098,10 +1213,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_6wqy",
+        "id": "act_bite_x1zg",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) piercing damage. Target is grappled (escape DC 11). Until this grapple ends, the target is restrained, and spiderfrog can't bite another target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) piercing damage. Target is grappled (escape DC 11). Until this grapple ends, the target is restrained, and spiderfrog can't bite another target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) piercing damage. Target is {@condition grappled} (escape {@dc 11}). Until this grapple ends, the target is {@condition restrained}, and spiderfrog can't bite another target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1111,7 +1229,7 @@
           "targets": "one target",
           "save": {
             "dc": 11,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -1130,11 +1248,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MGELFT/Spiderfrog.webp",
     "tokenImg": "img/bestiary/tokens/MGELFT/Spiderfrog.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_yeti_tyke_mgelft",
@@ -1225,10 +1355,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_mcef",
+        "id": "act_keen_smell_dtrc",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The yeti tyke has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "entries": [
+          "The yeti tyke has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1242,10 +1375,13 @@
         }
       },
       {
-        "id": "act_snow_camouflage_wxys",
+        "id": "act_snow_camouflage_aouh",
         "name": "Snow Camouflage",
         "actionType": "trait",
         "descriptionHtml": "<p>The yeti tyke has advantage on Dexterity (Stealth) checks made to hide in snowy terrain.</p>",
+        "entries": [
+          "The yeti tyke has advantage on Dexterity ({@skill Stealth}) checks made to hide in snowy terrain."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1261,10 +1397,13 @@
     ],
     "actions": [
       {
-        "id": "act_claw_4ysy",
+        "id": "act_claw_x3o2",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) slashing damage, plus 2 (1d4) cold damage. Claw does both slashing and cold damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) slashing damage, plus 2 (1d4) cold damage. Claw does both slashing and cold damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) slashing damage, plus 2 ({@damage 1d4}) cold damage. Claw does both slashing and cold damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1294,10 +1433,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MGELFT/Yeti Tyke.webp",
     "tokenImg": "img/bestiary/tokens/MGELFT/Yeti Tyke.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

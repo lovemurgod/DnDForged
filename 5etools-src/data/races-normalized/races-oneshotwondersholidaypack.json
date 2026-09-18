@@ -1,0 +1,332 @@
+[
+  {
+    "id": "race_canisar_oneshotwondersholidaypack",
+    "name": "Canisar",
+    "source": "OneShotWondersHolidayPack",
+    "page": 0,
+    "size": "S",
+    "speed": "30 ft, burrow 10 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 120 ft.</p></div>\n<div class=\"compendium-subentry\"><strong>Hind Leg Dash.</strong> <p>You gain an additional 10 ft of movement speed until the end of your turn whenever you use the Dash or Disengage action.</p></div>\n<div class=\"compendium-subentry\"><strong>Fanged Jaws.</strong> <p>If you hit a target with an Unarmed Strike|XPHB, you can deal piercing damage equal to 1d4 plus your Strength modifier.</p></div>\n<div class=\"compendium-subentry\"><strong>Hunter Gatherer.</strong> <p>You have proficiency in the Nature, Survival or Stealth skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Ancestral Blessing.</strong> <p>Once per Short Rest|XPHB, you can cast the Guidance spell on yourself as an Action|XPHB.</p></div>",
+    "traits": [
+      {
+        "id": "trait_canisar_darkvision_oneshotwondersholidaypack",
+        "name": "Darkvision",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Canisar",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 120 ft.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 120 ft."
+        ]
+      },
+      {
+        "id": "trait_canisar_hind_leg_dash_oneshotwondersholidaypack",
+        "name": "Hind Leg Dash",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Canisar",
+        "actionType": "passive",
+        "description": "You gain an additional 10 ft of movement speed until the end of your turn whenever you use the Dash or Disengage action.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain an additional 10 ft of movement speed until the end of your turn whenever you use the {@action Dash|XPHB} or {@action Disengage|XPHB} action."
+        ]
+      },
+      {
+        "id": "trait_canisar_fanged_jaws_oneshotwondersholidaypack",
+        "name": "Fanged Jaws",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Canisar",
+        "actionType": "passive",
+        "description": "If you hit a target with an Unarmed Strike|XPHB, you can deal piercing damage equal to 1d4 plus your Strength modifier.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4 + @str",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "If you hit a target with an {@variantrule Unarmed Strike|XPHB}, you can deal piercing damage equal to {@dice 1d4} plus your Strength modifier."
+        ]
+      },
+      {
+        "id": "trait_canisar_hunter_gatherer_oneshotwondersholidaypack",
+        "name": "Hunter Gatherer",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Canisar",
+        "actionType": "passive",
+        "description": "You have proficiency in the Nature, Survival or Stealth skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Nature|XPHB}, {@skill Survival|XPHB} or {@skill Stealth|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_canisar_ancestral_blessing_oneshotwondersholidaypack",
+        "name": "Ancestral Blessing",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Canisar",
+        "actionType": "action",
+        "description": "Once per Short Rest|XPHB, you can cast the Guidance spell on yourself as an Action|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Once per {@variantrule Short Rest|XPHB}, you can cast the {@spell Guidance|XPHB} spell on yourself as an {@variantrule Action|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 120 ft.\n\n**Hind Leg Dash**: You gain an additional 10 ft of movement speed until the end of your turn whenever you use the Dash or Disengage action.\n\n**Fanged Jaws**: If you hit a target with an Unarmed Strike|XPHB, you can deal piercing damage equal to 1d4 plus your Strength modifier.\n\n**Hunter Gatherer**: You have proficiency in the Nature, Survival or Stealth skill.\n\n**Ancestral Blessing**: Once per Short Rest|XPHB, you can cast the Guidance spell on yourself as an Action|XPHB."
+  },
+  {
+    "id": "race_hederan_oneshotwondersholidaypack",
+    "name": "Hederan",
+    "source": "OneShotWondersHolidayPack",
+    "page": 0,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 ft.</p></div>\n<div class=\"compendium-subentry\"><strong>Outdoor Adept.</strong> <p>You can move across Difficult Terrain|XPHB made from earth or foliage without expending extra movement.</p></div>\n<div class=\"compendium-subentry\"><strong>Protected by Nature.</strong> <p>You can attempt to Hide even when you are only lightly obscured by foliage, heavy rain/snow, mist, or other natural phenomena.</p></div>\n<div class=\"compendium-subentry\"><strong>Friend of Fauna.</strong> <p>Once per Long Rest|XPHB, you can cast the Beast Bond spell without the material components needed and without expending a spell slot.</p></div>",
+    "traits": [
+      {
+        "id": "trait_hederan_darkvision_oneshotwondersholidaypack",
+        "name": "Darkvision",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Hederan",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 ft.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 ft."
+        ]
+      },
+      {
+        "id": "trait_hederan_outdoor_adept_oneshotwondersholidaypack",
+        "name": "Outdoor Adept",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Hederan",
+        "actionType": "passive",
+        "description": "You can move across Difficult Terrain|XPHB made from earth or foliage without expending extra movement.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move across {@variantrule Difficult Terrain|XPHB} made from earth or foliage without expending extra movement."
+        ]
+      },
+      {
+        "id": "trait_hederan_protected_by_nature_oneshotwondersholidaypack",
+        "name": "Protected by Nature",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Hederan",
+        "actionType": "passive",
+        "description": "You can attempt to Hide even when you are only lightly obscured by foliage, heavy rain/snow, mist, or other natural phenomena.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can attempt to {@action Hide|XPHB} even when you are only lightly obscured by foliage, heavy rain/snow, mist, or other natural phenomena."
+        ]
+      },
+      {
+        "id": "trait_hederan_friend_of_fauna_oneshotwondersholidaypack",
+        "name": "Friend of Fauna",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Hederan",
+        "actionType": "passive",
+        "description": "Once per Long Rest|XPHB, you can cast the Beast Bond spell without the material components needed and without expending a spell slot.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Once per {@variantrule Long Rest|XPHB}, you can cast the {@spell Beast Bond|XGE} spell without the material components needed and without expending a spell slot."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 ft.\n\n**Outdoor Adept**: You can move across Difficult Terrain|XPHB made from earth or foliage without expending extra movement.\n\n**Protected by Nature**: You can attempt to Hide even when you are only lightly obscured by foliage, heavy rain/snow, mist, or other natural phenomena.\n\n**Friend of Fauna**: Once per Long Rest|XPHB, you can cast the Beast Bond spell without the material components needed and without expending a spell slot."
+  },
+  {
+    "id": "race_snowborn_oneshotwondersholidaypack",
+    "name": "Snowborn",
+    "source": "OneShotWondersHolidayPack",
+    "page": 0,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Chilled Anatomy.</strong> <p>You have Resistance|XPHB to Cold damage. You also know the Ray of Frost cantrip.</p></div>\n<div class=\"compendium-subentry\"><strong>Compacted Snow.</strong> <p>You can move through the space of any creature that is a size larger than you, but you can't stop in the same space. Additionally, you can squeeze through a space that is large enough for a creature one size smaller than you without movement penalties.</p></div>\n<div class=\"compendium-subentry\"><strong>Frigid Construct.</strong> <p>You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours unmoving; during this time you are indistinguishable from a snowman, but retain consciousness. You don't need to eat, drink or breathe.</p></div>\n<div class=\"compendium-subentry\"><strong>Glacial Form.</strong> <p>Once per long rest, you can cast the False Life spell without using the material components or expending a spell slot, and harden your body into ice.</p></div>",
+    "traits": [
+      {
+        "id": "trait_snowborn_chilled_anatomy_oneshotwondersholidaypack",
+        "name": "Chilled Anatomy",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Snowborn",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Cold damage. You also know the Ray of Frost cantrip.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Cold damage. You also know the {@spell Ray of Frost|XPHB} cantrip."
+        ]
+      },
+      {
+        "id": "trait_snowborn_compacted_snow_oneshotwondersholidaypack",
+        "name": "Compacted Snow",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Snowborn",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is a size larger than you, but you can't stop in the same space. Additionally, you can squeeze through a space that is large enough for a creature one size smaller than you without movement penalties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is a size larger than you, but you can't stop in the same space. Additionally, you can squeeze through a space that is large enough for a creature one size smaller than you without movement penalties."
+        ]
+      },
+      {
+        "id": "trait_snowborn_frigid_construct_oneshotwondersholidaypack",
+        "name": "Frigid Construct",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Snowborn",
+        "actionType": "passive",
+        "description": "You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours unmoving; during this time you are indistinguishable from a snowman, but retain consciousness. You don't need to eat, drink or breathe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't need to sleep, and magic can't put you to sleep. You can finish a {@variantrule Long Rest|XPHB} in 4 hours if you spend those hours unmoving; during this time you are indistinguishable from a snowman, but retain consciousness. You don't need to eat, drink or breathe."
+        ]
+      },
+      {
+        "id": "trait_snowborn_glacial_form_oneshotwondersholidaypack",
+        "name": "Glacial Form",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Snowborn",
+        "actionType": "passive",
+        "description": "Once per long rest, you can cast the False Life spell without using the material components or expending a spell slot, and harden your body into ice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Once per long rest, you can cast the {@spell False Life|XPHB} spell without using the material components or expending a spell slot, and harden your body into ice."
+        ]
+      }
+    ],
+    "description": "**Chilled Anatomy**: You have Resistance|XPHB to Cold damage. You also know the Ray of Frost cantrip.\n\n**Compacted Snow**: You can move through the space of any creature that is a size larger than you, but you can't stop in the same space. Additionally, you can squeeze through a space that is large enough for a creature one size smaller than you without movement penalties.\n\n**Frigid Construct**: You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours unmoving; during this time you are indistinguishable from a snowman, but retain consciousness. You don't need to eat, drink or breathe.\n\n**Glacial Form**: Once per long rest, you can cast the False Life spell without using the material components or expending a spell slot, and harden your body into ice."
+  },
+  {
+    "id": "race_tarandus_oneshotwondersholidaypack",
+    "name": "Tarandus",
+    "source": "OneShotWondersHolidayPack",
+    "page": 0,
+    "size": "M",
+    "speed": "35 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Guiding Light.</strong> <p>As a Bonus Action|XPHB, you can produce dim light in a 20 ft radius from your nose. You can end this effect as a Bonus Action|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Antler Defence.</strong> <p>Once per Short Rest|XPHB as a Reaction|XPHB, you can lower your antlers and enter a defensive stance. Until the start of your next turn, you have a +2 bonus to your Armor Class|XPHB against melee attacks.</p></div>\n<div class=\"compendium-subentry\"><strong>Hooves.</strong> <p>If you hit a target with an Unarmed Strike|XPHB, you can deal bludgeoning damage equal to 1d4 plus your Strength modifier.</p></div>\n<div class=\"compendium-subentry\"><strong>Born to Navigate.</strong> <p>You have proficiency in the Perception or Survival skill.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tarandus_guiding_light_oneshotwondersholidaypack",
+        "name": "Guiding Light",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Tarandus",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can produce dim light in a 20 ft radius from your nose. You can end this effect as a Bonus Action|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can produce dim light in a 20 ft radius from your nose. You can end this effect as a {@variantrule Bonus Action|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_tarandus_antler_defence_oneshotwondersholidaypack",
+        "name": "Antler Defence",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Tarandus",
+        "actionType": "reaction",
+        "description": "Once per Short Rest|XPHB as a Reaction|XPHB, you can lower your antlers and enter a defensive stance. Until the start of your next turn, you have a +2 bonus to your Armor Class|XPHB against melee attacks.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Once per {@variantrule Short Rest|XPHB} as a {@variantrule Reaction|XPHB}, you can lower your antlers and enter a defensive stance. Until the start of your next turn, you have a +2 bonus to your {@variantrule Armor Class|XPHB} against melee attacks."
+        ]
+      },
+      {
+        "id": "trait_tarandus_hooves_oneshotwondersholidaypack",
+        "name": "Hooves",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Tarandus",
+        "actionType": "passive",
+        "description": "If you hit a target with an Unarmed Strike|XPHB, you can deal bludgeoning damage equal to 1d4 plus your Strength modifier.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4 + @str",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "If you hit a target with an {@variantrule Unarmed Strike|XPHB}, you can deal bludgeoning damage equal to {@dice 1d4} plus your Strength modifier."
+        ]
+      },
+      {
+        "id": "trait_tarandus_born_to_navigate_oneshotwondersholidaypack",
+        "name": "Born to Navigate",
+        "source": "OneShotWondersHolidayPack",
+        "raceName": "Tarandus",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception|XPHB} or {@skill Survival|XPHB} skill."
+        ]
+      }
+    ],
+    "description": "**Guiding Light**: As a Bonus Action|XPHB, you can produce dim light in a 20 ft radius from your nose. You can end this effect as a Bonus Action|XPHB.\n\n**Antler Defence**: Once per Short Rest|XPHB as a Reaction|XPHB, you can lower your antlers and enter a defensive stance. Until the start of your next turn, you have a +2 bonus to your Armor Class|XPHB against melee attacks.\n\n**Hooves**: If you hit a target with an Unarmed Strike|XPHB, you can deal bludgeoning damage equal to 1d4 plus your Strength modifier.\n\n**Born to Navigate**: You have proficiency in the Perception or Survival skill."
+  }
+]

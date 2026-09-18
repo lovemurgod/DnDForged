@@ -97,7 +97,7 @@
       {
         "id": "sc_exul_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 3,
@@ -197,13 +197,17 @@
                   "formula": "8d8",
                   "type": "Lightning",
                   "label": "Damage 1",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "4d8",
                   "type": "Thunder",
                   "label": "Damage 2",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -298,13 +302,17 @@
                   "formula": "5d8",
                   "type": "Fire",
                   "label": "Damage 1",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "5d8",
                   "type": "Fire",
                   "label": "Damage 2",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a piece of charcoal)",
@@ -322,10 +330,13 @@
     ],
     "traits": [
       {
-        "id": "act_elemental_demise_xvyp",
+        "id": "act_elemental_demise_oa2n",
         "name": "Elemental Demise",
         "actionType": "trait",
         "descriptionHtml": "<p>If Exul dies, his body disintegrates in a flash of fire and puff of smoke, leaving behind only the equipment he was wearing or carrying.</p>",
+        "entries": [
+          "If Exul dies, his body disintegrates in a flash of fire and puff of smoke, leaving behind only the equipment he was wearing or carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -341,10 +352,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xaoh",
+        "id": "act_multiattack_bc6b",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Exul makes two handaxe attacks or uses his Hurl Flame twice.</p>",
+        "entries": [
+          "Exul makes two handaxe attacks or uses his Hurl Flame twice."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -358,10 +372,13 @@
         }
       },
       {
-        "id": "act_handaxe_7jdv",
+        "id": "act_handaxe_5fiu",
         "name": "Handaxe",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one target. {@h}13 (2d6 + 6) slashing damage plus 3 (1d6) fire damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 13 (2d6 + 6) slashing damage plus 3 (1d6) fire damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 10} to hit, reach 5 ft., one target. {@h}13 (2d6 + 6) slashing damage plus 3 (1d6) fire damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -384,10 +401,13 @@
         }
       },
       {
-        "id": "act_hurl_flame_qu96",
+        "id": "act_hurl_flame_zbe2",
         "name": "Hurl Flame",
         "actionType": "action",
-        "descriptionHtml": "<p>rs +7 to hit, range 120 ft., one target. {@h}17 (5d6) fire damage.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: +7 to hit, range 120 ft., one target. Hit: 17 (5d6) fire damage.</p>",
+        "entries": [
+          "{@atk rs} {@hit 7} to hit, range 120 ft., one target. {@h}17 (5d6) fire damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -413,11 +433,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AitFR-ISF/Exul.webp",
     "tokenImg": "img/bestiary/tokens/AitFR-ISF/Exul.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_malivar_aitfr-isf",
@@ -522,7 +554,7 @@
       {
         "id": "sc_malivar_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -555,7 +587,8 @@
                     "formula": "1d6",
                     "type": "Acid",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -600,7 +633,8 @@
                     "formula": "1d12",
                     "type": "Poison",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -669,7 +703,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -719,7 +755,9 @@
                     "formula": "4d4",
                     "type": "Slashing",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "2d4",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a sliver of glass)",
@@ -764,7 +802,9 @@
                     "formula": "2d4",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a bit of spiderweb)",
@@ -795,7 +835,9 @@
                     "formula": "8d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -821,7 +863,9 @@
                     "formula": "3d10",
                     "type": "Thunder",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d10",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -852,7 +896,9 @@
                     "formula": "3d6",
                     "type": "Bludgeoning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a tentacle)",
@@ -902,7 +948,9 @@
                     "formula": "8d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a small crystal or glass cone)",
@@ -928,13 +976,17 @@
                     "formula": "8d8",
                     "type": "Lightning",
                     "label": "Damage 1",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "4d8",
                     "type": "Thunder",
                     "label": "Damage 2",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -950,10 +1002,14 @@
     ],
     "traits": [
       {
-        "id": "act_benign_transportation__recharges_after_malivar_casts_a_conjuration_spell_of_1st_level_or_higher__qtts",
+        "id": "act_benign_transportation__recharges_after_malivar_casts_a_conjuration_spell_of_1st_level_or_higher__jhfp",
         "name": "Benign Transportation (Recharges after Malivar Casts a Conjuration Spell of 1st Level or Higher)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Malivar teleports up to 30 feet to an unoccupied space that he can see.</p><p>If he instead chooses a space within range that is occupied by a willing Small or Medium creature, they both teleport, swapping places.</p>",
+        "entries": [
+          "As a bonus action, Malivar teleports up to 30 feet to an unoccupied space that he can see.",
+          "If he instead chooses a space within range that is occupied by a willing Small or Medium creature, they both teleport, swapping places."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -969,10 +1025,13 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_dkq7",
+        "id": "act_dagger_9ztf",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 5} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -998,10 +1057,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AitFR-ISF/Malivar.webp",
     "tokenImg": "img/bestiary/tokens/AitFR-ISF/Malivar.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

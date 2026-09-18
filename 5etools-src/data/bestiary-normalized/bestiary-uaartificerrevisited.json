@@ -1,0 +1,445 @@
+[
+  {
+    "id": "creature_alchemical_homunculus_uaartificerrevisited",
+    "name": "Alchemical Homunculus",
+    "source": "UAArtificerRevisited",
+    "edition": "2014",
+    "page": 6,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 30,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 4,
+        "mod": -3
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 11,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 7,
+        "mod": -2
+      }
+    },
+    "str": 4,
+    "dex": 15,
+    "con": 11,
+    "int": 10,
+    "wis": 10,
+    "cha": 7,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+4",
+      "stealth": "+4"
+    },
+    "skills": {
+      "perception": "+4",
+      "stealth": "+4"
+    },
+    "immune": [
+      "acid",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_might_of_the_master_cfh7",
+        "name": "Might of the Master",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The following numbers increase by 1 when your proficiency bonus increases by 1: the homunculus's skill bonuses and the bonuses to hit and damage of its Acidic Spittle.</p>",
+        "entries": [
+          "The following numbers increase by 1 when your proficiency bonus increases by 1: the homunculus's skill bonuses and the bonuses to hit and damage of its Acidic Spittle."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_acidic_spittle_2tp1",
+        "name": "Acidic Spittle",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30 ft., one target you can see. Hit: 1d6 + 2 acid damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 30 ft., one target you can see. {@h}{@damage 1d6 + 2} acid damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "30 ft.",
+          "targets": "one target you can see",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_alchemical_salve__3_day__fl42",
+        "name": "Alchemical Salve (3/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The homunculus produces a salve and touches one creature you designate. The target receives one of the following magical benefits of your choice:</p><ul><li><strong><em>Buoyancy.</em></strong> <p>The target gains a flying speed of 10 feet for 10 minutes.</p></li><li><strong><em>Inspiration.</em></strong> <p>The target feels giddy and effective, gaining advantage on certain ability checks in the next hour. The target chooses the checks before or after rolling. The magic runs out after the target has used it on a number of checks equal to your Intelligence modifier (minimum of 1).</p></li><li><strong><em>Resilience.</em></strong> <p>The target gains a number of temporary hit points equal to 2d6 + your Intelligence modifier.</p></li></ul>",
+        "entries": [
+          "The homunculus produces a salve and touches one creature you designate. The target receives one of the following magical benefits of your choice:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Buoyancy",
+                "entry": "The target gains a flying speed of 10 feet for 10 minutes."
+              },
+              {
+                "type": "item",
+                "name": "Inspiration",
+                "entry": "The target feels giddy and effective, gaining advantage on certain ability checks in the next hour. The target chooses the checks before or after rolling. The magic runs out after the target has used it on a number of checks equal to your Intelligence modifier (minimum of 1)."
+              },
+              {
+                "type": "item",
+                "name": "Resilience",
+                "entry": "The target gains a number of temporary hit points equal to {@dice 2d6} + your Intelligence modifier."
+              }
+            ]
+          }
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UAArtificerRevisited/Alchemical Homunculus.webp",
+    "tokenImg": "img/bestiary/tokens/UAArtificerRevisited/Alchemical Homunculus.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_iron_defender_uaartificerrevisited",
+    "name": "Iron Defender",
+    "source": "UAArtificerRevisited",
+    "edition": "2014",
+    "page": 11,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "str": 14,
+    "dex": 12,
+    "con": 14,
+    "int": 4,
+    "wis": 10,
+    "cha": 6,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
+    "skills": {
+      "perception": "+4"
+    },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_might_of_the_master_pjki",
+        "name": "Might of the Master",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The following numbers increase by 1 when your proficiency bonus increases by 1: the iron defender's skill bonuses, the bonuses to hit and damage of its bite, and the number of hit points restored by its Repair action.</p>",
+        "entries": [
+          "The following numbers increase by 1 when your proficiency bonus increases by 1: the iron defender's skill bonuses, the bonuses to hit and damage of its bite, and the number of hit points restored by its Repair action."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_vigilant_2it7",
+        "name": "Vigilant",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The iron defender can't be Surprise.</p>",
+        "entries": [
+          "The iron defender can't be {@quickref Surprise|PHB|3|0|surprised}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_b5zr",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target you can see. Hit: 1d8 + 2 piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target you can see. {@h}{@damage 1d8 + 2} piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target you can see",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_repair__3_day__741x",
+        "name": "Repair (3/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The magical mechanisms inside the iron defender restore 2d8 + 2 hit points to itself or to one construct or object within 5 feet of it.</p>",
+        "entries": [
+          "The magical mechanisms inside the iron defender restore {@dice 2d8 + 2} hit points to itself or to one construct or object within 5 feet of it."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_defensive_pounce_6ukh",
+        "name": "Defensive Pounce",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>The iron defender imposes disadvantage on the attack roll of one creature it can see that is within 5 feet of it, provided the attack roll is against a creature other than the iron defender.</p>",
+        "entries": [
+          "The iron defender imposes disadvantage on the attack roll of one creature it can see that is within 5 feet of it, provided the attack roll is against a creature other than the iron defender."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UAArtificerRevisited/Iron Defender.webp",
+    "tokenImg": "img/bestiary/tokens/UAArtificerRevisited/Iron Defender.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

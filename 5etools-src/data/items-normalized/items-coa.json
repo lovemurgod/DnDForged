@@ -141,6 +141,100 @@
     "descriptionHtml": "<p>When Fierna was born, petitioners and devils from all over came to celebrate her birth. Many brought gifts and treasures, including a powerful infernal warlock. Recognizing the strength and inner fire of Fierna, the warlock gifted her with the Amulet of the Inferno, and it has been around her neck ever since.</p>\n<p>The Amulet of the Inferno is a magic necklace that grants a +3 bonus to spell save DC and spell attack bonus.</p>\n<div class=\"item-subentry\"><strong>Random Properties.</strong> <p>The Amulet of the Inferno has the following random properties:</p>\n<ul><li>3 Artifact Properties; Major Beneficial Properties properties</li><li>2 Artifact Properties; Major Detrimental Properties properties</li></ul></div>\n<div class=\"item-subentry\"><strong>Infernal Fire.</strong> <p>While worn, the amulet augments any magical flames created by you, transforming normal fire into Hellfire. Hellfire ignores resistances and immunities to fire damage and deals double damage to creatures vulnerable to either fire or necrotic damage. It is also capable of melting stone, as well as igniting flammable objects.</p></div>\n<div class=\"item-subentry\"><strong>Raging Inferno.</strong> <p>While attuned to the Amulet of the Inferno, you may use a bonus action to cast Fire Bolt or Produce Flame. The cantrips scale based on your total character level and use Intelligence as a spellcasting modifier if you're normally incapable of casting spells.</p></div>\n<div class=\"item-subentry\"><strong>Everburning.</strong> <p>The Amulet of the Inferno grants resistance to cold damage and the ability to breathe underwater. Any magical flames you conjure are similarly augmented: they can be used underwater, can't be extinguished through any means, and can exude any temperature. While the casting of a fire spell can still be interrupted with Counterspell, once the spell has been cast, any lingering flames can't be removed.</p></div>\n<div class=\"item-subentry\"><strong>Destroying the Amulet.</strong> <p>The only creature capable of destroying the amulet is the warlock that created it. Nobody living knows the warlock's identity, making destroying the amulet almost impossible.</p></div>"
   },
   {
+    "id": "it_axe_of_agonizing_paralysis_coa",
+    "name": "Axe of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "0.50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Axe of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 slashing (or 1d8 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb | **Value:** 0.50 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
+    "id": "it_battle_axe_of_agonizing_paralysis_coa",
+    "name": "Battle Axe of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 4,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Battle Axe of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 4 lb | **Value:** 1 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
     "id": "it_battleaxe_of_agonizing_paralysis_coa",
     "name": "Battleaxe of Agonizing Paralysis",
     "source": "CoA",
@@ -186,6 +280,53 @@
     },
     "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 4 lb | **Value:** 10 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
     "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
+    "id": "it_boarding_axe_of_agonizing_paralysis_coa",
+    "name": "Boarding Axe of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "8 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d8",
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Special"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Boarding Axe of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d8 slashing versatile) | **Properties:** Special | **Weight:** 3 lb | **Value:** 8 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.\n\n**Special.** This one-handed axe has a pick on the opposite end of the blade. You can choose to deal either slashing damage or piercing damage, depending on which end you use to attack. If you are proficient with axes, you can add your proficiency bonus on any checks made to climb a vertical surface when wielding it.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>\n<div class=\"item-subentry\"><strong>Special.</strong> <p>This one-handed axe has a pick on the opposite end of the blade. You can choose to deal either slashing damage or piercing damage, depending on which end you use to attack. If you are proficient with axes, you can add your proficiency bonus on any checks made to climb a vertical surface when wielding it.</p></div>"
   },
   {
     "id": "it_bracers_of_asmodeus_coa",
@@ -260,6 +401,54 @@
     },
     "descriptionMarkdown": "*Melee Weapon, rare (Requires Attunement)*\n\n**Damage:** 1d6 piercing (or 1d8 piercing versatile) | **Properties:** Thrown, Versatile | **Weight:** 4 lb\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. In addition, you can make one additional attack with it as a bonus action on each of your turns.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. You're also vulnerable to radiant damage and each time you receive magical healing, you must make a 15 Constitution saving throw.\n\nOn a failed save, the healing has no effect. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.",
     "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. In addition, you can make one additional attack with it as a bonus action on each of your turns.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. You're also vulnerable to radiant damage and each time you receive magical healing, you must make a 15 Constitution saving throw.</p>\n<p>On a failed save, the healing has no effect. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
+  },
+  {
+    "id": "it_claw_of_agonizing_paralysis_coa",
+    "name": "Claw of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "0 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "ATT",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Claw of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 slashing | **Properties:** ATT, Light | **Weight:** 3 lb | **Value:** 0 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.\n\nA claw is a simple, bladed melee weapon worn as a glove",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>\n<p>A claw is a simple, bladed melee weapon worn as a glove</p>"
   },
   {
     "id": "it_club_of_agonizing_paralysis_coa",
@@ -433,6 +622,55 @@
     "descriptionHtml": "<p>You have a +2 bonus to attack and damage rolls made with this magic weapon. In addition, when you're damaged by a creature in reach, you may use your reaction to make one melee attack against it with this weapon.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned, you have disadvantage on attack rolls with weapons other than this one.</p>\n<p>Whenever a hostile creature damages you, you must succeed on a 15 Wisdom saving throw or go berserk. While berserk, you must use your action on each of your turns to attack the creature nearest to you with the weapon. If you can make extra attacks as part of the Attack action, you use those extra attacks, moving to attack the next nearest creature after you fell your current target. If you have multiple possible targets, you attack one at random.</p>\n<p>You're berserk until you start your turn with no creatures within 60 feet of you that you can see or hear. Alternatively, an ally can use an action to make a 15 Charisma (Persuasion) check and if successful, you're no longer berserk. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
   },
   {
+    "id": "it_demonbone_glaive__silver_coa",
+    "name": "Demonbone Glaive, Silver",
+    "source": "CoA",
+    "page": 268,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 6,
+    "value": "23 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d10",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": "+2",
+    "properties": [
+      "Heavy",
+      "Reach",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Demonbone Glaive, Silver",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 2,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d10",
+          "stat": "auto",
+          "extra": 2,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d10 slashing | **Properties:** Heavy, Reach, Two-Handed | **Weight:** 6 lb | **Value:** 23 gp\n\n---\n\nYou have a +2 bonus to attack and damage rolls made with this magic weapon. In addition, when you're damaged by a creature in reach, you may use your reaction to make one melee attack against it with this weapon.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned, you have disadvantage on attack rolls with weapons other than this one.\n\nWhenever a hostile creature damages you, you must succeed on a 15 Wisdom saving throw or go berserk. While berserk, you must use your action on each of your turns to attack the creature nearest to you with the weapon. If you can make extra attacks as part of the Attack action, you use those extra attacks, moving to attack the next nearest creature after you fell your current target. If you have multiple possible targets, you attack one at random.\n\nYou're berserk until you start your turn with no creatures within 60 feet of you that you can see or hear. Alternatively, an ally can use an action to make a 15 Charisma (Persuasion) check and if successful, you're no longer berserk. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>You have a +2 bonus to attack and damage rolls made with this magic weapon. In addition, when you're damaged by a creature in reach, you may use your reaction to make one melee attack against it with this weapon.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned, you have disadvantage on attack rolls with weapons other than this one.</p>\n<p>Whenever a hostile creature damages you, you must succeed on a 15 Wisdom saving throw or go berserk. While berserk, you must use your action on each of your turns to attack the creature nearest to you with the weapon. If you can make extra attacks as part of the Attack action, you use those extra attacks, moving to attack the next nearest creature after you fell your current target. If you have multiple possible targets, you attack one at random.</p>\n<p>You're berserk until you start your turn with no creatures within 60 feet of you that you can see or hear. Alternatively, an ally can use an action to make a 15 Charisma (Persuasion) check and if successful, you're no longer berserk. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
     "id": "it_demonbone_halberd_coa",
     "name": "Demonbone Halberd",
     "source": "CoA",
@@ -480,6 +718,104 @@
     },
     "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d10 slashing | **Properties:** Heavy, Reach, Two-Handed | **Weight:** 6 lb | **Value:** 20 gp\n\n---\n\nYou have a +2 bonus to attack and damage rolls made with this magic weapon. In addition, when you're damaged by a creature in reach, you may use your reaction to make one melee attack against it with this weapon.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned, you have disadvantage on attack rolls with weapons other than this one.\n\nWhenever a hostile creature damages you, you must succeed on a 15 Wisdom saving throw or go berserk. While berserk, you must use your action on each of your turns to attack the creature nearest to you with the weapon. If you can make extra attacks as part of the Attack action, you use those extra attacks, moving to attack the next nearest creature after you fell your current target. If you have multiple possible targets, you attack one at random.\n\nYou're berserk until you start your turn with no creatures within 60 feet of you that you can see or hear. Alternatively, an ally can use an action to make a 15 Charisma (Persuasion) check and if successful, you're no longer berserk. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.",
     "descriptionHtml": "<p>You have a +2 bonus to attack and damage rolls made with this magic weapon. In addition, when you're damaged by a creature in reach, you may use your reaction to make one melee attack against it with this weapon.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned, you have disadvantage on attack rolls with weapons other than this one.</p>\n<p>Whenever a hostile creature damages you, you must succeed on a 15 Wisdom saving throw or go berserk. While berserk, you must use your action on each of your turns to attack the creature nearest to you with the weapon. If you can make extra attacks as part of the Attack action, you use those extra attacks, moving to attack the next nearest creature after you fell your current target. If you have multiple possible targets, you attack one at random.</p>\n<p>You're berserk until you start your turn with no creatures within 60 feet of you that you can see or hear. Alternatively, an ally can use an action to make a 15 Charisma (Persuasion) check and if successful, you're no longer berserk. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
+  },
+  {
+    "id": "it_demonbone_halberd__silver_coa",
+    "name": "Demonbone Halberd, Silver",
+    "source": "CoA",
+    "page": 268,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 6,
+    "value": "23 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d10",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": "+2",
+    "properties": [
+      "Heavy",
+      "Reach",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Demonbone Halberd, Silver",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 2,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d10",
+          "stat": "auto",
+          "extra": 2,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d10 slashing | **Properties:** Heavy, Reach, Two-Handed | **Weight:** 6 lb | **Value:** 23 gp\n\n---\n\nYou have a +2 bonus to attack and damage rolls made with this magic weapon. In addition, when you're damaged by a creature in reach, you may use your reaction to make one melee attack against it with this weapon.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned, you have disadvantage on attack rolls with weapons other than this one.\n\nWhenever a hostile creature damages you, you must succeed on a 15 Wisdom saving throw or go berserk. While berserk, you must use your action on each of your turns to attack the creature nearest to you with the weapon. If you can make extra attacks as part of the Attack action, you use those extra attacks, moving to attack the next nearest creature after you fell your current target. If you have multiple possible targets, you attack one at random.\n\nYou're berserk until you start your turn with no creatures within 60 feet of you that you can see or hear. Alternatively, an ally can use an action to make a 15 Charisma (Persuasion) check and if successful, you're no longer berserk. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>You have a +2 bonus to attack and damage rolls made with this magic weapon. In addition, when you're damaged by a creature in reach, you may use your reaction to make one melee attack against it with this weapon.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned, you have disadvantage on attack rolls with weapons other than this one.</p>\n<p>Whenever a hostile creature damages you, you must succeed on a 15 Wisdom saving throw or go berserk. While berserk, you must use your action on each of your turns to attack the creature nearest to you with the weapon. If you can make extra attacks as part of the Attack action, you use those extra attacks, moving to attack the next nearest creature after you fell your current target. If you have multiple possible targets, you attack one at random.</p>\n<p>You're berserk until you start your turn with no creatures within 60 feet of you that you can see or hear. Alternatively, an ally can use an action to make a 15 Charisma (Persuasion) check and if successful, you're no longer berserk. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
+    "id": "it_demonbone_pike__silver_coa",
+    "name": "Demonbone Pike, Silver",
+    "source": "CoA",
+    "page": 268,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 18,
+    "value": "14 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d10",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": "+2",
+    "properties": [
+      "Heavy",
+      "Reach",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Demonbone Pike, Silver",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 2,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d10",
+          "stat": "auto",
+          "extra": 2,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d10 piercing | **Properties:** Heavy, Reach, Two-Handed | **Weight:** 18 lb | **Value:** 14 gp\n\n---\n\nYou have a +2 bonus to attack and damage rolls made with this magic weapon. In addition, when you're damaged by a creature in reach, you may use your reaction to make one melee attack against it with this weapon.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned, you have disadvantage on attack rolls with weapons other than this one.\n\nWhenever a hostile creature damages you, you must succeed on a 15 Wisdom saving throw or go berserk. While berserk, you must use your action on each of your turns to attack the creature nearest to you with the weapon. If you can make extra attacks as part of the Attack action, you use those extra attacks, moving to attack the next nearest creature after you fell your current target. If you have multiple possible targets, you attack one at random.\n\nYou're berserk until you start your turn with no creatures within 60 feet of you that you can see or hear. Alternatively, an ally can use an action to make a 15 Charisma (Persuasion) check and if successful, you're no longer berserk. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>You have a +2 bonus to attack and damage rolls made with this magic weapon. In addition, when you're damaged by a creature in reach, you may use your reaction to make one melee attack against it with this weapon.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned, you have disadvantage on attack rolls with weapons other than this one.</p>\n<p>Whenever a hostile creature damages you, you must succeed on a 15 Wisdom saving throw or go berserk. While berserk, you must use your action on each of your turns to attack the creature nearest to you with the weapon. If you can make extra attacks as part of the Attack action, you use those extra attacks, moving to attack the next nearest creature after you fell your current target. If you have multiple possible targets, you attack one at random.</p>\n<p>You're berserk until you start your turn with no creatures within 60 feet of you that you can see or hear. Alternatively, an ally can use an action to make a 15 Charisma (Persuasion) check and if successful, you're no longer berserk. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
   },
   {
     "id": "it_double_bladed_scimitar_of_agonizing_paralysis_coa",
@@ -889,6 +1225,54 @@
     "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
   },
   {
+    "id": "it_greatsword__silver_of_retribution_coa",
+    "name": "Greatsword, Silver of Retribution",
+    "source": "CoA",
+    "page": 270,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 6,
+    "value": "53 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Greatsword, Silver of Retribution",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 2d6 slashing | **Properties:** Heavy, Two-Handed | **Weight:** 6 lb | **Value:** 53 gp\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.\n\nThe vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
     "id": "it_halberd_of_agonizing_paralysis_coa",
     "name": "Halberd of Agonizing Paralysis",
     "source": "CoA",
@@ -938,6 +1322,51 @@
     "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
   },
   {
+    "id": "it_hammer_of_agonizing_paralysis_coa",
+    "name": "Hammer of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "0.20 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "bludgeoning",
+    "bonusWeapon": "+3",
+    "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hammer of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 3 lb | **Value:** 0.20 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
     "id": "it_handaxe_of_agonizing_paralysis_coa",
     "name": "Handaxe of Agonizing Paralysis",
     "source": "CoA",
@@ -983,6 +1412,54 @@
       "versatile": null
     },
     "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 slashing | **Properties:** Light, Thrown | **Weight:** 2 lb | **Value:** 5 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
+    "id": "it_heavy_hammer_of_agonizing_paralysis_coa",
+    "name": "Heavy Hammer of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 4,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Heavy",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Heavy Hammer of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 bludgeoning (or 1d10 bludgeoning versatile) | **Properties:** Heavy, Versatile | **Weight:** 4 lb | **Value:** 1 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
     "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
   },
   {
@@ -1327,6 +1804,102 @@
     "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
   },
   {
+    "id": "it_long_sword_of_agonizing_paralysis_coa",
+    "name": "Long Sword of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "2 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Heavy",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Long Sword of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Heavy, Versatile | **Weight:** 3 lb | **Value:** 2 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
+    "id": "it_long_sword_of_retribution_coa",
+    "name": "Long Sword of Retribution",
+    "source": "CoA",
+    "page": 270,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "2 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Heavy",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Long Sword of Retribution",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Heavy, Versatile | **Weight:** 3 lb | **Value:** 2 gp\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.\n\nThe vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.",
+    "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
+  },
+  {
     "id": "it_longsword_of_agonizing_paralysis_coa",
     "name": "Longsword of Agonizing Paralysis",
     "source": "CoA",
@@ -1421,6 +1994,53 @@
     "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
   },
   {
+    "id": "it_longsword__silver_of_retribution_coa",
+    "name": "Longsword, Silver of Retribution",
+    "source": "CoA",
+    "page": 270,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "17 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Longsword, Silver of Retribution",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb | **Value:** 17 gp\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.\n\nThe vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
     "id": "it_mace_of_agonizing_paralysis_coa",
     "name": "Mace of Agonizing Paralysis",
     "source": "CoA",
@@ -1463,6 +2083,54 @@
       "versatile": null
     },
     "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 4 lb | **Value:** 5 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
+    "id": "it_mattock_of_agonizing_paralysis_coa",
+    "name": "Mattock of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 10,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d12",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Mattock of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d12",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d12 piercing | **Properties:** Heavy, Two-Handed | **Weight:** 10 lb | **Value:** 1 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
     "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
   },
   {
@@ -1557,6 +2225,55 @@
     },
     "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 piercing | **Weight:** 4 lb | **Value:** 15 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
     "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
+    "id": "it_nunchaku_of_agonizing_paralysis_coa",
+    "name": "Nunchaku of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "0 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Finesse",
+      "Versatile",
+      "Flourish"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Nunchaku of Agonizing Paralysis",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 bludgeoning (or 1d8 bludgeoning versatile) | **Properties:** Finesse, Versatile, Flourish | **Weight:** 3 lb | **Value:** 0 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.\n\nNunchaku are martial melee weapons composed of two hard batons connected to one another by a short chain or tether.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>\n<p>Nunchaku are martial melee weapons composed of two hard batons connected to one another by a short chain or tether.</p>"
   },
   {
     "id": "it_pike_of_agonizing_paralysis_coa",
@@ -1802,6 +2519,53 @@
     },
     "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 piercing | **Properties:** Finesse | **Weight:** 2 lb | **Value:** 25 gp\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.\n\nThe vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.",
     "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
+  },
+  {
+    "id": "it_rapier__silver_of_retribution_coa",
+    "name": "Rapier, Silver of Retribution",
+    "source": "CoA",
+    "page": 270,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "26 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Finesse"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Rapier, Silver of Retribution",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 piercing | **Properties:** Finesse | **Weight:** 2 lb | **Value:** 26 gp\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.\n\nThe vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
   },
   {
     "id": "it_ring_of_collecting_coa",
@@ -2058,6 +2822,54 @@
     "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
   },
   {
+    "id": "it_scimitar__silver_of_retribution_coa",
+    "name": "Scimitar, Silver of Retribution",
+    "source": "CoA",
+    "page": 270,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "27 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Scimitar, Silver of Retribution",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 slashing | **Properties:** Finesse, Light | **Weight:** 3 lb | **Value:** 27 gp\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.\n\nThe vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
     "id": "it_scourge_of_shadow_coa",
     "name": "Scourge of Shadow",
     "source": "CoA",
@@ -2208,6 +3020,54 @@
     "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
   },
   {
+    "id": "it_shortsword__silver_of_retribution_coa",
+    "name": "Shortsword, Silver of Retribution",
+    "source": "CoA",
+    "page": 270,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "11 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Shortsword, Silver of Retribution",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 piercing | **Properties:** Finesse, Light | **Weight:** 2 lb | **Value:** 11 gp\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.\n\nThe vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
     "id": "it_sickle_of_agonizing_paralysis_coa",
     "name": "Sickle of Agonizing Paralysis",
     "source": "CoA",
@@ -2329,6 +3189,53 @@
     "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
   },
   {
+    "id": "it_staff_of_agonizing_paralysis_coa",
+    "name": "Staff of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "0.02 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": "1d6",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Staff of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d6"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d4 bludgeoning (or 1d6 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 2 lb | **Value:** 0.02 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
     "id": "it_stygian_javelin_coa",
     "name": "Stygian Javelin",
     "source": "CoA",
@@ -2422,6 +3329,151 @@
     },
     "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 piercing (or 1d8 piercing versatile) | **Properties:** Thrown, Versatile | **Weight:** 3 lb | **Value:** 1 gp\n\n---\n\nYou have a +2 bonus to attack and damage rolls made with this magic weapon. When you throw it, it deals one extra die of damage on a hit. After you throw it and it hits or misses, it flies back to your hand immediately.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. In addition, you have disadvantage on attack rolls made with weapons other than this one.\n\nWhenever you roll a 1 on an attack roll using this weapon, your target changes to your closest ally.\n\nIf there are multiple allies, randomly determine which is the target. Make a new attack roll with advantage against your ally. If the attack hits, in addition to the standard damage you deal an extra 2d6 poison damage. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.",
     "descriptionHtml": "<p>You have a +2 bonus to attack and damage rolls made with this magic weapon. When you throw it, it deals one extra die of damage on a hit. After you throw it and it hits or misses, it flies back to your hand immediately.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. In addition, you have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>Whenever you roll a 1 on an attack roll using this weapon, your target changes to your closest ally.</p>\n<p>If there are multiple allies, randomly determine which is the target. Make a new attack roll with advantage against your ally. If the attack hits, in addition to the standard damage you deal an extra 2d6 poison damage. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
+  },
+  {
+    "id": "it_sword_of_agonizing_paralysis_coa",
+    "name": "Sword of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "1.50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Finesse",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Sword of Agonizing Paralysis",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 slashing (or 1d8 slashing versatile) | **Properties:** Finesse, Versatile | **Weight:** 2 lb | **Value:** 1.50 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>"
+  },
+  {
+    "id": "it_sword_of_retribution_coa",
+    "name": "Sword of Retribution",
+    "source": "CoA",
+    "page": 270,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "1.50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Finesse",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Sword of Retribution",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 slashing (or 1d8 slashing versatile) | **Properties:** Finesse, Versatile | **Weight:** 2 lb | **Value:** 1.50 gp\n\n---\n\nYou gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.\n\n**Curse.** You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.\n\nThe vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.\n\n**Corrupting.** This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.",
+    "descriptionHtml": "<p>You gain a +3 bonus to attack and damage rolls made with this sword. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means.</p>\n<div class=\"item-subentry\"><strong>Curse.</strong> <p>You're unwilling to part with this weapon while attuned to it. While attuned to this weapon, you also have disadvantage on attack rolls made with weapons other than this one.</p>\n<p>The vengeful spirit possessing the sword shares its history and lust for vengeance with the wielder. After each successful long rest, you experience nightmares of the spirit's past, culminating in its death. When you wake, you must make a 11 Constitution saving throw. On a failed save, you only gain the benefits of a short rest. Only the Remove Curse spell allows you to end attunement to this item.</p></div>\n<div class=\"item-subentry\"><strong>Corrupting.</strong> <p>This item corrupts. See the \"Infernal Item Corruption|CoA|16|Infernal Item Corruption\" section.</p></div>"
+  },
+  {
+    "id": "it_tetherhooks_of_agonizing_paralysis_coa",
+    "name": "Tetherhooks of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "0 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Hookpull",
+      "Reach",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Tetherhooks of Agonizing Paralysis",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 piercing | **Properties:** Hookpull, Reach, Two-Handed | **Weight:** 3 lb | **Value:** 0 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.\n\nA tetherhook is a martial melee weapon. It is comprised of a hook attached to a chain or strap",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>\n<p>A tetherhook is a martial melee weapon. It is comprised of a hook attached to a chain or strap</p>"
   },
   {
     "id": "it_trident_of_agonizing_paralysis_coa",
@@ -2704,6 +3756,55 @@
     },
     "descriptionMarkdown": "*Melee Weapon, artifact (Requires Attunement)*\n\n**Damage:** 1d8 cold | **Properties:** Finesse\n\n---\n\n*Note: This item is paired with True-Ice Shards (Dagger)*\n\nCrafted from the very glacier in which he was imprisoned, the True-Ice Shards are a rapier and parrying dagger (main gauche) pair used by Levistus. They exemplify his time spent in the glacier, augmenting telepathy, divination, and defense. Due to his control over ice, Levistus can conjure the True-Ice Shards from anywhere, including if they were destroyed.\n\nYou gain a +3 bonus to attack and damage rolls made with the magical rapier and it does 1d8 cold damage instead of its regular damage.\n\nBecause Levistus conjures the True-Ice Shards at will, he often rewards a copy of the artifact to his most loyal followers. The copies are identical to the original with one exception: Levistus can destroy or retrieve a copy at any time.\n\n**Random Properties.** The True-Ice Shards have the following random properties:\n\n- 2 Artifact Properties; Major Beneficial Properties properties\n- 2 Artifact Properties; Minor Detrimental Properties properties\n- 1 Artifact Properties; Major Detrimental Properties property\n\n**Sub-Zero.** Cold damage dealt with the shards ignores resistances and immunities. Creatures vulnerable to cold damage take triple damage from the True-Ice Shards, rather than double.\n\nAfter you damage a creature with the shards, you may use a bonus action to force the creature to make a 22 Constitution saving throw. On a failed save, the creature that took the damage becomes vulnerable to cold damage for 24 hours. Once you use this feature, you may not use it again until after you have finished a long rest.\n\n**The Best Defense.** As a reaction to being attacked, you use the rapier to increase your defense, adding +3 to your AC until the end of your next turn. If you attack with the rapier before the end of your next turn, you do not have its +3 bonus to attack and damage rolls.\n\n**Mental Command.** While attuned to the True-Ice Shards, you can use an action to cast the Detect Thoughts spell (save 20), targeting any creature you have previously met. If the targeted creature is on a different plane of existence, the spell fails.\n\nAs long as you maintain concentration, you can use a bonus action to send a telepathic message to the focused creature. It can reply—using a bonus action to do so—as long as the focus and concentration continue.\n\n**Omniscient.** You can use the True-Ice Shards to cast a variety of divination spells. Locate Animals or Plants, Locate Creature, and Locate Object may be cast at will, and don't have a maximum range. Other limitations of the spells still apply, and they can't detect subjects on other planes of existence.\n\nAdditionally, you may cast Scrying (with a spell save DC of 20) and Find the Path. Once either spell is cast, you must finish a long rest before casting either of them again.\n\n**Destroying the Shards.** While Levistus still lives, destroying the True-Ice Shards serves little purpose, as he is capable of recreating them at will. That aside, the shards can be destroyed when subjected to a sufficient source of heat. A few such sources include the inside of an active volcano, a continuous source of Hellfire, or a powerful fire spell cast at 9th level.",
     "descriptionHtml": "<p><em>Note: This item is paired with True-Ice Shards (Dagger)</em></p>\n<p>Crafted from the very glacier in which he was imprisoned, the True-Ice Shards are a rapier and parrying dagger (main gauche) pair used by Levistus. They exemplify his time spent in the glacier, augmenting telepathy, divination, and defense. Due to his control over ice, Levistus can conjure the True-Ice Shards from anywhere, including if they were destroyed.</p>\n<p>You gain a +3 bonus to attack and damage rolls made with the magical rapier and it does 1d8 cold damage instead of its regular damage.</p>\n<p>Because Levistus conjures the True-Ice Shards at will, he often rewards a copy of the artifact to his most loyal followers. The copies are identical to the original with one exception: Levistus can destroy or retrieve a copy at any time.</p>\n<div class=\"item-subentry\"><strong>Random Properties.</strong> <p>The True-Ice Shards have the following random properties:</p>\n<ul><li>2 Artifact Properties; Major Beneficial Properties properties</li><li>2 Artifact Properties; Minor Detrimental Properties properties</li><li>1 Artifact Properties; Major Detrimental Properties property</li></ul></div>\n<div class=\"item-subentry\"><strong>Sub-Zero.</strong> <p>Cold damage dealt with the shards ignores resistances and immunities. Creatures vulnerable to cold damage take triple damage from the True-Ice Shards, rather than double.</p>\n<p>After you damage a creature with the shards, you may use a bonus action to force the creature to make a 22 Constitution saving throw. On a failed save, the creature that took the damage becomes vulnerable to cold damage for 24 hours. Once you use this feature, you may not use it again until after you have finished a long rest.</p></div>\n<div class=\"item-subentry\"><strong>The Best Defense.</strong> <p>As a reaction to being attacked, you use the rapier to increase your defense, adding +3 to your AC until the end of your next turn. If you attack with the rapier before the end of your next turn, you do not have its +3 bonus to attack and damage rolls.</p></div>\n<div class=\"item-subentry\"><strong>Mental Command.</strong> <p>While attuned to the True-Ice Shards, you can use an action to cast the Detect Thoughts spell (save 20), targeting any creature you have previously met. If the targeted creature is on a different plane of existence, the spell fails.</p>\n<p>As long as you maintain concentration, you can use a bonus action to send a telepathic message to the focused creature. It can reply—using a bonus action to do so—as long as the focus and concentration continue.</p></div>\n<div class=\"item-subentry\"><strong>Omniscient.</strong> <p>You can use the True-Ice Shards to cast a variety of divination spells. Locate Animals or Plants, Locate Creature, and Locate Object may be cast at will, and don't have a maximum range. Other limitations of the spells still apply, and they can't detect subjects on other planes of existence.</p>\n<p>Additionally, you may cast Scrying (with a spell save DC of 20) and Find the Path. Once either spell is cast, you must finish a long rest before casting either of them again.</p></div>\n<div class=\"item-subentry\"><strong>Destroying the Shards.</strong> <p>While Levistus still lives, destroying the True-Ice Shards serves little purpose, as he is capable of recreating them at will. That aside, the shards can be destroyed when subjected to a sufficient source of heat. A few such sources include the inside of an active volcano, a continuous source of Hellfire, or a powerful fire spell cast at 9th level.</p></div>"
+  },
+  {
+    "id": "it_twinblades_of_agonizing_paralysis_coa",
+    "name": "Twinblades of Agonizing Paralysis",
+    "source": "CoA",
+    "page": 271,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "75 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d4",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": "+3",
+    "properties": [
+      "Finesse",
+      "Two-Handed",
+      "Whirl"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Twinblades of Agonizing Paralysis",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 3,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d4",
+          "stat": "auto",
+          "extra": 3,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 2d4 slashing | **Properties:** Finesse, Two-Handed, Whirl | **Weight:** 3 lb | **Value:** 75 gp\n\n---\n\nYou have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.\n\nTwinblades are martial melee weapons; double-bladed polearms that rely on the user's dexterity to keep them in constant motion.",
+    "descriptionHtml": "<p>You have a +3 bonus to attack and damage rolls made with this magic weapon. When this weapon reduces a creature to 0 hit points, the creature doesn't die. Instead, infernal runes appear as if carved into their flesh and they're healed to 1 hit point. They now have the paralyzed condition until the condition is removed by a Lesser Restoration spell or similar magic. When the condition is removed, the runes disappear. At the start of each of their turns while they're paralyzed, the creature suffers immense pain and gains a level of exhaustion.</p>\n<p>Twinblades are martial melee weapons; double-bladed polearms that rely on the user's dexterity to keep them in constant motion.</p>"
   },
   {
     "id": "it_vial_of_greed_coa",

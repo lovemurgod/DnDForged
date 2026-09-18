@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getBrewEntities } from './brew-data-loader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -227,9 +228,9 @@ function extractUpcastInfo(spell) {
         }
     } else if (spell.entriesHigherLevel) {
         const hlText = JSON.stringify(spell.entriesHigherLevel);
-        const diceM = hlText.match(/(?:increases by|gain (?:an additional )?)(?:\{@(?:damage|dice) )?(\d+d\d+|\d+)/i);
+        const diceM = hlText.match(/(?:increases by|gain (?:an additional )?)(?:\{@(?:damage|dice) )?(\d+d\d+(?:\s*[+-]\s*(?:\d+d\d+|\d+))*|\d+)/i);
         if (diceM) {
-            upcastBonus = diceM[1];
+            upcastBonus = diceM[1].trim();
         }
     }
 
@@ -245,14 +246,14 @@ function extractDamageList(spell) {
     if (isCantrip) {
         if (spName.includes('booming blade')) {
             return [
-                { formula: '0d8', type: 'Thunder', stat: 'none' },
-                { formula: '1d8', type: 'Thunder', stat: 'none' }
+                { formula: '0d8', type: 'Thunder', label: 'Hit', stat: 'none', cantripScale: true },
+                { formula: '1d8', type: 'Thunder', label: 'If Moves', stat: 'none', cantripScale: true }
             ];
         }
         if (spName.includes('green-flame blade')) {
             return [
-                { formula: '0d8', type: 'Fire', stat: 'none' },
-                { formula: '1d8', type: 'Fire', stat: 'spell' }
+                { formula: '0d8', type: 'Fire', label: 'Hit', stat: 'none', cantripScale: true },
+                { formula: '1d8', type: 'Fire', label: 'Leap Fire', stat: 'spell', cantripScale: true }
             ];
         }
     }
@@ -307,6 +308,7 @@ function extractDamageList(spell) {
         const types = spell.damageInflict.map(t => t.charAt(0).toUpperCase() + t.slice(1));
         
         if (isCantrip) {
+            const isMultiAttackCantrip = /eldritch blast/i.test(spell.name || '');
             const dmgMatches = [...baseText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
             if (dmgMatches.length > 0) {
                 dmgMatches.forEach((m, idx) => {
@@ -316,20 +318,21 @@ function extractDamageList(spell) {
                     if (dmgMatches.length > 1) {
                         label = idx === 0 ? 'Normal' : `Option ${idx + 1}`;
                     }
-                    list.push({ formula, type, label, stat: 'none' });
+                    list.push({ formula, type, label, stat: 'none', cantripScale: isMultiAttackCantrip ? false : true });
                 });
             } else {
                 const m = baseText.match(/\{@damage\s+([^}|]+)[^}]*\}/i) || baseText.match(/(\d+d\d+)/i);
                 if (m) {
                     const formula = (m[1] || m[0]).replace(/{@damage ([^}|]+)[^}]*}/, '$1').trim();
-                    list.push({ formula, type: types[0] || 'Damage', stat: 'none' });
+                    list.push({ formula, type: types[0] || 'Damage', stat: 'none', cantripScale: isMultiAttackCantrip ? false : true });
                 }
             }
         } else {
             // For multi-damage-type spells (e.g. Ice Storm: 2d8 bludgeoning and 4d6 cold)
             if (types.length > 1) {
                 types.forEach(t => {
-                    const typeRegex = new RegExp(`\\{@damage\\s+([^}|]+)[^}]*\\}[^.]*?${t.toLowerCase()}`, 'i');
+                    // Match the closest {@damage formula} preceding the damage type without another {@damage} in between
+                    const typeRegex = new RegExp(`\\{@damage\\s+([^}|]+)[^}]*\\}(?:(?!\\{@damage)[\\s\\S])*?${t.toLowerCase()}\\s+damage`, 'i');
                     const tm = baseText.match(typeRegex);
                     if (tm) {
                         const formula = tm[1].trim();
@@ -497,21 +500,29 @@ function buildNormalizedDatabase() {
     const allSpells = [];
     const seenSet = new Set();
 
+    const rawSpells = [];
     for (const sourceKey in indexData) {
         const file = indexData[sourceKey];
         const filePath = path.join(spellsDir, file);
         if (!fs.existsSync(filePath)) continue;
 
         const content = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        const spellList = content.spell || [];
+        (content.spell || []).forEach(sp => {
+            if (!sp.source) sp.source = sourceKey;
+            rawSpells.push(sp);
+        });
+    }
 
-        spellList.forEach(sp => {
-            const spellName = (sp.name || '').trim();
-            const spellSource = (sp.source || sourceKey || 'PHB').trim();
-            const uniqueKey = `${spellName.toLowerCase()}|${spellSource.toLowerCase()}`;
+    const brewSpells = getBrewEntities('spell');
+    rawSpells.push(...brewSpells);
 
-            if (seenSet.has(uniqueKey)) return;
-            seenSet.add(uniqueKey);
+    rawSpells.forEach(sp => {
+        const spellName = (sp.name || '').trim();
+        const spellSource = (sp.source || 'PHB').trim();
+        const uniqueKey = `${spellName.toLowerCase()}|${spellSource.toLowerCase()}`;
+
+        if (seenSet.has(uniqueKey)) return;
+        seenSet.add(uniqueKey);
 
             const schoolFull = SCHOOL_MAP[sp.school] || sp.school || 'Evocation';
             const castingTime = formatTime(sp.time);
@@ -530,11 +541,67 @@ function buildNormalizedDatabase() {
             const attackStat = extractAttackStat(sp);
             const { upcastBonus, upcastScaleStep } = extractUpcastInfo(sp);
 
+            // Smart per-row scaling assignment
+            const isCantrip = sp.level === 0;
+            const isMultiAttackCantrip = isCantrip && /eldritch blast/i.test(spellName);
+            const higherLevelText = JSON.stringify(sp.entriesHigherLevel || '').toLowerCase();
+
+            damageList.forEach((d, idx) => {
+                if (isCantrip) {
+                    if (isMultiAttackCantrip) {
+                        d.cantripScale = false;
+                    } else if (d.cantripScale === undefined) {
+                        d.cantripScale = true;
+                    }
+                } else {
+                    if (upcastBonus) {
+                        const rowType = (d.type || '').toLowerCase();
+                        const mentionsRowType = rowType && higherLevelText.includes(`${rowType} damage`);
+                        const mentionsBoth = higherLevelText.includes('both damage') || higherLevelText.includes('each damage');
+
+                        if (mentionsBoth || mentionsRowType) {
+                            d.upcastBonus = upcastBonus;
+                            d.upcastScaleStep = upcastScaleStep;
+                        } else if (!higherLevelText.includes(' damage increases') && idx === 0) {
+                            d.upcastBonus = upcastBonus;
+                            d.upcastScaleStep = upcastScaleStep;
+                        } else if (damageList.length === 1) {
+                            d.upcastBonus = upcastBonus;
+                            d.upcastScaleStep = upcastScaleStep;
+                        } else if (idx === 0 && !damageList.some(r => higherLevelText.includes((r.type || '').toLowerCase() + ' damage'))) {
+                            d.upcastBonus = upcastBonus;
+                            d.upcastScaleStep = upcastScaleStep;
+                        } else {
+                            d.upcastBonus = '';
+                            d.upcastScaleStep = 1;
+                        }
+                    } else {
+                        d.upcastBonus = '';
+                        d.upcastScaleStep = 1;
+                    }
+                }
+            });
+
             // Base class lists from sources.json
             const srcEntry = (sourcesData[spellSource] && sourcesData[spellSource][spellName]) ? sourcesData[spellSource][spellName] : null;
             const classesList = srcEntry && srcEntry.class ? srcEntry.class.map(c => c.name) : [];
             const variantClassesList = srcEntry && srcEntry.classVariant ? srcEntry.classVariant.map(c => c.name) : [];
-            const combinedClasses = Array.from(new Set([...classesList, ...variantClassesList])).sort();
+            
+            let directClasses = [];
+            if (sp.classes) {
+                if (Array.isArray(sp.classes)) {
+                    directClasses = sp.classes.map(c => typeof c === 'string' ? c : c.name).filter(Boolean);
+                } else if (typeof sp.classes === 'object') {
+                    if (Array.isArray(sp.classes.fromClassList)) {
+                        directClasses.push(...sp.classes.fromClassList.map(c => c.name).filter(Boolean));
+                    }
+                    if (Array.isArray(sp.classes.fromClassListVariant)) {
+                        directClasses.push(...sp.classes.fromClassListVariant.map(c => c.name).filter(Boolean));
+                    }
+                }
+            }
+
+            const combinedClasses = Array.from(new Set([...classesList, ...variantClassesList, ...directClasses])).sort();
 
             // Subclasses, Races, Backgrounds, Feats from additionalAssocMap
             const assoc = additionalAssocMap.get(spellName.toLowerCase()) || { subclasses: [], races: [], backgrounds: [], feats: [] };
@@ -560,6 +627,7 @@ function buildNormalizedDatabase() {
                 backgrounds: assoc.backgrounds,
                 feats: assoc.feats,
                 damageList,
+                cantripScale: isCantrip ? damageList.some(d => d.cantripScale) : false,
                 saveAbility,
                 attackStat,
                 upcastBonus,
@@ -573,7 +641,6 @@ function buildNormalizedDatabase() {
 
             allSpells.push(normalized);
         });
-    }
 
     allSpells.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -595,7 +662,9 @@ function buildNormalizedDatabase() {
         classes: sp.classes,
         damageList: sp.damageList,
         saveAbility: sp.saveAbility,
-        attackStat: sp.attackStat
+        attackStat: sp.attackStat,
+        upcastBonus: sp.upcastBonus,
+        upcastScaleStep: sp.upcastScaleStep
     }));
 
     fs.writeFileSync(catalogPath, JSON.stringify(catalog, null, 2), 'utf8');

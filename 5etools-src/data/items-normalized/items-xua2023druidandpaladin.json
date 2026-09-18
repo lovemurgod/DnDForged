@@ -1,0 +1,86 @@
+[
+  {
+    "id": "it_priest_s_pack_xua2023druidandpaladin",
+    "name": "Priest's Pack",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 27,
+    "type": "Adventuring Gear",
+    "rawType": "G",
+    "rarity": "none",
+    "reqAttune": false,
+    "weight": 24,
+    "value": "33 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": false,
+    "packContents": [
+      "backpack|phb",
+      "blanket|phb",
+      "lamp|phb",
+      "tinderbox|phb",
+      {
+        "item": "rations (1 day)|phb",
+        "quantity": 7
+      },
+      "robes|phb"
+    ],
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Adventuring Gear*\n\n**Weight:** 24 lb | **Value:** 33 gp\n\n---\n\nIncludes:\n\n- Backpack\n- Blanket\n- Lamp\n- Holy Water (flask)\n- Rations (1 day) (7 days)\n- Robes\n- Tinderbox",
+    "descriptionHtml": "<p>Includes:</p>\n<ul><li>Backpack</li><li>Blanket</li><li>Lamp</li><li>Holy Water (flask)</li><li>Rations (1 day) (7 days)</li><li>Robes</li><li>Tinderbox</li></ul>"
+  },
+  {
+    "id": "it_shortsword_xua2023druidandpaladin",
+    "name": "Shortsword",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 25,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "none",
+    "reqAttune": false,
+    "weight": 2,
+    "value": "10 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "XUA2023DruidAndPaladin-L"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Shortsword",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon*\n\n**Damage:** 1d6 piercing | **Properties:** Finesse, XUA2023DruidAndPaladin-L | **Weight:** 2 lb | **Value:** 10 gp\n\n---",
+    "descriptionHtml": ""
+  }
+]

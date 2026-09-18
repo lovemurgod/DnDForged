@@ -1,0 +1,234 @@
+[
+  {
+    "id": "creature_draconic_spirit_ua2021draconicoptions",
+    "name": "Draconic Spirit",
+    "source": "UA2021DraconicOptions",
+    "edition": "2014",
+    "page": 7,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Dragon",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 80,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "str": 19,
+    "dex": 14,
+    "con": 17,
+    "int": 10,
+    "wis": 14,
+    "cha": 14,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [
+      {
+        "resist": [
+          "acid",
+          "cold",
+          "fire",
+          "lightning",
+          "poison"
+        ],
+        "cond": true,
+        "note": "(Chromatic and Metallic only)"
+      },
+      {
+        "resist": [
+          "force",
+          "necrotic",
+          "psychic",
+          "radiant",
+          "thunder"
+        ],
+        "cond": true,
+        "note": "(Gem only)"
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 12,
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "blindsight 30 ft., darkvision 60 ft."
+    },
+    "languages": [
+      "Draconic",
+      "understands the languages you speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_shared_resistances_bmgo",
+        "name": "Shared Resistances",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When you summon the dragon, choose one of its damage resistances. You have resistance to the chosen damage type until the spell ends.</p>",
+        "entries": [
+          "When you summon the dragon, choose one of its damage resistances. You have resistance to the chosen damage type until the spell ends."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_ibpy",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The dragon uses its Breath Weapon, and it makes a number of Bite and Claw attacks equal to half the spell's level (rounded down).</p>",
+        "entries": [
+          "The dragon uses its Breath Weapon, and it makes a number of Bite and Claw attacks equal to half the spell's level (rounded down)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_and_claw_tans",
+        "name": "Bite and Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: your spell attack modifier to hit, reach 10 ft., one target. Hit: 1d6 + 4 + summonSpellLevel piercing damage.</p>",
+        "entries": [
+          "{@atk mw} your spell attack modifier to hit, reach 10 ft., one target. {@h}{@damage 1d6 + 4 + summonSpellLevel} piercing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 4 + summonSpellLevel",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_breath_weapon_rg57",
+        "name": "Breath Weapon",
+        "actionType": "action",
+        "descriptionHtml": "<p>The dragon exhales a stream of multicolored energy in a 30-foot cone. Each creature in that area must make a Dexterity saving throw, taking 2d6 damage of your choice of a damage type this dragon has resistance to on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The dragon exhales a stream of multicolored energy in a 30-foot cone. Each creature in that area must make a Dexterity saving throw, taking {@damage 2d6} damage of your choice of a damage type this dragon has resistance to on a failed save, or half as much damage on a successful one."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UA2021DraconicOptions/Draconic Spirit.webp",
+    "tokenImg": "img/bestiary/tokens/UA2021DraconicOptions/Draconic Spirit.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

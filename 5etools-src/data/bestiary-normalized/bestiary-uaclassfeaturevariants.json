@@ -1,0 +1,428 @@
+[
+  {
+    "id": "creature_beast_of_the_air_uaclassfeaturevariants",
+    "name": "Beast of the Air",
+    "source": "UAClassFeatureVariants",
+    "edition": "2014",
+    "page": 8,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 60,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 6,
+        "mod": -2
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 8,
+        "mod": -1
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "str": 6,
+    "dex": 16,
+    "con": 13,
+    "int": 8,
+    "wis": 14,
+    "cha": 11,
+    "proficiencyBonus": 2,
+    "save": {
+      "dex": "+5",
+      "con": "+3",
+      "wis": "+4"
+    },
+    "saves": {
+      "dex": "+5",
+      "con": "+3",
+      "wis": "+4"
+    },
+    "skill": {
+      "perception": "+4",
+      "stealth": "+5"
+    },
+    "skills": {
+      "perception": "+4",
+      "stealth": "+5"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_flyby_whwg",
+        "name": "Flyby",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
+        "entries": [
+          "The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_primal_rebirth_de58",
+        "name": "Primal Rebirth",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the beast has died within the last hour, you can use your action to touch it and expend a spell slot of 1st level or higher. The beast returns to life after 1 minute with all its hit points restored.</p>",
+        "entries": [
+          "If the beast has died within the last hour, you can use your action to touch it and expend a spell slot of 1st level or higher. The beast returns to life after 1 minute with all its hit points restored."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_ready_companion_f1xv",
+        "name": "Ready Companion",
+        "actionType": "trait",
+        "descriptionHtml": "<p>As a bonus action, you can command the beast to make its shred attack or to Hide.</p>",
+        "entries": [
+          "As a bonus action, you can command the beast to make its shred attack or to Hide."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_shred_gktc",
+        "name": "Shred",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1d6 + 3 slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}{@damage 1d6 + 3} slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UAClassFeatureVariants/Beast of the Air.webp",
+    "tokenImg": "img/bestiary/tokens/UAClassFeatureVariants/Beast of the Air.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_beast_of_the_earth_uaclassfeaturevariants",
+    "name": "Beast of the Earth",
+    "source": "UAClassFeatureVariants",
+    "edition": "2014",
+    "page": 9,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 8,
+        "mod": -1
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "str": 14,
+    "dex": 14,
+    "con": 15,
+    "int": 8,
+    "wis": 14,
+    "cha": 11,
+    "proficiencyBonus": 2,
+    "save": {
+      "dex": "+4",
+      "con": "+4",
+      "wis": "+4"
+    },
+    "saves": {
+      "dex": "+4",
+      "con": "+4",
+      "wis": "+4"
+    },
+    "skill": {
+      "perception": "+4",
+      "stealth": "+4"
+    },
+    "skills": {
+      "perception": "+4",
+      "stealth": "+4"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_charge_6tm0",
+        "name": "Charge",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the beast moves at least 20 feet straight toward a target and then hits it with a maul attack on the same turn, the target takes an extra 1d6 slashing damage. The DC equals your spell save DC. If the target is a creature, it must succeed on a Strength saving throw against your spell save DC or be knocked prone.</p>",
+        "entries": [
+          "If the beast moves at least 20 feet straight toward a target and then hits it with a maul attack on the same turn, the target takes an extra {@dice 1d6} slashing damage. The DC equals your spell save DC. If the target is a creature, it must succeed on a Strength saving throw against your spell save DC or be knocked {@condition prone}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_primal_rebirth_badi",
+        "name": "Primal Rebirth",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the beast has died within the last hour, you can use your action to touch it and expend a spell slot of 1st level or higher. The beast returns to life after 1 minute with all its hit points restored.</p>",
+        "entries": [
+          "If the beast has died within the last hour, you can use your action to touch it and expend a spell slot of 1st level or higher. The beast returns to life after 1 minute with all its hit points restored."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_ready_companion_dphe",
+        "name": "Ready Companion",
+        "actionType": "trait",
+        "descriptionHtml": "<p>As a bonus action, you can command the beast to make its maul attack or to Hide.</p>",
+        "entries": [
+          "As a bonus action, you can command the beast to make its maul attack or to Hide."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_maul_9621",
+        "name": "Maul",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1d6 + 2 slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}{@damage 1d6 + 2} slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UAClassFeatureVariants/Beast of the Earth.webp",
+    "tokenImg": "img/bestiary/tokens/UAClassFeatureVariants/Beast of the Earth.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

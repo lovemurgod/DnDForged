@@ -1,11 +1,2370 @@
 [
   {
+    "id": "race_dwarf_duergar_mtf",
+    "name": "Dwarf (Duergar)",
+    "raceName": "Dwarf",
+    "subraceName": "Duergar",
+    "source": "MTF",
+    "page": 81,
+    "size": [
+      "M"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Superior Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Duergar Resilience.</strong> <p>You have advantage on saving throws against poison, and you have resistance against poison damage. You also have advantage on saving throws against illusions and against being charmed or paralyzed.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common, Dwarvish, and Undercommon.</p></div>\n<div class=\"compendium-subentry\"><strong>Duergar Magic.</strong> <p>When you reach 3rd level, you can cast the Enlarge/Reduce spell on yourself once with this trait, using only the spell's enlarge option. When you reach 5th level, you can cast the Invisibility spell on yourself once with this trait. You don't need material components for either spell, and you can't cast them while you're in direct sunlight, although sunlight has no effect on them once cast. You regain the ability to cast these spells with this trait when you finish a long rest. Intelligence is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Sensitivity.</strong> <p>You have disadvantage on attack rolls and Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dwarf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years."
+        ]
+      },
+      {
+        "id": "trait_dwarf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_dwarf_speed_phb",
+        "name": "Speed",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your speed is not reduced by wearing heavy armor.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your speed is not reduced by wearing heavy armor."
+        ]
+      },
+      {
+        "id": "trait_dwarf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_resilience_phb",
+        "name": "Dwarven Resilience",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against poison, and you have resistance against poison damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against poison, and you have resistance against poison damage."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_combat_training_phb",
+        "name": "Dwarven Combat Training",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item battleaxe|phb}, {@item handaxe|phb}, {@item light hammer|phb}, and {@item warhammer|phb}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_tool_proficiency_phb",
+        "name": "Tool Proficiency",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You gain proficiency with the artisan's tools of your choice: Smith's tools, brewer's supplies, or mason's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency with the {@item artisan's tools|PHB} of your choice: {@item Smith's tools|phb}, {@item brewer's supplies|phb}, or {@item mason's tools|phb}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_stonecunning_phb",
+        "name": "Stonecunning",
+        "source": "PHB",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Whenever you make an Intelligence ({@skill History}) check related to the origin of stonework, you are considered proficient in the {@skill History} skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+        ]
+      },
+      {
+        "id": "trait_dwarf_duergar_languages_mtf",
+        "name": "Languages",
+        "source": "MTF",
+        "raceName": "Dwarf",
+        "subraceName": "Duergar",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common, Dwarvish, and Undercommon.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common, Dwarvish, and Undercommon."
+        ]
+      },
+      {
+        "id": "trait_dwarf_duergar_superior_darkvision_mtf",
+        "name": "Superior Darkvision",
+        "source": "MTF",
+        "raceName": "Dwarf",
+        "subraceName": "Duergar",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_dwarf_duergar_duergar_resilience_mtf",
+        "name": "Duergar Resilience",
+        "source": "MTF",
+        "raceName": "Dwarf",
+        "subraceName": "Duergar",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against poison, and you have resistance against poison damage. You also have advantage on saving throws against illusions and against being charmed or paralyzed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against poison, and you have resistance against poison damage. You also have advantage on saving throws against illusions and against being {@condition charmed} or {@condition paralyzed}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_duergar_duergar_magic_mtf",
+        "name": "Duergar Magic",
+        "source": "MTF",
+        "raceName": "Dwarf",
+        "subraceName": "Duergar",
+        "actionType": "passive",
+        "description": "When you reach 3rd level, you can cast the Enlarge/Reduce spell on yourself once with this trait, using only the spell's enlarge option. When you reach 5th level, you can cast the Invisibility spell on yourself once with this trait. You don't need material components for either spell, and you can't cast them while you're in direct sunlight, although sunlight has no effect on them once cast. You regain the ability to cast these spells with this trait when you finish a long rest. Intelligence is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you reach 3rd level, you can cast the {@spell Enlarge/Reduce} spell on yourself once with this trait, using only the spell's enlarge option. When you reach 5th level, you can cast the {@spell Invisibility} spell on yourself once with this trait. You don't need material components for either spell, and you can't cast them while you're in direct sunlight, although sunlight has no effect on them once cast. You regain the ability to cast these spells with this trait when you finish a long rest. Intelligence is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_dwarf_duergar_sunlight_sensitivity_mtf",
+        "name": "Sunlight Sensitivity",
+        "source": "MTF",
+        "raceName": "Dwarf",
+        "subraceName": "Duergar",
+        "actionType": "passive",
+        "description": "You have disadvantage on attack rolls and Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have disadvantage on attack rolls and Wisdom ({@skill Perception}) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight."
+        ]
+      }
+    ],
+    "description": "**Age**: Dwarves mature at the same rate as humans, but they're considered young until they reach the age of 50. On average, they live about 350 years.\n\n**Size**: Dwarves stand between 4 and 5 feet tall and average about 150 pounds. Your size is Medium.\n\n**Speed**: Your speed is not reduced by wearing heavy armor.\n\n**Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Dwarven Resilience**: You have advantage on saving throws against poison, and you have resistance against poison damage.\n\n**Dwarven Combat Training**: You have proficiency with the battleaxe, handaxe, light hammer, and warhammer.\n\n**Tool Proficiency**: You gain proficiency with the artisan's tools of your choice: Smith's tools, brewer's supplies, or mason's tools.\n\n**Stonecunning**: Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.\n\n**Languages**: You can speak, read, and write Common, Dwarvish, and Undercommon.\n\n**Superior Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Duergar Resilience**: You have advantage on saving throws against poison, and you have resistance against poison damage. You also have advantage on saving throws against illusions and against being charmed or paralyzed.\n\n**Duergar Magic**: When you reach 3rd level, you can cast the Enlarge/Reduce spell on yourself once with this trait, using only the spell's enlarge option. When you reach 5th level, you can cast the Invisibility spell on yourself once with this trait. You don't need material components for either spell, and you can't cast them while you're in direct sunlight, although sunlight has no effect on them once cast. You regain the ability to cast these spells with this trait when you finish a long rest. Intelligence is your spellcasting ability for these spells.\n\n**Sunlight Sensitivity**: You have disadvantage on attack rolls and Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight."
+  },
+  {
+    "id": "race_elf_eladrin_mtf",
+    "name": "Elf (Eladrin)",
+    "raceName": "Elf",
+    "subraceName": "Eladrin",
+    "source": "MTF",
+    "page": 61,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<p><em>Choose your eladrin's season: autumn, winter, spring, or summer. When finishing a long rest, you can change your season. See the \"Info\" tab for more information.</em></p>\n<div class=\"compendium-subentry\"><strong>Fey Step.</strong> <p>As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a short or long rest.</p>\n<p>When you reach 3rd level, your Fey Step gains an additional effect based on your season; if the effect requires a saving throw, the DC equals 8 + your proficiency bonus + your Charisma modifier:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Autumn.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Winter.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Spring.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Summer.</strong> </div></li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_elf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old."
+        ]
+      },
+      {
+        "id": "trait_elf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_phb",
+        "name": "Keen Senses",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_phb",
+        "name": "Fey Ancestry",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition charmed}, and magic can't put you to sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_phb",
+        "name": "Trance",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.",
+          "{@note If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.}"
+        ]
+      },
+      {
+        "id": "trait_elf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+        ]
+      },
+      {
+        "id": "trait_elf_eladrin_fey_step_mtf",
+        "name": "Fey Step",
+        "source": "MTF",
+        "raceName": "Elf",
+        "subraceName": "Eladrin",
+        "actionType": "bonus",
+        "description": "As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a short or long rest.\n\nWhen you reach 3rd level, your Fey Step gains an additional effect based on your season; if the effect requires a saving throw, the DC equals 8 + your proficiency bonus + your Charisma modifier:\n\n- **Autumn** Immediately after you use your Fey Step, up to two creatures of your choice that you can see within 10 feet of you must succeed on a Wisdom saving throw or be charmed by you for 1 minute, or until you or your companions deal any damage to it.\n- **Winter** When you use your Fey Step, one creature of your choice that you can see within 5 feet of you before you teleport must succeed on a Wisdom saving throw or be frightened of you until the end of your next turn.\n- **Spring** When you use your Fey Step, you can touch one willing creature within 5 feet of you. That creature then teleports instead of you, appearing in an unoccupied space of your choice that you can see within 30 feet of you.\n- **Summer** Immediately after you use your Fey Step, each creature of your choice that you can see within 5 feet of you takes fire damage equal to your Charisma modifier (minimum of 1 damage).",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a short or long rest.",
+          "When you reach 3rd level, your Fey Step gains an additional effect based on your season; if the effect requires a saving throw, the DC equals 8 + your proficiency bonus + your Charisma modifier:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Autumn",
+                "entry": "Immediately after you use your Fey Step, up to two creatures of your choice that you can see within 10 feet of you must succeed on a Wisdom saving throw or be {@condition charmed} by you for 1 minute, or until you or your companions deal any damage to it."
+              },
+              {
+                "type": "item",
+                "name": "Winter",
+                "entry": "When you use your Fey Step, one creature of your choice that you can see within 5 feet of you before you teleport must succeed on a Wisdom saving throw or be {@condition frightened} of you until the end of your next turn."
+              },
+              {
+                "type": "item",
+                "name": "Spring",
+                "entry": "When you use your Fey Step, you can touch one willing creature within 5 feet of you. That creature then teleports instead of you, appearing in an unoccupied space of your choice that you can see within 30 feet of you."
+              },
+              {
+                "type": "item",
+                "name": "Summer",
+                "entry": "Immediately after you use your Fey Step, each creature of your choice that you can see within 5 feet of you takes fire damage equal to your Charisma modifier (minimum of 1 damage)."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "Choose your eladrin's season: autumn, winter, spring, or summer. When finishing a long rest, you can change your season. See the \"Info\" tab for more information."
+  },
+  {
+    "id": "race_elf_sea_mtf",
+    "name": "Elf (Sea)",
+    "raceName": "Elf",
+    "subraceName": "Sea",
+    "source": "MTF",
+    "page": 62,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft, swim 30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Sea Elf Training.</strong> <p>You have proficiency with the spear, trident, light crossbow, and net.</p></div>\n<div class=\"compendium-subentry\"><strong>Child of the Sea.</strong> <p>You have a swimming speed of 30 feet, and you can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Friend of the Sea.</strong> <p>Using gestures and sounds, you can communicate simple ideas with any beast that has an innate swimming speed.</p></div>\n<div class=\"compendium-subentry\"><strong>Extra Language.</strong> <p>You can speak, read, and write Aquan.</p></div>",
+    "traits": [
+      {
+        "id": "trait_elf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old."
+        ]
+      },
+      {
+        "id": "trait_elf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_phb",
+        "name": "Keen Senses",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_phb",
+        "name": "Fey Ancestry",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition charmed}, and magic can't put you to sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_phb",
+        "name": "Trance",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.",
+          "{@note If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.}"
+        ]
+      },
+      {
+        "id": "trait_elf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+        ]
+      },
+      {
+        "id": "trait_elf_sea_sea_elf_training_mtf",
+        "name": "Sea Elf Training",
+        "source": "MTF",
+        "raceName": "Elf",
+        "subraceName": "Sea",
+        "actionType": "passive",
+        "description": "You have proficiency with the spear, trident, light crossbow, and net.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item spear|phb}, {@item trident|phb}, {@item light crossbow|phb}, and {@item net|phb}."
+        ]
+      },
+      {
+        "id": "trait_elf_sea_child_of_the_sea_mtf",
+        "name": "Child of the Sea",
+        "source": "MTF",
+        "raceName": "Elf",
+        "subraceName": "Sea",
+        "actionType": "passive",
+        "description": "You have a swimming speed of 30 feet, and you can breathe air and water.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a swimming speed of 30 feet, and you can breathe air and water."
+        ]
+      },
+      {
+        "id": "trait_elf_sea_friend_of_the_sea_mtf",
+        "name": "Friend of the Sea",
+        "source": "MTF",
+        "raceName": "Elf",
+        "subraceName": "Sea",
+        "actionType": "passive",
+        "description": "Using gestures and sounds, you can communicate simple ideas with any beast that has an innate swimming speed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Using gestures and sounds, you can communicate simple ideas with any beast that has an innate swimming speed."
+        ]
+      },
+      {
+        "id": "trait_elf_sea_extra_language_mtf",
+        "name": "Extra Language",
+        "source": "MTF",
+        "raceName": "Elf",
+        "subraceName": "Sea",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Aquan.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Aquan."
+        ]
+      }
+    ],
+    "description": "**Age**: Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.\n\n**Size**: Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.\n\n**Darkvision**: Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Keen Senses**: You have proficiency in the Perception skill.\n\n**Fey Ancestry**: You have advantage on saving throws against being charmed, and magic can't put you to sleep.\n\n**Trance**: Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.\n\n**Languages**: You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.\n\n**Sea Elf Training**: You have proficiency with the spear, trident, light crossbow, and net.\n\n**Child of the Sea**: You have a swimming speed of 30 feet, and you can breathe air and water.\n\n**Friend of the Sea**: Using gestures and sounds, you can communicate simple ideas with any beast that has an innate swimming speed.\n\n**Extra Language**: You can speak, read, and write Aquan."
+  },
+  {
+    "id": "race_elf_shadar_kai_mtf",
+    "name": "Elf (Shadar-kai)",
+    "raceName": "Elf",
+    "subraceName": "Shadar-kai",
+    "source": "MTF",
+    "page": 62,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Necrotic Resistance.</strong> <p>You have resistance to necrotic damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Blessing of the Raven Queen.</strong> <p>As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a long rest.</p>\n<p>Starting at 3rd level, you also gain resistance to all damage when you teleport using this trait. The resistance lasts until the start of your next turn. During that time, you appear ghostly and translucent.</p></div>",
+    "traits": [
+      {
+        "id": "trait_elf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old."
+        ]
+      },
+      {
+        "id": "trait_elf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_phb",
+        "name": "Keen Senses",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_phb",
+        "name": "Fey Ancestry",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition charmed}, and magic can't put you to sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_phb",
+        "name": "Trance",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.",
+          "{@note If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.}"
+        ]
+      },
+      {
+        "id": "trait_elf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+        ]
+      },
+      {
+        "id": "trait_elf_shadar_kai_necrotic_resistance_mtf",
+        "name": "Necrotic Resistance",
+        "source": "MTF",
+        "raceName": "Elf",
+        "subraceName": "Shadar-kai",
+        "actionType": "passive",
+        "description": "You have resistance to necrotic damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to necrotic damage."
+        ]
+      },
+      {
+        "id": "trait_elf_shadar_kai_blessing_of_the_raven_queen_mtf",
+        "name": "Blessing of the Raven Queen",
+        "source": "MTF",
+        "raceName": "Elf",
+        "subraceName": "Shadar-kai",
+        "actionType": "bonus",
+        "description": "As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a long rest.\n\nStarting at 3rd level, you also gain resistance to all damage when you teleport using this trait. The resistance lasts until the start of your next turn. During that time, you appear ghostly and translucent.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a long rest.",
+          "Starting at 3rd level, you also gain resistance to all damage when you teleport using this trait. The resistance lasts until the start of your next turn. During that time, you appear ghostly and translucent."
+        ]
+      }
+    ],
+    "description": "**Age**: Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.\n\n**Size**: Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.\n\n**Darkvision**: Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Keen Senses**: You have proficiency in the Perception skill.\n\n**Fey Ancestry**: You have advantage on saving throws against being charmed, and magic can't put you to sleep.\n\n**Trance**: Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.\n\n**Languages**: You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.\n\n**Necrotic Resistance**: You have resistance to necrotic damage.\n\n**Blessing of the Raven Queen**: As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a long rest.\n\nStarting at 3rd level, you also gain resistance to all damage when you teleport using this trait. The resistance lasts until the start of your next turn. During that time, you appear ghostly and translucent."
+  },
+  {
     "id": "race_gith_mtf",
     "name": "Gith",
     "source": "MTF",
     "page": 96,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Gith reach adulthood in their late teens and live for about a century.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Gith are taller and leaner than humans, with most a slender 6 feet in height.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Gith.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Gith reach adulthood in their late teens and live for about a century.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Gith are taller and leaner than humans, with most a slender 6 feet in height.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Gith.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gith_age_mtf",
+        "name": "Age",
+        "source": "MTF",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith reach adulthood in their late teens and live for about a century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith reach adulthood in their late teens and live for about a century."
+        ]
+      },
+      {
+        "id": "trait_gith_size_mtf",
+        "name": "Size",
+        "source": "MTF",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith are taller and leaner than humans, with most a slender 6 feet in height.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith are taller and leaner than humans, with most a slender 6 feet in height."
+        ]
+      },
+      {
+        "id": "trait_gith_languages_mtf",
+        "name": "Languages",
+        "source": "MTF",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Gith.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Gith."
+        ]
+      }
+    ],
+    "description": "**Age**: Gith reach adulthood in their late teens and live for about a century.\n\n**Size**: Gith are taller and leaner than humans, with most a slender 6 feet in height.\n\n**Languages**: You can speak, read, and write Common and Gith."
+  },
+  {
+    "id": "race_gith_githyanki_mtf",
+    "name": "Gith (Githyanki)",
+    "raceName": "Gith",
+    "subraceName": "Githyanki",
+    "source": "MTF",
+    "page": 96,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Githyanki tend toward lawful evil. They are aggressive and arrogant, and they remain the faithful servants of their lich-queen, Vlaakith. Renegade githyanki tend toward chaos.</p></div>\n<div class=\"compendium-subentry\"><strong>Decadent Mastery.</strong> <p>You learn one language of your choice, and you are proficient with one skill or tool|phb|5|tools of your choice. In the timeless city of Tu'narath, githyanki have bountiful time to master odd bits of knowledge.</p></div>\n<div class=\"compendium-subentry\"><strong>Martial Prodigy.</strong> <p>You are proficient with light and medium armor and with shortsword, longsword, and greatsword.</p></div>\n<div class=\"compendium-subentry\"><strong>Githyanki Psionics.</strong> <p>You know the mage hand cantrip, and the hand is invisible when you cast the cantrip with this trait.</p>\n<p>When you reach 3rd level, you can cast jump once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the misty step spell once with this trait, and you regain the ability to do so when you finish a long rest.</p>\n<p>Intelligence is your spellcasting ability for these spells. When you cast them with this trait, they don't require components.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gith_age_mtf",
+        "name": "Age",
+        "source": "MTF",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith reach adulthood in their late teens and live for about a century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith reach adulthood in their late teens and live for about a century."
+        ]
+      },
+      {
+        "id": "trait_gith_size_mtf",
+        "name": "Size",
+        "source": "MTF",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith are taller and leaner than humans, with most a slender 6 feet in height.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith are taller and leaner than humans, with most a slender 6 feet in height."
+        ]
+      },
+      {
+        "id": "trait_gith_languages_mtf",
+        "name": "Languages",
+        "source": "MTF",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Gith.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Gith."
+        ]
+      },
+      {
+        "id": "trait_gith_githyanki_alignment_mtf",
+        "name": "Alignment",
+        "source": "MTF",
+        "raceName": "Gith",
+        "subraceName": "Githyanki",
+        "actionType": "passive",
+        "description": "Githyanki tend toward lawful evil. They are aggressive and arrogant, and they remain the faithful servants of their lich-queen, Vlaakith. Renegade githyanki tend toward chaos.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Githyanki tend toward lawful evil. They are aggressive and arrogant, and they remain the faithful servants of their lich-queen, Vlaakith. Renegade githyanki tend toward chaos."
+        ]
+      },
+      {
+        "id": "trait_gith_githyanki_decadent_mastery_mtf",
+        "name": "Decadent Mastery",
+        "source": "MTF",
+        "raceName": "Gith",
+        "subraceName": "Githyanki",
+        "actionType": "passive",
+        "description": "You learn one language of your choice, and you are proficient with one skill or tool|phb|5|tools of your choice. In the timeless city of Tu'narath, githyanki have bountiful time to master odd bits of knowledge.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You learn one language of your choice, and you are proficient with one skill or {@book tool|phb|5|tools} of your choice. In the timeless city of Tu'narath, githyanki have bountiful time to master odd bits of knowledge."
+        ]
+      },
+      {
+        "id": "trait_gith_githyanki_martial_prodigy_mtf",
+        "name": "Martial Prodigy",
+        "source": "MTF",
+        "raceName": "Gith",
+        "subraceName": "Githyanki",
+        "actionType": "passive",
+        "description": "You are proficient with light and medium armor and with shortsword, longsword, and greatsword.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are proficient with light and medium armor and with {@item shortsword|phb|shortswords}, {@item longsword|phb|longswords}, and {@item greatsword|phb|greatswords}."
+        ]
+      },
+      {
+        "id": "trait_gith_githyanki_githyanki_psionics_mtf",
+        "name": "Githyanki Psionics",
+        "source": "MTF",
+        "raceName": "Gith",
+        "subraceName": "Githyanki",
+        "actionType": "passive",
+        "description": "You know the mage hand cantrip, and the hand is invisible when you cast the cantrip with this trait.\n\nWhen you reach 3rd level, you can cast jump once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the misty step spell once with this trait, and you regain the ability to do so when you finish a long rest.\n\nIntelligence is your spellcasting ability for these spells. When you cast them with this trait, they don't require components.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell mage hand} cantrip, and the hand is {@condition invisible} when you cast the cantrip with this trait.",
+          "When you reach 3rd level, you can cast {@spell jump} once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell misty step} spell once with this trait, and you regain the ability to do so when you finish a long rest.",
+          "Intelligence is your spellcasting ability for these spells. When you cast them with this trait, they don't require components."
+        ]
+      }
+    ],
+    "description": "**Age**: Gith reach adulthood in their late teens and live for about a century.\n\n**Size**: Gith are taller and leaner than humans, with most a slender 6 feet in height.\n\n**Languages**: You can speak, read, and write Common and Gith.\n\n**Alignment**: Githyanki tend toward lawful evil. They are aggressive and arrogant, and they remain the faithful servants of their lich-queen, Vlaakith. Renegade githyanki tend toward chaos.\n\n**Decadent Mastery**: You learn one language of your choice, and you are proficient with one skill or tool|phb|5|tools of your choice. In the timeless city of Tu'narath, githyanki have bountiful time to master odd bits of knowledge.\n\n**Martial Prodigy**: You are proficient with light and medium armor and with shortsword, longsword, and greatsword.\n\n**Githyanki Psionics**: You know the mage hand cantrip, and the hand is invisible when you cast the cantrip with this trait.\n\nWhen you reach 3rd level, you can cast jump once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the misty step spell once with this trait, and you regain the ability to do so when you finish a long rest.\n\nIntelligence is your spellcasting ability for these spells. When you cast them with this trait, they don't require components."
+  },
+  {
+    "id": "race_gith_githzerai_mtf",
+    "name": "Gith (Githzerai)",
+    "raceName": "Gith",
+    "subraceName": "Githzerai",
+    "source": "MTF",
+    "page": 96,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Githzerai tend toward lawful neutral. Their rigorous training in psychic abilities requires an implacable mental discipline.</p></div>\n<div class=\"compendium-subentry\"><strong>Mental Discipline.</strong> <p>You have advantage on saving throws against the charmed and frightened conditions. Under the tutelage of monastic masters, githzerai learn to govern their own minds.</p></div>\n<div class=\"compendium-subentry\"><strong>Githzerai Psionics.</strong> <p>You know the mage hand cantrip, and the hand is invisible when you cast the cantrip with this trait.</p>\n<p>When you reach 3rd level, you can cast shield once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the detect thoughts spell once with this trait, and you regain the ability to do so when you finish a long rest.</p>\n<p>Wisdom is your spellcasting ability for these spells. When you cast them with this trait, they don't require components.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gith_age_mtf",
+        "name": "Age",
+        "source": "MTF",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith reach adulthood in their late teens and live for about a century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith reach adulthood in their late teens and live for about a century."
+        ]
+      },
+      {
+        "id": "trait_gith_size_mtf",
+        "name": "Size",
+        "source": "MTF",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith are taller and leaner than humans, with most a slender 6 feet in height.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith are taller and leaner than humans, with most a slender 6 feet in height."
+        ]
+      },
+      {
+        "id": "trait_gith_languages_mtf",
+        "name": "Languages",
+        "source": "MTF",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Gith.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Gith."
+        ]
+      },
+      {
+        "id": "trait_gith_githzerai_alignment_mtf",
+        "name": "Alignment",
+        "source": "MTF",
+        "raceName": "Gith",
+        "subraceName": "Githzerai",
+        "actionType": "passive",
+        "description": "Githzerai tend toward lawful neutral. Their rigorous training in psychic abilities requires an implacable mental discipline.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Githzerai tend toward lawful neutral. Their rigorous training in psychic abilities requires an implacable mental discipline."
+        ]
+      },
+      {
+        "id": "trait_gith_githzerai_mental_discipline_mtf",
+        "name": "Mental Discipline",
+        "source": "MTF",
+        "raceName": "Gith",
+        "subraceName": "Githzerai",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against the charmed and frightened conditions. Under the tutelage of monastic masters, githzerai learn to govern their own minds.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against the {@condition charmed} and {@condition frightened} conditions. Under the tutelage of monastic masters, githzerai learn to govern their own minds."
+        ]
+      },
+      {
+        "id": "trait_gith_githzerai_githzerai_psionics_mtf",
+        "name": "Githzerai Psionics",
+        "source": "MTF",
+        "raceName": "Gith",
+        "subraceName": "Githzerai",
+        "actionType": "passive",
+        "description": "You know the mage hand cantrip, and the hand is invisible when you cast the cantrip with this trait.\n\nWhen you reach 3rd level, you can cast shield once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the detect thoughts spell once with this trait, and you regain the ability to do so when you finish a long rest.\n\nWisdom is your spellcasting ability for these spells. When you cast them with this trait, they don't require components.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell mage hand} cantrip, and the hand is {@condition invisible} when you cast the cantrip with this trait.",
+          "When you reach 3rd level, you can cast {@spell shield} once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell detect thoughts} spell once with this trait, and you regain the ability to do so when you finish a long rest.",
+          "Wisdom is your spellcasting ability for these spells. When you cast them with this trait, they don't require components."
+        ]
+      }
+    ],
+    "description": "**Age**: Gith reach adulthood in their late teens and live for about a century.\n\n**Size**: Gith are taller and leaner than humans, with most a slender 6 feet in height.\n\n**Languages**: You can speak, read, and write Common and Gith.\n\n**Alignment**: Githzerai tend toward lawful neutral. Their rigorous training in psychic abilities requires an implacable mental discipline.\n\n**Mental Discipline**: You have advantage on saving throws against the charmed and frightened conditions. Under the tutelage of monastic masters, githzerai learn to govern their own minds.\n\n**Githzerai Psionics**: You know the mage hand cantrip, and the hand is invisible when you cast the cantrip with this trait.\n\nWhen you reach 3rd level, you can cast shield once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the detect thoughts spell once with this trait, and you regain the ability to do so when you finish a long rest.\n\nWisdom is your spellcasting ability for these spells. When you cast them with this trait, they don't require components."
+  },
+  {
+    "id": "race_gnome_deep_mtf",
+    "name": "Gnome (Deep)",
+    "raceName": "Gnome",
+    "subraceName": "Deep",
+    "source": "MTF",
+    "page": 113,
+    "size": [
+      "S"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Deep gnomes are short-lived for gnomes. They mature at the same rate humans do and are considered full-grown adults by 25. They live 200 to 250 years, although hard toil and the dangers of the Underdark often claim them before their time.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Unlike other gnomes, svirfneblin tend to weigh 80 to 120 pounds. Your size is Small.</p></div>\n<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Svirfneblin believe that survival depends on avoiding entanglements with other creatures and not making enemies, so they favor neutral alignments. They rarely wish others ill, and they are unlikely to take risks on behalf of others, except those dearest to them.</p></div>\n<div class=\"compendium-subentry\"><strong>Superior Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Stone Camouflage.</strong> <p>You have advantage on Dexterity (Stealth) checks to hide in rocky terrain.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common, Gnomish, and Undercommon.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gnome_deep_age_mtf",
+        "name": "Age",
+        "source": "MTF",
+        "raceName": "Gnome",
+        "subraceName": "Deep",
+        "actionType": "passive",
+        "description": "Deep gnomes are short-lived for gnomes. They mature at the same rate humans do and are considered full-grown adults by 25. They live 200 to 250 years, although hard toil and the dangers of the Underdark often claim them before their time.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Deep gnomes are short-lived for gnomes. They mature at the same rate humans do and are considered full-grown adults by 25. They live 200 to 250 years, although hard toil and the dangers of the Underdark often claim them before their time."
+        ]
+      },
+      {
+        "id": "trait_gnome_deep_size_mtf",
+        "name": "Size",
+        "source": "MTF",
+        "raceName": "Gnome",
+        "subraceName": "Deep",
+        "actionType": "passive",
+        "description": "Unlike other gnomes, svirfneblin tend to weigh 80 to 120 pounds. Your size is Small.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Unlike other gnomes, svirfneblin tend to weigh 80 to 120 pounds. Your size is Small."
+        ]
+      },
+      {
+        "id": "trait_gnome_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_gnome_gnome_cunning_phb",
+        "name": "Gnome Cunning",
+        "source": "PHB",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic."
+        ]
+      },
+      {
+        "id": "trait_gnome_deep_languages_mtf",
+        "name": "Languages",
+        "source": "MTF",
+        "raceName": "Gnome",
+        "subraceName": "Deep",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common, Gnomish, and Undercommon.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common, Gnomish, and Undercommon."
+        ]
+      },
+      {
+        "id": "trait_gnome_deep_alignment_mtf",
+        "name": "Alignment",
+        "source": "MTF",
+        "raceName": "Gnome",
+        "subraceName": "Deep",
+        "actionType": "passive",
+        "description": "Svirfneblin believe that survival depends on avoiding entanglements with other creatures and not making enemies, so they favor neutral alignments. They rarely wish others ill, and they are unlikely to take risks on behalf of others, except those dearest to them.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Svirfneblin believe that survival depends on avoiding entanglements with other creatures and not making enemies, so they favor neutral alignments. They rarely wish others ill, and they are unlikely to take risks on behalf of others, except those dearest to them."
+        ]
+      },
+      {
+        "id": "trait_gnome_deep_superior_darkvision_mtf",
+        "name": "Superior Darkvision",
+        "source": "MTF",
+        "raceName": "Gnome",
+        "subraceName": "Deep",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_gnome_deep_stone_camouflage_mtf",
+        "name": "Stone Camouflage",
+        "source": "MTF",
+        "raceName": "Gnome",
+        "subraceName": "Deep",
+        "actionType": "passive",
+        "description": "You have advantage on Dexterity (Stealth) checks to hide in rocky terrain.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on Dexterity ({@skill Stealth}) checks to hide in rocky terrain."
+        ]
+      }
+    ],
+    "description": "**Age**: Deep gnomes are short-lived for gnomes. They mature at the same rate humans do and are considered full-grown adults by 25. They live 200 to 250 years, although hard toil and the dangers of the Underdark often claim them before their time.\n\n**Size**: Unlike other gnomes, svirfneblin tend to weigh 80 to 120 pounds. Your size is Small.\n\n**Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Gnome Cunning**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.\n\n**Languages**: You can speak, read, and write Common, Gnomish, and Undercommon.\n\n**Alignment**: Svirfneblin believe that survival depends on avoiding entanglements with other creatures and not making enemies, so they favor neutral alignments. They rarely wish others ill, and they are unlikely to take risks on behalf of others, except those dearest to them.\n\n**Superior Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Stone Camouflage**: You have advantage on Dexterity (Stealth) checks to hide in rocky terrain."
+  },
+  {
+    "id": "race_tiefling_asmodeus_mtf",
+    "name": "Tiefling (Asmodeus)",
+    "raceName": "Tiefling",
+    "subraceName": "Asmodeus",
+    "source": "MTF",
+    "page": 21,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal."
+  },
+  {
+    "id": "race_tiefling_baalzebul_mtf",
+    "name": "Tiefling (Baalzebul)",
+    "raceName": "Tiefling",
+    "subraceName": "Baalzebul",
+    "source": "MTF",
+    "page": 21,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Legacy of Maladomini.</strong> <p>You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the ray of sickness spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the crown of madness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      },
+      {
+        "id": "trait_tiefling_baalzebul_legacy_of_maladomini_mtf",
+        "name": "Legacy of Maladomini",
+        "source": "MTF",
+        "raceName": "Tiefling",
+        "subraceName": "Baalzebul",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the ray of sickness spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the crown of madness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. When you reach 3rd level, you can cast the {@spell ray of sickness} spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell crown of madness} spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal.\n\n**Legacy of Maladomini**: You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the ray of sickness spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the crown of madness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+  },
+  {
+    "id": "race_tiefling_dispater_mtf",
+    "name": "Tiefling (Dispater)",
+    "raceName": "Tiefling",
+    "subraceName": "Dispater",
+    "source": "MTF",
+    "page": 21,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Legacy of Dis.</strong> <p>You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the disguise self spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the detect thoughts spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      },
+      {
+        "id": "trait_tiefling_dispater_legacy_of_dis_mtf",
+        "name": "Legacy of Dis",
+        "source": "MTF",
+        "raceName": "Tiefling",
+        "subraceName": "Dispater",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the disguise self spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the detect thoughts spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. When you reach 3rd level, you can cast the {@spell disguise self} spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell detect thoughts} spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal.\n\n**Legacy of Dis**: You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the disguise self spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the detect thoughts spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+  },
+  {
+    "id": "race_tiefling_fierna_mtf",
+    "name": "Tiefling (Fierna)",
+    "raceName": "Tiefling",
+    "subraceName": "Fierna",
+    "source": "MTF",
+    "page": 21,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Legacy of Phlegethos.</strong> <p>You know the friends cantrip. When you reach 3rd level, you can cast the charm person spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the suggestion spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      },
+      {
+        "id": "trait_tiefling_fierna_legacy_of_phlegethos_mtf",
+        "name": "Legacy of Phlegethos",
+        "source": "MTF",
+        "raceName": "Tiefling",
+        "subraceName": "Fierna",
+        "actionType": "passive",
+        "description": "You know the friends cantrip. When you reach 3rd level, you can cast the charm person spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the suggestion spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell friends} cantrip. When you reach 3rd level, you can cast the {@spell charm person} spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell suggestion} spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal.\n\n**Legacy of Phlegethos**: You know the friends cantrip. When you reach 3rd level, you can cast the charm person spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the suggestion spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+  },
+  {
+    "id": "race_tiefling_glasya_mtf",
+    "name": "Tiefling (Glasya)",
+    "raceName": "Tiefling",
+    "subraceName": "Glasya",
+    "source": "MTF",
+    "page": 22,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Legacy of Malbolge.</strong> <p>You know the minor illusion cantrip. When you reach 3rd level, you can cast the disguise self spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the invisibility spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      },
+      {
+        "id": "trait_tiefling_glasya_legacy_of_malbolge_mtf",
+        "name": "Legacy of Malbolge",
+        "source": "MTF",
+        "raceName": "Tiefling",
+        "subraceName": "Glasya",
+        "actionType": "passive",
+        "description": "You know the minor illusion cantrip. When you reach 3rd level, you can cast the disguise self spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the invisibility spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell minor illusion} cantrip. When you reach 3rd level, you can cast the {@spell disguise self} spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell invisibility} spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal.\n\n**Legacy of Malbolge**: You know the minor illusion cantrip. When you reach 3rd level, you can cast the disguise self spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the invisibility spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+  },
+  {
+    "id": "race_tiefling_levistus_mtf",
+    "name": "Tiefling (Levistus)",
+    "raceName": "Tiefling",
+    "subraceName": "Levistus",
+    "source": "MTF",
+    "page": 22,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Legacy of Stygia.</strong> <p>You know the ray of frost cantrip. When you reach 3rd level, you can cast the armor of Agathys spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the darkness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      },
+      {
+        "id": "trait_tiefling_levistus_legacy_of_stygia_mtf",
+        "name": "Legacy of Stygia",
+        "source": "MTF",
+        "raceName": "Tiefling",
+        "subraceName": "Levistus",
+        "actionType": "passive",
+        "description": "You know the ray of frost cantrip. When you reach 3rd level, you can cast the armor of Agathys spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the darkness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell ray of frost} cantrip. When you reach 3rd level, you can cast the {@spell armor of Agathys} spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell darkness} spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal.\n\n**Legacy of Stygia**: You know the ray of frost cantrip. When you reach 3rd level, you can cast the armor of Agathys spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the darkness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+  },
+  {
+    "id": "race_tiefling_mammon_mtf",
+    "name": "Tiefling (Mammon)",
+    "raceName": "Tiefling",
+    "subraceName": "Mammon",
+    "source": "MTF",
+    "page": 22,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Legacy of Minauros.</strong> <p>You know the mage hand cantrip. When you reach 3rd level, you can cast the Tenser's floating disk spell once with this trait and regain the ability to do so when you finish a short or long rest. When you reach 5th level, you can cast the arcane lock spell once with this trait, requiring no material component, and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      },
+      {
+        "id": "trait_tiefling_mammon_legacy_of_minauros_mtf",
+        "name": "Legacy of Minauros",
+        "source": "MTF",
+        "raceName": "Tiefling",
+        "subraceName": "Mammon",
+        "actionType": "passive",
+        "description": "You know the mage hand cantrip. When you reach 3rd level, you can cast the Tenser's floating disk spell once with this trait and regain the ability to do so when you finish a short or long rest. When you reach 5th level, you can cast the arcane lock spell once with this trait, requiring no material component, and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell mage hand} cantrip. When you reach 3rd level, you can cast the {@spell Tenser's floating disk} spell once with this trait and regain the ability to do so when you finish a short or long rest. When you reach 5th level, you can cast the {@spell arcane lock} spell once with this trait, requiring no material component, and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal.\n\n**Legacy of Minauros**: You know the mage hand cantrip. When you reach 3rd level, you can cast the Tenser's floating disk spell once with this trait and regain the ability to do so when you finish a short or long rest. When you reach 5th level, you can cast the arcane lock spell once with this trait, requiring no material component, and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+  },
+  {
+    "id": "race_tiefling_mephistopheles_mtf",
+    "name": "Tiefling (Mephistopheles)",
+    "raceName": "Tiefling",
+    "subraceName": "Mephistopheles",
+    "source": "MTF",
+    "page": 23,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Legacy of Cania.</strong> <p>You know the mage hand cantrip. When you reach 3rd level, you can cast the burning hands spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the flame blade spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      },
+      {
+        "id": "trait_tiefling_mephistopheles_legacy_of_cania_mtf",
+        "name": "Legacy of Cania",
+        "source": "MTF",
+        "raceName": "Tiefling",
+        "subraceName": "Mephistopheles",
+        "actionType": "passive",
+        "description": "You know the mage hand cantrip. When you reach 3rd level, you can cast the burning hands spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the flame blade spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell mage hand} cantrip. When you reach 3rd level, you can cast the {@spell burning hands} spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell flame blade} spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal.\n\n**Legacy of Cania**: You know the mage hand cantrip. When you reach 3rd level, you can cast the burning hands spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the flame blade spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+  },
+  {
+    "id": "race_tiefling_zariel_mtf",
+    "name": "Tiefling (Zariel)",
+    "raceName": "Tiefling",
+    "subraceName": "Zariel",
+    "source": "MTF",
+    "page": 23,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Legacy of Avernus.</strong> <p>You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the searing smite spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the branding smite spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tiefling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_tiefling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Tieflings are about the same size and build as humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tieflings are about the same size and build as humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tiefling_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tiefling_hellish_resistance_phb",
+        "name": "Hellish Resistance",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have resistance to fire damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to fire damage."
+        ]
+      },
+      {
+        "id": "trait_tiefling_infernal_legacy_phb",
+        "name": "Infernal Legacy",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. Once you reach 3rd level, you can cast the {@spell hellish rebuke} spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the {@spell darkness} spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_tiefling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Infernal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Infernal."
+        ]
+      },
+      {
+        "id": "trait_tiefling_zariel_legacy_of_avernus_mtf",
+        "name": "Legacy of Avernus",
+        "source": "MTF",
+        "raceName": "Tiefling",
+        "subraceName": "Zariel",
+        "actionType": "passive",
+        "description": "You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the searing smite spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the branding smite spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell thaumaturgy} cantrip. When you reach 3rd level, you can cast the {@spell searing smite} spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell branding smite} spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      }
+    ],
+    "description": "**Age**: Tieflings mature at the same rate as humans but live a few years longer.\n\n**Size**: Tieflings are about the same size and build as humans. Your size is Medium.\n\n**Darkvision**: Thanks to your infernal heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Hellish Resistance**: You have resistance to fire damage.\n\n**Infernal Legacy**: You know the thaumaturgy cantrip. Once you reach 3rd level, you can cast the hellish rebuke spell as a 2nd-level spell with this trait; you regain the ability to cast it when you finish a long rest. Once you reach 5th level, you can also cast the darkness spell once per day with this trait; you regain the ability to cast it when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Languages**: You can speak, read, and write Common and Infernal.\n\n**Legacy of Avernus**: You know the thaumaturgy cantrip. When you reach 3rd level, you can cast the searing smite spell as a 2nd-level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the branding smite spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
   }
 ]

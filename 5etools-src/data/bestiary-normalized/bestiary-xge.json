@@ -90,10 +90,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_hearing_and_smell_e65d",
+        "id": "act_keen_hearing_and_smell_3k52",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
-        "descriptionHtml": "<p>The wolf has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
+        "descriptionHtml": "<p>The hound has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
+        "entries": [
+          "The hound has advantage on Wisdom ({@skill Perception}) checks that rely on hearing or smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -107,10 +110,93 @@
         }
       },
       {
-        "id": "act_pack_tactics_7210",
+        "id": "act_pack_tactics_676a",
         "name": "Pack Tactics",
         "actionType": "trait",
-        "descriptionHtml": "<p>The wolf has advantage on an attack roll against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "descriptionHtml": "<p>The hound has advantage on an attack roll against a creature if at least one of the hound's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "The hound has advantage on an attack roll against a creature if at least one of the hound's allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_cloak_of_shadows_z1o5",
+        "name": "Cloak of Shadows",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The hound appears with a number of temporary hit points equal to half your sorcerer level.</p>",
+        "entries": [
+          "The hound appears with a number of temporary hit points equal to half your sorcerer level."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_incorporeal_movement_d31p",
+        "name": "Incorporeal Movement",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The hound can move through other creatures and objects as if they were difficult terrain. The hound takes 5 force damage if it ends its turn inside an object.</p>",
+        "entries": [
+          "The hound can move through other creatures and objects as if they were {@quickref difficult terrain||3}. The hound takes 5 force damage if it ends its turn inside an object."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_omen_sight_5s3g",
+        "name": "Omen Sight",
+        "actionType": "trait",
+        "descriptionHtml": "<p>At the start of its turn, the hound automatically knows its target's location. If the target was hidden, it is no longer hidden from the hound.</p>",
+        "entries": [
+          "At the start of its turn, the hound automatically knows its target's location. If the target was hidden, it is no longer hidden from the hound."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_ever_at_your_heels_bvkn",
+        "name": "Ever at Your Heels",
+        "actionType": "trait",
+        "descriptionHtml": "<p>On its turn, it can move only toward its target by the most direct route, and it can use its action only to attack its target. The hound can make opportunity attacks, but only against its target. Additionally, while the hound is within 5 feet of the target, the target has disadvantage on saving throws against any spell you cast. The hound disappears if it is reduced to 0 hit points, if its target is reduced to 0 hit points, or after 5 minutes.</p>",
+        "entries": [
+          "On its turn, it can move only toward its target by the most direct route, and it can use its action only to attack its target. The hound can make opportunity attacks, but only against its target. Additionally, while the hound is within 5 feet of the target, the target has disadvantage on saving throws against any spell you cast. The hound disappears if it is reduced to 0 hit points, if its target is reduced to 0 hit points, or after 5 minutes."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -126,10 +212,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_0k8o",
+        "id": "act_bite_f5yz",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) piercing damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) piercing damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}10 ({@damage 2d6 + 3}) piercing damage. If the target is a creature, it must succeed on a {@dc 13} Strength saving throw or be knocked {@condition prone}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -158,11 +247,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/XGE/Hound of Ill Omen.webp",
     "tokenImg": "img/bestiary/tokens/XGE/Hound of Ill Omen.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_tiny_servant_xge",
@@ -262,10 +363,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_slam_wqxu",
+        "id": "act_slam_lpcz",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d4 + 3) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d4 + 3}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -291,10 +395,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/XGE/Tiny Servant.webp",
     "tokenImg": "img/bestiary/tokens/XGE/Tiny Servant.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

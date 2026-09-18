@@ -1,0 +1,1155 @@
+[
+  {
+    "id": "creature_great_fir_drake_oneshotwondersholidaypack",
+    "name": "Great Fir Drake",
+    "source": "OneShotWondersHolidayPack",
+    "edition": "2014",
+    "page": 39,
+    "isSrd": false,
+    "size": "Huge",
+    "sizeCategory": "H",
+    "type": "Dragon",
+    "subtype": "",
+    "alignment": "L N",
+    "ac": [
+      {
+        "value": 19,
+        "condition": null
+      }
+    ],
+    "primaryAc": 19,
+    "acCondition": "",
+    "hp": {
+      "average": 162,
+      "formula": "18d12 + 54"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 40,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 21,
+        "mod": 5
+      },
+      "dex": {
+        "score": 19,
+        "mod": 4
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 20,
+        "mod": 5
+      },
+      "wis": {
+        "score": 20,
+        "mod": 5
+      },
+      "cha": {
+        "score": 21,
+        "mod": 5
+      }
+    },
+    "str": 21,
+    "dex": 19,
+    "con": 16,
+    "int": 20,
+    "wis": 20,
+    "cha": 21,
+    "proficiencyBonus": 5,
+    "save": {
+      "str": "+4",
+      "int": "+10",
+      "wis": "+9",
+      "cha": "+9"
+    },
+    "saves": {
+      "str": "+4",
+      "int": "+10",
+      "wis": "+9",
+      "cha": "+9"
+    },
+    "skill": {
+      "insight": "+9",
+      "perception": "+9",
+      "persuasion": "+9",
+      "stealth": "+9"
+    },
+    "skills": {
+      "insight": "+9",
+      "perception": "+9",
+      "persuasion": "+9",
+      "stealth": "+9"
+    },
+    "immune": [
+      "radiant"
+    ],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "blinded"
+    ],
+    "passive": 19,
+    "initiative": {
+      "proficiency": 2
+    },
+    "senses": {
+      "passivePerception": 19,
+      "sensesString": "Blindsight 60 ft, Darkvision 120 ft"
+    },
+    "languages": [
+      "Common",
+      "Draconic",
+      "Sylvan"
+    ],
+    "cr": "15",
+    "crNumeric": 15,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_great_fir_drake_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 1,
+        "dc": 18,
+        "atkMod": 10,
+        "header": "The drake casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save DC 18, +10 to hit with spell attacks):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_color_spray_xphb",
+            "name": "Color Spray",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "Self (15 feet cone)",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "constitution",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 18,
+            "damageList": [],
+            "components": "V, S, M (a pinch of colorful sand)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_faerie_fire_xphb",
+            "name": "Faerie Fire",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 18,
+            "damageList": [],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_hypnotic_pattern_xphb",
+              "name": "Hypnotic Pattern",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 18,
+              "damageList": [],
+              "components": "S, M (a pinch of confetti)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_major_image_xphb",
+              "name": "Major Image",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a bit of fleece)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_plant_growth_xphb",
+              "name": "Plant Growth",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Transmutation",
+              "castingTime": "1 action, 8 hours",
+              "range": "150 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Color Spray",
+          "Detect Magic",
+          "Faerie Fire"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_illumination_zz9p",
+        "name": "Illumination",
+        "actionType": "trait",
+        "descriptionHtml": "<p>As a Bonus Action, the drake can produce dim light in a 15 ft radius, or bright light in a 15 ft radius and dim light for an additional 15 ft radius. The drake can end this effect as a Bonus Action.</p>",
+        "entries": [
+          "As a {@variantrule Bonus Action|XPHB}, the drake can produce dim light in a 15 ft radius, or bright light in a 15 ft radius and dim light for an additional 15 ft radius. The drake can end this effect as a {@variantrule Bonus Action|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_prickly_pines_rq44",
+        "name": "Prickly Pines",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If a creature successfully hits the drake with a melee attack, the creature takes 4 (1d8) piercing damage.</p>",
+        "entries": [
+          "If a creature successfully hits the drake with a melee attack, the creature takes 4 ({@damage 1d8}) piercing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__0dt4",
+        "name": "Legendary Resistance (3/Day, or 4/Day in Lair)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the drake fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the drake fails a saving throw, it can choose to succeed instead."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_5wzr",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The drake makes three Rend attacks. It can replace one attack with a use of (A) Incandescent Breath or (B) Spellcasting to cast Color Spray.</p>",
+        "entries": [
+          "The drake makes three Rend attacks. It can replace one attack with a use of (A) Incandescent Breath or (B) Spellcasting to cast {@spell Color Spray|XPHB|Colour Spray}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rend_gjmi",
+        "name": "Rend",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 13 (2d8 + 4) Slashing damage plus 7 (2d6) Radiant damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 9}, reach 10 ft. {@h}13 ({@damage 2d8 + 4}) Slashing damage plus 7 ({@damage 2d6}) Radiant damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 4",
+              "type": "Slashing"
+            },
+            {
+              "formula": "2d6",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_incandescent_breath__recharge_5__os5z",
+        "name": "Incandescent Breath (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>dex DC 19, each creature in a 90 ft long, 5 ft wide Line [Area of Effect]. {@actSaveFail} 55 (10d10) Radiant damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave dex} {@dc 19}, each creature in a 90 ft long, 5 ft wide {@variantrule Line [Area of Effect]|XPHB|Line}. {@actSaveFail} 55 ({@damage 10d10}) Radiant damage. {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 19,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "10d10",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_bright_tail_lash_kd1v",
+          "name": "Bright Tail Lash",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>str DC 17, a creature the drake can see within 15 ft. {@actSaveFail} 10 (3d6) Radiant damage, and the target is knocked Prone.</p>",
+          "entries": [
+            "{@actSave str} {@dc 17}, a creature the drake can see within 15 ft. {@actSaveFail} 10 ({@damage 3d6}) Radiant damage, and the target is knocked {@condition Prone|XPHB}."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 17,
+              "ability": "STR"
+            },
+            "damages": [
+              {
+                "formula": "3d6",
+                "type": "Radiant"
+              }
+            ],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_pounce_9mb3",
+          "name": "Pounce",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The drake moves up to half its Speed, and it makes one Rend attack.</p>",
+          "entries": [
+            "The drake moves up to half its {@variantrule Speed|XPHB}, and it makes one Rend attack."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_twinkling_lights_7lf8",
+          "name": "Twinkling Lights",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The drake uses Spellcasting to cast Faerie Fire.</p>",
+          "entries": [
+            "The drake uses Spellcasting to cast {@spell Faerie Fire|XPHB}."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "legendaryActionsLair": 4,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/OneShotWondersHolidayPack/Great Fir Drake.webp",
+    "tokenImg": "img/bestiary/tokens/OneShotWondersHolidayPack/Great Fir Drake.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_pudding_gremlin_oneshotwondersholidaypack",
+    "name": "Pudding Gremlin",
+    "source": "OneShotWondersHolidayPack",
+    "edition": "2014",
+    "page": 34,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 21,
+      "formula": "6d6"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 5,
+        "mod": -3
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "str": 8,
+    "dex": 16,
+    "con": 10,
+    "int": 5,
+    "wis": 10,
+    "cha": 9,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "acrobatics": "+5",
+      "stealth": "+5"
+    },
+    "skills": {
+      "acrobatics": "+5",
+      "stealth": "+5"
+    },
+    "immune": [
+      "fire"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "Darkvision 60 ft"
+    },
+    "languages": [],
+    "cr": "1/2",
+    "crNumeric": 0.5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_death_burst_sq49",
+        "name": "Death Burst",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The pudding gremlin explodes when it dies. dex DC 11, each creature in a 5-foot Emanation [Area of Effect] originating from the pudding gremlin. {@actSaveFail} 7 (2d6) Fire damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "The pudding gremlin explodes when it dies. {@actSave dex} {@dc 11}, each creature in a 5-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the pudding gremlin. {@actSaveFail} 7 ({@damage 2d6}) Fire damage. {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 11,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_false_appearance_qnwt",
+        "name": "False Appearance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the pudding gremlin doesn't move on its turn, it has Advantage when taking the Hide action.</p>",
+        "entries": [
+          "If the pudding gremlin doesn't move on its turn, it has {@variantrule Advantage|XPHB} when taking the Hide action."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_claw_hme8",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft, Hit: 5 (1d4 + 3) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft, {@h}5 ({@damage 1d4 + 3}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "{@h}5 ({@damage 1d4 + 3}) Slashing damage",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 3",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fire_breath___recharge__9hvg",
+        "name": "Fire Breath {@recharge}",
+        "actionType": "action",
+        "descriptionHtml": "<p>dex DC 11, each creature in a 15 ft Cone [Area of Effect]. {@actSaveFail} 7 (2d6) Fire damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave dex} {@dc 11}, each creature in a 15 ft {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} 7 ({@damage 2d6}) Fire damage. {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 11,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_create_gremlin__1_day__ogir",
+        "name": "Create Gremlin (1/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>If the pudding gremlin is within 10 ft of an ordinary pudding, it can turn the ordinary pudding into another pudding gremlin. This new pudding gremlin appears in an unoccupied space within 10 ft of the original pudding gremlin and acts as its ally.</p>",
+        "entries": [
+          "If the pudding gremlin is within 10 ft of an ordinary pudding, it can turn the ordinary pudding into another pudding gremlin. This new pudding gremlin appears in an unoccupied space within 10 ft of the original pudding gremlin and acts as its ally."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/OneShotWondersHolidayPack/Pudding Gremlin.webp",
+    "tokenImg": "img/bestiary/tokens/OneShotWondersHolidayPack/Pudding Gremlin.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_snow_sphinx_oneshotwondersholidaypack",
+    "name": "Snow Sphinx",
+    "source": "OneShotWondersHolidayPack",
+    "edition": "2014",
+    "page": 37,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Celestial",
+    "subtype": "",
+    "alignment": "C N",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 105,
+      "formula": "14d10 + 28"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 60,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 17,
+        "mod": 3
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "str": 17,
+    "dex": 13,
+    "con": 15,
+    "int": 15,
+    "wis": 14,
+    "cha": 16,
+    "proficiencyBonus": 3,
+    "save": {
+      "dex": "+4",
+      "con": "+5"
+    },
+    "saves": {
+      "dex": "+4",
+      "con": "+5"
+    },
+    "skill": {
+      "arcana": "+5",
+      "athletics": "+6",
+      "deception": "+6",
+      "insight": "+5",
+      "stealth": "+4"
+    },
+    "skills": {
+      "arcana": "+5",
+      "athletics": "+6",
+      "deception": "+6",
+      "insight": "+5",
+      "stealth": "+4"
+    },
+    "immune": [],
+    "resist": [
+      "cold",
+      "necrotic",
+      "radiant"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 12,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "Truesight 60 ft"
+    },
+    "languages": [
+      "Celestial",
+      "Common"
+    ],
+    "cr": "7",
+    "crNumeric": 7,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_snow_sphinx_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 2,
+        "casterLevel": 1,
+        "dc": 13,
+        "atkMod": 5,
+        "header": "The sphinx casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save DC 13):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_ice_knife_xphb",
+            "name": "Ice Knife",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "spell",
+            "atkMod": 5,
+            "dc": 13,
+            "damageList": [
+              {
+                "formula": "2d6",
+                "type": "Cold",
+                "stat": "none",
+                "upcastBonus": "1d6",
+                "upcastScaleStep": 1
+              },
+              {
+                "formula": "1d10",
+                "type": "Piercing",
+                "stat": "none",
+                "upcastBonus": "",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "S, M (a drop of water or a piece of ice)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_minor_illusion_xphb",
+            "name": "Minor Illusion",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "S, M (a bit of fleece)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_dispel_magic_xphb",
+              "name": "Dispel Magic",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_fear_xphb",
+              "name": "Fear",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "Self (30 feet cone)",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [],
+              "components": "V, S, M (a white feather)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_suggestion_xphb",
+              "name": "Suggestion",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 8 hours",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [],
+              "components": "V, M (a drop of honey)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Magic",
+          "Ice Knife",
+          "Minor Illusion"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_inscrutable_hq14",
+        "name": "Inscrutable",
+        "actionType": "trait",
+        "descriptionHtml": "<p>No magic can observe the sphinx remotely or detect its thoughts without its permission. Wisdom (Insight) checks made to ascertain its intentions or sincerity are made with Disadvantage.</p>",
+        "entries": [
+          "No magic can observe the sphinx remotely or detect its thoughts without its permission. Wisdom ({@skill Insight|XPHB}) checks made to ascertain its intentions or sincerity are made with {@variantrule Disadvantage|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_its6",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The sphinx makes two Claw attacks.</p>",
+        "entries": [
+          "The sphinx makes two Claw attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_d9yz",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft, Hit: 12 (2d8 + 3) Slashing damage plus 14 (4d6) Cold damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 5 ft, {@h}12 ({@damage 2d8 + 3}) Slashing damage plus 14 ({@damage 4d6}) Cold damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "{@h}12 ({@damage 2d8 + 3}) Slashing damage plus 14 ({@damage 4d6}) Cold damage",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 3",
+              "type": "Slashing"
+            },
+            {
+              "formula": "4d6",
+              "type": "Cold"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_freezing_glare__recharge_5__slbe",
+        "name": "Freezing Glare (Recharge 5)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>con DC 13, each creature in a 30-foot Cone [Area of Effect]. 1 The target has the Restrained condition and repeats the save at the end of its next turn if it is still Restrained, ending the effect on itself on a success. 2 The target has the Petrified condition instead of the Restrained condition, and is turned into an ice statue.</p>",
+        "entries": [
+          "{@actSave con} {@dc 13}, each creature in a 30-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail 1} The target has the {@condition Restrained|XPHB} condition and repeats the save at the end of its next turn if it is still {@condition Restrained|XPHB}, ending the effect on itself on a success. {@actSaveFail 2} The target has the {@condition Petrified|XPHB} condition instead of the {@condition Restrained|XPHB} condition, and is turned into an ice statue."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 13,
+            "ability": "CON"
+          },
+          "damages": [],
+          "recharge": "5"
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/OneShotWondersHolidayPack/Snow Sphinx.webp",
+    "tokenImg": "img/bestiary/tokens/OneShotWondersHolidayPack/Snow Sphinx.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

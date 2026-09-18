@@ -1,0 +1,179 @@
+[
+  {
+    "id": "creature_pact_familiar_xua2023playershandbookp5",
+    "name": "Pact Familiar",
+    "source": "XUA2023PlayersHandbookP5",
+    "edition": "2014",
+    "page": 10,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 3,
+        "mod": -4
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 3,
+    "dex": 14,
+    "con": 12,
+    "int": 10,
+    "wis": 14,
+    "cha": 8,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion"
+    ],
+    "passive": 12,
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "darkvision 120 ft."
+    },
+    "languages": [
+      "{@variantrule Telepathy|XUA2023PlayersHandbookP5} 120 ft. (only between you and the familiar)"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_eldritch_bond_dv3l",
+        "name": "Eldritch Bond",
+        "actionType": "trait",
+        "descriptionHtml": "<p>You can add your Proficiency Bonus to any ability check or saving throw that the familiar makes.</p>",
+        "entries": [
+          "You can add your Proficiency Bonus to any ability check or saving throw that the familiar makes."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_eldritch_strike_swlb",
+        "name": "Eldritch Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Spell Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 2 + half your Warlock level (round up) damage of a type determined by the familiar's creature type: Aberration (Acid), Celestial (Radiant), Dragon (Fire), Fey (Psychic), Fiend (Poison), or Undead (Necrotic).</p>",
+        "entries": [
+          "{@atk ms} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}2 + half your Warlock level (round up) damage of a type determined by the familiar's creature type: Aberration (Acid), Celestial (Radiant), Dragon (Fire), Fey (Psychic), Fiend (Poison), or Undead (Necrotic)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_invisibility_cpjm",
+        "name": "Invisibility",
+        "actionType": "action",
+        "descriptionHtml": "<p>The familiar has the Invisible condition until the end of its next turn.</p>",
+        "entries": [
+          "The familiar has the {@condition Invisible|XUA2023PlayersHandbookP5} condition until the end of its next turn."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2023PlayersHandbookP5/Pact Familiar.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2023PlayersHandbookP5/Pact Familiar.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

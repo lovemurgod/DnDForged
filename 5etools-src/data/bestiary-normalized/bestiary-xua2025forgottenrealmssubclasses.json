@@ -1,0 +1,204 @@
+[
+  {
+    "id": "creature_purple_dragon_companion_xua2025forgottenrealmssubclasses",
+    "name": "Purple Dragon Companion",
+    "source": "XUA2025ForgottenRealmsSubclasses",
+    "edition": "2014",
+    "page": 4,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Dragon",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 30,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 8,
+        "mod": -1
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": 16,
+    "dex": 16,
+    "con": 12,
+    "int": 8,
+    "wis": 13,
+    "cha": 10,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you know; telepathy 30 ft."
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_fmzr",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The dragon can breathe both air and water.</p>",
+        "entries": [
+          "The dragon can breathe both air and water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_stalwart_bond_mqg2",
+        "name": "Stalwart Bond",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Add half your Proficiency (round down) to any ability check or saving throw the dragon makes.</p>",
+        "entries": [
+          "Add half your {@variantrule Proficiency|XPHB|Proficiency Bonus} (round down) to any ability check or saving throw the dragon makes."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_rend_vlrv",
+        "name": "Rend",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +3 plus your Intelligence modifier, reach 5 ft. Hit: 1d6 plus your Intelligence modifier Force damage.</p>",
+        "entries": [
+          "{@atkr m} +3 plus your Intelligence modifier, reach 5 ft. {@h}{@damage 1d6} plus your Intelligence modifier Force damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_gravity_breath__2_day__t1y1",
+        "name": "Gravity Breath (2/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>con DC 8 plus your Proficiency plus your Intelligence modifier, each creature in a 15-foot Cone [Area of Effect]. {@actSaveFail} The target is either pulled up to 15 feet straight toward the dragon or pushed 15 feet straight away from the dragon (your choice).</p>",
+        "entries": [
+          "{@actSave con} {@dc 8} plus your {@variantrule Proficiency|XPHB|Proficiency Bonus} plus your Intelligence modifier, each creature in a 15-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} The target is either pulled up to 15 feet straight toward the dragon or pushed 15 feet straight away from the dragon (your choice)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 8,
+            "ability": "CON"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2025ForgottenRealmsSubclasses/Purple Dragon Companion.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2025ForgottenRealmsSubclasses/Purple Dragon Companion.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

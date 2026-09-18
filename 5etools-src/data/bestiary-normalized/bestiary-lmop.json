@@ -94,10 +94,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_3a1m",
+        "id": "act_undead_fortitude_qxur",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead.</p>",
+        "entries": [
+          "If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -111,10 +114,13 @@
         }
       },
       {
-        "id": "act_ash_puff_t94f",
+        "id": "act_ash_puff_fo78",
         "name": "Ash Puff",
         "actionType": "trait",
         "descriptionHtml": "<p>The first time the zombie takes damage, any living creature within 5 feet of the zombie must succeed on a DC 10 Constitution saving throw or gain disadvantage on attack rolls, saving throws, and ability checks for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on it early with a successful save.</p>",
+        "entries": [
+          "The first time the zombie takes damage, any living creature within 5 feet of the zombie must succeed on a {@dc 10} Constitution saving throw or gain disadvantage on attack rolls, saving throws, and ability checks for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on it early with a successful save."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -133,10 +139,13 @@
     ],
     "actions": [
       {
-        "id": "act_slam_0v52",
+        "id": "act_slam_nr5j",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -162,11 +171,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LMoP/Ash Zombie.webp",
     "tokenImg": "img/bestiary/tokens/LMoP/Ash Zombie.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_evil_mage_lmop",
@@ -271,7 +292,7 @@
       {
         "id": "sc_evil_mage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -342,7 +363,8 @@
                     "formula": "1d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -392,7 +414,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -452,10 +476,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_quarterstaff_qdru",
+        "id": "act_quarterstaff_dkcw",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}3 (1d8 - 1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 3 (1d8 - 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 1} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d8 - 1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -481,11 +508,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LMoP/Evil Mage.webp",
     "tokenImg": "img/bestiary/tokens/LMoP/Evil Mage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_gundren_rockseeker_lmop",
@@ -575,10 +614,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_ztku",
+        "id": "act_club_o46k",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -604,11 +646,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LMoP/Gundren Rockseeker.webp",
     "tokenImg": "img/bestiary/tokens/LMoP/Gundren Rockseeker.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_mormesk_the_wraith_lmop",
@@ -724,10 +778,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_803a",
+        "id": "act_incorporeal_movement_7dtg",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The wraith can move through an object or another creature, but can't stop there.</p>",
+        "entries": [
+          "The wraith can move through an object or another creature, but can't stop there."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -741,10 +798,13 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_p3yz",
+        "id": "act_sunlight_sensitivity_8em8",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the wraith has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight.</p>",
+        "entries": [
+          "While in sunlight, the wraith has disadvantage on attack rolls and on Wisdom ({@skill Perception}) checks that rely on sight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -760,10 +820,13 @@
     ],
     "actions": [
       {
-        "id": "act_life_drain_7ngz",
+        "id": "act_life_drain_hv0p",
         "name": "Life Drain",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one creature. {@h}16 (3d8 + 3) necrotic damage, and the target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. If this attack reduces the target's hit point maximum to 0, the target dies. This reduction to the target's hit point maximum lasts until the target finishes a long rest.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 16 (3d8 + 3) necrotic damage, and the target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. If this attack reduces the target's hit point maximum to 0, the target dies. This reduction to the target's hit point maximum lasts until the target finishes a long rest.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one creature. {@h}16 ({@damage 3d8 + 3}) necrotic damage, and the target must succeed on a {@dc 13} Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. If this attack reduces the target's hit point maximum to 0, the target dies. This reduction to the target's hit point maximum lasts until the target finishes a long rest."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -792,11 +855,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LMoP/Mormesk the Wraith.webp",
     "tokenImg": "img/bestiary/tokens/LMoP/Mormesk the Wraith.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_nezznar_the_black_spider_lmop",
@@ -905,7 +980,7 @@
       {
         "id": "sc_nezznar_the_black_spider_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -992,7 +1067,7 @@
       {
         "id": "sc_nezznar_the_black_spider_1",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -1044,7 +1119,8 @@
                     "formula": "1d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -1070,7 +1146,8 @@
                     "formula": "1d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -1120,7 +1197,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1198,10 +1277,13 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_hbg9",
+        "id": "act_special_equipment_2d1z",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has a spider staff.</p>",
+        "entries": [
+          "Nezznar has a {@item spider staff|LMoP}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1215,10 +1297,13 @@
         }
       },
       {
-        "id": "act_fey_ancestry_znoi",
+        "id": "act_fey_ancestry_3c6r",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
+        "entries": [
+          "Nezznar has advantage on saving throws against being {@condition charmed}, and magic can't put him to sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1232,10 +1317,13 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_4ho0",
+        "id": "act_sunlight_sensitivity_djoz",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has disadvantage on attack rolls when he or his target is in sunlight.</p>",
+        "entries": [
+          "Nezznar has disadvantage on attack rolls when he or his target is in sunlight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1251,10 +1339,13 @@
     ],
     "actions": [
       {
-        "id": "act_spider_staff_by9q",
+        "id": "act_spider_staff_8qj7",
         "name": "Spider Staff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}2 (1d6 - 1) bludgeoning damage plus 3 (1d6) poison damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 2 (1d6 - 1) bludgeoning damage plus 3 (1d6) poison damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 1} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d6 - 1}) bludgeoning damage plus 3 ({@damage 1d6}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1284,11 +1375,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LMoP/Nezznar the Black Spider.webp",
     "tokenImg": "img/bestiary/tokens/LMoP/Nezznar the Black Spider.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_nundro_rockseeker_lmop",
@@ -1378,10 +1481,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_n55w",
+        "id": "act_club_bdm2",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1407,11 +1513,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LMoP/Nundro Rockseeker.webp",
     "tokenImg": "img/bestiary/tokens/LMoP/Nundro Rockseeker.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_redbrand_ruffian_lmop",
@@ -1505,10 +1623,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_d9qs",
+        "id": "act_multiattack_8e4j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ruffian makes two melee attacks.</p>",
+        "entries": [
+          "The ruffian makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1522,10 +1643,13 @@
         }
       },
       {
-        "id": "act_shortsword_w29h",
+        "id": "act_shortsword_ghux",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1551,11 +1675,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LMoP/Redbrand Ruffian.webp",
     "tokenImg": "img/bestiary/tokens/LMoP/Redbrand Ruffian.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_sildar_hallwinter_lmop",
@@ -1655,10 +1791,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_e4ml",
+        "id": "act_multiattack_p9q2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Sildar makes two melee attacks.</p>",
+        "entries": [
+          "Sildar makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1672,10 +1811,13 @@
         }
       },
       {
-        "id": "act_longsword_qt15",
+        "id": "act_longsword_ziy0",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}5 (1d8 + 1) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d8 + 1}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1694,10 +1836,13 @@
         }
       },
       {
-        "id": "act_heavy_crossbow_moaf",
+        "id": "act_heavy_crossbow_uqzz",
         "name": "Heavy Crossbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +2 to hit, range 100/400 ft., one target. {@h}5 (1d10) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +2 to hit, range 100/400 ft., one target. Hit: 5 (1d10) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 2} to hit, range 100/400 ft., one target. {@h}5 ({@damage 1d10}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1719,10 +1864,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_6c4d",
+        "id": "act_parry_1eds",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>When an attacker hits Sildar with a melee attack and Sildar can see the attacker, he can roll 1d6 and add the number rolled to his AC against the triggering attack, provided that he's wielding a melee weapon.</p>",
+        "entries": [
+          "When an attacker hits Sildar with a melee attack and Sildar can see the attacker, he can roll {@dice 1d6} and add the number rolled to his AC against the triggering attack, provided that he's wielding a melee weapon."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1741,11 +1889,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LMoP/Sildar Hallwinter.webp",
     "tokenImg": "img/bestiary/tokens/LMoP/Sildar Hallwinter.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_venomfang_lmop",
@@ -1857,10 +2017,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_4amc",
+        "id": "act_amphibious_tcr0",
         "name": "Amphibious",
         "actionType": "trait",
-        "descriptionHtml": "<p>The dragon can breathe air and water.</p>",
+        "descriptionHtml": "<p>Venomfang can breathe air and water.</p>",
+        "entries": [
+          "Venomfang can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1876,10 +2039,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zluq",
+        "id": "act_multiattack_5axf",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The dragon makes three attacks: one with its bite and two with its claws.</p>",
+        "descriptionHtml": "<p>Venomfang makes three attacks: one with its bite and two with its claws.</p>",
+        "entries": [
+          "Venomfang makes three attacks: one with its bite and two with its claws."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1893,10 +2059,13 @@
         }
       },
       {
-        "id": "act_bite_dzel",
+        "id": "act_bite_48ot",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}15 (2d10 + 4) piercing damage plus 7 (2d6) poison damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 15 (2d10 + 4) piercing damage plus 7 (2d6) poison damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 10 ft., one target. {@h}15 ({@damage 2d10 + 4}) piercing damage plus 7 ({@damage 2d6}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1919,10 +2088,13 @@
         }
       },
       {
-        "id": "act_claw_l34s",
+        "id": "act_claw_wh3u",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1941,10 +2113,13 @@
         }
       },
       {
-        "id": "act_poison_breath__recharge_5__y5w5",
+        "id": "act_poison_breath__recharge_5__whkh",
         "name": "Poison Breath (Recharge 5)",
         "actionType": "action",
-        "descriptionHtml": "<p>The dragon exhales poisonous gas in a 30-foot cone. Each creature in that area must make a DC 14 Constitution saving throw, taking 42 (12d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
+        "descriptionHtml": "<p>Venomfang exhales poisonous gas in a 30-foot cone. Each creature in that area must make a DC 14 Constitution saving throw, taking 42 (12d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Venomfang exhales poisonous gas in a 30-foot cone. Each creature in that area must make a {@dc 14} Constitution saving throw, taking 42 ({@damage 12d6}) poison damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1973,10 +2148,95 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Customizing Dragons",
+        "descriptionHtml": "<p>You can customize any dragon's stat block to reflect Venomfang's unique character. Minor changes such as those below are easy to make and have no impact on a dragon's challenge rating.</p><div><strong><em>Languages.</em></strong> <p>Most dragons prefer to speak Draconic but learn Common for dealing with allies and minions. But given their high Intelligence and long life span, dragons can easily learn additional languages. You can add languages to a dragon's stat block.</p></div><div><strong><em>Skills.</em></strong> <p>Most dragons are proficient in the Perception and Stealth skills, and many dragons have additional skill proficiencies. As with languages, you can customize a dragon's skill list (even doubling their proficiency bonus with certain skills) to reflect particular interests and activities. You can also give a dragon tool proficiencies, particularly if Venomfang spends time in Humanoid form.</p></div><div><strong><em>Spells.</em></strong> <p><em>See the \"Variant: Dragons as Innate Spellcasters\" inset(s), below.</em></p></div><div><strong><em>Other Traits and Actions.</em></strong> <p>You can borrow traits and actions from other monsters to add unique flavor to a dragon. Consider these examples:</p><ul><li><strong><em>Flyby.</em></strong> <p>Venomfang is an agile flier, quick to fly out of enemies' reach.</p><p>Venomfang doesn't provoke an opportunity attack when it flies out of an enemy's reach.</p></li><li><strong><em>Mimicry.</em></strong> <p>Impersonating characters or their allies could be a fun trick for a crafty dragon.</p><p>Venomfang can mimic any sounds it has heard, including voices. A creature that hears the sounds can tell they are imitations with a successful DC 13 Wisdom (Insight) check.</p></li><li><strong><em>Rejuvenation.</em></strong> <p>You might decide that dragons in your campaign, being an essential part of the Material Plane, are nearly impossible to destroy. A dragon's life essence might be preserved in the egg from which it first emerged, in its hoard, or in a cavernous hall at the center of the world, just as a lich's essence is hidden in a phylactery.</p><p>If it has an essence-preserving object, a destroyed dragon gains a new body in 1d10 days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the object.</p></li><li><strong><em>Special Senses.</em></strong> <p>Most dragons have blindsight and darkvision. You might upgrade blindsight to truesight, or you could give a dragon with a burrowing speed tremorsense.</p></li></ul></div>",
+        "entries": [
+          "You can customize any dragon's stat block to reflect Venomfang's unique character. Minor changes such as those below are easy to make and have no impact on a dragon's challenge rating.",
+          {
+            "type": "entries",
+            "name": "Languages",
+            "entries": [
+              "Most dragons prefer to speak Draconic but learn Common for dealing with allies and minions. But given their high Intelligence and long life span, dragons can easily learn additional languages. You can add languages to a dragon's stat block."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Skills",
+            "entries": [
+              "Most dragons are proficient in the {@skill Perception} and {@skill Stealth} skills, and many dragons have additional skill proficiencies. As with languages, you can customize a dragon's skill list (even doubling their proficiency bonus with certain skills) to reflect particular interests and activities. You can also give a dragon tool proficiencies, particularly if Venomfang spends time in Humanoid form."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Spells",
+            "entries": [
+              "{@note See the \"Variant: Dragons as Innate Spellcasters\" inset(s), below.}"
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Other Traits and Actions",
+            "entries": [
+              "You can borrow traits and actions from other monsters to add unique flavor to a dragon. Consider these examples:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Flyby",
+                    "entries": [
+                      "Venomfang is an agile flier, quick to fly out of enemies' reach.",
+                      "Venomfang doesn't provoke an opportunity attack when it flies out of an enemy's reach."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Mimicry",
+                    "entries": [
+                      "Impersonating characters or their allies could be a fun trick for a crafty dragon.",
+                      "Venomfang can mimic any sounds it has heard, including voices. A creature that hears the sounds can tell they are imitations with a successful {@dc 13} Wisdom ({@skill Insight}) check."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Rejuvenation",
+                    "entries": [
+                      "You might decide that dragons in your campaign, being an essential part of the Material Plane, are nearly impossible to destroy. A dragon's life essence might be preserved in the egg from which it first emerged, in its hoard, or in a cavernous hall at the center of the world, just as a lich's essence is hidden in a phylactery.",
+                      "If it has an essence-preserving object, a destroyed dragon gains a new body in {@dice 1d10} days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the object."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Special Senses",
+                    "entries": [
+                      "Most dragons have {@sense blindsight} and {@sense darkvision}. You might upgrade {@sense blindsight} to {@sense truesight}, or you could give a dragon with a burrowing speed {@sense tremorsense|MM}."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LMoP/Venomfang.webp",
     "tokenImg": "img/bestiary/tokens/LMoP/Venomfang.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

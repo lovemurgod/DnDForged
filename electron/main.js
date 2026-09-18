@@ -5,10 +5,17 @@ import { fileURLToPath } from 'url';
 import { spawn } from 'child_process';
 import net from 'net';
 import crypto from 'crypto';
+import { SourceManager } from './source-manager.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.join(__dirname, '..');
+
+// Single-instance lock: prevent multiple competing ForgeDVTT instances
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+}
 
 const DEFAULT_PORT = 5050;
 
@@ -58,14 +65,22 @@ if (!fs.existsSync(appConfig.backupsDir)) {
   fs.mkdirSync(appConfig.backupsDir, { recursive: true });
 }
 
-// Auto-migrate legacy data from root .dndforged-data if present
+// Initialize Source Manager
+const sourceManager = new SourceManager({
+  rootDir,
+  campaignDataDir: appConfig.campaignDataDir
+});
+
+// Auto-migrate legacy data from root .dndforged-data if present (clean install only, never overwrite)
 const legacyDataDir = path.join(rootDir, '.dndforged-data');
 const targetCampFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
 const legacyCampFile = path.join(legacyDataDir, 'campaigns.json');
+const migrationDoneMarker = path.join(appConfig.campaignDataDir, '.migration_done');
 
-if (fs.existsSync(legacyCampFile) && (!fs.existsSync(targetCampFile) || fs.statSync(targetCampFile).size < 500)) {
+if (fs.existsSync(legacyCampFile) && !fs.existsSync(targetCampFile) && !fs.existsSync(migrationDoneMarker)) {
   try {
     fs.cpSync(legacyDataDir, appConfig.campaignDataDir, { recursive: true });
+    fs.writeFileSync(migrationDoneMarker, new Date().toISOString(), 'utf8');
     console.log('[Migration] Migrated campaign data from workspace to active data dir.');
   } catch (e) {
     console.error('Migration notice:', e.message);
@@ -139,12 +154,27 @@ function isPortActive(port) {
 }
 
 async function syncConfigToServer() {
-  if (!appConfig.gmCredentials) return;
   try {
     await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/sync-config`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gmCredentials: appConfig.gmCredentials })
+      body: JSON.stringify({
+        gmCredentials: appConfig.gmCredentials,
+        campaignDataDir: appConfig.campaignDataDir
+      })
+    });
+  } catch (e) {}
+  await syncSourcesToServer();
+}
+
+async function syncSourcesToServer() {
+  try {
+    await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/server/sync-sources`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        disabledSources: sourceManager.config.disabledSources
+      })
     });
   } catch (e) {}
 }
@@ -552,6 +582,7 @@ ipcMain.handle('select-data-folder', async () => {
   appConfig.campaignDataDir = newDir;
   saveConfig();
   process.env.FORGEDVTT_DATA_DIR = newDir;
+  sourceManager.setCampaignDataDir(newDir);
 
   // Seamlessly notify server process if running
   try {
@@ -746,7 +777,199 @@ ipcMain.handle('gm-delete-campaign', async (_, campId) => {
   }
 });
 
+// Database Sources & Homebrew Management IPC
+ipcMain.handle('sources-get-all', (_, campaignId) => {
+  return sourceManager.getAllSources(campaignId);
+});
+
+ipcMain.handle('sources-toggle', async (_, { code, enabled, campaignId }) => {
+  const result = sourceManager.toggleSource(code, enabled, campaignId);
+  await syncSourcesToServer();
+  appendLog(`[Sources] Set source ${code} to ${enabled ? 'Enabled' : 'Disabled'}${campaignId ? ` for campaign ${campaignId}` : ' globally'}.`);
+  return result;
+});
+
+ipcMain.handle('sources-batch-toggle', async (_, { codes, enabled, campaignId }) => {
+  const result = sourceManager.batchToggle(codes, enabled, campaignId);
+  await syncSourcesToServer();
+  appendLog(`[Sources] Bulk set ${result.count} sources to ${enabled ? 'Enabled' : 'Disabled'}.`);
+  return result;
+});
+
+ipcMain.handle('sources-apply-preset', async (_, { preset, campaignId }) => {
+  const result = sourceManager.applyPreset(preset, campaignId);
+  await syncSourcesToServer();
+  appendLog(`[Sources] Applied preset '${preset}'${campaignId ? ` to campaign ${campaignId}` : ' globally'}.`);
+  return result;
+});
+
+ipcMain.handle('sources-get-details', (_, { category, code }) => {
+  return sourceManager.getSourceDetails(category, code);
+});
+
+ipcMain.handle('sources-save-details', async (_, data) => {
+  const result = sourceManager.saveSourceDetails(data);
+  if (result.success) {
+    await syncSourcesToServer();
+    appendLog(`[Sources] Saved changes to database source ${data.code} (${data.category}).`);
+  }
+  return result;
+});
+
+ipcMain.handle('sources-add-file', async (_, { category }) => {
+  if (!mainWindow) return { canceled: true };
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    title: `Add Database File for ${category}`,
+    filters: [
+      { name: 'JSON Files', extensions: ['json'] },
+      { name: 'All Files', extensions: ['*'] }
+    ],
+    properties: ['openFile']
+  });
+
+  if (canceled || !filePaths || filePaths.length === 0) {
+    return { canceled: true };
+  }
+
+  const result = sourceManager.addDatabaseFile({ category, filePath: filePaths[0] });
+  if (result.success) {
+    await syncSourcesToServer();
+    appendLog(`[Sources] Successfully imported database file '${filePaths[0]}' as source '${result.source.code}' into ${category}.`);
+  }
+  return result;
+});
+
+ipcMain.handle('sources-create-custom', async (_, data) => {
+  const result = sourceManager.createCustomSource(data);
+  if (result.success) {
+    await syncSourcesToServer();
+    appendLog(`[Sources] Created new custom source '${result.source.code}' in category '${result.source.category}'.`);
+  }
+  return result;
+});
+
+ipcMain.handle('sources-delete-custom', async (_, { category, code }) => {
+  const result = sourceManager.deleteCustomSource(category, code);
+  if (result.success) {
+    await syncSourcesToServer();
+    appendLog(`[Sources] Deleted custom source '${code}' from category '${category}'.`);
+  }
+  return result;
+});
+
+ipcMain.handle('sources-reveal-file', (_, filePath) => {
+  if (filePath && fs.existsSync(filePath)) {
+    shell.showItemInFolder(filePath);
+    return { success: true };
+  }
+  return { success: false, error: 'File path not found' };
+});
+
+ipcMain.handle('sources-search-compendium', (_, { category, query }) => {
+  return sourceManager.searchCompendium(category, query);
+});
+
+ipcMain.handle('sources-get-entity-full', (_, { category, name, source }) => {
+  return sourceManager.getEntityFullData(category, name, source);
+});
+
+ipcMain.handle('sources-export', async (_, { category, code }) => {
+  if (!mainWindow) return { canceled: true };
+  const cleanCode = (code || 'SOURCE').toUpperCase();
+  const defaultFileName = `${cleanCode}-Compendium.json`;
+
+  const { filePath, canceled } = await dialog.showSaveDialog(mainWindow, {
+    title: `Export ${cleanCode} Sourcebook`,
+    defaultPath: path.join(appConfig.campaignDataDir, defaultFileName),
+    filters: [{ name: 'JSON Files', extensions: ['json'] }]
+  });
+
+  if (canceled || !filePath) return { canceled: true };
+  return sourceManager.exportSource(category, code, filePath);
+});
+
+ipcMain.handle('sources-select-asset', async () => {
+  if (!mainWindow) return { canceled: true };
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    title: 'Select Token or Artwork Image',
+    filters: [
+      { name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'webp', 'svg'] },
+      { name: 'All Files', extensions: ['*'] }
+    ],
+    properties: ['openFile']
+  });
+
+  if (canceled || !filePaths || filePaths.length === 0) {
+    return { canceled: true };
+  }
+
+  return sourceManager.saveAssetImage(filePaths[0]);
+});
+
+ipcMain.handle('sources-search-global', (_, { query, category, limit }) => {
+  return sourceManager.searchAllCompendium(query, { category, limit });
+});
+
+ipcMain.handle('sources-get-preview', (_, { category, name, source }) => {
+  return sourceManager.getFormattedStatblock(category, name, source);
+});
+
+ipcMain.handle('sources-select-import-files', async () => {
+  if (!mainWindow) return { canceled: true };
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    title: 'Select Sourcebook JSON or ZIP Files',
+    filters: [
+      { name: 'Compendium Files (*.json, *.zip)', extensions: ['json', 'zip'] },
+      { name: 'JSON Files (*.json)', extensions: ['json'] },
+      { name: 'ZIP Archives (*.zip)', extensions: ['zip'] },
+      { name: 'All Files', extensions: ['*'] }
+    ],
+    properties: ['openFile', 'multiSelections']
+  });
+
+  if (canceled || !filePaths || filePaths.length === 0) {
+    return { canceled: true };
+  }
+  return { success: true, filePaths };
+});
+
+ipcMain.handle('sources-select-import-folder', async () => {
+  if (!mainWindow) return { canceled: true };
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    title: 'Select Sourcebook Folder',
+    properties: ['openDirectory']
+  });
+
+  if (canceled || !filePaths || filePaths.length === 0) {
+    return { canceled: true };
+  }
+  return { success: true, folderPath: filePaths[0] };
+});
+
+ipcMain.handle('sources-inspect-bulk', (_, { paths }) => {
+  return sourceManager.inspectImportFiles(paths);
+});
+
+ipcMain.handle('sources-execute-bulk-import', async (_, { candidates, conflictDecisions }) => {
+  const res = sourceManager.bulkImportSources(candidates, conflictDecisions);
+  if (res && res.success) {
+    // Notify local express server to broadcast sources update to any connected VTTs
+    try {
+      await fetch(`http://localhost:${DEFAULT_PORT}/api/server/sync-sources`, { method: 'POST' }).catch(() => {});
+    } catch (_) {}
+  }
+  return res;
+});
+
 // App Lifecycle
+app.on('second-instance', () => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.show();
+    mainWindow.focus();
+  }
+});
+
 app.whenReady().then(async () => {
   createWindow();
   createTray();

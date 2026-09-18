@@ -92,10 +92,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_9i5e",
+        "id": "act_amphibious_grvk",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The homarid can breathe air and water.</p>",
+        "entries": [
+          "The homarid can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -111,10 +114,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wgsn",
+        "id": "act_multiattack_u8mm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The homarid makes two claw attacks.</p>",
+        "entries": [
+          "The homarid makes two claw attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -128,10 +134,13 @@
         }
       },
       {
-        "id": "act_claw_xrv6",
+        "id": "act_claw_7huj",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}5 (1d8 + 1) slashing damage, and the target is grappled (escape DC 11). The homarid has two claws, each of which can grapple only one target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage, and the target is grappled (escape DC 11). The homarid has two claws, each of which can grapple only one target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d8 + 1}) slashing damage, and the target is {@condition grappled} (escape {@dc 11}). The homarid has two claws, each of which can grapple only one target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -141,7 +150,7 @@
           "targets": "one target",
           "save": {
             "dc": 11,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -160,11 +169,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSD/Homarid.webp",
     "tokenImg": "img/bestiary/tokens/PSD/Homarid.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_kavu_predator_psd",
@@ -259,10 +280,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pounce_roia",
+        "id": "act_pounce_rp9r",
         "name": "Pounce",
         "actionType": "trait",
         "descriptionHtml": "<p>If the kavu moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the kavu can make one bite attack against it as a bonus action.</p>",
+        "entries": [
+          "If the kavu moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a {@dc 14} Strength saving throw or be knocked {@condition prone}. If the target is {@condition prone}, the kavu can make one bite attack against it as a bonus action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -281,10 +305,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_udk8",
+        "id": "act_multiattack_nly5",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The kavu makes two claw attacks.</p>",
+        "entries": [
+          "The kavu makes two claw attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -298,10 +325,13 @@
         }
       },
       {
-        "id": "act_bite_vlz1",
+        "id": "act_bite_nhqj",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}9 (1d10 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}9 ({@damage 1d10 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -320,10 +350,13 @@
         }
       },
       {
-        "id": "act_claw_lom9",
+        "id": "act_claw_sljb",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -349,11 +382,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSD/Kavu Predator.webp",
     "tokenImg": "img/bestiary/tokens/PSD/Kavu Predator.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_lyra_psd",
@@ -471,14 +516,14 @@
       {
         "id": "sc_lyra_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 7,
         "casterLevel": 0,
         "dc": 20,
         "atkMod": 12,
-        "header": "The planetar's spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components:",
+        "header": "Lyra's spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -545,7 +590,9 @@
                   "formula": "6d10",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -595,12 +642,16 @@
                 {
                   "formula": "5d6",
                   "type": "Fire",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "5d6",
                   "type": "Radiant",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a pinch of sulfur)",
@@ -697,7 +748,9 @@
                   "formula": "4d10",
                   "type": "Piercing",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d10",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a locust)",
@@ -716,10 +769,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_snlh",
+        "id": "act_angelic_weapons_2jnu",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>Lyra's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "Lyra's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra {@damage 5d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -738,10 +794,13 @@
         }
       },
       {
-        "id": "act_divine_awareness_z806",
+        "id": "act_divine_awareness_cc4r",
         "name": "Divine Awareness",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar knows if it hears a lie.</p>",
+        "descriptionHtml": "<p>Lyra knows if it hears a lie.</p>",
+        "entries": [
+          "Lyra knows if it hears a lie."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -755,10 +814,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_p0bt",
+        "id": "act_magic_resistance_hz3d",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The planetar has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>Lyra has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "Lyra has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -774,10 +836,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_fumx",
+        "id": "act_multiattack_v2ur",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The planetar makes two melee attacks.</p>",
+        "descriptionHtml": "<p>Lyra makes two melee attacks.</p>",
+        "entries": [
+          "Lyra makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -791,10 +856,13 @@
         }
       },
       {
-        "id": "act_greatsword_u5l3",
+        "id": "act_greatsword_61ra",
         "name": "Greatsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 5 ft., one target. {@h}21 ({@damage 4d6 + 7}) slashing damage plus 22 ({@damage 5d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -817,10 +885,13 @@
         }
       },
       {
-        "id": "act_healing_touch__4_day__vtt2",
+        "id": "act_healing_touch__4_day__s9rq",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The planetar touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>Lyra touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "Lyra touches another creature. The target magically regains 30 ({@dice 6d8 + 3}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -841,11 +912,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSD/Lyra.webp",
     "tokenImg": "img/bestiary/tokens/PSD/Lyra.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_serra_angel_psd",
@@ -963,14 +1046,14 @@
       {
         "id": "sc_serra_angel_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 5,
         "casterLevel": 0,
         "dc": 17,
         "atkMod": 9,
-        "header": "The deva's spellcasting ability is Charisma (spell save DC 17). The deva can innately cast the following spells, requiring only verbal components:",
+        "header": "The angel's spellcasting ability is Charisma (spell save DC 17). The deva can innately cast the following spells, requiring only verbal components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -1050,10 +1133,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_m3xv",
+        "id": "act_angelic_weapons_k8gi",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>The angel's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The angel's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra {@damage 4d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1072,10 +1158,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_5yf2",
+        "id": "act_magic_resistance_l3gv",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The angel has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1091,10 +1180,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_53oq",
+        "id": "act_multiattack_fltn",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva makes two melee attacks.</p>",
+        "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
+        "entries": [
+          "The angel makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1108,10 +1200,13 @@
         }
       },
       {
-        "id": "act_mace_hj15",
+        "id": "act_mace_qity",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) bludgeoning damage plus 18 ({@damage 4d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1134,10 +1229,13 @@
         }
       },
       {
-        "id": "act_healing_touch__3_day__tdcb",
+        "id": "act_healing_touch__3_day__8rfa",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The angel touches another creature. The target magically regains 20 ({@dice 4d8 + 2}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1151,10 +1249,14 @@
         }
       },
       {
-        "id": "act_change_shape_t3hw",
+        "id": "act_change_shape_21ts",
         "name": "Change Shape",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the deva retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "entries": [
+          "The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).",
+          "In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1175,11 +1277,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSD/Serra Angel.webp",
     "tokenImg": "img/bestiary/tokens/PSD/Serra Angel.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_shalai_psd",
@@ -1301,14 +1415,14 @@
       {
         "id": "sc_shalai_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 10,
         "casterLevel": 0,
         "dc": 25,
         "atkMod": 17,
-        "header": "The solar's spellcasting ability is Charisma (spell save DC 25). It can innately cast the following spells, requiring no material components:",
+        "header": "Shalai's spellcasting ability is Charisma (spell save DC 25). It can innately cast the following spells, requiring no material components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -1375,7 +1489,9 @@
                   "formula": "6d10",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -1484,10 +1600,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_kb6i",
+        "id": "act_angelic_weapons_s3u7",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The solar's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra 6d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>Shalai's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra 6d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "Shalai's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra {@damage 6d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1506,10 +1625,13 @@
         }
       },
       {
-        "id": "act_divine_awareness_6tbv",
+        "id": "act_divine_awareness_n2d7",
         "name": "Divine Awareness",
         "actionType": "trait",
-        "descriptionHtml": "<p>The solar knows if it hears a lie.</p>",
+        "descriptionHtml": "<p>Shalai knows if it hears a lie.</p>",
+        "entries": [
+          "Shalai knows if it hears a lie."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1523,10 +1645,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_uj18",
+        "id": "act_magic_resistance_oahq",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The solar has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>Shalai has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "Shalai has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1542,10 +1667,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1d15",
+        "id": "act_multiattack_5ek2",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The solar makes two greatsword attacks.</p>",
+        "descriptionHtml": "<p>Shalai makes two greatsword attacks.</p>",
+        "entries": [
+          "Shalai makes two greatsword attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1559,10 +1687,13 @@
         }
       },
       {
-        "id": "act_greatsword_n97g",
+        "id": "act_greatsword_bv0j",
         "name": "Greatsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +15 to hit, reach 5 ft., one target. {@h}22 (4d6 + 8) slashing damage plus 27 (6d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +15 to hit, reach 5 ft., one target. Hit: 22 (4d6 + 8) slashing damage plus 27 (6d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 15} to hit, reach 5 ft., one target. {@h}22 ({@damage 4d6 + 8}) slashing damage plus 27 ({@damage 6d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1585,10 +1716,13 @@
         }
       },
       {
-        "id": "act_slaying_longbow_0zth",
+        "id": "act_slaying_longbow_r5sn",
         "name": "Slaying Longbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +13 to hit, range 150/600 ft., one target. {@h}15 (2d8 + 6) piercing damage plus 27 (6d8) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a DC 15 Constitution saving throw or die.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +13 to hit, range 150/600 ft., one target. Hit: 15 (2d8 + 6) piercing damage plus 27 (6d8) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a DC 15 Constitution saving throw or die.</p>",
+        "entries": [
+          "{@atk rw} {@hit 13} to hit, range 150/600 ft., one target. {@h}15 ({@damage 2d8 + 6}) piercing damage plus 27 ({@damage 6d8}) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a {@dc 15} Constitution saving throw or die."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1614,10 +1748,13 @@
         }
       },
       {
-        "id": "act_flying_sword_q9fe",
+        "id": "act_flying_sword_apon",
         "name": "Flying Sword",
         "actionType": "action",
-        "descriptionHtml": "<p>The solar releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies.</p>",
+        "descriptionHtml": "<p>Shalai releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies.</p>",
+        "entries": [
+          "Shalai releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1631,10 +1768,13 @@
         }
       },
       {
-        "id": "act_healing_touch__4_day__2y1t",
+        "id": "act_healing_touch__4_day__tctl",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The solar touches another creature. The target magically regains 40 (8d8 + 4) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>Shalai touches another creature. The target magically regains 40 (8d8 + 4) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "Shalai touches another creature. The target magically regains 40 ({@dice 8d8 + 4}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1655,10 +1795,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_teleport_a88t",
+          "id": "act_teleport_unie",
           "name": "Teleport",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The solar magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
+          "descriptionHtml": "<p>Shalai magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
+          "entries": [
+            "Shalai magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1672,10 +1815,13 @@
           }
         },
         {
-          "id": "act_searing_burst__costs_2_actions__jrvy",
+          "id": "act_searing_burst__costs_2_actions__8zws",
           "name": "Searing Burst (Costs 2 Actions)",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The solar emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a DC 23 Dexterity saving throw, taking 14 (4d6) fire damage plus 14 (4d6) radiant damage on a failed save, or half as much damage on a successful one.</p>",
+          "descriptionHtml": "<p>Shalai emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a DC 23 Dexterity saving throw, taking 14 (4d6) fire damage plus 14 (4d6) radiant damage on a failed save, or half as much damage on a successful one.</p>",
+          "entries": [
+            "Shalai emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a {@dc 23} Dexterity saving throw, taking 14 ({@damage 4d6}) fire damage plus 14 ({@damage 4d6}) radiant damage on a failed save, or half as much damage on a successful one."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1701,10 +1847,13 @@
           }
         },
         {
-          "id": "act_blinding_gaze__costs_3_actions__9n6z",
+          "id": "act_blinding_gaze__costs_3_actions__gqfg",
           "name": "Blinding Gaze (Costs 3 Actions)",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The solar targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a DC 15 Constitution saving throw or be blinded until magic such as the lesser restoration spell removes the blindness.</p>",
+          "descriptionHtml": "<p>Shalai targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a DC 15 Constitution saving throw or be blinded until magic such as the lesser restoration spell removes the blindness.</p>",
+          "entries": [
+            "Shalai targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a {@dc 15} Constitution saving throw or be {@condition blinded} until magic such as the {@spell lesser restoration} spell removes the blindness."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1722,11 +1871,23 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSD/Shalai.webp",
     "tokenImg": "img/bestiary/tokens/PSD/Shalai.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_steel_leaf_kavu_psd",
@@ -1819,10 +1980,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_raking_charge_ln8b",
+        "id": "act_raking_charge_q1c4",
         "name": "Raking Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the kavu moves at least 20 feet straight toward a creature and then hits it with a bite attack on the same turn, that target must succeed on a DC 15 Strength saving throw or be knocked prone. If the target is prone, the kavu can make one rend attack against it as a bonus action.</p>",
+        "entries": [
+          "If the kavu moves at least 20 feet straight toward a creature and then hits it with a bite attack on the same turn, that target must succeed on a {@dc 15} Strength saving throw or be knocked {@condition prone}. If the target is {@condition prone}, the kavu can make one rend attack against it as a bonus action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1841,10 +2005,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_2jul",
+        "id": "act_bite_vagk",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}14 (2d8 + 5) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}14 ({@damage 2d8 + 5}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1863,10 +2030,13 @@
         }
       },
       {
-        "id": "act_rend_22vc",
+        "id": "act_rend_k6ew",
         "name": "Rend",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one prone creature. {@h}23 (4d8 + 5) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one prone creature. Hit: 23 (4d8 + 5) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one {@condition prone} creature. {@h}23 ({@damage 4d8 + 5}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1892,11 +2062,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSD/Steel Leaf Kavu.webp",
     "tokenImg": "img/bestiary/tokens/PSD/Steel Leaf Kavu.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_zombie_horse_psd",
@@ -1993,10 +2175,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_oa3e",
+        "id": "act_undead_fortitude_tewi",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead.</p>",
+        "entries": [
+          "If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2012,10 +2197,13 @@
     ],
     "actions": [
       {
-        "id": "act_slam_0u0l",
+        "id": "act_slam_ckmw",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2041,10 +2229,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/PSD/Zombie Horse.webp",
     "tokenImg": "img/bestiary/tokens/PSD/Zombie Horse.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

@@ -6,7 +6,91 @@
     "page": 0,
     "size": "Medium",
     "speed": "30 ft",
-    "traitsHtml": ""
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_boggart_creature_type_lfl",
+        "name": "Creature Type",
+        "source": "LFL",
+        "raceName": "Boggart",
+        "actionType": "passive",
+        "description": "You are a Humanoid. You are also considered a goblinoid for any prerequisite or effect that requires you to be a goblinoid.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are a Humanoid. You are also considered a goblinoid for any prerequisite or effect that requires you to be a goblinoid."
+        ]
+      },
+      {
+        "id": "trait_boggart_darkvision_lfl",
+        "name": "Darkvision",
+        "source": "LFL",
+        "raceName": "Boggart",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were in dim light. You discern colors in that darkness only as shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were in dim light. You discern colors in that darkness only as shades of gray."
+        ]
+      },
+      {
+        "id": "trait_boggart_fey_ancestry_lfl",
+        "name": "Fey Ancestry",
+        "source": "LFL",
+        "raceName": "Boggart",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws you make to avoid or end the charmed condition on yourself.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws you make to avoid or end the {@condition charmed} condition on yourself."
+        ]
+      },
+      {
+        "id": "trait_boggart_fury_of_the_small_lfl",
+        "name": "Fury of the Small",
+        "source": "LFL",
+        "raceName": "Boggart",
+        "actionType": "passive",
+        "description": "When you damage a creature with an attack or a spell and the creature's size is larger than yours, you can cause the attack or spell to deal extra damage to the creature. The extra damage equals your proficiency bonus.\n\nYou can use this trait a number of times equal to your proficiency bonus, regaining all expended uses when you finish a long rest, and you can use it no more than once per turn.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you damage a creature with an attack or a spell and the creature's size is larger than yours, you can cause the attack or spell to deal extra damage to the creature. The extra damage equals your proficiency bonus.",
+          "You can use this trait a number of times equal to your proficiency bonus, regaining all expended uses when you finish a long rest, and you can use it no more than once per turn."
+        ]
+      },
+      {
+        "id": "trait_boggart_nimble_escape_lfl",
+        "name": "Nimble Escape",
+        "source": "LFL",
+        "raceName": "Boggart",
+        "actionType": "bonus",
+        "description": "You can take the Disengage or Hide action as a bonus action on each of your turns.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can take the {@action Disengage} or {@action Hide} action as a bonus action on each of your turns."
+        ]
+      }
+    ],
+    "description": "**Creature Type**: You are a Humanoid. You are also considered a goblinoid for any prerequisite or effect that requires you to be a goblinoid.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were in dim light. You discern colors in that darkness only as shades of gray.\n\n**Fey Ancestry**: You have advantage on saving throws you make to avoid or end the charmed condition on yourself.\n\n**Fury of the Small**: When you damage a creature with an attack or a spell and the creature's size is larger than yours, you can cause the attack or spell to deal extra damage to the creature. The extra damage equals your proficiency bonus.\n\nYou can use this trait a number of times equal to your proficiency bonus, regaining all expended uses when you finish a long rest, and you can use it no more than once per turn.\n\n**Nimble Escape**: You can take the Disengage or Hide action as a bonus action on each of your turns."
   },
   {
     "id": "race_elf_lfl",
@@ -15,7 +99,128 @@
     "page": 0,
     "size": "Medium",
     "speed": "30 ft",
-    "traitsHtml": ""
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_elf_darkvision_lfl",
+        "name": "Darkvision",
+        "source": "LFL",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_elf_elven_lineage_lfl",
+        "name": "Elven Lineage",
+        "source": "LFL",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You are part of a lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table. You gain the level 1 benefit of that lineage.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are part of a lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table. You gain the level 1 benefit of that lineage.",
+          "When you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a {@variantrule Long Rest|XPHB}. You can also cast the spell using any spell slots you have of the appropriate level.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage).",
+          {
+            "type": "table",
+            "caption": "Elven Lineages",
+            "colLabels": [
+              "Lineage",
+              "Level 1",
+              "Level 3",
+              "Level 5"
+            ],
+            "colStyles": [
+              "col-2",
+              "col-6",
+              "col-2",
+              "col-2"
+            ],
+            "rows": [
+              [
+                "Drow",
+                "The range of your {@sense Darkvision|XPHB} increases to 120 feet. You also know the {@spell Dancing Lights|XPHB} cantrip.",
+                "{@spell Faerie Fire|XPHB}",
+                "{@spell Darkness|XPHB}"
+              ],
+              [
+                "High Elf",
+                "You know the {@spell Prestidigitation|XPHB} cantrip. Whenever you finish a {@variantrule Long Rest|XPHB}, you can replace that cantrip with a different {@filter cantrip from the Wizard spell list|spells|level=0|class=Wizard}.",
+                "{@spell Detect Magic|XPHB}",
+                "{@spell Misty Step|XPHB}"
+              ],
+              [
+                "Wood Elf",
+                "Your {@variantrule Speed|XPHB} increases to 35 feet. You also know the {@spell Druidcraft|XPHB} cantrip.",
+                "{@spell Longstrider|XPHB}",
+                "{@spell Pass without Trace|XPHB}"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_lfl",
+        "name": "Fey Ancestry",
+        "source": "LFL",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Charmed|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_lfl",
+        "name": "Keen Senses",
+        "source": "LFL",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Insight, Perception, or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Insight|XPHB}, {@skill Perception|XPHB}, or {@skill Survival|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_lfl",
+        "name": "Trance",
+        "source": "LFL",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't need to sleep, and magic can't put you to sleep. You can finish a {@variantrule Long Rest|XPHB} in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Elven Lineage**: You are part of a lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table. You gain the level 1 benefit of that lineage.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the lineage).\n\n**Fey Ancestry**: You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.\n\n**Keen Senses**: You have proficiency in the Insight, Perception, or Survival skill.\n\n**Trance**: You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness."
   },
   {
     "id": "race_faerie_lfl",
@@ -24,7 +229,59 @@
     "page": 0,
     "size": "Medium",
     "speed": "30 ft",
-    "traitsHtml": ""
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_faerie_creature_type_lfl",
+        "name": "Creature Type",
+        "source": "LFL",
+        "raceName": "Faerie",
+        "actionType": "passive",
+        "description": "You are a Fey.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are a Fey."
+        ]
+      },
+      {
+        "id": "trait_faerie_fairy_magic_lfl",
+        "name": "Fairy Magic",
+        "source": "LFL",
+        "raceName": "Faerie",
+        "actionType": "passive",
+        "description": "You know the druidcraft cantrip. Starting at 3rd level, you can cast the faerie fire spell with this trait. Starting at 5th level, you can also cast the enlarge/reduce spell with this trait. Once you cast faerie fire or enlarge/reduce with this trait, you can't cast that spell with it again until you finish a long rest. You can also cast either of those spells using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for these spells when you cast them with this trait (choose when you select this race).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell druidcraft} cantrip. Starting at 3rd level, you can cast the {@spell faerie fire} spell with this trait. Starting at 5th level, you can also cast the {@spell enlarge/reduce} spell with this trait. Once you cast {@spell faerie fire} or {@spell enlarge/reduce} with this trait, you can't cast that spell with it again until you finish a long rest. You can also cast either of those spells using any spell slots you have of the appropriate level.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for these spells when you cast them with this trait (choose when you select this race)."
+        ]
+      },
+      {
+        "id": "trait_faerie_flight_lfl",
+        "name": "Flight",
+        "source": "LFL",
+        "raceName": "Faerie",
+        "actionType": "passive",
+        "description": "Because of your wings, you have a flying speed equal to your walking speed. You can't use this flying speed if you're wearing medium or heavy armor.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Because of your wings, you have a flying speed equal to your walking speed. You can't use this flying speed if you're wearing medium or heavy armor."
+        ]
+      }
+    ],
+    "description": "**Creature Type**: You are a Fey.\n\n**Fairy Magic**: You know the druidcraft cantrip. Starting at 3rd level, you can cast the faerie fire spell with this trait. Starting at 5th level, you can also cast the enlarge/reduce spell with this trait. Once you cast faerie fire or enlarge/reduce with this trait, you can't cast that spell with it again until you finish a long rest. You can also cast either of those spells using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for these spells when you cast them with this trait (choose when you select this race).\n\n**Flight**: Because of your wings, you have a flying speed equal to your walking speed. You can't use this flying speed if you're wearing medium or heavy armor."
   },
   {
     "id": "race_flamekin_lfl",
@@ -33,7 +290,42 @@
     "page": 0,
     "size": "Medium",
     "speed": "30 ft",
-    "traitsHtml": ""
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_flamekin_size_lfl",
+        "name": "Size",
+        "source": "LFL",
+        "raceName": "Flamekin",
+        "actionType": "passive",
+        "description": "You are Medium or Small. You choose the size when you select this race.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are Medium or Small. You choose the size when you select this race."
+        ]
+      },
+      {
+        "id": "trait_flamekin_darkvision_lfl",
+        "name": "Darkvision",
+        "source": "LFL",
+        "raceName": "Flamekin",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You discern colors in that darkness only as shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You discern colors in that darkness only as shades of gray."
+        ]
+      }
+    ],
+    "description": "**Size**: You are Medium or Small. You choose the size when you select this race.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You discern colors in that darkness only as shades of gray."
   },
   {
     "id": "race_kithkin_lfl",
@@ -42,7 +334,74 @@
     "page": 0,
     "size": "Medium",
     "speed": "30 ft",
-    "traitsHtml": ""
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_kithkin_brave_lfl",
+        "name": "Brave",
+        "source": "LFL",
+        "raceName": "Kithkin",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on saving throws you make to avoid or end the Frightened condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Frightened|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_kithkin_halfling_nimbleness_lfl",
+        "name": "Halfling Nimbleness",
+        "source": "LFL",
+        "raceName": "Kithkin",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is a size larger than you, but you can't stop in the same space.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is a size larger than you, but you can't stop in the same space."
+        ]
+      },
+      {
+        "id": "trait_kithkin_luck_lfl",
+        "name": "Luck",
+        "source": "LFL",
+        "raceName": "Kithkin",
+        "actionType": "passive",
+        "description": "When you roll a 1 on the d20 of a D20 Test|XPHB, you can reroll the die, and you must use the new roll.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you roll a 1 on the {@dice d20} of a {@variantrule D20 Test|XPHB}, you can reroll the die, and you must use the new roll."
+        ]
+      },
+      {
+        "id": "trait_kithkin_naturally_stealthy_lfl",
+        "name": "Naturally Stealthy",
+        "source": "LFL",
+        "raceName": "Kithkin",
+        "actionType": "passive",
+        "description": "You can take the Hide action even when you are obscured only by a creature that is at least one size larger than you.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can take the {@action Hide|XPHB} action even when you are obscured only by a creature that is at least one size larger than you."
+        ]
+      }
+    ],
+    "description": "**Brave**: You have Advantage|XPHB on saving throws you make to avoid or end the Frightened condition.\n\n**Halfling Nimbleness**: You can move through the space of any creature that is a size larger than you, but you can't stop in the same space.\n\n**Luck**: When you roll a 1 on the d20 of a D20 Test|XPHB, you can reroll the die, and you must use the new roll.\n\n**Naturally Stealthy**: You can take the Hide action even when you are obscured only by a creature that is at least one size larger than you."
   },
   {
     "id": "race_lorwyn_changeling_lfl",
@@ -51,7 +410,74 @@
     "page": 0,
     "size": "S/M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Shape Self.</strong> <p>As an action, you can reshape your body to a two-legged Humanoid shape or to a four-legged Beast shape. While you have a Humanoid shape, you can wear clothing and armor made for a Humanoid of your size.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 120 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Delightful Imitator.</strong> <p>You have proficiency in the Deception or Performance skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Unpredictable Movement.</strong> <p>When you roll Initiative|XPHB, you can immediately move up to half your Speed|XPHB, provided you don't have Disadvantage|XPHB on the Initiative|XPHB roll.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Shape Self.</strong> <p>As an action, you can reshape your body to a two-legged Humanoid shape or to a four-legged Beast shape. While you have a Humanoid shape, you can wear clothing and armor made for a Humanoid of your size.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 120 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Delightful Imitator.</strong> <p>You have proficiency in the Deception or Performance skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Unpredictable Movement.</strong> <p>When you roll Initiative|XPHB, you can immediately move up to half your Speed|XPHB, provided you don't have Disadvantage|XPHB on the Initiative|XPHB roll.</p></div>",
+    "traits": [
+      {
+        "id": "trait_lorwyn_changeling_shape_self_lfl",
+        "name": "Shape Self",
+        "source": "LFL",
+        "raceName": "Lorwyn Changeling",
+        "actionType": "action",
+        "description": "As an action, you can reshape your body to a two-legged Humanoid shape or to a four-legged Beast shape. While you have a Humanoid shape, you can wear clothing and armor made for a Humanoid of your size.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As an action, you can reshape your body to a two-legged Humanoid shape or to a four-legged Beast shape. While you have a Humanoid shape, you can wear clothing and armor made for a Humanoid of your size."
+        ]
+      },
+      {
+        "id": "trait_lorwyn_changeling_darkvision_lfl",
+        "name": "Darkvision",
+        "source": "LFL",
+        "raceName": "Lorwyn Changeling",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 120 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 120 feet."
+        ]
+      },
+      {
+        "id": "trait_lorwyn_changeling_delightful_imitator_lfl",
+        "name": "Delightful Imitator",
+        "source": "LFL",
+        "raceName": "Lorwyn Changeling",
+        "actionType": "passive",
+        "description": "You have proficiency in the Deception or Performance skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Deception|XPHB} or {@skill Performance|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_lorwyn_changeling_unpredictable_movement_lfl",
+        "name": "Unpredictable Movement",
+        "source": "LFL",
+        "raceName": "Lorwyn Changeling",
+        "actionType": "passive",
+        "description": "When you roll Initiative|XPHB, you can immediately move up to half your Speed|XPHB, provided you don't have Disadvantage|XPHB on the Initiative|XPHB roll.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you roll {@variantrule Initiative|XPHB}, you can immediately move up to half your {@variantrule Speed|XPHB}, provided you don't have {@variantrule Disadvantage|XPHB} on the {@variantrule Initiative|XPHB} roll."
+        ]
+      }
+    ],
+    "description": "**Shape Self**: As an action, you can reshape your body to a two-legged Humanoid shape or to a four-legged Beast shape. While you have a Humanoid shape, you can wear clothing and armor made for a Humanoid of your size.\n\n**Darkvision**: You have Darkvision with a range of 120 feet.\n\n**Delightful Imitator**: You have proficiency in the Deception or Performance skill.\n\n**Unpredictable Movement**: When you roll Initiative|XPHB, you can immediately move up to half your Speed|XPHB, provided you don't have Disadvantage|XPHB on the Initiative|XPHB roll."
   },
   {
     "id": "race_rimekin_lfl",
@@ -60,6 +486,58 @@
     "page": 0,
     "size": "S/M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Cold Fire Magic.</strong> <p>You know the Ray of Frost cantrip. When you reach character levels 3 and 5, you learn the Ice Knife spell and the Flame Blade spell, respectively. You always have those spells prepared. You can cast each once without a spell slot, and you regain the ability to cast these spells in this way when you finish a Long Rest|XPHB. You can also cast the spells using any spell slots you have of the appropriate level. When you cast Flame Blade using this trait, the spell deals Cold damage instead of Fire damage.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for these spells (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Cold Resistance.</strong> <p>You have Resistance|XPHB to Cold damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Cold Fire Magic.</strong> <p>You know the Ray of Frost cantrip. When you reach character levels 3 and 5, you learn the Ice Knife spell and the Flame Blade spell, respectively. You always have those spells prepared. You can cast each once without a spell slot, and you regain the ability to cast these spells in this way when you finish a Long Rest|XPHB. You can also cast the spells using any spell slots you have of the appropriate level. When you cast Flame Blade using this trait, the spell deals Cold damage instead of Fire damage.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for these spells (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Cold Resistance.</strong> <p>You have Resistance|XPHB to Cold damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>",
+    "traits": [
+      {
+        "id": "trait_rimekin_cold_fire_magic_lfl",
+        "name": "Cold Fire Magic",
+        "source": "LFL",
+        "raceName": "Rimekin",
+        "actionType": "passive",
+        "description": "You know the Ray of Frost cantrip. When you reach character levels 3 and 5, you learn the Ice Knife spell and the Flame Blade spell, respectively. You always have those spells prepared. You can cast each once without a spell slot, and you regain the ability to cast these spells in this way when you finish a Long Rest|XPHB. You can also cast the spells using any spell slots you have of the appropriate level. When you cast Flame Blade using this trait, the spell deals Cold damage instead of Fire damage.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for these spells (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Ray of Frost|XPHB} cantrip. When you reach character levels 3 and 5, you learn the {@spell Ice Knife|XPHB} spell and the {@spell Flame Blade|XPHB} spell, respectively. You always have those spells prepared. You can cast each once without a spell slot, and you regain the ability to cast these spells in this way when you finish a {@variantrule Long Rest|XPHB}. You can also cast the spells using any spell slots you have of the appropriate level. When you cast {@spell Flame Blade|XPHB} using this trait, the spell deals Cold damage instead of Fire damage.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for these spells (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_rimekin_cold_resistance_lfl",
+        "name": "Cold Resistance",
+        "source": "LFL",
+        "raceName": "Rimekin",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Cold damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Cold damage."
+        ]
+      },
+      {
+        "id": "trait_rimekin_darkvision_lfl",
+        "name": "Darkvision",
+        "source": "LFL",
+        "raceName": "Rimekin",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      }
+    ],
+    "description": "**Cold Fire Magic**: You know the Ray of Frost cantrip. When you reach character levels 3 and 5, you learn the Ice Knife spell and the Flame Blade spell, respectively. You always have those spells prepared. You can cast each once without a spell slot, and you regain the ability to cast these spells in this way when you finish a Long Rest|XPHB. You can also cast the spells using any spell slots you have of the appropriate level. When you cast Flame Blade using this trait, the spell deals Cold damage instead of Fire damage.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for these spells (choose the ability when you select this species).\n\n**Cold Resistance**: You have Resistance|XPHB to Cold damage.\n\n**Darkvision**: You have Darkvision with a range of 60 feet."
   }
 ]

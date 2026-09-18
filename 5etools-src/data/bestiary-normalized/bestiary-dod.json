@@ -106,7 +106,7 @@
       {
         "id": "sc_yarnspinner_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 5,
@@ -282,10 +282,13 @@
     ],
     "traits": [
       {
-        "id": "act_fey_rebirth_ezkj",
+        "id": "act_fey_rebirth_8wbg",
         "name": "Fey Rebirth",
         "actionType": "trait",
         "descriptionHtml": "<p>If Yarnspinner dies in his Domain of Delight, he revives with all his hit points 1d4 days later in a safe location in that domain.</p>",
+        "entries": [
+          "If Yarnspinner dies in his Domain of Delight, he revives with all his hit points {@dice 1d4} days later in a safe location in that domain."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -299,10 +302,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__dzec",
+        "id": "act_legendary_resistance__3_day__bk9f",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Yarnspinner fails a saving throw, he can choose to succeed instead.</p>",
+        "entries": [
+          "If Yarnspinner fails a saving throw, he can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -316,10 +322,13 @@
         }
       },
       {
-        "id": "act_spider_climb_3m5l",
+        "id": "act_spider_climb_dhwd",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>Yarnspinner can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "entries": [
+          "Yarnspinner can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -333,10 +342,13 @@
         }
       },
       {
-        "id": "act_web_walker_ahx0",
+        "id": "act_web_walker_ozdc",
         "name": "Web Walker",
         "actionType": "trait",
         "descriptionHtml": "<p>Yarnspinner ignores movement restrictions caused by webbing.</p>",
+        "entries": [
+          "Yarnspinner ignores movement restrictions caused by webbing."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -350,10 +362,21 @@
         }
       },
       {
-        "id": "act_web_weaver__3_day__bbm2",
+        "id": "act_web_weaver__3_day__6j4q",
         "name": "Web Weaver (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Yarnspinner can take 1 minute to craft one of the following structures out of webbing:</p><ul><li>A 3-inch-thick, opaque wall of webbing consisting of up to three 10-foot-square sections, each of which must be anchored on at least two sides by other walls or surfaces. Each section has AC 12; 20 hit points; vulnerability to fire damage; and immunity to bludgeoning, poison, and psychic damage.</li><li>A hut small enough to fit in a 10-foot cube. The hut comes with a closable door and a comfortable bed made of webbing, sized for a Tiny, Small, or Medium creature.</li><li>A message consisting of no more than twenty-five characters, anchored at various points so it hangs in the air.</li></ul>",
+        "entries": [
+          "Yarnspinner can take 1 minute to craft one of the following structures out of webbing:",
+          {
+            "type": "list",
+            "items": [
+              "A 3-inch-thick, opaque wall of webbing consisting of up to three 10-foot-square sections, each of which must be anchored on at least two sides by other walls or surfaces. Each section has AC 12; 20 hit points; vulnerability to fire damage; and immunity to bludgeoning, poison, and psychic damage.",
+              "A hut small enough to fit in a 10-foot cube. The hut comes with a closable door and a comfortable bed made of webbing, sized for a Tiny, Small, or Medium creature.",
+              "A message consisting of no more than twenty-five characters, anchored at various points so it hangs in the air."
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -369,10 +392,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_d650",
+        "id": "act_multiattack_h6yj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Yarnspinner makes two Bite attacks and uses Spellcasting or Web once.</p>",
+        "entries": [
+          "Yarnspinner makes two Bite attacks and uses Spellcasting or Web once."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -386,10 +412,13 @@
         }
       },
       {
-        "id": "act_bite_tk6q",
+        "id": "act_bite_i0wg",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}17 (3d6 + 7) piercing damage plus 11 (2d10) poison damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 17 (3d6 + 7) piercing damage plus 11 (2d10) poison damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 11} to hit, reach 10 ft., one target. {@h}17 ({@damage 3d6 + 7}) piercing damage plus 11 ({@damage 2d10}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -412,10 +441,13 @@
         }
       },
       {
-        "id": "act_web_tzhf",
+        "id": "act_web_njgx",
         "name": "Web",
         "actionType": "action",
         "descriptionHtml": "<p>Yarnspinner shoots webbing at one creature he can see within 120 feet of himself. The target must succeed on a DC 17 Strength saving throw or be restrained for 1 hour. The target can repeat the save at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "entries": [
+          "Yarnspinner shoots webbing at one creature he can see within 120 feet of himself. The target must succeed on a {@dc 17} Strength saving throw or be {@condition restrained} for 1 hour. The target can repeat the save at the end of each of its turns, ending the effect on itself on a success."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -439,10 +471,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoD/Yarnspinner.webp",
     "tokenImg": "img/bestiary/tokens/DoD/Yarnspinner.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

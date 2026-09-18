@@ -99,6 +99,100 @@
     "descriptionHtml": "<table class=\"item-table\"><thead><tr><th>d10</th><th>Trinket</th></tr></thead><tbody><tr><td>1</td><td>A pierced dragon scale on a cord</td></tr><tr><td>2</td><td>A statuette of a dragon carved from black bone</td></tr><tr><td>3</td><td>A dragon's tooth, engraved with an unknown sigil</td></tr><tr><td>4</td><td>A child's doll of a dragon, woven from leather cords</td></tr><tr><td>5</td><td>A dagger carved from a dragon's talon</td></tr><tr><td>6</td><td>A brass disk bearing the silhouette of a black dragon</td></tr><tr><td>7</td><td>A small egg-shaped piece of polished bone</td></tr><tr><td>8</td><td>A bone fragment with brass inlaid runes</td></tr><tr><td>9</td><td>A leather pouch filled with tiny draconic teeth</td></tr><tr><td>10</td><td>A single large seed that's warm to the touch</td></tr></tbody></table>"
   },
   {
+    "id": "it_axe_armblade_erlw",
+    "name": "Axe Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 3,
+    "value": "0.50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Axe Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d6 slashing (or 1d8 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb | **Value:** 0.50 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
+  },
+  {
+    "id": "it_battle_axe_armblade_erlw",
+    "name": "Battle Axe Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 4,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Battle Axe Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 4 lb | **Value:** 1 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
+  },
+  {
     "id": "it_battleaxe_armblade_erlw",
     "name": "Battleaxe Armblade",
     "source": "ERLW",
@@ -221,6 +315,101 @@
     "macroTemplate": null,
     "descriptionMarkdown": "*Wondrous Item, legendary (Requires Attunement)*\n\n---\n\nThis symbiotic crown is carved from dark purple and mauve stone, with ten points like stalks set with gemstones resembling the eyestalks of a beholder. To attune to this item, you must wear it on your head for the entire attunement period, during which the crown's hidden tendrils burrow into your scalp to bond with your skull.\n\nWhile wearing the crown, you can see normally in darkness, both magical and nonmagical, to a distance of 120 feet.\n\n**Spells.** The crown has 10 charges. While wearing it, you can use an action to expend some of its charges to cast one of the following spells from it (spell save 16): charm person (1 charge), disintegrate (6 charges), fear (3 charges), finger of death (7 charges), flesh to stone (6 charges), hold person (2 charges), ray of enfeeblement (2 charges), sleep (1 charge), slow (3 charges), telekinesis (5 charges).\n\nThe crown regains 1d6 + 3 expended charges daily at dawn.\n\n**Symbiotic Nature.** The crown can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the crown ends, and it detaches from you.\n\nThe daelkyr Belashyrra made these crowns. While on the same plane of existence as the crown, Belashyrra can see through its eyestalks.",
     "descriptionHtml": "<p>This symbiotic crown is carved from dark purple and mauve stone, with ten points like stalks set with gemstones resembling the eyestalks of a beholder. To attune to this item, you must wear it on your head for the entire attunement period, during which the crown's hidden tendrils burrow into your scalp to bond with your skull.</p>\n<p>While wearing the crown, you can see normally in darkness, both magical and nonmagical, to a distance of 120 feet.</p>\n<div class=\"item-subentry\"><strong>Spells.</strong> <p>The crown has 10 charges. While wearing it, you can use an action to expend some of its charges to cast one of the following spells from it (spell save 16): charm person (1 charge), disintegrate (6 charges), fear (3 charges), finger of death (7 charges), flesh to stone (6 charges), hold person (2 charges), ray of enfeeblement (2 charges), sleep (1 charge), slow (3 charges), telekinesis (5 charges).</p>\n<p>The crown regains 1d6 + 3 expended charges daily at dawn.</p></div>\n<div class=\"item-subentry\"><strong>Symbiotic Nature.</strong> <p>The crown can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the crown ends, and it detaches from you.</p>\n<p>The daelkyr Belashyrra made these crowns. While on the same plane of existence as the crown, Belashyrra can see through its eyestalks.</p></div>"
+  },
+  {
+    "id": "it_boarding_axe_armblade_erlw",
+    "name": "Boarding Axe Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 3,
+    "value": "8 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d8",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Special"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Boarding Axe Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d8 slashing (or 1d8 slashing versatile) | **Properties:** Special | **Weight:** 3 lb | **Value:** 8 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.\n\n**Special.** This one-handed axe has a pick on the opposite end of the blade. You can choose to deal either slashing damage or piercing damage, depending on which end you use to attack. If you are proficient with axes, you can add your proficiency bonus on any checks made to climb a vertical surface when wielding it.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>\n<div class=\"item-subentry\"><strong>Special.</strong> <p>This one-handed axe has a pick on the opposite end of the blade. You can choose to deal either slashing damage or piercing damage, depending on which end you use to attack. If you are proficient with axes, you can add your proficiency bonus on any checks made to climb a vertical surface when wielding it.</p></div>"
+  },
+  {
+    "id": "it_claw_armblade_erlw",
+    "name": "Claw Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 3,
+    "value": "0 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "ATT",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Claw Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d6 slashing | **Properties:** ATT, Light | **Weight:** 3 lb | **Value:** 0 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.\n\nA claw is a simple, bladed melee weapon worn as a glove",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>\n<p>A claw is a simple, bladed melee weapon worn as a glove</p>"
   },
   {
     "id": "it_cleansing_stone_erlw",
@@ -1069,6 +1258,51 @@
     "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
   },
   {
+    "id": "it_hammer_armblade_erlw",
+    "name": "Hammer Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 3,
+    "value": "0.20 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Hammer Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 3 lb | **Value:** 0.20 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
+  },
+  {
     "id": "it_handaxe_armblade_erlw",
     "name": "Handaxe Armblade",
     "source": "ERLW",
@@ -1114,6 +1348,54 @@
       "versatile": null
     },
     "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d6 slashing | **Properties:** Light, Thrown | **Weight:** 2 lb | **Value:** 5 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
+  },
+  {
+    "id": "it_heavy_hammer_armblade_erlw",
+    "name": "Heavy Hammer Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 4,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Heavy Hammer Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d8 bludgeoning (or 1d10 bludgeoning versatile) | **Properties:** Heavy, Versatile | **Weight:** 4 lb | **Value:** 1 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
     "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
   },
   {
@@ -1643,6 +1925,58 @@
     "descriptionHtml": "<p>This hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.</p>\n<p>While wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.</p>\n<div class=\"item-subentry\"><strong>Symbiotic Nature.</strong> <p>The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.</p>\n<p>The armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.</p></div>\n<p>The breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials.</p>"
   },
   {
+    "id": "it_living_leather_corslet_erlw",
+    "name": "Living Leather Corslet",
+    "source": "ERLW",
+    "page": 278,
+    "type": "Light Armor",
+    "rawType": "LA",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 10,
+    "value": "4.50 gp",
+    "ac": 13,
+    "bonusAc": "+1",
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Light Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 13 | **Weight:** 10 lb | **Value:** 4.50 gp\n\n---\n\nThis hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.\n\nWhile wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.\n\n**Symbiotic Nature.** The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.\n\nThe armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.\n\nA close-fitting shirt of hardened leather with long sleeves.",
+    "descriptionHtml": "<p>This hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.</p>\n<p>While wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.</p>\n<div class=\"item-subentry\"><strong>Symbiotic Nature.</strong> <p>The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.</p>\n<p>The armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.</p></div>\n<p>A close-fitting shirt of hardened leather with long sleeves.</p>"
+  },
+  {
+    "id": "it_living_leather_shirt_erlw",
+    "name": "Living Leather Shirt",
+    "source": "ERLW",
+    "page": 278,
+    "type": "Light Armor",
+    "rawType": "LA",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 8,
+    "value": "1 gp",
+    "ac": 12,
+    "bonusAc": "+1",
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Light Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 12 | **Weight:** 8 lb | **Value:** 1 gp\n\n---\n\nThis hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.\n\nWhile wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.\n\n**Symbiotic Nature.** The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.\n\nThe armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.\n\nA lightweight garment of hardened leather, providing some protection to its wearer while allowing for great freedom of movement.",
+    "descriptionHtml": "<p>This hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.</p>\n<p>While wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.</p>\n<div class=\"item-subentry\"><strong>Symbiotic Nature.</strong> <p>The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.</p>\n<p>The armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.</p></div>\n<p>A lightweight garment of hardened leather, providing some protection to its wearer while allowing for great freedom of movement.</p>"
+  },
+  {
     "id": "it_living_padded_armor_erlw",
     "name": "Living Padded Armor",
     "source": "ERLW",
@@ -1719,6 +2053,58 @@
     "macroTemplate": null,
     "descriptionMarkdown": "*Heavy Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 15 | **Weight:** 40 lb | **Value:** 30 gp\n\n---\n\nThis hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.\n\nWhile wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.\n\n**Symbiotic Nature.** The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.\n\nThe armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.\n\nThis armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.",
     "descriptionHtml": "<p>This hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.</p>\n<p>While wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.</p>\n<div class=\"item-subentry\"><strong>Symbiotic Nature.</strong> <p>The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.</p>\n<p>The armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.</p></div>\n<p>This armor is leather armor with heavy rings sewn into it. The rings help reinforce the armor against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.</p>"
+  },
+  {
+    "id": "it_living_ring_mail_erlw",
+    "name": "Living Ring-Mail",
+    "source": "ERLW",
+    "page": 278,
+    "type": "Heavy Armor",
+    "rawType": "HA",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 50,
+    "value": "5 gp",
+    "ac": 16,
+    "bonusAc": "+1",
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Heavy Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 16 | **Weight:** 50 lb | **Value:** 5 gp\n\n---\n\nThis hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.\n\nWhile wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.\n\n**Symbiotic Nature.** The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.\n\nThe armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.\n\nThis armour is leather armour with heavy rings sewn into it. The rings help reinforce the armour against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.",
+    "descriptionHtml": "<p>This hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.</p>\n<p>While wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.</p>\n<div class=\"item-subentry\"><strong>Symbiotic Nature.</strong> <p>The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.</p>\n<p>The armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.</p></div>\n<p>This armour is leather armour with heavy rings sewn into it. The rings help reinforce the armour against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.</p>"
+  },
+  {
+    "id": "it_living_scale_armour_erlw",
+    "name": "Living Scale Armour",
+    "source": "ERLW",
+    "page": 278,
+    "type": "Medium Armor",
+    "rawType": "MA",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 40,
+    "value": "5 gp",
+    "ac": 15,
+    "bonusAc": "+1",
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Medium Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 15 | **Weight:** 40 lb | **Value:** 5 gp\n\n---\n\nThis hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.\n\nWhile wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.\n\n**Symbiotic Nature.** The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.\n\nThe armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.\n\nThis armour consists of a coat and leggings (and perhaps a separate skirt) of leather covered with overlapping pieces of metal, much like the scales of a fish. The suit includes gauntlets.",
+    "descriptionHtml": "<p>This hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.</p>\n<p>While wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.</p>\n<div class=\"item-subentry\"><strong>Symbiotic Nature.</strong> <p>The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.</p>\n<p>The armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.</p></div>\n<p>This armour consists of a coat and leggings (and perhaps a separate skirt) of leather covered with overlapping pieces of metal, much like the scales of a fish. The suit includes gauntlets.</p>"
   },
   {
     "id": "it_living_scale_mail_erlw",
@@ -1825,6 +2211,54 @@
     "descriptionHtml": "<p>This hideous armor is formed from black chitin, beneath which veins pulse and red sinews glisten. To attune to this item, you must wear it for the entire attunement period, during which tendrils on the inside burrow into you.</p>\n<p>While wearing this armor, you have a +1 bonus to Armor Class, and you have resistance to the following damage types: necrotic, poison, and psychic.</p>\n<div class=\"item-subentry\"><strong>Symbiotic Nature.</strong> <p>The armor can't be removed from you while you're attuned to it, and you can't voluntarily end your attunement to it. If you're targeted by a spell that ends a curse, your attunement to the armor ends, and it detaches from you.</p>\n<p>The armor requires fresh blood be fed to it. Immediately after you finish any long rest, you must either feed half of your remaining Hit Dice to the armor (round up) or take 1 level of exhaustion.</p></div>\n<p>Made from tough but flexible leather, studded leather is reinforced with close-set rivets or spikes.</p>"
   },
   {
+    "id": "it_long_sword_armblade_erlw",
+    "name": "Long Sword Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 3,
+    "value": "2 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Long Sword Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Heavy, Versatile | **Weight:** 3 lb | **Value:** 2 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
+  },
+  {
     "id": "it_longsword_armblade_erlw",
     "name": "Longsword Armblade",
     "source": "ERLW",
@@ -1914,6 +2348,54 @@
       "versatile": null
     },
     "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d6 bludgeoning | **Weight:** 4 lb | **Value:** 5 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
+  },
+  {
+    "id": "it_mattock_armblade_erlw",
+    "name": "Mattock Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 10,
+    "value": "1 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d12",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Mattock Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d12",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d12 piercing | **Properties:** Heavy, Two-Handed | **Weight:** 10 lb | **Value:** 1 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
     "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
   },
   {
@@ -2034,6 +2516,55 @@
     "macroTemplate": null,
     "descriptionMarkdown": "*Adventuring Gear*\n\n---\n\n| d10 | Trinket |\n| --- | --- |\n| 1 | The favorite childhood toy of one of the adventurers, floating in midair |\n| 2 | A tin whistle that makes beautiful colors and patterns magically appear when it's played |\n| 3 | A toy lightning rail car |\n| 4 | A glass eye |\n| 5 | A silver lapel pin of a finely detailed gorgon's head with ruby eyes |\n| 6 | A monocle that can be used as a telescope |\n| 7 | A six-inch-tall mechanical marmoset in need of minor repairs |\n| 8 | A small medallion made of silver, depicting a tower with an eye at the top of it and other smaller eyes embedded in the sides |\n| 9 | A cloak pin made of iron in the shape of two hammers joined by a semicircular haft |\n| 10 | A wooden dinosaur toy that has movable legs |",
     "descriptionHtml": "<table class=\"item-table\"><thead><tr><th>d10</th><th>Trinket</th></tr></thead><tbody><tr><td>1</td><td>The favorite childhood toy of one of the adventurers, floating in midair</td></tr><tr><td>2</td><td>A tin whistle that makes beautiful colors and patterns magically appear when it's played</td></tr><tr><td>3</td><td>A toy lightning rail car</td></tr><tr><td>4</td><td>A glass eye</td></tr><tr><td>5</td><td>A silver lapel pin of a finely detailed gorgon's head with ruby eyes</td></tr><tr><td>6</td><td>A monocle that can be used as a telescope</td></tr><tr><td>7</td><td>A six-inch-tall mechanical marmoset in need of minor repairs</td></tr><tr><td>8</td><td>A small medallion made of silver, depicting a tower with an eye at the top of it and other smaller eyes embedded in the sides</td></tr><tr><td>9</td><td>A cloak pin made of iron in the shape of two hammers joined by a semicircular haft</td></tr><tr><td>10</td><td>A wooden dinosaur toy that has movable legs</td></tr></tbody></table>"
+  },
+  {
+    "id": "it_nunchaku_armblade_erlw",
+    "name": "Nunchaku Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 3,
+    "value": "0 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Versatile",
+      "Flourish"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Nunchaku Armblade",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d6 bludgeoning (or 1d8 bludgeoning versatile) | **Properties:** Finesse, Versatile, Flourish | **Weight:** 3 lb | **Value:** 0 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.\n\nNunchaku are martial melee weapons composed of two hard batons connected to one another by a short chain or tether.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>\n<p>Nunchaku are martial melee weapons composed of two hard batons connected to one another by a short chain or tether.</p>"
   },
   {
     "id": "it_orb_of_shielding_erlw",
@@ -2532,6 +3063,150 @@
     "descriptionHtml": "<p>This polished Eberron dragonshard fits in the hand and stores information similar to a book. The shard can hold the equivalent of one book that's no more than 320 pages long. A shard can be created blank or already filled with information. When the shard is created, the creator can set a passphrase that must be spoken to access the information stored within.</p>\n<p>While holding the shard, you can use an action to open your mind to the shard, seeing its content in your mind. On subsequent rounds, reading the text or scribing new text on blank \"pages\" in the shard requires concentration (as if concentration||concentrating on a spell) and takes the same amount of time it takes you to read and write normally. Thinking of a particular phrase or topic draws you to the first section in the shard that addresses it.</p>\n<p>A wizard can use a spellshard as a spellbook, with the usual cost in gold and time to \"scribe\" a spell into the shard.</p>"
   },
   {
+    "id": "it_staff_armblade_erlw",
+    "name": "Staff Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 2,
+    "value": "0.02 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d4",
+    "dmg2": "1d6",
+    "dmgType": "bludgeoning",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Staff Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Bludgeoning"
+        }
+      ],
+      "versatile": "1d6"
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d4 bludgeoning (or 1d6 bludgeoning versatile) | **Properties:** Versatile | **Weight:** 2 lb | **Value:** 0.02 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
+  },
+  {
+    "id": "it_sword_armblade_erlw",
+    "name": "Sword Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 2,
+    "value": "1.50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Sword Armblade",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d6 slashing (or 1d8 slashing versatile) | **Properties:** Finesse, Versatile | **Weight:** 2 lb | **Value:** 1.50 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
+  },
+  {
+    "id": "it_tetherhooks_armblade_erlw",
+    "name": "Tetherhooks Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 3,
+    "value": "0 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Hookpull",
+      "Reach",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Tetherhooks Armblade",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "10 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d8 piercing | **Properties:** Hookpull, Reach, Two-Handed | **Weight:** 3 lb | **Value:** 0 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.\n\nA tetherhook is a martial melee weapon. It is comprised of a hook attached to a chain or strap",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>\n<p>A tetherhook is a martial melee weapon. It is comprised of a hook attached to a chain or strap</p>"
+  },
+  {
     "id": "it_trident_armblade_erlw",
     "name": "Trident Armblade",
     "source": "ERLW",
@@ -2578,6 +3253,55 @@
     },
     "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 1d6 piercing (or 1d8 piercing versatile) | **Properties:** Thrown, Versatile | **Weight:** 4 lb | **Value:** 5 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.",
     "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>"
+  },
+  {
+    "id": "it_twinblades_armblade_erlw",
+    "name": "Twinblades Armblade",
+    "source": "ERLW",
+    "page": 276,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "common",
+    "reqAttune": "by a warforged",
+    "weight": 3,
+    "value": "75 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d4",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Two-Handed",
+      "Whirl"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Twinblades Armblade",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d4",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Melee Weapon, common (by a warforged)*\n\n**Damage:** 2d4 slashing | **Properties:** Finesse, Two-Handed, Whirl | **Weight:** 3 lb | **Value:** 75 gp\n\n---\n\nAn armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.\n\nAs a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.\n\nTwinblades are martial melee weapons; double-bladed polearms that rely on the user's dexterity to keep them in constant motion.",
+    "descriptionHtml": "<p>An armblade is a magic weapon that attaches to your arm, becoming inseparable from you as long as you're attuned to it. To attune to this item, you must hold it against your forearm for the entire attunement period.</p>\n<p>As a bonus action, you can retract the armblade into your forearm or extend it from there. While it is extended, you can use the weapon as if you were holding it, and you can't use that hand for other purposes.</p>\n<p>Twinblades are martial melee weapons; double-bladed polearms that rely on the user's dexterity to keep them in constant motion.</p>"
   },
   {
     "id": "it_uncommon_glamerweave_erlw",

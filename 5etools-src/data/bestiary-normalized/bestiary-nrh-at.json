@@ -101,10 +101,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_antimagic_cone_w7es",
+        "id": "act_antimagic_cone_2ygy",
         "name": "Antimagic Cone",
         "actionType": "trait",
-        "descriptionHtml": "<p>The beholder's central eye creates an area of antimagic, as in the antimagic field spell, in a 150-foot cone. At the start of each of its turns, the beholder decides which way the cone faces and whether the cone is active. The area works against the beholder's own eye rays.</p>",
+        "descriptionHtml": "<p>Emo's central eye creates an area of antimagic, as in the antimagic field spell, in a 150-foot cone. At the start of each of its turns, the beholder decides which way the cone faces and whether the cone is active. The area works against the beholder's own eye rays.</p>",
+        "entries": [
+          "Emo's central eye creates an area of antimagic, as in the {@spell antimagic field} spell, in a 150-foot cone. At the start of each of its turns, the beholder decides which way the cone faces and whether the cone is active. The area works against the beholder's own eye rays."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -120,10 +123,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_w538",
+        "id": "act_bite_wdhc",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}14 (4d6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 14 (4d6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}14 ({@damage 4d6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -142,10 +148,93 @@
         }
       },
       {
-        "id": "act_eye_rays_10md",
+        "id": "act_eye_rays_nsgn",
         "name": "Eye Rays",
         "actionType": "action",
-        "descriptionHtml": "<p>The beholder shoots three of the following magical eye rays at random (reroll duplicates), choosing one to three targets it can see within 120 feet of it:</p><ul><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li></ul>",
+        "descriptionHtml": "<p>Emo shoots three of the following magical eye rays at random (reroll duplicates), choosing one to three targets it can see within 120 feet of it:</p><ul><li><strong><em>1. Happiness Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Wisdom saving throw or fall prone with laughter, becoming incapacitated and unable to stand up for 1 minute or until Emo harms the creature. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>2. Sadness Ray.</em></strong> <p>The targeted creature must succeed on a DC 15 Intelligence saving throw. On a failed save, the target is overcome by sorrow and takes 3d6 psychic damage, and it can't take a reaction until the end of its next turn. On its next turn, it can use either an action or a bonus action, not both. On a successful save, the target takes half as much damage and suffers none of the other effects.</p></li><li><strong><em>3. Anger Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Wisdom saving throw or be compelled to duel with Emo for 1 minute. The target has disadvantage on attack rolls against creatures other than Emo and must make a Wisdom saving throw each time it attempts to move more than 30 feet away from Emo.</p></li><li><strong><em>4. Anxiety Ray.</em></strong> <p>The targeted creature must succeed on a DC 15 Intelligence saving throw or lose the ability to distinguish friend from foe, regarding all creatures it can see as enemies for 1 minute. Each time the target takes damage, it can repeat the saving throw, ending the effect on itself on a success.</p><p>Whenever the affected creature targets another creature with an attack, spell, or other ability, it must choose the target at random from among the creatures it can see within range of the attack, spell, or other ability it's using. If an enemy provokes an opportunity attack from the affected creature, the creature must make that attack if it is able to.</p></li><li><strong><em>5. Fear Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Wisdom saving throw or be frightened for 1 minute.</p><p>The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>6. Desolation Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Intelligence saving throw. On a successful save, the target takes 5d10 psychic damage, and the spell ends. On a failed save, the target takes 5d10 psychic damage and perceives itself to be confined within an illusory stone cell for 1 minute. The target can't see or hear anything beyond the cell and is restrained.</p></li><li><strong><em>7. Jealousy Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Wisdom saving throw or become charmed for 1 minute. While the target is charmed in this way, it must use its action before moving on each of its turns to make a melee attack against a creature that Emo chooses. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>8. Disgusting Ray.</em></strong> <p>The targeted creature must succeed on a DC 15 Constitution saving throw against poison. On a failed save, the target is enveloped in sphere of yellow, nauseating gas and spends its action on its next turn retching and reeling.</p></li><li><strong><em>9. Surprise Ray.</em></strong> <p>The targeted creature must succeed on a</p><p>DC 15 Dexterity saving throw or be blinded by a spray of color until the end of its next turn.</p></li><li><strong><em>10. Trust Ray.</em></strong> <p>The targeted creature must succeed on a</p><p>DC 16 Wisdom saving throw or be charmed by Emo for 1 hour or until Emo harms the creature.</p></li></ul>",
+        "entries": [
+          "Emo shoots three of the following magical eye rays at random (reroll duplicates), choosing one to three targets it can see within 120 feet of it:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "1. Happiness Ray",
+                "entries": [
+                  "The targeted creature must succeed on a {@dc 14} Wisdom saving throw or fall {@condition prone} with laughter, becoming {@condition incapacitated} and unable to stand up for 1 minute or until Emo harms the creature. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+                ],
+                "type": "item"
+              },
+              {
+                "name": "2. Sadness Ray",
+                "entries": [
+                  "The targeted creature must succeed on a {@dc 15} Intelligence saving throw. On a failed save, the target is overcome by sorrow and takes {@damage 3d6} psychic damage, and it can't take a reaction until the end of its next turn. On its next turn, it can use either an action or a bonus action, not both. On a successful save, the target takes half as much damage and suffers none of the other effects."
+                ],
+                "type": "item"
+              },
+              {
+                "name": "3. Anger Ray",
+                "entries": [
+                  "The targeted creature must succeed on a {@dc 14} Wisdom saving throw or be compelled to duel with Emo for 1 minute. The target has disadvantage on attack rolls against creatures other than Emo and must make a Wisdom saving throw each time it attempts to move more than 30 feet away from Emo."
+                ],
+                "type": "item"
+              },
+              {
+                "name": "4. Anxiety Ray",
+                "entries": [
+                  "The targeted creature must succeed on a {@dc 15} Intelligence saving throw or lose the ability to distinguish friend from foe, regarding all creatures it can see as enemies for 1 minute. Each time the target takes damage, it can repeat the saving throw, ending the effect on itself on a success.",
+                  "Whenever the affected creature targets another creature with an attack, spell, or other ability, it must choose the target at random from among the creatures it can see within range of the attack, spell, or other ability it's using. If an enemy provokes an opportunity attack from the affected creature, the creature must make that attack if it is able to."
+                ],
+                "type": "item"
+              },
+              {
+                "name": "5. Fear Ray",
+                "entries": [
+                  "The targeted creature must succeed on a {@dc 14} Wisdom saving throw or be {@condition frightened} for 1 minute.",
+                  "The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+                ],
+                "type": "item"
+              },
+              {
+                "name": "6. Desolation Ray",
+                "entries": [
+                  "The targeted creature must succeed on a {@dc 14} Intelligence saving throw. On a successful save, the target takes {@damage 5d10} psychic damage, and the spell ends. On a failed save, the target takes {@damage 5d10} psychic damage and perceives itself to be confined within an illusory stone cell for 1 minute. The target can't see or hear anything beyond the cell and is {@condition restrained}."
+                ],
+                "type": "item"
+              },
+              {
+                "name": "7. Jealousy Ray",
+                "entries": [
+                  "The targeted creature must succeed on a {@dc 14} Wisdom saving throw or become {@condition charmed} for 1 minute. While the target is {@condition charmed} in this way, it must use its action before moving on each of its turns to make a melee attack against a creature that Emo chooses. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+                ],
+                "type": "item"
+              },
+              {
+                "name": "8. Disgusting Ray",
+                "entries": [
+                  "The targeted creature must succeed on a {@dc 15} Constitution saving throw against poison. On a failed save, the target is enveloped in sphere of yellow, nauseating gas and spends its action on its next turn retching and reeling."
+                ],
+                "type": "item"
+              },
+              {
+                "name": "9. Surprise Ray",
+                "entries": [
+                  "The targeted creature must succeed on a",
+                  "{@dc 15} Dexterity saving throw or be {@condition blinded} by a spray of color until the end of its next turn."
+                ],
+                "type": "item"
+              },
+              {
+                "name": "10. Trust Ray",
+                "entries": [
+                  "The targeted creature must succeed on a",
+                  "{@dc 16} Wisdom saving throw or be {@condition charmed} by Emo for 1 hour or until Emo harms the creature."
+                ],
+                "type": "item"
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -154,13 +243,21 @@
           "range": null,
           "targets": null,
           "save": {
-            "dc": 16,
-            "ability": "STR"
+            "dc": 14,
+            "ability": "WIS"
           },
           "damages": [
             {
-              "formula": "10d8",
-              "type": "Force"
+              "formula": "3d6",
+              "type": "Psychic"
+            },
+            {
+              "formula": "5d10",
+              "type": "Psychic"
+            },
+            {
+              "formula": "5d10",
+              "type": "Psychic"
             }
           ],
           "recharge": null
@@ -171,13 +268,16 @@
     "reactions": [],
     "legendaryActions": {
       "count": 3,
-      "description": "The beholder can take 3 legendary actions, using the Eye Ray option below. It can take only one legendary action at a time and only at the end of another creature's turn. The beholder regains spent legendary actions at the start of its turn.",
+      "description": "Emo can take 3 legendary actions, using the Eye Ray option below. It can take only one legendary action at a time and only at the end of another creature's turn. The beholder regains spent legendary actions at the start of its turn.",
       "entries": [
         {
-          "id": "act_eye_ray_4r04",
+          "id": "act_eye_ray_ie1p",
           "name": "Eye Ray",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The beholder uses one random eye ray.</p>",
+          "descriptionHtml": "<p>Emo uses one random eye ray.</p>",
+          "entries": [
+            "Emo uses one random eye ray."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -192,12 +292,16 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_lair_action_rh1s",
-        "name": "Lair Action",
+        "id": "act_50_foot_square_area_5v0z",
+        "name": "50-foot-square Area",
         "actionType": "lair",
         "descriptionHtml": "<p>A 50-foot-square area of ground within 120 feet of the beholder becomes slimy; that area is difficult terrain until initiative count 20 on the next round.</p>",
+        "entries": [
+          "A 50-foot-square area of ground within 120 feet of the beholder becomes slimy; that area is {@quickref difficult terrain||3} until initiative count 20 on the next round."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -211,10 +315,13 @@
         }
       },
       {
-        "id": "act_lair_action_b0cj",
-        "name": "Lair Action",
+        "id": "act_walls_within_120_qux5",
+        "name": "Walls Within 120",
         "actionType": "lair",
         "descriptionHtml": "<p>Walls within 120 feet of the beholder sprout grasping appendages until initiative count 20 on the round after next. Each creature of the beholder's choice that starts its turn within 10 feet of such a wall must succeed on a DC 15 Dexterity saving throw or be grappled. Escaping requires a successful DC 15 Strength (Athletics) or Dexterity (Acrobatics) check.</p>",
+        "entries": [
+          "Walls within 120 feet of the beholder sprout grasping appendages until initiative count 20 on the round after next. Each creature of the beholder's choice that starts its turn within 10 feet of such a wall must succeed on a {@dc 15} Dexterity saving throw or be {@condition grappled}. Escaping requires a successful {@dc 15} Strength ({@skill Athletics}) or Dexterity ({@skill Acrobatics}) check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -231,10 +338,13 @@
         }
       },
       {
-        "id": "act_lair_action_2j7b",
-        "name": "Lair Action",
+        "id": "act_eye_opens_zla5",
+        "name": "Eye Opens",
         "actionType": "lair",
         "descriptionHtml": "<p>An eye opens on a solid surface within 60 feet of the beholder. One random eye ray of the beholder shoots from that eye at a target of the beholder's choice that it can see. The eye then closes and disappears.</p>",
+        "entries": [
+          "An eye opens on a solid surface within 60 feet of the beholder. One random eye ray of the beholder shoots from that eye at a target of the beholder's choice that it can see. The eye then closes and disappears."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -248,10 +358,13 @@
         }
       },
       {
-        "id": "act_lair_action_gqy8",
-        "name": "Lair Action",
+        "id": "act_beholder_can_t_repeat_7vl6",
+        "name": "Beholder Can't Repeat",
         "actionType": "lair",
         "descriptionHtml": "<p>The beholder can't repeat an effect until they have all been used, and it can't use the same effect two rounds in a row.</p>",
+        "entries": [
+          "The beholder can't repeat an effect until they have all been used, and it can't use the same effect two rounds in a row."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -265,10 +378,136 @@
         }
       }
     ],
+    "lairHeader": "When fighting inside its lair, a beholder can invoke the ambient magic to take lair actions. On initiative count 20 (losing initiative ties), the beholder can take one lair action to cause one of the following effects:",
+    "lairActionsDesc": "When fighting inside its lair, a beholder can invoke the ambient magic to take lair actions. On initiative count 20 (losing initiative ties), the beholder can take one lair action to cause one of the following effects:",
+    "regionalEffects": [
+      {
+        "id": "act_regional_effect_3b08",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Creatures within 1 mile of the beholder's lair sometimes feel as if they're being watched when they aren't.</p>",
+        "entries": [
+          "Creatures within 1 mile of the beholder's lair sometimes feel as if they're being watched when they aren't."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_po5a",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>When the beholder sleeps, minor warps in reality occur within 1 mile of its lair and then vanish 24 hours later. Marks on cave walls might change subtly, an eerie trinket might appear where none existed before, harmless slime might coat a statue, and so on. These effects apply only to natural surfaces and to nonmagical objects that aren't on anyone's person.</p>",
+        "entries": [
+          "When the beholder sleeps, minor warps in reality occur within 1 mile of its lair and then vanish 24 hours later. Marks on cave walls might change subtly, an eerie trinket might appear where none existed before, harmless slime might coat a statue, and so on. These effects apply only to natural surfaces and to nonmagical objects that aren't on anyone's person."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "regionalEffectsHtml": "<p>A region containing a beholder's lair is warped by the creature's unnatural presence, which creates one or more of the following effects:</p><ul><li>Creatures within 1 mile of the beholder's lair sometimes feel as if they're being watched when they aren't.</li><li>When the beholder sleeps, minor warps in reality occur within 1 mile of its lair and then vanish 24 hours later. Marks on cave walls might change subtly, an eerie trinket might appear where none existed before, harmless slime might coat a statue, and so on. These effects apply only to natural surfaces and to nonmagical objects that aren't on anyone's person.</li></ul><p>If the beholder dies, these effects fade over the course of 1d10 days.</p>",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Variant Abilities",
+        "descriptionHtml": "<p>When a beholder's dream-imagination runs wild, the result can be an offspring that has an unusual or unique set of abilities. Rather than the standard powers of a beholder's central eye and eyestalks, the creature has one or more variant abilities—guaranteed to surprise any enemies who thought they knew what they were getting themselves into.</p><p>This section provides several alternative spell effects for a beholder's eye. Each of these effects is designed to be of the same power level as the one it replaces, enabling you to create a custom beholder without altering the monster's challenge rating. As another option, you can switch any of the damaging eye rays in the Monster Manual to an effect with a different damage type, such as replacing the enervation ray with a combustion ray that deals fire damage instead of necrotic damage.</p><p>Unless otherwise indicated, an alternative ability has the same range as the eye ray it is replacing, and it affects only one creature per use (even if the ability is based on a spell that normally affects an area or multiple targets). The saving throw for an alternative ability uses the same DC and the same ability score as the spell the eye ray is based on.</p><ul><li><strong><em>Antimagic Cone:.</em></strong> <p>mirage arcane, power word stun (affecting the weakest non-stunned target in the cone each round)</p></li><li><strong><em>Charm Ray:.</em></strong> <p>banishment (1 minute), confusion (1 minute)</p></li><li><strong><em>Death Ray:.</em></strong> <p>circle of death (10-foot-radius sphere; 4d6 necrotic damage to all creatures in the area), feeblemind</p></li><li><strong><em>Disintegration Ray:.</em></strong> <p>chain lightning (primary target takes 6d8 lightning damage; two secondary targets within 30 feet of the primary target take 3d8 lightning damage each), eyebite (sickened effect; 1 minute)</p></li><li><strong><em>Enervation Ray:.</em></strong> <p>create undead (usable regardless of the time of day), polymorph (1 minute)</p></li><li><strong><em>Fear Ray:.</em></strong> <p>gaseous form (self or willing creature only), moonbeam</p></li><li><strong><em>Paralyzing Ray:.</em></strong> <p>modify memory, silence (1 minute)</p></li><li><strong><em>Petrification Ray:.</em></strong> <p>Otto's irresistible dance (1 minute), wall of ice (1 minute; one 10-foot-square panel)</p></li><li><strong><em>Sleep Ray:.</em></strong> <p>blindness/deafness, misty step (self or willing creature only)</p></li><li><strong><em>Slowing Ray:.</em></strong> <p>bestow curse (1 minute), sleet storm (one 10-foot-cube)</p></li><li><strong><em>Telekinesis Ray:.</em></strong> <p>geas (1 hour), wall of force (1 minute; one 10-foot-square panel)</p></li></ul>",
+        "entries": [
+          "When a beholder's dream-imagination runs wild, the result can be an offspring that has an unusual or unique set of abilities. Rather than the standard powers of a beholder's central eye and eyestalks, the creature has one or more variant abilities—guaranteed to surprise any enemies who thought they knew what they were getting themselves into.",
+          "This section provides several alternative spell effects for a beholder's eye. Each of these effects is designed to be of the same power level as the one it replaces, enabling you to create a custom beholder without altering the monster's challenge rating. As another option, you can switch any of the damaging eye rays in the {@book Monster Manual|MM} to an effect with a different damage type, such as replacing the enervation ray with a combustion ray that deals fire damage instead of necrotic damage.",
+          "Unless otherwise indicated, an alternative ability has the same range as the eye ray it is replacing, and it affects only one creature per use (even if the ability is based on a spell that normally affects an area or multiple targets). The saving throw for an alternative ability uses the same DC and the same ability score as the spell the eye ray is based on.",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Antimagic Cone:",
+                "entry": "{@spell mirage arcane}, {@spell power word stun} (affecting the weakest non-{@condition stunned} target in the cone each round)"
+              },
+              {
+                "type": "item",
+                "name": "Charm Ray:",
+                "entry": "{@spell banishment} (1 minute), {@spell confusion} (1 minute)"
+              },
+              {
+                "type": "item",
+                "name": "Death Ray:",
+                "entry": "{@spell circle of death} (10-foot-radius sphere; 4d6 necrotic damage to all creatures in the area), {@spell feeblemind}"
+              },
+              {
+                "type": "item",
+                "name": "Disintegration Ray:",
+                "entry": "{@spell chain lightning} (primary target takes 6d8 lightning damage; two secondary targets within 30 feet of the primary target take 3d8 lightning damage each), {@spell eyebite} (sickened effect; 1 minute)"
+              },
+              {
+                "type": "item",
+                "name": "Enervation Ray:",
+                "entry": "{@spell create undead} (usable regardless of the time of day), {@spell polymorph} (1 minute)"
+              },
+              {
+                "type": "item",
+                "name": "Fear Ray:",
+                "entry": "{@spell gaseous form} (self or willing creature only), {@spell moonbeam}"
+              },
+              {
+                "type": "item",
+                "name": "Paralyzing Ray:",
+                "entry": "{@spell modify memory}, {@spell silence} (1 minute)"
+              },
+              {
+                "type": "item",
+                "name": "Petrification Ray:",
+                "entry": "{@spell Otto's irresistible dance} (1 minute), {@spell wall of ice} (1 minute; one 10-foot-square panel)"
+              },
+              {
+                "type": "item",
+                "name": "Sleep Ray:",
+                "entry": "{@spell blindness/deafness}, {@spell misty step} (self or willing creature only)"
+              },
+              {
+                "type": "item",
+                "name": "Slowing Ray:",
+                "entry": "{@spell bestow curse} (1 minute), {@spell sleet storm} (one 10-foot-cube)"
+              },
+              {
+                "type": "item",
+                "name": "Telekinesis Ray:",
+                "entry": "{@spell geas} (1 hour), {@spell wall of force} (1 minute; one 10-foot-square panel)"
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-AT/Emo.webp",
     "tokenImg": "img/bestiary/tokens/NRH-AT/Emo.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": {
+      "name": "Beholder",
+      "source": "MM"
+    }
   },
   {
     "id": "creature_maude_nrh-at",
@@ -366,10 +605,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brute_n5sm",
+        "id": "act_brute_awvu",
         "name": "Brute",
         "actionType": "trait",
-        "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when the bugbear hits with it (included in the attack).</p>",
+        "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when Maude hits with it (included in the attack).</p>",
+        "entries": [
+          "A melee weapon deals one extra die of its damage when Maude hits with it (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -383,10 +625,13 @@
         }
       },
       {
-        "id": "act_surprise_attack_cxz4",
+        "id": "act_surprise_attack_glhk",
         "name": "Surprise Attack",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the bugbear surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
+        "descriptionHtml": "<p>If Maude surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
+        "entries": [
+          "If Maude surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 ({@damage 2d6}) damage from the attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -405,10 +650,13 @@
         }
       },
       {
-        "id": "act_heart_of_hruggek_9i0k",
+        "id": "act_heart_of_hruggek_0l8e",
         "name": "Heart of Hruggek",
         "actionType": "trait",
-        "descriptionHtml": "<p>The bugbear has advantage on saving throws against being charmed, frightened, paralyzed, poisoned, stunned, or put to sleep.</p>",
+        "descriptionHtml": "<p>Maude has advantage on saving throws against being charmed, frightened, paralyzed, poisoned, stunned, or put to sleep.</p>",
+        "entries": [
+          "Maude has advantage on saving throws against being {@condition charmed}, {@condition frightened}, {@condition paralyzed}, {@condition poisoned}, {@condition stunned}, or put to sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -424,10 +672,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_r6qs",
+        "id": "act_multiattack_dyad",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The bugbear makes two melee attacks.</p>",
+        "descriptionHtml": "<p>Maude makes two melee attacks.</p>",
+        "entries": [
+          "Maude makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -441,10 +692,13 @@
         }
       },
       {
-        "id": "act_morningstar_7onb",
+        "id": "act_morningstar_1xel",
         "name": "Morningstar",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}11 (2d8 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 11 (2d8 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d8 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -463,10 +717,13 @@
         }
       },
       {
-        "id": "act_javelin_tric",
+        "id": "act_javelin_qors",
         "name": "Javelin",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}9 (2d6 + 3) piercing damage in melee or 5 (1d6 + 3) piercing damage at range.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 9 (2d6 + 3) piercing damage in melee or 5 (1d6 + 3) piercing damage at range.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 5} to hit, reach 5 ft. or range 30/120 ft., one target. {@h}9 ({@damage 2d6 + 3}) piercing damage in melee or 5 ({@damage 1d6 + 3}) piercing damage at range."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -496,11 +753,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-AT/Maude.webp",
     "tokenImg": "img/bestiary/tokens/NRH-AT/Maude.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_mr__greystone_nrh-at",
@@ -604,10 +873,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brave_lf3f",
+        "id": "act_brave_gle2",
         "name": "Brave",
         "actionType": "trait",
         "descriptionHtml": "<p>Mr. Greystone has advantage on saving throws against being frightened.</p>",
+        "entries": [
+          "Mr. Greystone has advantage on saving throws against being {@condition frightened}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -621,10 +893,13 @@
         }
       },
       {
-        "id": "act_brute_rnmt",
+        "id": "act_brute_ovhr",
         "name": "Brute",
         "actionType": "trait",
         "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when Mr. Greystone hits with it (included in the attack).</p>",
+        "entries": [
+          "A melee weapon deals one extra die of its damage when Mr. Greystone hits with it (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -640,10 +915,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jat6",
+        "id": "act_multiattack_kxbo",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Mr. Greystone makes two melee attacks or two ranged attacks.</p>",
+        "entries": [
+          "Mr. Greystone makes two melee attacks or two ranged attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -657,10 +935,13 @@
         }
       },
       {
-        "id": "act_club_xjmf",
+        "id": "act_club_gzw8",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -679,10 +960,13 @@
         }
       },
       {
-        "id": "act_hand_crossbow_9tx2",
+        "id": "act_hand_crossbow_m50n",
         "name": "Hand Crossbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +5 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 5} to hit, range 30/120 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -708,10 +992,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-AT/Mr. Greystone.webp",
     "tokenImg": "img/bestiary/tokens/NRH-AT/Mr. Greystone.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

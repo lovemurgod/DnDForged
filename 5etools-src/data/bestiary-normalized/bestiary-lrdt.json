@@ -96,7 +96,7 @@
       {
         "id": "sc_alax_jadescales_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 3,
@@ -169,7 +169,9 @@
                 {
                   "formula": "2d8",
                   "type": "Healing",
-                  "stat": "spell"
+                  "stat": "spell",
+                  "upcastBonus": "2d8",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -233,10 +235,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_x0sj",
+        "id": "act_multiattack_jwnf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Alax makes two Fire Strike attacks.</p>",
+        "entries": [
+          "Alax makes two Fire Strike attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -250,10 +255,13 @@
         }
       },
       {
-        "id": "act_fire_strike_npr9",
+        "id": "act_fire_strike_lbf6",
         "name": "Fire Strike",
         "actionType": "action",
-        "descriptionHtml": "<p>ms,rs +5 to hit, reach 5 ft. or range 60 ft., one target. {@h}10 (2d6 + 3) fire damage.</p>",
+        "descriptionHtml": "<p>Attack: +5 to hit, reach 5 ft. or range 60 ft., one target. Hit: 10 (2d6 + 3) fire damage.</p>",
+        "entries": [
+          "{@atk ms,rs} {@hit 5} to hit, reach 5 ft. or range 60 ft., one target. {@h}10 ({@damage 2d6 + 3}) fire damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -272,10 +280,13 @@
         }
       },
       {
-        "id": "act_breath_weapon__recharges_after_a_short_or_long_rest__b1y9",
+        "id": "act_breath_weapon__recharges_after_a_short_or_long_rest__5tcd",
         "name": "Breath Weapon (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Alax exhales a 15-foot cone of fire. Each creature in that area must make a DC 12 Dexterity saving throw, taking 14 (4d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Alax exhales a 15-foot cone of fire. Each creature in that area must make a {@dc 12} Dexterity saving throw, taking 14 ({@damage 4d6}) fire damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -304,11 +315,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LRDT/Alax Jadescales.webp",
     "tokenImg": "img/bestiary/tokens/LRDT/Alax Jadescales.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_ervan_soulfallen_lrdt",
@@ -409,7 +432,7 @@
       {
         "id": "sc_ervan_soulfallen_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 3,
@@ -483,7 +506,9 @@
                   "formula": "4d6",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -571,10 +596,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_0o6h",
+        "id": "act_multiattack_oqhy",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ervan uses his staff to make three Arcane Blast attacks.</p>",
+        "entries": [
+          "Ervan uses his staff to make three Arcane Blast attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -588,10 +616,13 @@
         }
       },
       {
-        "id": "act_arcane_blast_c71f",
+        "id": "act_arcane_blast_wpop",
         "name": "Arcane Blast",
         "actionType": "action",
-        "descriptionHtml": "<p>ms,rs +6 to hit, reach 5 ft. or range 120 ft., one target. {@h}13 (3d6 + 3) force damage.</p>",
+        "descriptionHtml": "<p>Attack: +6 to hit, reach 5 ft. or range 120 ft., one target. Hit: 13 (3d6 + 3) force damage.</p>",
+        "entries": [
+          "{@atk ms,rs} {@hit 6} to hit, reach 5 ft. or range 120 ft., one target. {@h}13 ({@damage 3d6 + 3}) force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -610,10 +641,13 @@
         }
       },
       {
-        "id": "act_acid_rain__recharges_after_a_short_or_long_rest__1bk3",
+        "id": "act_acid_rain__recharges_after_a_short_or_long_rest__iqb8",
         "name": "Acid Rain (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Acid falls in a 10-foot-radius, 20-foot-high cylinder centered on a point Ervan can see within 120 feet of himself. Each creature in that area must make a DC 14 Dexterity saving throw, taking 22 (4d10) acid damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Acid falls in a 10-foot-radius, 20-foot-high cylinder centered on a point Ervan can see within 120 feet of himself. Each creature in that area must make a {@dc 14} Dexterity saving throw, taking 22 ({@damage 4d10}) acid damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -642,10 +676,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LRDT/Ervan Soulfallen.webp",
     "tokenImg": "img/bestiary/tokens/LRDT/Ervan Soulfallen.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

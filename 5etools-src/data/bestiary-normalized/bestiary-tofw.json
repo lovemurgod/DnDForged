@@ -103,14 +103,14 @@
       {
         "id": "sc_aza_dowling_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 3,
         "casterLevel": 1,
         "dc": 13,
         "atkMod": 5,
-        "header": "The muse casts one of the following spells, using Charisma as the spellcasting ability (spell save DC 13):",
+        "header": "Aza casts one of the following spells, using Charisma as the spellcasting ability (spell save DC 13):",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -191,10 +191,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_atbi",
+        "id": "act_multiattack_0syj",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The muse makes two Beguiling Resonance attacks.</p>",
+        "descriptionHtml": "<p>Aza makes two Beguiling Resonance attacks.</p>",
+        "entries": [
+          "Aza makes two Beguiling Resonance attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -208,10 +211,13 @@
         }
       },
       {
-        "id": "act_beguiling_resonance_j2sp",
+        "id": "act_beguiling_resonance_atvb",
         "name": "Beguiling Resonance",
         "actionType": "action",
-        "descriptionHtml": "<p>ms,rs +5 to hit, reach 5 ft. or range 90 ft., one target. {@h}9 (2d8) psychic damage. If the target is a creature, it must succeed on a DC 13 Charisma saving throw or have disadvantage on the next attack roll it makes until the end of its next turn.</p>",
+        "descriptionHtml": "<p>Attack: +5 to hit, reach 5 ft. or range 90 ft., one target. Hit: 9 (2d8) psychic damage. If the target is a creature, it must succeed on a DC 13 Charisma saving throw or have disadvantage on the next attack roll it makes until the end of its next turn.</p>",
+        "entries": [
+          "{@atk ms,rs} {@hit 5} to hit, reach 5 ft. or range 90 ft., one target. {@h}9 ({@damage 2d8}) psychic damage. If the target is a creature, it must succeed on a {@dc 13} Charisma saving throw or have disadvantage on the next attack roll it makes until the end of its next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -235,10 +241,14 @@
     ],
     "bonusActions": [
       {
-        "id": "act_enchanting_presence_xlr0",
+        "id": "act_enchanting_presence_o6cg",
         "name": "Enchanting Presence",
         "actionType": "bonus",
-        "descriptionHtml": "<p>Each creature within 30 feet of the muse must make a DC 13 Wisdom saving throw. On a failed save, the creature has the charmed condition for 1 minute. On a successful save, the creature becomes immune to any muse's Enchanting Presence for 24 hours.</p><p>Whenever the muse deals damage to the charmed creature, the charmed creature can repeat the saving throw, ending the effect on itself on a success.</p>",
+        "descriptionHtml": "<p>Each creature within 30 feet of Aza must make a DC 13 Wisdom saving throw. On a failed save, the creature has the charmed condition for 1 minute. On a successful save, the creature becomes immune to any muse's Enchanting Presence for 24 hours.</p><p>Whenever Aza deals damage to the charmed creature, the charmed creature can repeat the saving throw, ending the effect on itself on a success.</p>",
+        "entries": [
+          "Each creature within 30 feet of Aza must make a {@dc 13} Wisdom saving throw. On a failed save, the creature has the {@condition charmed} condition for 1 minute. On a successful save, the creature becomes immune to any muse's Enchanting Presence for 24 hours.",
+          "Whenever Aza deals damage to the {@condition charmed} creature, the {@condition charmed} creature can repeat the saving throw, ending the effect on itself on a success."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -261,11 +271,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Aza Dowling.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Aza Dowling.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_ebonclaw_tofw",
@@ -358,10 +380,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_jwe9",
+        "id": "act_keen_smell_xci0",
         "name": "Keen Smell",
         "actionType": "trait",
-        "descriptionHtml": "<p>The tiger has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "descriptionHtml": "<p>Ebonclaw has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "entries": [
+          "Ebonclaw has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -375,10 +400,13 @@
         }
       },
       {
-        "id": "act_pounce_r0c7",
+        "id": "act_pounce_hw2b",
         "name": "Pounce",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the tiger moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the tiger can make one bite attack against it as a bonus action.</p>",
+        "descriptionHtml": "<p>If Ebonclaw moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the tiger can make one bite attack against it as a bonus action.</p>",
+        "entries": [
+          "If Ebonclaw moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a {@dc 14} Strength saving throw or be knocked {@condition prone}. If the target is {@condition prone}, the tiger can make one bite attack against it as a bonus action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -397,10 +425,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_55u3",
+        "id": "act_bite_vael",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}10 (1d10 + 5) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 10 (1d10 + 5) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}10 ({@damage 1d10 + 5}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -419,10 +450,13 @@
         }
       },
       {
-        "id": "act_claw_5kd0",
+        "id": "act_claw_qou9",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}12 (2d6 + 5) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}12 ({@damage 2d6 + 5}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -448,11 +482,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Ebonclaw.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Ebonclaw.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_eyestalk_of_gzemnid_tofw",
@@ -545,10 +591,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_tunneler_q5xn",
+        "id": "act_tunneler_od1v",
         "name": "Tunneler",
         "actionType": "trait",
-        "descriptionHtml": "<p>The worm can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
+        "descriptionHtml": "<p>The eyestalk can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
+        "entries": [
+          "The eyestalk can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -564,10 +613,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6lc1",
+        "id": "act_multiattack_6b6u",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The worm makes two attacks: one with its bite and one with its stinger.</p>",
+        "descriptionHtml": "<p>The eyestalk attacks with its bite and uses Eradication Gaze.</p>",
+        "entries": [
+          "The eyestalk attacks with its bite and uses Eradication Gaze."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -581,10 +633,14 @@
         }
       },
       {
-        "id": "act_bite_884l",
+        "id": "act_bite_0i54",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +14 to hit, reach 10 ft., one target. {@h}22 (3d8 + 9) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 19 Dexterity saving throw or be swallowed by the worm. A swallowed creature is blinded and restrained, it has Cover against attacks and other effects outside the worm, and it takes 21 (6d6) acid damage at the start of each of the worm's turns.</p><p>If the worm takes 30 damage or more on a single turn from a creature inside it, the worm must succeed on a DC 21 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of the worm. If the worm dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 10 ft., one target. Hit: 22 (3d8 + 9) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 19 Dexterity saving throw or be swallowed by the eyestalk. A swallowed creature is blinded and restrained, it has Cover against attacks and other effects outside the eyestalk, and it takes 21 (6d6) acid damage at the start of each of the eyestalk's turns.</p><p>If the eyestalk takes 30 damage or more on a single turn from a creature inside it, the eyestalk must succeed on a DC 21 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of the eyestalk. If the eyestalk dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
+        "entries": [
+          "{@atk mw} {@hit 14} to hit, reach 10 ft., one target. {@h}22 ({@damage 3d8 + 9}) piercing damage. If the target is a Large or smaller creature, it must succeed on a {@dc 19} Dexterity saving throw or be swallowed by the eyestalk. A swallowed creature is {@condition blinded} and {@condition restrained}, it has {@quickref Cover||3||total cover} against attacks and other effects outside the eyestalk, and it takes 21 ({@damage 6d6}) acid damage at the start of each of the eyestalk's turns.",
+          "If the eyestalk takes 30 damage or more on a single turn from a creature inside it, the eyestalk must succeed on a {@dc 21} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall {@condition prone} in a space within 10 feet of the eyestalk. If the eyestalk dies, a swallowed creature is no longer {@condition restrained} by it and can escape from the corpse by using 20 feet of movement, exiting {@condition prone}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -610,32 +666,31 @@
         }
       },
       {
-        "id": "act_tail_stinger_np43",
-        "name": "Tail Stinger",
+        "id": "act_eradication_gaze__recharge_5__o8av",
+        "name": "Eradication Gaze (Recharge 5)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +14 to hit, reach 10 ft., one creature. {@h}19 (3d6 + 9) piercing damage, and the target must make a DC 19 Constitution saving throw, taking 42 (12d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
+        "descriptionHtml": "<p>The eyestalk creates an area of magical devastation in a 150-foot cone. Any creature in that area must succeed on a DC 16 Dexterity saving throw or take 55 (10d10) necrotic damage. If this damage reduces a creature to 0 hit points, its body becomes a pile of fine violet dust.</p>",
+        "entries": [
+          "The eyestalk creates an area of magical devastation in a 150-foot cone. Any creature in that area must succeed on a {@dc 16} Dexterity saving throw or take 55 ({@damage 10d10}) necrotic damage. If this damage reduces a creature to 0 hit points, its body becomes a pile of fine violet dust."
+        ],
         "macro": {
-          "isAttack": true,
+          "isAttack": false,
           "attackType": null,
-          "attackBonus": 14,
-          "reach": 10,
+          "attackBonus": null,
+          "reach": null,
           "range": null,
-          "targets": "one creature",
+          "targets": null,
           "save": {
-            "dc": 19,
-            "ability": "CON"
+            "dc": 16,
+            "ability": "DEX"
           },
           "damages": [
             {
-              "formula": "3d6 + 9",
-              "type": "Piercing"
-            },
-            {
-              "formula": "12d6",
-              "type": "Poison"
+              "formula": "10d10",
+              "type": "Necrotic"
             }
           ],
-          "recharge": null
+          "recharge": "5"
         }
       }
     ],
@@ -646,11 +701,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Eyestalk of Gzemnid.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Eyestalk of Gzemnid.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_farrow_tofw",
@@ -755,10 +822,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cunning_action_xomj",
+        "id": "act_cunning_action_pi88",
         "name": "Cunning Action",
         "actionType": "trait",
-        "descriptionHtml": "<p>On each of its turns, the spy can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
+        "descriptionHtml": "<p>On each of its turns, Farrow can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
+        "entries": [
+          "On each of its turns, Farrow can use a bonus action to take the {@action Dash}, {@action Disengage}, or {@action Hide} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -772,10 +842,13 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__65tw",
+        "id": "act_sneak_attack__1_turn__rmpa",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
-        "descriptionHtml": "<p>The spy deals an extra 7 (2d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't incapacitated and the spy doesn't have disadvantage on the attack roll.</p>",
+        "descriptionHtml": "<p>Farrow deals an extra 7 (2d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't incapacitated and the spy doesn't have disadvantage on the attack roll.</p>",
+        "entries": [
+          "Farrow deals an extra 7 ({@damage 2d6}) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't {@condition incapacitated} and the spy doesn't have disadvantage on the attack roll."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -796,10 +869,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_a62m",
+        "id": "act_multiattack_5kb9",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The spy makes two melee attacks.</p>",
+        "descriptionHtml": "<p>Farrow makes two melee attacks.</p>",
+        "entries": [
+          "Farrow makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -813,10 +889,13 @@
         }
       },
       {
-        "id": "act_shortsword_bj8v",
+        "id": "act_shortsword_frla",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -835,10 +914,13 @@
         }
       },
       {
-        "id": "act_hand_crossbow_dnm0",
+        "id": "act_hand_crossbow_tfuc",
         "name": "Hand Crossbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 30/120 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -864,11 +946,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Farrow.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Farrow.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_gertrube_tofw",
@@ -961,10 +1055,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_dac4",
+        "id": "act_pack_tactics_qq2u",
         "name": "Pack Tactics",
         "actionType": "trait",
-        "descriptionHtml": "<p>The thug has advantage on an attack roll against a creature if at least one of the thug's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "descriptionHtml": "<p>Gertrube has advantage on an attack roll against a creature if at least one of the thug's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "Gertrube has advantage on an attack roll against a creature if at least one of the thug's allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -980,10 +1077,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_iupi",
+        "id": "act_multiattack_np0r",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The thug makes two melee attacks.</p>",
+        "descriptionHtml": "<p>Gertrube makes two melee attacks.</p>",
+        "entries": [
+          "Gertrube makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -997,10 +1097,13 @@
         }
       },
       {
-        "id": "act_mace_pzo8",
+        "id": "act_mace_irrk",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature. {@h}5 (1d6 + 2) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6 + 2) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one creature. {@h}5 ({@damage 1d6 + 2}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1019,10 +1122,13 @@
         }
       },
       {
-        "id": "act_heavy_crossbow_nh91",
+        "id": "act_heavy_crossbow_detn",
         "name": "Heavy Crossbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +2 to hit, range 100/400 ft., one target. {@h}5 (1d10) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +2 to hit, range 100/400 ft., one target. Hit: 5 (1d10) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 2} to hit, range 100/400 ft., one target. {@h}5 ({@damage 1d10}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1048,11 +1154,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Gertrube.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Gertrube.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_giant_whirlwyrm_tofw",
@@ -1150,10 +1268,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_hktj",
+        "id": "act_multiattack_m4xk",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The behir makes two attacks: one with its bite and one to constrict.</p>",
+        "descriptionHtml": "<p>The whirlwyrm makes two attacks: one with its bite and one to constrict.</p>",
+        "entries": [
+          "The whirlwyrm makes two attacks: one with its bite and one to constrict."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1167,10 +1288,13 @@
         }
       },
       {
-        "id": "act_bite_uwrd",
+        "id": "act_bite_vdbn",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}22 (3d10 + 6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 22 (3d10 + 6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 10} to hit, reach 10 ft., one target. {@h}22 ({@damage 3d10 + 6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1189,10 +1313,13 @@
         }
       },
       {
-        "id": "act_constrict_5ihv",
+        "id": "act_constrict_eiil",
         "name": "Constrict",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one Large or smaller creature. {@h}17 (2d10 + 6) bludgeoning damage plus 17 (2d10 + 6) slashing damage. The target is grappled (escape DC 16) if the behir isn't already constricting a creature, and the target is restrained until this grapple ends.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one Large or smaller creature. Hit: 17 (2d10 + 6) bludgeoning damage plus 17 (2d10 + 6) slashing damage. The target is grappled (escape DC 16) if the whirlwyrm isn't already constricting a creature, and the target is restrained until this grapple ends.</p>",
+        "entries": [
+          "{@atk mw} {@hit 10} to hit, reach 5 ft., one Large or smaller creature. {@h}17 ({@damage 2d10 + 6}) bludgeoning damage plus 17 ({@damage 2d10 + 6}) slashing damage. The target is {@condition grappled} (escape {@dc 16}) if the whirlwyrm isn't already constricting a creature, and the target is {@condition restrained} until this grapple ends."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1202,7 +1329,7 @@
           "targets": "one Large or smaller creature",
           "save": {
             "dc": 16,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -1218,10 +1345,13 @@
         }
       },
       {
-        "id": "act_lightning_breath__recharge_5__hnpk",
-        "name": "Lightning Breath (Recharge 5)",
+        "id": "act_thunder_breath__recharge_5__q9b2",
+        "name": "Thunder Breath (Recharge 5)",
         "actionType": "action",
-        "descriptionHtml": "<p>The behir exhales a line of lightning that is 20 feet long and 5 feet wide. Each creature in that line must make a DC 16 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "descriptionHtml": "<p>The whirlwyrm exhales a line of thunder that is 20 feet long and 5 feet wide. Each creature in that line must make a DC 16 Dexterity saving throw, taking 66 (12d10) thunder damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The whirlwyrm exhales a line of thunder that is 20 feet long and 5 feet wide. Each creature in that line must make a {@dc 16} Dexterity saving throw, taking 66 ({@damage 12d10}) thunder damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1236,17 +1366,21 @@
           "damages": [
             {
               "formula": "12d10",
-              "type": "Lightning"
+              "type": "Thunder"
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_swallow_egid",
+        "id": "act_swallow_5d80",
         "name": "Swallow",
         "actionType": "action",
-        "descriptionHtml": "<p>The behir makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is blinded and restrained, it has Cover against attacks and other effects outside the behir, and it takes 21 (6d6) acid damage at the start of each of the behir's turns. A behir can have only one creature swallowed at a time.</p><p>If the behir takes 30 damage or more on a single turn from the swallowed creature, the behir must succeed on a DC 14 Constitution saving throw at the end of that turn or regurgitate the creature, which falls prone in a space within 10 feet of the behir. If the behir dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 15 feet of movement, exiting prone.</p>",
+        "descriptionHtml": "<p>The whirlwyrm makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is blinded and restrained, it has Cover against attacks and other effects outside the whirlwyrm, and it takes 21 (6d6) acid damage at the start of each of the whirlwyrm's turns. A whirlwyrm can have only one creature swallowed at a time.</p><p>If the whirlwyrm takes 30 damage or more on a single turn from the swallowed creature, the whirlwyrm must succeed on a DC 14 Constitution saving throw at the end of that turn or regurgitate the creature, which falls prone in a space within 10 feet of the whirlwyrm. If the whirlwyrm dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 15 feet of movement, exiting prone.</p>",
+        "entries": [
+          "The whirlwyrm makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is {@condition blinded} and {@condition restrained}, it has {@quickref Cover||3||total cover} against attacks and other effects outside the whirlwyrm, and it takes 21 ({@damage 6d6}) acid damage at the start of each of the whirlwyrm's turns. A whirlwyrm can have only one creature swallowed at a time.",
+          "If the whirlwyrm takes 30 damage or more on a single turn from the swallowed creature, the whirlwyrm must succeed on a {@dc 14} Constitution saving throw at the end of that turn or regurgitate the creature, which falls {@condition prone} in a space within 10 feet of the whirlwyrm. If the whirlwyrm dies, a swallowed creature is no longer {@condition restrained} by it and can escape from the corpse by using 15 feet of movement, exiting {@condition prone}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1275,11 +1409,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Giant Whirlwyrm.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Giant Whirlwyrm.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_josbert_plum_tofw",
@@ -1372,10 +1518,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_pmeo",
+        "id": "act_pack_tactics_gzqi",
         "name": "Pack Tactics",
         "actionType": "trait",
-        "descriptionHtml": "<p>The peacekeeper has advantage on an attack roll against a creature if at least one of the peacekeeper's allies is within 5 feet of the creature and the ally doesn't have the incapacitated condition.</p>",
+        "descriptionHtml": "<p>Josbert has advantage on an attack roll against a creature if at least one of the peacekeeper's allies is within 5 feet of the creature and the ally doesn't have the incapacitated condition.</p>",
+        "entries": [
+          "Josbert has advantage on an attack roll against a creature if at least one of the peacekeeper's allies is within 5 feet of the creature and the ally doesn't have the {@condition incapacitated} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1391,10 +1540,13 @@
     ],
     "actions": [
       {
-        "id": "act_electrified_mancatcher_x1u2",
+        "id": "act_electrified_mancatcher_5xsj",
         "name": "Electrified Mancatcher",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 10 ft., one target. {@h}8 (1d10 + 3) piercing damage plus 4 (1d8) lightning damage. If the target is a Large or smaller creature, it has the grappled condition (escape DC 13). Until the grappled condition ends, the target has the restrained condition and can't teleport, the peacekeeper can't make Electrified Mancatcher attacks, and the target takes 8 (1d10 + 3) lightning damage at the start of each of its turns.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 8 (1d10 + 3) piercing damage plus 4 (1d8) lightning damage. If the target is a Large or smaller creature, it has the grappled condition (escape DC 13). Until the grappled condition ends, the target has the restrained condition and can't teleport, Josbert can't make Electrified Mancatcher attacks, and the target takes 8 (1d10 + 3) lightning damage at the start of each of its turns.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 10 ft., one target. {@h}8 ({@damage 1d10 + 3}) piercing damage plus 4 ({@damage 1d8}) lightning damage. If the target is a Large or smaller creature, it has the {@condition grappled} condition (escape {@dc 13}). Until the {@condition grappled} condition ends, the target has the {@condition restrained} condition and can't teleport, Josbert can't make Electrified Mancatcher attacks, and the target takes 8 ({@damage 1d10 + 3}) lightning damage at the start of each of its turns."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1404,7 +1556,7 @@
           "targets": "one target",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -1431,11 +1583,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Josbert Plum.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Josbert Plum.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_kal_the_crisp_tofw",
@@ -1533,10 +1697,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_md2p",
+        "id": "act_multiattack_32tk",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The fire starter makes two Havoc Hammer or Havoc Flask attacks.</p>",
+        "descriptionHtml": "<p>Kal makes two Havoc Hammer or Havoc Flask attacks.</p>",
+        "entries": [
+          "Kal makes two Havoc Hammer or Havoc Flask attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1550,10 +1717,13 @@
         }
       },
       {
-        "id": "act_havoc_hammer_td5c",
+        "id": "act_havoc_hammer_fu1h",
         "name": "Havoc Hammer",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage plus 9 (2d8) fire damage. If the target is a creature, magical flames cling to it, causing it to take 3 (1d6) fire damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a DC 13 Dexterity saving throw, ending the effect on itself on a successful save.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage plus 9 (2d8) fire damage. If the target is a creature, magical flames cling to it, causing it to take 3 (1d6) fire damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a DC 13 Dexterity saving throw, ending the effect on itself on a successful save.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) bludgeoning damage plus 9 ({@damage 2d8}) fire damage. If the target is a creature, magical flames cling to it, causing it to take 3 ({@damage 1d6}) fire damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a {@dc 13} Dexterity saving throw, ending the effect on itself on a successful save."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1583,10 +1753,14 @@
         }
       },
       {
-        "id": "act_havoc_flask_3cxq",
+        "id": "act_havoc_flask_9d79",
         "name": "Havoc Flask",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range 30/90 ft., one target. {@h}13 (2d12) fire damage. If the target is a creature, magical flames cling to it, causing it to take 3 (1d6) fire damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a DC 13 Dexterity saving throw, ending the effect on itself on a successful save.</p><p>After the fire starter throws the flask, roll a d6; on a 3 or lower, the fire starter has no more flasks to throw.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/90 ft., one target. Hit: 13 (2d12) fire damage. If the target is a creature, magical flames cling to it, causing it to take 3 (1d6) fire damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a DC 13 Dexterity saving throw, ending the effect on itself on a successful save.</p><p>After Kal throws the flask, roll a d6; on a 3 or lower, the fire starter has no more flasks to throw.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 30/90 ft., one target. {@h}13 ({@damage 2d12}) fire damage. If the target is a creature, magical flames cling to it, causing it to take 3 ({@damage 1d6}) fire damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a {@dc 13} Dexterity saving throw, ending the effect on itself on a successful save.",
+          "After Kal throws the flask, roll a {@dice d6}; on a 3 or lower, the fire starter has no more flasks to throw."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1619,11 +1793,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Kal the Crisp.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Kal the Crisp.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_kopoha_tofw",
@@ -1739,14 +1925,14 @@
       {
         "id": "sc_kopoha_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 8,
         "casterLevel": 0,
         "dc": 23,
         "atkMod": 15,
-        "header": "The empyrean's innate spellcasting ability is Charisma (spell save DC 23, +15 to hit with spell attacks). It can innately cast the following spells, requiring no material components:",
+        "header": "Kopoha's innate spellcasting ability is Charisma (spell save DC 23, +15 to hit with spell attacks). It can innately cast the following spells, requiring no material components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -1897,7 +2083,9 @@
                   "formula": "12d6",
                   "type": "Bludgeoning",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a fractured rock)",
@@ -1926,7 +2114,9 @@
                   "formula": "7d10",
                   "type": "Fire",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -1969,10 +2159,13 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__0pzw",
+        "id": "act_legendary_resistance__3_day__h18r",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the empyrean fails a saving throw, it can choose to succeed instead.</p>",
+        "descriptionHtml": "<p>If Kopoha fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If Kopoha fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1986,10 +2179,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_krpm",
+        "id": "act_magic_resistance_x7rd",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The empyrean has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>Kopoha has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "Kopoha has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2003,10 +2199,13 @@
         }
       },
       {
-        "id": "act_magic_weapons_4i9x",
+        "id": "act_magic_weapons_ij1c",
         "name": "Magic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The empyrean's weapon attacks are magical.</p>",
+        "descriptionHtml": "<p>Kopoha's weapon attacks are magical.</p>",
+        "entries": [
+          "Kopoha's weapon attacks are magical."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2022,35 +2221,13 @@
     ],
     "actions": [
       {
-        "id": "act_maul_p8lx",
-        "name": "Maul",
-        "actionType": "action",
-        "descriptionHtml": "<p>mw +17 to hit, reach 10 ft., one target. {@h}31 (6d6 + 10) bludgeoning damage. If the target is a creature, it must succeed on a DC 15 Constitution saving throw or be stunned until the end of the empyrean's next turn.</p>",
-        "macro": {
-          "isAttack": true,
-          "attackType": null,
-          "attackBonus": 17,
-          "reach": 10,
-          "range": null,
-          "targets": "one target",
-          "save": {
-            "dc": 15,
-            "ability": "CON"
-          },
-          "damages": [
-            {
-              "formula": "6d6 + 10",
-              "type": "Bludgeoning"
-            }
-          ],
-          "recharge": null
-        }
-      },
-      {
-        "id": "act_bolt_4lkb",
+        "id": "act_bolt_81cn",
         "name": "Bolt",
         "actionType": "action",
-        "descriptionHtml": "<p>rs +15 to hit, range 600 ft., one target. {@h}24 (7d6) damage of one of the following types (empyrean's choice): acid, cold, fire, force, lightning, radiant, or thunder.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: +15 to hit, range 600 ft., one target. Hit: 24 (7d6) damage of one of the following types (empyrean's choice): acid, cold, fire, force, lightning, radiant, or thunder.</p>",
+        "entries": [
+          "{@atk rs} {@hit 15} to hit, range 600 ft., one target. {@h}24 ({@damage 7d6}) damage of one of the following types (empyrean's choice): acid, cold, fire, force, lightning, radiant, or thunder."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2076,10 +2253,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_ccb9",
+          "id": "act_attack_hw84",
           "name": "Attack",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The empyrean makes one attack.</p>",
+          "descriptionHtml": "<p>Kopoha makes one attack.</p>",
+          "entries": [
+            "Kopoha makes one attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -2093,10 +2273,13 @@
           }
         },
         {
-          "id": "act_bolster_2qyh",
+          "id": "act_bolster_78md",
           "name": "Bolster",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The empyrean bolsters all nonhostile creatures within 120 feet of it until the end of its next turn. Bolstered creatures can't be charmed or frightened, and they gain advantage on ability checks and saving throws until the end of the empyrean's next turn.</p>",
+          "descriptionHtml": "<p>Kopoha bolsters all nonhostile creatures within 120 feet of it until the end of its next turn. Bolstered creatures can't be charmed or frightened, and they gain advantage on ability checks and saving throws until the end of the empyrean's next turn.</p>",
+          "entries": [
+            "Kopoha bolsters all nonhostile creatures within 120 feet of it until the end of its next turn. Bolstered creatures can't be {@condition charmed} or {@condition frightened}, and they gain advantage on ability checks and saving throws until the end of the empyrean's next turn."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -2110,10 +2293,13 @@
           }
         },
         {
-          "id": "act_trembling_strike__costs_2_actions__4lo2",
+          "id": "act_trembling_strike__costs_2_actions__57jq",
           "name": "Trembling Strike (Costs 2 Actions)",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The empyrean strikes the ground with its maul, triggering an earth tremor. All other creatures on the ground within 60 feet of the empyrean must succeed on a DC 25 Strength saving throw or be knocked prone.</p>",
+          "descriptionHtml": "<p>Kopoha strikes the ground with its maul, triggering an earth tremor. All other creatures on the ground within 60 feet of the empyrean must succeed on a DC 25 Strength saving throw or be knocked prone.</p>",
+          "entries": [
+            "Kopoha strikes the ground with its maul, triggering an earth tremor. All other creatures on the ground within 60 feet of the empyrean must succeed on a {@dc 25} Strength saving throw or be knocked {@condition prone}."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -2131,11 +2317,23 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Kopoha.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Kopoha.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_modron_planar_incarnate_tofw",
@@ -2252,10 +2450,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__lmc6",
+        "id": "act_legendary_resistance__3_day__p3gp",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the incarnate fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the incarnate fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2269,10 +2470,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_iyh9",
+        "id": "act_magic_resistance_ypbz",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnate has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The incarnate has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2286,27 +2490,13 @@
         }
       },
       {
-        "id": "act_planar_form_2aou",
-        "name": "Planar Form",
-        "actionType": "trait",
-        "descriptionHtml": "<p>An incarnate on the Upper Planes is a Celestial. An incarnate on the Lower Planes is a Fiend.</p>",
-        "macro": {
-          "isAttack": false,
-          "attackType": null,
-          "attackBonus": null,
-          "reach": null,
-          "range": null,
-          "targets": null,
-          "save": null,
-          "damages": [],
-          "recharge": null
-        }
-      },
-      {
-        "id": "act_siege_monster_e6d1",
+        "id": "act_siege_monster_s125",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnate deals double damage to objects and structures.</p>",
+        "entries": [
+          "The incarnate deals double damage to objects and structures."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2322,10 +2512,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_d08s",
+        "id": "act_multiattack_dmcl",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnate makes two Slam or Energy Bolt attacks.</p>",
+        "entries": [
+          "The incarnate makes two Slam or Energy Bolt attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2339,10 +2532,13 @@
         }
       },
       {
-        "id": "act_slam_1eqj",
+        "id": "act_slam_cy22",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +15 to hit, reach 15 ft., one target. {@h}27 (3d12 + 8) force damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +15 to hit, reach 15 ft., one target. Hit: 27 (3d12 + 8) force damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 15} to hit, reach 15 ft., one target. {@h}27 ({@damage 3d12 + 8}) force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2361,10 +2557,13 @@
         }
       },
       {
-        "id": "act_energy_bolt_3w3a",
+        "id": "act_energy_bolt_exfu",
         "name": "Energy Bolt",
         "actionType": "action",
-        "descriptionHtml": "<p>rs +12 to hit, range 120 ft., one target. {@h}32 (5d12) necrotic damage if the incarnate is a Fiend or radiant damage if the incarnate is a Celestial.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: +12 to hit, range 120 ft., one target. Hit: 32 (5d12) necrotic damage.</p>",
+        "entries": [
+          "{@atk rs} {@hit 12} to hit, range 120 ft., one target. {@h}32 ({@damage 5d12}) necrotic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2383,10 +2582,13 @@
         }
       },
       {
-        "id": "act_planar_exhalation__recharge_5__pbfp",
+        "id": "act_planar_exhalation__recharge_5__u28u",
         "name": "Planar Exhalation (Recharge 5)",
         "actionType": "action",
-        "descriptionHtml": "<p>The incarnate exhales concentrated energy native to its plane in a 60-foot cone. Each creature in that area must make a DC 23 Constitution saving throw. On a failed save, a creature takes 52 (8d12) necrotic damage if the incarnate is a Fiend or radiant damage if the incarnate is a Celestial, and the creature has the blinded condition until the end of the incarnate's next turn. On a successful save, a creature takes half as much damage only.</p>",
+        "descriptionHtml": "<p>The incarnate exhales concentrated energy native to its plane in a 60-foot cone. Each creature in that area must make a DC 23 Constitution saving throw. On a failed save, a creature takes 52 (8d12) necrotic damage, and the creature has the blinded condition until the end of the incarnate's next turn. On a successful save, a creature takes half as much damage only.</p>",
+        "entries": [
+          "The incarnate exhales concentrated energy native to its plane in a 60-foot cone. Each creature in that area must make a {@dc 23} Constitution saving throw. On a failed save, a creature takes 52 ({@damage 8d12}) necrotic damage, and the creature has the {@condition blinded} condition until the end of the incarnate's next turn. On a successful save, a creature takes half as much damage only."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2411,10 +2613,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_searing_gaze_qaw3",
+        "id": "act_searing_gaze_oj9w",
         "name": "Searing Gaze",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by an attack roll, the incarnate turns its magical gaze toward one creature it can see within 120 feet of itself and commands it to combust. The target must succeed on a DC 20 Wisdom saving throw or take 16 (3d10) fire damage.</p>",
+        "entries": [
+          "In response to being hit by an attack roll, the incarnate turns its magical gaze toward one creature it can see within 120 feet of itself and commands it to combust. The target must succeed on a {@dc 20} Wisdom saving throw or take 16 ({@damage 3d10}) fire damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2436,10 +2641,13 @@
         }
       },
       {
-        "id": "act_teleport_g9if",
+        "id": "act_teleport_snf3",
         "name": "Teleport",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after a creature the incarnate sees ends its turn, the incarnate teleports up to 60 feet to an unoccupied space it can see.</p>",
+        "entries": [
+          "Immediately after a creature the incarnate sees ends its turn, the incarnate teleports up to 60 feet to an unoccupied space it can see."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2458,11 +2666,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Modron Planar Incarnate.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Modron Planar Incarnate.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_morte_tofw",
@@ -2565,10 +2785,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_6ftv",
+        "id": "act_bite_mrgg",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2594,11 +2817,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Morte.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Morte.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_ophelia_tofw",
@@ -2687,10 +2922,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_trampling_charge_lvqu",
+        "id": "act_trampling_charge_qfso",
         "name": "Trampling Charge",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the elephant moves at least 20 feet straight toward a creature and then hits it with a gore attack on the same turn, that target must succeed on a DC 12 Strength saving throw or be knocked prone. If the target is prone, the elephant can make one stomp attack against it as a bonus action.</p>",
+        "descriptionHtml": "<p>If Ophelia moves at least 20 feet straight toward a creature and then hits it with a gore attack on the same turn, that target must succeed on a DC 12 Strength saving throw or be knocked prone. If the target is prone, the elephant can make one stomp attack against it as a bonus action.</p>",
+        "entries": [
+          "If Ophelia moves at least 20 feet straight toward a creature and then hits it with a gore attack on the same turn, that target must succeed on a {@dc 12} Strength saving throw or be knocked {@condition prone}. If the target is {@condition prone}, the elephant can make one stomp attack against it as a bonus action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2709,10 +2947,13 @@
     ],
     "actions": [
       {
-        "id": "act_gore_nex2",
+        "id": "act_gore_6kyf",
         "name": "Gore",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}19 (3d8 + 6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 19 (3d8 + 6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}19 ({@damage 3d8 + 6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2731,10 +2972,13 @@
         }
       },
       {
-        "id": "act_stomp_6zrd",
+        "id": "act_stomp_eaki",
         "name": "Stomp",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one prone creature. {@h}22 (3d10 + 6) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one prone creature. Hit: 22 (3d10 + 6) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one {@condition prone} creature. {@h}22 ({@damage 3d10 + 6}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2760,11 +3004,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Ophelia.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Ophelia.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_parvaz_tofw",
@@ -2857,10 +3113,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_oi3m",
+        "id": "act_keen_sight_4857",
         "name": "Keen Sight",
         "actionType": "trait",
-        "descriptionHtml": "<p>The eagle has advantage on Wisdom (Perception) checks that rely on sight.</p>",
+        "descriptionHtml": "<p>Parvaz has advantage on Wisdom (Perception) checks that rely on sight.</p>",
+        "entries": [
+          "Parvaz has advantage on Wisdom ({@skill Perception}) checks that rely on sight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2876,10 +3135,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kt4s",
+        "id": "act_multiattack_gxll",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The eagle makes two attacks: one with its beak and one with its talons.</p>",
+        "descriptionHtml": "<p>Parvaz makes two attacks: one with its beak and one with its talons.</p>",
+        "entries": [
+          "Parvaz makes two attacks: one with its beak and one with its talons."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2893,10 +3155,13 @@
         }
       },
       {
-        "id": "act_beak_gdej",
+        "id": "act_beak_chr9",
         "name": "Beak",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2915,10 +3180,13 @@
         }
       },
       {
-        "id": "act_talons_89q3",
+        "id": "act_talons_9tce",
         "name": "Talons",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}10 ({@damage 2d6 + 3}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2944,11 +3212,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Parvaz.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Parvaz.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_r04m_tofw",
@@ -3038,10 +3318,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_fs04",
+        "id": "act_axiomatic_mind_y42q",
         "name": "Axiomatic Mind",
         "actionType": "trait",
-        "descriptionHtml": "<p>The monodrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
+        "descriptionHtml": "<p>R04M can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
+        "entries": [
+          "R04M can't be compelled to act in a manner contrary to its nature or its instructions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3055,10 +3338,13 @@
         }
       },
       {
-        "id": "act_disintegration_ythj",
+        "id": "act_disintegration_syso",
         "name": "Disintegration",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the monodrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
+        "descriptionHtml": "<p>If R04M dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
+        "entries": [
+          "If R04M dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3074,10 +3360,13 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_nxyk",
+        "id": "act_dagger_p9al",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3096,10 +3385,13 @@
         }
       },
       {
-        "id": "act_javelin_ivp4",
+        "id": "act_javelin_28xw",
         "name": "Javelin",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +2 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}3 (1d6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +2 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 3 (1d6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 2} to hit, reach 5 ft. or range 30/120 ft., one target. {@h}3 ({@damage 1d6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3125,11 +3417,32 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Rogue Modrons",
+        "descriptionHtml": "<p>A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.</p><p>A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank.</p>",
+        "entries": [
+          "A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.",
+          "A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank."
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/R04M.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/R04M.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_shariel_tofw",
@@ -3247,14 +3560,14 @@
       {
         "id": "sc_shariel_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 5,
         "casterLevel": 0,
         "dc": 17,
         "atkMod": 9,
-        "header": "The deva's spellcasting ability is Charisma (spell save DC 17). The deva can innately cast the following spells, requiring only verbal components:",
+        "header": "Shariel's spellcasting ability is Charisma (spell save DC 17). The deva can innately cast the following spells, requiring only verbal components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -3334,10 +3647,13 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_fe5w",
+        "id": "act_angelic_weapons_54r2",
         "name": "Angelic Weapons",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "descriptionHtml": "<p>Shariel's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "Shariel's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra {@damage 4d8} radiant damage (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3356,10 +3672,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_r920",
+        "id": "act_magic_resistance_h9p2",
         "name": "Magic Resistance",
         "actionType": "trait",
-        "descriptionHtml": "<p>The deva has advantage on saving throws against spells and other magical effects.</p>",
+        "descriptionHtml": "<p>Shariel has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "Shariel has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3375,10 +3694,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uvl9",
+        "id": "act_multiattack_npco",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva makes two melee attacks.</p>",
+        "descriptionHtml": "<p>Shariel makes two melee attacks.</p>",
+        "entries": [
+          "Shariel makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3392,10 +3714,13 @@
         }
       },
       {
-        "id": "act_mace_58bg",
+        "id": "act_mace_1ykl",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) bludgeoning damage plus 18 ({@damage 4d8}) radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3418,10 +3743,13 @@
         }
       },
       {
-        "id": "act_healing_touch__3_day__ekwy",
+        "id": "act_healing_touch__3_day__cgv5",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "descriptionHtml": "<p>Shariel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "Shariel touches another creature. The target magically regains 20 ({@dice 4d8 + 2}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3435,10 +3763,14 @@
         }
       },
       {
-        "id": "act_change_shape_qfqq",
+        "id": "act_change_shape_qhbd",
         "name": "Change Shape",
         "actionType": "action",
-        "descriptionHtml": "<p>The deva magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the deva retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "descriptionHtml": "<p>Shariel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, Shariel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "entries": [
+          "Shariel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).",
+          "In a new form, Shariel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3459,11 +3791,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Shariel.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Shariel.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_vecna_impersonator_tofw",
@@ -3560,10 +3904,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_1rrz",
+        "id": "act_shapechanger_f4k0",
         "name": "Shapechanger",
         "actionType": "trait",
-        "descriptionHtml": "<p>The doppelganger can use its action to polymorph into a Small or Medium humanoid it has seen, or back into its true form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
+        "descriptionHtml": "<p>The impersonator can use its action to polymorph into a Small or Medium humanoid it has seen, or back into its true form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
+        "entries": [
+          "The impersonator can use its action to polymorph into a Small or Medium humanoid it has seen, or back into its true form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3577,10 +3924,13 @@
         }
       },
       {
-        "id": "act_ambusher_yxnz",
+        "id": "act_ambusher_zfxc",
         "name": "Ambusher",
         "actionType": "trait",
-        "descriptionHtml": "<p>In the first round of a combat, the doppelganger has advantage on attack rolls against any creature it surprised.</p>",
+        "descriptionHtml": "<p>In the first round of a combat, the impersonator has advantage on attack rolls against any creature it surprised.</p>",
+        "entries": [
+          "In the first round of a combat, the impersonator has advantage on attack rolls against any creature it {@status surprised}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3594,10 +3944,13 @@
         }
       },
       {
-        "id": "act_surprise_attack_ovvw",
+        "id": "act_surprise_attack_ra7r",
         "name": "Surprise Attack",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the doppelganger surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 10 (3d6) damage from the attack.</p>",
+        "descriptionHtml": "<p>If the impersonator surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 10 (3d6) damage from the attack.</p>",
+        "entries": [
+          "If the impersonator surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 10 ({@damage 3d6}) damage from the attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3618,10 +3971,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bj8p",
+        "id": "act_multiattack_qcs7",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The doppelganger makes two melee attacks.</p>",
+        "descriptionHtml": "<p>The impersonator makes two melee attacks.</p>",
+        "entries": [
+          "The impersonator makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3635,10 +3991,13 @@
         }
       },
       {
-        "id": "act_slam_20l0",
+        "id": "act_slam_p3vs",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3657,10 +4016,13 @@
         }
       },
       {
-        "id": "act_read_thoughts_4nrf",
+        "id": "act_read_thoughts_9kjt",
         "name": "Read Thoughts",
         "actionType": "action",
-        "descriptionHtml": "<p>The doppelganger magically reads the surface thoughts of one creature within 60 feet of it. The effect can penetrate barriers, but 3 feet of wood or dirt, 2 feet of stone, 2 inches of metal, or a thin sheet of lead blocks it. While the target is in range, the doppelganger can continue reading its thoughts, as long as the doppelganger's concentration isn't broken (as if concentration on a spell). While reading the target's mind, the doppelganger has advantage on Wisdom (Insight) and Charisma (Deception, Intimidation, and Persuasion) checks against the target.</p>",
+        "descriptionHtml": "<p>The impersonator magically reads the surface thoughts of one creature within 60 feet of it. The effect can penetrate barriers, but 3 feet of wood or dirt, 2 feet of stone, 2 inches of metal, or a thin sheet of lead blocks it. While the target is in range, the impersonator can continue reading its thoughts, as long as the impersonator's concentration isn't broken (as if concentration on a spell). While reading the target's mind, the impersonator has advantage on Wisdom (Insight) and Charisma (Deception, Intimidation, and Persuasion) checks against the target.</p>",
+        "entries": [
+          "The impersonator magically reads the surface thoughts of one creature within 60 feet of it. The effect can penetrate barriers, but 3 feet of wood or dirt, 2 feet of stone, 2 inches of metal, or a thin sheet of lead blocks it. While the target is in range, the impersonator can continue reading its thoughts, as long as the impersonator's {@status concentration} isn't broken (as if {@status concentration||concentrating} on a spell). While reading the target's mind, the impersonator has advantage on Wisdom ({@skill Insight}) and Charisma ({@skill Deception}, {@skill Intimidation}, and {@skill Persuasion}) checks against the target."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3681,11 +4043,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Vecna Impersonator.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Vecna Impersonator.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_whirlwyrm_tofw",
@@ -3776,10 +4150,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_zzhh",
+        "id": "act_hold_breath_akad",
         "name": "Hold Breath",
         "actionType": "trait",
-        "descriptionHtml": "<p>The crocodile can hold its breath for 30 minutes.</p>",
+        "descriptionHtml": "<p>The whirlwyrm can hold its breath for 30 minutes.</p>",
+        "entries": [
+          "The whirlwyrm can hold its breath for 30 minutes."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3795,10 +4172,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_sars",
+        "id": "act_multiattack_ev00",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The crocodile makes two attacks: one with its bite and one with its tail.</p>",
+        "descriptionHtml": "<p>The whirlwyrm makes two attacks: one with its bite and one with its tail.</p>",
+        "entries": [
+          "The whirlwyrm makes two attacks: one with its bite and one with its tail."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3812,10 +4192,13 @@
         }
       },
       {
-        "id": "act_bite_omum",
+        "id": "act_bite_i4mf",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}21 (3d10 + 5) piercing damage, and the target is grappled (escape DC 16). Until this grapple ends, the target is restrained, and the crocodile can't bite another target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 21 (3d10 + 5) piercing damage, and the target is grappled (escape DC 16). Until this grapple ends, the target is restrained, and the whirlwyrm can't bite another target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}21 ({@damage 3d10 + 5}) piercing damage, and the target is {@condition grappled} (escape {@dc 16}). Until this grapple ends, the target is {@condition restrained}, and the whirlwyrm can't bite another target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3825,7 +4208,7 @@
           "targets": "one target",
           "save": {
             "dc": 16,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -3837,17 +4220,20 @@
         }
       },
       {
-        "id": "act_tail_wchz",
+        "id": "act_tail_n04z",
         "name": "Tail",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one target not grappled by the crocodile. {@h}14 (2d8 + 5) bludgeoning damage. If the target is a creature, it must succeed on a DC 16 Strength saving throw or be knocked prone.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target not grappled by the whirlwyrm. Hit: 14 (2d8 + 5) bludgeoning damage. If the target is a creature, it must succeed on a DC 16 Strength saving throw or be knocked prone.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 10 ft., one target not {@condition grappled} by the whirlwyrm. {@h}14 ({@damage 2d8 + 5}) bludgeoning damage. If the target is a creature, it must succeed on a {@dc 16} Strength saving throw or be knocked {@condition prone}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
           "attackBonus": 8,
           "reach": 10,
           "range": null,
-          "targets": "one target not {@condition grappled} by the crocodile",
+          "targets": "one target not {@condition grappled} by the whirlwyrm",
           "save": {
             "dc": 16,
             "ability": "STR"
@@ -3869,11 +4255,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Whirlwyrm.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Whirlwyrm.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_x01_tofw",
@@ -3983,14 +4381,14 @@
       {
         "id": "sc_x01_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 4,
         "casterLevel": 1,
         "dc": 17,
         "atkMod": 9,
-        "header": "The hexton casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save DC 17):",
+        "header": "X01 casts one of the following spells, requiring no material components and using Intelligence as the spellcasting ability (spell save DC 17):",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -4112,10 +4510,13 @@
     ],
     "traits": [
       {
-        "id": "act_axiomatic_mind_7btm",
+        "id": "act_axiomatic_mind_k0ka",
         "name": "Axiomatic Mind",
         "actionType": "trait",
-        "descriptionHtml": "<p>The hexton can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
+        "descriptionHtml": "<p>X01 can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
+        "entries": [
+          "X01 can't be compelled to act in a manner contrary to its nature or its instructions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4129,10 +4530,13 @@
         }
       },
       {
-        "id": "act_combat_ready_5oir",
+        "id": "act_combat_ready_ky1f",
         "name": "Combat Ready",
         "actionType": "trait",
-        "descriptionHtml": "<p>The hexton has advantage on initiative rolls.</p>",
+        "descriptionHtml": "<p>X01 has advantage on initiative rolls.</p>",
+        "entries": [
+          "X01 has advantage on initiative rolls."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4146,10 +4550,13 @@
         }
       },
       {
-        "id": "act_disintegration_38xl",
+        "id": "act_disintegration_n2mw",
         "name": "Disintegration",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the hexton dies, its body disintegrates into dust, leaving behind anything it was carrying.</p>",
+        "descriptionHtml": "<p>If X01 dies, its body disintegrates into dust, leaving behind anything it was carrying.</p>",
+        "entries": [
+          "If X01 dies, its body disintegrates into dust, leaving behind anything it was carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4163,10 +4570,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__fipb",
+        "id": "act_legendary_resistance__4_day__lj5j",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the hexton fails a saving throw, it can choose to succeed instead.</p>",
+        "descriptionHtml": "<p>If X01 fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If X01 fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4182,10 +4592,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_en3j",
+        "id": "act_multiattack_dpz4",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The hexton makes one Pincer attack and two Tentacle attacks.</p>",
+        "descriptionHtml": "<p>X01 makes one Pincer attack and two Tentacle attacks.</p>",
+        "entries": [
+          "X01 makes one Pincer attack and two Tentacle attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4199,10 +4612,13 @@
         }
       },
       {
-        "id": "act_pincer_t1te",
+        "id": "act_pincer_sdc6",
         "name": "Pincer",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 10 ft., one target. {@h}13 (2d8 + 4) bludgeoning damage plus 10 (3d6) force damage. If the target is a creature, it must succeed on a DC 17 Constitution saving throw or have the incapacitated condition until the end of its next turn.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage plus 10 (3d6) force damage. If the target is a creature, it must succeed on a DC 17 Constitution saving throw or have the incapacitated condition until the end of its next turn.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 10 ft., one target. {@h}13 ({@damage 2d8 + 4}) bludgeoning damage plus 10 ({@damage 3d6}) force damage. If the target is a creature, it must succeed on a {@dc 17} Constitution saving throw or have the {@condition incapacitated} condition until the end of its next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4228,10 +4644,13 @@
         }
       },
       {
-        "id": "act_tentacle_9pk7",
+        "id": "act_tentacle_7y7z",
         "name": "Tentacle",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 10 ft., one target. {@h}15 (2d10 + 4) piercing damage, and if the target is a Medium or smaller creature, it has the grappled condition (escape DC 14). Until this grapple ends, the hexton can't use this tentacle against other targets. The hexton has six tentacles, each of which can grapple one target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 15 (2d10 + 4) piercing damage, and if the target is a Medium or smaller creature, it has the grappled condition (escape DC 14). Until this grapple ends, X01 can't use this tentacle against other targets. The hexton has six tentacles, each of which can grapple one target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 10 ft., one target. {@h}15 ({@damage 2d10 + 4}) piercing damage, and if the target is a Medium or smaller creature, it has the {@condition grappled} condition (escape {@dc 14}). Until this grapple ends, X01 can't use this tentacle against other targets. The hexton has six tentacles, each of which can grapple one target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4241,7 +4660,7 @@
           "targets": "one target",
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -4256,10 +4675,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_counter_magic_ltyw",
+        "id": "act_counter_magic_8luw",
         "name": "Counter Magic",
         "actionType": "reaction",
-        "descriptionHtml": "<p>The hexton attempts to interrupt a creature it can see that is casting a spell. If the spell is 3rd level or lower, it fails and has no effect. If the spell is 4th level or higher, the hexton makes an Intelligence check (DC 10 + the spell's level). On a success, the spell fails and has no effect.</p>",
+        "descriptionHtml": "<p>X01 attempts to interrupt a creature it can see that is casting a spell. If the spell is 3rd level or lower, it fails and has no effect. If the spell is 4th level or higher, the hexton makes an Intelligence check (DC 10 + the spell's level). On a success, the spell fails and has no effect.</p>",
+        "entries": [
+          "X01 attempts to interrupt a creature it can see that is casting a spell. If the spell is 3rd level or lower, it fails and has no effect. If the spell is 4th level or higher, the hexton makes an Intelligence check ({@dc 10} + the spell's level). On a success, the spell fails and has no effect."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4269,17 +4691,20 @@
           "targets": null,
           "save": {
             "dc": 10,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_lightning_rebuke_2v6y",
+        "id": "act_lightning_rebuke_2tcj",
         "name": "Lightning Rebuke",
         "actionType": "reaction",
-        "descriptionHtml": "<p>When a creature within 120 feet of the hexton damages it, the hexton magically retaliates with an arc of lightning. The creature must make a DC 17 Dexterity saving throw, taking 11 (2d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "descriptionHtml": "<p>When a creature within 120 feet of X01 damages it, the hexton magically retaliates with an arc of lightning. The creature must make a DC 17 Dexterity saving throw, taking 11 (2d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "When a creature within 120 feet of X01 damages it, the hexton magically retaliates with an arc of lightning. The creature must make a {@dc 17} Dexterity saving throw, taking 11 ({@damage 2d10}) lightning damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4306,11 +4731,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/X01.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/X01.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_zaythir_tofw",
@@ -4417,14 +4854,14 @@
       {
         "id": "sc_zaythir_0",
         "name": "Spellcasting (Psionics)",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 3,
-        "casterLevel": 1,
+        "casterLevel": 0,
         "dc": 14,
         "atkMod": 6,
-        "header": "The githzerai casts one of the following spells, requiring no spell components and using Wisdom as the spellcasting ability (spell save DC 14):",
+        "header": "Zaythir casts one of the following spells, requiring no spell components and using Wisdom as the spellcasting ability (spell save DC 14):",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -4525,10 +4962,13 @@
     ],
     "traits": [
       {
-        "id": "act_psychic_defense_cn9b",
+        "id": "act_psychic_defense_ps31",
         "name": "Psychic Defense",
         "actionType": "trait",
-        "descriptionHtml": "<p>While the githzerai is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
+        "descriptionHtml": "<p>While Zaythir is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
+        "entries": [
+          "While Zaythir is wearing no armor and wielding no shield, its AC includes its Wisdom modifier."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4544,10 +4984,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_lpr7",
+        "id": "act_multiattack_ef6c",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The githzerai makes three Unarmed Strike or Psychic Bolt attacks. It can replace any of these attacks with one use of its Pacifying Touch.</p>",
+        "descriptionHtml": "<p>Zaythir makes three Unarmed Strike or Psychic Bolt attacks. It can replace any of these attacks with one use of its Pacifying Touch.</p>",
+        "entries": [
+          "Zaythir makes three Unarmed Strike or Psychic Bolt attacks. It can replace any of these attacks with one use of its Pacifying Touch."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4561,10 +5004,13 @@
         }
       },
       {
-        "id": "act_unarmed_strike_qavn",
+        "id": "act_unarmed_strike_zx3l",
         "name": "Unarmed Strike",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage plus 10 (3d6) psychic damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage plus 10 (3d6) psychic damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) bludgeoning damage plus 10 ({@damage 3d6}) psychic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4587,10 +5033,13 @@
         }
       },
       {
-        "id": "act_psychic_bolt_4xrt",
+        "id": "act_psychic_bolt_d4xg",
         "name": "Psychic Bolt",
         "actionType": "action",
-        "descriptionHtml": "<p>rs +6 to hit, range 60 ft., one creature. {@h}17 (5d6) psychic damage.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: +6 to hit, range 60 ft., one creature. Hit: 17 (5d6) psychic damage.</p>",
+        "entries": [
+          "{@atk rs} {@hit 6} to hit, range 60 ft., one creature. {@h}17 ({@damage 5d6}) psychic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4609,10 +5058,13 @@
         }
       },
       {
-        "id": "act_pacifying_touch_sa9y",
+        "id": "act_pacifying_touch_h3jj",
         "name": "Pacifying Touch",
         "actionType": "action",
-        "descriptionHtml": "<p>The githzerai touches one creature it can see within 5 feet of itself. The target must succeed on a DC 14 Intelligence saving throw, or the githzerai chooses an action for that target: Attack, Cast a Spell, or Dash. The affected target can't take that action for 1 minute. At the end of each of the target's turns, it can repeat the saving throw, ending the effect on itself on a successful save. A target that succeeds on the saving throw becomes immune to this githzerai's Pacifying Touch for 24 hours.</p>",
+        "descriptionHtml": "<p>Zaythir touches one creature it can see within 5 feet of itself. The target must succeed on a DC 14 Intelligence saving throw, or the githzerai chooses an action for that target: Attack, Cast a Spell, or Dash. The affected target can't take that action for 1 minute. At the end of each of the target's turns, it can repeat the saving throw, ending the effect on itself on a successful save. A target that succeeds on the saving throw becomes immune to this githzerai's Pacifying Touch for 24 hours.</p>",
+        "entries": [
+          "Zaythir touches one creature it can see within 5 feet of itself. The target must succeed on a {@dc 14} Intelligence saving throw, or the githzerai chooses an action for that target: Attack, Cast a Spell, or {@action Dash}. The affected target can't take that action for 1 minute. At the end of each of the target's turns, it can repeat the saving throw, ending the effect on itself on a successful save. A target that succeeds on the saving throw becomes immune to this githzerai's Pacifying Touch for 24 hours."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4636,10 +5088,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/ToFW/Zaythir.webp",
     "tokenImg": "img/bestiary/tokens/ToFW/Zaythir.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

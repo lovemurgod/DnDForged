@@ -1,0 +1,876 @@
+[
+  {
+    "id": "race_aasimar_fernian_exploringeberron24",
+    "name": "Aasimar (Fernian)",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "Medium",
+    "speed": "30 ft",
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_aasimar_fernian_fernian_resistance_exploringeberron24",
+        "name": "Fernian Resistance",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Fernian)",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Fire damage and Necrotic damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Fire damage and Necrotic damage."
+        ]
+      },
+      {
+        "id": "trait_aasimar_fernian_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Fernian)",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_aasimar_fernian_healing_hands_exploringeberron24",
+        "name": "Healing Hands",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Fernian)",
+        "actionType": "action",
+        "description": "As a Magic action, you touch a creature and roll a number of d4s equal to your Proficiency|XPHB|Proficiency Bonus. The creature regains a number of Hit Points|XPHB equal to the total rolled. Once you use this trait, you can't use it again until you finish a Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@action Magic|XPHB} action, you touch a creature and roll a number of d4s equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}. The creature regains a number of {@variantrule Hit Points|XPHB} equal to the total rolled. Once you use this trait, you can't use it again until you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_aasimar_fernian_flame_bearer_exploringeberron24",
+        "name": "Flame Bearer",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Fernian)",
+        "actionType": "passive",
+        "description": "You know the Produce Flame cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Produce Flame|XPHB} cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_aasimar_fernian_celestial_revelation_exploringeberron24",
+        "name": "Celestial Revelation",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Fernian)",
+        "actionType": "bonus",
+        "description": "When you reach character level 3, you can transform as a Bonus Action|XPHB using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required). Once you transform, you can't do so again until you finish a Long Rest|XPHB.\n\nOnce on each of your turns before the transformation ends, you can deal extra damage to one target when you deal damage to it with an attack or a spell. The extra damage equals your Proficiency|XPHB|Proficiency Bonus, and the extra damage's type is either Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance.\n\nHere are the transformation options:\n\n- **Heavenly Wings**\n\nTwo spectral wings sprout from your back temporarily. Until the transformation ends, you have a Fly Speed|XPHB equal to your Speed|XPHB.\n- **Inner Radiance**\n\nSearing light temporarily radiates from your eyes and mouth. For the duration, you shed Bright Light|XPHB in a 10-foot radius and Dim Light|XPHB for an additional 10 feet, and at the end of each of your turns, each creature within 10 feet of you takes Radiant damage equal to your Proficiency|XPHB|Proficiency Bonus.\n- **Necrotic Shroud**\n\nYour eyes briefly become pools of darkness, and flightless wings sprout from your back temporarily. Creatures other than your allies within 10 feet of you must succeed on a Charisma saving throw (8 plus your Charisma modifier and Proficiency|XPHB|Proficiency Bonus) or have the Frightened condition until the end of your next turn.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you reach character level 3, you can transform as a {@variantrule Bonus Action|XPHB} using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required). Once you transform, you can't do so again until you finish a {@variantrule Long Rest|XPHB}.",
+          "Once on each of your turns before the transformation ends, you can deal extra damage to one target when you deal damage to it with an attack or a spell. The extra damage equals your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and the extra damage's type is either Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance.",
+          "Here are the transformation options:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Heavenly Wings",
+                "entries": [
+                  "Two spectral wings sprout from your back temporarily. Until the transformation ends, you have a {@variantrule Fly Speed|XPHB} equal to your {@variantrule Speed|XPHB}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Inner Radiance",
+                "entries": [
+                  "Searing light temporarily radiates from your eyes and mouth. For the duration, you shed {@variantrule Bright Light|XPHB} in a 10-foot radius and {@variantrule Dim Light|XPHB} for an additional 10 feet, and at the end of each of your turns, each creature within 10 feet of you takes Radiant damage equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Necrotic Shroud",
+                "entries": [
+                  "Your eyes briefly become pools of darkness, and flightless wings sprout from your back temporarily. Creatures other than your allies within 10 feet of you must succeed on a Charisma saving throw ({@dc 8} plus your Charisma modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or have the {@condition Frightened|XPHB} condition until the end of your next turn."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Fernian Resistance**: You have Resistance|XPHB to Fire damage and Necrotic damage.\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Healing Hands**: As a Magic action, you touch a creature and roll a number of d4s equal to your Proficiency|XPHB|Proficiency Bonus. The creature regains a number of Hit Points|XPHB equal to the total rolled. Once you use this trait, you can't use it again until you finish a Long Rest|XPHB.\n\n**Flame Bearer**: You know the Produce Flame cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose the ability when you select this species).\n\n**Celestial Revelation**: When you reach character level 3, you can transform as a Bonus Action|XPHB using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required). Once you transform, you can't do so again until you finish a Long Rest|XPHB.\n\nOnce on each of your turns before the transformation ends, you can deal extra damage to one target when you deal damage to it with an attack or a spell. The extra damage equals your Proficiency|XPHB|Proficiency Bonus, and the extra damage's type is either Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Radiance.\n\nHere are the transformation options:\n\n- **Heavenly Wings**\n\nTwo spectral wings sprout from your back temporarily. Until the transformation ends, you have a Fly Speed|XPHB equal to your Speed|XPHB.\n- **Inner Radiance**\n\nSearing light temporarily radiates from your eyes and mouth. For the duration, you shed Bright Light|XPHB in a 10-foot radius and Dim Light|XPHB for an additional 10 feet, and at the end of each of your turns, each creature within 10 feet of you takes Radiant damage equal to your Proficiency|XPHB|Proficiency Bonus.\n- **Necrotic Shroud**\n\nYour eyes briefly become pools of darkness, and flightless wings sprout from your back temporarily. Creatures other than your allies within 10 feet of you must succeed on a Charisma saving throw (8 plus your Charisma modifier and Proficiency|XPHB|Proficiency Bonus) or have the Frightened condition until the end of your next turn."
+  },
+  {
+    "id": "race_aasimar_mabaran_exploringeberron24",
+    "name": "Aasimar (Mabaran)",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "Medium",
+    "speed": "30 ft",
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_aasimar_mabaran_celestial_resistance_exploringeberron24",
+        "name": "Celestial Resistance",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Mabaran)",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Necrotic damage and Radiant damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Necrotic damage and Radiant damage."
+        ]
+      },
+      {
+        "id": "trait_aasimar_mabaran_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Mabaran)",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_aasimar_mabaran_healing_hands_exploringeberron24",
+        "name": "Healing Hands",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Mabaran)",
+        "actionType": "action",
+        "description": "As a Magic action, you touch a creature and roll a number of d4s equal to your Proficiency|XPHB|Proficiency Bonus. The creature regains a number of Hit Points|XPHB equal to the total rolled. Once you use this trait, you can't use it again until you finish a Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@action Magic|XPHB} action, you touch a creature and roll a number of d4s equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}. The creature regains a number of {@variantrule Hit Points|XPHB} equal to the total rolled. Once you use this trait, you can't use it again until you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_aasimar_mabaran_herald_of_death_exploringeberron24",
+        "name": "Herald of Death",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Mabaran)",
+        "actionType": "passive",
+        "description": "You know the Toll the Dead cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Toll the Dead|XPHB} cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_aasimar_mabaran_celestial_revelation_exploringeberron24",
+        "name": "Celestial Revelation",
+        "source": "ExploringEberron24",
+        "raceName": "Aasimar (Mabaran)",
+        "actionType": "bonus",
+        "description": "When you reach character level 3, you can transform as a Bonus Action|XPHB using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required). Once you transform, you can't do so again until you finish a Long Rest|XPHB.\n\nOnce on each of your turns before the transformation ends, you can deal extra damage to one target when you deal damage to it with an attack or a spell. The extra damage equals your Proficiency|XPHB|Proficiency Bonus, and the extra damage's type is either Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Darkness.\n\nHere are the transformation options:\n\n- **Heavenly Wings**\n\nTwo spectral wings sprout from your back temporarily. Until the transformation ends, you have a Fly Speed|XPHB equal to your Speed|XPHB.\n- **Inner Darkness**\n\nYou consume light and life, creating a shroud of shadows. For the duration, you reduce Bright Light|XPHB in a 20-foot radius to Dim Light|XPHB, and at the end of each of your turns, each creature within 10 feet of you takes Necrotic damage equal to your Proficiency|XPHB|Proficiency Bonus.\n- **Necrotic Shroud**\n\nYour eyes briefly become pools of darkness, and flightless wings sprout from your back temporarily. Creatures other than your allies within 10 feet of you must succeed on a Charisma saving throw (8 plus your Charisma modifier and Proficiency|XPHB|Proficiency Bonus) or have the Frightened condition until the end of your next turn.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you reach character level 3, you can transform as a {@variantrule Bonus Action|XPHB} using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required). Once you transform, you can't do so again until you finish a {@variantrule Long Rest|XPHB}.",
+          "Once on each of your turns before the transformation ends, you can deal extra damage to one target when you deal damage to it with an attack or a spell. The extra damage equals your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and the extra damage's type is either Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Darkness.",
+          "Here are the transformation options:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Heavenly Wings",
+                "entries": [
+                  "Two spectral wings sprout from your back temporarily. Until the transformation ends, you have a {@variantrule Fly Speed|XPHB} equal to your {@variantrule Speed|XPHB}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Inner Darkness",
+                "entries": [
+                  "You consume light and life, creating a shroud of shadows. For the duration, you reduce {@variantrule Bright Light|XPHB} in a 20-foot radius to {@variantrule Dim Light|XPHB}, and at the end of each of your turns, each creature within 10 feet of you takes Necrotic damage equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Necrotic Shroud",
+                "entries": [
+                  "Your eyes briefly become pools of darkness, and flightless wings sprout from your back temporarily. Creatures other than your allies within 10 feet of you must succeed on a Charisma saving throw ({@dc 8} plus your Charisma modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or have the {@condition Frightened|XPHB} condition until the end of your next turn."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Celestial Resistance**: You have Resistance|XPHB to Necrotic damage and Radiant damage.\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Healing Hands**: As a Magic action, you touch a creature and roll a number of d4s equal to your Proficiency|XPHB|Proficiency Bonus. The creature regains a number of Hit Points|XPHB equal to the total rolled. Once you use this trait, you can't use it again until you finish a Long Rest|XPHB.\n\n**Herald of Death**: You know the Toll the Dead cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose the ability when you select this species).\n\n**Celestial Revelation**: When you reach character level 3, you can transform as a Bonus Action|XPHB using one of the options below (choose the option each time you transform). The transformation lasts for 1 minute or until you end it (no action required). Once you transform, you can't do so again until you finish a Long Rest|XPHB.\n\nOnce on each of your turns before the transformation ends, you can deal extra damage to one target when you deal damage to it with an attack or a spell. The extra damage equals your Proficiency|XPHB|Proficiency Bonus, and the extra damage's type is either Necrotic for Necrotic Shroud or Radiant for Heavenly Wings and Inner Darkness.\n\nHere are the transformation options:\n\n- **Heavenly Wings**\n\nTwo spectral wings sprout from your back temporarily. Until the transformation ends, you have a Fly Speed|XPHB equal to your Speed|XPHB.\n- **Inner Darkness**\n\nYou consume light and life, creating a shroud of shadows. For the duration, you reduce Bright Light|XPHB in a 20-foot radius to Dim Light|XPHB, and at the end of each of your turns, each creature within 10 feet of you takes Necrotic damage equal to your Proficiency|XPHB|Proficiency Bonus.\n- **Necrotic Shroud**\n\nYour eyes briefly become pools of darkness, and flightless wings sprout from your back temporarily. Creatures other than your allies within 10 feet of you must succeed on a Charisma saving throw (8 plus your Charisma modifier and Proficiency|XPHB|Proficiency Bonus) or have the Frightened condition until the end of your next turn."
+  },
+  {
+    "id": "race_dhakaani_ghaal_dar_hobgoblin_exploringeberron24",
+    "name": "Dhakaani Ghaal'dar (Hobgoblin)",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Discipline.</strong> <p>You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Strength in Unity.</strong> <p>If you fail a D20 Test|XPHB, you can gain a bonus to the roll equal to the number of allies you can see within 30 feet of you (maximum bonus of +5). Once you use this trait, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>War and Peace.</strong> <p>You gain proficiency in two of the following skills: Athletics, History, Intimidation, Performance.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dhakaani_ghaal_dar_hobgoblin_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Ghaal'dar (Hobgoblin)",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_ghaal_dar_hobgoblin_discipline_exploringeberron24",
+        "name": "Discipline",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Ghaal'dar (Hobgoblin)",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Charmed|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_ghaal_dar_hobgoblin_strength_in_unity_exploringeberron24",
+        "name": "Strength in Unity",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Ghaal'dar (Hobgoblin)",
+        "actionType": "passive",
+        "description": "If you fail a D20 Test|XPHB, you can gain a bonus to the roll equal to the number of allies you can see within 30 feet of you (maximum bonus of +5). Once you use this trait, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "If you fail a {@variantrule D20 Test|XPHB}, you can gain a bonus to the roll equal to the number of allies you can see within 30 feet of you (maximum bonus of +5). Once you use this trait, you can't use it again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_ghaal_dar_hobgoblin_war_and_peace_exploringeberron24",
+        "name": "War and Peace",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Ghaal'dar (Hobgoblin)",
+        "actionType": "passive",
+        "description": "You gain proficiency in two of the following skills: Athletics, History, Intimidation, Performance.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency in two of the following skills: {@skill Athletics|XPHB}, {@skill History|XPHB}, {@skill Intimidation|XPHB}, {@skill Performance|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Discipline**: You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.\n\n**Strength in Unity**: If you fail a D20 Test|XPHB, you can gain a bonus to the roll equal to the number of allies you can see within 30 feet of you (maximum bonus of +5). Once you use this trait, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**War and Peace**: You gain proficiency in two of the following skills: Athletics, History, Intimidation, Performance."
+  },
+  {
+    "id": "race_dhakaani_golin_dar_goblin_exploringeberron24",
+    "name": "Dhakaani Golin'dar (Goblin)",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "S",
+    "speed": "35 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Discipline.</strong> <p>You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Naturally Stealthy.</strong> <p>You can take the Hide action even when you are obscured only by a creature that is at least one size larger than you.</p></div>\n<div class=\"compendium-subentry\"><strong>Nimbleness.</strong> <p>You can move through the space of any creature that is a size larger than you, but you can't stop in the same space.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dhakaani_golin_dar_goblin_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Golin'dar (Goblin)",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_golin_dar_goblin_discipline_exploringeberron24",
+        "name": "Discipline",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Golin'dar (Goblin)",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Charmed|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_golin_dar_goblin_naturally_stealthy_exploringeberron24",
+        "name": "Naturally Stealthy",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Golin'dar (Goblin)",
+        "actionType": "passive",
+        "description": "You can take the Hide action even when you are obscured only by a creature that is at least one size larger than you.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can take the {@action Hide|XPHB} action even when you are obscured only by a creature that is at least one size larger than you."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_golin_dar_goblin_nimbleness_exploringeberron24",
+        "name": "Nimbleness",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Golin'dar (Goblin)",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is a size larger than you, but you can't stop in the same space.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is a size larger than you, but you can't stop in the same space."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Discipline**: You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.\n\n**Naturally Stealthy**: You can take the Hide action even when you are obscured only by a creature that is at least one size larger than you.\n\n**Nimbleness**: You can move through the space of any creature that is a size larger than you, but you can't stop in the same space."
+  },
+  {
+    "id": "race_dhakaani_guul_dar_bugbear_exploringeberron24",
+    "name": "Dhakaani Guul'dar (Bugbear)",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Brave.</strong> <p>You have Advantage|XPHB on saving throws you make to avoid or end the Frightened condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Long-Limbed.</strong> <p>When you make a melee attack on your turn, your reach for it is 5 feet greater than normal.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You have Advantage|XPHB on any ability check you make to end the Grappled condition. You also count as one size larger when determining your carrying capacity.</p></div>\n<div class=\"compendium-subentry\"><strong>Stand by the Strong.</strong> <p>When an ally within 30 feet that can see you fails a saving throw to avoid or end the Frightened condition, you can use your Reaction|XPHB to allow them to reroll the saving throw.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dhakaani_guul_dar_bugbear_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Guul'dar (Bugbear)",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_guul_dar_bugbear_brave_exploringeberron24",
+        "name": "Brave",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Guul'dar (Bugbear)",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on saving throws you make to avoid or end the Frightened condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Frightened|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_guul_dar_bugbear_long_limbed_exploringeberron24",
+        "name": "Long-Limbed",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Guul'dar (Bugbear)",
+        "actionType": "passive",
+        "description": "When you make a melee attack on your turn, your reach for it is 5 feet greater than normal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you make a melee attack on your turn, your reach for it is 5 feet greater than normal."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_guul_dar_bugbear_powerful_build_exploringeberron24",
+        "name": "Powerful Build",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Guul'dar (Bugbear)",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on any ability check you make to end the Grappled condition. You also count as one size larger when determining your carrying capacity.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on any ability check you make to end the {@condition Grappled|XPHB} condition. You also count as one size larger when determining your carrying capacity."
+        ]
+      },
+      {
+        "id": "trait_dhakaani_guul_dar_bugbear_stand_by_the_strong_exploringeberron24",
+        "name": "Stand by the Strong",
+        "source": "ExploringEberron24",
+        "raceName": "Dhakaani Guul'dar (Bugbear)",
+        "actionType": "passive",
+        "description": "When an ally within 30 feet that can see you fails a saving throw to avoid or end the Frightened condition, you can use your Reaction|XPHB to allow them to reroll the saving throw.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When an ally within 30 feet that can see you fails a saving throw to avoid or end the {@condition Frightened|XPHB} condition, you can use your {@variantrule Reaction|XPHB} to allow them to reroll the saving throw."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Brave**: You have Advantage|XPHB on saving throws you make to avoid or end the Frightened condition.\n\n**Long-Limbed**: When you make a melee attack on your turn, your reach for it is 5 feet greater than normal.\n\n**Powerful Build**: You have Advantage|XPHB on any ability check you make to end the Grappled condition. You also count as one size larger when determining your carrying capacity.\n\n**Stand by the Strong**: When an ally within 30 feet that can see you fails a saving throw to avoid or end the Frightened condition, you can use your Reaction|XPHB to allow them to reroll the saving throw."
+  },
+  {
+    "id": "race_gnoll_exploringeberron24",
+    "name": "Gnoll",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Bite.</strong> <p>Your teeth are natural weapons, which you can use to make Unarmed Strike|XPHB|Unarmed Strikes. If you hit with them, you deal Piercing damage equal to 1d6 plus your Strength modifier in place of the normal Bludgeoning damage of your Unarmed Strike|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Hunter's Senses.</strong> <p>You have proficiency in the Perception, Stealth, or Survival skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Rampage.</strong> <p>When you use your Bite or reduce a creature to 0 Hit Points|XPHB with an attack, you can take a Bonus Action|XPHB to move up to half your Speed|XPHB and make one attack with a weapon or an Unarmed Strike|XPHB using your Bite.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gnoll_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_gnoll_bite_exploringeberron24",
+        "name": "Bite",
+        "source": "ExploringEberron24",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "Your teeth are natural weapons, which you can use to make Unarmed Strike|XPHB|Unarmed Strikes. If you hit with them, you deal Piercing damage equal to 1d6 plus your Strength modifier in place of the normal Bludgeoning damage of your Unarmed Strike|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6 + @str",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your teeth are natural weapons, which you can use to make {@variantrule Unarmed Strike|XPHB|Unarmed Strikes}. If you hit with them, you deal Piercing damage equal to {@dice 1d6} plus your Strength modifier in place of the normal Bludgeoning damage of your {@variantrule Unarmed Strike|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_gnoll_hunter_s_senses_exploringeberron24",
+        "name": "Hunter's Senses",
+        "source": "ExploringEberron24",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception, Stealth, or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception|XPHB}, {@skill Stealth|XPHB}, or {@skill Survival|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_gnoll_rampage_exploringeberron24",
+        "name": "Rampage",
+        "source": "ExploringEberron24",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "When you use your Bite or reduce a creature to 0 Hit Points|XPHB with an attack, you can take a Bonus Action|XPHB to move up to half your Speed|XPHB and make one attack with a weapon or an Unarmed Strike|XPHB using your Bite.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you use your Bite or reduce a creature to 0 {@variantrule Hit Points|XPHB} with an attack, you can take a {@variantrule Bonus Action|XPHB} to move up to half your {@variantrule Speed|XPHB} and make one attack with a weapon or an {@variantrule Unarmed Strike|XPHB} using your Bite."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Bite**: Your teeth are natural weapons, which you can use to make Unarmed Strike|XPHB|Unarmed Strikes. If you hit with them, you deal Piercing damage equal to 1d6 plus your Strength modifier in place of the normal Bludgeoning damage of your Unarmed Strike|XPHB.\n\n**Hunter's Senses**: You have proficiency in the Perception, Stealth, or Survival skill.\n\n**Rampage**: When you use your Bite or reduce a creature to 0 Hit Points|XPHB with an attack, you can take a Bonus Action|XPHB to move up to half your Speed|XPHB and make one attack with a weapon or an Unarmed Strike|XPHB using your Bite."
+  },
+  {
+    "id": "race_jhorgun_taal_half_orc_exploringeberron24",
+    "name": "Jhorgun'taal (Half-Orc)",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Relentless Endurance.</strong> <p>When you are reduced to 0 Hit Points|XPHB but not killed outright, you can drop to 1 Hit Points|XPHB|Hit Point instead. Once you use this trait, you can't do so again until you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Versatile.</strong> <p>You gain an Origin feat|feats|category=o of your choice.</p></div>",
+    "traits": [
+      {
+        "id": "trait_jhorgun_taal_half_orc_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Jhorgun'taal (Half-Orc)",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_jhorgun_taal_half_orc_relentless_endurance_exploringeberron24",
+        "name": "Relentless Endurance",
+        "source": "ExploringEberron24",
+        "raceName": "Jhorgun'taal (Half-Orc)",
+        "actionType": "passive",
+        "description": "When you are reduced to 0 Hit Points|XPHB but not killed outright, you can drop to 1 Hit Points|XPHB|Hit Point instead. Once you use this trait, you can't do so again until you finish a Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you are reduced to 0 {@variantrule Hit Points|XPHB} but not killed outright, you can drop to 1 {@variantrule Hit Points|XPHB|Hit Point} instead. Once you use this trait, you can't do so again until you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_jhorgun_taal_half_orc_versatile_exploringeberron24",
+        "name": "Versatile",
+        "source": "ExploringEberron24",
+        "raceName": "Jhorgun'taal (Half-Orc)",
+        "actionType": "passive",
+        "description": "You gain an Origin feat|feats|category=o of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain an {@filter Origin feat|feats|category=o} of your choice."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Relentless Endurance**: When you are reduced to 0 Hit Points|XPHB but not killed outright, you can drop to 1 Hit Points|XPHB|Hit Point instead. Once you use this trait, you can't do so again until you finish a Long Rest|XPHB.\n\n**Versatile**: You gain an Origin feat|feats|category=o of your choice."
+  },
+  {
+    "id": "race_kalamer_landwalker_merfolk_exploringeberron24",
+    "name": "Kalamer Landwalker (Merfolk)",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "M",
+    "speed": "10 ft, swim 40 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Blessing of the Sea.</strong> <p>You have two forms: your natural merfolk form and that of a landwalker. As a Magic action, you can shape-shift to change from your merfolk form to your landwalker form. While in your landwalker form, your fish-like fluke splits into 2 legs. Your Speed|XPHB increases by 20 feet, but your Swim Speed|XPHB is reduced to 0.</p>\n<p>You stay in the new form until you take a Magic action to revert to your merfolk form.</p></div>\n<div class=\"compendium-subentry\"><strong>Karakala Lore.</strong> <p>You have proficiency in the Nature, Performance, or Survival skill.</p></div>",
+    "traits": [
+      {
+        "id": "trait_kalamer_landwalker_merfolk_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Kalamer Landwalker (Merfolk)",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_kalamer_landwalker_merfolk_amphibious_exploringeberron24",
+        "name": "Amphibious",
+        "source": "ExploringEberron24",
+        "raceName": "Kalamer Landwalker (Merfolk)",
+        "actionType": "passive",
+        "description": "You can breathe air and water.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can breathe air and water."
+        ]
+      },
+      {
+        "id": "trait_kalamer_landwalker_merfolk_blessing_of_the_sea_exploringeberron24",
+        "name": "Blessing of the Sea",
+        "source": "ExploringEberron24",
+        "raceName": "Kalamer Landwalker (Merfolk)",
+        "actionType": "action",
+        "description": "You have two forms: your natural merfolk form and that of a landwalker. As a Magic action, you can shape-shift to change from your merfolk form to your landwalker form. While in your landwalker form, your fish-like fluke splits into 2 legs. Your Speed|XPHB increases by 20 feet, but your Swim Speed|XPHB is reduced to 0.\n\nYou stay in the new form until you take a Magic action to revert to your merfolk form.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have two forms: your natural merfolk form and that of a landwalker. As a {@action Magic|XPHB} action, you can shape-shift to change from your merfolk form to your landwalker form. While in your landwalker form, your fish-like fluke splits into 2 legs. Your {@variantrule Speed|XPHB} increases by 20 feet, but your {@variantrule Swim Speed|XPHB} is reduced to 0.",
+          "You stay in the new form until you take a {@action Magic|XPHB} action to revert to your merfolk form."
+        ]
+      },
+      {
+        "id": "trait_kalamer_landwalker_merfolk_karakala_lore_exploringeberron24",
+        "name": "Karakala Lore",
+        "source": "ExploringEberron24",
+        "raceName": "Kalamer Landwalker (Merfolk)",
+        "actionType": "passive",
+        "description": "You have proficiency in the Nature, Performance, or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Nature|XPHB}, {@skill Performance|XPHB}, or {@skill Survival|XPHB} skill."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Amphibious**: You can breathe air and water.\n\n**Blessing of the Sea**: You have two forms: your natural merfolk form and that of a landwalker. As a Magic action, you can shape-shift to change from your merfolk form to your landwalker form. While in your landwalker form, your fish-like fluke splits into 2 legs. Your Speed|XPHB increases by 20 feet, but your Swim Speed|XPHB is reduced to 0.\n\nYou stay in the new form until you take a Magic action to revert to your merfolk form.\n\n**Karakala Lore**: You have proficiency in the Nature, Performance, or Survival skill."
+  },
+  {
+    "id": "race_ruinbound_exploringeberron24",
+    "name": "Ruinbound",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 120 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Personal Symbiont.</strong> <p>You are bound to an alien entity that is part of your body and can't be removed. Your symbiont possesses a minor supernatural ability, which it can use on your behalf. Choose a cantrip from the following list: Acid Splash, Guidance (self only), Light, Mage Hand, Mind Sliver, Poison Spray, Resistance (self only), Shocking Grasp, Thorn Whip. You can switch to a different cantrip from this list whenever you finish a Long Rest|XPHB.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Symbiont Mastery.</strong> <p>You can attune to one magic item that has the Symbiotic Nature property without it counting toward the maximum number of magic items you can attune to. In addition, whenever you finish a Long Rest|XPHB, you can end your Attunement|XPHB to a magic item that has the Symbiotic Nature property. When doing so, you can ignore any restrictions that require you be targeted by a Remove Curse spell or similar magic before the symbiont can be removed.</p></div>\n<div class=\"compendium-subentry\"><strong>Unnatural Resilience.</strong> <p>You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws you make to avoid or end the Poisoned condition.</p></div>\n<table class=\"compendium-table\"><thead><tr><th>1d8</th><th>Mutation</th></tr></thead><tbody><tr><td>1</td><td><strong>Unnatural Hair.</strong> Is your hair an unusual color? Ectoplasmic in nature? Does it move of its own accord?</td></tr><tr><td>2</td><td><strong>Unusual Skin.</strong> Is your skin transparent? Slick? An unnatural color?</td></tr><tr><td>3</td><td><strong>Aberrant Eyes.</strong> Are your eyes luminous? Invisible? Do they resemble the eyes of an animal, or are they seemingly absent?</td></tr><tr><td>4</td><td><strong>Strange Appetites.</strong> Do you prefer your food charred? Do you eat flowers, or can you only eat living things?</td></tr><tr><td>5</td><td><strong>Living Tattoos.</strong> You appear to have exotic tattoos across your body. They slowly and constantly change, and you have no control over the design. Do they show images or words, or are they incomprehensible?</td></tr><tr><td>6</td><td><strong>Ageless.</strong> The passage of time affects your appearance differently than others. Do you appear old beyond your years, or look surprisingly young no matter your age? As you grow older, do you look younger?</td></tr><tr><td>7</td><td><strong>Inexplicable Hearing.</strong> You have no visible ears, yet you can hear clearly. Does sound feel different to you? How do you experience it?</td></tr><tr><td>8</td><td><strong>Extra Joints.</strong> You have one or more extra joints. Is it just an unusual joint in your fingers, or can you bend your entire leg backward?</td></tr></tbody></table>",
+    "traits": [
+      {
+        "id": "trait_ruinbound_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Ruinbound",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 120 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 120 feet."
+        ]
+      },
+      {
+        "id": "trait_ruinbound_personal_symbiont_exploringeberron24",
+        "name": "Personal Symbiont",
+        "source": "ExploringEberron24",
+        "raceName": "Ruinbound",
+        "actionType": "passive",
+        "description": "You are bound to an alien entity that is part of your body and can't be removed. Your symbiont possesses a minor supernatural ability, which it can use on your behalf. Choose a cantrip from the following list: Acid Splash, Guidance (self only), Light, Mage Hand, Mind Sliver, Poison Spray, Resistance (self only), Shocking Grasp, Thorn Whip. You can switch to a different cantrip from this list whenever you finish a Long Rest|XPHB.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are bound to an alien entity that is part of your body and can't be removed. Your symbiont possesses a minor supernatural ability, which it can use on your behalf. Choose a cantrip from the following list: {@spell Acid Splash|XPHB}, {@spell Guidance|XPHB} (self only), {@spell Light|XPHB}, {@spell Mage Hand|XPHB}, {@spell Mind Sliver|XPHB}, {@spell Poison Spray|XPHB}, {@spell Resistance|XPHB} (self only), {@spell Shocking Grasp|XPHB}, {@spell Thorn Whip|XPHB}. You can switch to a different cantrip from this list whenever you finish a {@variantrule Long Rest|XPHB}.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_ruinbound_symbiont_mastery_exploringeberron24",
+        "name": "Symbiont Mastery",
+        "source": "ExploringEberron24",
+        "raceName": "Ruinbound",
+        "actionType": "passive",
+        "description": "You can attune to one magic item that has the Symbiotic Nature property without it counting toward the maximum number of magic items you can attune to. In addition, whenever you finish a Long Rest|XPHB, you can end your Attunement|XPHB to a magic item that has the Symbiotic Nature property. When doing so, you can ignore any restrictions that require you be targeted by a Remove Curse spell or similar magic before the symbiont can be removed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can attune to one magic item that has the Symbiotic Nature property without it counting toward the maximum number of magic items you can attune to. In addition, whenever you finish a {@variantrule Long Rest|XPHB}, you can end your {@variantrule Attunement|XPHB} to a magic item that has the Symbiotic Nature property. When doing so, you can ignore any restrictions that require you be targeted by a {@spell Remove Curse|XPHB} spell or similar magic before the symbiont can be removed."
+        ]
+      },
+      {
+        "id": "trait_ruinbound_unnatural_resilience_exploringeberron24",
+        "name": "Unnatural Resilience",
+        "source": "ExploringEberron24",
+        "raceName": "Ruinbound",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws you make to avoid or end the Poisoned condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Poison damage. You also have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Poisoned|XPHB} condition."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 120 feet.\n\n**Personal Symbiont**: You are bound to an alien entity that is part of your body and can't be removed. Your symbiont possesses a minor supernatural ability, which it can use on your behalf. Choose a cantrip from the following list: Acid Splash, Guidance (self only), Light, Mage Hand, Mind Sliver, Poison Spray, Resistance (self only), Shocking Grasp, Thorn Whip. You can switch to a different cantrip from this list whenever you finish a Long Rest|XPHB.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).\n\n**Symbiont Mastery**: You can attune to one magic item that has the Symbiotic Nature property without it counting toward the maximum number of magic items you can attune to. In addition, whenever you finish a Long Rest|XPHB, you can end your Attunement|XPHB to a magic item that has the Symbiotic Nature property. When doing so, you can ignore any restrictions that require you be targeted by a Remove Curse spell or similar magic before the symbiont can be removed.\n\n**Unnatural Resilience**: You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws you make to avoid or end the Poisoned condition."
+  },
+  {
+    "id": "race_sahuagin_exploringeberron24",
+    "name": "Sahuagin",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "size": "M",
+    "speed": "30 ft, swim true ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 120 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Swift Swimmer.</strong> <p>You have a Swim speed equal to your Speed|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Blood Frenzy.</strong> <p>As a Bonus Action|XPHB, you can enter a blood frenzy until the start of your next turn. During this time, you have Advantage|XPHB on attack rolls against any creature that doesn't have all its Hit Points|XPHB.</p>\n<p>You can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Armor.</strong> <p>You have tough, scaly skin. When you aren't wearing any armor, your base Armor Class|XPHB equals 12 plus your Dexterity modifier. You can use a Shield and still gain this benefit.</p></div>\n<div class=\"compendium-subentry\"><strong>Limited Amphibiousness.</strong> <p>You can breathe air and underwater, but you need to be submerged at least once every 4 hours to avoid suffocating.</p></div>",
+    "traits": [
+      {
+        "id": "trait_sahuagin_darkvision_exploringeberron24",
+        "name": "Darkvision",
+        "source": "ExploringEberron24",
+        "raceName": "Sahuagin",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 120 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 120 feet."
+        ]
+      },
+      {
+        "id": "trait_sahuagin_swift_swimmer_exploringeberron24",
+        "name": "Swift Swimmer",
+        "source": "ExploringEberron24",
+        "raceName": "Sahuagin",
+        "actionType": "passive",
+        "description": "You have a Swim speed equal to your Speed|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a Swim speed equal to your {@variantrule Speed|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_sahuagin_blood_frenzy_exploringeberron24",
+        "name": "Blood Frenzy",
+        "source": "ExploringEberron24",
+        "raceName": "Sahuagin",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can enter a blood frenzy until the start of your next turn. During this time, you have Advantage|XPHB on attack rolls against any creature that doesn't have all its Hit Points|XPHB.\n\nYou can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can enter a blood frenzy until the start of your next turn. During this time, you have {@variantrule Advantage|XPHB} on attack rolls against any creature that doesn't have all its {@variantrule Hit Points|XPHB}.",
+          "You can use this {@variantrule Bonus Action|XPHB} a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_sahuagin_natural_armor_exploringeberron24",
+        "name": "Natural Armor",
+        "source": "ExploringEberron24",
+        "raceName": "Sahuagin",
+        "actionType": "passive",
+        "description": "You have tough, scaly skin. When you aren't wearing any armor, your base Armor Class|XPHB equals 12 plus your Dexterity modifier. You can use a Shield and still gain this benefit.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have tough, scaly skin. When you aren't wearing any armor, your base {@variantrule Armor Class|XPHB} equals 12 plus your Dexterity modifier. You can use a {@item Shield|XPHB} and still gain this benefit."
+        ]
+      },
+      {
+        "id": "trait_sahuagin_limited_amphibiousness_exploringeberron24",
+        "name": "Limited Amphibiousness",
+        "source": "ExploringEberron24",
+        "raceName": "Sahuagin",
+        "actionType": "passive",
+        "description": "You can breathe air and underwater, but you need to be submerged at least once every 4 hours to avoid suffocating.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can breathe air and underwater, but you need to be submerged at least once every 4 hours to avoid suffocating."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 120 feet.\n\n**Swift Swimmer**: You have a Swim speed equal to your Speed|XPHB.\n\n**Blood Frenzy**: As a Bonus Action|XPHB, you can enter a blood frenzy until the start of your next turn. During this time, you have Advantage|XPHB on attack rolls against any creature that doesn't have all its Hit Points|XPHB.\n\nYou can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\n**Natural Armor**: You have tough, scaly skin. When you aren't wearing any armor, your base Armor Class|XPHB equals 12 plus your Dexterity modifier. You can use a Shield and still gain this benefit.\n\n**Limited Amphibiousness**: You can breathe air and underwater, but you need to be submerged at least once every 4 hours to avoid suffocating."
+  }
+]

@@ -1,0 +1,63 @@
+[
+  {
+    "id": "race_kender_ua2022heroesofkrynnrevisited",
+    "name": "Kender",
+    "source": "UA2022HeroesOfKrynnRevisited",
+    "page": 1,
+    "size": "S",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Fearless.</strong> <p>You are immune to the frightened condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Kender Curiosity.</strong> <p>Thanks to the mystical origin of your people, you gain proficiency with one of the following skills of your choice: Insight, Investigation, Sleight of Hand, Stealth, or Survival.</p></div>\n<div class=\"compendium-subentry\"><strong>Taunt.</strong> <p>You have an extraordinary ability to fluster creatures. As a bonus action, you can unleash a string of provoking words at a creature within 60 feet of you that can hear and understand you. The target must succeed on a Wisdom saving throw or it has disadvantage on attack rolls against targets other than you until the start of your next turn. The DC equals 8 + your proficiency bonus + your Intelligence, Wisdom, or Charisma modifier (choose when you select this race).</p>\n<p>You can use this bonus action a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_kender_fearless_ua2022heroesofkrynnrevisited",
+        "name": "Fearless",
+        "source": "UA2022HeroesOfKrynnRevisited",
+        "raceName": "Kender",
+        "actionType": "passive",
+        "description": "You are immune to the frightened condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are immune to the {@condition frightened} condition."
+        ]
+      },
+      {
+        "id": "trait_kender_kender_curiosity_ua2022heroesofkrynnrevisited",
+        "name": "Kender Curiosity",
+        "source": "UA2022HeroesOfKrynnRevisited",
+        "raceName": "Kender",
+        "actionType": "passive",
+        "description": "Thanks to the mystical origin of your people, you gain proficiency with one of the following skills of your choice: Insight, Investigation, Sleight of Hand, Stealth, or Survival.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to the mystical origin of your people, you gain proficiency with one of the following skills of your choice: {@skill Insight}, {@skill Investigation}, {@skill Sleight of Hand}, {@skill Stealth}, or {@skill Survival}."
+        ]
+      },
+      {
+        "id": "trait_kender_taunt_ua2022heroesofkrynnrevisited",
+        "name": "Taunt",
+        "source": "UA2022HeroesOfKrynnRevisited",
+        "raceName": "Kender",
+        "actionType": "bonus",
+        "description": "You have an extraordinary ability to fluster creatures. As a bonus action, you can unleash a string of provoking words at a creature within 60 feet of you that can hear and understand you. The target must succeed on a Wisdom saving throw or it has disadvantage on attack rolls against targets other than you until the start of your next turn. The DC equals 8 + your proficiency bonus + your Intelligence, Wisdom, or Charisma modifier (choose when you select this race).\n\nYou can use this bonus action a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have an extraordinary ability to fluster creatures. As a bonus action, you can unleash a string of provoking words at a creature within 60 feet of you that can hear and understand you. The target must succeed on a Wisdom saving throw or it has disadvantage on attack rolls against targets other than you until the start of your next turn. The DC equals 8 + your proficiency bonus + your Intelligence, Wisdom, or Charisma modifier (choose when you select this race).",
+          "You can use this bonus action a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        ]
+      }
+    ],
+    "description": "**Fearless**: You are immune to the frightened condition.\n\n**Kender Curiosity**: Thanks to the mystical origin of your people, you gain proficiency with one of the following skills of your choice: Insight, Investigation, Sleight of Hand, Stealth, or Survival.\n\n**Taunt**: You have an extraordinary ability to fluster creatures. As a bonus action, you can unleash a string of provoking words at a creature within 60 feet of you that can hear and understand you. The target must succeed on a Wisdom saving throw or it has disadvantage on attack rolls against targets other than you until the start of your next turn. The DC equals 8 + your proficiency bonus + your Intelligence, Wisdom, or Charisma modifier (choose when you select this race).\n\nYou can use this bonus action a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+  }
+]

@@ -1,0 +1,1426 @@
+/**
+ * ============================================================================
+ * ForgeD VTT - Mobile & Touch Adaptive Stylesheet (vtt-mobile.css)
+ * ============================================================================
+ * Strictly isolated for mobile viewports (<= 900px) and touch pointer devices.
+ * Zero desktop regressions: desktop viewports (>900px fine pointer) ignore
+ * these rules completely.
+ * ============================================================================
+ */
+
+/* ============================================================================
+   1. DESKTOP BASELINE - Hide all mobile-specific elements completely
+   ============================================================================ */
+#vtt-mobile-nav,
+#vtt-mobile-tools-fab,
+#vtt-mobile-tools-menu,
+#vtt-mobile-backdrop,
+#vtt-mobile-shape-pill,
+#vtt-mobile-shape-sheet,
+#vtt-mobile-drag-pill,
+#vtt-mobile-token-actions,
+.mobile-only,
+.mobile-sheet-topbar,
+.mobile-drawer-header,
+.mobile-more-grid,
+.btn-mobile-spawn-token,
+.asset-mobile-spawn-btn,
+.btn-mobile-spawn-asset,
+.mobile-sheet-spawn-btn {
+    display: none !important;
+}
+
+/* ============================================================================
+   2. MOBILE & TOUCH MEDIA QUERY
+   ============================================================================ */
+@media screen and (max-width: 900px), screen and (pointer: coarse) and (max-width: 1366px) {
+
+    /* --- Root & Safe Area Helpers --- */
+    :root {
+        --mobile-bottom-nav-h: 56px;
+        --safe-bottom: env(safe-area-inset-bottom, 0px);
+        --total-bottom-space: calc(var(--mobile-bottom-nav-h) + var(--safe-bottom));
+    }
+
+    html, body {
+        overflow: hidden;
+        position: fixed;
+        width: 100vw;
+        height: 100dvh;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none !important;
+        overscroll-behavior: none !important;
+        touch-action: manipulation;
+    }
+
+    /* --- Main Workspace Layout --- */
+    #vtt-workspace {
+        display: block !important;
+        position: relative !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+        grid-template-columns: none !important;
+    }
+
+    /* --- Hide Desktop Left Toolbar (Replaced by Mobile FAB) --- */
+    #vtt-controls {
+        display: none !important;
+    }
+
+    /* --- Fullscreen Canvas Viewport --- */
+    #vtt-canvas-viewport {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        z-index: 10 !important;
+        overflow: hidden !important;
+        overscroll-behavior: none !important;
+        touch-action: none !important;
+        -webkit-touch-callout: none !important;
+    }
+
+    #vtt-canvas-interaction,
+    #canvas-container {
+        touch-action: none !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        user-select: none !important;
+    }
+
+    /* Position Bottom-Left Coordinates above Mobile Bottom Nav */
+    #vtt-coordinates-indicator {
+        bottom: calc(var(--total-bottom-space) + 10px) !important;
+        left: 12px !important;
+        z-index: 50 !important;
+        font-size: 0.72rem !important;
+        padding: 4px 10px !important;
+        border-radius: 12px !important;
+        background: rgba(14, 18, 27, 0.85) !important;
+        border: 1px solid rgba(212, 175, 55, 0.2) !important;
+    }
+
+    /* ========================================================================
+       3. MOBILE BACKDROP OVERLAY
+       ======================================================================== */
+    #vtt-mobile-backdrop {
+        display: block !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        background: rgba(0, 0, 0, 0.65) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+        z-index: 850 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    #vtt-mobile-backdrop.active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    /* ========================================================================
+       4. MOBILE FLOATING TOOL FAB & PALETTE
+       ======================================================================== */
+    #vtt-mobile-tools-fab {
+        display: flex !important;
+        position: fixed !important;
+        top: 14px !important;
+        left: 14px !important;
+        width: 46px !important;
+        height: 46px !important;
+        border-radius: 50% !important;
+        background: rgba(18, 24, 38, 0.92) !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.45) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.55), 0 0 10px rgba(212, 175, 55, 0.15) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        color: #f5c242 !important;
+        font-size: 1.15rem !important;
+        align-items: center !important;
+        justify-content: center !important;
+        z-index: 800 !important;
+        cursor: pointer !important;
+        transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease !important;
+    }
+
+    #vtt-mobile-tools-fab:active {
+        transform: scale(0.92) !important;
+        background: rgba(26, 35, 56, 0.98) !important;
+    }
+
+    #vtt-mobile-tools-fab.active {
+        background: rgba(212, 175, 55, 0.25) !important;
+        border-color: #f5c242 !important;
+        color: #ffffff !important;
+    }
+
+    #vtt-mobile-tools-menu {
+        display: flex !important;
+        flex-direction: column !important;
+        position: fixed !important;
+        top: 68px !important;
+        left: 14px !important;
+        min-width: 190px !important;
+        background: rgba(15, 20, 31, 0.96) !important;
+        border: 1px solid rgba(212, 175, 55, 0.35) !important;
+        border-radius: 14px !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65), 0 0 15px rgba(212, 175, 55, 0.1) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        z-index: 810 !important;
+        padding: 6px !important;
+        gap: 4px !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transform: translateY(-8px) scale(0.96) !important;
+        transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    #vtt-mobile-tools-menu.active {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        transform: translateY(0) scale(1) !important;
+    }
+
+    .mobile-tool-item.vtt-hidden,
+    .mobile-tool-item.gm-only.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-tool-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        padding: 10px 14px !important;
+        border-radius: 10px !important;
+        background: transparent !important;
+        border: none !important;
+        color: #d1d5db !important;
+        font-size: 0.9rem !important;
+        font-weight: 500 !important;
+        cursor: pointer !important;
+        text-align: left !important;
+        width: 100% !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
+    }
+
+    .mobile-tool-item i {
+        font-size: 1rem !important;
+        width: 20px !important;
+        text-align: center !important;
+        color: #f5c242 !important;
+    }
+
+    .mobile-tool-item.active {
+        background: rgba(212, 175, 55, 0.2) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+    }
+
+    .mobile-tool-item:active {
+        background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .mobile-tool-divider {
+        height: 1px !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        margin: 4px 6px !important;
+    }
+
+    /* ========================================================================
+       5. MOBILE BOTTOM NAVIGATION BAR
+       ======================================================================== */
+    #vtt-mobile-nav {
+        display: flex !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: var(--total-bottom-space) !important;
+        padding-bottom: var(--safe-bottom) !important;
+        background: rgba(12, 16, 26, 0.96) !important;
+        border-top: 1px solid rgba(212, 175, 55, 0.3) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        z-index: 1000 !important;
+        align-items: center !important;
+        justify-content: space-around !important;
+        user-select: none !important;
+    }
+
+    .mobile-nav-btn {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 1 !important;
+        height: var(--mobile-bottom-nav-h) !important;
+        background: transparent !important;
+        border: none !important;
+        color: #8a99ad !important;
+        font-size: 0.68rem !important;
+        font-weight: 500 !important;
+        gap: 3px !important;
+        cursor: pointer !important;
+        position: relative !important;
+        padding: 4px 2px !important;
+        transition: color 0.2s ease, transform 0.15s ease !important;
+    }
+
+    .mobile-nav-btn i {
+        font-size: 1.15rem !important;
+        transition: transform 0.2s ease !important;
+    }
+
+    .mobile-nav-btn.active {
+        color: #f5c242 !important;
+        font-weight: 700 !important;
+    }
+
+    .mobile-nav-btn.active i {
+        transform: translateY(-2px) scale(1.1) !important;
+        filter: drop-shadow(0 0 6px rgba(245, 194, 66, 0.6)) !important;
+    }
+
+    .mobile-nav-btn:active {
+        transform: scale(0.94) !important;
+    }
+
+    .mobile-nav-badge {
+        position: absolute !important;
+        top: 4px !important;
+        right: 22% !important;
+        background: #e63946 !important;
+        color: #ffffff !important;
+        font-size: 0.62rem !important;
+        font-weight: 700 !important;
+        padding: 2px 6px !important;
+        border-radius: 10px !important;
+        box-shadow: 0 2px 6px rgba(230, 57, 70, 0.5) !important;
+        pointer-events: none !important;
+    }
+
+    /* ========================================================================
+       6. RIGHT SIDEBAR -> MOBILE FULL DRAWER
+       ======================================================================== */
+    #vtt-sidebar {
+        display: flex !important;
+        flex-direction: column !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: calc(100dvh - var(--total-bottom-space)) !important;
+        max-width: 100vw !important;
+        z-index: 900 !important;
+        background: rgba(13, 17, 27, 0.98) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: none !important;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
+        transform: translateY(100%) !important;
+        transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1) !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7) !important;
+    }
+
+    #vtt-sidebar.mobile-drawer-open {
+        transform: translateY(0) !important;
+    }
+
+    #vtt-sidebar-resizer {
+        display: none !important;
+    }
+
+    /* Hide desktop vertical tab strip inside sidebar on mobile */
+    #vtt-sidebar .sidebar-tabs {
+        display: none !important;
+    }
+
+    #vtt-sidebar .sidebar-content {
+        height: 100% !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        position: relative !important;
+    }
+
+    /* Drawer Header with Title, Back Button and Close Button */
+    .mobile-drawer-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        height: 50px !important;
+        min-height: 50px !important;
+        padding: 0 14px !important;
+        background: rgba(18, 25, 40, 0.98) !important;
+        border-bottom: 1.5px solid rgba(212, 175, 55, 0.25) !important;
+        flex-shrink: 0 !important;
+        z-index: 100 !important;
+    }
+
+    .mobile-drawer-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    .mobile-drawer-back-btn {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        color: #f5c242 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+    }
+
+    .mobile-drawer-title {
+        font-family: var(--font-heading, 'Cinzel', serif) !important;
+        font-size: 1.05rem !important;
+        font-weight: 700 !important;
+        color: #f5c242 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .mobile-drawer-close {
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: #d1d5db !important;
+        font-size: 1rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: background-color 0.15s ease, color 0.15s ease !important;
+    }
+
+    .mobile-drawer-close:active {
+        background: rgba(230, 57, 70, 0.3) !important;
+        color: #ff6b6b !important;
+    }
+
+    /* Tab panels inside mobile sidebar - MUST BE RELATIVE FLEX CHILD SO IT NEVER OVERLAYS DRAWER HEADER */
+    #vtt-sidebar .tab-panel {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        flex: 1 !important;
+        height: calc(100% - 50px) !important;
+        max-height: calc(100% - 50px) !important;
+        display: none !important;
+        flex-direction: column !important;
+        overflow-y: auto !important;
+    }
+
+    #vtt-sidebar .tab-panel.active {
+        display: flex !important;
+    }
+
+    /* Ensure Library internal tabs header doesn't blow out on mobile */
+    .library-tabs-header {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    /* Spawn Token button on Bestiary rows */
+    .btn-mobile-spawn-token {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        border-radius: 8px !important;
+        background: rgba(212, 175, 55, 0.22) !important;
+        border: 1px solid rgba(212, 175, 55, 0.6) !important;
+        color: #f5c242 !important;
+        font-size: 0.95rem !important;
+        cursor: pointer !important;
+        margin-left: 6px !important;
+        flex-shrink: 0 !important;
+        transition: transform 0.15s ease, background-color 0.15s ease !important;
+    }
+
+    .btn-mobile-spawn-token:active {
+        transform: scale(0.92) !important;
+        background: rgba(212, 175, 55, 0.45) !important;
+    }
+
+    /* Spawn button in Creature Sheet Topbar */
+    .mobile-sheet-spawn-btn {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 6px 12px !important;
+        border-radius: 8px !important;
+        background: rgba(212, 175, 55, 0.25) !important;
+        border: 1px solid rgba(212, 175, 55, 0.6) !important;
+        color: #f5c242 !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+    }
+
+    .mobile-sheet-spawn-btn:active {
+        background: rgba(212, 175, 55, 0.5) !important;
+        transform: scale(0.94) !important;
+    }
+
+    /* Dedicated 'More' Grid Hub */
+    .mobile-more-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 14px !important;
+        padding: 16px !important;
+    }
+
+    .mobile-more-card {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 22px 14px !important;
+        border-radius: 14px !important;
+        background: rgba(20, 27, 43, 0.92) !important;
+        border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+        gap: 10px !important;
+        color: #e2e8f0 !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        user-select: none !important;
+        transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease !important;
+    }
+
+    .mobile-more-card:active {
+        transform: scale(0.95) !important;
+        background: rgba(30, 42, 68, 0.98) !important;
+        border-color: #f5c242 !important;
+    }
+
+    .mobile-more-card i {
+        font-size: 1.8rem !important;
+        color: #f5c242 !important;
+    }
+
+    .mobile-more-card span {
+        font-size: 0.88rem !important;
+        font-weight: 600 !important;
+        font-family: var(--font-heading, 'Cinzel', serif) !important;
+    }
+
+    /* ========================================================================
+       7. CHAT & FAST DICE ROLLER ADAPTATIONS
+       ======================================================================== */
+    #tab-chat {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+    }
+
+    #chat-messages {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        padding: 12px !important;
+    }
+
+    .chat-input-area {
+        flex-shrink: 0 !important;
+        background: rgba(16, 22, 35, 0.95) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding: 8px 10px !important;
+    }
+
+    .fast-dice-bar {
+        display: flex !important;
+        overflow-x: auto !important;
+        gap: 6px !important;
+        padding: 4px 2px 8px 2px !important;
+        scrollbar-width: none !important;
+    }
+
+    .fast-dice-bar::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .fast-dice {
+        min-width: 42px !important;
+        height: 36px !important;
+        flex-shrink: 0 !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+    }
+
+    #chat-input {
+        font-size: 16px !important; /* Prevents auto-zoom in Safari iOS */
+        height: 42px !important;
+        border-radius: 10px !important;
+    }
+
+    #btn-chat-send {
+        width: 44px !important;
+        height: 42px !important;
+        border-radius: 10px !important;
+    }
+
+    /* ========================================================================
+       8. CHARACTER & CREATURE SHEETS (FULLSCREEN MOBILE OVERLAYS)
+       ======================================================================== */
+    #player-sheet-panel,
+    #creature-sheet-panel {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        max-width: 100vw !important;
+        z-index: 1100 !important;
+        border: none !important;
+        background: rgba(10, 14, 23, 0.99) !important;
+        backdrop-filter: blur(24px) !important;
+        -webkit-backdrop-filter: blur(24px) !important;
+        transform: translateY(100%) !important;
+        transition: transform 0.32s cubic-bezier(0.33, 1, 0.68, 1) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+
+    #player-sheet-panel.open,
+    #creature-sheet-panel.open {
+        transform: translateY(0) !important;
+    }
+
+    #player-sheet-panel.minimized,
+    #creature-sheet-panel.minimized {
+        transform: translateY(100%) !important;
+    }
+
+    /* Hide desktop minimize arrow buttons */
+    #player-sheet-minimize-btn,
+    #creature-sheet-minimize-btn {
+        display: none !important;
+    }
+
+    /* Mobile Sheet Top Bar */
+    .mobile-sheet-topbar {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 10px 14px !important;
+        background: rgba(18, 25, 40, 0.95) !important;
+        border-bottom: 1.5px solid rgba(212, 175, 55, 0.3) !important;
+        flex-shrink: 0 !important;
+        z-index: 10 !important;
+    }
+
+    .mobile-sheet-info {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-sheet-avatar {
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #f5c242 !important;
+        object-fit: cover !important;
+        flex-shrink: 0 !important;
+    }
+
+    .mobile-sheet-details {
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-sheet-name {
+        font-family: var(--font-heading, 'Cinzel', serif) !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        color: #f5c242 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+
+    .mobile-sheet-hp-pill {
+        font-size: 0.72rem !important;
+        font-weight: 600 !important;
+        color: #4ade80 !important;
+    }
+
+    .mobile-sheet-close-btn {
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        color: #ffffff !important;
+        font-size: 1.15rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        flex-shrink: 0 !important;
+    }
+
+    .mobile-sheet-close-btn:active {
+        background: rgba(230, 57, 70, 0.4) !important;
+    }
+
+    /* Player Sheet Inner Tabs Header on Mobile */
+    .ps-tabs-header {
+        overflow-x: auto !important;
+        scrollbar-width: none !important;
+        padding: 4px 6px !important;
+        background: rgba(14, 19, 31, 0.9) !important;
+        gap: 4px !important;
+    }
+
+    .ps-tabs-header::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .ps-tab-btn {
+        padding: 10px 14px !important;
+        font-size: 0.85rem !important;
+        min-height: 44px !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+    }
+
+    .ps-tab-btn.active {
+        background: rgba(212, 175, 55, 0.2) !important;
+        color: #f5c242 !important;
+        border-bottom: 2px solid #f5c242 !important;
+    }
+
+    /* ========================================================================
+       9. INITIATIVE TRACKER MOBILE ADAPTATION
+       ======================================================================== */
+    #vtt-initiative-carousel-container {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: calc(100dvh - var(--total-bottom-space)) !important;
+        max-width: 100vw !important;
+        z-index: 950 !important;
+        background: rgba(13, 17, 27, 0.98) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+        border: none !important;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
+        transform: translateY(100%) !important;
+        transition: transform 0.3s cubic-bezier(0.33, 1, 0.68, 1) !important;
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7) !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    #vtt-initiative-carousel-container.mobile-init-open {
+        transform: translateY(0) !important;
+    }
+
+    /* Hide desktop drag handle and resize corner on mobile */
+    #btn-init-drag,
+    #init-resize-handle,
+    #hud-init-position,
+    #btn-init-orientation,
+    #btn-init-minimize {
+        display: none !important;
+    }
+
+    .init-scroll-wrapper {
+        flex: 1 !important;
+        height: auto !important;
+        overflow-y: auto !important;
+        max-height: none !important;
+    }
+
+    .init-carousel-list {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 12px !important;
+        gap: 8px !important;
+    }
+
+    .init-controls-bottom {
+        padding: 12px 16px !important;
+        background: rgba(18, 25, 40, 0.95) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+        justify-content: space-around !important;
+    }
+
+    .init-controls-bottom button {
+        min-height: 44px !important;
+        min-width: 44px !important;
+        font-size: 1.1rem !important;
+        border-radius: 12px !important;
+    }
+
+    /* ========================================================================
+       10. GENERAL MODALS & DIALOGS RESPONSIVENESS
+       ======================================================================== */
+    .vtt-overlay-panel .login-card,
+    .vtt-overlay-panel .modal-content,
+    #panel-layers-config,
+    #modal-bestiary-filter .login-card {
+        width: 94vw !important;
+        max-width: 94vw !important;
+        max-height: 88dvh !important;
+        padding: 20px 16px !important;
+        overflow-y: auto !important;
+    }
+
+    /* Mobile Login Card & Inputs (Prevent iOS Safari auto-zoom) */
+    .login-split-container {
+        padding: 10px !important;
+        width: 100vw !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .login-form-pane .login-card {
+        width: 92vw !important;
+        max-width: 420px !important;
+        padding: 24px 16px !important;
+        margin: auto !important;
+    }
+
+    .login-body .form-group input,
+    .login-body .form-group select,
+    #input-gm-password {
+        font-size: 16px !important; /* Prevents auto-zoom on iOS */
+        min-height: 46px !important;
+    }
+
+    .login-body .btn-primary {
+        min-height: 48px !important;
+        font-size: 1rem !important;
+    }
+
+    /* GM Map Preview Banner Offset (Avoids overlapping Mobile Tool FAB) */
+    #vtt-map-preview-banner {
+        top: 14px !important;
+        left: 70px !important;
+        z-index: 805 !important;
+    }
+
+    /* ========================================================================
+       11. TOKEN RIGHT-CLICK / LONG-PRESS CONTEXT MENU MOBILE OPTIMIZATIONS
+       ======================================================================== */
+    .vtt-token-context-menu {
+        max-width: 88vw !important;
+        max-height: 75dvh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.2) !important;
+        border-radius: 12px !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* Centered Mobile Modal Popup for Token Context Menu */
+    .vtt-token-context-menu.mobile-modal-mode {
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 88vw !important;
+        max-width: 360px !important;
+        max-height: 78dvh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        z-index: 1300 !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.55) !important;
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.92), 0 0 24px rgba(212, 175, 55, 0.25) !important;
+        animation: mobileModalPop 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    @keyframes mobileModalPop {
+        from { opacity: 0; transform: translate(-50%, -46%) scale(0.96); }
+        to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .vtt-token-menu-item {
+        padding: 10px 14px !important;
+        min-height: 42px !important;
+    }
+
+    /* Mobile Tap-to-Expand Accordion Submenus */
+    .vtt-token-menu-item .vtt-token-submenu {
+        position: static !important;
+        width: 100% !important;
+        left: auto !important;
+        top: auto !important;
+        border-left: 2px solid rgba(212, 175, 55, 0.4) !important;
+        margin-top: 6px !important;
+        padding-left: 8px !important;
+        background: rgba(0, 0, 0, 0.3) !important;
+        border-radius: 6px !important;
+        box-shadow: none !important;
+        display: none;
+    }
+
+    .vtt-token-menu-item.submenu-expanded .vtt-token-submenu {
+        display: block !important;
+    }
+
+    /* Context menu touch optimization */
+    .context-menu {
+        min-width: 210px !important;
+        padding: 6px !important;
+        border-radius: 14px !important;
+    }
+
+    .btn-ctx-item {
+        padding: 12px 14px !important;
+        font-size: 0.95rem !important;
+    }
+
+    /* ========================================================================
+       12. MOBILE MEASURE & AOE SHAPE FLOATING UI & BOTTOM SHEET
+       ======================================================================== */
+    /* Hide desktop floating measure panel on mobile */
+    #panel-measure-config {
+        display: none !important;
+    }
+
+    /* Floating Shape Button (Placed next to Tabletop Tools FAB on top-left) */
+    #vtt-mobile-shape-pill {
+        display: flex !important;
+        position: fixed !important;
+        top: 14px !important;
+        left: 68px !important;
+        bottom: auto !important;
+        right: auto !important;
+        height: 46px !important;
+        padding: 0 16px !important;
+        border-radius: 23px !important;
+        background: rgba(14, 18, 27, 0.92) !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.45) !important;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6), 0 0 12px rgba(212, 175, 55, 0.25) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        color: #ffffff !important;
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        align-items: center !important;
+        gap: 8px !important;
+        z-index: 810 !important;
+        cursor: pointer !important;
+        transition: transform 0.15s ease, background 0.15s ease !important;
+        touch-action: manipulation !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+    }
+
+    #vtt-mobile-shape-pill.vtt-hidden {
+        display: none !important;
+    }
+
+    #vtt-mobile-shape-pill:active {
+        transform: scale(0.95) !important;
+        background: rgba(212, 175, 55, 0.2) !important;
+    }
+
+    #vtt-mobile-shape-pill .color-dot {
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 50% !important;
+        display: inline-block !important;
+        background: #eab308;
+        box-shadow: 0 0 6px currentColor !important;
+    }
+
+    /* Mobile Shape & Color Bottom Sheet */
+    .vtt-mobile-bottom-sheet {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        background: rgba(14, 18, 27, 0.98) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-top: 1px solid rgba(212, 175, 55, 0.4) !important;
+        border-radius: 20px 20px 0 0 !important;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.8) !important;
+        padding: 12px 18px calc(18px + var(--safe-bottom, 0px)) !important;
+        z-index: 1200 !important;
+        animation: slideUpSheet 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .vtt-mobile-bottom-sheet.vtt-hidden {
+        display: none !important;
+    }
+
+    @keyframes slideUpSheet {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .vtt-sheet-handle {
+        width: 38px !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-radius: 4px !important;
+        margin: 0 auto 12px auto !important;
+    }
+
+    .vtt-sheet-header {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        margin-bottom: 14px !important;
+    }
+
+    .vtt-sheet-header h4 {
+        margin: 0 !important;
+        font-size: 1rem !important;
+        font-weight: 700 !important;
+        color: #f1f5f9 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .vtt-sheet-close {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: none !important;
+        color: #94a3b8 !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+    }
+
+    .vtt-sheet-close:active {
+        background: rgba(239, 68, 68, 0.25) !important;
+        color: #ef4444 !important;
+    }
+
+    .vtt-shape-grid {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+    }
+
+    .vtt-shape-opt {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+        padding: 12px 6px !important;
+        border-radius: 12px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #cbd5e1 !important;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: all 0.15s ease !important;
+    }
+
+    .vtt-shape-opt i {
+        font-size: 1.25rem !important;
+        color: #d4af37 !important;
+    }
+
+    .vtt-shape-opt.active {
+        background: rgba(212, 175, 55, 0.25) !important;
+        border-color: #d4af37 !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(212, 175, 55, 0.3) !important;
+    }
+
+    .vtt-color-picker-row {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding-top: 8px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .vtt-color-label {
+        font-size: 0.85rem !important;
+        font-weight: 600 !important;
+        color: #94a3b8 !important;
+    }
+
+    .vtt-color-swatches {
+        display: flex !important;
+        gap: 12px !important;
+    }
+
+    .vtt-color-swatch {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        border: 2px solid transparent !important;
+        cursor: pointer !important;
+        transition: transform 0.15s ease, border-color 0.15s ease !important;
+    }
+
+    .vtt-color-swatch.active {
+        border-color: #ffffff !important;
+        transform: scale(1.15) !important;
+        box-shadow: 0 0 10px currentColor !important;
+    }
+
+    /* ========================================================================
+       13. FLOATING DISTANCE READOUT PILL (ALWAYS ON TOKEN DRAG ON MOBILE)
+       ======================================================================== */
+    #vtt-mobile-drag-pill {
+        display: flex !important;
+        position: fixed !important;
+        z-index: 1500 !important;
+        pointer-events: none !important;
+        background: rgba(15, 23, 42, 0.94) !important;
+        border: 1.5px solid #d4af37 !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.75), 0 0 12px rgba(212, 175, 55, 0.4) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        padding: 6px 14px !important;
+        border-radius: 20px !important;
+        color: #fef08a !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        align-items: center !important;
+        gap: 8px !important;
+        white-space: nowrap !important;
+        transform: translate(-50%, -140%) !important;
+        transition: opacity 0.15s ease !important;
+    }
+
+    #vtt-mobile-drag-pill.vtt-hidden {
+        display: none !important;
+    }
+
+    #vtt-mobile-drag-pill i {
+        color: #d4af37 !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* ========================================================================
+       14. MOBILE TOKEN QUICK ACTION BAR
+       ======================================================================== */
+    #vtt-mobile-token-actions {
+        display: flex !important;
+        position: fixed !important;
+        z-index: 840 !important;
+        gap: 8px !important;
+        background: rgba(14, 18, 27, 0.95) !important;
+        border: 1px solid rgba(212, 175, 55, 0.45) !important;
+        border-radius: 24px !important;
+        padding: 4px 8px !important;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.75), 0 0 15px rgba(212, 175, 55, 0.25) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        transform: translate(-50%, -130%) !important;
+        animation: fadeInQuickAction 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    #vtt-mobile-token-actions.vtt-hidden {
+        display: none !important;
+    }
+
+    @keyframes fadeInQuickAction {
+        from { opacity: 0; transform: translate(-50%, -110%) scale(0.92); }
+        to { opacity: 1; transform: translate(-50%, -130%) scale(1); }
+    }
+
+    .vtt-token-action-btn {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        padding: 6px 12px !important;
+        border-radius: 16px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: none !important;
+        color: #f1f5f9 !important;
+        font-size: 0.8rem !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+    }
+
+    .vtt-token-action-btn i {
+        color: #f5c242 !important;
+        font-size: 0.85rem !important;
+    }
+
+    .vtt-token-action-btn:active {
+        background: rgba(212, 175, 55, 0.3) !important;
+        color: #ffffff !important;
+    }
+
+    /* ========================================================================
+       15. MOBILE MODALS & BOTTOM SHEET DRAWER PRESENTATION
+       ======================================================================== */
+    .vtt-modal {
+        display: flex !important;
+        align-items: flex-end !important;
+        justify-content: center !important;
+        background: rgba(0, 0, 0, 0.75) !important;
+        backdrop-filter: blur(4px) !important;
+        -webkit-backdrop-filter: blur(4px) !important;
+        padding: 0 !important;
+        z-index: 2500 !important;
+    }
+
+    .vtt-modal.vtt-hidden {
+        display: none !important;
+    }
+
+    .vtt-modal .modal-content,
+    .vtt-modal .vtt-modal-content {
+        width: 100% !important;
+        max-width: 100vw !important;
+        max-height: 86dvh !important;
+        margin: 0 !important;
+        padding: 16px 20px calc(24px + var(--safe-bottom, 0px)) !important;
+        border-radius: 20px 20px 0 0 !important;
+        border-bottom: none !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(212, 175, 55, 0.25) !important;
+        animation: slideUpModal 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        position: relative !important;
+    }
+
+    /* Modal Top Pull Handle */
+    .vtt-modal .modal-content::before,
+    .vtt-modal .vtt-modal-content::before {
+        content: '' !important;
+        display: block !important;
+        width: 38px !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-radius: 4px !important;
+        margin: -4px auto 14px auto !important;
+    }
+
+    @keyframes slideUpModal {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Modal Action Buttons Sticky Bottom Bar on Mobile */
+    .vtt-modal .flex-row.gap-sm:last-child,
+    .vtt-modal .vtt-modal-footer {
+        position: sticky !important;
+        bottom: -24px !important;
+        margin: 20px -20px calc(-24px - var(--safe-bottom, 0px)) -20px !important;
+        padding: 12px 20px calc(14px + var(--safe-bottom, 0px)) 20px !important;
+        background: rgba(14, 18, 27, 0.96) !important;
+        backdrop-filter: blur(8px) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        z-index: 10 !important;
+    }
+
+    /* ========================================================================
+       16. GLOBAL OVERSCROLL CONTAINMENT & SMOOTH SCROLLING ON MOBILE
+       ======================================================================== */
+    .scroll-styled,
+    .tab-panel,
+    .sidebar-content,
+    #chat-messages,
+    .ps-tabs-body,
+    .init-combatants-list,
+    #vtt-creature-sheet-panel,
+    #player-sheet-content {
+        overscroll-behavior: contain !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    /* ========================================================================
+       17. SHEET SUB-MODALS & BESTIARY IMPORT BOTTOM SHEET DRAWER PRESENTATION
+       ======================================================================== */
+    .vtt-sheet-submodal-overlay {
+        z-index: 3000 !important;
+        background: rgba(0, 0, 0, 0.75) !important;
+        backdrop-filter: blur(6px) !important;
+        -webkit-backdrop-filter: blur(6px) !important;
+    }
+
+    .vtt-sheet-submodal {
+        position: fixed !important;
+        top: auto !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        transform: none !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+        max-height: 88dvh !important;
+        border-radius: 20px 20px 0 0 !important;
+        border-bottom: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        z-index: 3010 !important;
+        box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.85), 0 0 20px rgba(212, 175, 55, 0.25) !important;
+        animation: slideUpSubmodal 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .vtt-sheet-submodal-high {
+        z-index: 3025 !important;
+    }
+
+    /* Submodal Top Pull Handle */
+    .vtt-sheet-submodal::before {
+        content: '' !important;
+        display: block !important;
+        width: 40px !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.3) !important;
+        border-radius: 4px !important;
+        margin: 8px auto 6px auto !important;
+        flex-shrink: 0 !important;
+    }
+
+    @keyframes slideUpSubmodal {
+        from { transform: translateY(100%); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* Submodal footer / action bar padding */
+    .vtt-sheet-submodal-footer,
+    .vtt-sheet-submodal > div:last-child {
+        padding-bottom: calc(14px + var(--safe-bottom, 0px)) !important;
+    }
+
+    .vtt-sheet-submodal .btn {
+        min-height: 42px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .vtt-sheet-submodal input[type="checkbox"] {
+        min-width: 20px !important;
+        min-height: 20px !important;
+    }
+
+    /* Bestiary Template Import Modal - Fullscreen Mobile Drawer */
+    .bestiary-import-drawer-mobile {
+        position: fixed !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100vw !important;
+        height: 100dvh !important;
+        max-width: 100vw !important;
+        max-height: 100dvh !important;
+        border-radius: 0 !important;
+        border: none !important;
+        transform: none !important;
+        z-index: 3010 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 !important;
+        background: var(--color-bg-base, #10141d) !important;
+        animation: slideUpSubmodal 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .bestiary-import-drawer-mobile .bestiary-drawer-header {
+        padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px 16px !important;
+        background: rgba(14, 18, 27, 0.98) !important;
+        border-bottom: 1px solid var(--color-border-subtle) !important;
+    }
+
+    .bestiary-import-drawer-mobile .bestiary-drawer-body {
+        flex: 1 !important;
+        padding: 12px 16px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+
+    .bestiary-import-drawer-mobile .npc-template-row {
+        min-height: 48px !important;
+        padding: 10px 12px !important;
+    }
+}
+
+/* ============================================================================
+   3. MANUAL UI OVERRIDES (FORCE-DESKTOP-UI & FORCE-MOBILE-UI)
+   ============================================================================ */
+html.force-desktop-ui #vtt-mobile-nav,
+html.force-desktop-ui #vtt-mobile-tools-fab,
+html.force-desktop-ui #vtt-mobile-tools-menu,
+html.force-desktop-ui #vtt-mobile-backdrop,
+html.force-desktop-ui #vtt-mobile-shape-pill,
+html.force-desktop-ui #vtt-mobile-shape-sheet,
+html.force-desktop-ui #vtt-mobile-drag-pill,
+html.force-desktop-ui #vtt-mobile-token-actions,
+html.force-desktop-ui .mobile-only,
+html.force-desktop-ui .mobile-sheet-topbar,
+html.force-desktop-ui .mobile-drawer-header,
+html.force-desktop-ui .mobile-more-grid,
+html.force-desktop-ui .btn-mobile-spawn-token,
+html.force-desktop-ui .asset-mobile-spawn-btn,
+html.force-desktop-ui .btn-mobile-spawn-asset,
+html.force-desktop-ui .mobile-sheet-spawn-btn {
+    display: none !important;
+}
+
+html.force-desktop-ui #vtt-controls {
+    display: flex !important;
+}
+
+html.force-desktop-ui #vtt-workspace {
+    display: grid !important;
+    grid-template-columns: var(--vtt-sidebar-w, 360px) 1fr !important;
+    position: relative !important;
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
+html.force-desktop-ui #vtt-sidebar {
+    display: flex !important;
+    position: relative !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+}
+
+html.force-desktop-ui #vtt-canvas-viewport {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+}

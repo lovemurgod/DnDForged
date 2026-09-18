@@ -1,0 +1,640 @@
+[
+  {
+    "id": "class_cleric_xua2022clericandrevisedspecies",
+    "name": "Cleric",
+    "source": "XUA2022ClericAndRevisedSpecies",
+    "page": 3,
+    "hitDie": "d8",
+    "primaryAbility": "None",
+    "features": [
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_channel_divinity_1",
+        "name": "Channel Divinity",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 4,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 1,
+        "actionType": "action",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the ability to channel divine energy directly from the Outer Planes, using that energy to fuel magical effects. You start with two such effects: Divine Spark and Turn Undead, each of which is described below. Each time you use your Channel Divinity, you choose which effect to create, and you gain additional effect options at higher levels in this Class.</p>\n<p>You can use your Channel Divinity a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XUA2022ClericAndRevisedSpecies.</p>\n<p>Some Channel Divinity effects require Saving Throws. When you use such an effect from this Class, the DC equals the Spell Save DC from this Class's Spellcasting feature.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Divine Spark.</strong> <p>As a Magic Action, you point your Holy Symbol at another creature you can see within 30 feet of yourself and focus divine energy at them. Roll a number of d8s equal to your Proficiency Bonus and add the rolls together. You either restore Hit Points to the creature equal to that total or force the creature to make a Constitution Saving Throw. On a failed save, the creature takes Radiant Damage equal to the total, and on a successful save, the creature takes half as much damage (rounded down).</p></div>\n<div class=\"compendium-subentry\"><strong>Turn Undead.</strong> <p>As a Magic Action, you present your Holy Symbol and speak a prayer censuring Undead creatures. Each Undead within 30 feet of you must make a Wisdom Saving Throw. If the creature fails its Saving Throw, it is Dazed for 1 minute or until it takes any damage or you are Incapacitated or die. While Dazed in this way, the only Action the creature can take is the Dash Action, and if it Moves, it must end that Move|XUA2022ClericAndRevisedSpecies farther from you than where it started.</p></div></div>",
+        "rawEntries": [
+          "You gain the ability to channel divine energy directly from the Outer Planes, using that energy to fuel magical effects. You start with two such effects: Divine Spark and Turn Undead, each of which is described below. Each time you use your Channel Divinity, you choose which effect to create, and you gain additional effect options at higher levels in this Class.",
+          "You can use your Channel Divinity a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a {@variantrule Long Rest|XUA2022ClericAndRevisedSpecies}.",
+          "Some Channel Divinity effects require Saving Throws. When you use such an effect from this Class, the DC equals the Spell Save DC from this Class's Spellcasting feature.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Divine Spark",
+                "entries": [
+                  "As a {@action Magic|XUA2022ClericAndRevisedSpecies} Action, you point your Holy Symbol at another creature you can see within 30 feet of yourself and focus divine energy at them. Roll a number of d8s equal to your Proficiency Bonus and add the rolls together. You either restore Hit Points to the creature equal to that total or force the creature to make a Constitution Saving Throw. On a failed save, the creature takes Radiant Damage equal to the total, and on a successful save, the creature takes half as much damage (rounded down)."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Turn Undead",
+                "entries": [
+                  "As a {@action Magic|XUA2022ClericAndRevisedSpecies} Action, you present your Holy Symbol and speak a prayer censuring Undead creatures. Each Undead within 30 feet of you must make a Wisdom Saving Throw. If the creature fails its Saving Throw, it is Dazed for 1 minute or until it takes any damage or you are {@condition Incapacitated|XUA2022ClericAndRevisedSpecies} or die. While Dazed in this way, the only Action the creature can take is the {@action Dash|XUA2022ClericAndRevisedSpecies} Action, and if it Moves, it must end that {@variantrule Move|XUA2022ClericAndRevisedSpecies} farther from you than where it started."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_spellcasting_1",
+        "name": "Spellcasting",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 4,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have learned to cast Spells through prayer, meditation, and devotion. See the Player's Handbook for the rules on spellcasting. The information below details how you use those rules as a Cleric.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Prepared Spells.</strong> <p>You have the following Spells prepared: Cure Wounds, Sacred Flame, Shield of Faith, Spare the Dying, and Thaumaturgy. Alternatively, you can prepare three 0-level Spells (also known as cantrips) and two 1st-level Spells of your choice. Any Spell you prepare for this Class must be a Divine Spell.</p>\n<p>Whenever you finish a Long Rest|XUA2022ClericAndRevisedSpecies, you can pray or meditate and replace any Spell you have prepared for this Class with another Divine Spell of the same level.</p>\n<p>At higher levels in this Class, you can prepare more Spells, as shown on the Cleric table. The numbers there determine the number of different Spells you can prepare of each level. For example, as a 4th-level Cleric, you can prepare four different 0-level Spells, four different 1st-level Spells, and three different 2nd-level Spells.</p>\n<p>Consult the \"Prepared Cleric Spells\" section for recommendations on which spells to prepare at higher levels.</p></div>\n<div class=\"compendium-subentry\"><strong>Spell Slots.</strong> <p>The Cleric table shows how many Spell Slots you have at each level to cast your Cleric Spells of 1st level and higher; the number of different Spells you can prepare of each level equals the number of Spell Slots you have at that level. For example, as a 5th-level Cleric, you have four 1st-level Spell Slots, three 2nd-level Spell Slots, and two 3rd-level Spell Slots.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Ability.</strong> <p>Wisdom is your Spellcasting Ability for your Cleric Spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Focus.</strong> <p>You can use a Holy Symbol as a Spellcasting Focus for the Spells you prepare for this Class.</p></div></div>",
+        "rawEntries": [
+          "You have learned to cast Spells through prayer, meditation, and devotion. See the Player's Handbook for the rules on spellcasting. The information below details how you use those rules as a Cleric.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Prepared Spells",
+                "entries": [
+                  "You have the following Spells prepared: {@spell Cure Wounds}, {@spell Sacred Flame}, {@spell Shield} of Faith, {@spell Spare the Dying}, and {@spell Thaumaturgy}. Alternatively, you can prepare three 0-level Spells (also known as cantrips) and two 1st-level Spells of your choice. Any Spell you prepare for this Class must be a Divine Spell.",
+                  "Whenever you finish a {@variantrule Long Rest|XUA2022ClericAndRevisedSpecies}, you can pray or meditate and replace any Spell you have prepared for this Class with another Divine Spell of the same level.",
+                  "At higher levels in this Class, you can prepare more Spells, as shown on the Cleric table. The numbers there determine the number of different Spells you can prepare of each level. For example, as a 4th-level Cleric, you can prepare four different 0-level Spells, four different 1st-level Spells, and three different 2nd-level Spells.",
+                  "Consult the \"Prepared Cleric Spells\" section for recommendations on which spells to prepare at higher levels."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spell Slots",
+                "entries": [
+                  "The Cleric table shows how many Spell Slots you have at each level to cast your Cleric Spells of 1st level and higher; the number of different Spells you can prepare of each level equals the number of Spell Slots you have at that level. For example, as a 5th-level Cleric, you have four 1st-level Spell Slots, three 2nd-level Spell Slots, and two 3rd-level Spell Slots."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spellcasting Ability",
+                "entries": [
+                  "Wisdom is your Spellcasting Ability for your Cleric Spells."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spellcasting Focus",
+                "entries": [
+                  "You can use a Holy Symbol as a Spellcasting Focus for the Spells you prepare for this Class."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_holy_order_2",
+        "name": "Holy Order",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 5,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have dedicated yourself to one of the following sacred roles, either on your own or as part of a religious order. Choose one of the following options:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Protector.</strong> <p>Trained for battle, you gain Martial Weapon Proficiency and Heavy Armor Training|XUA2022ClericAndRevisedSpecies.</p></div></li><li><div class=\"compendium-subentry\"><strong>Scholar.</strong> <p>Studying and teaching about lore of the gods and the multiverse, you gain Proficiency in two of the following Skills of your choice: Arcana, History, Nature, Persuasion, and Religion. Whenever you make an Ability Check|XUA2022ClericAndRevisedSpecies using either Skill, you gain a bonus to the check equal to your Wisdom Modifier.</p></div></li><li><div class=\"compendium-subentry\"><strong>Thaumaturge.</strong> <p>Delving deeper into your divine magical abilities, you can prepare one extra 0level Spell from the Divine Spell list. See your Spellcasting feature for more information on preparing Spells. In addition, you regain one expended use of your Channel Divinity whenever you finish a Short Rest.</p></div></li></ul>",
+        "rawEntries": [
+          "You have dedicated yourself to one of the following sacred roles, either on your own or as part of a religious order. Choose one of the following options:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Protector",
+                "entries": [
+                  "Trained for battle, you gain Martial Weapon Proficiency and Heavy {@variantrule Armor Training|XUA2022ClericAndRevisedSpecies}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Scholar",
+                "entries": [
+                  "Studying and teaching about lore of the gods and the multiverse, you gain Proficiency in two of the following Skills of your choice: {@skill Arcana}, {@skill History}, {@skill Nature}, {@skill Persuasion}, and {@skill Religion}. Whenever you make an {@variantrule Ability Check|XUA2022ClericAndRevisedSpecies} using either Skill, you gain a bonus to the check equal to your Wisdom Modifier."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Thaumaturge",
+                "entries": [
+                  "Delving deeper into your divine magical abilities, you can prepare one extra 0level Spell from the Divine Spell list. See your Spellcasting feature for more information on preparing Spells. In addition, you regain one expended use of your Channel Divinity whenever you finish a Short Rest."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_cleric_subclass_3",
+        "name": "Cleric Subclass",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 5,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Life Domain Subclass or another Cleric Subclass of your choice. The Life Domain is detailed after the Cleric's Class description, and other Subclasses will appear in future Unearthed Arcana articles.</p>\n<p>A Subclass is a specialization that grants you special abilities at certain Cleric levels. For the rest of your career, you gain each of your Subclass's features that are of your Cleric level and lower. This Class's description tells you the levels when your Subclass provides features.</p>",
+        "rawEntries": [
+          "You gain the Life Domain Subclass or another Cleric Subclass of your choice. The Life Domain is detailed after the Cleric's Class description, and other Subclasses will appear in future Unearthed {@skill Arcana} articles.",
+          "A Subclass is a specialization that grants you special abilities at certain Cleric levels. For the rest of your career, you gain each of your Subclass's features that are of your Cleric level and lower. This Class's description tells you the levels when your Subclass provides features."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_feat_4",
+        "name": "Feat",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 5,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 4,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_smite_undead_5",
+        "name": "Smite Undead",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 5,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can cause your Turn Undead feature to smite the undying; whenever you use Turn Undead, you can roll a number of d8s equal to your Proficiency Bonus and add the rolls together. Each Undead that fails its Saving Throw against that use of Turn Undead takes Radiant Damage equal to the roll's total.</p>",
+        "rawEntries": [
+          "You can cause your Turn Undead feature to smite the undying; whenever you use Turn Undead, you can roll a number of d8s equal to your Proficiency Bonus and add the rolls together. Each Undead that fails its Saving Throw against that use of Turn Undead takes Radiant Damage equal to the roll's total."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_subclass_feature_6",
+        "name": "Subclass Feature",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 5,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 6,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Cleric Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Cleric Subclass."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_blessed_strikes_7",
+        "name": "Blessed Strikes",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 5,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 7,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d8",
+        "formulaConfig": {
+          "baseDice": "1d8",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "entriesHtml": "<p>Divine power infuses you in battle. When a creature takes damage from one of your 0-level Spells or your attacks with Weapons, you can also deal 1d8 Radiant Damage to that creature. Once you deal this damage, you can't use this feature again until the start of your next turn.</p>",
+        "rawEntries": [
+          "Divine power infuses you in battle. When a creature takes damage from one of your 0-level Spells or your attacks with Weapons, you can also deal {@damage 1d8} Radiant Damage to that creature. Once you deal this damage, you can't use this feature again until the start of your next turn."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_feat_8",
+        "name": "Feat",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 8,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_holy_order_9",
+        "name": "Holy Order",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 9,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Your sacred duties have expanded, allowing you to choose a second option from the Holy Order feature.</p>",
+        "rawEntries": [
+          "Your sacred duties have expanded, allowing you to choose a second option from the Holy Order feature."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_subclass_feature_10",
+        "name": "Subclass Feature",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Cleric Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Cleric Subclass."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_divine_intervention_11",
+        "name": "Divine Intervention",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 11,
+        "actionType": "action",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "2d6",
+        "formulaConfig": {
+          "baseDice": "2d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "entriesHtml": "<p>You can call on your deity or pantheon to intervene on your behalf when your need is great.</p>\n<p>As an Action, describe the assistance you seek, and roll percentile dice. If you roll a number equal to or lower than your Cleric level, the divine power intervenes. The DM chooses the nature of the intervention; the effect of any Divine Spell is appropriate.</p>\n<p>If the intervention occurs, you can't use this feature again for 2d6 days. Otherwise, you can use it again after you finish a Long Rest|XUA2022ClericAndRevisedSpecies.</p>",
+        "rawEntries": [
+          "You can call on your deity or pantheon to intervene on your behalf when your need is great.",
+          "As an Action, describe the assistance you seek, and roll percentile dice. If you roll a number equal to or lower than your Cleric level, the divine power intervenes. The DM chooses the nature of the intervention; the effect of any Divine Spell is appropriate.",
+          "If the intervention occurs, you can't use this feature again for {@dice 2d6} days. Otherwise, you can use it again after you finish a {@variantrule Long Rest|XUA2022ClericAndRevisedSpecies}."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_feat_12",
+        "name": "Feat",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 12,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_subclass_feature_14",
+        "name": "Subclass Feature",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 14,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Cleric Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Cleric Subclass."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_feat_16",
+        "name": "Feat",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 16,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_great_divine_intervention_18",
+        "name": "Great Divine Intervention",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 18,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "2d4",
+        "formulaConfig": {
+          "baseDice": "2d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "entriesHtml": "<p>When you use your Divine Intervention feature, it succeeds automatically—no roll required—and you can use it again after 2d4 days.</p>",
+        "rawEntries": [
+          "When you use your Divine Intervention feature, it succeeds automatically—no roll required—and you can use it again after {@dice 2d4} days."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_feat_19",
+        "name": "Feat",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 19,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_cleric_xua2022clericandrevisedspecies_epic_boon_20",
+        "name": "Epic Boon",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 6,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "level": 20,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Epic Boon of Fate or another Epic Boon Feat of your choice.</p>",
+        "rawEntries": [
+          "You gain the {@feat Epic Boon of Fate|XUA2022ClericAndRevisedSpecies} or another Epic Boon Feat of your choice."
+        ]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "subclass_cleric_life_xua2022clericandrevisedspecies",
+        "name": "Life Domain",
+        "shortName": "Life",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "page": 7,
+        "className": "Cleric",
+        "classSource": "XUA2022ClericAndRevisedSpecies",
+        "features": [
+          {
+            "id": "scf_cleric_life_xua2022clericandrevisedspecies_disciple_of_life_3",
+            "name": "Disciple of Life",
+            "source": "XUA2022ClericAndRevisedSpecies",
+            "page": 7,
+            "className": "Cleric",
+            "classSource": "XUA2022ClericAndRevisedSpecies",
+            "subclassShortName": "Life",
+            "subclassSource": "XUA2022ClericAndRevisedSpecies",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your healing Spells are empowered by life itself. When a Spell you cast with a Spell Slot restores Hit Points to a creature, that creature regains additional Hit Points on the turn you cast the Spell. The additional Hit Points equal 2 plus the Spell's level.</p>",
+            "rawEntries": [
+              "Your healing Spells are empowered by life itself. When a Spell you cast with a Spell Slot restores Hit Points to a creature, that creature regains additional Hit Points on the turn you cast the Spell. The additional Hit Points equal 2 plus the Spell's level."
+            ]
+          },
+          {
+            "id": "scf_cleric_life_xua2022clericandrevisedspecies_domain_spells_3",
+            "name": "Domain Spells",
+            "source": "XUA2022ClericAndRevisedSpecies",
+            "page": 7,
+            "className": "Cleric",
+            "classSource": "XUA2022ClericAndRevisedSpecies",
+            "subclassShortName": "Life",
+            "subclassSource": "XUA2022ClericAndRevisedSpecies",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your connection to this divine domain ensures you always have certain Spells ready. When you reach a Cleric level specified in the Life Domain Spells table, you thereafter always have the listed Spells prepared. These Spells don't count against the number of Spells you can prepare, and they follow the rules of this Class's Spellcasting feature.</p>\n<table class=\"compendium-table\"><thead><tr><th>Cleric Level</th><th>Prepared Spells</th></tr></thead><tbody><tr><td>3rd</td><td>Lesser Restoration, Prayer of Healing</td></tr><tr><td>5th</td><td>Mass Healing Word, Revivify</td></tr><tr><td>7th</td><td>Aura of Life, Death Ward</td></tr><tr><td>9th</td><td>Greater Restoration, Mass Cure Wounds</td></tr></tbody></table>",
+            "rawEntries": [
+              "Your connection to this divine domain ensures you always have certain Spells ready. When you reach a Cleric level specified in the Life Domain Spells table, you thereafter always have the listed Spells prepared. These Spells don't count against the number of Spells you can prepare, and they follow the rules of this Class's Spellcasting feature.",
+              {
+                "type": "table",
+                "caption": "Life Domain Spells",
+                "colLabels": [
+                  "Cleric Level",
+                  "Prepared Spells"
+                ],
+                "colStyles": [
+                  "col-1 text-center",
+                  "col-11"
+                ],
+                "rows": [
+                  [
+                    "3rd",
+                    "{@spell Lesser Restoration}, {@spell Prayer of Healing|XUA2022ClericAndRevisedSpecies}"
+                  ],
+                  [
+                    "5th",
+                    "{@spell Mass Healing Word}, {@spell Revivify}"
+                  ],
+                  [
+                    "7th",
+                    "{@spell Aura of Life}, {@spell Death Ward}"
+                  ],
+                  [
+                    "9th",
+                    "{@spell Greater Restoration}, {@spell Mass Cure Wounds}"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_cleric_life_xua2022clericandrevisedspecies_life_domain_3",
+            "name": "Life Domain",
+            "source": "XUA2022ClericAndRevisedSpecies",
+            "page": 7,
+            "className": "Cleric",
+            "classSource": "XUA2022ClericAndRevisedSpecies",
+            "subclassShortName": "Life",
+            "subclassSource": "XUA2022ClericAndRevisedSpecies",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>The Life Domain focuses on the vibrant positive energy—one of the fundamental forces of the universe—that sustains all life. The Clerics who tap into this domain are masters of healing, using that force of life to cure many hurts.</p>\n<p>Existence itself relies on the positive energy associated with this domain, so a Cleric of any religious tradition might choose it. This domain is associated with agricultural deities, sun gods, gods of healing or endurance, and gods of home and community. Religious orders of healing also seek the powers of this domain.</p>",
+            "rawEntries": [
+              "The Life Domain focuses on the vibrant positive energy—one of the fundamental forces of the universe—that sustains all life. The Clerics who tap into this domain are masters of healing, using that force of life to cure many hurts.",
+              "Existence itself relies on the positive energy associated with this domain, so a Cleric of any religious tradition might choose it. This domain is associated with agricultural deities, sun gods, gods of healing or endurance, and gods of home and community. Religious orders of healing also seek the powers of this domain.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Domain Spells|Cleric|XUA2022ClericAndRevisedSpecies|Life|XUA2022ClericAndRevisedSpecies|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Disciple of Life|Cleric|XUA2022ClericAndRevisedSpecies|Life|XUA2022ClericAndRevisedSpecies|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_cleric_life_xua2022clericandrevisedspecies_preserve_life_6",
+            "name": "Preserve Life",
+            "source": "XUA2022ClericAndRevisedSpecies",
+            "page": 7,
+            "className": "Cleric",
+            "classSource": "XUA2022ClericAndRevisedSpecies",
+            "subclassShortName": "Life",
+            "subclassSource": "XUA2022ClericAndRevisedSpecies",
+            "level": 6,
+            "actionType": "action",
+            "hasCounter": true,
+            "usesMax": 2,
+            "resetType": "short",
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can use your Channel Divinity to heal a group of the critically injured. As an Action, you expend one use of your Channel Divinity and present your Holy Symbol, restoring a number of Hit Points equal to 5 times your Cleric level.</p>\n<p>Choose any creatures within 30 feet of yourself (you can choose yourself), and divide those Hit Points among the chosen creatures. This feature can bring a creature's current Hit Points to no more than half its Hit Point Maximum.</p>",
+            "rawEntries": [
+              "You can use your Channel Divinity to heal a group of the critically injured. As an Action, you expend one use of your Channel Divinity and present your Holy Symbol, restoring a number of Hit Points equal to 5 times your Cleric level.",
+              "Choose any creatures within 30 feet of yourself (you can choose yourself), and divide those Hit Points among the chosen creatures. This feature can bring a creature's current Hit Points to no more than half its Hit Point Maximum."
+            ]
+          },
+          {
+            "id": "scf_cleric_life_xua2022clericandrevisedspecies_blessed_healer_10",
+            "name": "Blessed Healer",
+            "source": "XUA2022ClericAndRevisedSpecies",
+            "page": 7,
+            "className": "Cleric",
+            "classSource": "XUA2022ClericAndRevisedSpecies",
+            "subclassShortName": "Life",
+            "subclassSource": "XUA2022ClericAndRevisedSpecies",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>The healing spells you cast on others heal you as well. When you cast a spell with a Spell Slot on another creature that restores Hit Points to it, you regain Hit Points equal to 2 plus the Spell's level on the turn you cast the Spell.</p>",
+            "rawEntries": [
+              "The healing spells you cast on others heal you as well. When you cast a spell with a Spell Slot on another creature that restores Hit Points to it, you regain Hit Points equal to 2 plus the Spell's level on the turn you cast the Spell."
+            ]
+          },
+          {
+            "id": "scf_cleric_life_xua2022clericandrevisedspecies_supreme_healing_14",
+            "name": "Supreme Healing",
+            "source": "XUA2022ClericAndRevisedSpecies",
+            "page": 7,
+            "className": "Cleric",
+            "classSource": "XUA2022ClericAndRevisedSpecies",
+            "subclassShortName": "Life",
+            "subclassSource": "XUA2022ClericAndRevisedSpecies",
+            "level": 14,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "2d6",
+            "formulaConfig": {
+              "baseDice": "2d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>When you would normally roll one or more dice to restore Hit Points to a creature with a Spell that you cast with a Spell Slot, don't roll those dice for the healing; instead use the highest number possible for each die. For example, instead of restoring 2d6 Hit Points to a creature with a Spell, you restore 12.</p>",
+            "rawEntries": [
+              "When you would normally roll one or more dice to restore Hit Points to a creature with a Spell that you cast with a Spell Slot, don't roll those dice for the healing; instead use the highest number possible for each die. For example, instead of restoring {@dice 2d6} Hit Points to a creature with a Spell, you restore 12."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

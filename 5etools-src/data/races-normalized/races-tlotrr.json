@@ -1,0 +1,3387 @@
+[
+  {
+    "id": "race_barding_tlotrr",
+    "name": "Barding",
+    "source": "TLotRR",
+    "page": 28,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Adventuring Age.</strong> <p>Between 18–40 years of age. Bardings rarely become adventurers before their 18th year, and retire in their forties, when they return home to serve their family and folk.</p></div>\n<div class=\"compendium-subentry\"><strong>Archers of Dale.</strong> <p>You have proficiency with the longbow.</p></div>\n<div class=\"compendium-subentry\"><strong>Starting Virtue.</strong> <p>You gain one cultural virtue of your choice (see Chapter 4|TLotRR|3|Virtues).</p></div>\n<div class=\"compendium-subentry\"><strong>Trading People.</strong> <p>You have proficiency in the Persuasion skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read and write Westron|TLotRR and Dalish|TLotRR, a language that can be described as a very old form of the Westron|TLotRR|Common Speech.</p></div>\n<div class=\"compendium-subentry\"><strong>Standard of Living: Prosperous.</strong> <p>The city of Dale and nearby Esgaroth are successful trading towns. Those among the Bardings who choose a life of adventure are usually members of less affluent families—yet, their wealth is still superior to that of most of the denizens of Eriador.</p>\n<div class=\"compendium-subentry\"><strong>Starting Gear.</strong> </div></div>\n<div class=\"compendium-subentry\"><strong>Backgrounds.</strong> <p>Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:</p>\n<ul><li>Dragon Stories</li><li>By Hammer and Anvil</li><li>Healing Hands</li><li>Gifted Senses</li><li>A Patient Hunter</li><li>Wordweaver</li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_barding_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Barding",
+        "actionType": "passive",
+        "description": "Between 18–40 years of age. Bardings rarely become adventurers before their 18th year, and retire in their forties, when they return home to serve their family and folk.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 18–40 years of age. Bardings rarely become adventurers before their 18th year, and retire in their forties, when they return home to serve their family and folk."
+        ]
+      },
+      {
+        "id": "trait_barding_archers_of_dale_tlotrr",
+        "name": "Archers of Dale",
+        "source": "TLotRR",
+        "raceName": "Barding",
+        "actionType": "passive",
+        "description": "You have proficiency with the longbow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item longbow|PHB|great bow}."
+        ]
+      },
+      {
+        "id": "trait_barding_starting_virtue_tlotrr",
+        "name": "Starting Virtue",
+        "source": "TLotRR",
+        "raceName": "Barding",
+        "actionType": "passive",
+        "description": "You gain one cultural virtue of your choice (see Chapter 4|TLotRR|3|Virtues).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain one cultural virtue of your choice (see {@book Chapter 4|TLotRR|3|Virtues})."
+        ]
+      },
+      {
+        "id": "trait_barding_trading_people_tlotrr",
+        "name": "Trading People",
+        "source": "TLotRR",
+        "raceName": "Barding",
+        "actionType": "passive",
+        "description": "You have proficiency in the Persuasion skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Persuasion} skill."
+        ]
+      },
+      {
+        "id": "trait_barding_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Barding",
+        "actionType": "passive",
+        "description": "You can speak, read and write Westron|TLotRR and Dalish|TLotRR, a language that can be described as a very old form of the Westron|TLotRR|Common Speech.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read and write {@language Westron|TLotRR} and {@language Dalish|TLotRR}, a language that can be described as a very old form of the {@language Westron|TLotRR|Common Speech}."
+        ]
+      },
+      {
+        "id": "trait_barding_standard_of_living_prosperous_tlotrr",
+        "name": "Standard of Living: Prosperous",
+        "source": "TLotRR",
+        "raceName": "Barding",
+        "actionType": "passive",
+        "description": "The city of Dale and nearby Esgaroth are successful trading towns. Those among the Bardings who choose a life of adventure are usually members of less affluent families—yet, their wealth is still superior to that of most of the denizens of Eriador.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "The city of Dale and nearby Esgaroth are successful trading towns. Those among the Bardings who choose a life of adventure are usually members of less affluent families—yet, their wealth is still superior to that of most of the denizens of Eriador.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_barding_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Barding",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Dragon Stories\n- By Hammer and Anvil\n- Healing Hands\n- Gifted Senses\n- A Patient Hunter\n- Wordweaver",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Dragon Stories|TLotRR}",
+              "{@background By Hammer and Anvil|TLotRR}",
+              "{@background Healing Hands|TLotRR}",
+              "{@background Gifted Senses|TLotRR}",
+              "{@background A Patient Hunter|TLotRR}",
+              "{@background Wordweaver|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 18–40 years of age. Bardings rarely become adventurers before their 18th year, and retire in their forties, when they return home to serve their family and folk.\n\n**Archers of Dale**: You have proficiency with the longbow.\n\n**Starting Virtue**: You gain one cultural virtue of your choice (see Chapter 4|TLotRR|3|Virtues).\n\n**Trading People**: You have proficiency in the Persuasion skill.\n\n**Languages**: You can speak, read and write Westron|TLotRR and Dalish|TLotRR, a language that can be described as a very old form of the Westron|TLotRR|Common Speech.\n\n**Standard of Living: Prosperous**: The city of Dale and nearby Esgaroth are successful trading towns. Those among the Bardings who choose a life of adventure are usually members of less affluent families—yet, their wealth is still superior to that of most of the denizens of Eriador.\n\n**Starting Gear**\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Dragon Stories\n- By Hammer and Anvil\n- Healing Hands\n- Gifted Senses\n- A Patient Hunter\n- Wordweaver"
+  },
+  {
+    "id": "race_bree_hobbit_tlotrr",
+    "name": "Bree-Hobbit",
+    "source": "TLotRR",
+    "page": 183,
+    "size": "Medium",
+    "speed": "30 ft",
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_bree_hobbit_ability_score_increase_tlotrr",
+        "name": "Ability Score Increase",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Your Dexterity score increases by 2.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your Dexterity score increases by 2."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_bree_hobbit_curiosity_tlotrr",
+        "name": "Bree-Hobbit Curiosity",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency in the Insight skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Insight} skill."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_hobbit_sense_tlotrr",
+        "name": "Hobbit-Sense",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_pipe_weed_lore_tlotrr",
+        "name": "Pipe-Weed Lore",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency with pipe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item pipe|TLotRR|pipes}."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_unobtrusive_tlotrr",
+        "name": "Unobtrusive",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You speak, read and write {@language Westron|TLotRR}, preserving the use of a few words and names of your own forgotten tongue."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_standard_of_living_common_tlotrr",
+        "name": "Standard of Living: Common",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_subculture_tlotrr",
+        "name": "Subculture",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bucklander|TLotRR}",
+              "{@background On Patrol|TLotRR}",
+              "{@background Restless Farmer|TLotRR}",
+              "{@background Too Many Paths to Tread|TLotRR}",
+              "{@background Tookish Blood|TLotRR}",
+              "{@background Witty Gentlehobbit|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_cultural_virtues_tlotrr",
+        "name": "Cultural Virtues",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for Hobbit:\n\n- Bree-Pony\n- Desperate Courage\n- Small Folk\n- Strange as News from Bree\n- The Art of Smoking\n- Tough as Old Tree-Roots",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for {@race Hobbit|TLotRR|hobbits}:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@feat Bree-Pony|TLotRR}",
+              "{@feat Desperate Courage|TLotRR}",
+              "{@feat Small Folk|TLotRR}",
+              "{@feat Strange as News from Bree|TLotRR}",
+              "{@feat The Art of Smoking|TLotRR}",
+              "{@feat Tough as Old Tree-Roots|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Ability Score Increase**: Your Dexterity score increases by 2.\n\n**Adventuring Age**: Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.\n\n**Bree-Hobbit Curiosity**: You have proficiency in the Insight skill.\n\n**Hobbit-Sense**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.\n\n**Pipe-Weed Lore**: You have proficiency with pipe.\n\n**Unobtrusive**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.\n\n**Standard of Living: Common**: Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**\n\n**Subculture**: All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit\n\n**Cultural Virtues**: Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for Hobbit:\n\n- Bree-Pony\n- Desperate Courage\n- Small Folk\n- Strange as News from Bree\n- The Art of Smoking\n- Tough as Old Tree-Roots"
+  },
+  {
+    "id": "race_bree_hobbit_fallohide_tlotrr",
+    "name": "Bree-Hobbit (Fallohide)",
+    "raceName": "Bree-Hobbit",
+    "subraceName": "Fallohide",
+    "source": "TLotRR",
+    "page": 183,
+    "size": "Medium",
+    "speed": "30 ft",
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_bree_hobbit_ability_score_increase_tlotrr",
+        "name": "Ability Score Increase",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Your Dexterity score increases by 2.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your Dexterity score increases by 2."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_bree_hobbit_curiosity_tlotrr",
+        "name": "Bree-Hobbit Curiosity",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency in the Insight skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Insight} skill."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_hobbit_sense_tlotrr",
+        "name": "Hobbit-Sense",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_pipe_weed_lore_tlotrr",
+        "name": "Pipe-Weed Lore",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency with pipe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item pipe|TLotRR|pipes}."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_unobtrusive_tlotrr",
+        "name": "Unobtrusive",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You speak, read and write {@language Westron|TLotRR}, preserving the use of a few words and names of your own forgotten tongue."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_standard_of_living_common_tlotrr",
+        "name": "Standard of Living: Common",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_subculture_tlotrr",
+        "name": "Subculture",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bucklander|TLotRR}",
+              "{@background On Patrol|TLotRR}",
+              "{@background Restless Farmer|TLotRR}",
+              "{@background Too Many Paths to Tread|TLotRR}",
+              "{@background Tookish Blood|TLotRR}",
+              "{@background Witty Gentlehobbit|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_cultural_virtues_tlotrr",
+        "name": "Cultural Virtues",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for Hobbit:\n\n- Bree-Pony\n- Desperate Courage\n- Small Folk\n- Strange as News from Bree\n- The Art of Smoking\n- Tough as Old Tree-Roots",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for {@race Hobbit|TLotRR|hobbits}:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@feat Bree-Pony|TLotRR}",
+              "{@feat Desperate Courage|TLotRR}",
+              "{@feat Small Folk|TLotRR}",
+              "{@feat Strange as News from Bree|TLotRR}",
+              "{@feat The Art of Smoking|TLotRR}",
+              "{@feat Tough as Old Tree-Roots|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Ability Score Increase**: Your Dexterity score increases by 2.\n\n**Adventuring Age**: Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.\n\n**Bree-Hobbit Curiosity**: You have proficiency in the Insight skill.\n\n**Hobbit-Sense**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.\n\n**Pipe-Weed Lore**: You have proficiency with pipe.\n\n**Unobtrusive**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.\n\n**Standard of Living: Common**: Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**\n\n**Subculture**: All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit\n\n**Cultural Virtues**: Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for Hobbit:\n\n- Bree-Pony\n- Desperate Courage\n- Small Folk\n- Strange as News from Bree\n- The Art of Smoking\n- Tough as Old Tree-Roots"
+  },
+  {
+    "id": "race_bree_hobbit_harfoot_tlotrr",
+    "name": "Bree-Hobbit (Harfoot)",
+    "raceName": "Bree-Hobbit",
+    "subraceName": "Harfoot",
+    "source": "TLotRR",
+    "page": 183,
+    "size": "Medium",
+    "speed": "30 ft",
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_bree_hobbit_ability_score_increase_tlotrr",
+        "name": "Ability Score Increase",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Your Dexterity score increases by 2.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your Dexterity score increases by 2."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_bree_hobbit_curiosity_tlotrr",
+        "name": "Bree-Hobbit Curiosity",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency in the Insight skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Insight} skill."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_hobbit_sense_tlotrr",
+        "name": "Hobbit-Sense",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_pipe_weed_lore_tlotrr",
+        "name": "Pipe-Weed Lore",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency with pipe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item pipe|TLotRR|pipes}."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_unobtrusive_tlotrr",
+        "name": "Unobtrusive",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You speak, read and write {@language Westron|TLotRR}, preserving the use of a few words and names of your own forgotten tongue."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_standard_of_living_common_tlotrr",
+        "name": "Standard of Living: Common",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_subculture_tlotrr",
+        "name": "Subculture",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bucklander|TLotRR}",
+              "{@background On Patrol|TLotRR}",
+              "{@background Restless Farmer|TLotRR}",
+              "{@background Too Many Paths to Tread|TLotRR}",
+              "{@background Tookish Blood|TLotRR}",
+              "{@background Witty Gentlehobbit|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_cultural_virtues_tlotrr",
+        "name": "Cultural Virtues",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for Hobbit:\n\n- Bree-Pony\n- Desperate Courage\n- Small Folk\n- Strange as News from Bree\n- The Art of Smoking\n- Tough as Old Tree-Roots",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for {@race Hobbit|TLotRR|hobbits}:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@feat Bree-Pony|TLotRR}",
+              "{@feat Desperate Courage|TLotRR}",
+              "{@feat Small Folk|TLotRR}",
+              "{@feat Strange as News from Bree|TLotRR}",
+              "{@feat The Art of Smoking|TLotRR}",
+              "{@feat Tough as Old Tree-Roots|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Ability Score Increase**: Your Dexterity score increases by 2.\n\n**Adventuring Age**: Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.\n\n**Bree-Hobbit Curiosity**: You have proficiency in the Insight skill.\n\n**Hobbit-Sense**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.\n\n**Pipe-Weed Lore**: You have proficiency with pipe.\n\n**Unobtrusive**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.\n\n**Standard of Living: Common**: Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**\n\n**Subculture**: All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit\n\n**Cultural Virtues**: Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for Hobbit:\n\n- Bree-Pony\n- Desperate Courage\n- Small Folk\n- Strange as News from Bree\n- The Art of Smoking\n- Tough as Old Tree-Roots"
+  },
+  {
+    "id": "race_bree_hobbit_stoor_tlotrr",
+    "name": "Bree-Hobbit (Stoor)",
+    "raceName": "Bree-Hobbit",
+    "subraceName": "Stoor",
+    "source": "TLotRR",
+    "page": 183,
+    "size": "Medium",
+    "speed": "30 ft",
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_bree_hobbit_ability_score_increase_tlotrr",
+        "name": "Ability Score Increase",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Your Dexterity score increases by 2.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your Dexterity score increases by 2."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_bree_hobbit_curiosity_tlotrr",
+        "name": "Bree-Hobbit Curiosity",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency in the Insight skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Insight} skill."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_hobbit_sense_tlotrr",
+        "name": "Hobbit-Sense",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_pipe_weed_lore_tlotrr",
+        "name": "Pipe-Weed Lore",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency with pipe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item pipe|TLotRR|pipes}."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_unobtrusive_tlotrr",
+        "name": "Unobtrusive",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You speak, read and write {@language Westron|TLotRR}, preserving the use of a few words and names of your own forgotten tongue."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_standard_of_living_common_tlotrr",
+        "name": "Standard of Living: Common",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_subculture_tlotrr",
+        "name": "Subculture",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures."
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bucklander|TLotRR}",
+              "{@background On Patrol|TLotRR}",
+              "{@background Restless Farmer|TLotRR}",
+              "{@background Too Many Paths to Tread|TLotRR}",
+              "{@background Tookish Blood|TLotRR}",
+              "{@background Witty Gentlehobbit|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_bree_hobbit_cultural_virtues_tlotrr",
+        "name": "Cultural Virtues",
+        "source": "TLotRR",
+        "raceName": "Bree-Hobbit",
+        "actionType": "passive",
+        "description": "Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for Hobbit:\n\n- Bree-Pony\n- Desperate Courage\n- Small Folk\n- Strange as News from Bree\n- The Art of Smoking\n- Tough as Old Tree-Roots",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for {@race Hobbit|TLotRR|hobbits}:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@feat Bree-Pony|TLotRR}",
+              "{@feat Desperate Courage|TLotRR}",
+              "{@feat Small Folk|TLotRR}",
+              "{@feat Strange as News from Bree|TLotRR}",
+              "{@feat The Art of Smoking|TLotRR}",
+              "{@feat Tough as Old Tree-Roots|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Ability Score Increase**: Your Dexterity score increases by 2.\n\n**Adventuring Age**: Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.\n\n**Bree-Hobbit Curiosity**: You have proficiency in the Insight skill.\n\n**Hobbit-Sense**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.\n\n**Pipe-Weed Lore**: You have proficiency with pipe.\n\n**Unobtrusive**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.\n\n**Standard of Living: Common**: Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**\n\n**Subculture**: All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit\n\n**Cultural Virtues**: Bree-hobbits pick their cultural virtues from the following list, rather than the options typical for Hobbit:\n\n- Bree-Pony\n- Desperate Courage\n- Small Folk\n- Strange as News from Bree\n- The Art of Smoking\n- Tough as Old Tree-Roots"
+  },
+  {
+    "id": "race_dwarf_tlotrr",
+    "name": "Dwarf",
+    "source": "TLotRR",
+    "page": 31,
+    "size": "M",
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Adventuring Age.</strong> <p>Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.</p></div>\n<div class=\"compendium-subentry\"><strong>Axes of the Dwarves.</strong> <p>You have proficiency with the battle axe, greataxe, and mattock.</p></div>\n<div class=\"compendium-subentry\"><strong>Endurance of the Dwarves.</strong> <p>Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.</p></div>\n<div class=\"compendium-subentry\"><strong>Make Light of Burdens.</strong> <p>Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.</p></div>\n<div class=\"compendium-subentry\"><strong>Tool Proficiencies.</strong> <p>You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.</p></div>\n<div class=\"compendium-subentry\"><strong>Standard of Living: Prosperous.</strong> <p>With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.</p>\n<div class=\"compendium-subentry\"><strong>Starting Gear.</strong> </div></div>\n<div class=\"compendium-subentry\"><strong>Backgrounds.</strong> <p>Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:</p>\n<ul><li>Bitter Exile</li><li>Eloquent Orator</li><li>Far Trader</li><li>The Grief of Azanulbizar</li><li>A Life of Toil</li><li>A Penetrating Gaze</li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_dwarf_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts."
+        ]
+      },
+      {
+        "id": "trait_dwarf_axes_of_the_dwarves_tlotrr",
+        "name": "Axes of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the battle axe, greataxe, and mattock.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item battle axe|TLotRR}, {@item greataxe|PHB|great axe}, and {@item mattock|TLotRR}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_endurance_of_the_dwarves_tlotrr",
+        "name": "Endurance of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level."
+        ]
+      },
+      {
+        "id": "trait_dwarf_make_light_of_burdens_tlotrr",
+        "name": "Make Light of Burdens",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are {@variantrule Encumbrance|TLotRR|encumbered or heavily encumbered}, and the weight you can push, drag or lift) is doubled."
+        ]
+      },
+      {
+        "id": "trait_dwarf_tool_proficiencies_tlotrr",
+        "name": "Tool Proficiencies",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item artisan's tools|PHB} of your choice: {@item jeweler's tools|PHB}, {@item mason's tools|PHB}, or {@item smith's tools|PHB}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read and write {@language Westron|TLotRR} and {@language Khuzdul|TLotRR}, the secret language of the Dwarves."
+        ]
+      },
+      {
+        "id": "trait_dwarf_standard_of_living_prosperous_tlotrr",
+        "name": "Standard of Living: Prosperous",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_dwarf_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bitter Exile|TLotRR}",
+              "{@background Eloquent Orator|TLotRR}",
+              "{@background Far Trader|TLotRR}",
+              "{@background The Grief of Azanulbizar|TLotRR}",
+              "{@background A Life of Toil|TLotRR}",
+              "{@background A Penetrating Gaze|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.\n\n**Axes of the Dwarves**: You have proficiency with the battle axe, greataxe, and mattock.\n\n**Endurance of the Dwarves**: Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.\n\n**Make Light of Burdens**: Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.\n\n**Tool Proficiencies**: You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.\n\n**Languages**: You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.\n\n**Standard of Living: Prosperous**: With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze"
+  },
+  {
+    "id": "race_dwarf_blue_mountain_tlotrr",
+    "name": "Dwarf (Blue Mountain)",
+    "raceName": "Dwarf",
+    "subraceName": "Blue Mountain",
+    "source": "TLotRR",
+    "page": 32,
+    "size": [
+      "M"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Songs of the Halls.</strong> <p>You gain proficiency in the Old Lore skill, and with a musical instrument of your choice.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dwarf_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts."
+        ]
+      },
+      {
+        "id": "trait_dwarf_axes_of_the_dwarves_tlotrr",
+        "name": "Axes of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the battle axe, greataxe, and mattock.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item battle axe|TLotRR}, {@item greataxe|PHB|great axe}, and {@item mattock|TLotRR}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_endurance_of_the_dwarves_tlotrr",
+        "name": "Endurance of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level."
+        ]
+      },
+      {
+        "id": "trait_dwarf_make_light_of_burdens_tlotrr",
+        "name": "Make Light of Burdens",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are {@variantrule Encumbrance|TLotRR|encumbered or heavily encumbered}, and the weight you can push, drag or lift) is doubled."
+        ]
+      },
+      {
+        "id": "trait_dwarf_tool_proficiencies_tlotrr",
+        "name": "Tool Proficiencies",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item artisan's tools|PHB} of your choice: {@item jeweler's tools|PHB}, {@item mason's tools|PHB}, or {@item smith's tools|PHB}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read and write {@language Westron|TLotRR} and {@language Khuzdul|TLotRR}, the secret language of the Dwarves."
+        ]
+      },
+      {
+        "id": "trait_dwarf_standard_of_living_prosperous_tlotrr",
+        "name": "Standard of Living: Prosperous",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_dwarf_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bitter Exile|TLotRR}",
+              "{@background Eloquent Orator|TLotRR}",
+              "{@background Far Trader|TLotRR}",
+              "{@background The Grief of Azanulbizar|TLotRR}",
+              "{@background A Life of Toil|TLotRR}",
+              "{@background A Penetrating Gaze|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dwarf_blue_mountain_songs_of_the_halls_tlotrr",
+        "name": "Songs of the Halls",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "subraceName": "Blue Mountain",
+        "actionType": "passive",
+        "description": "You gain proficiency in the Old Lore skill, and with a musical instrument of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency in the {@skill Old Lore|TLotRR} skill, and with a {@item musical instrument|SCAG} of your choice."
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.\n\n**Axes of the Dwarves**: You have proficiency with the battle axe, greataxe, and mattock.\n\n**Endurance of the Dwarves**: Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.\n\n**Make Light of Burdens**: Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.\n\n**Tool Proficiencies**: You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.\n\n**Languages**: You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.\n\n**Standard of Living: Prosperous**: With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze\n\n**Songs of the Halls**: You gain proficiency in the Old Lore skill, and with a musical instrument of your choice."
+  },
+  {
+    "id": "race_dwarf_erebor_tlotrr",
+    "name": "Dwarf (Erebor)",
+    "raceName": "Dwarf",
+    "subraceName": "Erebor",
+    "source": "TLotRR",
+    "page": 32,
+    "size": [
+      "M"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Wrights of the Mountain.</strong> <p>You gain proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools. If you are already proficient with the tools of your choice, you add double your proficiency bonus to checks you make with them. Additionally, whenever you make an Intelligence check related to the origin of jewellery, metal-work, or stone-work, you are considered proficient in the Old Lore skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.</p></div>\n<div class=\"compendium-subentry\"><strong>Extra Language.</strong> <p>You can speak, read, and write Dalish|TLotRR.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dwarf_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts."
+        ]
+      },
+      {
+        "id": "trait_dwarf_axes_of_the_dwarves_tlotrr",
+        "name": "Axes of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the battle axe, greataxe, and mattock.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item battle axe|TLotRR}, {@item greataxe|PHB|great axe}, and {@item mattock|TLotRR}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_endurance_of_the_dwarves_tlotrr",
+        "name": "Endurance of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level."
+        ]
+      },
+      {
+        "id": "trait_dwarf_make_light_of_burdens_tlotrr",
+        "name": "Make Light of Burdens",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are {@variantrule Encumbrance|TLotRR|encumbered or heavily encumbered}, and the weight you can push, drag or lift) is doubled."
+        ]
+      },
+      {
+        "id": "trait_dwarf_tool_proficiencies_tlotrr",
+        "name": "Tool Proficiencies",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item artisan's tools|PHB} of your choice: {@item jeweler's tools|PHB}, {@item mason's tools|PHB}, or {@item smith's tools|PHB}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read and write {@language Westron|TLotRR} and {@language Khuzdul|TLotRR}, the secret language of the Dwarves."
+        ]
+      },
+      {
+        "id": "trait_dwarf_standard_of_living_prosperous_tlotrr",
+        "name": "Standard of Living: Prosperous",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_dwarf_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bitter Exile|TLotRR}",
+              "{@background Eloquent Orator|TLotRR}",
+              "{@background Far Trader|TLotRR}",
+              "{@background The Grief of Azanulbizar|TLotRR}",
+              "{@background A Life of Toil|TLotRR}",
+              "{@background A Penetrating Gaze|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dwarf_erebor_wrights_of_the_mountain_tlotrr",
+        "name": "Wrights of the Mountain",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "subraceName": "Erebor",
+        "actionType": "passive",
+        "description": "You gain proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools. If you are already proficient with the tools of your choice, you add double your proficiency bonus to checks you make with them. Additionally, whenever you make an Intelligence check related to the origin of jewellery, metal-work, or stone-work, you are considered proficient in the Old Lore skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency with the artisan's tools of your choice: {@item jeweler's tools|PHB}, {@item mason's tools|PHB}, or {@item smith's tools|PHB}. If you are already proficient with the tools of your choice, you add double your proficiency bonus to checks you make with them. Additionally, whenever you make an Intelligence check related to the origin of jewellery, metal-work, or stone-work, you are considered proficient in the {@skill Old Lore|TLotRR} skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."
+        ]
+      },
+      {
+        "id": "trait_dwarf_erebor_extra_language_tlotrr",
+        "name": "Extra Language",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "subraceName": "Erebor",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Dalish|TLotRR.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write {@language Dalish|TLotRR}."
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.\n\n**Axes of the Dwarves**: You have proficiency with the battle axe, greataxe, and mattock.\n\n**Endurance of the Dwarves**: Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.\n\n**Make Light of Burdens**: Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.\n\n**Tool Proficiencies**: You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.\n\n**Languages**: You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.\n\n**Standard of Living: Prosperous**: With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze\n\n**Wrights of the Mountain**: You gain proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools. If you are already proficient with the tools of your choice, you add double your proficiency bonus to checks you make with them. Additionally, whenever you make an Intelligence check related to the origin of jewellery, metal-work, or stone-work, you are considered proficient in the Old Lore skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus.\n\n**Extra Language**: You can speak, read, and write Dalish|TLotRR."
+  },
+  {
+    "id": "race_dwarf_iron_hill_tlotrr",
+    "name": "Dwarf (Iron Hill)",
+    "raceName": "Dwarf",
+    "subraceName": "Iron Hill",
+    "source": "TLotRR",
+    "page": 32,
+    "size": [
+      "M"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Shod with Iron.</strong> <p>You have proficiency with all armour and shields.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dwarf_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts."
+        ]
+      },
+      {
+        "id": "trait_dwarf_axes_of_the_dwarves_tlotrr",
+        "name": "Axes of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the battle axe, greataxe, and mattock.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item battle axe|TLotRR}, {@item greataxe|PHB|great axe}, and {@item mattock|TLotRR}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_endurance_of_the_dwarves_tlotrr",
+        "name": "Endurance of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level."
+        ]
+      },
+      {
+        "id": "trait_dwarf_make_light_of_burdens_tlotrr",
+        "name": "Make Light of Burdens",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are {@variantrule Encumbrance|TLotRR|encumbered or heavily encumbered}, and the weight you can push, drag or lift) is doubled."
+        ]
+      },
+      {
+        "id": "trait_dwarf_tool_proficiencies_tlotrr",
+        "name": "Tool Proficiencies",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item artisan's tools|PHB} of your choice: {@item jeweler's tools|PHB}, {@item mason's tools|PHB}, or {@item smith's tools|PHB}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read and write {@language Westron|TLotRR} and {@language Khuzdul|TLotRR}, the secret language of the Dwarves."
+        ]
+      },
+      {
+        "id": "trait_dwarf_standard_of_living_prosperous_tlotrr",
+        "name": "Standard of Living: Prosperous",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_dwarf_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bitter Exile|TLotRR}",
+              "{@background Eloquent Orator|TLotRR}",
+              "{@background Far Trader|TLotRR}",
+              "{@background The Grief of Azanulbizar|TLotRR}",
+              "{@background A Life of Toil|TLotRR}",
+              "{@background A Penetrating Gaze|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dwarf_iron_hill_shod_with_iron_tlotrr",
+        "name": "Shod with Iron",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "subraceName": "Iron Hill",
+        "actionType": "passive",
+        "description": "You have proficiency with all armour and shields.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with all armour and shields."
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.\n\n**Axes of the Dwarves**: You have proficiency with the battle axe, greataxe, and mattock.\n\n**Endurance of the Dwarves**: Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.\n\n**Make Light of Burdens**: Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.\n\n**Tool Proficiencies**: You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.\n\n**Languages**: You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.\n\n**Standard of Living: Prosperous**: With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze\n\n**Shod with Iron**: You have proficiency with all armour and shields."
+  },
+  {
+    "id": "race_dwarf_wandering_tlotrr",
+    "name": "Dwarf (Wandering)",
+    "raceName": "Dwarf",
+    "subraceName": "Wandering",
+    "source": "TLotRR",
+    "page": 32,
+    "size": [
+      "M"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Wandering People.</strong> <p>You gain proficiency in the Travel skill.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dwarf_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts."
+        ]
+      },
+      {
+        "id": "trait_dwarf_axes_of_the_dwarves_tlotrr",
+        "name": "Axes of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the battle axe, greataxe, and mattock.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item battle axe|TLotRR}, {@item greataxe|PHB|great axe}, and {@item mattock|TLotRR}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_endurance_of_the_dwarves_tlotrr",
+        "name": "Endurance of the Dwarves",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level."
+        ]
+      },
+      {
+        "id": "trait_dwarf_make_light_of_burdens_tlotrr",
+        "name": "Make Light of Burdens",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are {@variantrule Encumbrance|TLotRR|encumbered or heavily encumbered}, and the weight you can push, drag or lift) is doubled."
+        ]
+      },
+      {
+        "id": "trait_dwarf_tool_proficiencies_tlotrr",
+        "name": "Tool Proficiencies",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item artisan's tools|PHB} of your choice: {@item jeweler's tools|PHB}, {@item mason's tools|PHB}, or {@item smith's tools|PHB}."
+        ]
+      },
+      {
+        "id": "trait_dwarf_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read and write {@language Westron|TLotRR} and {@language Khuzdul|TLotRR}, the secret language of the Dwarves."
+        ]
+      },
+      {
+        "id": "trait_dwarf_standard_of_living_prosperous_tlotrr",
+        "name": "Standard of Living: Prosperous",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_dwarf_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bitter Exile|TLotRR}",
+              "{@background Eloquent Orator|TLotRR}",
+              "{@background Far Trader|TLotRR}",
+              "{@background The Grief of Azanulbizar|TLotRR}",
+              "{@background A Life of Toil|TLotRR}",
+              "{@background A Penetrating Gaze|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dwarf_wandering_wandering_people_tlotrr",
+        "name": "Wandering People",
+        "source": "TLotRR",
+        "raceName": "Dwarf",
+        "subraceName": "Wandering",
+        "actionType": "passive",
+        "description": "You gain proficiency in the Travel skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency in the {@skill Travel|TLotRR} skill."
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 50–100 years of age. Dwarves generally start their life on the road in their fifties, and do not usually consider retiring before their nineties. Around that time, many among them choose to dedicate themselves solely to the perfection of their crafts.\n\n**Axes of the Dwarves**: You have proficiency with the battle axe, greataxe, and mattock.\n\n**Endurance of the Dwarves**: Your hit point maximum increases by 1, and it increases by an additional 1 every time you gain a level.\n\n**Make Light of Burdens**: Armour doesn't impose disadvantage on your fatigue saving throws, and your carrying capacity (including the weight you can carry before you are Encumbrance|TLotRR|encumbered or heavily encumbered, and the weight you can push, drag or lift) is doubled.\n\n**Tool Proficiencies**: You have proficiency with the artisan's tools of your choice: jeweler's tools, mason's tools, or smith's tools.\n\n**Languages**: You can speak, read and write Westron|TLotRR and Khuzdul|TLotRR, the secret language of the Dwarves.\n\n**Standard of Living: Prosperous**: With the fabulous Dragon-hoard of Erebor reclaimed and their kingdom restored, the Dwarves of Durin's Folk are the richest of the seven houses.\n\n**Starting Gear**\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bitter Exile\n- Eloquent Orator\n- Far Trader\n- The Grief of Azanulbizar\n- A Life of Toil\n- A Penetrating Gaze\n\n**Wandering People**: You gain proficiency in the Travel skill."
+  },
+  {
+    "id": "race_elf_tlotrr",
+    "name": "Elf",
+    "source": "TLotRR",
+    "page": 34,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Adventuring Age.</strong> <p>Between 100–500 years of age. Elves may leave their homes at any time after they reach adulthood (at about a century of age). Adventurers older than 300 years are rare, as in time all Elves find the sea-longing that lies deep within their hearts to become irresistible.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Elves have slender builds and are taller than most Men, standing well over 6 feet tall. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Elvish Dreams.</strong> <p>Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit as from 8 hours of sleep.</p></div>\n<div class=\"compendium-subentry\"><strong>Elven-Skill.</strong> <p>By virtue of their birthright, Elves are capable of reaching levels of finesse unattainable by mortals. If you are not miserable and make an ability check that lets you add your proficiency bonus, you can obtain a magical success. You can do so a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Immortal Folk.</strong> <p>You are immune to ageing and disease.</p></div>\n<div class=\"compendium-subentry\"><strong>Keen Eyes of the Elves.</strong> <p>You have proficiency in the Perception skill, and dim light doesn't impose disadvantage on your Wisdom (Perception) checks relying on sight.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Westron|TLotRR and Sindarin|TLotRR, the Grey-elven tongue.</p></div>\n<div class=\"compendium-subentry\"><strong>Backgrounds.</strong> <p>Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:</p>\n<ul><li>The Call of the Sea</li><li>Maker of Ships</li><li>A Merchant Family</li><li>Sky-Watcher</li><li>Tower Guard</li><li>Visitor to the Mountains</li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_elf_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Between 100–500 years of age. Elves may leave their homes at any time after they reach adulthood (at about a century of age). Adventurers older than 300 years are rare, as in time all Elves find the sea-longing that lies deep within their hearts to become irresistible.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 100–500 years of age. Elves may leave their homes at any time after they reach adulthood (at about a century of age). Adventurers older than 300 years are rare, as in time all Elves find the sea-longing that lies deep within their hearts to become irresistible."
+        ]
+      },
+      {
+        "id": "trait_elf_size_tlotrr",
+        "name": "Size",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves have slender builds and are taller than most Men, standing well over 6 feet tall. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves have slender builds and are taller than most Men, standing well over 6 feet tall. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_elvish_dreams_tlotrr",
+        "name": "Elvish Dreams",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit as from 8 hours of sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit as from 8 hours of sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_elven_skill_tlotrr",
+        "name": "Elven-Skill",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "By virtue of their birthright, Elves are capable of reaching levels of finesse unattainable by mortals. If you are not miserable and make an ability check that lets you add your proficiency bonus, you can obtain a magical success. You can do so a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "By virtue of their birthright, Elves are capable of reaching levels of finesse unattainable by mortals. If you are not {@condition miserable|TLotRR} and make an ability check that lets you add your proficiency bonus, you can obtain a magical success. You can do so a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_elf_immortal_folk_tlotrr",
+        "name": "Immortal Folk",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You are immune to ageing and disease.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are immune to ageing and disease."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_eyes_of_the_elves_tlotrr",
+        "name": "Keen Eyes of the Elves",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill, and dim light doesn't impose disadvantage on your Wisdom (Perception) checks relying on sight.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill, and dim light doesn't impose disadvantage on your Wisdom ({@skill Perception}) checks relying on sight."
+        ]
+      },
+      {
+        "id": "trait_elf_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Westron|TLotRR and Sindarin|TLotRR, the Grey-elven tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write {@language Westron|TLotRR} and {@language Sindarin|TLotRR}, the Grey-elven tongue."
+        ]
+      },
+      {
+        "id": "trait_elf_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- The Call of the Sea\n- Maker of Ships\n- A Merchant Family\n- Sky-Watcher\n- Tower Guard\n- Visitor to the Mountains",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background The Call of the Sea|TLotRR}",
+              "{@background Maker of Ships|TLotRR}",
+              "{@background A Merchant Family|TLotRR}",
+              "{@background Sky-Watcher|TLotRR}",
+              "{@background Tower Guard|TLotRR}",
+              "{@background Visitor to the Mountains|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 100–500 years of age. Elves may leave their homes at any time after they reach adulthood (at about a century of age). Adventurers older than 300 years are rare, as in time all Elves find the sea-longing that lies deep within their hearts to become irresistible.\n\n**Size**: Elves have slender builds and are taller than most Men, standing well over 6 feet tall. Your size is Medium.\n\n**Elvish Dreams**: Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit as from 8 hours of sleep.\n\n**Elven-Skill**: By virtue of their birthright, Elves are capable of reaching levels of finesse unattainable by mortals. If you are not miserable and make an ability check that lets you add your proficiency bonus, you can obtain a magical success. You can do so a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.\n\n**Immortal Folk**: You are immune to ageing and disease.\n\n**Keen Eyes of the Elves**: You have proficiency in the Perception skill, and dim light doesn't impose disadvantage on your Wisdom (Perception) checks relying on sight.\n\n**Languages**: You can speak, read, and write Westron|TLotRR and Sindarin|TLotRR, the Grey-elven tongue.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- The Call of the Sea\n- Maker of Ships\n- A Merchant Family\n- Sky-Watcher\n- Tower Guard\n- Visitor to the Mountains"
+  },
+  {
+    "id": "race_elf_lindon_tlotrr",
+    "name": "Elf (Lindon)",
+    "raceName": "Elf",
+    "subraceName": "Lindon",
+    "source": "TLotRR",
+    "page": 35,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Elven-Lore.</strong> <p>You have proficiency in one of the following skills of your choice: Nature, Old Lore, or Performance.</p></div>\n<div class=\"compendium-subentry\"><strong>Shipwrights and Singers.</strong> <p>You have proficiency with the tools of your choice: carpenter's tools, water vehicles, or a musical instrument of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Standard of Living: Frugal.</strong> <p>The Fair Folk of Eriador live in harmony with Middle-earth and have little or no use for those things that others consider precious. They lack nothing, and craft beautiful things using the richest materials, but they don't profit from their wealth the way other folks do.</p>\n<div class=\"compendium-subentry\"><strong>Starting Gear.</strong> </div></div>",
+    "traits": [
+      {
+        "id": "trait_elf_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Between 100–500 years of age. Elves may leave their homes at any time after they reach adulthood (at about a century of age). Adventurers older than 300 years are rare, as in time all Elves find the sea-longing that lies deep within their hearts to become irresistible.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 100–500 years of age. Elves may leave their homes at any time after they reach adulthood (at about a century of age). Adventurers older than 300 years are rare, as in time all Elves find the sea-longing that lies deep within their hearts to become irresistible."
+        ]
+      },
+      {
+        "id": "trait_elf_size_tlotrr",
+        "name": "Size",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves have slender builds and are taller than most Men, standing well over 6 feet tall. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves have slender builds and are taller than most Men, standing well over 6 feet tall. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_elvish_dreams_tlotrr",
+        "name": "Elvish Dreams",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit as from 8 hours of sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit as from 8 hours of sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_elven_skill_tlotrr",
+        "name": "Elven-Skill",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "By virtue of their birthright, Elves are capable of reaching levels of finesse unattainable by mortals. If you are not miserable and make an ability check that lets you add your proficiency bonus, you can obtain a magical success. You can do so a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "By virtue of their birthright, Elves are capable of reaching levels of finesse unattainable by mortals. If you are not {@condition miserable|TLotRR} and make an ability check that lets you add your proficiency bonus, you can obtain a magical success. You can do so a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_elf_immortal_folk_tlotrr",
+        "name": "Immortal Folk",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You are immune to ageing and disease.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are immune to ageing and disease."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_eyes_of_the_elves_tlotrr",
+        "name": "Keen Eyes of the Elves",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill, and dim light doesn't impose disadvantage on your Wisdom (Perception) checks relying on sight.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill, and dim light doesn't impose disadvantage on your Wisdom ({@skill Perception}) checks relying on sight."
+        ]
+      },
+      {
+        "id": "trait_elf_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Westron|TLotRR and Sindarin|TLotRR, the Grey-elven tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write {@language Westron|TLotRR} and {@language Sindarin|TLotRR}, the Grey-elven tongue."
+        ]
+      },
+      {
+        "id": "trait_elf_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- The Call of the Sea\n- Maker of Ships\n- A Merchant Family\n- Sky-Watcher\n- Tower Guard\n- Visitor to the Mountains",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background The Call of the Sea|TLotRR}",
+              "{@background Maker of Ships|TLotRR}",
+              "{@background A Merchant Family|TLotRR}",
+              "{@background Sky-Watcher|TLotRR}",
+              "{@background Tower Guard|TLotRR}",
+              "{@background Visitor to the Mountains|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_elf_lindon_elven_lore_tlotrr",
+        "name": "Elven-Lore",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "subraceName": "Lindon",
+        "actionType": "passive",
+        "description": "You have proficiency in one of the following skills of your choice: Nature, Old Lore, or Performance.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in one of the following skills of your choice: {@skill Nature}, {@skill Old Lore|TLotRR}, or {@skill Performance}."
+        ]
+      },
+      {
+        "id": "trait_elf_lindon_shipwrights_and_singers_tlotrr",
+        "name": "Shipwrights and Singers",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "subraceName": "Lindon",
+        "actionType": "passive",
+        "description": "You have proficiency with the tools of your choice: carpenter's tools, water vehicles, or a musical instrument of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the tools of your choice: {@item carpenter's tools|PHB}, water vehicles, or a {@item musical instrument|SCAG} of your choice."
+        ]
+      },
+      {
+        "id": "trait_elf_lindon_standard_of_living_frugal_tlotrr",
+        "name": "Standard of Living: Frugal",
+        "source": "TLotRR",
+        "raceName": "Elf",
+        "subraceName": "Lindon",
+        "actionType": "passive",
+        "description": "The Fair Folk of Eriador live in harmony with Middle-earth and have little or no use for those things that others consider precious. They lack nothing, and craft beautiful things using the richest materials, but they don't profit from their wealth the way other folks do.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "The Fair Folk of Eriador live in harmony with Middle-earth and have little or no use for those things that others consider precious. They lack nothing, and craft beautiful things using the richest materials, but they don't profit from their wealth the way other folks do.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 100–500 years of age. Elves may leave their homes at any time after they reach adulthood (at about a century of age). Adventurers older than 300 years are rare, as in time all Elves find the sea-longing that lies deep within their hearts to become irresistible.\n\n**Size**: Elves have slender builds and are taller than most Men, standing well over 6 feet tall. Your size is Medium.\n\n**Elvish Dreams**: Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit as from 8 hours of sleep.\n\n**Elven-Skill**: By virtue of their birthright, Elves are capable of reaching levels of finesse unattainable by mortals. If you are not miserable and make an ability check that lets you add your proficiency bonus, you can obtain a magical success. You can do so a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.\n\n**Immortal Folk**: You are immune to ageing and disease.\n\n**Keen Eyes of the Elves**: You have proficiency in the Perception skill, and dim light doesn't impose disadvantage on your Wisdom (Perception) checks relying on sight.\n\n**Languages**: You can speak, read, and write Westron|TLotRR and Sindarin|TLotRR, the Grey-elven tongue.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- The Call of the Sea\n- Maker of Ships\n- A Merchant Family\n- Sky-Watcher\n- Tower Guard\n- Visitor to the Mountains\n\n**Elven-Lore**: You have proficiency in one of the following skills of your choice: Nature, Old Lore, or Performance.\n\n**Shipwrights and Singers**: You have proficiency with the tools of your choice: carpenter's tools, water vehicles, or a musical instrument of your choice.\n\n**Standard of Living: Frugal**: The Fair Folk of Eriador live in harmony with Middle-earth and have little or no use for those things that others consider precious. They lack nothing, and craft beautiful things using the richest materials, but they don't profit from their wealth the way other folks do.\n\n**Starting Gear**"
+  },
+  {
+    "id": "race_hobbit_tlotrr",
+    "name": "Hobbit",
+    "source": "TLotRR",
+    "page": 37,
+    "size": "S",
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Ability Score Increase.</strong> <p>Your Dexterity score increases by 2.</p></div>\n<div class=\"compendium-subentry\"><strong>Adventuring Age.</strong> <p>Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.</p></div>\n<div class=\"compendium-subentry\"><strong>Hobbit Elusiveness.</strong> <p>You have proficiency in the Stealth skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Hobbit-Sense.</strong> <p>You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.</p></div>\n<div class=\"compendium-subentry\"><strong>Pipe-Weed Lore.</strong> <p>You have proficiency with pipe.</p></div>\n<div class=\"compendium-subentry\"><strong>Unobtrusive.</strong> <p>You can move through the space of any creature that is of a size larger than yours.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.</p></div>\n<div class=\"compendium-subentry\"><strong>Standard of Living: Common.</strong> <p>Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.</p>\n<div class=\"compendium-subentry\"><strong>Starting Gear.</strong> </div></div>\n<div class=\"compendium-subentry\"><strong>Subculture.</strong> <p>All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.</p></div>\n<div class=\"compendium-subentry\"><strong>Backgrounds.</strong> <p>Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:</p>\n<ul><li>Bucklander</li><li>On Patrol</li><li>Restless Farmer</li><li>Too Many Paths to Tread</li><li>Tookish Blood</li><li>Witty Gentlehobbit</li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_hobbit_ability_score_increase_tlotrr",
+        "name": "Ability Score Increase",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Your Dexterity score increases by 2.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your Dexterity score increases by 2."
+        ]
+      },
+      {
+        "id": "trait_hobbit_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties."
+        ]
+      },
+      {
+        "id": "trait_hobbit_hobbit_elusiveness_tlotrr",
+        "name": "Hobbit Elusiveness",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency in the Stealth skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Stealth} skill."
+        ]
+      },
+      {
+        "id": "trait_hobbit_hobbit_sense_tlotrr",
+        "name": "Hobbit-Sense",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow."
+        ]
+      },
+      {
+        "id": "trait_hobbit_pipe_weed_lore_tlotrr",
+        "name": "Pipe-Weed Lore",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency with pipe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item pipe|TLotRR|pipes}."
+        ]
+      },
+      {
+        "id": "trait_hobbit_unobtrusive_tlotrr",
+        "name": "Unobtrusive",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_hobbit_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You speak, read and write {@language Westron|TLotRR}, preserving the use of a few words and names of your own forgotten tongue."
+        ]
+      },
+      {
+        "id": "trait_hobbit_standard_of_living_common_tlotrr",
+        "name": "Standard of Living: Common",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_hobbit_subculture_tlotrr",
+        "name": "Subculture",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures."
+        ]
+      },
+      {
+        "id": "trait_hobbit_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bucklander|TLotRR}",
+              "{@background On Patrol|TLotRR}",
+              "{@background Restless Farmer|TLotRR}",
+              "{@background Too Many Paths to Tread|TLotRR}",
+              "{@background Tookish Blood|TLotRR}",
+              "{@background Witty Gentlehobbit|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Ability Score Increase**: Your Dexterity score increases by 2.\n\n**Adventuring Age**: Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.\n\n**Hobbit Elusiveness**: You have proficiency in the Stealth skill.\n\n**Hobbit-Sense**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.\n\n**Pipe-Weed Lore**: You have proficiency with pipe.\n\n**Unobtrusive**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.\n\n**Standard of Living: Common**: Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**\n\n**Subculture**: All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit"
+  },
+  {
+    "id": "race_hobbit_fallohide_tlotrr",
+    "name": "Hobbit (Fallohide)",
+    "raceName": "Hobbit",
+    "subraceName": "Fallohide",
+    "source": "TLotRR",
+    "page": 38,
+    "size": [
+      "S"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Skill in Language and Song.</strong> <p>You have proficiency with the tools of your choice: calligrapher's supplies, cartographer's tools, or a musical instrument.</p></div>",
+    "traits": [
+      {
+        "id": "trait_hobbit_ability_score_increase_tlotrr",
+        "name": "Ability Score Increase",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Your Dexterity score increases by 2.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your Dexterity score increases by 2."
+        ]
+      },
+      {
+        "id": "trait_hobbit_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties."
+        ]
+      },
+      {
+        "id": "trait_hobbit_hobbit_elusiveness_tlotrr",
+        "name": "Hobbit Elusiveness",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency in the Stealth skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Stealth} skill."
+        ]
+      },
+      {
+        "id": "trait_hobbit_hobbit_sense_tlotrr",
+        "name": "Hobbit-Sense",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow."
+        ]
+      },
+      {
+        "id": "trait_hobbit_pipe_weed_lore_tlotrr",
+        "name": "Pipe-Weed Lore",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency with pipe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item pipe|TLotRR|pipes}."
+        ]
+      },
+      {
+        "id": "trait_hobbit_unobtrusive_tlotrr",
+        "name": "Unobtrusive",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_hobbit_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You speak, read and write {@language Westron|TLotRR}, preserving the use of a few words and names of your own forgotten tongue."
+        ]
+      },
+      {
+        "id": "trait_hobbit_standard_of_living_common_tlotrr",
+        "name": "Standard of Living: Common",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_hobbit_subculture_tlotrr",
+        "name": "Subculture",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures."
+        ]
+      },
+      {
+        "id": "trait_hobbit_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bucklander|TLotRR}",
+              "{@background On Patrol|TLotRR}",
+              "{@background Restless Farmer|TLotRR}",
+              "{@background Too Many Paths to Tread|TLotRR}",
+              "{@background Tookish Blood|TLotRR}",
+              "{@background Witty Gentlehobbit|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_hobbit_fallohide_skill_in_language_and_song_tlotrr",
+        "name": "Skill in Language and Song",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "subraceName": "Fallohide",
+        "actionType": "passive",
+        "description": "You have proficiency with the tools of your choice: calligrapher's supplies, cartographer's tools, or a musical instrument.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the tools of your choice: {@item calligrapher's supplies|PHB}, {@item cartographer's tools|PHB}, or a {@item musical instrument|SCAG}."
+        ]
+      }
+    ],
+    "description": "**Ability Score Increase**: Your Dexterity score increases by 2.\n\n**Adventuring Age**: Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.\n\n**Hobbit Elusiveness**: You have proficiency in the Stealth skill.\n\n**Hobbit-Sense**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.\n\n**Pipe-Weed Lore**: You have proficiency with pipe.\n\n**Unobtrusive**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.\n\n**Standard of Living: Common**: Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**\n\n**Subculture**: All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit\n\n**Skill in Language and Song**: You have proficiency with the tools of your choice: calligrapher's supplies, cartographer's tools, or a musical instrument."
+  },
+  {
+    "id": "race_hobbit_harfoot_tlotrr",
+    "name": "Hobbit (Harfoot)",
+    "raceName": "Hobbit",
+    "subraceName": "Harfoot",
+    "source": "TLotRR",
+    "page": 38,
+    "size": [
+      "S"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Skilful with Tools.</strong> <p>You have proficiency with the artisan's tools of your choice: herbalism kit, mason's tools, or weaver's tools.</p></div>",
+    "traits": [
+      {
+        "id": "trait_hobbit_ability_score_increase_tlotrr",
+        "name": "Ability Score Increase",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Your Dexterity score increases by 2.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your Dexterity score increases by 2."
+        ]
+      },
+      {
+        "id": "trait_hobbit_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties."
+        ]
+      },
+      {
+        "id": "trait_hobbit_hobbit_elusiveness_tlotrr",
+        "name": "Hobbit Elusiveness",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency in the Stealth skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Stealth} skill."
+        ]
+      },
+      {
+        "id": "trait_hobbit_hobbit_sense_tlotrr",
+        "name": "Hobbit-Sense",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow."
+        ]
+      },
+      {
+        "id": "trait_hobbit_pipe_weed_lore_tlotrr",
+        "name": "Pipe-Weed Lore",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency with pipe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item pipe|TLotRR|pipes}."
+        ]
+      },
+      {
+        "id": "trait_hobbit_unobtrusive_tlotrr",
+        "name": "Unobtrusive",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_hobbit_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You speak, read and write {@language Westron|TLotRR}, preserving the use of a few words and names of your own forgotten tongue."
+        ]
+      },
+      {
+        "id": "trait_hobbit_standard_of_living_common_tlotrr",
+        "name": "Standard of Living: Common",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_hobbit_subculture_tlotrr",
+        "name": "Subculture",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures."
+        ]
+      },
+      {
+        "id": "trait_hobbit_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bucklander|TLotRR}",
+              "{@background On Patrol|TLotRR}",
+              "{@background Restless Farmer|TLotRR}",
+              "{@background Too Many Paths to Tread|TLotRR}",
+              "{@background Tookish Blood|TLotRR}",
+              "{@background Witty Gentlehobbit|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_hobbit_harfoot_skilful_with_tools_tlotrr",
+        "name": "Skilful with Tools",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "subraceName": "Harfoot",
+        "actionType": "passive",
+        "description": "You have proficiency with the artisan's tools of your choice: herbalism kit, mason's tools, or weaver's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item artisan's tools|PHB} of your choice: {@item herbalism kit|PHB}, {@item mason's tools|PHB}, or {@item weaver's tools|PHB}."
+        ]
+      }
+    ],
+    "description": "**Ability Score Increase**: Your Dexterity score increases by 2.\n\n**Adventuring Age**: Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.\n\n**Hobbit Elusiveness**: You have proficiency in the Stealth skill.\n\n**Hobbit-Sense**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.\n\n**Pipe-Weed Lore**: You have proficiency with pipe.\n\n**Unobtrusive**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.\n\n**Standard of Living: Common**: Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**\n\n**Subculture**: All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit\n\n**Skilful with Tools**: You have proficiency with the artisan's tools of your choice: herbalism kit, mason's tools, or weaver's tools."
+  },
+  {
+    "id": "race_hobbit_stoor_tlotrr",
+    "name": "Hobbit (Stoor)",
+    "raceName": "Hobbit",
+    "subraceName": "Stoor",
+    "source": "TLotRR",
+    "page": 38,
+    "size": [
+      "S"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Riverside Dweller.</strong> <p>You have proficiency with the tools of your choice: carpenter's tools, water vehicles, or woodcarver's tools.</p></div>",
+    "traits": [
+      {
+        "id": "trait_hobbit_ability_score_increase_tlotrr",
+        "name": "Ability Score Increase",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Your Dexterity score increases by 2.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your Dexterity score increases by 2."
+        ]
+      },
+      {
+        "id": "trait_hobbit_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties."
+        ]
+      },
+      {
+        "id": "trait_hobbit_hobbit_elusiveness_tlotrr",
+        "name": "Hobbit Elusiveness",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency in the Stealth skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Stealth} skill."
+        ]
+      },
+      {
+        "id": "trait_hobbit_hobbit_sense_tlotrr",
+        "name": "Hobbit-Sense",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow."
+        ]
+      },
+      {
+        "id": "trait_hobbit_pipe_weed_lore_tlotrr",
+        "name": "Pipe-Weed Lore",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You have proficiency with pipe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item pipe|TLotRR|pipes}."
+        ]
+      },
+      {
+        "id": "trait_hobbit_unobtrusive_tlotrr",
+        "name": "Unobtrusive",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_hobbit_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You speak, read and write {@language Westron|TLotRR}, preserving the use of a few words and names of your own forgotten tongue."
+        ]
+      },
+      {
+        "id": "trait_hobbit_standard_of_living_common_tlotrr",
+        "name": "Standard of Living: Common",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_hobbit_subculture_tlotrr",
+        "name": "Subculture",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures."
+        ]
+      },
+      {
+        "id": "trait_hobbit_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Bucklander|TLotRR}",
+              "{@background On Patrol|TLotRR}",
+              "{@background Restless Farmer|TLotRR}",
+              "{@background Too Many Paths to Tread|TLotRR}",
+              "{@background Tookish Blood|TLotRR}",
+              "{@background Witty Gentlehobbit|TLotRR}"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_hobbit_stoor_riverside_dweller_tlotrr",
+        "name": "Riverside Dweller",
+        "source": "TLotRR",
+        "raceName": "Hobbit",
+        "subraceName": "Stoor",
+        "actionType": "passive",
+        "description": "You have proficiency with the tools of your choice: carpenter's tools, water vehicles, or woodcarver's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the tools of your choice: {@item carpenter's tools|PHB}, water vehicles, or {@item woodcarver's tools|PHB}."
+        ]
+      }
+    ],
+    "description": "**Ability Score Increase**: Your Dexterity score increases by 2.\n\n**Adventuring Age**: Between 25–60 years of age. Hobbits do not abandon their comfortable lives easily, but when they do they usually wait for their coming of age at 33. A particularly reckless fellow might feel the call to adventure when in their tweens, as Hobbits call their twenties.\n\n**Hobbit Elusiveness**: You have proficiency in the Stealth skill.\n\n**Hobbit-Sense**: You have advantage on all Intelligence, Wisdom, and Charisma saving throws against Shadow.\n\n**Pipe-Weed Lore**: You have proficiency with pipe.\n\n**Unobtrusive**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You speak, read and write Westron|TLotRR, preserving the use of a few words and names of your own forgotten tongue.\n\n**Standard of Living: Common**: Hobbits live in peace, their land is well-tilled and their borders protected, but theirs is an isolated island in the middle of a desolate region, and trading is an uncommon occurrence.\n\n**Starting Gear**\n\n**Subculture**: All Hobbits display the traits described so far, but in their wandering days the Shire-folk were divided into three distinct groups: the Fallohides, the Harfoots, and the Stoors. Although those branches today are blended together in most families, there is a tendency for an individual Hobbit to display some characteristics that can be traced back to one of the three ancestral origins. Choose one of these subcultures.\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Bucklander\n- On Patrol\n- Restless Farmer\n- Too Many Paths to Tread\n- Tookish Blood\n- Witty Gentlehobbit\n\n**Riverside Dweller**: You have proficiency with the tools of your choice: carpenter's tools, water vehicles, or woodcarver's tools."
+  },
+  {
+    "id": "race_man_of_bree_tlotrr",
+    "name": "Man of Bree",
+    "source": "TLotRR",
+    "page": 40,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Adventuring Age.</strong> <p>Between 18–40 years of age. Actual adventurers from Bree-land are rare indeed. If they leave their villages at all, they do it when the vigour of youth is in their limbs, and usually return home to settle down before their fortieth year.</p></div>\n<div class=\"compendium-subentry\"><strong>Pipe-Weed Lore.</strong> <p>You have proficiency with pipe.</p></div>\n<div class=\"compendium-subentry\"><strong>See Through a Brick Wall in Time.</strong> <p>You have proficiency in the Insight skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Starting Virtue.</strong> <p>You gain one cultural virtue of your choice (see Chapter 4|TLotRR|3|Virtues).</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You speak, read and write Westron|TLotRR, albeit slightly altered in a local dialect.</p></div>\n<div class=\"compendium-subentry\"><strong>Standard of Living: Common.</strong> <p>Bree-land is not as wealthy as it once was, but these days the inhabitants of the four villages are no more rustic than their neighbours in the Shire, and no less well-off.</p>\n<div class=\"compendium-subentry\"><strong>Starting Gear.</strong> </div></div>\n<div class=\"compendium-subentry\"><strong>Backgrounds.</strong> <p>Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:</p>\n<ul><li>Crossroads of the North</li><li>Forest-Dweller</li><li>Gate-Warden</li><li>No Longer Free from Care and Fear</li><li>Off with Dwarves</li><li>Up the Greenway</li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_man_of_bree_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Man of Bree",
+        "actionType": "passive",
+        "description": "Between 18–40 years of age. Actual adventurers from Bree-land are rare indeed. If they leave their villages at all, they do it when the vigour of youth is in their limbs, and usually return home to settle down before their fortieth year.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 18–40 years of age. Actual adventurers from Bree-land are rare indeed. If they leave their villages at all, they do it when the vigour of youth is in their limbs, and usually return home to settle down before their fortieth year."
+        ]
+      },
+      {
+        "id": "trait_man_of_bree_pipe_weed_lore_tlotrr",
+        "name": "Pipe-Weed Lore",
+        "source": "TLotRR",
+        "raceName": "Man of Bree",
+        "actionType": "passive",
+        "description": "You have proficiency with pipe.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with {@item pipe|TLotRR|pipes}."
+        ]
+      },
+      {
+        "id": "trait_man_of_bree_see_through_a_brick_wall_in_time_tlotrr",
+        "name": "See Through a Brick Wall in Time",
+        "source": "TLotRR",
+        "raceName": "Man of Bree",
+        "actionType": "passive",
+        "description": "You have proficiency in the Insight skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Insight} skill."
+        ]
+      },
+      {
+        "id": "trait_man_of_bree_starting_virtue_tlotrr",
+        "name": "Starting Virtue",
+        "source": "TLotRR",
+        "raceName": "Man of Bree",
+        "actionType": "passive",
+        "description": "You gain one cultural virtue of your choice (see Chapter 4|TLotRR|3|Virtues).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain one cultural virtue of your choice (see {@book Chapter 4|TLotRR|3|Virtues})."
+        ]
+      },
+      {
+        "id": "trait_man_of_bree_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Man of Bree",
+        "actionType": "passive",
+        "description": "You speak, read and write Westron|TLotRR, albeit slightly altered in a local dialect.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You speak, read and write {@language Westron|TLotRR}, albeit slightly altered in a local dialect."
+        ]
+      },
+      {
+        "id": "trait_man_of_bree_standard_of_living_common_tlotrr",
+        "name": "Standard of Living: Common",
+        "source": "TLotRR",
+        "raceName": "Man of Bree",
+        "actionType": "passive",
+        "description": "Bree-land is not as wealthy as it once was, but these days the inhabitants of the four villages are no more rustic than their neighbours in the Shire, and no less well-off.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Bree-land is not as wealthy as it once was, but these days the inhabitants of the four villages are no more rustic than their neighbours in the Shire, and no less well-off.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_man_of_bree_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Man of Bree",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Crossroads of the North\n- Forest-Dweller\n- Gate-Warden\n- No Longer Free from Care and Fear\n- Off with Dwarves\n- Up the Greenway",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Crossroads of the North|TLotRR}",
+              "{@background Forest-Dweller|TLotRR}",
+              "{@background Gate-Warden|TLotRR}",
+              "{@background No Longer Free from Care and Fear|TLotRR}",
+              "{@background Off with Dwarves|TLotRR}",
+              "{@background Up the Greenway|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 18–40 years of age. Actual adventurers from Bree-land are rare indeed. If they leave their villages at all, they do it when the vigour of youth is in their limbs, and usually return home to settle down before their fortieth year.\n\n**Pipe-Weed Lore**: You have proficiency with pipe.\n\n**See Through a Brick Wall in Time**: You have proficiency in the Insight skill.\n\n**Starting Virtue**: You gain one cultural virtue of your choice (see Chapter 4|TLotRR|3|Virtues).\n\n**Languages**: You speak, read and write Westron|TLotRR, albeit slightly altered in a local dialect.\n\n**Standard of Living: Common**: Bree-land is not as wealthy as it once was, but these days the inhabitants of the four villages are no more rustic than their neighbours in the Shire, and no less well-off.\n\n**Starting Gear**\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Crossroads of the North\n- Forest-Dweller\n- Gate-Warden\n- No Longer Free from Care and Fear\n- Off with Dwarves\n- Up the Greenway"
+  },
+  {
+    "id": "race_ranger_of_the_north_tlotrr",
+    "name": "Ranger of the North",
+    "source": "TLotRR",
+    "page": 42,
+    "size": "M",
+    "speed": "35 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Adventuring Age.</strong> <p>Between 20–50 years of age. Rangers take to the Wild around the age of twenty, but may begin to go on adventures even at a younger age. They retain their strength of body and will longer than most Men, but usually cease to travel far from Eriador when they reach their fifties.</p></div>\n<div class=\"compendium-subentry\"><strong>Wandering Folk.</strong> <p>You have proficiency in two of the following skills of your choice: Explore, Hunting, Old Lore, Perception, Stealth, or Travel.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read and write Westron|TLotRR and Sindarin|TLotRR.</p></div>\n<div class=\"compendium-subentry\"><strong>Standard of Living: Frugal.</strong> <p>Rangers rarely wear or carry anything whose worth cannot be measured in a practical way. Their gear or garments are never considered precious for the gleam of stone or gold, but for their capability to endure long journeys and strenuous fights.</p>\n<div class=\"compendium-subentry\"><strong>Starting Gear.</strong> </div></div>\n<div class=\"compendium-subentry\"><strong>Backgrounds.</strong> <p>Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:</p>\n<ul><li>Counsellor</li><li>Far-Reaching Herald</li><li>Hunter of Orcs</li><li>Keeper of Lore</li><li>Protector of the Land</li><li>Watcher on the Border</li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_ranger_of_the_north_adventuring_age_tlotrr",
+        "name": "Adventuring Age",
+        "source": "TLotRR",
+        "raceName": "Ranger of the North",
+        "actionType": "passive",
+        "description": "Between 20–50 years of age. Rangers take to the Wild around the age of twenty, but may begin to go on adventures even at a younger age. They retain their strength of body and will longer than most Men, but usually cease to travel far from Eriador when they reach their fifties.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Between 20–50 years of age. Rangers take to the Wild around the age of twenty, but may begin to go on adventures even at a younger age. They retain their strength of body and will longer than most Men, but usually cease to travel far from Eriador when they reach their fifties."
+        ]
+      },
+      {
+        "id": "trait_ranger_of_the_north_wandering_folk_tlotrr",
+        "name": "Wandering Folk",
+        "source": "TLotRR",
+        "raceName": "Ranger of the North",
+        "actionType": "passive",
+        "description": "You have proficiency in two of the following skills of your choice: Explore, Hunting, Old Lore, Perception, Stealth, or Travel.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in two of the following skills of your choice: {@skill Explore|TLotRR}, {@skill Hunting|TLotRR}, {@skill Old Lore|TLotRR}, {@skill Perception}, {@skill Stealth}, or {@skill Travel|TLotRR}."
+        ]
+      },
+      {
+        "id": "trait_ranger_of_the_north_languages_tlotrr",
+        "name": "Languages",
+        "source": "TLotRR",
+        "raceName": "Ranger of the North",
+        "actionType": "passive",
+        "description": "You can speak, read and write Westron|TLotRR and Sindarin|TLotRR.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read and write {@language Westron|TLotRR} and {@language Sindarin|TLotRR}."
+        ]
+      },
+      {
+        "id": "trait_ranger_of_the_north_standard_of_living_frugal_tlotrr",
+        "name": "Standard of Living: Frugal",
+        "source": "TLotRR",
+        "raceName": "Ranger of the North",
+        "actionType": "passive",
+        "description": "Rangers rarely wear or carry anything whose worth cannot be measured in a practical way. Their gear or garments are never considered precious for the gleam of stone or gold, but for their capability to endure long journeys and strenuous fights.\n\n**Starting Gear**",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Rangers rarely wear or carry anything whose worth cannot be measured in a practical way. Their gear or garments are never considered precious for the gleam of stone or gold, but for their capability to endure long journeys and strenuous fights.",
+          {
+            "type": "statblock",
+            "tag": "table",
+            "source": "TLotRR",
+            "name": "Starting Gear",
+            "page": 70,
+            "collapsed": true
+          }
+        ]
+      },
+      {
+        "id": "trait_ranger_of_the_north_backgrounds_tlotrr",
+        "name": "Backgrounds",
+        "source": "TLotRR",
+        "raceName": "Ranger of the North",
+        "actionType": "passive",
+        "description": "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Counsellor\n- Far-Reaching Herald\n- Hunter of Orcs\n- Keeper of Lore\n- Protector of the Land\n- Watcher on the Border",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:",
+          {
+            "type": "list",
+            "columns": 3,
+            "items": [
+              "{@background Counsellor|TLotRR}",
+              "{@background Far-Reaching Herald|TLotRR}",
+              "{@background Hunter of Orcs|TLotRR}",
+              "{@background Keeper of Lore|TLotRR}",
+              "{@background Protector of the Land|TLotRR}",
+              "{@background Watcher on the Border|TLotRR}"
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Adventuring Age**: Between 20–50 years of age. Rangers take to the Wild around the age of twenty, but may begin to go on adventures even at a younger age. They retain their strength of body and will longer than most Men, but usually cease to travel far from Eriador when they reach their fifties.\n\n**Wandering Folk**: You have proficiency in two of the following skills of your choice: Explore, Hunting, Old Lore, Perception, Stealth, or Travel.\n\n**Languages**: You can speak, read and write Westron|TLotRR and Sindarin|TLotRR.\n\n**Standard of Living: Frugal**: Rangers rarely wear or carry anything whose worth cannot be measured in a practical way. Their gear or garments are never considered precious for the gleam of stone or gold, but for their capability to endure long journeys and strenuous fights.\n\n**Starting Gear**\n\n**Backgrounds**: Players choosing a background receive a brief personal history, two skill proficiencies, a tool proficiency and two distinctive features:\n\n- Counsellor\n- Far-Reaching Herald\n- Hunter of Orcs\n- Keeper of Lore\n- Protector of the Land\n- Watcher on the Border"
+  }
+]

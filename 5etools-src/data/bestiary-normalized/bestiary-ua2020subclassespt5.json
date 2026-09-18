@@ -1,0 +1,201 @@
+[
+  {
+    "id": "creature_drake_companion_ua2020subclassespt5",
+    "name": "Drake Companion",
+    "source": "UA2020SubclassesPt5",
+    "edition": "2014",
+    "page": 3,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Dragon",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 8,
+        "mod": -1
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 16,
+    "dex": 12,
+    "con": 15,
+    "int": 8,
+    "wis": 14,
+    "cha": 8,
+    "proficiencyBonus": 2,
+    "save": {
+      "dex": "+1 + PB",
+      "wis": "+2 + PB"
+    },
+    "saves": {
+      "dex": "+1 + PB",
+      "wis": "+2 + PB"
+    },
+    "skill": {},
+    "skills": {},
+    "immune": [
+      {
+        "special": "determined by the drake's draconic essence trait"
+      }
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Draconic"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_draconic_essence_94tv",
+        "name": "Draconic Essence",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When you summon the drake, choose a damage type: acid, cold, fire, lightning, or poison. The chosen type determines the drake's damage immunity, the damage of its bite, and the damage of its Infused Strikes trait.</p>",
+        "entries": [
+          "When you summon the drake, choose a damage type: acid, cold, fire, lightning, or poison. The chosen type determines the drake's damage immunity, the damage of its bite, and the damage of its Infused Strikes trait."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_gjvv",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 + PB to hit, reach 5 ft., one target. Hit: 1d6 piercing damage plus PB damage of a type determined by the drake's Draconic Essence.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3 + PB} to hit, reach 5 ft., one target. {@h}{@damage 1d6} piercing damage plus {@damage PB} damage of a type determined by the drake's Draconic Essence."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Piercing"
+            },
+            {
+              "formula": "PB",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_infused_strikes_qczg",
+        "name": "Infused Strikes",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When another creature within 30 feet of the drake that it can see hits with a weapon attack, the drake infuses the strike with its essence, causing the attack to deal an extra 1d6 damage of the type determined by its Draconic Essence.</p>",
+        "entries": [
+          "When another creature within 30 feet of the drake that it can see hits with a weapon attack, the drake infuses the strike with its essence, causing the attack to deal an extra {@damage 1d6} damage of the type determined by its Draconic Essence."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UA2020SubclassesPt5/Drake Companion.webp",
+    "tokenImg": "img/bestiary/tokens/UA2020SubclassesPt5/Drake Companion.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

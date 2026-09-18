@@ -1,0 +1,850 @@
+[
+  {
+    "id": "race_ardling_xua2022characteroptions",
+    "name": "Ardling",
+    "source": "XUA2022CharacterOptions",
+    "page": 3,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type:.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 4–7 feet tall) or Small (about 3–4 feet tall), chosen when you select this Race</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>200 years on average</p></div></li></ul>\n<p>As an Ardling, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Angelic Flight.</strong> <p>As a Bonus Action, you sprout spectral wings for a moment and fly up to a number of feet equal to your Speed. If you are in the air at the end of this movement, you fall if nothing is holding you aloft.</p>\n<p>You can use this Bonus Action a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a  Long Rest|XUA2022CharacterOptions.</p></div>\n<div class=\"compendium-subentry\"><strong>Celestial Legacy.</strong> <p>You are the recipient of a celestial legacy that grants you magical abilities. Choose a legacy from the Celestial Legacies table: Exalted, associated with Chaotic Good planes; Heavenly, associated with Lawful Good planes; or Idyllic, associated with Neutral Good planes. You gain the initial benefit of the chosen legacy: a cantrip that you learn. You also choose the animal you most closely resemble; the table provides a few suggestions for each legacy (you don't gain wings by choosing an animal that can fly).</p>\n<p>Starting at 3rd level and again at 5th level, you gain the ability to cast a higher-level Spell with this trait, as shown on the table. Once you cast the Spell with this trait, you can't cast that Spell with it again until you finish a  Long Rest|XUA2022CharacterOptions; however, you can cast the Spell using any Spell Slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the legacy).</p>\n<table class=\"compendium-table\"><thead><tr><th>Legacy</th><th>Suggested Animals</th><th>1st Level</th><th>3rd Level</th><th>5th Level</th></tr></thead><tbody><tr><td>Exalted</td><td>Cat, eagle, goat, mule</td><td>Thaumaturgy</td><td>Divine Favor</td><td>Lesser Restoration</td></tr><tr><td>Heavenly</td><td>Elephant, owl, pig, stork</td><td>Light</td><td>Cure Wounds</td><td>Zone of Truth</td></tr><tr><td>Idyllic</td><td>Bear, dog, raven, toad</td><td>Guidance</td><td>Healing Word</td><td>Animal Messenger</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Damage Resistance.</strong> <p>You have Resistance to Radiant Damage.</p></div>",
+    "traits": [
+      {
+        "id": "trait_ardling_angelic_flight_xua2022characteroptions",
+        "name": "Angelic Flight",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Ardling",
+        "actionType": "bonus",
+        "description": "As a Bonus Action, you sprout spectral wings for a moment and fly up to a number of feet equal to your Speed. If you are in the air at the end of this movement, you fall if nothing is holding you aloft.\n\nYou can use this Bonus Action a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a  Long Rest|XUA2022CharacterOptions.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a Bonus Action, you sprout spectral wings for a moment and fly up to a number of feet equal to your Speed. If you are in the air at the end of this movement, you fall if nothing is holding you aloft.",
+          "You can use this Bonus Action a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a  {@variantrule Long Rest|XUA2022CharacterOptions}."
+        ]
+      },
+      {
+        "id": "trait_ardling_celestial_legacy_xua2022characteroptions",
+        "name": "Celestial Legacy",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Ardling",
+        "actionType": "passive",
+        "description": "You are the recipient of a celestial legacy that grants you magical abilities. Choose a legacy from the Celestial Legacies table: Exalted, associated with Chaotic Good planes; Heavenly, associated with Lawful Good planes; or Idyllic, associated with Neutral Good planes. You gain the initial benefit of the chosen legacy: a cantrip that you learn. You also choose the animal you most closely resemble; the table provides a few suggestions for each legacy (you don't gain wings by choosing an animal that can fly).\n\nStarting at 3rd level and again at 5th level, you gain the ability to cast a higher-level Spell with this trait, as shown on the table. Once you cast the Spell with this trait, you can't cast that Spell with it again until you finish a  Long Rest|XUA2022CharacterOptions; however, you can cast the Spell using any Spell Slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the legacy).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are the recipient of a celestial legacy that grants you magical abilities. Choose a legacy from the Celestial Legacies table: Exalted, associated with Chaotic Good planes; Heavenly, associated with Lawful Good planes; or Idyllic, associated with Neutral Good planes. You gain the initial benefit of the chosen legacy: a cantrip that you learn. You also choose the animal you most closely resemble; the table provides a few suggestions for each legacy (you don't gain wings by choosing an animal that can fly).",
+          "Starting at 3rd level and again at 5th level, you gain the ability to cast a higher-level Spell with this trait, as shown on the table. Once you cast the Spell with this trait, you can't cast that Spell with it again until you finish a  {@variantrule Long Rest|XUA2022CharacterOptions}; however, you can cast the Spell using any Spell Slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the legacy).",
+          {
+            "type": "table",
+            "caption": "Celestial Legacies",
+            "colLabels": [
+              "Legacy",
+              "Suggested Animals",
+              "1st Level",
+              "3rd Level",
+              "5th Level"
+            ],
+            "colStyles": [
+              "col-2-4",
+              "col-2-4",
+              "col-2-4",
+              "col-2-4",
+              "col-2-4"
+            ],
+            "rows": [
+              [
+                "Exalted",
+                "Cat, eagle, goat, mule",
+                "Thaumaturgy",
+                "Divine Favor",
+                "Lesser Restoration"
+              ],
+              [
+                "Heavenly",
+                "Elephant, owl, pig, stork",
+                "Light",
+                "Cure Wounds",
+                "Zone of Truth"
+              ],
+              [
+                "Idyllic",
+                "Bear, dog, raven, toad",
+                "Guidance",
+                "Healing Word",
+                "Animal Messenger"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_ardling_damage_resistance_xua2022characteroptions",
+        "name": "Damage Resistance",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Ardling",
+        "actionType": "passive",
+        "description": "You have Resistance to Radiant Damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Resistance to Radiant Damage."
+        ]
+      }
+    ],
+    "description": "**Creature Type:**\n\nHumanoid\n\n**Size:**\n\nMedium (about 4–7 feet tall) or Small (about 3–4 feet tall), chosen when you select this Race\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n200 years on average\n\nAs an Ardling, you have these special traits."
+  },
+  {
+    "id": "race_dragonborn_xua2022characteroptions",
+    "name": "Dragonborn",
+    "source": "XUA2022CharacterOptions",
+    "page": 4,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type:.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 5-7 feet tall)</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>80 years on average</p></div></li></ul>\n<p>As a Dragonborn, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Draconic Ancestry.</strong> <p>Your lineage stems from a dragon progenitor. Choose the type of dragon from the Draconic Ancestor table. Your choice affects your Breath Weapon and Damage Resistance traits. The chosen dragon also affects your appearance, with you displaying coloration and other features reminiscent of that dragon.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th></tr></thead><tbody><tr><td>Black</td><td>Acid</td></tr><tr><td>Blue</td><td>Lightning</td></tr><tr><td>Brass</td><td>Fire</td></tr><tr><td>Bronze</td><td>Lightning</td></tr><tr><td>Copper</td><td>Acid</td></tr><tr><td>Gold</td><td>Fire</td></tr><tr><td>Green</td><td>Poison</td></tr><tr><td>Red</td><td>Fire</td></tr><tr><td>Silver</td><td>Cold</td></tr><tr><td>White</td><td>Cold</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Breath Weapon.</strong> <p>As an Action, you exhale destructive energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw against a DC equal to 8 + your Constitution modifier + your Proficiency Bonus. On a failed save, a creature takes 1d10 + your character level in damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage.</p>\n<p>You can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a  Long Rest|XUA2022CharacterOptions.</p></div>\n<div class=\"compendium-subentry\"><strong>Damage Resistance.</strong> <p>You have Resistance to the damage type determined by your Draconic Ancestry trait.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Language.</strong> <p>You instinctively know the language of dragons. You can therefore speak, read, and write Draconic.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dragonborn_draconic_ancestry_xua2022characteroptions",
+        "name": "Draconic Ancestry",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "Your lineage stems from a dragon progenitor. Choose the type of dragon from the Draconic Ancestor table. Your choice affects your Breath Weapon and Damage Resistance traits. The chosen dragon also affects your appearance, with you displaying coloration and other features reminiscent of that dragon.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your lineage stems from a dragon progenitor. Choose the type of dragon from the Draconic Ancestor table. Your choice affects your Breath Weapon and Damage Resistance traits. The chosen dragon also affects your appearance, with you displaying coloration and other features reminiscent of that dragon.",
+          {
+            "type": "table",
+            "caption": "Draconic Ancestor",
+            "colLabels": [
+              "Dragon",
+              "Damage Type"
+            ],
+            "colStyles": [
+              "col-6",
+              "col-6"
+            ],
+            "rows": [
+              [
+                "Black",
+                "Acid"
+              ],
+              [
+                "Blue",
+                "Lightning"
+              ],
+              [
+                "Brass",
+                "Fire"
+              ],
+              [
+                "Bronze",
+                "Lightning"
+              ],
+              [
+                "Copper",
+                "Acid"
+              ],
+              [
+                "Gold",
+                "Fire"
+              ],
+              [
+                "Green",
+                "Poison"
+              ],
+              [
+                "Red",
+                "Fire"
+              ],
+              [
+                "Silver",
+                "Cold"
+              ],
+              [
+                "White",
+                "Cold"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dragonborn_breath_weapon_xua2022characteroptions",
+        "name": "Breath Weapon",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dragonborn",
+        "actionType": "action",
+        "description": "As an Action, you exhale destructive energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw against a DC equal to 8 + your Constitution modifier + your Proficiency Bonus. On a failed save, a creature takes 1d10 + your character level in damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage.\n\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a  Long Rest|XUA2022CharacterOptions.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d10 + @level",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "level",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "As an Action, you exhale destructive energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw against a DC equal to 8 + your Constitution modifier + your Proficiency Bonus. On a failed save, a creature takes {@damage 1d10} + your character level in damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage.",
+          "You can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a  {@variantrule Long Rest|XUA2022CharacterOptions}."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_damage_resistance_xua2022characteroptions",
+        "name": "Damage Resistance",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have Resistance to the damage type determined by your Draconic Ancestry trait.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Resistance to the damage type determined by your Draconic Ancestry trait."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_darkvision_xua2022characteroptions",
+        "name": "Darkvision",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_draconic_language_xua2022characteroptions",
+        "name": "Draconic Language",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You instinctively know the language of dragons. You can therefore speak, read, and write Draconic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You instinctively know the language of dragons. You can therefore speak, read, and write Draconic."
+        ]
+      }
+    ],
+    "description": "**Creature Type:**\n\nHumanoid\n\n**Size:**\n\nMedium (about 5-7 feet tall)\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n80 years on average\n\nAs a Dragonborn, you have these special traits."
+  },
+  {
+    "id": "race_dwarf_xua2022characteroptions",
+    "name": "Dwarf",
+    "source": "XUA2022CharacterOptions",
+    "page": 5,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type:.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 4-5 feet tall)</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>350 years on average</p></div></li></ul>\n<p>As a Dwarf, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Dwarven Resilience.</strong> <p>You have Resistance to Poison Damage. You also have Advantage on saving throws you make to avoid or end the Poisoned Condition on yourself.</p></div>\n<div class=\"compendium-subentry\"><strong>Dwarven Toughness.</strong> <p>Your Hit Point Maximum increases by 1, and it increases by 1 again whenever you gain a level.</p></div>\n<div class=\"compendium-subentry\"><strong>Forge Wise.</strong> <p>Your divine creator gave you an uncanny affinity for working with stone or metal. You gain Tool Proficiency|XUA2022CharacterOptions with two of the following options of your choice: Jeweler's Tools, Mason's Tools, Smith's Tools, or Tinker's Tools.</p></div>\n<div class=\"compendium-subentry\"><strong>Stonecunning.</strong> <p>As a Bonus Action, you gain Tremorsense|XUA2022CharacterOptions  with a range of 60 feet for 10 minutes. You must be on a stone surface or touching such a surface to use this Tremorsense. The stone can be natural or worked.</p>\n<p>You can use this Bonus Action a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a  Long Rest|XUA2022CharacterOptions.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dwarf_darkvision_xua2022characteroptions",
+        "name": "Darkvision",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_resilience_xua2022characteroptions",
+        "name": "Dwarven Resilience",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "You have Resistance to Poison Damage. You also have Advantage on saving throws you make to avoid or end the Poisoned Condition on yourself.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Resistance to Poison Damage. You also have Advantage on saving throws you make to avoid or end the Poisoned Condition on yourself."
+        ]
+      },
+      {
+        "id": "trait_dwarf_dwarven_toughness_xua2022characteroptions",
+        "name": "Dwarven Toughness",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your Hit Point Maximum increases by 1, and it increases by 1 again whenever you gain a level.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your Hit Point Maximum increases by 1, and it increases by 1 again whenever you gain a level."
+        ]
+      },
+      {
+        "id": "trait_dwarf_forge_wise_xua2022characteroptions",
+        "name": "Forge Wise",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dwarf",
+        "actionType": "passive",
+        "description": "Your divine creator gave you an uncanny affinity for working with stone or metal. You gain Tool Proficiency|XUA2022CharacterOptions with two of the following options of your choice: Jeweler's Tools, Mason's Tools, Smith's Tools, or Tinker's Tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your divine creator gave you an uncanny affinity for working with stone or metal. You gain {@variantrule Tool Proficiency|XUA2022CharacterOptions} with two of the following options of your choice: Jeweler's Tools, Mason's Tools, Smith's Tools, or Tinker's Tools."
+        ]
+      },
+      {
+        "id": "trait_dwarf_stonecunning_xua2022characteroptions",
+        "name": "Stonecunning",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Dwarf",
+        "actionType": "bonus",
+        "description": "As a Bonus Action, you gain Tremorsense|XUA2022CharacterOptions  with a range of 60 feet for 10 minutes. You must be on a stone surface or touching such a surface to use this Tremorsense. The stone can be natural or worked.\n\nYou can use this Bonus Action a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a  Long Rest|XUA2022CharacterOptions.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a Bonus Action, you gain {@variantrule Tremorsense|XUA2022CharacterOptions}  with a range of 60 feet for 10 minutes. You must be on a stone surface or touching such a surface to use this Tremorsense. The stone can be natural or worked.",
+          "You can use this Bonus Action a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a  {@variantrule Long Rest|XUA2022CharacterOptions}."
+        ]
+      }
+    ],
+    "description": "**Creature Type:**\n\nHumanoid\n\n**Size:**\n\nMedium (about 4-5 feet tall)\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n350 years on average\n\nAs a Dwarf, you have these special traits."
+  },
+  {
+    "id": "race_elf_xua2022characteroptions",
+    "name": "Elf",
+    "source": "XUA2022CharacterOptions",
+    "page": 6,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 5-6 feet tall)</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>750 years on average</p></div></li></ul>\n<p>As an Elf, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Elven Lineage.</strong> <p>You are part of an elven lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table: Drow, the lineage of the Underdark; High Elf, the lineage of fey crossings and other magical locations; or Wood Elf, the lineage of primeval forests. You gain the 1st-level benefit of that lineage.</p>\n<p>Starting at 3rd level and again at 5th level, you also gain the ability to cast a Spell with this trait. Once you cast the Spell with this trait, you can't cast that Spell with it again until you finish a Long Rest|XUA2022CharacterOptions; however, you can cast the Spell using any Spell Slots you have of the appropriate level.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the lineage).</p>\n<table class=\"compendium-table\"><thead><tr><th>Lineage</th><th>1st Level</th><th>3rd Level</th><th>5th Level</th></tr></thead><tbody><tr><td>Drow</td><td>The range of your Darkvision increases to 120 feet. You also know the Dancing Lights cantrip.</td><td>Faerie Fire</td><td>Darkness</td></tr><tr><td>High Elf</td><td>You know the Prestidigitation cantrip. Whenever you finish a Long Rest|XUA2022CharacterOptions, you can replace that cantrip with a different cantrip from the Arcane Spells|XUA2022CharacterOptions|Arcane Spell List.</td><td>Detect Magic</td><td>Misty Step</td></tr><tr><td>Wood Elf</td><td>Your Speed increases to 35 feet. You also know the Druidcraft cantrip.</td><td>Longstrider</td><td>Pass without Trace</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Fey Ancestry.</strong> <p>You have Advantage on saving throws you make to avoid or end the Charmed Condition on yourself.</p></div>\n<div class=\"compendium-subentry\"><strong>Keen Senses.</strong> <p>You have Proficiency in the Perception Skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Trance.</strong> <p>You don't need to sleep, and magic can't put you to sleep. You can finish a  Long Rest|XUA2022CharacterOptions in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness.</p></div>",
+    "traits": [
+      {
+        "id": "trait_elf_darkvision_xua2022characteroptions",
+        "name": "Darkvision",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_elf_elven_lineage_xua2022characteroptions",
+        "name": "Elven Lineage",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You are part of an elven lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table: Drow, the lineage of the Underdark; High Elf, the lineage of fey crossings and other magical locations; or Wood Elf, the lineage of primeval forests. You gain the 1st-level benefit of that lineage.\n\nStarting at 3rd level and again at 5th level, you also gain the ability to cast a Spell with this trait. Once you cast the Spell with this trait, you can't cast that Spell with it again until you finish a Long Rest|XUA2022CharacterOptions; however, you can cast the Spell using any Spell Slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the lineage).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are part of an elven lineage that grants you supernatural abilities. Choose a lineage from the Elven Lineages table: Drow, the lineage of the Underdark; High Elf, the lineage of fey crossings and other magical locations; or Wood Elf, the lineage of primeval forests. You gain the 1st-level benefit of that lineage.",
+          "Starting at 3rd level and again at 5th level, you also gain the ability to cast a Spell with this trait. Once you cast the Spell with this trait, you can't cast that Spell with it again until you finish a {@variantrule Long Rest|XUA2022CharacterOptions}; however, you can cast the Spell using any Spell Slots you have of the appropriate level.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the lineage).",
+          {
+            "type": "table",
+            "caption": "Elven Lineages",
+            "colLabels": [
+              "Lineage",
+              "1st Level",
+              "3rd Level",
+              "5th Level"
+            ],
+            "colStyles": [
+              "col-2",
+              "col-4",
+              "col-3",
+              "col-3"
+            ],
+            "rows": [
+              [
+                "Drow",
+                "The range of your Darkvision increases to 120 feet. You also know the {@spell Dancing Lights} cantrip.",
+                "Faerie Fire",
+                "Darkness"
+              ],
+              [
+                "High Elf",
+                "You know the {@spell Prestidigitation} cantrip. Whenever you finish a {@variantrule Long Rest|XUA2022CharacterOptions}, you can replace that cantrip with a different cantrip from the {@variantrule Arcane Spells|XUA2022CharacterOptions|Arcane Spell List.}",
+                "Detect Magic",
+                "Misty Step"
+              ],
+              [
+                "Wood Elf",
+                "Your Speed increases to 35 feet. You also know the {@spell Druidcraft} cantrip.",
+                "Longstrider",
+                "Pass without Trace"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_xua2022characteroptions",
+        "name": "Fey Ancestry",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have Advantage on saving throws you make to avoid or end the Charmed Condition on yourself.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Advantage on saving throws you make to avoid or end the Charmed Condition on yourself."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_xua2022characteroptions",
+        "name": "Keen Senses",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have Proficiency in the Perception Skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Proficiency in the Perception Skill."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_xua2022characteroptions",
+        "name": "Trance",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You don't need to sleep, and magic can't put you to sleep. You can finish a  Long Rest|XUA2022CharacterOptions in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't need to sleep, and magic can't put you to sleep. You can finish a  {@variantrule Long Rest|XUA2022CharacterOptions} in 4 hours if you spend those hours in a trancelike meditation, during which you retain consciousness."
+        ]
+      }
+    ],
+    "description": "**Creature Type**\n\nHumanoid\n\n**Size:**\n\nMedium (about 5-6 feet tall)\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n750 years on average\n\nAs an Elf, you have these special traits."
+  },
+  {
+    "id": "race_gnome_xua2022characteroptions",
+    "name": "Gnome",
+    "source": "XUA2022CharacterOptions",
+    "page": 7,
+    "size": "S",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Small (about 3-4 feet tall)</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>425 years on average</p></div></li></ul>\n<p>As a Gnome, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Gnomish Cunning.</strong> <p>You have Advantage on Intelligence, Wisdom, and Charisma saving throws.</p></div>\n<div class=\"compendium-subentry\"><strong>Gnomish Lineage.</strong> <p>You are part of a gnomish lineage that grants you supernatural abilities. Choose a lineage from the Gnomish Lineages table: Forest Gnome, the lineage of magic-filled forests, or Rock Gnome, the lineage of primeval mountains. You gain the benefits of that lineage.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the lineage).</p></div>\n<table class=\"compendium-table\"><thead><tr><th>Lineage</th><th>Benefit</th></tr></thead><tbody><tr><td>Forest Gnome</td><td>You know the Minor Illusion cantrip. You can also cast the Speak with Animals Spell with this trait. You can cast it with the trait a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XUA2022CharacterOptions. You can also use any Spell Slots you have to cast the Spell.</td></tr><tr><td>Rock Gnome</td><td>You know the Mending and Prestidigitation cantrips.In addition, you can spend 10 minutes casting Prestidigitation to create a Tiny clockwork device (AC 5, 1 HP), such as a toy, a fire starter, or a music box. Casting the Spell in this way consumes 10 GP worth of raw material (string, gears, and the like), which you provide during the casting. When you create the device, you determine its function by choosing one effect from Prestidigitation; the device produces that effect whenever you or another creature takes a Bonus Action to touch the device and activate it. If the chosen effect has options within it, you choose one of those options for the device when you create it. For example, if you choose the spell's ignite-extinguish effect, you determine whether the device ignites or extinguishes fire; the device doesn't do both. You can have three such devices in existence at a time, and each one dismantles itself 8 hours after its creation. You can also touch one of your devices and dismantle it as an Action. After a device is dismantled, the 10 GP of materials used to create it can be reclaimed.</td></tr></tbody></table>",
+    "traits": [
+      {
+        "id": "trait_gnome_darkvision_xua2022characteroptions",
+        "name": "Darkvision",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_gnome_gnomish_cunning_xua2022characteroptions",
+        "name": "Gnomish Cunning",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You have Advantage on Intelligence, Wisdom, and Charisma saving throws.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Advantage on Intelligence, Wisdom, and Charisma saving throws."
+        ]
+      },
+      {
+        "id": "trait_gnome_gnomish_lineage_xua2022characteroptions",
+        "name": "Gnomish Lineage",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Gnome",
+        "actionType": "passive",
+        "description": "You are part of a gnomish lineage that grants you supernatural abilities. Choose a lineage from the Gnomish Lineages table: Forest Gnome, the lineage of magic-filled forests, or Rock Gnome, the lineage of primeval mountains. You gain the benefits of that lineage.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the lineage).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are part of a gnomish lineage that grants you supernatural abilities. Choose a lineage from the Gnomish Lineages table: Forest Gnome, the lineage of magic-filled forests, or Rock Gnome, the lineage of primeval mountains. You gain the benefits of that lineage.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the lineage)."
+        ]
+      }
+    ],
+    "description": "**Creature Type**\n\nHumanoid\n\n**Size:**\n\nSmall (about 3-4 feet tall)\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n425 years on average\n\nAs a Gnome, you have these special traits."
+  },
+  {
+    "id": "race_halfling_xua2022characteroptions",
+    "name": "Halfling",
+    "source": "XUA2022CharacterOptions",
+    "page": 8,
+    "size": "S",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Small (about 2-3 feet tall)</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>150 years on average</p></div></li></ul>\n<p>As a Halfling, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Brave.</strong> <p>You have Advantage on saving throws you make to avoid or end the Frightened Condition on yourself.</p></div>\n<div class=\"compendium-subentry\"><strong>Halfling Nimbleness.</strong> <p>You can move through the space of any creature that is of a Size larger than yours, but you can't stop there.</p></div>\n<div class=\"compendium-subentry\"><strong>Luck.</strong> <p>When you roll a 1 on the d20 of a d20 Test, you can reroll the die, and you must use the new roll.</p></div>\n<div class=\"compendium-subentry\"><strong>Naturally Stealthy.</strong> <p>You have a Proficiency in the Stealth Skill.</p></div>",
+    "traits": [
+      {
+        "id": "trait_halfling_brave_xua2022characteroptions",
+        "name": "Brave",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You have Advantage on saving throws you make to avoid or end the Frightened Condition on yourself.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Advantage on saving throws you make to avoid or end the Frightened Condition on yourself."
+        ]
+      },
+      {
+        "id": "trait_halfling_halfling_nimbleness_xua2022characteroptions",
+        "name": "Halfling Nimbleness",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a Size larger than yours, but you can't stop there.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a Size larger than yours, but you can't stop there."
+        ]
+      },
+      {
+        "id": "trait_halfling_luck_xua2022characteroptions",
+        "name": "Luck",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "When you roll a 1 on the d20 of a d20 Test, you can reroll the die, and you must use the new roll.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you roll a 1 on the {@dice d20} of a {@dice d20} Test, you can reroll the die, and you must use the new roll."
+        ]
+      },
+      {
+        "id": "trait_halfling_naturally_stealthy_xua2022characteroptions",
+        "name": "Naturally Stealthy",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You have a Proficiency in the Stealth Skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a Proficiency in the Stealth Skill."
+        ]
+      }
+    ],
+    "description": "**Creature Type**\n\nHumanoid\n\n**Size:**\n\nSmall (about 2-3 feet tall)\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n150 years on average\n\nAs a Halfling, you have these special traits."
+  },
+  {
+    "id": "race_human_xua2022characteroptions",
+    "name": "Human",
+    "source": "XUA2022CharacterOptions",
+    "page": 2,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type:.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 4–7 feet tall) or Small (about 2–4 feet tall), chosen when you select this Race</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>80 years on average</p></div></li></ul>\n<p>As a human, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Resourceful.</strong> <p>You gain Inspiration whenever you finish a Long Rest|XUA2022CharacterOptions.</p></div>\n<div class=\"compendium-subentry\"><strong>Skillful.</strong> <p>You gain Proficiency in one Skill of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Versatile.</strong> <p>You gain the Skilled Feat or another 1st-level Feat of your choice.</p></div>",
+    "traits": [
+      {
+        "id": "trait_human_resourceful_xua2022characteroptions",
+        "name": "Resourceful",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Human",
+        "actionType": "passive",
+        "description": "You gain Inspiration whenever you finish a Long Rest|XUA2022CharacterOptions.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain Inspiration whenever you finish a {@variantrule Long Rest|XUA2022CharacterOptions}."
+        ]
+      },
+      {
+        "id": "trait_human_skillful_xua2022characteroptions",
+        "name": "Skillful",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Human",
+        "actionType": "passive",
+        "description": "You gain Proficiency in one Skill of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain Proficiency in one Skill of your choice."
+        ]
+      },
+      {
+        "id": "trait_human_versatile_xua2022characteroptions",
+        "name": "Versatile",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Human",
+        "actionType": "passive",
+        "description": "You gain the Skilled Feat or another 1st-level Feat of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain the Skilled Feat or another 1st-level Feat of your choice."
+        ]
+      }
+    ],
+    "description": "**Creature Type:**\n\nHumanoid\n\n**Size:**\n\nMedium (about 4–7 feet tall) or Small (about 2–4 feet tall), chosen when you select this Race\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n80 years on average\n\nAs a human, you have these special traits."
+  },
+  {
+    "id": "race_orc_xua2022characteroptions",
+    "name": "Orc",
+    "source": "XUA2022CharacterOptions",
+    "page": 9,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 6-7 feet tall)</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>80 years on average</p></div></li></ul>\n<p>As an Orc, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Adrenaline Rush.</strong> <p>You can take the Dash Action as a Bonus Action. When you do so, you gain a number of Temporary Hit Points equal to your Proficiency Bonus.</p>\n<p>You can use this trait a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XUA2022CharacterOptions.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You count as one Size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>\n<div class=\"compendium-subentry\"><strong>Relentless Endurance.</strong> <p>When you are reduced to 0 Hit Points but not killed outright, you can drop to 1 Hit Point instead. Once you use this trait, you can't do so again until you finish a Long Rest|XUA2022CharacterOptions.</p></div>",
+    "traits": [
+      {
+        "id": "trait_orc_adrenaline_rush_xua2022characteroptions",
+        "name": "Adrenaline Rush",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Orc",
+        "actionType": "bonus",
+        "description": "You can take the Dash Action as a Bonus Action. When you do so, you gain a number of Temporary Hit Points equal to your Proficiency Bonus.\n\nYou can use this trait a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XUA2022CharacterOptions.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can take the {@action Dash} Action as a Bonus Action. When you do so, you gain a number of Temporary Hit Points equal to your Proficiency Bonus.",
+          "You can use this trait a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a {@variantrule Long Rest|XUA2022CharacterOptions}."
+        ]
+      },
+      {
+        "id": "trait_orc_darkvision_xua2022characteroptions",
+        "name": "Darkvision",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_orc_powerful_build_xua2022characteroptions",
+        "name": "Powerful Build",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You count as one Size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You count as one Size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+        ]
+      },
+      {
+        "id": "trait_orc_relentless_endurance_xua2022characteroptions",
+        "name": "Relentless Endurance",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "When you are reduced to 0 Hit Points but not killed outright, you can drop to 1 Hit Point instead. Once you use this trait, you can't do so again until you finish a Long Rest|XUA2022CharacterOptions.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you are reduced to 0 Hit Points but not killed outright, you can drop to 1 Hit Point instead. Once you use this trait, you can't do so again until you finish a {@variantrule Long Rest|XUA2022CharacterOptions}."
+        ]
+      }
+    ],
+    "description": "**Creature Type**\n\nHumanoid\n\n**Size:**\n\nMedium (about 6-7 feet tall)\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n80 years on average\n\nAs an Orc, you have these special traits."
+  },
+  {
+    "id": "race_tiefling_xua2022characteroptions",
+    "name": "Tiefling",
+    "source": "XUA2022CharacterOptions",
+    "page": 2,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 4–7 feet tall) or Small (about 3–4 feet tall) , chosen when you select this Race</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>100 years on average</p></div></li></ul>\n<p>As a Tiefling, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Fiendish Legacy.</strong> <p>You are the recipient of a fiendish legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table: Abyssal, associated with Chaotic Evil planes; Chthonic, associated with Neutral Evil planes; or Infernal, associated with Lawful Evil planes. You gain the 1st-level benefit of the chosen legacy.</p>\n<p>Starting at 3rd level and again at 5th level, you gain the ability to cast a higher-level Spell with this trait, as shown on the table. Once you cast the Spell with this trait, you can't cast that Spell with it again until you finish a Long Rest|XUA2022CharacterOptions; however, you can cast the Spell using any Spell Slots you have of the appropriate level.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the lineage).</p>\n<table class=\"compendium-table\"><thead><tr><th>Legacy</th><th>1st Level</th><th>3rd Level</th><th>5th Level</th></tr></thead><tbody><tr><td>Abyssal</td><td>You have Resistance to Poison Damage. You also know the Poison Spray cantrip.</td><td>Ray of Sickness</td><td>Hold Person</td></tr><tr><td>Chthonic</td><td>You have Resistance to Necrotic Damage. You also know the Chill Touch cantrip.</td><td>False Life</td><td>Ray of Enfeeblement</td></tr><tr><td>Infernal</td><td>You have Resistance to Fire Damage. You also know the Fire Bolt cantrip.</td><td>Hellish Rebuke</td><td>Darkness</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Otherworldly Presence.</strong> <p>You know the Thaumaturgy cantrip. When you cast it with this trait, the Spell uses the same spellcasting ability you use for your Fiendish Legacy trait.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tiefling_darkvision_xua2022characteroptions",
+        "name": "Darkvision",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_tiefling_fiendish_legacy_xua2022characteroptions",
+        "name": "Fiendish Legacy",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You are the recipient of a fiendish legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table: Abyssal, associated with Chaotic Evil planes; Chthonic, associated with Neutral Evil planes; or Infernal, associated with Lawful Evil planes. You gain the 1st-level benefit of the chosen legacy.\n\nStarting at 3rd level and again at 5th level, you gain the ability to cast a higher-level Spell with this trait, as shown on the table. Once you cast the Spell with this trait, you can't cast that Spell with it again until you finish a Long Rest|XUA2022CharacterOptions; however, you can cast the Spell using any Spell Slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the lineage).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are the recipient of a fiendish legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table: Abyssal, associated with Chaotic Evil planes; Chthonic, associated with Neutral Evil planes; or Infernal, associated with Lawful Evil planes. You gain the 1st-level benefit of the chosen legacy.",
+          "Starting at 3rd level and again at 5th level, you gain the ability to cast a higher-level Spell with this trait, as shown on the table. Once you cast the Spell with this trait, you can't cast that Spell with it again until you finish a {@variantrule Long Rest|XUA2022CharacterOptions}; however, you can cast the Spell using any Spell Slots you have of the appropriate level.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the Spells you cast with this trait (choose the ability when you select the lineage).",
+          {
+            "type": "table",
+            "caption": "Fiendish Legacies",
+            "colLabels": [
+              "Legacy",
+              "1st Level",
+              "3rd Level",
+              "5th Level"
+            ],
+            "colStyles": [
+              "col-1 text-center",
+              "col-11"
+            ],
+            "rows": [
+              [
+                "Abyssal",
+                "You have Resistance to Poison Damage. You also know the {@spell Poison Spray} cantrip.",
+                "Ray of Sickness",
+                "Hold Person"
+              ],
+              [
+                "Chthonic",
+                "You have Resistance to Necrotic Damage. You also know the {@spell Chill Touch} cantrip.",
+                "False Life",
+                "Ray of Enfeeblement"
+              ],
+              [
+                "Infernal",
+                "You have Resistance to Fire Damage. You also know the {@spell Fire Bolt} cantrip.",
+                "Hellish Rebuke",
+                "Darkness"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_tiefling_otherworldly_presence_xua2022characteroptions",
+        "name": "Otherworldly Presence",
+        "source": "XUA2022CharacterOptions",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the Thaumaturgy cantrip. When you cast it with this trait, the Spell uses the same spellcasting ability you use for your Fiendish Legacy trait.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Thaumaturgy} cantrip. When you cast it with this trait, the Spell uses the same spellcasting ability you use for your Fiendish Legacy trait."
+        ]
+      }
+    ],
+    "description": "**Creature Type**\n\nHumanoid\n\n**Size:**\n\nMedium (about 4–7 feet tall) or Small (about 3–4 feet tall) , chosen when you select this Race\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n100 years on average\n\nAs a Tiefling, you have these special traits."
+  }
+]

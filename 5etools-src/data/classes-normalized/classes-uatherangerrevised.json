@@ -1,0 +1,1451 @@
+[
+  {
+    "id": "class_ranger_revised_uatherangerrevised",
+    "name": "Ranger (Revised)",
+    "source": "UATheRangerRevised",
+    "page": 1,
+    "hitDie": "d10",
+    "primaryAbility": "None",
+    "features": [
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_favored_enemy_1",
+        "name": "Favored Enemy",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy commonly encountered in the wilds.</p>\n<p>Choose a type of favored enemy: beasts|bestiary|type=beast, fey|bestiary|type=fey, humanoids|bestiary|type=humanoid, monstrosities|bestiary|type=monstrosity, or undead|bestiary|type=undead. You gain a +2 bonus to damage rolls with weapon attacks against creatures of the chosen type. Additionally, you have advantage on Wisdom (Survival) checks to track your favored enemies, as well as on Intelligence checks to recall information about them.</p>\n<p>When you gain this feature, you also learn one language of your choice, typically one spoken by your favored enemy or creatures associated with it. However, you are free to pick any language you wish to learn.</p>",
+        "rawEntries": [
+          "Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy commonly encountered in the wilds.",
+          "Choose a type of favored enemy: {@filter beasts|bestiary|type=beast}, {@filter fey|bestiary|type=fey}, {@filter humanoids|bestiary|type=humanoid}, {@filter monstrosities|bestiary|type=monstrosity}, or {@filter undead|bestiary|type=undead}. You gain a +2 bonus to damage rolls with weapon attacks against creatures of the chosen type. Additionally, you have advantage on Wisdom ({@skill Survival}) checks to track your favored enemies, as well as on Intelligence checks to recall information about them.",
+          "When you gain this feature, you also learn one language of your choice, typically one spoken by your favored enemy or creatures associated with it. However, you are free to pick any language you wish to learn."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_natural_explorer_1",
+        "name": "Natural Explorer",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You are a master of navigating the natural world, and you react with swift and decisive action when attacked. This grants you the following benefits:</p>\n<ul><li>You ignore difficult terrain||3.</li><li>You have advantage on initiative rolls.</li><li>On your first turn during combat, you have advantage on attack rolls against creatures that have not yet acted.</li></ul>\n<p>In addition, you are skilled at navigating the wilderness. You gain the following benefits when traveling for an hour or more:</p>\n<ul><li>Difficult terrain doesn't slow your group's travel.</li><li>Your group can't become lost except by magical means.</li><li>Even when you are engaged in another activity while traveling (such as foraging, navigating, or tracking), you remain alert to danger.</li><li>If you are traveling alone, you can move stealthily at a normal pace.</li><li>When you forage, you find twice as much food as you normally would.</li><li>While tracking other creatures, you also learn their exact number, their sizes, and how long ago they passed through the area.</li></ul>",
+        "rawEntries": [
+          "You are a master of navigating the natural world, and you react with swift and decisive action when attacked. This grants you the following benefits:",
+          {
+            "type": "list",
+            "items": [
+              "You ignore {@quickref difficult terrain||3}.",
+              "You have advantage on initiative rolls.",
+              "On your first turn during combat, you have advantage on attack rolls against creatures that have not yet acted."
+            ]
+          },
+          "In addition, you are skilled at navigating the wilderness. You gain the following benefits when traveling for an hour or more:",
+          {
+            "type": "list",
+            "items": [
+              "Difficult terrain doesn't slow your group's travel.",
+              "Your group can't become lost except by magical means.",
+              "Even when you are engaged in another activity while traveling (such as foraging, navigating, or tracking), you remain alert to danger.",
+              "If you are traveling alone, you can move stealthily at a normal pace.",
+              "When you forage, you find twice as much food as you normally would.",
+              "While tracking other creatures, you also learn their exact number, their sizes, and how long ago they passed through the area."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_fighting_style_2",
+        "name": "Fighting Style",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.</p>",
+        "rawEntries": [
+          "At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
+          {
+            "type": "options",
+            "count": 1,
+            "entries": [
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Archery"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Close Quarters Shooter|UALightDarkUnderdark"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Defense"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Dueling"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Mariner|UAWaterborneAdventures"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Tunnel Fighter|UALightDarkUnderdark"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Two-Weapon Fighting"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Blind Fighting|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Interception|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Thrown Weapon Fighting|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Unarmed Fighting|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Druidic Warrior|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Blind Fighting|TCE"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Druidic Warrior|TCE"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Thrown Weapon Fighting|TCE"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_spellcasting_2",
+        "name": "Spellcasting",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>By the time you reach 2nd level, you have learned to use the magical essence of nature to cast spells, much as a druid does. See chapter 10|PHB|10 for the general rules of spellcasting and chapter 11|PHB|11 for the ranger spell list|spells|class=ranger.</p>\n<div class=\"compendium-subentry\"><strong>Spell Slots.</strong> <p>The Ranger table shows how many spell slots you have to cast your ranger spells|spells|class=ranger of 1st level and higher. To cast one of these spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.</p>\n<p>For example, if you know the 1st-level spell animal friendship and have a 1st-level and a 2nd-level spell slot available, you can cast animal friendship using either slot.</p></div>\n<div class=\"compendium-subentry\"><strong>Spells Known of 1st Level and Higher.</strong> <p>You know two 1st-level spells of your choice from the ranger spell list.</p>\n<p>The Spells Known column of the Ranger table shows when you learn more ranger spells of your choice. Each of these spells must be of a level for which you have spell slots. For instance, when you reach 5th level in this class, you can learn one new spell of 1st or 2nd level.</p>\n<p>Additionally, when you gain a level in this class, you can choose one of the ranger spells you know and replace it with another spell from the ranger spell list, which also must be of a level for which you have spell slots.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Ability.</strong> <p>Wisdom is your spellcasting ability for your ranger spells, since your magic draws on your attunement to nature. You use your Wisdom whenever a spell refers to your spellcasting ability. In addition, you use your Wisdom modifier when setting the saving throw DC for a ranger spell you cast and when making an attack roll with one.</p>\n<div class=\"compendium-subentry\"><strong>Spell.</strong> </div>\n<div class=\"compendium-subentry\"><strong>Spell.</strong> </div></div>",
+        "rawEntries": [
+          "By the time you reach 2nd level, you have learned to use the magical essence of nature to cast spells, much as a druid does. See {@book chapter 10|PHB|10} for the general rules of spellcasting and {@book chapter 11|PHB|11} for the {@filter ranger spell list|spells|class=ranger}.",
+          {
+            "type": "entries",
+            "name": "Spell Slots",
+            "entries": [
+              "The Ranger table shows how many spell slots you have to cast your {@filter ranger spells|spells|class=ranger} of 1st level and higher. To cast one of these spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.",
+              "For example, if you know the 1st-level spell {@spell animal friendship} and have a 1st-level and a 2nd-level spell slot available, you can cast {@spell animal friendship} using either slot."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Spells Known of 1st Level and Higher",
+            "entries": [
+              "You know two 1st-level spells of your choice from the ranger spell list.",
+              "The Spells Known column of the Ranger table shows when you learn more ranger spells of your choice. Each of these spells must be of a level for which you have spell slots. For instance, when you reach 5th level in this class, you can learn one new spell of 1st or 2nd level.",
+              "Additionally, when you gain a level in this class, you can choose one of the ranger spells you know and replace it with another spell from the ranger spell list, which also must be of a level for which you have spell slots."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Spellcasting Ability",
+            "entries": [
+              "Wisdom is your spellcasting ability for your ranger spells, since your magic draws on your attunement to nature. You use your Wisdom whenever a spell refers to your spellcasting ability. In addition, you use your Wisdom modifier when setting the saving throw DC for a ranger spell you cast and when making an attack roll with one.",
+              {
+                "type": "abilityDc",
+                "name": "Spell",
+                "attributes": [
+                  "wis"
+                ]
+              },
+              {
+                "type": "abilityAttackMod",
+                "name": "Spell",
+                "attributes": [
+                  "wis"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_primeval_awareness_3",
+        "name": "Primeval Awareness",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 3,
+        "actionType": "action",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Beginning at 3rd level, your mastery of ranger lore allows you to establish a powerful link to beasts and to the land around you.</p>\n<p>You have an innate ability to communicate with beasts, and they recognize you as a kindred spirit. Through sounds and gestures, you can communicate simple ideas to a beast as an action, and can read its basic mood and intent. You learn its emotional state, whether it is affected by magic of any sort, its short-term needs (such as food or safety), and actions you can take (if any) to persuade it to not attack.</p>\n<p>You cannot use this ability against a creature that you have attacked within the past 10 minutes.</p>\n<p>Additionally, you can attune your senses to determine if any of your favored enemies lurk nearby. By spending 1 uninterrupted minute in concentration (as if you were concentration||concentrating on a spell), you can sense whether any of your favored enemies are present within 5 miles of you. This feature reveals which of your favored enemies are present, their numbers, and the creatures' general direction and distance (in miles) from you.</p>\n<p>If there are multiple groups of your favored enemies within range, you learn this information for each group.</p>",
+        "rawEntries": [
+          "Beginning at 3rd level, your mastery of ranger lore allows you to establish a powerful link to beasts and to the land around you.",
+          "You have an innate ability to communicate with beasts, and they recognize you as a kindred spirit. Through sounds and gestures, you can communicate simple ideas to a beast as an action, and can read its basic mood and intent. You learn its emotional state, whether it is affected by magic of any sort, its short-term needs (such as food or safety), and actions you can take (if any) to persuade it to not attack.",
+          "You cannot use this ability against a creature that you have attacked within the past 10 minutes.",
+          "Additionally, you can attune your senses to determine if any of your favored enemies lurk nearby. By spending 1 uninterrupted minute in {@status concentration} (as if you were {@status concentration||concentrating} on a spell), you can sense whether any of your favored enemies are present within 5 miles of you. This feature reveals which of your favored enemies are present, their numbers, and the creatures' general direction and distance (in miles) from you.",
+          "If there are multiple groups of your favored enemies within range, you learn this information for each group."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ranger_conclave_3",
+        "name": "Ranger Conclave",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 3rd level, you choose to emulate the ideals and training of a ranger conclave from the list of available conclaves. Your choice grants you features at 3rd level and again at 5th, 7th, 11th, and 15th level.</p>",
+        "rawEntries": [
+          "At 3rd level, you choose to emulate the ideals and training of a ranger conclave from the list of available conclaves. Your choice grants you features at 3rd level and again at 5th, 7th, 11th, and 15th level."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ability_score_improvement_4",
+        "name": "Ability Score Improvement",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 4,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ranger_conclave_feature_5",
+        "name": "Ranger Conclave feature",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 5th level, you gain a feature granted to you by your Ranger Conclave.</p>",
+        "rawEntries": [
+          "At 5th level, you gain a feature granted to you by your Ranger Conclave."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_greater_favored_enemy_6",
+        "name": "Greater Favored Enemy",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 6,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 6th level, you are ready to hunt even deadlier game. Choose a type of greater favored enemy: aberrations|bestiary|type=aberration, celestials|bestiary|type=celestial, constructs|bestiary|type=construct, dragons|bestiary|type=dragon, elementals|bestiary|type=elemental, fiends|bestiary|type=fiend, or giants|bestiary|type=giant. You gain all the benefits against this chosen enemy that you normally gain against your favored enemy, including an additional language. Your bonus to damage rolls against all your favored enemies increases to +4.</p>\n<p>Additionally, you have advantage on saving throws against the spells and abilities used by a greater favored enemy.</p>",
+        "rawEntries": [
+          "At 6th level, you are ready to hunt even deadlier game. Choose a type of greater favored enemy: {@filter aberrations|bestiary|type=aberration}, {@filter celestials|bestiary|type=celestial}, {@filter constructs|bestiary|type=construct}, {@filter dragons|bestiary|type=dragon}, {@filter elementals|bestiary|type=elemental}, {@filter fiends|bestiary|type=fiend}, or {@filter giants|bestiary|type=giant}. You gain all the benefits against this chosen enemy that you normally gain against your favored enemy, including an additional language. Your bonus to damage rolls against all your favored enemies increases to +4.",
+          "Additionally, you have advantage on saving throws against the spells and abilities used by a greater favored enemy."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ranger_conclave_feature_7",
+        "name": "Ranger Conclave feature",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 7,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 7th level, you gain a feature granted to you by your Ranger Conclave.</p>",
+        "rawEntries": [
+          "At 7th level, you gain a feature granted to you by your Ranger Conclave."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ability_score_improvement_8",
+        "name": "Ability Score Improvement",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 8,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_fleet_of_foot_8",
+        "name": "Fleet of Foot",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 8,
+        "actionType": "bonus",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Beginning at 8th level, you can use the Dash action as a bonus action on your turn.</p>",
+        "rawEntries": [
+          "Beginning at 8th level, you can use the {@action Dash} action as a bonus action on your turn."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_hide_in_plain_sight_10",
+        "name": "Hide in Plain Sight",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Starting at 10th level, you can remain perfectly still for long periods of time to set up ambushes.</p>\n<p>When you attempt to hide on your turn, you can opt to not move on that turn. If you avoid moving, creatures that attempt to detect you take a -10 penalty to their Wisdom (Perception) checks until the start of your next turn. You lose this benefit if you move or fall prone, either voluntarily or because of some external effect. You are still automatically detected if any effect or action causes you to no longer be hidden.</p>\n<p>If you are still hidden on your next turn, you can continue to remain motionless and gain this benefit until you are detected.</p>",
+        "rawEntries": [
+          "Starting at 10th level, you can remain perfectly still for long periods of time to set up ambushes.",
+          "When you attempt to hide on your turn, you can opt to not move on that turn. If you avoid moving, creatures that attempt to detect you take a -10 penalty to their Wisdom ({@skill Perception}) checks until the start of your next turn. You lose this benefit if you move or fall {@condition prone}, either voluntarily or because of some external effect. You are still automatically detected if any effect or action causes you to no longer be hidden.",
+          "If you are still hidden on your next turn, you can continue to remain motionless and gain this benefit until you are detected."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ranger_conclave_feature_11",
+        "name": "Ranger Conclave feature",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 11,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 11th level, you gain a feature granted to you by your Ranger Conclave.</p>",
+        "rawEntries": [
+          "At 11th level, you gain a feature granted to you by your Ranger Conclave."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ability_score_improvement_12",
+        "name": "Ability Score Improvement",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 12,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_vanish_14",
+        "name": "Vanish",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 14,
+        "actionType": "bonus",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Starting at 14th level, you can use the Hide action as a bonus action on your turn. Also, you can't be tracked by nonmagical means, unless you choose to leave a trail.</p>",
+        "rawEntries": [
+          "Starting at 14th level, you can use the {@action Hide} action as a bonus action on your turn. Also, you can't be tracked by nonmagical means, unless you choose to leave a trail."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ranger_conclave_feature_15",
+        "name": "Ranger Conclave feature",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 15,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 15th level, you gain a feature granted to you by your Ranger Conclave.</p>",
+        "rawEntries": [
+          "At 15th level, you gain a feature granted to you by your Ranger Conclave."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ability_score_improvement_16",
+        "name": "Ability Score Improvement",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 16,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_feral_senses_18",
+        "name": "Feral Senses",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 18,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 18th level, you gain preternatural senses that help you fight creatures you can't see. When you attack a creature you can't see, your inability to see it doesn't impose disadvantage on your attack rolls against it. You are also aware of the location of any invisible creature within 30 feet of you, provided that the creature isn't hidden from you and you aren't blinded or deafened.</p>",
+        "rawEntries": [
+          "At 18th level, you gain preternatural senses that help you fight creatures you can't see. When you attack a creature you can't see, your inability to see it doesn't impose disadvantage on your attack rolls against it. You are also aware of the location of any {@condition invisible} creature within 30 feet of you, provided that the creature isn't hidden from you and you aren't {@condition blinded} or {@condition deafened}."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_ability_score_improvement_19",
+        "name": "Ability Score Improvement",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 19,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_revised_uatherangerrevised_foe_slayer_20",
+        "name": "Foe Slayer",
+        "source": "UATheRangerRevised",
+        "page": 1,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "level": 20,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 20th level, you become an unparalleled hunter. Once on each of your turns, you can add your Wisdom modifier to the attack roll or the damage roll of an attack you make. You can choose to use this feature before or after the roll, but before any effects of the roll are applied.</p>",
+        "rawEntries": [
+          "At 20th level, you become an unparalleled hunter. Once on each of your turns, you can add your Wisdom modifier to the attack roll or the damage roll of an attack you make. You can choose to use this feature before or after the roll, but before any effects of the roll are applied."
+        ]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "subclass_ranger_revised_beast_conclave_uatherangerrevised",
+        "name": "Beast Conclave",
+        "shortName": "Beast Conclave",
+        "source": "UATheRangerRevised",
+        "page": 5,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "features": [
+          {
+            "id": "scf_ranger_revised_beast_conclave_uatherangerrevised_animal_companion_3",
+            "name": "Animal Companion",
+            "source": "UATheRangerRevised",
+            "page": 5,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Beast Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 3rd level, you learn to use your magic to create a powerful bond with a creature of the natural world.</p>\n<p>With 8 hours of work and the expenditure of 50 gp worth of rare herbs and fine food, you call forth an animal from the wilderness to serve as your faithful companion. You normally select you companion from among the following animals: an ape, a black bear, a boar, a giant badger, a giant weasel, a mule, a panther, or a wolf. However, your DM might pick one of these animals for you, based on the surrounding terrain and on what types of creatures would logically be present in the area.</p>\n<p>At the end of the 8 hours, your animal companion appears and gains all the benefits of your Companion's Bond ability. You can have only one animal companion at a time.</p>\n<p>If your animal companion is ever slain, the magical bond you share allows you to return it to life. With 8 hours of work and the expenditure of 25 gp worth of rare herbs and fine food, you call forth your companion's spirit and use your magic to create a new body for it. You can return an animal companion to life in this manner even if you do not possess any part of its body.</p>\n<p>If you use this ability to return a former animal companion to life while you have a current animal companion, your current companion leaves you and is replaced by the restored companion.</p>",
+            "rawEntries": [
+              "At 3rd level, you learn to use your magic to create a powerful bond with a creature of the natural world.",
+              "With 8 hours of work and the expenditure of 50 gp worth of rare herbs and fine food, you call forth an animal from the wilderness to serve as your faithful companion. You normally select you companion from among the following animals: an {@creature ape}, a {@creature black bear}, a {@creature boar}, a {@creature giant badger}, a {@creature giant weasel}, a {@creature mule}, a {@creature panther}, or a {@creature wolf}. However, your DM might pick one of these animals for you, based on the surrounding terrain and on what types of creatures would logically be present in the area.",
+              "At the end of the 8 hours, your animal companion appears and gains all the benefits of your Companion's Bond ability. You can have only one animal companion at a time.",
+              "If your animal companion is ever slain, the magical bond you share allows you to return it to life. With 8 hours of work and the expenditure of 25 gp worth of rare herbs and fine food, you call forth your companion's spirit and use your magic to create a new body for it. You can return an animal companion to life in this manner even if you do not possess any part of its body.",
+              "If you use this ability to return a former animal companion to life while you have a current animal companion, your current companion leaves you and is replaced by the restored companion."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_beast_conclave_uatherangerrevised_beast_conclave_ua_3",
+            "name": "Beast Conclave (UA)",
+            "source": "UATheRangerRevised",
+            "page": 5,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Beast Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Many rangers are more at home in the wilds than in civilization, to the point where animals consider them kin. Rangers of the Beast Conclave develop a close bond with a beast, then further strengthen that bond through the use of magic.</p>",
+            "rawEntries": [
+              "Many rangers are more at home in the wilds than in civilization, to the point where animals consider them kin. Rangers of the Beast Conclave develop a close bond with a beast, then further strengthen that bond through the use of magic.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Animal Companion|Ranger (Revised)|UATheRangerRevised|Beast Conclave|UATheRangerRevised|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Companion's Bond|Ranger (Revised)|UATheRangerRevised|Beast Conclave|UATheRangerRevised|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_beast_conclave_uatherangerrevised_companion_s_bond_3",
+            "name": "Companion's Bond",
+            "source": "UATheRangerRevised",
+            "page": 5,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Beast Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your animal companion gains a variety of benefits while it is linked to you.</p>\n<p>The animal companion loses its Multiattack action, if it has one.</p>\n<p>The companion obeys your commands as best it can. It rolls for initiative like any other creature, but you determine its actions, decisions, attitudes, and so on. If you are incapacitated or absent, your companion acts on its own.</p>\n<p>When using your Natural Explorer feature, you and your animal companion can both move stealthily at a normal pace.</p>\n<p>Your animal companion has abilities and game statistics determined in part by your level. Your companion uses your proficiency bonus rather than its own. In addition to the areas where it normally uses its proficiency bonus, an animal companion also adds its proficiency bonus to its AC and to its damage rolls.</p>\n<p>Your animal companion gains proficiency in two skills of your choice. It also becomes proficient with all saving throws.</p>\n<p>For each level you gain after 3rd, your animal companion gains an additional hit die and increases its hit points accordingly.</p>\n<p>Whenever you gain the Ability Score Improvement class feature, your companion's abilities also improve. Your companion can increase one ability score of your choice by 2, or it can increase two ability scores of your choice by 1. As normal, your companion can't increase an ability score above 20 using this feature unless its description specifies otherwise.</p>\n<p>Your companion shares your alignment, and has a personality trait and a flaw that you can roll for or select from the tables below. Your companion shares your ideal, and its bond is always, \"The ranger who travels with me is a beloved companion for whom I would gladly give my life.\"</p>\n<p>Your animal companion gains the benefits of your Favored Enemy feature, and of your Greater Favored Enemy feature when you gain that feature at 6th level. It uses the favored enemies you selected for those features.</p>\n<table class=\"compendium-table\"><thead><tr><th>d6</th><th>Trait</th></tr></thead><tbody><tr><td>1</td><td>I'm dauntless in the face of adversity.</td></tr><tr><td>2</td><td>Threaten my friends, threaten me.</td></tr><tr><td>3</td><td>I stay on alert so others can rest.</td></tr><tr><td>4</td><td>People see an animal and underestimate me.</td></tr><tr><td>5</td><td>I have a knack for showing up in the nick of time.</td></tr><tr><td>6</td><td>I put my friends' needs before my own in all things.</td></tr></tbody></table>\n<table class=\"compendium-table\"><thead><tr><th>d6</th><th>Flaw</th></tr></thead><tbody><tr><td>1</td><td>If there's food left unattended, I'll eat it.</td></tr><tr><td>2</td><td>I growl at strangers, and all people except my ranger are strangers to me.</td></tr><tr><td>3</td><td>Any time is a good time for a belly rub.</td></tr><tr><td>4</td><td>I'm deathly afraid of water.</td></tr><tr><td>5</td><td>My idea of hello is a flurry of licks to the face.</td></tr><tr><td>6</td><td>I jump on creatures to tell them how much I love them.</td></tr></tbody></table>",
+            "rawEntries": [
+              "Your animal companion gains a variety of benefits while it is linked to you.",
+              "The animal companion loses its Multiattack action, if it has one.",
+              "The companion obeys your commands as best it can. It rolls for initiative like any other creature, but you determine its actions, decisions, attitudes, and so on. If you are {@condition incapacitated} or absent, your companion acts on its own.",
+              "When using your Natural Explorer feature, you and your animal companion can both move stealthily at a normal pace.",
+              "Your animal companion has abilities and game statistics determined in part by your level. Your companion uses your proficiency bonus rather than its own. In addition to the areas where it normally uses its proficiency bonus, an animal companion also adds its proficiency bonus to its AC and to its damage rolls.",
+              "Your animal companion gains proficiency in two skills of your choice. It also becomes proficient with all saving throws.",
+              "For each level you gain after 3rd, your animal companion gains an additional hit die and increases its hit points accordingly.",
+              "Whenever you gain the Ability Score Improvement class feature, your companion's abilities also improve. Your companion can increase one ability score of your choice by 2, or it can increase two ability scores of your choice by 1. As normal, your companion can't increase an ability score above 20 using this feature unless its description specifies otherwise.",
+              "Your companion shares your alignment, and has a personality trait and a flaw that you can roll for or select from the tables below. Your companion shares your ideal, and its bond is always, \"The ranger who travels with me is a beloved companion for whom I would gladly give my life.\"",
+              "Your animal companion gains the benefits of your Favored Enemy feature, and of your Greater Favored Enemy feature when you gain that feature at 6th level. It uses the favored enemies you selected for those features.",
+              {
+                "type": "table",
+                "caption": "Companion Trait",
+                "colLabels": [
+                  "d6",
+                  "Trait"
+                ],
+                "colStyles": [
+                  "col-1 text-center",
+                  "col-11"
+                ],
+                "rows": [
+                  [
+                    "1",
+                    "I'm dauntless in the face of adversity."
+                  ],
+                  [
+                    "2",
+                    "Threaten my friends, threaten me."
+                  ],
+                  [
+                    "3",
+                    "I stay on alert so others can rest."
+                  ],
+                  [
+                    "4",
+                    "People see an animal and underestimate me."
+                  ],
+                  [
+                    "5",
+                    "I have a knack for showing up in the nick of time."
+                  ],
+                  [
+                    "6",
+                    "I put my friends' needs before my own in all things."
+                  ]
+                ]
+              },
+              {
+                "type": "table",
+                "caption": "Companion Flaw",
+                "colLabels": [
+                  "d6",
+                  "Flaw"
+                ],
+                "colStyles": [
+                  "col-1 text-center",
+                  "col-11"
+                ],
+                "rows": [
+                  [
+                    "1",
+                    "If there's food left unattended, I'll eat it."
+                  ],
+                  [
+                    "2",
+                    "I growl at strangers, and all people except my ranger are strangers to me."
+                  ],
+                  [
+                    "3",
+                    "Any time is a good time for a belly rub."
+                  ],
+                  [
+                    "4",
+                    "I'm deathly afraid of water."
+                  ],
+                  [
+                    "5",
+                    "My idea of hello is a flurry of licks to the face."
+                  ],
+                  [
+                    "6",
+                    "I jump on creatures to tell them how much I love them."
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_beast_conclave_uatherangerrevised_coordinated_attack_5",
+            "name": "Coordinated Attack",
+            "source": "UATheRangerRevised",
+            "page": 5,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Beast Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 5,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Beginning at 5th level, you and your animal companion form a more potent fighting force. When you use the Attack action on your turn, if your companion can see you, it can use its reaction to make a melee attack.</p>",
+            "rawEntries": [
+              "Beginning at 5th level, you and your animal companion form a more potent fighting force. When you use the {@action Attack} action on your turn, if your companion can see you, it can use its reaction to make a melee attack."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_beast_conclave_uatherangerrevised_beast_s_defense_7",
+            "name": "Beast's Defense",
+            "source": "UATheRangerRevised",
+            "page": 5,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Beast Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 7,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 7th level, while your companion can see you, it has advantage on all saving throws.</p>",
+            "rawEntries": [
+              "At 7th level, while your companion can see you, it has advantage on all saving throws."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_beast_conclave_uatherangerrevised_storm_of_claw_and_fangs_11",
+            "name": "Storm of Claw and Fangs",
+            "source": "UATheRangerRevised",
+            "page": 5,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Beast Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 11th level, your companion can use its action to make a melee attack against each creature of its choice within 5 feet of it, with a separate attack roll for each target.</p>",
+            "rawEntries": [
+              "At 11th level, your companion can use its action to make a melee attack against each creature of its choice within 5 feet of it, with a separate attack roll for each target."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_beast_conclave_uatherangerrevised_superior_beast_s_defense_15",
+            "name": "Superior Beast's Defense",
+            "source": "UATheRangerRevised",
+            "page": 5,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Beast Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 15th level, whenever an attacker that your companion can see hits it with an attack, it can use its reaction to halve the attack's damage against it.</p>",
+            "rawEntries": [
+              "At 15th level, whenever an attacker that your companion can see hits it with an attack, it can use its reaction to halve the attack's damage against it."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_ranger_revised_deep_stalker_conclave_uatherangerrevised",
+        "name": "Deep Stalker Conclave",
+        "shortName": "Deep Stalker Conclave",
+        "source": "UATheRangerRevised",
+        "page": 7,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "features": [
+          {
+            "id": "scf_ranger_revised_deep_stalker_conclave_uatherangerrevised_deep_stalker_conclave_ua_3",
+            "name": "Deep Stalker Conclave (UA)",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Deep Stalker Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Most folk descend into the depths of the Underdark only under the most pressing conditions, undertaking some desperate quest or following the promise of vast riches. All too often, evil festers beneath the earth unnoticed, and rangers of the Deep Stalker Conclave strive to uncover and defeat such threats before they can reach the surface.</p>",
+            "rawEntries": [
+              "Most folk descend into the depths of the Underdark only under the most pressing conditions, undertaking some desperate quest or following the promise of vast riches. All too often, evil festers beneath the earth unnoticed, and rangers of the Deep Stalker Conclave strive to uncover and defeat such threats before they can reach the surface.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Deep Stalker Magic|Ranger (Revised)|UATheRangerRevised|Deep Stalker Conclave|UATheRangerRevised|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Underdark Scout|Ranger (Revised)|UATheRangerRevised|Deep Stalker Conclave|UATheRangerRevised|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_deep_stalker_conclave_uatherangerrevised_deep_stalker_magic_3",
+            "name": "Deep Stalker Magic",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Deep Stalker Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 3rd level, you have darkvision out to a range of 90 feet. If you already have darkvision, you increase its range by 30 feet. You also gain access to additional spells at 3rd, 5th, 9th, 13th, and 15th level. Once you gain a deep stalker spell, it counts as a ranger spell for you but doesn't count against the number of rangers spells you know.</p>\n<table class=\"compendium-table\"><thead><tr><th>Ranger Level</th><th>Spells</th></tr></thead><tbody><tr><td>3rd</td><td>disguise self</td></tr><tr><td>5th</td><td>rope trick</td></tr><tr><td>9th</td><td>glyph of warding</td></tr><tr><td>13th</td><td>greater invisibility</td></tr><tr><td>17th</td><td>seeming</td></tr></tbody></table>",
+            "rawEntries": [
+              "At 3rd level, you have {@sense darkvision} out to a range of 90 feet. If you already have {@sense darkvision}, you increase its range by 30 feet. You also gain access to additional spells at 3rd, 5th, 9th, 13th, and 15th level. Once you gain a deep stalker spell, it counts as a ranger spell for you but doesn't count against the number of rangers spells you know.",
+              {
+                "type": "table",
+                "caption": "Deep Stalker Spells",
+                "colLabels": [
+                  "Ranger Level",
+                  "Spells"
+                ],
+                "colStyles": [
+                  "col-2 text-center",
+                  "col-10"
+                ],
+                "rows": [
+                  [
+                    "3rd",
+                    "{@spell disguise self}"
+                  ],
+                  [
+                    "5th",
+                    "{@spell rope trick}"
+                  ],
+                  [
+                    "9th",
+                    "{@spell glyph of warding}"
+                  ],
+                  [
+                    "13th",
+                    "{@spell greater invisibility}"
+                  ],
+                  [
+                    "17th",
+                    "{@spell seeming}"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_deep_stalker_conclave_uatherangerrevised_underdark_scout_3",
+            "name": "Underdark Scout",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Deep Stalker Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 3rd level, you master the art of the ambush. On your first turn during combat, you gain a +10 bonus to your speed and if you use the attack action on that turn, you can make one additional attack. You are also adept at evading creatures that rely on darkvision. Such creatures gain no benefit when attempting to detect you in dark and dim conditions. Additionally, when the DM determines if you can hide from a creature, that creature gains no benefit from its darkvision.</p>",
+            "rawEntries": [
+              "At 3rd level, you master the art of the ambush. On your first turn during combat, you gain a +10 bonus to your speed and if you use the attack action on that turn, you can make one additional attack. You are also adept at evading creatures that rely on {@sense darkvision}. Such creatures gain no benefit when attempting to detect you in dark and dim conditions. Additionally, when the DM determines if you can hide from a creature, that creature gains no benefit from its {@sense darkvision}."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_deep_stalker_conclave_uatherangerrevised_extra_attack_5",
+            "name": "Extra Attack",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Deep Stalker Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 5,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.</p>",
+            "rawEntries": [
+              "Beginning at 5th level, you can attack twice, instead of once, whenever you take the {@action Attack} action on your turn."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_deep_stalker_conclave_uatherangerrevised_iron_mind_7",
+            "name": "Iron Mind",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Deep Stalker Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 7,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 7th level, you gain proficiency in Wisdom saving throws.</p>",
+            "rawEntries": [
+              "At 7th level, you gain proficiency in Wisdom saving throws."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_deep_stalker_conclave_uatherangerrevised_stalker_s_flurry_11",
+            "name": "Stalker's Flurry",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Deep Stalker Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Starting at 11th level, once on each of your turns when you miss with an attack, you can make another attack. You can gain one additional attack during your turn with this ability.</p>",
+            "rawEntries": [
+              "Starting at 11th level, once on each of your turns when you miss with an attack, you can make another attack. You can gain one additional attack during your turn with this ability."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_deep_stalker_conclave_uatherangerrevised_stalker_s_dodge_15",
+            "name": "Stalker's Dodge",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Deep Stalker Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 15th level, whenever a creature attacks you and does not have advantage, you can use your reaction to impose disadvantage on the creature's attack roll against you. You can use this feature before or after the attack roll is made, but it must be used before the outcome of the roll is determined.</p>",
+            "rawEntries": [
+              "At 15th level, whenever a creature attacks you and does not have advantage, you can use your reaction to impose disadvantage on the creature's attack roll against you. You can use this feature before or after the attack roll is made, but it must be used before the outcome of the roll is determined."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_ranger_revised_hunter_conclave_uatherangerrevised",
+        "name": "Hunter Conclave",
+        "shortName": "Hunter Conclave",
+        "source": "UATheRangerRevised",
+        "page": 7,
+        "className": "Ranger (Revised)",
+        "classSource": "UATheRangerRevised",
+        "features": [
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_colossus_slayer_3",
+            "name": "Colossus Slayer",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d8",
+            "formulaConfig": {
+              "baseDice": "1d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your tenacity can wear down the most potent foes. When you hit a creature with a weapon attack, the creature takes an extra 1d8 damage if it's below its hit point maximum. You can deal this extra damage only once per turn.</p>",
+            "rawEntries": [
+              "Your tenacity can wear down the most potent foes. When you hit a creature with a weapon attack, the creature takes an extra {@damage 1d8} damage if it's below its hit point maximum. You can deal this extra damage only once per turn."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_giant_killer_3",
+            "name": "Giant Killer",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When a Large or larger creature within 5 feet of you hits or misses you with an attack, you can use your reaction to attack that creature immediately after its attack, provided that you can see the creature.</p>",
+            "rawEntries": [
+              "When a Large or larger creature within 5 feet of you hits or misses you with an attack, you can use your reaction to attack that creature immediately after its attack, provided that you can see the creature."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_horde_breaker_3",
+            "name": "Horde Breaker",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Once on each of your turns when you make a weapon attack, you can make another attack with the same weapon against a different creature that is within 5 feet of the original target and within range of your weapon.</p>",
+            "rawEntries": [
+              "Once on each of your turns when you make a weapon attack, you can make another attack with the same weapon against a different creature that is within 5 feet of the original target and within range of your weapon."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_hunter_conclave_ua_3",
+            "name": "Hunter Conclave (UA)",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Some rangers seek to master weapons to better protect civilization from the terrors of the wilderness. Members of the Hunter Conclave learn specialized fighting techniques for use against the most dire threats, from rampaging ogres and hordes of orcs to towering giants and terrifying dragons.</p>",
+            "rawEntries": [
+              "Some rangers seek to master weapons to better protect civilization from the terrors of the wilderness. Members of the Hunter Conclave learn specialized fighting techniques for use against the most dire threats, from rampaging ogres and hordes of orcs to towering giants and terrifying dragons.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Hunter's Prey|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_hunter_s_prey_3",
+            "name": "Hunter's Prey",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 3rd level, you gain one of the following features of your choice.</p>",
+            "rawEntries": [
+              "At 3rd level, you gain one of the following features of your choice.",
+              {
+                "type": "options",
+                "count": 1,
+                "entries": [
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Colossus Slayer|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|3"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Giant Killer|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|3"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Horde Breaker|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|3"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_extra_attack_5",
+            "name": "Extra Attack",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 5,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.</p>",
+            "rawEntries": [
+              "Beginning at 5th level, you can attack twice, instead of once, whenever you take the {@action Attack} action on your turn."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_defensive_tactics_7",
+            "name": "Defensive Tactics",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 7,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 7th level, you gain one of the following features of your choice.</p>",
+            "rawEntries": [
+              "At 7th level, you gain one of the following features of your choice.",
+              {
+                "type": "options",
+                "count": 1,
+                "entries": [
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Escape the Horde|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|7"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Multiattack Defense|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|7"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Steel Will|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|7"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_escape_the_horde_7",
+            "name": "Escape the Horde",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 7,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Opportunity attacks against you are made with disadvantage.</p>",
+            "rawEntries": [
+              "Opportunity attacks against you are made with disadvantage."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_multiattack_defense_7",
+            "name": "Multiattack Defense",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 7,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When a creature hits you with an attack, you gain a +4 bonus to AC against all subsequent attacks made by that creature for the rest of the turn.</p>",
+            "rawEntries": [
+              "When a creature hits you with an attack, you gain a +4 bonus to AC against all subsequent attacks made by that creature for the rest of the turn."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_steel_will_7",
+            "name": "Steel Will",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 7,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You have advantage on saving throws against being frightened.</p>",
+            "rawEntries": [
+              "You have advantage on saving throws against being {@condition frightened}."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_multiattack_11",
+            "name": "Multiattack",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 11th level, you gain one of the following features of your choice.</p>",
+            "rawEntries": [
+              "At 11th level, you gain one of the following features of your choice.",
+              {
+                "type": "options",
+                "count": 1,
+                "entries": [
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Volley|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|11"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Whirlwind Attack|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|11"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_volley_11",
+            "name": "Volley",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can use your action to make a ranged attack against any number of creatures within 10 feet of a point you can see within your weapon's range. You must have ammunition for each target, as normal, and you make a separate attack roll for each target.</p>",
+            "rawEntries": [
+              "You can use your action to make a ranged attack against any number of creatures within 10 feet of a point you can see within your weapon's range. You must have ammunition for each target, as normal, and you make a separate attack roll for each target."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_whirlwind_attack_11",
+            "name": "Whirlwind Attack",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can use your action to make a melee attack against any number of creatures within 5 feet of you, with a separate attack roll for each target.</p>",
+            "rawEntries": [
+              "You can use your action to make a melee attack against any number of creatures within 5 feet of you, with a separate attack roll for each target."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_evasion_15",
+            "name": "Evasion",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can nimbly dodge out of the way of certain area effects, such as a red dragon's fiery breath or a lightning bolt spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.</p>",
+            "rawEntries": [
+              "You can nimbly dodge out of the way of certain area effects, such as a red dragon's fiery breath or a {@spell lightning bolt} spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_stand_against_the_tide_15",
+            "name": "Stand Against the Tide",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When a hostile creature misses you with a melee attack, you can use your reaction to force that creature to repeat the same attack against another creature (other than itself) of your choice.</p>",
+            "rawEntries": [
+              "When a hostile creature misses you with a melee attack, you can use your reaction to force that creature to repeat the same attack against another creature (other than itself) of your choice."
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_superior_hunter_s_defense_15",
+            "name": "Superior Hunter's Defense",
+            "source": "UATheRangerRevised",
+            "page": 7,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At 15th level, you gain one of the following features of your choice.</p>",
+            "rawEntries": [
+              "At 15th level, you gain one of the following features of your choice.",
+              {
+                "type": "options",
+                "count": 1,
+                "entries": [
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Evasion|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|15"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Stand Against the Tide|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|15"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Uncanny Dodge|Ranger (Revised)|UATheRangerRevised|Hunter Conclave|UATheRangerRevised|15"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_ranger_revised_hunter_conclave_uatherangerrevised_uncanny_dodge_15",
+            "name": "Uncanny Dodge",
+            "source": "UATheRangerRevised",
+            "page": 93,
+            "className": "Ranger (Revised)",
+            "classSource": "UATheRangerRevised",
+            "subclassShortName": "Hunter Conclave",
+            "subclassSource": "UATheRangerRevised",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you.</p>",
+            "rawEntries": [
+              "When an attacker that you can see hits you with an attack, you can use your reaction to halve the attack's damage against you."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -134,7 +134,7 @@
       {
         "id": "sc_vecna_the_archlich_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 6,
@@ -245,7 +245,9 @@
                 "formula": "8d6",
                 "type": "Lightning",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "upcastBonus": "1d6",
+                "upcastScaleStep": 1
               }
             ],
             "components": "V, S, M (a bit of fur and a crystal rod)",
@@ -315,7 +317,9 @@
                   "formula": "4d6",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -451,10 +455,13 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__5_day__wyn6",
+        "id": "act_legendary_resistance__5_day__2t3s",
         "name": "Legendary Resistance (5/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Vecna fails a saving throw, he can choose to succeed instead.</p>",
+        "entries": [
+          "If Vecna fails a saving throw, he can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -468,10 +475,13 @@
         }
       },
       {
-        "id": "act_special_equipment_8dqo",
+        "id": "act_special_equipment_9bmk",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Vecna carries a magic dagger named Afterthought. In the hands of anyone other than Vecna, Afterthought is a +2 dagger.</p>",
+        "entries": [
+          "Vecna carries a magic dagger named Afterthought. In the hands of anyone other than Vecna, Afterthought is a {@item +2 dagger}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -485,10 +495,13 @@
         }
       },
       {
-        "id": "act_undying_fj9z",
+        "id": "act_undying_rzku",
         "name": "Undying",
         "actionType": "trait",
         "descriptionHtml": "<p>If Vecna is slain, his soul refuses to accept its fate and lives on as a disembodied spirit that fashions a new body for itself after 1d100 years. Vecna's soul can fashion a new body even if its old body was burned to ash or otherwise obliterated. When the new body is complete, Vecna regains all his hit points and becomes active again. Vecna's new body appears anywhere within 100 miles of where Vecna was slain.</p>",
+        "entries": [
+          "If Vecna is slain, his soul refuses to accept its fate and lives on as a disembodied spirit that fashions a new body for itself after {@dice 1d100} years. Vecna's soul can fashion a new body even if its old body was burned to ash or otherwise obliterated. When the new body is complete, Vecna regains all his hit points and becomes active again. Vecna's new body appears anywhere within 100 miles of where Vecna was slain."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -502,10 +515,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_qgp9",
+        "id": "act_unusual_nature_10cv",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>Vecna doesn't require air, food, drink, or sleep.</p>",
+        "entries": [
+          "Vecna doesn't require air, food, drink, or sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -521,10 +537,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ziny",
+        "id": "act_multiattack_n2pm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Vecna uses Flight of the Damned (if available), Rotten Fate, or Spellcasting. He then makes two attacks with <em>Afterthought</em>.</p>",
+        "entries": [
+          "Vecna uses Flight of the Damned (if available), Rotten Fate, or Spellcasting. He then makes two attacks with {@i Afterthought}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -538,10 +557,13 @@
         }
       },
       {
-        "id": "act_afterthought_r203",
+        "id": "act_afterthought_tibg",
         "name": "Afterthought",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +13 to hit, reach 5 ft., one target. {@h}7 (1d4 + 5) piercing damage, plus 9 (2d8) necrotic damage. If the target is a creature, it is afflicted by entropic magic, taking 9 (2d8) necrotic damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a DC 20 Constitution saving throw, ending the effect on itself on a success. Until it succeeds on this save, the afflicted target can't regain hit points.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 5 ft., one target. Hit: 7 (1d4 + 5) piercing damage, plus 9 (2d8) necrotic damage. If the target is a creature, it is afflicted by entropic magic, taking 9 (2d8) necrotic damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a DC 20 Constitution saving throw, ending the effect on itself on a success. Until it succeeds on this save, the afflicted target can't regain hit points.</p>",
+        "entries": [
+          "{@atk mw} {@hit 13} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d4 + 5}) piercing damage, plus 9 ({@damage 2d8}) necrotic damage. If the target is a creature, it is afflicted by entropic magic, taking 9 ({@damage 2d8}) necrotic damage at the start of each of its turns. Immediately after taking this damage on its turn, the target can make a {@dc 20} Constitution saving throw, ending the effect on itself on a success. Until it succeeds on this save, the afflicted target can't regain hit points."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -571,10 +593,13 @@
         }
       },
       {
-        "id": "act_flight_of_the_damned__recharge_5__xgoc",
+        "id": "act_flight_of_the_damned__recharge_5__ar0a",
         "name": "Flight of the Damned (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Vecna conjures a torrent of flying, spectral entities that fill a 120-foot cone and pass through all creatures in that area before dissipating. Each creature in that area must make a DC 22 Constitution saving throw. On a failed save, the creature takes 36 (8d8) necrotic damage and is frightened of Vecna for 1 minute. On a successful save, the creature takes half as much damage and isn't frightened. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "entries": [
+          "Vecna conjures a torrent of flying, spectral entities that fill a 120-foot cone and pass through all creatures in that area before dissipating. Each creature in that area must make a {@dc 22} Constitution saving throw. On a failed save, the creature takes 36 ({@damage 8d8}) necrotic damage and is {@condition frightened} of Vecna for 1 minute. On a successful save, the creature takes half as much damage and isn't {@condition frightened}. A {@condition frightened} creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -596,10 +621,13 @@
         }
       },
       {
-        "id": "act_rotten_fate_r2qi",
+        "id": "act_rotten_fate_lwrl",
         "name": "Rotten Fate",
         "actionType": "action",
         "descriptionHtml": "<p>Vecna causes necrotic magic to engulf one creature he can see within 120 feet of himself. The target must make a DC 22 Constitution saving throw, taking 96 (8d8 + 60) necrotic damage on a failed save, or half as much damage on a successful one. A Humanoid killed by this magic rises as a zombie at the start of Vecna's next turn and acts immediately after Vecna in the initiative order. The zombie is under Vecna's control.</p>",
+        "entries": [
+          "Vecna causes necrotic magic to engulf one creature he can see within 120 feet of himself. The target must make a {@dc 22} Constitution saving throw, taking 96 ({@damage 8d8 + 60}) necrotic damage on a failed save, or half as much damage on a successful one. A Humanoid killed by this magic rises as a {@creature zombie} at the start of Vecna's next turn and acts immediately after Vecna in the initiative order. The {@creature zombie} is under Vecna's control."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -623,10 +651,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_vile_teleport_xaie",
+        "id": "act_vile_teleport_ycir",
         "name": "Vile Teleport",
         "actionType": "bonus",
         "descriptionHtml": "<p>Vecna teleports, along with any equipment he is wearing or carrying, up to 30 feet to an unoccupied space he can see. He can cause each creature of his choice within 15 feet of his destination space to take 10 (3d6) psychic damage. If at least one creature takes this damage, Vecna regains 80 hit points.</p>",
+        "entries": [
+          "Vecna teleports, along with any equipment he is wearing or carrying, up to 30 feet to an unoccupied space he can see. He can cause each creature of his choice within 15 feet of his destination space to take 10 ({@damage 3d6}) psychic damage. If at least one creature takes this damage, Vecna regains 80 hit points."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -647,10 +678,13 @@
     ],
     "reactions": [
       {
-        "id": "act_dread_counterspell_mukn",
+        "id": "act_dread_counterspell_ls19",
         "name": "Dread Counterspell",
         "actionType": "reaction",
         "descriptionHtml": "<p>Vecna utters a dread word to interrupt a creature he can see that is casting a spell. If the spell is 4th level or lower, it fails and has no effect. If the spell is 5th level or higher, Vecna makes an Intelligence check (DC 10 + the spell's level). On a success, the spell fails and has no effect. Whatever the spell's level, the caster takes 10 (3d6) psychic damage if the spell fails.</p>",
+        "entries": [
+          "Vecna utters a dread word to interrupt a creature he can see that is casting a spell. If the spell is 4th level or lower, it fails and has no effect. If the spell is 5th level or higher, Vecna makes an Intelligence check ({@dc 10} + the spell's level). On a success, the spell fails and has no effect. Whatever the spell's level, the caster takes 10 ({@damage 3d6}) psychic damage if the spell fails."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -660,7 +694,7 @@
           "targets": null,
           "save": {
             "dc": 10,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -672,10 +706,13 @@
         }
       },
       {
-        "id": "act_fell_rebuke_6sja",
+        "id": "act_fell_rebuke_32a8",
         "name": "Fell Rebuke",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by an attack, Vecna utters a fell word, dealing 10 (3d6) necrotic damage to the attacker, and Vecna teleports, along with any equipment he is wearing or carrying, up to 30 feet to an unoccupied space he can see.</p>",
+        "entries": [
+          "In response to being hit by an attack, Vecna utters a fell word, dealing 10 ({@damage 3d6}) necrotic damage to the attacker, and Vecna teleports, along with any equipment he is wearing or carrying, up to 30 feet to an unoccupied space he can see."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -699,10 +736,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/VD/Vecna the Archlich.webp",
     "tokenImg": "img/bestiary/tokens/VD/Vecna the Archlich.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

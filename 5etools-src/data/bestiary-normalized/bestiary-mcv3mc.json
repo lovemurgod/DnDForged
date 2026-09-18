@@ -104,10 +104,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blaze_rod_o1ql",
+        "id": "act_blaze_rod_jsup",
         "name": "Blaze Rod",
         "actionType": "trait",
         "descriptionHtml": "<p>When the blaze drops to 0 hit points, it disappears in a cloud of smoke and has a 50 percent chance of leaving behind a glowing rod worth 100 gp. The rod sheds dim light in a 5-foot radius. As an action, a creature can try to snap the rod, doing so with a successful DC 14 Strength check. The snapped rod releases its fiery energy in a 5-foot-radius sphere centered on itself. Each creature in that area must make a DC 14 Dexterity saving throw, taking 6 (1d12) fire damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "When the blaze drops to 0 hit points, it disappears in a cloud of smoke and has a 50 percent chance of leaving behind a glowing rod worth 100 gp. The rod sheds dim light in a 5-foot radius. As an action, a creature can try to snap the rod, doing so with a successful {@dc 14} Strength check. The snapped rod releases its fiery energy in a 5-foot-radius sphere centered on itself. Each creature in that area must make a {@dc 14} Dexterity saving throw, taking 6 ({@damage 1d12}) fire damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -129,10 +132,13 @@
         }
       },
       {
-        "id": "act_heat_aura_rhws",
+        "id": "act_heat_aura_kx51",
         "name": "Heat Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that starts its turn within 5 feet of the blaze takes 3 (1d6) fire damage.</p>",
+        "entries": [
+          "Any creature that starts its turn within 5 feet of the blaze takes 3 ({@damage 1d6}) fire damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -151,10 +157,13 @@
         }
       },
       {
-        "id": "act_illumination_516d",
+        "id": "act_illumination_j0nj",
         "name": "Illumination",
         "actionType": "trait",
         "descriptionHtml": "<p>The blaze sheds bright light in a 20-foot radius and dim light for an additional 20 feet.</p>",
+        "entries": [
+          "The blaze sheds bright light in a 20-foot radius and dim light for an additional 20 feet."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -168,10 +177,13 @@
         }
       },
       {
-        "id": "act_water_susceptibility_7xwc",
+        "id": "act_water_susceptibility_eaok",
         "name": "Water Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>The blaze takes 1 cold damage for every 5 feet it moves in water, for every gallon of water splashed on it, or whenever it starts its turn in the rain.</p>",
+        "entries": [
+          "The blaze takes 1 cold damage for every 5 feet it moves in water, for every gallon of water splashed on it, or whenever it starts its turn in the rain."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -187,10 +199,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9jlb",
+        "id": "act_multiattack_rp5h",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The blaze makes three Fiery Doom attacks.</p>",
+        "entries": [
+          "The blaze makes three Fiery Doom attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -204,10 +219,13 @@
         }
       },
       {
-        "id": "act_fiery_doom_7eyx",
+        "id": "act_fiery_doom_4cz7",
         "name": "Fiery Doom",
         "actionType": "action",
-        "descriptionHtml": "<p>ms,rs +6 to hit; reach 5 ft. or ranged 60 ft., one target. {@h}8 (1d10 + 3) fire damage, and the target catches fire if it's a creature or a flammable object. Until a creature takes an action to extinguish the fire, the burning target takes 3 (1d6) fire damage at the end of each of its turns.</p>",
+        "descriptionHtml": "<p>Attack: +6 to hit; reach 5 ft. or ranged 60 ft., one target. Hit: 8 (1d10 + 3) fire damage, and the target catches fire if it's a creature or a flammable object. Until a creature takes an action to extinguish the fire, the burning target takes 3 (1d6) fire damage at the end of each of its turns.</p>",
+        "entries": [
+          "{@atk ms,rs} {@hit 6} to hit; reach 5 ft. or ranged 60 ft., one target. {@h}8 ({@damage 1d10 + 3}) fire damage, and the target catches fire if it's a creature or a flammable object. Until a creature takes an action to extinguish the fire, the burning target takes 3 ({@damage 1d6}) fire damage at the end of each of its turns."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -237,11 +255,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV3MC/Blaze.webp",
     "tokenImg": "img/bestiary/tokens/MCV3MC/Blaze.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_creeper_mcv3mc",
@@ -338,10 +368,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_bizarre_physiology_5o9n",
+        "id": "act_bizarre_physiology_9cqq",
         "name": "Bizarre Physiology",
         "actionType": "trait",
         "descriptionHtml": "<p>The creeper can't take actions except for Dash, Disengage, Hide, and Search. It can't take bonus actions or reactions.</p>",
+        "entries": [
+          "The creeper can't take actions except for {@action Dash}, {@action Disengage}, {@action Hide}, and {@action Search}. It can't take bonus actions or reactions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -355,10 +388,13 @@
         }
       },
       {
-        "id": "act_creeper_head_8smd",
+        "id": "act_creeper_head_0v7n",
         "name": "Creeper Head",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creeper drops to 0 hit points from a charged creeper's explosion (see the Destruction trait), it dies and its head falls off. A creeper's fallen head is hollow and can be worn as a mask with eye and mouth openings.</p>",
+        "entries": [
+          "When a creeper drops to 0 hit points from a charged creeper's explosion (see the Destruction trait), it dies and its head falls off. A creeper's fallen head is hollow and can be worn as a mask with eye and mouth openings."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -372,10 +408,21 @@
         }
       },
       {
-        "id": "act_destruction_qo6c",
+        "id": "act_destruction_s8se",
         "name": "Destruction",
         "actionType": "trait",
         "descriptionHtml": "<p>When it ends its turn within 10 feet of a Humanoid that it can see, the creeper stops moving and emits a hiss loud enough to be heard by creatures within 30 feet of itself.</p><p>If the creeper drops to 0 hit points before the start of its next turn, the hissing stops, and the creeper dies. Otherwise, at the start of the creeper's next turn, one of following things happens:</p><ul><li>If there are no Humanoids within 10 feet of the hissing creeper, it stops hissing. It then uses any available movement to approach the nearest Humanoid it can see.</li><li>If there are one or more Humanoids within 10 feet of the hissing creeper, the creeper explodes in a ball of energy that fills a 20-foot-radius sphere centered on itself. This energy spreads around corners. The creeper is destroyed, and every other creature in the explosion's area must make a DC 12 Dexterity saving throw, taking 14 (4d6) lightning damage on a failed save, or half as much damage on a successful one. Increase this damage by 7 (2d6) if the creeper is charged (see \"Electrical Charge\" below). Objects in the area that aren't being worn or carried take 14 (4d6) lightning damage, or 21 (6d6) lightning damage if the creeper is charged.</li></ul>",
+        "entries": [
+          "When it ends its turn within 10 feet of a Humanoid that it can see, the creeper stops moving and emits a hiss loud enough to be heard by creatures within 30 feet of itself.",
+          "If the creeper drops to 0 hit points before the start of its next turn, the hissing stops, and the creeper dies. Otherwise, at the start of the creeper's next turn, one of following things happens:",
+          {
+            "type": "list",
+            "items": [
+              "If there are no Humanoids within 10 feet of the hissing creeper, it stops hissing. It then uses any available movement to approach the nearest Humanoid it can see.",
+              "If there are one or more Humanoids within 10 feet of the hissing creeper, the creeper explodes in a ball of energy that fills a 20-foot-radius sphere centered on itself. This energy spreads around corners. The creeper is destroyed, and every other creature in the explosion's area must make a {@dc 12} Dexterity saving throw, taking 14 ({@damage 4d6}) lightning damage on a failed save, or half as much damage on a successful one. Increase this damage by 7 ({@damage 2d6}) if the creeper is charged (see \"Electrical Charge\" below). Objects in the area that aren't being worn or carried take 14 ({@damage 4d6}) lightning damage, or 21 ({@damage 6d6}) lightning damage if the creeper is charged."
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -405,10 +452,13 @@
         }
       },
       {
-        "id": "act_electrical_charge_en3y",
+        "id": "act_electrical_charge_4izb",
         "name": "Electrical Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the creeper is subjected to lightning damage, it takes no damage and instead becomes charged for 1 minute. While charged, the creeper emits dim blue light in a 5-foot radius.</p>",
+        "entries": [
+          "Whenever the creeper is subjected to lightning damage, it takes no damage and instead becomes charged for 1 minute. While charged, the creeper emits dim blue light in a 5-foot radius."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -422,10 +472,13 @@
         }
       },
       {
-        "id": "act_fear_of_felines_angm",
+        "id": "act_fear_of_felines_xay5",
         "name": "Fear of Felines",
         "actionType": "trait",
         "descriptionHtml": "<p>The creeper has the frightened condition whenever it starts its turn within 60 feet of a feline creature it can see. The condition lasts until the start of the creeper's next turn.</p>",
+        "entries": [
+          "The creeper has the {@condition frightened} condition whenever it starts its turn within 60 feet of a feline creature it can see. The condition lasts until the start of the creeper's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -447,11 +500,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV3MC/Creeper.webp",
     "tokenImg": "img/bestiary/tokens/MCV3MC/Creeper.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_ender_dragon_mcv3mc",
@@ -561,10 +626,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dragon_egg_u3q1",
+        "id": "act_dragon_egg_0s05",
         "name": "Dragon Egg",
         "actionType": "trait",
         "descriptionHtml": "<p>When the Ender Dragon drops to 0 hit points, it radiates beams of purple light and then disappears, leaving behind an inert, jet-black dragon egg worth 5,000 gp.</p>",
+        "entries": [
+          "When the Ender Dragon drops to 0 hit points, it radiates beams of purple light and then disappears, leaving behind an inert, jet-black dragon egg worth 5,000 gp."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -578,10 +646,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__a6ew",
+        "id": "act_legendary_resistance__4_day__fkja",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the dragon fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -597,10 +668,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_g1pr",
+        "id": "act_multiattack_jg49",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon makes one Bite attack and uses Beating Wings.</p>",
+        "entries": [
+          "The dragon makes one Bite attack and uses Beating Wings."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -614,10 +688,13 @@
         }
       },
       {
-        "id": "act_bite_thxx",
+        "id": "act_bite_cvx3",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +14 to hit; reach 15 ft., one target. {@h}18 (3d6 + 8) piercing damage plus 7 (2d6) necrotic damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit; reach 15 ft., one target. Hit: 18 (3d6 + 8) piercing damage plus 7 (2d6) necrotic damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 14} to hit; reach 15 ft., one target. {@h}18 ({@damage 3d6 + 8}) piercing damage plus 7 ({@damage 2d6}) necrotic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -640,10 +717,13 @@
         }
       },
       {
-        "id": "act_beating_wings_azrc",
+        "id": "act_beating_wings_6ag6",
         "name": "Beating Wings",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon beats its great wings. Each creature within 15 feet of the dragon must succeed on a DC 21 Dexterity saving throw or take 10 (1d4 + 8) bludgeoning damage, be pushed 10 feet away from the dragon, and have the prone condition.</p>",
+        "entries": [
+          "The dragon beats its great wings. Each creature within 15 feet of the dragon must succeed on a {@dc 21} Dexterity saving throw or take 10 ({@damage 1d4 + 8}) bludgeoning damage, be pushed 10 feet away from the dragon, and have the {@condition prone} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -665,10 +745,13 @@
         }
       },
       {
-        "id": "act_harmful_breath__recharge_5__8nsl",
+        "id": "act_harmful_breath__recharge_5__b7b3",
         "name": "Harmful Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales putrid gas in a 60-foot cone. Each creature in that area must make a DC 21 Constitution saving throw, taking 52 (15d6) necrotic damage on a failed save, or half as much damage on a successful one. The dragon then chooses a point it can see where the cone makes contact with the ground. That point becomes the center of a 10-foot-high, 10-foot-radius cylinder of lingering gas that disappears at the start of the dragon's next turn. Any creature that starts its turn in the cylinder takes 10 (3d6) necrotic damage.</p>",
+        "entries": [
+          "The dragon exhales putrid gas in a 60-foot cone. Each creature in that area must make a {@dc 21} Constitution saving throw, taking 52 ({@damage 15d6}) necrotic damage on a failed save, or half as much damage on a successful one. The dragon then chooses a point it can see where the cone makes contact with the ground. That point becomes the center of a 10-foot-high, 10-foot-radius cylinder of lingering gas that disappears at the start of the dragon's next turn. Any creature that starts its turn in the cylinder takes 10 ({@damage 3d6}) necrotic damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -701,11 +784,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV3MC/Ender Dragon.webp",
     "tokenImg": "img/bestiary/tokens/MCV3MC/Ender Dragon.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_enderman_mcv3mc",
@@ -810,10 +905,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_evasive_teleportation_lrq2",
+        "id": "act_evasive_teleportation_7oo4",
         "name": "Evasive Teleportation",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever it takes damage or is the target of a ranged attack, the Enderman can teleport, along with any equipment it is wearing or carrying, to an unoccupied space it can see within 20 feet of itself (no action required). If this effect is triggered by a ranged attack, the Enderman teleports just before the attack hits, causing the attack to miss it. This trait is suppressed while the Enderman has the incapacitated condition.</p>",
+        "entries": [
+          "Whenever it takes damage or is the target of a ranged attack, the Enderman can teleport, along with any equipment it is wearing or carrying, to an unoccupied space it can see within 20 feet of itself (no action required). If this effect is triggered by a ranged attack, the Enderman teleports just before the attack hits, causing the attack to miss it. This trait is suppressed while the Enderman has the {@condition incapacitated} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -827,10 +925,13 @@
         }
       },
       {
-        "id": "act_implosion_w7ze",
+        "id": "act_implosion_n7my",
         "name": "Implosion",
         "actionType": "trait",
         "descriptionHtml": "<p>When the Enderman drops to 0 hit points, it dies as its body implodes. Roll a d10. On a roll of 9 or less, the Enderman leaves no remains. On a roll of 10, the Enderman leaves behind a glowing, purple orb called an Ender pearl, worth 500 gp. A creature can throw the pearl up to 60 feet; if the pearl lands in an unoccupied space big enough to contain the creature, the creature teleports to that space, along with any equipment it is wearing or carrying, and the pearl disappears.</p>",
+        "entries": [
+          "When the Enderman drops to 0 hit points, it dies as its body implodes. Roll a {@dice d10}. On a roll of 9 or less, the Enderman leaves no remains. On a roll of 10, the Enderman leaves behind a glowing, purple orb called an Ender pearl, worth 500 gp. A creature can throw the pearl up to 60 feet; if the pearl lands in an unoccupied space big enough to contain the creature, the creature teleports to that space, along with any equipment it is wearing or carrying, and the pearl disappears."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -844,10 +945,13 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_cth1",
+        "id": "act_sunlight_sensitivity_qe4i",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Enderman has disadvantage on attack rolls.</p>",
+        "entries": [
+          "While in sunlight, the Enderman has disadvantage on attack rolls."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -861,10 +965,13 @@
         }
       },
       {
-        "id": "act_water_susceptibility_5mc0",
+        "id": "act_water_susceptibility_8ir0",
         "name": "Water Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>The Enderman takes 1 cold damage for every 5 feet it moves in water, for every gallon of water splashed on it, or whenever it starts its turn in the rain.</p>",
+        "entries": [
+          "The Enderman takes 1 cold damage for every 5 feet it moves in water, for every gallon of water splashed on it, or whenever it starts its turn in the rain."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -880,10 +987,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xor9",
+        "id": "act_multiattack_8h3c",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Enderman makes two Slam attacks.</p>",
+        "entries": [
+          "The Enderman makes two Slam attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -897,10 +1007,13 @@
         }
       },
       {
-        "id": "act_slam_ulnl",
+        "id": "act_slam_llwi",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit; reach 10 ft., one target. {@h}8 (1d8 + 4) bludgeoning damage plus 9 (2d8) necrotic damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit; reach 10 ft., one target. Hit: 8 (1d8 + 4) bludgeoning damage plus 9 (2d8) necrotic damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit; reach 10 ft., one target. {@h}8 ({@damage 1d8 + 4}) bludgeoning damage plus 9 ({@damage 2d8}) necrotic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -930,11 +1043,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV3MC/Enderman.webp",
     "tokenImg": "img/bestiary/tokens/MCV3MC/Enderman.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_wolf_of_the_overworld_mcv3mc",
@@ -1027,10 +1152,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_rgir",
+        "id": "act_pack_tactics_b4yh",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The wolf has advantage on attack rolls against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally doesn't have the incapacitated condition.</p>",
+        "entries": [
+          "The wolf has advantage on attack rolls against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally doesn't have the {@condition incapacitated} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1046,10 +1174,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_pxxe",
+        "id": "act_bite_0lu2",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit; reach 5 ft., one target. {@h}7 (2d4 + 2) piercing damage. If the target is a creature, it must succeed on a DC 11 Strength saving throw or have the prone condition.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit; reach 5 ft., one target. Hit: 7 (2d4 + 2) piercing damage. If the target is a creature, it must succeed on a DC 11 Strength saving throw or have the prone condition.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit; reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) piercing damage. If the target is a creature, it must succeed on a {@dc 11} Strength saving throw or have the {@condition prone} condition."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1078,10 +1209,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV3MC/Wolf of the Overworld.webp",
     "tokenImg": "img/bestiary/tokens/MCV3MC/Wolf of the Overworld.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

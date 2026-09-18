@@ -1574,11 +1574,34 @@ let lastBroadcastedTokens = {};
             banner.classList.remove('vtt-hidden');
             
             const previewMapName = vtt.campaignState.maps[currentMapId]?.name || "Preview Map";
-            const activeMapName = vtt.campaignState.maps[vtt.campaignState.activeMapId]?.name || "Active Map";
+            const defaultMapName = vtt.campaignState.maps[vtt.campaignState.activeMapId]?.name || "Active Map";
             
-            const bannerNameSpan = document.getElementById('banner-previewing-map-name');
-            if (bannerNameSpan) {
-                bannerNameSpan.textContent = `"${previewMapName}" (Players are on "${activeMapName}")`;
+            // Build tooltip with map & player breakdown
+            const camp = vtt.campaignState;
+            const knownPlayers = camp.knownPlayers || [];
+            const allowedUsers = camp.allowedUsers || [];
+            const allPlayers = [...new Set([...knownPlayers, ...allowedUsers])];
+            
+            const tooltipLines = [`GM View: Currently previewing "${previewMapName}"`];
+            if (allPlayers.length > 0) {
+                tooltipLines.push('\nPlayer Locations:');
+                const mapToPlayers = {};
+                allPlayers.forEach(p => {
+                    const pMapId = camp.playerMapOverrides?.[p] || camp.activeMapId;
+                    const pMapName = camp.maps?.[pMapId]?.name || defaultMapName;
+                    if (!mapToPlayers[pMapName]) mapToPlayers[pMapName] = [];
+                    mapToPlayers[pMapName].push(p);
+                });
+                Object.entries(mapToPlayers).forEach(([mName, pList]) => {
+                    tooltipLines.push(`• ${mName}: ${pList.join(', ')}`);
+                });
+            } else {
+                tooltipLines.push(`\nDefault Player Map: "${defaultMapName}" (No players connected)`);
+            }
+            
+            const badge = document.getElementById('banner-gm-view-badge');
+            if (badge) {
+                badge.title = tooltipLines.join('\n');
             }
         } else {
             banner.classList.add('vtt-hidden');
@@ -2099,6 +2122,13 @@ let lastBroadcastedTokens = {};
     function renderFogOfWarLayer(width, height) {
         ctxFog.clearRect(0, 0, width, height);
 
+        const currentMap = vtt.campaignState?.maps?.[currentMapId];
+        const isFogEnabled = currentMap?.lightingSettings?.fogOfWar !== false; // Defaults to true
+        if (!isFogEnabled) {
+            visionPolygons = [];
+            return;
+        }
+
         if (vtt.role === 'GM' && gmTokenVisionMode && selectedTokenIds.size === 0) {
             gmTokenVisionMode = false; // Auto-exit if no tokens are selected
         }
@@ -2129,7 +2159,6 @@ let lastBroadcastedTokens = {};
         ctxFog.globalCompositeOperation = 'destination-out';
 
         // 1. Process standard Player Vision (completely clears fog)
-        const currentMap = vtt.campaignState?.maps?.[currentMapId];
         const isDaylightMode = currentMap?.lightingSettings?.daylightMode;
         const updateOnDrop = currentMap?.lightingSettings?.updateOnDrop !== false;
 
@@ -2647,7 +2676,7 @@ let lastBroadcastedTokens = {};
         const u = ((s_px - r_px) * r_h - (s_py - r_py) * r_w) / denom;
         const t = ((s_px - r_px) * s_h - (s_py - r_py) * s_w) / denom;
 
-        if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+        if (t >= 0.0001 && t <= 1 && u >= 0 && u <= 1) {
             return {
                 x: r_px + t * r_w,
                 y: r_py + t * r_h,
@@ -2987,116 +3016,8 @@ let lastBroadcastedTokens = {};
 
             ctxInteraction.restore();
         } else {
-            // Draw visible interactive objects for players
-            
-            // --- DRAW TOKENS ---
-            Object.values(tokens || {}).forEach(t => {
-                if (t.isVisible === false && !isGmViewing) return; // Players can't see explicitly hidden tokens
-                if (t.layer !== activeLayer && t.layer !== 'map' && !isGmViewing) return; // Players see 'token' layer and 'map' layer
-
-                const cx = t.x * grid.size * grid.scale;
-                const cy = t.y * grid.size * grid.scale;
-                const sz = (t.size || 1) * grid.size * grid.scale;
-
-                // Draw selection highlight
-                if (selectedTokenIds.has(t.id)) {
-                    ctxInteraction.strokeStyle = '#ffc107';
-                    ctxInteraction.lineWidth = 3;
-                    ctxInteraction.strokeRect(cx, cy, sz, sz);
-                }
-
-                // Draw token image
-                if (t.imageUrl) {
-                    const img = new Image();
-                    img.src = t.imageUrl;
-                    if (img.complete) {
-                        ctxInteraction.drawImage(img, cx, cy, sz, sz);
-                    } else {
-                        img.onload = () => renderAll();
-                    }
-                } else {
-                    // Fallback colored circle if no image
-                    ctxInteraction.fillStyle = t.isPlayer ? '#28a745' : '#dc3545';
-                    ctxInteraction.beginPath();
-                    ctxInteraction.arc(cx + sz/2, cy + sz/2, sz/2, 0, Math.PI*2);
-                    ctxInteraction.fill();
-                }
-
-                // Draw HP bar
-                if (t.maxHp) {
-                    const hpPercent = Math.max(0, Math.min(1, (t.hp || 0) / t.maxHp));
-                    ctxInteraction.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                    ctxInteraction.fillRect(cx, cy + sz + 2, sz, 6);
-                    ctxInteraction.fillStyle = hpPercent > 0.5 ? '#28a745' : (hpPercent > 0.2 ? '#ffc107' : '#dc3545');
-                    ctxInteraction.fillRect(cx, cy + sz + 2, sz * hpPercent, 6);
-                }
-                
-                // Draw Nameplate
-                if (t.name) {
-                    ctxInteraction.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                    const textWidth = ctxInteraction.measureText(t.name).width;
-                    ctxInteraction.fillRect(cx + sz/2 - textWidth/2 - 4, cy - 20, textWidth + 8, 16);
-                    ctxInteraction.fillStyle = '#ffffff';
-                    ctxInteraction.font = '12px Arial';
-                    ctxInteraction.textAlign = 'center';
-                    ctxInteraction.fillText(t.name, cx + sz/2, cy - 8);
-                    ctxInteraction.textAlign = 'left';
-                }
-                
-                // Draw conditions
-                if (t.conditions && t.conditions.length > 0) {
-                    const condSz = 12;
-                    t.conditions.forEach((cond, idx) => {
-                        ctxInteraction.fillStyle = cond.color || '#ff00ff';
-                        ctxInteraction.beginPath();
-                        ctxInteraction.arc(cx + condSz/2 + (idx * (condSz+2)), cy + condSz/2, condSz/2, 0, Math.PI*2);
-                        ctxInteraction.fill();
-                    });
-                }
-
-                // Draw token directional cone guide and rotation handle if angular light is enabled
-                const isSelectedToken = selectedTokenIds.has(t.id) || (selectedTokenId && selectedTokenId === t.id);
-                if (t.lightEnabled && t.lightAngle && t.lightAngle < 360 && isSelectedToken) {
-                    const center = { x: cx + sz / 2, y: cy + sz / 2 };
-                    const effFacing = getTokenEffectiveLightFacing(t);
-                    const facing = (effFacing * Math.PI / 180);
-                    const arc = (t.lightAngle * Math.PI / 180);
-                    const r = sz / 2;
-                    const hx = center.x + Math.cos(facing) * (r + 20);
-                    const hy = center.y + Math.sin(facing) * (r + 20);
-
-                    ctxInteraction.save();
-                    ctxInteraction.strokeStyle = 'rgba(255, 170, 0, 0.7)';
-                    ctxInteraction.lineWidth = 1.5;
-                    ctxInteraction.setLineDash([3, 3]);
-                    ctxInteraction.beginPath();
-                    ctxInteraction.moveTo(center.x, center.y);
-                    ctxInteraction.lineTo(center.x + Math.cos(facing - arc / 2) * (r + 38), center.y + Math.sin(facing - arc / 2) * (r + 38));
-                    ctxInteraction.moveTo(center.x, center.y);
-                    ctxInteraction.lineTo(center.x + Math.cos(facing + arc / 2) * (r + 38), center.y + Math.sin(facing + arc / 2) * (r + 38));
-                    ctxInteraction.stroke();
-                    ctxInteraction.setLineDash([]);
-
-                    // Direction line to handle
-                    ctxInteraction.strokeStyle = '#ffc107';
-                    ctxInteraction.lineWidth = 2;
-                    ctxInteraction.beginPath();
-                    ctxInteraction.moveTo(center.x, center.y);
-                    ctxInteraction.lineTo(hx, hy);
-                    ctxInteraction.stroke();
-
-                    // Rotation handle
-                    ctxInteraction.beginPath();
-                    ctxInteraction.arc(hx, hy, 5.5, 0, Math.PI * 2);
-                    ctxInteraction.fillStyle = '#ffc107';
-                    ctxInteraction.fill();
-                    ctxInteraction.strokeStyle = '#ffffff';
-                    ctxInteraction.lineWidth = 1.5;
-                    ctxInteraction.stroke();
-                    ctxInteraction.restore();
-                }
-            });
-
+            // Visible tokens and map assets are rendered via the DOM overlay layer (#vtt-html-overlays / #vtt-map-html-overlays).
+            // Interactive doors and windows for players:
             walls.forEach(wall => {
                 if (wall.type !== 'door' && wall.type !== 'window') return;
                 if (wall.isSecret && vtt.role !== 'GM') return;
@@ -3896,8 +3817,15 @@ let lastBroadcastedTokens = {};
                         node.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
                     } else if (needsImg) {
                         node = document.createElement('img');
-                        node.setAttribute('src', getSafeVttUrl(token.img));
                         node.draggable = false;
+                        node.onerror = () => {
+                            if (node.dataset.failed) return;
+                            node.dataset.failed = 'true';
+                            const initial = (token.name || 'C').charAt(0).toUpperCase();
+                            const color = token.color || (token.isPlayer ? '#007bff' : '#dc3545');
+                            node.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="${encodeURIComponent(color)}" stroke="%23ffffff" stroke-width="4"/><text x="50" y="65" font-size="44" font-family="sans-serif" font-weight="bold" fill="%23ffffff" text-anchor="middle">${initial}</text></svg>`;
+                        };
+                        node.setAttribute('src', getSafeVttUrl(token.img));
                     } else if (needsVideo) {
                         node = document.createElement('video');
                         node.setAttribute('src', getSafeVttUrl(token.img));
@@ -3927,6 +3855,15 @@ let lastBroadcastedTokens = {};
                         node.setAttribute('src', token.img);
                     }
                 } else if (token.img && node.getAttribute('src') !== getSafeVttUrl(token.img) && node.src !== getSafeVttUrl(token.img)) {
+                    if (node.tagName === 'IMG') {
+                        node.onerror = () => {
+                            if (node.dataset.failed) return;
+                            node.dataset.failed = 'true';
+                            const initial = (token.name || 'C').charAt(0).toUpperCase();
+                            const color = token.color || (token.isPlayer ? '#007bff' : '#dc3545');
+                            node.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="${encodeURIComponent(color)}" stroke="%23ffffff" stroke-width="4"/><text x="50" y="65" font-size="44" font-family="sans-serif" font-weight="bold" fill="%23ffffff" text-anchor="middle">${initial}</text></svg>`;
+                        };
+                    }
                     node.setAttribute('src', getSafeVttUrl(token.img));
                     if (node.tagName === 'VIDEO') {
                         node.muted = true;
@@ -5448,7 +5385,7 @@ window.emitTokenUpdates = function(currentTokens) {
                     <div style="display: flex; flex-direction: column; gap: 6px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 8px;">
                         ${!isGmViewing ? `
                             <button class="btn-view-map btn btn-secondary btn-xs" style="width: 100%; justify-content: center; font-size: 0.75rem;">
-                                <i class="fa-solid fa-eye"></i> Secret Preview
+                                <i class="fa-solid fa-eye"></i> GM View
                             </button>
                         ` : `
                             <button class="btn btn-secondary btn-xs" disabled style="width: 100%; justify-content: center; font-size: 0.75rem; opacity: 0.5;">
@@ -5621,13 +5558,14 @@ window.emitTokenUpdates = function(currentTokens) {
             if (currentMapId === editingMapId) { grid = Object.assign({}, map.grid); renderAll(); }
         });
 
-        const lightingInputs = ['daylight-mode', 'restrict-movement', 'update-on-drop'];
+        const lightingInputs = ['fog-of-war', 'daylight-mode', 'restrict-movement', 'update-on-drop'];
         lightingInputs.forEach(f => {
             const el = document.getElementById(`edit-map-${f}`);
             if (el) el.addEventListener('change', () => {
                 if (!editingMapId || !vtt.campaignState.maps[editingMapId]) return;
                 const map = vtt.campaignState.maps[editingMapId];
-                if (!map.lightingSettings) map.lightingSettings = { daylightMode: false, restrictMovement: false, updateOnDrop: true };
+                if (!map.lightingSettings) map.lightingSettings = { fogOfWar: true, daylightMode: false, restrictMovement: false, updateOnDrop: true };
+                if (f === 'fog-of-war') map.lightingSettings.fogOfWar = el.checked;
                 if (f === 'daylight-mode') map.lightingSettings.daylightMode = el.checked;
                 if (f === 'restrict-movement') map.lightingSettings.restrictMovement = el.checked;
                 if (f === 'update-on-drop') map.lightingSettings.updateOnDrop = el.checked;
@@ -5652,7 +5590,9 @@ window.emitTokenUpdates = function(currentTokens) {
         document.getElementById('edit-map-grid-color').value = g.color || '#888888';
         document.getElementById('edit-map-grid-opacity').value = g.opacity || 0.3;
         
-        const ls = map.lightingSettings || { daylightMode: false, restrictMovement: false, updateOnDrop: true };
+        const ls = map.lightingSettings || { fogOfWar: true, daylightMode: false, restrictMovement: false, updateOnDrop: true };
+        const fogEl = document.getElementById('edit-map-fog-of-war');
+        if (fogEl) fogEl.checked = ls.fogOfWar !== false;
         document.getElementById('edit-map-daylight-mode').checked = !!ls.daylightMode;
         document.getElementById('edit-map-restrict-movement').checked = !!ls.restrictMovement;
         document.getElementById('edit-map-update-on-drop').checked = ls.updateOnDrop !== false;
@@ -6145,14 +6085,20 @@ window.emitTokenUpdates = function(currentTokens) {
         allPotentialPlayers.forEach(p => {
             const currentMapId = camp.playerMapOverrides?.[p] || camp.activeMapId;
             const isAlreadyHere = currentMapId === mapId;
-            const div = document.createElement('label');
-            div.style.display = 'flex';
-            div.style.alignItems = 'center';
-            div.style.gap = '8px';
-            div.style.cursor = 'pointer';
-            div.style.padding = '4px 8px';
+            const currentMapName = camp.maps?.[currentMapId]?.name || 'Unknown Map';
             
-            div.innerHTML = `<input type="checkbox" value="${p}" checked> ${p} ${isAlreadyHere ? '<span style="font-size:0.7rem; color:var(--color-text-muted);">(Already Here)</span>' : ''}`;
+            const div = document.createElement('label');
+            div.className = 'push-player-row';
+            
+            div.innerHTML = `
+                <div class="push-player-left">
+                    <input type="checkbox" value="${p}" checked>
+                    <span class="push-player-name">${p}</span>
+                </div>
+                <span class="push-player-map-tag ${isAlreadyHere ? 'already-here' : 'other-map'}">
+                    ${isAlreadyHere ? 'Already Here' : `on "${currentMapName}"`}
+                </span>
+            `;
             list.appendChild(div);
         });
         
@@ -6724,6 +6670,7 @@ window.emitTokenUpdates = function(currentTokens) {
                             id: newId,
                             name: editedToken.name,
                             isCustomNpc: true,
+                            isGeneric: true,
                             isPlayer: false,
                             hpCurrent: editedToken.hp,
                             hpMax: editedToken.maxHp,
@@ -7031,8 +6978,220 @@ window.emitTokenUpdates = function(currentTokens) {
         document.getElementById('modal-token-edit').classList.remove('vtt-hidden');
     }
 
+    const isMobileViewport = () => {
+        const forced = localStorage.getItem('vtt_force_mobile_ui');
+        if (forced === 'true') return true;
+        if (forced === 'false') return false;
+        return window.innerWidth <= 900 || ((window.matchMedia && window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window) && window.innerWidth <= 1366);
+    };
+
+    function cancelActiveMeasurement() {
+        let changed = false;
+        if (localIsMeasuring || isTokenMeasuring || localIsShaping) {
+            localIsMeasuring = false;
+            isTokenMeasuring = false;
+            localIsShaping = false;
+            localMeasureStart = null;
+            localMeasureEnd = null;
+            localShapeStart = null;
+            localShapeEnd = null;
+            measureAnchorPoints = [];
+            if (vtt.socket) {
+                vtt.socket.emit('measure:clear', { mapId: currentMapId, username: vtt.username });
+            }
+            changed = true;
+        }
+        const dragPill = document.getElementById('vtt-mobile-drag-pill');
+        if (dragPill && !dragPill.classList.contains('vtt-hidden')) {
+            dragPill.classList.add('vtt-hidden');
+            changed = true;
+        }
+        if (changed) renderAll();
+    }
+
+    function cancelTokenDrag() {
+        if (dragTargetId) {
+            const originalPos = tokenDragOriginalPositions[dragTargetId];
+            if (originalPos && tokens[dragTargetId]) {
+                tokens[dragTargetId].x = originalPos.x;
+                tokens[dragTargetId].y = originalPos.y;
+                window.emitTokenUpdates(tokens);
+            }
+            dragTargetId = null;
+        }
+        tokenDragOriginalPositions = {};
+        const dragPill = document.getElementById('vtt-mobile-drag-pill');
+        if (dragPill) dragPill.classList.add('vtt-hidden');
+        cancelActiveMeasurement();
+        renderAll();
+    }
+
+    function startTouchTokenDrag(tokenId, clientX, clientY) {
+        const t = tokens[tokenId];
+        if (!t || !isTokenControlledByPlayer(t)) return false;
+
+        dragTargetId = tokenId;
+        const mouse = getCanvasMouseCoords({ clientX, clientY });
+        dragOffsetX = mouse.x - t.x;
+        dragOffsetY = mouse.y - t.y;
+
+        hideGmTokenTooltip();
+
+        if (!selectedTokenIds.has(tokenId)) {
+            selectedTokenIds.clear();
+            selectedTokenIds.add(tokenId);
+        }
+        selectedTokenId = tokenId;
+
+        tokenDragOriginalPositions = {};
+        selectedTokenIds.forEach(id => {
+            const selected = tokens[id];
+            if (selected) {
+                tokenDragOriginalPositions[id] = { x: selected.x, y: selected.y };
+            }
+        });
+
+        isTokenMeasuring = true;
+        localIsMeasuring = true;
+        const { drawW, drawH } = getTokenDrawDimensions(t);
+        localMeasureStart = { x: t.x + drawW / 2, y: t.y + drawH / 2 };
+        localMeasureEnd = localMeasureStart;
+        measureAnchorPoints = [localMeasureStart];
+
+        renderAll();
+        return true;
+    }
+
+    function moveTouchTokenDrag(clientX, clientY) {
+        if (!dragTargetId) return;
+        const t = tokens[dragTargetId];
+        if (!t) return;
+
+        const mouse = getCanvasMouseCoords({ clientX, clientY });
+        let nx = mouse.x - dragOffsetX;
+        let ny = mouse.y - dragOffsetY;
+
+        if (grid) {
+            const snapped = snapToGrid(nx, ny, true);
+            nx = snapped.x;
+            ny = snapped.y;
+        }
+
+        const sourceOriginal = tokenDragOriginalPositions[dragTargetId] || { x: t.x, y: t.y };
+        const currentMap = vtt.campaignState?.maps?.[currentMapId];
+        if (vtt.role !== 'GM' && currentMap?.lightingSettings?.restrictMovement) {
+            const { drawW, drawH } = getTokenDrawDimensions(t);
+            const radius = Math.min(drawW, drawH) / 2;
+            const startCenter = { x: sourceOriginal.x + drawW / 2, y: sourceOriginal.y + drawH / 2 };
+            const endCenter = { x: nx + drawW / 2, y: ny + drawH / 2 };
+
+            let closestT = 1.0;
+            let collisionPoint = null;
+
+            walls.forEach(wall => {
+                if (wall.isOpen) return;
+                const intersect = getLineIntersection(startCenter.x, startCenter.y, endCenter.x, endCenter.y, wall.x1, wall.y1, wall.x2, wall.y2);
+                if (intersect && intersect.t < closestT) {
+                    closestT = intersect.t;
+                    collisionPoint = intersect;
+                }
+            });
+
+            if (collisionPoint) {
+                const dx = endCenter.x - startCenter.x;
+                const dy = endCenter.y - startCenter.y;
+                const length = Math.hypot(dx, dy);
+                if (length > 0) {
+                    const backupT = Math.max(0, collisionPoint.t - ((radius - 2) / length));
+                    nx = startCenter.x + dx * backupT - drawW / 2;
+                    ny = startCenter.y + dy * backupT - drawH / 2;
+                }
+            }
+        }
+
+        const deltaX = nx - sourceOriginal.x;
+        const deltaY = ny - sourceOriginal.y;
+
+        if (selectedTokenIds.has(dragTargetId) && selectedTokenIds.size > 1) {
+            selectedTokenIds.forEach(id => {
+                const original = tokenDragOriginalPositions[id];
+                if (!original || !tokens[id]) return;
+                if (!isTokenControlledByPlayer(tokens[id])) return;
+                tokens[id].x = original.x + deltaX;
+                tokens[id].y = original.y + deltaY;
+            });
+        } else {
+            if (isTokenControlledByPlayer(t)) {
+                t.x = nx;
+                t.y = ny;
+            }
+        }
+
+        if (localIsMeasuring && isTokenMeasuring) {
+            const { drawW, drawH } = getTokenDrawDimensions(t);
+            const tokenCenter = { x: t.x + drawW / 2, y: t.y + drawH / 2 };
+            localMeasureEnd = tokenCenter;
+            const color = document.getElementById('measure-color')?.value || '#00ffff';
+            const anchor = document.getElementById('measure-square-anchor')?.value || 'center';
+            const beamW = parseFloat(document.getElementById('measure-beam-width')?.value || 5);
+            const points = (measureAnchorPoints.length > 0) ? [...measureAnchorPoints, localMeasureEnd] : null;
+            const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
+            if (broadcast) {
+                vtt.socket.emit('measure:update', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: 'line', color, squareAnchor: anchor, beamWidth: beamW, points });
+            }
+
+            const distFeet = calcDistanceFt(Math.hypot(localMeasureEnd.x - localMeasureStart.x, localMeasureEnd.y - localMeasureStart.y));
+            const dragPill = document.getElementById('vtt-mobile-drag-pill');
+            if (dragPill) {
+                const distSpan = document.getElementById('vtt-mobile-drag-dist');
+                if (distSpan) distSpan.textContent = `${distFeet} ft`;
+                dragPill.style.left = `${clientX || 0}px`;
+                dragPill.style.top = `${(clientY || 0) - 20}px`;
+                dragPill.classList.remove('vtt-hidden');
+            }
+        }
+        renderAll();
+    }
+
+    function endTouchTokenDrag(clientX, clientY) {
+        if (!dragTargetId) return;
+        const t = tokens[dragTargetId];
+        if (t) {
+            const originalPos = tokenDragOriginalPositions[dragTargetId] || { x: t.x, y: t.y };
+            if (originalPos.x !== t.x || originalPos.y !== t.y) {
+                t._animReq = {
+                    startX: originalPos.x,
+                    startY: originalPos.y,
+                    endX: t.x,
+                    endY: t.y,
+                    waypoints: isTokenMeasuring ? measureAnchorPoints.slice(1) : [],
+                    timestamp: Date.now(),
+                    duration: 500
+                };
+            }
+        }
+        window.emitTokenUpdates(tokens);
+        processTokenAnimReqs(tokens);
+        dragTargetId = null;
+        tokenDragOriginalPositions = {};
+        const dragPill = document.getElementById('vtt-mobile-drag-pill');
+        if (dragPill) dragPill.classList.add('vtt-hidden');
+        if (isTokenMeasuring) {
+            isTokenMeasuring = false;
+            localIsMeasuring = false;
+            measureAnchorPoints = [];
+            vtt.socket.emit('measure:clear', { mapId: currentMapId, username: vtt.username });
+            localMeasureStart = null;
+            localMeasureEnd = null;
+        }
+        renderAll();
+    }
+
     // API exposing to other scripts (like bridge)
     const engine = {
+        cancelTokenDrag,
+        isDraggingToken: () => !!dragTargetId,
+        openTokenEditModal,
         renderAll,
         getGrid: () => grid,
         getTokens: () => tokens,
@@ -7068,15 +7227,33 @@ window.emitTokenUpdates = function(currentTokens) {
             }
         },
         panTo,
+        panBy: (dx, dy) => {
+            panX += dx;
+            panY += dy;
+            updateContainerTransform();
+            renderAll();
+        },
         setZoom,
         stepZoom,
+        getZoom: () => zoom,
+        getPan: () => ({ panX, panY }),
+        getTokenAtPoint: (mouse, requireControl = true, matchLayer = true, touchRadius = 0) => getTokenAtPoint(mouse, requireControl, matchLayer, touchRadius),
+        startTouchTokenDrag,
+        moveTouchTokenDrag,
+        endTouchTokenDrag,
+        cancelTouchTokenDrag: cancelTokenDrag,
         centerOnToken: centerOnTokenOrMap,
         broadcastViewToPlayers,
         getCampaignSettings: () => campaignSettings,
         setInitiativeHoverToken: (tokenId) => {
             initiativeHoverTokenId = tokenId;
         },
-        getInitiativeHoverToken: () => initiativeHoverTokenId
+        getInitiativeHoverToken: () => initiativeHoverTokenId,
+        showGmTokenTooltip,
+        hideGmTokenTooltip,
+        showTokenContextMenu,
+        showMassRollContextMenu,
+        cancelActiveMeasurement
     };
 
     // =========================================================================
@@ -7762,20 +7939,58 @@ window.emitTokenUpdates = function(currentTokens) {
         menu.innerHTML = html;
         document.body.appendChild(menu);
 
-        // Position adjustment to avoid screen edge clipping
-        const menuRect = menu.getBoundingClientRect();
-        const screenW = window.innerWidth;
-        const screenH = window.innerHeight;
-        let adjustedX = clientX;
-        let adjustedY = clientY;
-        if (clientX + menuRect.width > screenW) {
-            adjustedX = screenW - menuRect.width - 10;
+        const isMobile = isMobileViewport();
+        const mobileBackdrop = document.getElementById('vtt-mobile-backdrop');
+
+        if (isMobile) {
+            menu.classList.add('mobile-modal-mode');
+            if (mobileBackdrop) {
+                mobileBackdrop.classList.add('active');
+            }
         }
-        if (clientY + menuRect.height > screenH) {
-            adjustedY = screenH - menuRect.height - 10;
+
+        const cleanupContextMenu = () => {
+            if (mobileBackdrop) {
+                mobileBackdrop.classList.remove('active');
+                mobileBackdrop.removeEventListener('click', cleanupContextMenu);
+                mobileBackdrop.removeEventListener('touchend', cleanupContextMenu);
+            }
+        };
+
+        if (isMobile && mobileBackdrop) {
+            mobileBackdrop.addEventListener('click', cleanupContextMenu);
+            mobileBackdrop.addEventListener('touchend', cleanupContextMenu);
         }
-        menu.style.left = `${adjustedX}px`;
-        menu.style.top = `${adjustedY}px`;
+
+        // Patch menu.remove to always clean up the backdrop
+        const originalMenuRemove = menu.remove.bind(menu);
+        menu.remove = function() {
+            cleanupContextMenu();
+            originalMenuRemove();
+        };
+
+        if (isMobile) {
+            menu.style.left = '50%';
+            menu.style.top = '50%';
+            menu.style.transform = 'translate(-50%, -50%)';
+        } else {
+            // Position adjustment to avoid screen edge clipping
+            const menuRect = menu.getBoundingClientRect();
+            const screenW = window.innerWidth;
+            const screenH = window.innerHeight;
+            let adjustedX = clientX;
+            let adjustedY = clientY;
+            if (clientX + menuRect.width > screenW) {
+                adjustedX = screenW - menuRect.width - 10;
+            }
+            if (clientY + menuRect.height > screenH) {
+                adjustedY = screenH - menuRect.height - 10;
+            }
+            adjustedX = Math.max(10, adjustedX);
+            adjustedY = Math.max(10, adjustedY);
+            menu.style.left = `${adjustedX}px`;
+            menu.style.top = `${adjustedY}px`;
+        }
 
         // Wire click handlers
         // Splash Art
@@ -8530,20 +8745,57 @@ window.emitTokenUpdates = function(currentTokens) {
         menu.innerHTML = html;
         document.body.appendChild(menu);
 
-        // Position adjustment to avoid screen edge clipping
-        const menuRect = menu.getBoundingClientRect();
-        const screenW = window.innerWidth;
-        const screenH = window.innerHeight;
-        let adjustedX = clientX;
-        let adjustedY = clientY;
-        if (clientX + menuRect.width > screenW) {
-            adjustedX = screenW - menuRect.width - 10;
+        const isMobileMass = isMobileViewport();
+        const mobileBackdropMass = document.getElementById('vtt-mobile-backdrop');
+
+        if (isMobileMass) {
+            menu.classList.add('mobile-modal-mode');
+            if (mobileBackdropMass) {
+                mobileBackdropMass.classList.add('active');
+            }
         }
-        if (clientY + menuRect.height > screenH) {
-            adjustedY = screenH - menuRect.height - 10;
+
+        const cleanupMassContextMenu = () => {
+            if (mobileBackdropMass) {
+                mobileBackdropMass.classList.remove('active');
+                mobileBackdropMass.removeEventListener('click', cleanupMassContextMenu);
+                mobileBackdropMass.removeEventListener('touchend', cleanupMassContextMenu);
+            }
+        };
+
+        if (isMobileMass && mobileBackdropMass) {
+            mobileBackdropMass.addEventListener('click', cleanupMassContextMenu);
+            mobileBackdropMass.addEventListener('touchend', cleanupMassContextMenu);
         }
-        menu.style.left = `${adjustedX}px`;
-        menu.style.top = `${adjustedY}px`;
+
+        const originalMassMenuRemove = menu.remove.bind(menu);
+        menu.remove = function() {
+            cleanupMassContextMenu();
+            originalMassMenuRemove();
+        };
+
+        if (isMobileMass) {
+            menu.style.left = '50%';
+            menu.style.top = '50%';
+            menu.style.transform = 'translate(-50%, -50%)';
+        } else {
+            // Position adjustment to avoid screen edge clipping
+            const menuRect = menu.getBoundingClientRect();
+            const screenW = window.innerWidth;
+            const screenH = window.innerHeight;
+            let adjustedX = clientX;
+            let adjustedY = clientY;
+            if (clientX + menuRect.width > screenW) {
+                adjustedX = screenW - menuRect.width - 10;
+            }
+            if (clientY + menuRect.height > screenH) {
+                adjustedY = screenH - menuRect.height - 10;
+            }
+            adjustedX = Math.max(10, adjustedX);
+            adjustedY = Math.max(10, adjustedY);
+            menu.style.left = `${adjustedX}px`;
+            menu.style.top = `${adjustedY}px`;
+        }
 
         const getResolvedMonsterData = (t) => {
             if (t.monsterData) return t.monsterData;
@@ -9076,7 +9328,18 @@ window.emitTokenUpdates = function(currentTokens) {
             });
         });
 
-        const close = () => modal.remove();
+        const onEsc = (e) => {
+            if (e.key === 'Escape' || e.keyCode === 27) close();
+        };
+        const close = () => {
+            window.removeEventListener('keydown', onEsc);
+            modal.remove();
+        };
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) close();
+        });
+        window.addEventListener('keydown', onEsc);
+
         btnClose.addEventListener('click', close);
         btnCancel.addEventListener('click', close);
 
@@ -9157,9 +9420,26 @@ window.emitTokenUpdates = function(currentTokens) {
 
         document.body.appendChild(modal);
 
+        const onEsc = (e) => {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                window.removeEventListener('keydown', onEsc);
+                modal.remove();
+            }
+        };
+        window.addEventListener('keydown', onEsc);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                window.removeEventListener('keydown', onEsc);
+                modal.remove();
+            }
+        });
+
         // Handlers
         const closeBtn = modal.querySelector('.vtt-modal-close');
-        closeBtn.addEventListener('click', () => modal.remove());
+        closeBtn.addEventListener('click', () => {
+            window.removeEventListener('keydown', onEsc);
+            modal.remove();
+        });
 
         const inputEl = modal.querySelector('#apply-damage-amount');
         const selectEl = modal.querySelector('#apply-damage-type');
@@ -9169,6 +9449,7 @@ window.emitTokenUpdates = function(currentTokens) {
             if (amount > 0) {
                 applyDamageToTokens(tokenIds, amount, selectEl.value, mode);
             }
+            window.removeEventListener('keydown', onEsc);
             modal.remove();
         };
 
@@ -9356,6 +9637,23 @@ window.emitTokenUpdates = function(currentTokens) {
                     });
                 }
             }
+        } else if (!isLayerShortcutModifierDown && !isInputActive && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            const code = e.code || '';
+            const isDigit = code.startsWith('Digit') || (!code.startsWith('Numpad') && ['1', '2', '3', '4', '5'].includes(e.key));
+            if (isDigit) {
+                const toolMap = {
+                    '1': 'tool-select',
+                    '2': 'tool-measure',
+                    '3': 'tool-shape',
+                    '4': 'tool-ping',
+                    '5': vtt.role === 'GM' ? 'tool-lighting' : null
+                };
+                const toolId = toolMap[e.key];
+                if (toolId) {
+                    e.preventDefault();
+                    document.getElementById(toolId)?.click();
+                }
+            }
         }
 
         if (e.key === 'Escape') {
@@ -9525,11 +9823,12 @@ window.emitTokenUpdates = function(currentTokens) {
     
     function getCanvasMouseCoords(e) {
         // Use viewport rect + explicit pan/zoom math so there's no ambiguity.
-        // (canvasInteraction.getBoundingClientRect().left === viewport.left + panX after CSS transform,
-        //  which would require NOT subtracting panX — using viewport rect makes the intent clear.)
+        // Support MouseEvent, Touch, or plain { clientX, clientY } objects safely.
         const vr = viewport.getBoundingClientRect();
-        const x = (e.clientX - vr.left - panX) / zoom;
-        const y = (e.clientY - vr.top - panY) / zoom;
+        const clientX = e?.clientX !== undefined ? e.clientX : (e?.touches?.[0]?.clientX ?? e?.changedTouches?.[0]?.clientX ?? 0);
+        const clientY = e?.clientY !== undefined ? e.clientY : (e?.touches?.[0]?.clientY ?? e?.changedTouches?.[0]?.clientY ?? 0);
+        const x = (clientX - vr.left - panX) / zoom;
+        const y = (clientY - vr.top - panY) / zoom;
         return { x, y };
     }
 
@@ -9867,9 +10166,10 @@ window.emitTokenUpdates = function(currentTokens) {
         return false;
     }
 
-    function showGmTokenTooltip(tokenId) {
+    function showGmTokenTooltip(tokenId, force = false) {
         const token = tokens[tokenId];
-        if (!token || !isTokenTooltipAllowed(token)) return;
+        if (!token) return;
+        if (!force && !isTokenTooltipAllowed(token)) return;
 
         hideGmTokenTooltip(); // Remove any existing tooltip first
 
@@ -9973,9 +10273,13 @@ window.emitTokenUpdates = function(currentTokens) {
         if (left + tipW > window.innerWidth - 10) {
             left = cx - screenRadius - tipW - 14;
         }
+        if (left < 10) {
+            left = Math.max(10, Math.min(cx - tipW / 2, window.innerWidth - tipW - 10));
+        }
         // Centre vertically on token
         let top = cy - tipH / 2;
-        top = Math.max(10, Math.min(top, window.innerHeight - tipH - 10));
+        const maxTop = window.innerHeight <= 900 ? window.innerHeight - tipH - 74 : window.innerHeight - tipH - 10;
+        top = Math.max(10, Math.min(top, maxTop));
 
         tooltip.style.left = `${Math.round(left)}px`;
         tooltip.style.top  = `${Math.round(top)}px`;
@@ -10024,9 +10328,27 @@ window.emitTokenUpdates = function(currentTokens) {
         
         canvasInteraction.addEventListener('contextmenu', e => {
             e.preventDefault();
-            if (hasPanned || localIsMeasuring || localIsShaping || isTokenMeasuring) return;
+            if (hasPanned) return;
 
             const mouse = getCanvasMouseCoords(e);
+            const token = getTokenAtPoint(mouse);
+            
+            // If right-clicking / long-pressing on a token, cancel any active measurement or drag and allow menu to open
+            if (token) {
+                cancelActiveMeasurement();
+                if (dragTargetId && cancelTokenDrag) {
+                    cancelTokenDrag();
+                }
+                e.stopPropagation();
+                if (selectedTokenIds.has(token.id) && selectedTokenIds.size > 1) {
+                    showMassRollContextMenu(Array.from(selectedTokenIds), e.clientX, e.clientY);
+                } else {
+                    showTokenContextMenu(token.id, e.clientX, e.clientY);
+                }
+                return;
+            }
+
+            if (localIsMeasuring || localIsShaping || isTokenMeasuring) return;
             
             // Note Context Menu
             if (vtt.role === 'GM' && activeLayer === 'notes' && activeTool === 'select') {
@@ -10037,16 +10359,6 @@ window.emitTokenUpdates = function(currentTokens) {
                     showAddNoteContextMenu(mouse.x, mouse.y, e.clientX, e.clientY);
                 }
                 return;
-            }
-
-            const token = getTokenAtPoint(mouse);
-            if (token) {
-                e.stopPropagation();
-                if (selectedTokenIds.has(token.id) && selectedTokenIds.size > 1) {
-                    showMassRollContextMenu(Array.from(selectedTokenIds), e.clientX, e.clientY);
-                } else {
-                    showTokenContextMenu(token.id, e.clientX, e.clientY);
-                }
             }
         });
     }
@@ -10064,7 +10376,7 @@ window.emitTokenUpdates = function(currentTokens) {
         return false;
     }
 
-    function getTokenAtPoint(mouse, requireControl = true, matchLayer = true) {
+    function getTokenAtPoint(mouse, requireControl = true, matchLayer = true, touchRadius = 0) {
         if (!tokens || !mouse) return null;
 
         const tokenEntries = Object.entries(tokens).map(([id, t], idx) => ({ id, token: t, originalIndex: idx }));
@@ -10074,6 +10386,8 @@ window.emitTokenUpdates = function(currentTokens) {
             if (zDiff !== 0) return zDiff;
             return b.originalIndex - a.originalIndex;
         });
+
+        const r = Math.max(0, touchRadius || 0);
 
         for (const { token } of tokenEntries) {
             if (!token) continue;
@@ -10098,11 +10412,11 @@ window.emitTokenUpdates = function(currentTokens) {
                 const dy = mouse.y - cy;
                 const localX = cos * dx - sin * dy + drawW / 2;
                 const localY = sin * dx + cos * dy + drawH / 2;
-                if (localX >= 0 && localX <= drawW && localY >= 0 && localY <= drawH) {
+                if (localX >= -r && localX <= drawW + r && localY >= -r && localY <= drawH + r) {
                     return token;
                 }
             } else {
-                if (mouse.x >= token.x && mouse.x <= token.x + drawW && mouse.y >= token.y && mouse.y <= token.y + drawH) {
+                if (mouse.x >= token.x - r && mouse.x <= token.x + drawW + r && mouse.y >= token.y - r && mouse.y <= token.y + drawH + r) {
                     return token;
                 }
             }
@@ -10277,6 +10591,7 @@ window.emitTokenUpdates = function(currentTokens) {
             const btn = document.getElementById(id);
             if (btn) {
                 btn.addEventListener('click', () => {
+                    if (id === 'tool-lighting' && vtt.role !== 'GM') return;
                     tools.forEach(otherId => {
                         const el = document.getElementById(otherId);
                         if (el) el.classList.remove('active');
@@ -10306,6 +10621,7 @@ window.emitTokenUpdates = function(currentTokens) {
         const btn = document.getElementById('btn-layers');
         if (btn) {
             btn.addEventListener('click', () => {
+                if (vtt.role !== 'GM') return;
                 const panel = document.getElementById('panel-layers-config');
                 if (panel) {
                     const isHidden = panel.classList.contains('vtt-hidden');
@@ -11121,7 +11437,11 @@ window.emitTokenUpdates = function(currentTokens) {
                     } else if (window.VTT?.playerSheet?.openSheet && token.characterId) {
                         window.VTT.playerSheet.openSheet(token.characterId);
                     } else if (window.VTT?.creatureSheet?.openSheet && token.monsterData) {
-                        window.VTT.creatureSheet.openSheet(token.monsterData, token.id, token.characterId);
+                        if (token.isCustomNpc) {
+                            token.monsterData.isCustomNpc = true;
+                            if (token.isGeneric !== undefined) token.monsterData.isGeneric = token.isGeneric;
+                        }
+                        window.VTT.creatureSheet.openSheet(token.monsterData, token.id, token.characterId || null);
                     }
                     return;
                 }
@@ -11340,6 +11660,16 @@ window.emitTokenUpdates = function(currentTokens) {
                                 tokenDragOriginalPositions[id] = { x: selected.x, y: selected.y };
                             }
                         });
+
+                        if (isMobileViewport() && isTokenControlledByPlayer(t)) {
+                            isTokenMeasuring = true;
+                            localIsMeasuring = true;
+                            const { drawW, drawH } = getTokenDrawDimensions(t);
+                            localMeasureStart = { x: t.x + drawW / 2, y: t.y + drawH / 2 };
+                            localMeasureEnd = localMeasureStart;
+                            measureAnchorPoints = [localMeasureStart];
+                        }
+
                         renderAll();
                     } else if (e.button === 0) {
                         boxSelectAdditive = e.ctrlKey || e.shiftKey;
@@ -11877,6 +12207,18 @@ window.emitTokenUpdates = function(currentTokens) {
                         if (broadcast) {
                             vtt.socket.emit('measure:update', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: 'line', color, squareAnchor: anchor, beamWidth: beamW, points });
                         }
+
+                        if (isMobileViewport()) {
+                            const distFeet = calcDistanceFt(Math.hypot(localMeasureEnd.x - localMeasureStart.x, localMeasureEnd.y - localMeasureStart.y));
+                            const dragPill = document.getElementById('vtt-mobile-drag-pill');
+                            if (dragPill) {
+                                const distSpan = document.getElementById('vtt-mobile-drag-dist');
+                                if (distSpan) distSpan.textContent = `${distFeet} ft`;
+                                dragPill.style.left = `${e.clientX || 0}px`;
+                                dragPill.style.top = `${(e.clientY || 0) - 20}px`;
+                                dragPill.classList.remove('vtt-hidden');
+                            }
+                        }
                     }
                     renderAll();
                 }
@@ -12078,6 +12420,8 @@ window.emitTokenUpdates = function(currentTokens) {
                 processTokenAnimReqs(tokens);
                 dragTargetId = null;
                 tokenDragOriginalPositions = {};
+                const dragPill = document.getElementById('vtt-mobile-drag-pill');
+                if (dragPill) dragPill.classList.add('vtt-hidden');
                 if (isTokenMeasuring) {
                     isTokenMeasuring = false;
                     localIsMeasuring = false;
@@ -12447,7 +12791,7 @@ window.emitTokenUpdates = function(currentTokens) {
 
             // Numpad 5: Center view to token / centroid / player character / map center
             // (or Shift+Numpad 5: GM broadcast view to players)
-            if (code === 'Numpad5' || (e.key === '5' && !isCtrl && !e.altKey && !isLayerShortcutModifierDown)) {
+            if (code === 'Numpad5') {
                 e.preventDefault();
                 if (e.shiftKey && vtt.role === 'GM') {
                     broadcastViewToPlayers();
@@ -12470,14 +12814,14 @@ window.emitTokenUpdates = function(currentTokens) {
             }
 
             // Numpad Panning: 4 (left), 8 (up), 6 (right), 2 (down) + diagonals 7, 9, 1, 3
-            const isNumpad4 = code === 'Numpad4' || (e.key === '4' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
-            const isNumpad8 = code === 'Numpad8' || (e.key === '8' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
-            const isNumpad6 = code === 'Numpad6' || (e.key === '6' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
-            const isNumpad2 = code === 'Numpad2' || (e.key === '2' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
-            const isNumpad7 = code === 'Numpad7' || (e.key === '7' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
-            const isNumpad9 = code === 'Numpad9' || (e.key === '9' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
-            const isNumpad1 = code === 'Numpad1' || (e.key === '1' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
-            const isNumpad3 = code === 'Numpad3' || (e.key === '3' && !isCtrl && !e.altKey && !e.shiftKey && !isLayerShortcutModifierDown);
+            const isNumpad4 = code === 'Numpad4';
+            const isNumpad8 = code === 'Numpad8';
+            const isNumpad6 = code === 'Numpad6';
+            const isNumpad2 = code === 'Numpad2';
+            const isNumpad7 = code === 'Numpad7';
+            const isNumpad9 = code === 'Numpad9';
+            const isNumpad1 = code === 'Numpad1';
+            const isNumpad3 = code === 'Numpad3';
 
             if (isNumpad4 || isNumpad8 || isNumpad6 || isNumpad2 || isNumpad7 || isNumpad9 || isNumpad1 || isNumpad3) {
                 e.preventDefault();

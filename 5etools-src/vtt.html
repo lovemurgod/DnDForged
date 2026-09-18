@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ForgeD VTT - Self-Hosted Virtual Tabletop</title>
     
     <!-- Favicons -->
@@ -20,6 +20,7 @@
     
     <!-- ForgeD VTT Custom Premium Stylesheet -->
     <link rel="stylesheet" href="css/vtt.css?v=8">
+    <link rel="stylesheet" href="css/vtt-mobile.css?v=1">
     
     <!-- 3D WebGL Dice Engine Stylesheet -->
     <link rel="stylesheet" href="css/dice-3d.css">
@@ -56,53 +57,60 @@
 
     <!-- Login Overlay Window -->
     <div id="login-overlay" class="vtt-overlay-panel">
-        <div class="login-card glassmorphism animated-fade-in">
-            <div class="login-header">
-                <img src="img/logo.png" alt="ForgeD VTT Logo" class="login-logo-img">
-                <img src="img/TextLogo.png" alt="ForgeD VTT" class="login-title-logo">
-                <p>Self-Hosted Virtual Tabletop System</p>
+        <div class="login-split-container animated-fade-in">
+            <div class="login-hero-pane">
+                <img src="img/logo.png" alt="ForgeD VTT Logo" class="login-hero-logo">
             </div>
             
-            <div class="login-body">
-                <div class="form-group">
-                    <label for="login-username"><i class="fa-solid fa-user"></i> Player Name</label>
-                    <input type="text" id="login-username" placeholder="Enter player name..." value="">
-                </div>
-                
-                <div class="form-group">
-                    <label for="login-role"><i class="fa-solid fa-crown"></i> Tabletop Role</label>
-                    <select id="login-role">
-                        <option value="GM">Game Master (GM)</option>
-                        <option value="Player">Player</option>
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label for="login-campaign"><i class="fa-solid fa-book-bookmark"></i> Select Campaign</label>
-                    <div class="flex-row">
-                        <select id="login-campaign">
-                            <option value="default">Default Campaign</option>
-                        </select>
-                        <button id="btn-create-campaign" class="btn btn-secondary" title="Create New Campaign">
-                            <i class="fa-solid fa-plus"></i>
+            <div class="login-form-pane">
+                <div class="login-card glassmorphism">
+                    <div class="login-header">
+                        <img src="img/TextLogo.png" alt="ForgeD VTT" class="login-title-logo">
+                        <p>Self-Hosted Virtual Tabletop System</p>
+                    </div>
+                    
+                    <div class="login-body">
+                        <div class="form-group">
+                            <label for="login-username"><i class="fa-solid fa-user"></i> Player Name</label>
+                            <input type="text" id="login-username" placeholder="Enter player name..." value="">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-role"><i class="fa-solid fa-crown"></i> Tabletop Role</label>
+                            <select id="login-role">
+                                <option value="GM">Game Master (GM)</option>
+                                <option value="Player">Player</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="login-campaign"><i class="fa-solid fa-book-bookmark"></i> Select Campaign</label>
+                            <div class="flex-row">
+                                <select id="login-campaign">
+                                    <option value="default">Default Campaign</option>
+                                </select>
+                                <button id="btn-create-campaign" class="btn btn-secondary" title="Create New Campaign">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" style="display:flex; align-items:center; gap:8px; margin-top:10px; margin-bottom:14px; user-select:none;">
+                            <input type="checkbox" id="login-remember" style="cursor:pointer;" checked>
+                            <label for="login-remember" style="margin:0; font-size:0.85rem; cursor:pointer; color:var(--color-text-muted, #aaa);">
+                                <i class="fa-solid fa-bookmark" style="margin-right:4px; color:var(--color-gold-base, #d4af37);"></i> Remember my login credentials
+                            </label>
+                        </div>
+
+                        <button id="btn-join-game" class="btn btn-primary btn-block">
+                            <i class="fa-solid fa-door-open"></i> Enter Tabletop
                         </button>
                     </div>
+                    
+                    <div class="login-footer">
+                        <p><a href="https://forgedvtt.com/" target="_blank" class="brand-link">Forge D VTT</a></p>
+                    </div>
                 </div>
-                
-                <div class="form-group" style="display:flex; align-items:center; gap:8px; margin-top:10px; margin-bottom:14px; user-select:none;">
-                    <input type="checkbox" id="login-remember" style="cursor:pointer;" checked>
-                    <label for="login-remember" style="margin:0; font-size:0.85rem; cursor:pointer; color:var(--color-text-muted, #aaa);">
-                        <i class="fa-solid fa-bookmark" style="margin-right:4px; color:var(--color-gold-base, #d4af37);"></i> Remember my login credentials
-                    </label>
-                </div>
-
-                <button id="btn-join-game" class="btn btn-primary btn-block">
-                    <i class="fa-solid fa-door-open"></i> Enter Tabletop
-                </button>
-            </div>
-            
-            <div class="login-footer">
-                <p><a href="https://forgedvtt.com/" target="_blank" class="brand-link">Forge D VTT</a></p>
             </div>
         </div>
     </div>
@@ -141,22 +149,131 @@
     <!-- Main Tabletop Workspace -->
     <div id="vtt-workspace" class="vtt-hidden">
         
+        <!-- Mobile Interactive Elements (Hidden on Desktop by default) -->
+        <div id="vtt-mobile-backdrop"></div>
+        
+        <button id="vtt-mobile-tools-fab" title="Tabletop Tools">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </button>
+
+        <div id="vtt-mobile-tools-menu">
+            <button class="mobile-tool-item active" data-tool="select">
+                <i class="fa-solid fa-mouse-pointer"></i> <span>Select & Move</span>
+            </button>
+            <button class="mobile-tool-item" data-tool="measure">
+                <i class="fa-solid fa-ruler"></i> <span>Measure Distance</span>
+            </button>
+            <button class="mobile-tool-item" data-tool="shape">
+                <i class="fa-solid fa-shapes"></i> <span>AOE Shape</span>
+            </button>
+            <button class="mobile-tool-item" data-tool="ping">
+                <i class="fa-solid fa-bullseye"></i> <span>Ping Map</span>
+            </button>
+            <button class="mobile-tool-item gm-only" data-tool="lighting">
+                <i class="fa-solid fa-lightbulb"></i> <span>Lighting & Walls</span>
+            </button>
+            <button class="mobile-tool-item gm-only" data-tool="layers">
+                <i class="fa-solid fa-layer-group"></i> <span>Switch Layers</span>
+            </button>
+            <div class="mobile-tool-divider"></div>
+            <button class="mobile-tool-item" data-tool="fit">
+                <i class="fa-solid fa-crosshairs"></i> <span>Focus</span>
+            </button>
+            <button class="mobile-tool-item" data-tool="zoom-in">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> <span>Zoom In (+10%)</span>
+            </button>
+            <button class="mobile-tool-item" data-tool="zoom-out">
+                <i class="fa-solid fa-magnifying-glass-minus"></i> <span>Zoom Out (-10%)</span>
+            </button>
+        </div>
+
+        <!-- Mobile Shape Selector Pill (Near FAB when Measure or Shape tool is active) -->
+        <button id="vtt-mobile-shape-pill" class="vtt-hidden" title="Change Shape / Color">
+            <i class="fa-solid fa-ruler" id="vtt-mobile-shape-pill-icon"></i>
+            <span id="vtt-mobile-shape-pill-text">Line</span>
+            <span id="vtt-mobile-shape-pill-color" class="color-dot"></span>
+        </button>
+
+        <!-- Mobile Floating Token Drag Distance Pill -->
+        <div id="vtt-mobile-drag-pill" class="vtt-hidden">
+            <i class="fa-solid fa-person-walking"></i>
+            <span id="vtt-mobile-drag-dist">0 ft</span>
+        </div>
+
+        <!-- Mobile Token Quick Action Bar -->
+        <div id="vtt-mobile-token-actions" class="vtt-hidden">
+            <button id="vtt-mobile-action-sheet" class="vtt-token-action-btn" title="Open Sheet">
+                <i class="fa-solid fa-user-shield"></i> <span>Sheet</span>
+            </button>
+            <button id="vtt-mobile-action-cond" class="vtt-token-action-btn" title="Set Condition">
+                <i class="fa-solid fa-heart-pulse"></i> <span>Status</span>
+            </button>
+            <button id="vtt-mobile-action-edit" class="vtt-token-action-btn" title="Edit Token">
+                <i class="fa-solid fa-pen"></i> <span>Edit</span>
+            </button>
+        </div>
+
+        <!-- Mobile Shape & Color Bottom Sheet Selector -->
+        <div id="vtt-mobile-shape-sheet" class="vtt-mobile-bottom-sheet vtt-hidden">
+            <div class="vtt-sheet-handle"></div>
+            <div class="vtt-sheet-header">
+                <h4><i class="fa-solid fa-shapes text-gradient-gold"></i> Select Shape & Color</h4>
+                <button id="btn-close-shape-sheet" class="vtt-sheet-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="vtt-sheet-body">
+                <div class="vtt-shape-grid">
+                    <button class="vtt-shape-opt active" data-shape="line">
+                        <i class="fa-solid fa-ruler"></i>
+                        <span>Line</span>
+                    </button>
+                    <button class="vtt-shape-opt" data-shape="circle">
+                        <i class="fa-regular fa-circle"></i>
+                        <span>Circle</span>
+                    </button>
+                    <button class="vtt-shape-opt" data-shape="square">
+                        <i class="fa-regular fa-square"></i>
+                        <span>Square</span>
+                    </button>
+                    <button class="vtt-shape-opt" data-shape="cone">
+                        <i class="fa-solid fa-pizza-slice"></i>
+                        <span>Cone</span>
+                    </button>
+                    <button class="vtt-shape-opt" data-shape="beam">
+                        <i class="fa-solid fa-grip-lines-vertical"></i>
+                        <span>Beam</span>
+                    </button>
+                </div>
+                <div class="vtt-color-picker-row">
+                    <span class="vtt-color-label">Theme Color:</span>
+                    <div class="vtt-color-swatches">
+                        <button class="vtt-color-swatch active" data-color="gold" style="background: #eab308;" title="Gold"></button>
+                        <button class="vtt-color-swatch" data-color="red" style="background: #ef4444;" title="Red"></button>
+                        <button class="vtt-color-swatch" data-color="blue" style="background: #3b82f6;" title="Blue"></button>
+                        <button class="vtt-color-swatch" data-color="green" style="background: #22c55e;" title="Green"></button>
+                        <button class="vtt-color-swatch" data-color="purple" style="background: #a855f7;" title="Purple"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <nav id="vtt-mobile-nav"></nav>
+
         <!-- Floating Left Toolbar (GM / Player Controls) -->
         <nav id="vtt-controls" class="glassmorphism">
-            <button id="tool-select" class="control-btn active" title="Select & Move Tokens (S)">
+            <button id="tool-select" class="control-btn active" title="Select & Move Tokens (1)">
                 <i class="fa-solid fa-mouse-pointer"></i>
             </button>
-            <button id="tool-lighting" class="control-btn gm-only" title="Add Lighting Object (L)">
-                <i class="fa-solid fa-lightbulb"></i>
-            </button>
-            <button id="tool-measure" class="control-btn" title="Measure Distance (M)">
+            <button id="tool-measure" class="control-btn" title="Measure Distance (2)">
                 <i class="fa-solid fa-ruler"></i>
             </button>
-            <button id="tool-shape" class="control-btn" title="Create Persistent Shape (C)">
+            <button id="tool-shape" class="control-btn" title="Create Persistent Shape (3)">
                 <i class="fa-solid fa-shapes"></i>
             </button>
-            <button id="tool-ping" class="control-btn" title="Ping Location (P)">
+            <button id="tool-ping" class="control-btn" title="Ping Location (4)">
                 <i class="fa-solid fa-bullseye"></i>
+            </button>
+            <button id="tool-lighting" class="control-btn gm-only" title="Add Lighting Object (5)">
+                <i class="fa-solid fa-lightbulb"></i>
             </button>
             <div class="control-divider gm-only"></div>
             <button id="btn-change-map" class="control-btn gm-only" title="Upload & Change Map Background">
@@ -165,10 +282,28 @@
             <button id="btn-toggle-initiative" class="control-btn gm-only" title="Toggle Initiative Tracker">
                 <i class="fa-solid fa-list-ol"></i>
             </button>
-            <button id="btn-layers" class="control-btn gm-only" title="Switch Layers (L)">
+            <button id="btn-layers" class="control-btn gm-only" title="Switch Layers (Hold ~ + 1-5)">
                 <i class="fa-solid fa-layer-group"></i>
             </button>
             <div style="flex-grow: 1;"></div>
+            
+            <!-- Left Sidebar Vertical Zoom Controls -->
+            <div id="vtt-sidebar-zoom" class="sidebar-zoom-container">
+                <button id="btn-zoom-in" class="control-btn control-btn-sm" title="Zoom In (+10% / Numpad +)">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+                <div class="sidebar-slider-wrapper">
+                    <input type="range" id="vtt-zoom-slider" min="10" max="500" value="100" step="5" title="Drag to Zoom" orient="vertical">
+                </div>
+                <button id="btn-zoom-out" class="control-btn control-btn-sm" title="Zoom Out (-10% / Numpad -)">
+                    <i class="fa-solid fa-minus"></i>
+                </button>
+                <div id="vtt-zoom-badge-container" title="Click to edit zoom percentage">
+                    <span id="vtt-zoom-badge">100%</span>
+                    <input type="number" id="vtt-zoom-input" class="vtt-hidden" min="10" max="500" step="1" value="100">
+                </div>
+            </div>
+
             <div class="control-divider"></div>
             <button id="btn-logout" class="control-btn" title="Exit Game" style="color: var(--color-danger);">
                 <i class="fa-solid fa-right-from-bracket"></i>
@@ -230,11 +365,11 @@
 
         <!-- Map Canvas Viewport Area -->
         <main id="vtt-canvas-viewport">
-            <!-- Secret Map Preview Banner (GM Only) -->
-            <div id="vtt-map-preview-banner" class="glassmorphism vtt-hidden" style="position: absolute; top: 16px; left: 50%; transform: translateX(-50%); z-index: 1000; padding: 8px 16px; border-radius: 30px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--color-border-active); box-shadow: 0 4px 20px rgba(0,0,0,0.5); background: rgba(18, 22, 33, 0.95); animation: fadeIn 0.3s ease;">
-                <span style="font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600; color: var(--color-gold-light); display: flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-eye-slash text-gradient-gold"></i> Secret View: Previewing <span id="banner-previewing-map-name" style="font-weight: 700; color: #fff;">"Initial Map"</span>
-                </span>
+            <!-- GM Map Preview Banner (GM Only) -->
+            <div id="vtt-map-preview-banner" class="glassmorphism vtt-hidden" style="position: absolute; top: 16px; left: 16px; z-index: 1000; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--color-border-active); box-shadow: 0 4px 20px rgba(0,0,0,0.5); background: rgba(18, 22, 33, 0.95); animation: fadeIn 0.3s ease;">
+                <div id="banner-gm-view-badge" class="gm-view-badge" style="cursor: help; display: flex; align-items: center; gap: 6px; font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600; color: var(--color-gold-light);" title="GM View">
+                    <i class="fa-solid fa-eye text-gradient-gold"></i> GM View
+                </div>
                 <span class="coord-divider" style="color: rgba(255,255,255,0.15)">|</span>
                 <button id="btn-banner-push-players" class="btn btn-primary btn-xxs" style="padding: 4px 10px; border-radius: 20px;">
                     <i class="fa-solid fa-bullhorn"></i> Push to Players
@@ -259,20 +394,8 @@
                 <canvas id="vtt-canvas-interaction"></canvas>
             </div>
             
-            <!-- Unified Bottom-Left Canvas HUD (Zoom & Coordinates) -->
+            <!-- Unified Bottom-Left Canvas HUD (Coordinates & Broadcast) -->
             <div id="vtt-coordinates-indicator" class="glassmorphism font-code">
-                <div id="vtt-zoom-badge-container" title="Click to edit zoom percentage">
-                    <span id="vtt-zoom-badge">100%</span>
-                    <input type="number" id="vtt-zoom-input" class="vtt-hidden" min="10" max="500" step="1" value="100">
-                </div>
-                <button id="btn-zoom-out" class="btn btn-icon btn-secondary btn-xxs" title="Zoom Out (-10% / Numpad -)">
-                    <i class="fa-solid fa-minus"></i>
-                </button>
-                <input type="range" id="vtt-zoom-slider" min="10" max="500" value="100" step="5" title="Drag to Zoom">
-                <button id="btn-zoom-in" class="btn btn-icon btn-secondary btn-xxs" title="Zoom In (+10% / Numpad +)">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
-                <span class="coord-divider">|</span>
                 <span class="vtt-coords-display">X: <span id="val-coord-x">0</span> Y: <span id="val-coord-y">0</span></span>
                 <button id="btn-gm-broadcast-view" class="btn btn-icon btn-secondary btn-xxs gm-only" title="Broadcast View to Players (Shift+Numpad 5)">
                     <i class="fa-solid fa-tower-broadcast"></i>
@@ -373,6 +496,8 @@
 
         <!-- Right Panels (Collapsible Tabs Sidebar) -->
         <aside id="vtt-sidebar" class="glassmorphism">
+            <!-- Sidebar Drag-to-Resize Handle -->
+            <div id="vtt-sidebar-resizer" title="Drag to resize sidebar"></div>
             
             <!-- Tab Headers -->
             <div class="sidebar-tabs">
@@ -413,13 +538,13 @@
                     <div class="chat-input-area">
                         <!-- Fast Dice Roller Quick Bar -->
                         <div class="fast-dice-bar">
-                            <button class="fast-dice" data-formula="1d4" title="Roll 1d4"><i class="fa-solid fa-dice-d4"></i> d4</button>
-                            <button class="fast-dice" data-formula="1d6" title="Roll 1d6"><i class="fa-solid fa-dice-d6"></i> d6</button>
-                            <button class="fast-dice" data-formula="1d8" title="Roll 1d8"><i class="fa-solid fa-dice-d8"></i> d8</button>
-                            <button class="fast-dice" data-formula="1d10" title="Roll 1d10"><i class="fa-solid fa-dice"></i> d10</button>
-                            <button class="fast-dice" data-formula="1d12" title="Roll 1d12"><i class="fa-solid fa-dice"></i> d12</button>
-                            <button class="fast-dice" data-formula="1d20" title="Roll 1d20"><i class="fa-solid fa-dice-d20 text-gradient-gold"></i> d20</button>
-                            <button class="fast-dice" data-formula="1d100" title="Roll 1d100"><i class="fa-solid fa-percent"></i> d100</button>
+                            <button class="fast-dice" data-formula="1d4" title="Roll 1d4">d4</button>
+                            <button class="fast-dice" data-formula="1d6" title="Roll 1d6">d6</button>
+                            <button class="fast-dice" data-formula="1d8" title="Roll 1d8">d8</button>
+                            <button class="fast-dice" data-formula="1d10" title="Roll 1d10">d10</button>
+                            <button class="fast-dice" data-formula="1d12" title="Roll 1d12">d12</button>
+                            <button class="fast-dice" data-formula="1d20" title="Roll 1d20">d20</button>
+                            <button class="fast-dice" data-formula="1d100" title="Roll 1d100">d100</button>
                         </div>
                         
                         <div class="roll-mode-toggle-group chat-roll-mode" style="margin-bottom:8px; display:flex;">
@@ -450,24 +575,44 @@
                     <div class="panel-body h-100" style="position: relative; flex: 1; overflow: hidden; display: flex; flex-direction: column;">
                         <!-- Official Tab Content -->
                         <div id="lib-official" class="lib-tab-content active" style="display: flex; flex-direction: column; height: 100%;">
-                            <div class="search-box">
-                                <input type="text" id="library-search" placeholder="Search monsters (e.g., Goblin)...">
-                                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                            </div>
-                            <div class="library-filter-bar" style="display:flex; gap:6px; margin: 4px 0 8px 0; font-size:0.75rem; align-items:center;">
-                                <div style="display:flex; border: 1px solid var(--color-border-subtle); border-radius: 4px; overflow: hidden; flex: 1;">
-                                    <button class="lib-filter-edition active" data-edition="all" style="flex:1; padding:4px 2px; border:none; background:var(--color-bg-tertiary); color:var(--color-gold-light); cursor:pointer; font-size:0.75rem; font-weight:600;">All</button>
-                                    <button class="lib-filter-edition" data-edition="2024" style="flex:1; padding:4px 2px; border:none; background:transparent; color:var(--color-text-secondary); cursor:pointer; font-size:0.75rem;">2024</button>
-                                    <button class="lib-filter-edition" data-edition="2014" style="flex:1; padding:4px 2px; border:none; background:transparent; color:var(--color-text-secondary); cursor:pointer; font-size:0.75rem;">2014</button>
+                            <div class="search-box" style="display: flex; gap: 8px; margin-bottom: 8px;">
+                                <div style="position: relative; flex: 1;">
+                                    <input type="text" id="library-search" placeholder="Search monsters (e.g., Goblin)..." autocomplete="off" style="width: 100%;">
+                                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                    <button id="library-search-clear" type="button" title="Clear search" style="display:none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--color-text-muted); cursor: pointer; padding: 4px; font-size: 0.8rem; z-index: 3;">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
                                 </div>
-                                <button id="lib-filter-spellcaster" class="btn btn-secondary btn-xxs" style="padding:4px 8px; font-size:0.75rem; border-radius:4px;" title="Filter Spellcasters Only">
-                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Spells
+                                <button id="btn-bestiary-filter" class="btn btn-secondary btn-icon" title="Advanced Filters" style="flex-shrink: 0; padding: 0 10px; position: relative;">
+                                    <i class="fa-solid fa-filter"></i>
+                                    <span id="bestiary-filter-badge" style="display: none; position: absolute; top: -5px; right: -5px; background: var(--color-gold-base); color: #000; font-size: 0.65rem; font-weight: 700; border-radius: 50%; width: 16px; height: 16px; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></span>
                                 </button>
                             </div>
                             
-                            <div id="library-monster-list" class="library-items scroll-styled" style="flex: 1; overflow-y: auto;">
-                                <!-- Dynamic monster query lists loaded via bridge -->
-                                <div class="library-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading 5etools library...</div>
+                            <!-- Tabular Bestiary Table Container -->
+                            <div class="bestiary-table-container">
+                                <div class="bestiary-table-header" id="bestiary-table-header">
+                                    <div class="bestiary-th bestiary-th-sort sorted" data-sort="name" title="Sort by Name">
+                                        <span>Name</span>
+                                        <i class="fa-solid fa-arrow-down-a-z sort-icon"></i>
+                                    </div>
+                                    <div class="bestiary-th bestiary-th-center bestiary-th-sort" data-sort="crNumeric" title="Sort by Challenge Rating">
+                                        <span>CR</span>
+                                        <i class="fa-solid fa-sort sort-icon"></i>
+                                    </div>
+                                    <div class="bestiary-th bestiary-th-sort" data-sort="type" title="Sort by Creature Type">
+                                        <span>Type</span>
+                                        <i class="fa-solid fa-sort sort-icon"></i>
+                                    </div>
+                                    <div class="bestiary-th bestiary-th-center bestiary-th-sort" data-sort="source" title="Sort by Sourcebook">
+                                        <span>Source</span>
+                                        <i class="fa-solid fa-sort sort-icon"></i>
+                                    </div>
+                                </div>
+                                <div id="library-monster-list" class="bestiary-table-body scroll-styled">
+                                    <!-- Dynamic monster rows loaded via bridge -->
+                                    <div class="library-loading p-3 text-muted"><i class="fa-solid fa-spinner fa-spin"></i> Loading 5etools library...</div>
+                                </div>
                             </div>
                         </div>
 
@@ -873,6 +1018,17 @@
                             </div>
                         </div>
 
+                        <!-- Interface Layout Mode Settings Card -->
+                        <div class="config-card" id="config-ui-mode-card">
+                            <h4><i class="fa-solid fa-mobile-screen-button text-gradient-gold"></i> Interface Layout</h4>
+                            <p class="config-desc text-muted">Toggle between Desktop and Mobile touch layout. Useful for touchscreen laptops and tablets.</p>
+                            
+                            <div class="config-setting">
+                                <label for="config-toggle-mobile-ui">Mobile UI Layout</label>
+                                <input type="checkbox" id="config-toggle-mobile-ui" style="cursor: pointer; width: 16px; height: 16px;">
+                            </div>
+                        </div>
+
                         <!-- Info Card -->
                         <div class="config-card config-footer-info">
                             <p><strong>ForgeD VTT Engine v1.0.0</strong></p>
@@ -994,12 +1150,12 @@
             <h3 style="margin: 0 0 16px 0; color: var(--color-gold-base);"><i class="fa-solid fa-users"></i> Push Players to Map</h3>
             <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 12px;">Select which players to bring to this map.</p>
             
-            <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--color-border-subtle); border-radius: 6px; padding: 12px; max-height: 300px; overflow-y: auto;" class="scroll-styled">
-                <label style="display: flex; align-items: center; gap: 8px; padding: 6px 8px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 4px; font-weight: bold; color: var(--color-gold-light);">
+            <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--color-border-subtle); border-radius: 8px; padding: 10px; max-height: 300px; overflow-y: auto;" class="scroll-styled">
+                <label class="push-player-all-row" style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 6px; font-weight: 600; color: var(--color-gold-light); user-select: none;">
                     <input type="checkbox" id="push-players-all" checked>
-                    All Players
+                    <span>All Players</span>
                 </label>
-                <div id="push-players-list" style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px;">
+                <div id="push-players-list" style="display: flex; flex-direction: column; gap: 4px;">
                     <!-- Player checkboxes populated dynamically -->
                 </div>
             </div>
@@ -1104,6 +1260,10 @@
             </div>
 
             <h4 style="margin-top: 16px; margin-bottom: 8px; color: var(--color-gold-base); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px;">Dynamic Lighting Settings</h4>
+            <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                <input type="checkbox" id="edit-map-fog-of-war" checked>
+                <label for="edit-map-fog-of-war" style="margin: 0;">Enable Fog of War / Dynamic Lighting</label>
+            </div>
             <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
                 <input type="checkbox" id="edit-map-daylight-mode">
                 <label for="edit-map-daylight-mode" style="margin: 0;">Daylight Mode (Global Illumination)</label>
@@ -1635,7 +1795,7 @@
         const moduleInitPromise = (async () => {
             try {
                 const _v = Date.now(); // cache-bust: forces fresh module load on every page load
-                const [canvasMod, creatureMod, spellMod, playerMod, chatMod, dataMod, handoutsMod, popoutMod] = await Promise.all([
+                const [canvasMod, creatureMod, spellMod, playerMod, chatMod, dataMod, handoutsMod, popoutMod, mobileMod] = await Promise.all([
                     import(`./js/vtt-canvas.js?v=${_v}`),
                     import(`./js/vtt-creature-sheet.js?v=${_v}`),
                     import(`./js/vtt-spell-manager.js?v=${_v}`),
@@ -1643,7 +1803,8 @@
                     import(`./js/vtt-chat.js?v=${_v}`),
                     import(`./js/vtt-data-bridge.js?v=${_v}`),
                     import(`./js/vtt-handouts.js?v=${_v}`),
-                    import(`./js/vtt-sheet-popout.js?v=${_v}`)
+                    import(`./js/vtt-sheet-popout.js?v=${_v}`),
+                    import(`./js/vtt-mobile-adapter.js?v=${_v}`)
                 ]);
                 
                 return {
@@ -1654,7 +1815,8 @@
                     initVttChat: chatMod.initVttChat,
                     initVttDataBridge: dataMod.initVttDataBridge,
                     initVttHandouts: handoutsMod.initVttHandouts,
-                    SheetWindowManager: popoutMod.SheetWindowManager
+                    SheetWindowManager: popoutMod.SheetWindowManager,
+                    initVttMobileAdapter: mobileMod.initVttMobileAdapter
                 };
             } catch (err) {
                 console.error("VTT Module Import Error:", err);
@@ -1665,6 +1827,7 @@
         // Initialize UI handlers immediately
         setupLoginHandlers();
         setupSidebarTabs();
+        setupUniversalModalDismissal();
 
         async function setupLoginHandlers() {
             const btnJoin = document.getElementById('btn-join-game');
@@ -1921,6 +2084,7 @@
                         if (mods.initVttHandouts) window.VTT.handoutsEngine = mods.initVttHandouts(window.VTT);
                         if (mods.initVttDataBridge) window.VTT.dataBridge = mods.initVttDataBridge(window.VTT);
                         if (mods.SheetWindowManager) window.VTT.sheetWindowManager = mods.SheetWindowManager;
+                        if (mods.initVttMobileAdapter) window.VTT.mobileAdapter = mods.initVttMobileAdapter(window.VTT);
 
                         // Setup dock callback: when an external tab asks to dock back into tabletop
                         if (window.SheetWindowManager) {
@@ -2090,6 +2254,152 @@
             });
         }
 
+        function setupUniversalModalDismissal() {
+            function getFormValuesSnapshot(container) {
+                if (!container) return '';
+                const fields = Array.from(container.querySelectorAll('input:not([type="button"]):not([type="submit"]):not([type="reset"]), select, textarea'));
+                return JSON.stringify(fields.map(el => {
+                    if (el.type === 'checkbox' || el.type === 'radio') return el.checked;
+                    return el.value;
+                }));
+            }
+
+            function tryDismissModal(modalEl) {
+                if (!modalEl || modalEl.classList.contains('vtt-hidden')) return false;
+
+                // Check for unsaved changes
+                if (modalEl._initialModalSnapshot !== undefined) {
+                    const currentSnapshot = getFormValuesSnapshot(modalEl);
+                    if (currentSnapshot !== modalEl._initialModalSnapshot) {
+                        if (!confirm("Discard unsaved changes?")) {
+                            return false;
+                        }
+                    }
+                }
+
+                // Attempt clicking a standard cancel/close button if present
+                const closeBtn = modalEl.querySelector('#btn-modal-cancel, #btn-map-modal-cancel, #btn-push-players-cancel, #btn-handout-cancel, #btn-view-handout-close, #btn-edit-map-close, #btn-token-edit-cancel, #btn-close-bestiary-filter, #btn-cancel-gm-password, #modal-cat-cancel, #modal-cat-close, #modal-macro-cancel, #modal-macro-close-btn, #modal-ability-cancel, #btn-import-cat-cancel, #cs-upcast-prompt-cancel, #upcast-prompt-cancel, #delete-prompt-cancel, .btn-close-modal, .vtt-modal-close');
+
+                if (closeBtn) {
+                    closeBtn.click();
+                } else {
+                    modalEl.classList.add('vtt-hidden');
+                }
+
+                modalEl._initialModalSnapshot = undefined;
+                return true;
+            }
+
+            // MutationObserver to automatically record form snapshots when any modal becomes visible
+            const modalObserver = new MutationObserver((mutations) => {
+                for (const mutation of mutations) {
+                    if (mutation.type === 'attributes' && (mutation.attributeName === 'class' || mutation.attributeName === 'style')) {
+                        const target = mutation.target;
+                        if (target && (target.classList.contains('vtt-modal') || target.classList.contains('vtt-overlay-panel') || target.classList.contains('vtt-sheet-submodal'))) {
+                            const isVisible = !target.classList.contains('vtt-hidden') && target.style.display !== 'none';
+                            if (isVisible && target._initialModalSnapshot === undefined) {
+                                setTimeout(() => {
+                                    if (!target.classList.contains('vtt-hidden') && target.style.display !== 'none') {
+                                        target._initialModalSnapshot = getFormValuesSnapshot(target);
+                                    }
+                                }, 50);
+                            } else if (!isVisible) {
+                                target._initialModalSnapshot = undefined;
+                            }
+                        }
+                    }
+                }
+            });
+            modalObserver.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class', 'style'] });
+
+            // Backdrop click handler for desktop & mobile
+            document.addEventListener('click', (e) => {
+                // 1. Direct click on .vtt-modal backdrop
+                if (e.target.classList && e.target.classList.contains('vtt-modal')) {
+                    tryDismissModal(e.target);
+                    return;
+                }
+
+                // 2. Direct click on .vtt-overlay-panel backdrop (excluding #login-overlay)
+                if (e.target.classList && e.target.classList.contains('vtt-overlay-panel') && e.target.id !== 'login-overlay') {
+                    tryDismissModal(e.target);
+                    return;
+                }
+
+                // 3. Direct click on .vtt-sheet-submodal-overlay
+                if (e.target.classList && e.target.classList.contains('vtt-sheet-submodal-overlay')) {
+                    const overlayId = e.target.id || '';
+                    let modalId = overlayId.replace('-overlay', '-modal');
+                    if (overlayId === 'modal-cs-upcast-overlay') modalId = 'modal-cs-upcast-prompt';
+                    let submodal = document.getElementById(modalId);
+                    if (!submodal && e.target.nextElementSibling && e.target.nextElementSibling.classList.contains('vtt-sheet-submodal')) {
+                        submodal = e.target.nextElementSibling;
+                    }
+                    if (!submodal) {
+                        submodal = document.querySelector('.vtt-sheet-submodal:not(.vtt-hidden)');
+                    }
+                    if (submodal) {
+                        if (tryDismissModal(submodal)) {
+                            e.target.classList.add('vtt-hidden');
+                        }
+                    } else {
+                        e.target.classList.add('vtt-hidden');
+                    }
+                    return;
+                }
+            });
+
+            // Universal Escape Key handler
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' || e.keyCode === 27) {
+                    // 1. High priority submodals
+                    const highSubmodals = Array.from(document.querySelectorAll('.vtt-sheet-submodal-high:not(.vtt-hidden)'));
+                    if (highSubmodals.length > 0) {
+                        const topModal = highSubmodals[highSubmodals.length - 1];
+                        if (tryDismissModal(topModal)) {
+                            const overlay = document.querySelector('.vtt-sheet-submodal-overlay.vtt-sheet-submodal-high:not(.vtt-hidden)');
+                            if (overlay) overlay.classList.add('vtt-hidden');
+                        }
+                        e.stopPropagation();
+                        return;
+                    }
+
+                    // 2. Standard submodals
+                    const standardSubmodals = Array.from(document.querySelectorAll('.vtt-sheet-submodal:not(.vtt-hidden)'));
+                    if (standardSubmodals.length > 0) {
+                        const topModal = standardSubmodals[standardSubmodals.length - 1];
+                        if (tryDismissModal(topModal)) {
+                            const overlay = document.querySelector('.vtt-sheet-submodal-overlay:not(.vtt-hidden)');
+                            if (overlay) overlay.classList.add('vtt-hidden');
+                        }
+                        e.stopPropagation();
+                        return;
+                    }
+
+                    // 3. Modals (.vtt-modal:not(.vtt-hidden))
+                    const openModals = Array.from(document.querySelectorAll('.vtt-modal:not(.vtt-hidden)'));
+                    if (openModals.length > 0) {
+                        const topModal = openModals[openModals.length - 1];
+                        if (tryDismissModal(topModal)) {
+                            e.stopPropagation();
+                        }
+                        return;
+                    }
+
+                    // 4. Overlay panels (.vtt-overlay-panel:not(.vtt-hidden):not(#login-overlay))
+                    const openOverlayPanels = Array.from(document.querySelectorAll('.vtt-overlay-panel:not(.vtt-hidden)'))
+                        .filter(p => p.id !== 'login-overlay');
+                    if (openOverlayPanels.length > 0) {
+                        const topModal = openOverlayPanels[openOverlayPanels.length - 1];
+                        if (tryDismissModal(topModal)) {
+                            e.stopPropagation();
+                        }
+                        return;
+                    }
+                }
+            });
+        }
+
         // Allowlist Global Handlers
         window.addAllowlistUser = function() {
             const ipt = document.getElementById('config-allowlist-input');
@@ -2113,5 +2423,132 @@
             }
         };
     </script>
+
+    <!-- Bestiary Advanced Filter Modal -->
+    <div id="modal-bestiary-filter" class="vtt-overlay-panel vtt-hidden" style="z-index: 10005;">
+        <div class="login-card glassmorphism animated-fade-in" style="width: 600px; max-width: 90vw; max-height: 85vh; display: flex; flex-direction: column; text-align: left;">
+            <div class="login-header" style="margin-bottom: 12px; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="login-title" style="font-size: 1.4rem; margin: 0;">
+                    <span class="title-gold"><i class="fa-solid fa-filter"></i> Advanced Filters</span>
+                </h2>
+                <button type="button" class="btn-close-modal" id="btn-close-bestiary-filter" style="background: none; border: none; color: var(--color-text-secondary); font-size: 1.2rem; cursor: pointer;"><i class="fa-solid fa-times"></i></button>
+            </div>
+            
+            <div class="login-body scroll-styled" style="flex: 1; overflow-y: auto; padding-right: 8px;">
+                
+                <!-- General Section -->
+                <div class="filter-section-header" style="cursor:pointer; display:flex; justify-content:space-between; border-bottom:1px solid var(--color-border-subtle); padding-bottom:4px; margin-top:8px;" onclick="document.getElementById('filter-section-general').classList.toggle('vtt-hidden')">
+                    <span style="font-weight:bold; color:var(--color-gold-light);">General</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div id="filter-section-general" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+                    <div style="display:flex; gap:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Challenge Rating (CR)</label>
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <select id="filter-cr-min"><option value="">Min</option></select>
+                                <span>to</span>
+                                <select id="filter-cr-max"><option value="">Max</option></select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Sourcebook</label>
+                            <div id="filter-source-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding-right: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Creature Type</label>
+                            <div id="filter-type-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding-right: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Size</label>
+                            <div id="filter-size-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding-right: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Environment</label>
+                            <div id="filter-env-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding-right: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Alignment</label>
+                            <div id="filter-alignment-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; padding-right: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Defenses Section -->
+                <div class="filter-section-header" style="cursor:pointer; display:flex; justify-content:space-between; border-bottom:1px solid var(--color-border-subtle); padding-bottom:4px; margin-top:16px;" onclick="document.getElementById('filter-section-defenses').classList.toggle('vtt-hidden')">
+                    <span style="font-weight:bold; color:var(--color-gold-light);">Defenses</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div id="filter-section-defenses" class="vtt-hidden" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+                    <div style="display:flex; gap:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label style="display:flex; justify-content:space-between;">Resistances <button class="btn btn-xxs filter-logic-toggle" data-category="resistances" data-logic="OR" style="font-size:0.65rem;">OR</button></label>
+                            <div id="filter-resistances-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label style="display:flex; justify-content:space-between;">Immunities <button class="btn btn-xxs filter-logic-toggle" data-category="immunities" data-logic="OR" style="font-size:0.65rem;">OR</button></label>
+                            <div id="filter-immunities-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label style="display:flex; justify-content:space-between;">Vulnerabilities <button class="btn btn-xxs filter-logic-toggle" data-category="vulnerabilities" data-logic="OR" style="font-size:0.65rem;">OR</button></label>
+                            <div id="filter-vulnerabilities-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Offense Section -->
+                <div class="filter-section-header" style="cursor:pointer; display:flex; justify-content:space-between; border-bottom:1px solid var(--color-border-subtle); padding-bottom:4px; margin-top:16px;" onclick="document.getElementById('filter-section-offense').classList.toggle('vtt-hidden')">
+                    <span style="font-weight:bold; color:var(--color-gold-light);">Offense</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div id="filter-section-offense" class="vtt-hidden" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+                    <div style="display:flex; gap:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label style="display:flex; justify-content:space-between;">Damage Types Dealt <button class="btn btn-xxs filter-logic-toggle" data-category="damageTypes" data-logic="OR" style="font-size:0.65rem;">OR</button></label>
+                            <div id="filter-damage-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label style="display:flex; justify-content:space-between;">Saving Throws Imposed <button class="btn btn-xxs filter-logic-toggle" data-category="saveTypes" data-logic="OR" style="font-size:0.65rem;">OR</button></label>
+                            <div id="filter-saves-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Senses & Movement Section -->
+                <div class="filter-section-header" style="cursor:pointer; display:flex; justify-content:space-between; border-bottom:1px solid var(--color-border-subtle); padding-bottom:4px; margin-top:16px;" onclick="document.getElementById('filter-section-senses').classList.toggle('vtt-hidden')">
+                    <span style="font-weight:bold; color:var(--color-gold-light);">Senses, Languages & Movement</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div id="filter-section-senses" class="vtt-hidden" style="display:flex; flex-direction:column; gap:12px; margin-top:8px;">
+                    <div style="display:flex; gap:12px;">
+                        <div class="form-group" style="flex:1;">
+                            <label style="display:flex; justify-content:space-between;">Senses <button class="btn btn-xxs filter-logic-toggle" data-category="senses" data-logic="OR" style="font-size:0.65rem;">OR</button></label>
+                            <div id="filter-senses-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label style="display:flex; justify-content:space-between;">Languages <button class="btn btn-xxs filter-logic-toggle" data-category="languages" data-logic="OR" style="font-size:0.65rem;">OR</button></label>
+                            <div id="filter-languages-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label style="display:flex; justify-content:space-between;">Movement <button class="btn btn-xxs filter-logic-toggle" data-category="movementTypes" data-logic="OR" style="font-size:0.65rem;">OR</button></label>
+                            <div id="filter-movement-container" class="scroll-styled" style="max-height: 100px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 4px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px; flex-shrink: 0;">
+                <button id="btn-clear-filters" class="btn btn-secondary" style="flex: 1;">Clear All</button>
+                <button id="btn-apply-filters" class="btn btn-primary" style="flex: 2;">
+                    <i class="fa-solid fa-check"></i> Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,0 +1,1684 @@
+[
+  {
+    "id": "class_psion_xua2025psionupdate",
+    "name": "Psion",
+    "source": "XUA2025PsionUpdate",
+    "page": 1,
+    "hitDie": "d6",
+    "primaryAbility": "0",
+    "features": [
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_power_1",
+        "name": "Psionic Power",
+        "source": "XUA2025PsionUpdate",
+        "page": 2,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You harbor a wellspring of psionic energy within yourself. This energy is represented by your Psionic Energy Dice. Your Psion level determines the die size and number of Psionic Energy Dice you have, as shown in the Energy Dice column of the Psion Features table.</p>\n<p>Your Psionic Energy Dice are used to enhance or fuel certain Psion features. You start with two such features: Telekinetic Propel|Psion|XUA2025PsionUpdate|1|XUA2025PsionUpdate and Telepathic Connection|Psion|XUA2025PsionUpdate|1|XUA2025PsionUpdate, each of which is detailed below. Some of your powers expend the Psionic Energy Dice, as specified in a power's description, and you can't use a power if it requires you to use a die when all your Psionic Energy Dice are expended.</p>\n<p>You regain one expended Psionic Energy Die when you finish a Short Rest|XPHB, and you regain all of them when you finish a Long Rest|XPHB.</p>\n<p>Some features that use Psionic Energy Dice require your target to make a saving throw. The save DC equals the spell save DC from this class's Spellcasting feature.</p>\n<div class=\"compendium-subentry\"></div>",
+        "rawEntries": [
+          "You harbor a wellspring of psionic energy within yourself. This energy is represented by your Psionic Energy Dice. Your Psion level determines the die size and number of Psionic Energy Dice you have, as shown in the Energy Dice column of the Psion Features table.",
+          "Your Psionic Energy Dice are used to enhance or fuel certain Psion features. You start with two such features: {@classFeature Telekinetic Propel|Psion|XUA2025PsionUpdate|1|XUA2025PsionUpdate} and {@classFeature Telepathic Connection|Psion|XUA2025PsionUpdate|1|XUA2025PsionUpdate}, each of which is detailed below. Some of your powers expend the Psionic Energy Dice, as specified in a power's description, and you can't use a power if it requires you to use a die when all your Psionic Energy Dice are expended.",
+          "You regain one expended Psionic Energy Die when you finish a {@variantrule Short Rest|XPHB}, and you regain all of them when you finish a {@variantrule Long Rest|XPHB}.",
+          "Some features that use Psionic Energy Dice require your target to make a saving throw. The save DC equals the spell save DC from this class's Spellcasting feature.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "refClassFeature",
+                "classFeature": "Telekinetic Propel|Psion|XUA2025PsionUpdate|1|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refClassFeature",
+                "classFeature": "Telepathic Connection|Psion|XUA2025PsionUpdate|1|XUA2025PsionUpdate"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_spellcasting_1",
+        "name": "Spellcasting",
+        "source": "XUA2025PsionUpdate",
+        "page": 2,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have learned how to channel magical energy using the power of your mind. See the Player's Handbook|XPHB for the rules on spellcasting. The information below details how you use those rules with Psion spells, which appear in the Psion spell list later in the class's description.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Cantrips.</strong> <p>You know two Psion cantrips of your choice. Minor Illusion and Telekinetic Fling are recommended.</p>\n<p>Whenever you gain a Psion level, you can replace one of your cantrips from this feature with another Psion cantrip of your choice.</p>\n<p>When you reach Psion levels 4 and 10, you learn another Psion cantrip of your choice, as shown in the Cantrips column of the Psion Features table.</p></div>\n<div class=\"compendium-subentry\"><strong>Spell Slots.</strong> <p>The Psion Features table shows how many spell slots you have to cast your level 1+ spells. You regain all expended spell slots when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Prepared Spells of Level 1+.</strong> <p>You prepare the list of level 1+ spells that are available for you to cast with this feature. To start, choose four level 1 Psion spells. Charm Person, Command, Dissonant Whispers, and Mage Armor are recommended.</p>\n<p>The number of spells on your list increases as you gain Psion levels, as shown in the Prepared Spells column of the Psion Features table. Whenever that number increases, choose additional Psion spells until the number of spells on your list matches the number in the table. The chosen spells must be of a level for which you have spell slots. For example, if you're a level 3 Psion, your list of prepared spells can include six Psion spells of levels 1 and 2 in any combination.</p>\n<p>If another Psion feature gives you spells that you always have prepared, those don't count against the number of spells you can prepare with this feature, but those spells otherwise count as Psion spells for you.</p></div>\n<div class=\"compendium-subentry\"><strong>Changing Your Prepared Spells.</strong> <p>Whenever you gain a Psion level, you can replace one spell on your list with another Psion spell of an eligible level.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Ability.</strong> <p>Intelligence is your spellcasting ability for your Psion spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Psionic Spellcasting.</strong> <p>When you cast a Psion spell, that spell doesn't require a Verbal or Material component, even if the spell includes \"V\" or \"M\" in its \"Components\" entry, except Material components that are consumed by the spell or have a cost specified in the spell.</p></div></div>",
+        "rawEntries": [
+          "You have learned how to channel magical energy using the power of your mind. See the {@book Player's Handbook|XPHB} for the rules on spellcasting. The information below details how you use those rules with Psion spells, which appear in the {@table Psion spell list|XUA2025PsionUpdate} later in the class's description.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Cantrips",
+                "page": 2,
+                "entries": [
+                  "You know two Psion cantrips of your choice. {@spell Minor Illusion|XPHB} and {@spell Telekinetic Fling|XUA2025PsionUpdate} are recommended.",
+                  "Whenever you gain a Psion level, you can replace one of your cantrips from this feature with another Psion cantrip of your choice.",
+                  "When you reach Psion levels 4 and 10, you learn another Psion cantrip of your choice, as shown in the Cantrips column of the Psion Features table."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spell Slots",
+                "page": 2,
+                "entries": [
+                  "The Psion Features table shows how many spell slots you have to cast your level 1+ spells. You regain all expended spell slots when you finish a {@variantrule Long Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Prepared Spells of Level 1+",
+                "page": 2,
+                "entries": [
+                  "You prepare the list of level 1+ spells that are available for you to cast with this feature. To start, choose four level 1 Psion spells. {@spell Charm Person|XPHB}, {@spell Command|XPHB}, {@spell Dissonant Whispers|XPHB}, and {@spell Mage Armor|XPHB} are recommended.",
+                  "The number of spells on your list increases as you gain Psion levels, as shown in the Prepared Spells column of the Psion Features table. Whenever that number increases, choose additional Psion spells until the number of spells on your list matches the number in the table. The chosen spells must be of a level for which you have spell slots. For example, if you're a level 3 Psion, your list of prepared spells can include six Psion spells of levels 1 and 2 in any combination.",
+                  "If another Psion feature gives you spells that you always have prepared, those don't count against the number of spells you can prepare with this feature, but those spells otherwise count as Psion spells for you."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Changing Your Prepared Spells",
+                "page": 3,
+                "entries": [
+                  "Whenever you gain a Psion level, you can replace one spell on your list with another Psion spell of an eligible level."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spellcasting Ability",
+                "page": 3,
+                "entries": [
+                  "Intelligence is your spellcasting ability for your Psion spells."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Psionic Spellcasting",
+                "page": 3,
+                "entries": [
+                  "When you cast a Psion spell, that spell doesn't require a Verbal or Material component, even if the spell includes \"V\" or \"M\" in its \"Components\" entry, except Material components that are consumed by the spell or have a cost specified in the spell."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_subtle_telekinesis_1",
+        "name": "Subtle Telekinesis",
+        "source": "XUA2025PsionUpdate",
+        "page": 3,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You know the Mage Hand cantrip. You can cast it without Somatic components, and you can make the spectral hand Invisible when you cast it.</p>",
+        "rawEntries": [
+          "You know the {@spell Mage Hand|XPHB} cantrip. You can cast it without Somatic components, and you can make the spectral hand {@condition Invisible} when you cast it."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_telekinetic_propel_1",
+        "name": "Telekinetic Propel",
+        "source": "XUA2025PsionUpdate",
+        "page": 3,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>As a Bonus Action|XPHB, choose one Large or smaller creature other than you that you can see within 30 feet of yourself. When you do so, the target must succeed on a Strength saving throw or be moved 5 feet straight toward you or straight away from you. Alternatively, you can roll one Psionic Energy Die when you take this Bonus Action|XPHB, and the distance moved is equal to 5 times the number rolled. The die is expended only if the target fails the saving throw.</p>",
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, choose one Large or smaller creature other than you that you can see within 30 feet of yourself. When you do so, the target must succeed on a Strength saving throw or be moved 5 feet straight toward you or straight away from you. Alternatively, you can roll one Psionic Energy Die when you take this {@variantrule Bonus Action|XPHB}, and the distance moved is equal to 5 times the number rolled. The die is expended only if the target fails the saving throw."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_telepathic_connection_1",
+        "name": "Telepathic Connection",
+        "source": "XUA2025PsionUpdate",
+        "page": 3,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have telepathy with a range of 30 feet. As a Bonus Action|XPHB, you can roll one Psionic Energy Die. For the next hour, the range of your telepathy increases by a number of feet equal to 10 times the number rolled. The first time you use this Bonus Action|XPHB after each Long Rest|XPHB, you don't expend the Psionic Energy Die. All other times you use this feature, you expend the die.</p>",
+        "rawEntries": [
+          "You have telepathy with a range of 30 feet. As a {@variantrule Bonus Action|XPHB}, you can roll one Psionic Energy Die. For the next hour, the range of your telepathy increases by a number of feet equal to 10 times the number rolled. The first time you use this {@variantrule Bonus Action|XPHB} after each {@variantrule Long Rest|XPHB}, you don't expend the Psionic Energy Die. All other times you use this feature, you expend the die."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_attack_mode_2",
+        "name": "Attack Mode",
+        "source": "XUA2025PsionUpdate",
+        "page": 3,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Damage from your weapon attacks, Psion spells, and Psion features ignores Resistance|XPHB to Psychic damage. In addition, when you roll damage for a spell, you can expend one Psionic Energy Die to reroll a number of damage dice up to your Intelligence modifier (minimum of one), and you must use the new rolls.</p>",
+        "rawEntries": [
+          "Damage from your weapon attacks, Psion spells, and Psion features ignores {@variantrule Resistance|XPHB} to Psychic damage. In addition, when you roll damage for a spell, you can expend one Psionic Energy Die to reroll a number of damage dice up to your Intelligence modifier (minimum of one), and you must use the new rolls."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_defense_mode_2",
+        "name": "Defense Mode",
+        "source": "XUA2025PsionUpdate",
+        "page": 3,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have Resistance|XPHB to Psychic damage. In addition, when you fail an Intelligence, Wisdom, or Charisma saving throw, you can take a Reaction|XPHB to expend one Psionic Energy Die; roll the Psionic Energy Die and add the number rolled to the saving throw, potentially turning a failure into a success.</p>",
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Psychic damage. In addition, when you fail an Intelligence, Wisdom, or Charisma saving throw, you can take a {@variantrule Reaction|XPHB} to expend one Psionic Energy Die; roll the Psionic Energy Die and add the number rolled to the saving throw, potentially turning a failure into a success."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_discipline_2",
+        "name": "Psionic Discipline",
+        "source": "XUA2025PsionUpdate",
+        "page": 3,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You learn further psionic techniques that are fueled by your Psionic Energy Dice. You gain two disciplines of your choice, such as Expanded Awareness|XUA2025PsionUpdate and Id Insinuation|XUA2025PsionUpdate. Disciplines are described in the \"Psionic Discipline Options\" section later in this class's description.</p>\n<p>You can use only one Discipline each turn and only once per turn unless otherwise noted in one of those options.</p>\n<p>Whenever you gain a Psion level, you can replace one of your Psionic Discipline options with one you don't know. You gain one additional option at Psion levels 5, 10, 13, and 17.</p>",
+        "rawEntries": [
+          "You learn further psionic techniques that are fueled by your Psionic Energy Dice. You gain two disciplines of your choice, such as {@optfeature Expanded Awareness|XUA2025PsionUpdate} and {@optfeature Id Insinuation|XUA2025PsionUpdate}. Disciplines are described in the \"Psionic Discipline Options\" section later in this class's description.",
+          "You can use only one Discipline each turn and only once per turn unless otherwise noted in one of those options.",
+          "Whenever you gain a Psion level, you can replace one of your Psionic Discipline options with one you don't know. You gain one additional option at Psion levels 5, 10, 13, and 17."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_discipline_options_2",
+        "name": "Psionic Discipline Options",
+        "source": "XUA2025PsionUpdate",
+        "page": 3,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Psionic Discipline options appear in alphabetical order.</p>",
+        "rawEntries": [
+          "Psionic Discipline options appear in alphabetical order.",
+          {
+            "type": "options",
+            "count": 2,
+            "entries": [
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Biofeedback|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Bolstering Precognition|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Destructive Thoughts|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Devilish Tongue|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Expanded Awareness|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Id Insinuation|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Inerrant Aim|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Observant Mind|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Psionic Backlash|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Psionic Guards|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Sharpened Mind|XUA2025PsionUpdate"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psion_subclass_3",
+        "name": "Psion Subclass",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a Psion subclass of your choice. The Psion, Psion, and Psion subclasses are detailed after this class's description. A subclass is a specialization that grants you features at certain Psion levels. For the rest of your career, you gain each of your subclass's features that are of your Psion level or lower.</p>",
+        "rawEntries": [
+          "You gain a Psion subclass of your choice. The {@class Psion|XUA2025PsionUpdate|Metamorph|Metamorph|XUA2025PsionUpdate}, {@class Psion|XUA2025PsionUpdate|Psykinetic|Psykinetic|XUA2025PsionUpdate}, and {@class Psion|XUA2025PsionUpdate|Telepath|Telepath|XUA2025PsionUpdate} subclasses are detailed after this class's description. A subclass is a specialization that grants you features at certain Psion levels. For the rest of your career, you gain each of your subclass's features that are of your Psion level or lower."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_ability_score_improvement_4",
+        "name": "Ability Score Improvement",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 4,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify. You gain this feature again at Psion levels 8, 12, and 16.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another {@5etools feat|feats.html} of your choice for which you qualify. You gain this feature again at Psion levels 8, 12, and 16."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_discipline_5",
+        "name": "Psionic Discipline",
+        "source": "XUA2025PsionUpdate",
+        "page": 2,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 5th level, you learn an additional Psionic Discipline.</p>",
+        "rawEntries": [
+          "At 5th level, you learn an additional Psionic Discipline."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_restoration_5",
+        "name": "Psionic Restoration",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can perform a meditation that focuses the mind for 1 minute. At the end of it, you regain expended Psionic Energy Dice. Once you use this feature, you can't do so again until you finish a Long Rest|XPHB.</p>",
+        "rawEntries": [
+          "You can perform a meditation that focuses the mind for 1 minute. At the end of it, you regain expended Psionic Energy Dice. Once you use this feature, you can't do so again until you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_subclass_feature_6",
+        "name": "Subclass Feature",
+        "source": "XUA2025PsionUpdate",
+        "page": 2,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 6,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Psion Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Psion Subclass."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_surge_7",
+        "name": "Psionic Surge",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 7,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can push your psionic powers using your life force. After you roll one or more Psionic Energy Dice, you can expend one of your Hit Point Dice and treat any roll of 1, 2, or 3 on those Psionic Energy Dice as a 4.</p>",
+        "rawEntries": [
+          "You can push your psionic powers using your life force. After you roll one or more Psionic Energy Dice, you can expend one of your Hit Point Dice and treat any roll of 1, 2, or 3 on those Psionic Energy Dice as a 4."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_ability_score_improvement_8",
+        "name": "Ability Score Improvement",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 8,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another {@5etools feat|feats.html} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_discipline_10",
+        "name": "Psionic Discipline",
+        "source": "XUA2025PsionUpdate",
+        "page": 2,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 10th level, you learn an additional Psionic Discipline.</p>",
+        "rawEntries": [
+          "At 10th level, you learn an additional Psionic Discipline."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_subclass_feature_10",
+        "name": "Subclass Feature",
+        "source": "XUA2025PsionUpdate",
+        "page": 2,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Psion Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Psion Subclass."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_ability_score_improvement_12",
+        "name": "Ability Score Improvement",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 12,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another {@5etools feat|feats.html} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_discipline_13",
+        "name": "Psionic Discipline",
+        "source": "XUA2025PsionUpdate",
+        "page": 2,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 13,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 13th level, you learn an additional Psionic Discipline.</p>",
+        "rawEntries": [
+          "At 13th level, you learn an additional Psionic Discipline."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_subclass_feature_14",
+        "name": "Subclass Feature",
+        "source": "XUA2025PsionUpdate",
+        "page": 2,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 14,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Psion Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Psion Subclass."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_ability_score_improvement_16",
+        "name": "Ability Score Improvement",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 16,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another {@5etools feat|feats.html} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_discipline_17",
+        "name": "Psionic Discipline",
+        "source": "XUA2025PsionUpdate",
+        "page": 2,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 17,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 17th level, you learn an additional Psionic Discipline.</p>",
+        "rawEntries": [
+          "At 17th level, you learn an additional Psionic Discipline."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_psionic_reserves_18",
+        "name": "Psionic Reserves",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 18,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you roll Initiative|XPHB, you regain expended uses of Psionic Energy Dice until you have four if you have fewer than that.</p>",
+        "rawEntries": [
+          "When you roll {@variantrule Initiative|XPHB}, you regain expended uses of Psionic Energy Dice until you have four if you have fewer than that."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_epic_boon_19",
+        "name": "Epic Boon",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 19,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain an Epic Boon feat|feats|category=EB or another feat of your choice for which you qualify. Boon of Energy Resistance is recommended.</p>",
+        "rawEntries": [
+          "You gain an {@filter Epic Boon feat|feats|category=EB} or another {@5etools feat|feats.html} of your choice for which you qualify. {@feat Boon of Energy Resistance|XPHB} is recommended."
+        ]
+      },
+      {
+        "id": "cf_psion_xua2025psionupdate_enkindled_life_force_20",
+        "name": "Enkindled Life Force",
+        "source": "XUA2025PsionUpdate",
+        "page": 4,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "level": 20,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You burn your life force to achieve greater psionics. Once per turn, when you roll one or more Psionic Energy Dice for a Psion feature or Psionic Discipline, you can expend one or two of your Hit Point Dice|XPHB. For each Hit Points|XPHB|Hit Point Die expended, roll an additional Psionic Energy Die and add the numbers rolled to the total. This roll does not expend the Psionic Energy Die.</p>",
+        "rawEntries": [
+          "You burn your life force to achieve greater psionics. Once per turn, when you roll one or more Psionic Energy Dice for a Psion feature or Psionic Discipline, you can expend one or two of your {@variantrule Hit Point Dice|XPHB}. For each {@variantrule Hit Points|XPHB|Hit Point} Die expended, roll an additional Psionic Energy Die and add the numbers rolled to the total. This roll does not expend the Psionic Energy Die."
+        ]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "subclass_psion_metamorph_xua2025psionupdate",
+        "name": "Metamorph",
+        "shortName": "Metamorph",
+        "source": "XUA2025PsionUpdate",
+        "page": 7,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "features": [
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_bone_blade_3",
+            "name": "Bone Blade",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d8",
+            "formulaConfig": {
+              "baseDice": "1d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>A blade made of bone springs from your forearm or extends from your hand. The blade counts as a Simple Melee weapon with F|XPHB|Finesse, and it deals 1d8 Piercing damage on a hit. You have Advantage|XPHB on the attack roll you make with the blade if at least one of your allies is within 5 feet of the target and the ally doesn't have the Incapacitated condition.</p>",
+            "rawEntries": [
+              "A blade made of bone springs from your forearm or extends from your hand. The blade counts as a Simple Melee weapon with {@itemProperty F|XPHB|Finesse}, and it deals {@damage 1d8} Piercing damage on a hit. You have {@variantrule Advantage|XPHB} on the attack roll you make with the blade if at least one of your allies is within 5 feet of the target and the ally doesn't have the Incapacitated condition."
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_flesh_maul_3",
+            "name": "Flesh Maul",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d10",
+            "formulaConfig": {
+              "baseDice": "1d10",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your fist and forearm coalesce into a hardened mass of flesh and bone. The maul counts as a Simple Melee weapon and deals 1d10 Bludgeoning damage on a hit. A creature hit by the maul has Disadvantage|XPHB on the next Strength or Constitution saving throw it makes before the start of its next turn.</p>",
+            "rawEntries": [
+              "Your fist and forearm coalesce into a hardened mass of flesh and bone. The maul counts as a Simple Melee weapon and deals {@damage 1d10} Bludgeoning damage on a hit. A creature hit by the maul has {@variantrule Disadvantage|XPHB} on the next Strength or Constitution saving throw it makes before the start of its next turn."
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_metamorph_3",
+            "name": "Metamorph",
+            "source": "XUA2025PsionUpdate",
+            "page": 7,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your mastery of psionic powers turns inward. Your own flesh becomes like clay to you, and you mold it into the perfect vessel for your psionic powers. Experience in manipulating your life energy also enables you to adjust the life force of friends and foes.</p>",
+            "rawEntries": [
+              "Your mastery of psionic powers turns inward. Your own flesh becomes like clay to you, and you mold it into the perfect vessel for your psionic powers. Experience in manipulating your life energy also enables you to adjust the life force of friends and foes.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Metamorph Spells|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Organic Weapons|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Mutable Form|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_metamorph_spells_3",
+            "name": "Metamorph Spells",
+            "source": "XUA2025PsionUpdate",
+            "page": 7,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you reach a Psion level specified in the Metamorph Spells table, you thereafter always have the listed spells prepared.</p>\n<div class=\"compendium-subentry\"><strong>Metamorph Spells.</strong> </div>",
+            "rawEntries": [
+              "When you reach a Psion level specified in the {@table Metamorph Spells|XUA2025PsionUpdate} table, you thereafter always have the listed spells prepared.",
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2025PsionUpdate",
+                "name": "Metamorph Spells",
+                "page": 7
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_mutable_form_3",
+            "name": "Mutable Form",
+            "source": "XUA2025PsionUpdate",
+            "page": 7,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>As a Bonus Action|XPHB, you can expend one Psionic Energy Die to psionically stretch your limbs for 1 minute. Roll the expended Psionic Energy Die and gain a number of Temporary Hit Points|XPHB equal to the number rolled plus your Intelligence modifier (minimum of 1 Temporary Hit Points|XPHB|Temporary Hit Point). In addition, you gain the following benefits while this feature is active.</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Reach.</strong> <p>Your reach increases by 5 feet.</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed.</strong> <p>Your Speed|XPHB increases by 5 feet.</p></div></li><li><div class=\"compendium-subentry\"><strong>Touch.</strong> <p>When you cast a spell that has a range of Touch and a casting time of an action, you can make the spell's range 10 feet.</p></div></li></ul>",
+            "rawEntries": [
+              "As a {@variantrule Bonus Action|XPHB}, you can expend one Psionic Energy Die to psionically stretch your limbs for 1 minute. Roll the expended Psionic Energy Die and gain a number of {@variantrule Temporary Hit Points|XPHB} equal to the number rolled plus your Intelligence modifier (minimum of 1 {@variantrule Temporary Hit Points|XPHB|Temporary Hit Point}). In addition, you gain the following benefits while this feature is active.",
+              {
+                "type": "list",
+                "style": "list-no-bullets",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Reach",
+                    "entries": [
+                      "Your reach increases by 5 feet."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Speed",
+                    "entries": [
+                      "Your {@variantrule Speed|XPHB} increases by 5 feet."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Touch",
+                    "entries": [
+                      "When you cast a spell that has a range of Touch and a casting time of an action, you can make the spell's range 10 feet."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_organic_weapons_3",
+            "name": "Organic Weapons",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "action",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can shape your limbs into weapons. As a Magic action, you can reform your free hand into one of the following organic weapons: Bone Blade, Flesh Maul, or Viscera Launcher. When you take the Attack action, you can use this feature before you make the attack roll. Your limb retains the form of the organic weapon until you take a Magic action to change it into another organic weapon, you have the Unconscious condition, or you return the limb to its previous form (no action required).</p>\n<p>Whenever you attack with the weapon, you can use your Intelligence modifier for the attack and damage rolls instead of using Strength or Dexterity.</p>\n<div class=\"compendium-subentry\"></div>",
+            "rawEntries": [
+              "You can shape your limbs into weapons. As a Magic action, you can reform your free hand into one of the following organic weapons: Bone Blade, Flesh Maul, or Viscera Launcher. When you take the {@action Attack|XPHB} action, you can use this feature before you make the attack roll. Your limb retains the form of the organic weapon until you take a {@action Magic|XPHB} action to change it into another organic weapon, you have the Unconscious condition, or you return the limb to its previous form (no action required).",
+              "Whenever you attack with the weapon, you can use your Intelligence modifier for the attack and damage rolls instead of using Strength or Dexterity.",
+              {
+                "type": "entries",
+                "entries": [
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Bone Blade|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Flesh Maul|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Viscera Launcher|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_viscera_launcher_3",
+            "name": "Viscera Launcher",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d6",
+            "formulaConfig": {
+              "baseDice": "1d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your hand and forearm transform into a crossbow made of muscle and sinew that fires bolts of bile. The launcher counts as a Simple Ranged weapon with a normal range of 30 feet and a long range of 90 feet, and it deals 1d6 Acid damage on a hit. Once on each of your turns when you hit a creature with an attack roll using the launcher, you can deal an extra 1d6 Acid damage to the target.</p>",
+            "rawEntries": [
+              "Your hand and forearm transform into a crossbow made of muscle and sinew that fires bolts of bile. The launcher counts as a Simple Ranged weapon with a normal range of 30 feet and a long range of 90 feet, and it deals {@damage 1d6} Acid damage on a hit. Once on each of your turns when you hit a creature with an attack roll using the launcher, you can deal an extra {@damage 1d6} Acid damage to the target."
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_extra_attack_6",
+            "name": "Extra Attack",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can attack twice instead of once whenever you take the Attack action on your turn.</p>\n<p>In addition, you can cast one of your Psion cantrips that has a casting time of an action in place of one of those attacks.</p>",
+            "rawEntries": [
+              "You can attack twice instead of once whenever you take the {@action Attack|XPHB} action on your turn.",
+              "In addition, you can cast one of your Psion cantrips that has a casting time of an action in place of one of those attacks."
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_flesh_weaver_6",
+            "name": "Flesh Weaver",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you use Mutable Form, you can expend an additional Psionic Energy Die to gain the following benefits while the feature is active.</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Organic Defense.</strong> <p>You gain a +2 bonus to AC.</p></div></li><li><div class=\"compendium-subentry\"><strong>Empowered Healing.</strong> <p>When you cast a spell with a spell slot that restores Hit Points|XPHB to one or more creatures, you can expend one Psionic Energy Die, roll it, and add the number rolled to the number of Hit Points|XPHB regained.</p></div></li></ul>",
+            "rawEntries": [
+              "When you use Mutable Form, you can expend an additional Psionic Energy Die to gain the following benefits while the feature is active.",
+              {
+                "type": "list",
+                "style": "list-no-bullets",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Organic Defense",
+                    "entries": [
+                      "You gain a +2 bonus to AC."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Empowered Healing",
+                    "entries": [
+                      "When you cast a spell with a spell slot that restores {@variantrule Hit Points|XPHB} to one or more creatures, you can expend one Psionic Energy Die, roll it, and add the number rolled to the number of {@variantrule Hit Points|XPHB} regained."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_improved_mutable_form_10",
+            "name": "Improved Mutable Form",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you use Mutable Form|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate, the duration increases to 10 minutes and you gain one of the following benefits of your choice, the effects of which last until Mutable Form|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate ends.</p>\n<div class=\"compendium-subentry\"></div>",
+            "rawEntries": [
+              "When you use {@subclassFeature Mutable Form|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate}, the duration increases to 10 minutes and you gain one of the following benefits of your choice, the effects of which last until {@subclassFeature Mutable Form|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate} ends.",
+              {
+                "type": "entries",
+                "entries": [
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Stony Epidermis|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|10|XUA2025PsionUpdate"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Superior Stride|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|10|XUA2025PsionUpdate"
+                  },
+                  {
+                    "type": "refSubclassFeature",
+                    "subclassFeature": "Unnatural Flexibility|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|10|XUA2025PsionUpdate"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_stony_epidermis_10",
+            "name": "Stony Epidermis",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You have Advantage|XPHB on Constitution saving throws to maintain Concentration|XPHB. In addition, choose one of the following damage types: Acid, Bludgeoning, Cold, Fire, Lightning, Piercing, Poison, Slashing, or Thunder. You gain Resistance|XPHB to the chosen damage type.</p>",
+            "rawEntries": [
+              "You have {@variantrule Advantage|XPHB} on Constitution saving throws to maintain {@status Concentration|XPHB}. In addition, choose one of the following damage types: Acid, Bludgeoning, Cold, Fire, Lightning, Piercing, Poison, Slashing, or Thunder. You gain {@variantrule Resistance|XPHB} to the chosen damage type."
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_superior_stride_10",
+            "name": "Superior Stride",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>While you aren't wearing armor, you can take the Dash action as a Bonus Action|XPHB, and you have a Climb Speed|XPHB and Swim Speed|XPHB equal to your Speed|XPHB.</p>",
+            "rawEntries": [
+              "While you aren't wearing armor, you can take the {@action Dash|XPHB} action as a {@variantrule Bonus Action|XPHB}, and you have a {@variantrule Climb Speed|XPHB} and {@variantrule Swim Speed|XPHB} equal to your {@variantrule Speed|XPHB}."
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_unnatural_flexibility_10",
+            "name": "Unnatural Flexibility",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You gain a +2 bonus to AC, and your body, along with any equipment you're wearing or carrying, becomes pliable. You can move through any space as narrow as 1 inch, and you can spend 5 feet of movement to escape from nonmagical restraints or end the Grappled condition.</p>",
+            "rawEntries": [
+              "You gain a +2 bonus to AC, and your body, along with any equipment you're wearing or carrying, becomes pliable. You can move through any space as narrow as 1 inch, and you can spend 5 feet of movement to escape from nonmagical restraints or end the {@condition Grappled|XPHB} condition."
+            ]
+          },
+          {
+            "id": "scf_psion_metamorph_xua2025psionupdate_life_bending_weapons_14",
+            "name": "Life-Bending Weapons",
+            "source": "XUA2025PsionUpdate",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Metamorph",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 14,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your weapon becomes wreathed in negative energy, and you radiate life-mending psionic energy. When you hit a target with an attack roll using your Organic Weapons|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate|Organic Weapon, roll one Psionic Energy Die. The target takes extra Necrotic damage equal to the number rolled. This roll doesn't expend the die.</p>\n<p>Alternatively, when you hit a creature with your Organic Weapon, you can instead expend one Psionic Energy Die and roll it. The target takes extra Necrotic damage equal to the roll, and each creature of your choice in a 30-foot Emanation [Area of Effect]|XPHB|Emanation originating from you regains Hit Points|XPHB equal the number rolled plus your Intelligence modifier. Once you use this feature, you can't do so again until the start of your next turn.</p>",
+            "rawEntries": [
+              "Your weapon becomes wreathed in negative energy, and you radiate life-mending psionic energy. When you hit a target with an attack roll using your {@subclassFeature Organic Weapons|Psion|XUA2025PsionUpdate|Metamorph|XUA2025PsionUpdate|3|XUA2025PsionUpdate|Organic Weapon}, roll one Psionic Energy Die. The target takes extra Necrotic damage equal to the number rolled. This roll doesn't expend the die.",
+              "Alternatively, when you hit a creature with your Organic Weapon, you can instead expend one Psionic Energy Die and roll it. The target takes extra Necrotic damage equal to the roll, and each creature of your choice in a 30-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from you regains {@variantrule Hit Points|XPHB} equal the number rolled plus your Intelligence modifier. Once you use this feature, you can't do so again until the start of your next turn."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_psion_psi_warper_xua2025psionupdate",
+        "name": "Psi Warper",
+        "shortName": "Psi Warper",
+        "source": "XUA2025PsionUpdate",
+        "page": 1,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "features": [
+          {
+            "id": "scf_psion_psi_warper_xua2025psion_psi_warper_3",
+            "name": "Psi Warper",
+            "source": "XUA2025Psion",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025Psion",
+            "subclassShortName": "Psi Warper",
+            "subclassSource": "XUA2025Psion",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Psi Warpers tune their psionic powers to manipulating the space between objects. Capable of teleporting across the battlefield and creating vacuums in space, a Psi Warper is never in one place for too long.</p>",
+            "rawEntries": [
+              "Psi Warpers tune their psionic powers to manipulating the space between objects. Capable of teleporting across the battlefield and creating vacuums in space, a Psi Warper is never in one place for too long.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Psi Warper Spells|Psion|XUA2025Psion|Psi Warper|XUA2025Psion|3|XUA2025Psion"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Teleportation|Psion|XUA2025Psion|Psi Warper|XUA2025Psion|3|XUA2025Psion"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Warp Propel|Psion|XUA2025Psion|Psi Warper|XUA2025Psion|3|XUA2025Psion"
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_psi_warper_xua2025psion_psi_warper_spells_3",
+            "name": "Psi Warper Spells",
+            "source": "XUA2025Psion",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025Psion",
+            "subclassShortName": "Psi Warper",
+            "subclassSource": "XUA2025Psion",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you reach a Psion level specified in the Psi Warper Spells table, you thereafter always have the listed spells prepared.</p>\n<div class=\"compendium-subentry\"><strong>Psi Warper Spells.</strong> </div>",
+            "rawEntries": [
+              "When you reach a Psion level specified in the {@table Psi Warper Spells|XUA2025Psion} table, you thereafter always have the listed spells prepared.",
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2025Psion",
+                "name": "Psi Warper Spells",
+                "page": 8
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_psi_warper_xua2025psion_teleportation_3",
+            "name": "Teleportation",
+            "source": "XUA2025Psion",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025Psion",
+            "subclassShortName": "Psi Warper",
+            "subclassSource": "XUA2025Psion",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can cast Misty Step without expending a spell slot, and you must finish a Long Rest|XPHB before you can cast it in this way again. You can also restore your use of it by expending one Psionic Energy Die (no action required).</p>",
+            "rawEntries": [
+              "You can cast {@spell Misty Step|XPHB} without expending a spell slot, and you must finish a {@variantrule Long Rest|XPHB} before you can cast it in this way again. You can also restore your use of it by expending one Psionic Energy Die (no action required)."
+            ]
+          },
+          {
+            "id": "scf_psion_psi_warper_xua2025psion_warp_propel_3",
+            "name": "Warp Propel",
+            "source": "XUA2025Psion",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025Psion",
+            "subclassShortName": "Psi Warper",
+            "subclassSource": "XUA2025Psion",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When a target fails its saving throw against your Telekinetic Propel|Psion|XUA2025Psion|1|XUA2025Psion, instead of pushing it, you can teleport the target to an unoccupied space you can see within 30 feet of you that is horizontal to you.</p>",
+            "rawEntries": [
+              "When a target fails its saving throw against your {@classFeature Telekinetic Propel|Psion|XUA2025Psion|1|XUA2025Psion}, instead of pushing it, you can teleport the target to an unoccupied space you can see within 30 feet of you that is horizontal to you."
+            ]
+          },
+          {
+            "id": "scf_psion_psi_warper_xua2025psion_teleporter_combat_6",
+            "name": "Teleporter Combat",
+            "source": "XUA2025Psion",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025Psion",
+            "subclassShortName": "Psi Warper",
+            "subclassSource": "XUA2025Psion",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Immediately after you cast Misty Step, you can cast one of your Psion cantrips that has a casting time of an action as part of the Bonus Action|XPHB.</p>",
+            "rawEntries": [
+              "Immediately after you cast {@spell Misty Step|XPHB}, you can cast one of your Psion cantrips that has a casting time of an action as part of the {@variantrule Bonus Action|XPHB}."
+            ]
+          },
+          {
+            "id": "scf_psion_psi_warper_xua2025psion_warp_space_6",
+            "name": "Warp Space",
+            "source": "XUA2025Psion",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025Psion",
+            "subclassShortName": "Psi Warper",
+            "subclassSource": "XUA2025Psion",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you cast Shatter, you can expend one Psionic Energy Die to modify the spell so that the radius of the spell's Sphere [Area of Effect]|XPHB|Sphere becomes 20 feet.</p>\n<p>In addition, creatures that fail the saving throw against the spell are pulled straight toward the center of the Sphere [Area of Effect]|XPHB|Sphere, ending in an unoccupied space as close to center of the Sphere [Area of Effect]|XPHB|Sphere as possible.</p>",
+            "rawEntries": [
+              "When you cast {@spell Shatter|XPHB}, you can expend one Psionic Energy Die to modify the spell so that the radius of the spell's {@variantrule Sphere [Area of Effect]|XPHB|Sphere} becomes 20 feet.",
+              "In addition, creatures that fail the saving throw against the spell are pulled straight toward the center of the {@variantrule Sphere [Area of Effect]|XPHB|Sphere}, ending in an unoccupied space as close to center of the {@variantrule Sphere [Area of Effect]|XPHB|Sphere} as possible."
+            ]
+          },
+          {
+            "id": "scf_psion_psi_warper_xua2025psion_duplicitous_target_10",
+            "name": "Duplicitous Target",
+            "source": "XUA2025Psion",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025Psion",
+            "subclassShortName": "Psi Warper",
+            "subclassSource": "XUA2025Psion",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When a creature you can see makes an attack roll against you, you can take a Reaction|XPHB to expend one Psionic Energy Die and choose a willing creature you can see within 30 feet of yourself that doesn't have the Incapacitated condition. You and the willing creature teleport, swapping places with each other. The creature then becomes the target of the attack roll.</p>",
+            "rawEntries": [
+              "When a creature you can see makes an attack roll against you, you can take a {@variantrule Reaction|XPHB} to expend one Psionic Energy Die and choose a willing creature you can see within 30 feet of yourself that doesn't have the {@condition Incapacitated|XPHB} condition. You and the willing creature teleport, swapping places with each other. The creature then becomes the target of the attack roll."
+            ]
+          },
+          {
+            "id": "scf_psion_psi_warper_xua2025psion_mass_teleportation_14",
+            "name": "Mass Teleportation",
+            "source": "XUA2025Psion",
+            "page": 8,
+            "className": "Psion",
+            "classSource": "XUA2025Psion",
+            "subclassShortName": "Psi Warper",
+            "subclassSource": "XUA2025Psion",
+            "level": 14,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>As a Magic action, you expend four Psionic Energy Dice and choose Huge or smaller creatures within 30 feet of yourself, up to a number of creatures equal to your Intelligence modifier (minimum of one creature). Each of the chosen creatures is teleported to an unoccupied space you can see within 150 feet of you. An unwilling creature that succeeds on a Wisdom saving throw against {@dcYourSpellSave} is unaffected.</p>",
+            "rawEntries": [
+              "As a {@action Magic|XPHB} action, you expend four Psionic Energy Dice and choose Huge or smaller creatures within 30 feet of yourself, up to a number of creatures equal to your Intelligence modifier (minimum of one creature). Each of the chosen creatures is teleported to an unoccupied space you can see within 150 feet of you. An unwilling creature that succeeds on a Wisdom saving throw against {@dcYourSpellSave} is unaffected."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_psion_psykinetic_xua2025psionupdate",
+        "name": "Psykinetic",
+        "shortName": "Psykinetic",
+        "source": "XUA2025PsionUpdate",
+        "page": 8,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "features": [
+          {
+            "id": "scf_psion_psykinetic_xua2025psionupdate_psykinetic_3",
+            "name": "Psykinetic",
+            "source": "XUA2025PsionUpdate",
+            "page": 9,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Psykinetic",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>A Psykinetic controls their psionic powers like a malleable force. They bend their telekinetic energies into sturdy barriers and strike with the force of a battering ram.</p>",
+            "rawEntries": [
+              "A Psykinetic controls their psionic powers like a malleable force. They bend their telekinetic energies into sturdy barriers and strike with the force of a battering ram.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Psykinetic Spells|Psion|XUA2025PsionUpdate|Psykinetic|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Stronger Telekinesis|Psion|XUA2025PsionUpdate|Psykinetic|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Telekinetic Techniques|Psion|XUA2025PsionUpdate|Psykinetic|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_psykinetic_xua2025psionupdate_psykinetic_spells_3",
+            "name": "Psykinetic Spells",
+            "source": "XUA2025PsionUpdate",
+            "page": 9,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Psykinetic",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you reach a Psion level specified in the Psykinetic Spells table, you thereafter always have the listed spells prepared.</p>\n<div class=\"compendium-subentry\"><strong>Psykinetic Spells.</strong> </div>",
+            "rawEntries": [
+              "When you reach a Psion level specified in the {@table Psykinetic Spells|XUA2025PsionUpdate} table, you thereafter always have the listed spells prepared.",
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2025PsionUpdate",
+                "name": "Psykinetic Spells",
+                "page": 9
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_psykinetic_xua2025psionupdate_stronger_telekinesis_3",
+            "name": "Stronger Telekinesis",
+            "source": "XUA2025PsionUpdate",
+            "page": 9,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Psykinetic",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you cast Mage Hand, its range increases by 30 feet when you cast it, and the hand can carry up to 20 pounds.</p>",
+            "rawEntries": [
+              "When you cast {@spell Mage Hand|XPHB}, its range increases by 30 feet when you cast it, and the hand can carry up to 20 pounds."
+            ]
+          },
+          {
+            "id": "scf_psion_psykinetic_xua2025psionupdate_telekinetic_techniques_3",
+            "name": "Telekinetic Techniques",
+            "source": "XUA2025PsionUpdate",
+            "page": 9,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Psykinetic",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d4",
+            "formulaConfig": {
+              "baseDice": "1d4",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>When you use Telekinetic Propel|Psion|XUA2025PsionUpdate|1|XUA2025PsionUpdate, you can roll 1d4 and use the number rolled instead of expending a Psionic Energy Die. In addition, when a target fails the saving throw against your Telekinetic Propel, you can impose one of the following effects on that target.</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Boost.</strong> <p>The target's Speed|XPHB increases by 10 feet until the start of your next turn.</p></div></li><li><div class=\"compendium-subentry\"><strong>Disorient.</strong> <p>The target can't make Opportunity Attack until the start of its next turn.</p></div></li><li><div class=\"compendium-subentry\"><strong>Telekinetic Bolt.</strong> <p>The target takes Force damage equal to the number rolled on the Psionic Energy Die.</p></div></li></ul>",
+            "rawEntries": [
+              "When you use {@classFeature Telekinetic Propel|Psion|XUA2025PsionUpdate|1|XUA2025PsionUpdate}, you can roll {@dice 1d4} and use the number rolled instead of expending a Psionic Energy Die. In addition, when a target fails the saving throw against your Telekinetic Propel, you can impose one of the following effects on that target.",
+              {
+                "type": "list",
+                "style": "list-no-bullets",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Boost",
+                    "entries": [
+                      "The target's {@variantrule Speed|XPHB} increases by 10 feet until the start of your next turn."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Disorient",
+                    "entries": [
+                      "The target can't make {@action Opportunity Attack|XPHB|Opportunity Attacks} until the start of its next turn."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Telekinetic Bolt",
+                    "entries": [
+                      "The target takes Force damage equal to the number rolled on the Psionic Energy Die."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_psykinetic_xua2025psionupdate_destructive_trance_6",
+            "name": "Destructive Trance",
+            "source": "XUA2025PsionUpdate",
+            "page": 9,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Psykinetic",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At the start of your turn, you can expend one Psionic Energy Die to enter a destructive state. For the next 10 minutes, you gain a Fly Speed|XPHB of 20 feet and can hover, and when you cast a Psion spell that expends a spell slot, you can roll your Psionic Energy Die and add the number rolled to one damage roll of that spell. This roll doesn't expend the Psionic Energy Die.</p>",
+            "rawEntries": [
+              "At the start of your turn, you can expend one Psionic Energy Die to enter a destructive state. For the next 10 minutes, you gain a {@variantrule Fly Speed|XPHB} of 20 feet and can hover, and when you cast a Psion spell that expends a spell slot, you can roll your Psionic Energy Die and add the number rolled to one damage roll of that spell. This roll doesn't expend the Psionic Energy Die."
+            ]
+          },
+          {
+            "id": "scf_psion_psykinetic_xua2025psionupdate_rebounding_field_6",
+            "name": "Rebounding Field",
+            "source": "XUA2025PsionUpdate",
+            "page": 9,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Psykinetic",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you cast Shield in response to being hit by an attack roll and cause the triggering attack to miss, you can expend one Psionic Energy Die to launch the force back at the attacker. The attacker makes a Dexterity saving throw. Roll two Psionic Energy Dice. On a failed save, the attacker takes Force damage equal to the amount rolled plus your Intelligence modifier. On a successful save, the attacker takes half as much damage only. Whether the target fails or succeeds on the saving throw, you gain Temporary Hit Points|XPHB equal to the amount of damage dealt.</p>",
+            "rawEntries": [
+              "When you cast {@spell Shield|XPHB} in response to being hit by an attack roll and cause the triggering attack to miss, you can expend one Psionic Energy Die to launch the force back at the attacker. The attacker makes a Dexterity saving throw. Roll two Psionic Energy Dice. On a failed save, the attacker takes Force damage equal to the amount rolled plus your Intelligence modifier. On a successful save, the attacker takes half as much damage only. Whether the target fails or succeeds on the saving throw, you gain {@variantrule Temporary Hit Points|XPHB} equal to the amount of damage dealt."
+            ]
+          },
+          {
+            "id": "scf_psion_psykinetic_xua2025psionupdate_enhanced_telekinetic_crush_10",
+            "name": "Enhanced Telekinetic Crush",
+            "source": "XUA2025PsionUpdate",
+            "page": 9,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Psykinetic",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you cast Telekinetic Crush, you can expend one Psionic Energy Die to modify the spell so that whether a creature fails or succeeds on the saving throw against the spell, its Speed|XPHB is halved until the start of your next turn. In addition, you can roll the expended Psionic Energy Die and add the number rolled to one damage roll of the spell.</p>",
+            "rawEntries": [
+              "When you cast {@spell Telekinetic Crush|XUA2025PsionUpdate}, you can expend one Psionic Energy Die to modify the spell so that whether a creature fails or succeeds on the saving throw against the spell, its {@variantrule Speed|XPHB} is halved until the start of your next turn. In addition, you can roll the expended Psionic Energy Die and add the number rolled to one damage roll of the spell."
+            ]
+          },
+          {
+            "id": "scf_psion_psykinetic_xua2025psionupdate_heightened_telekinesis_14",
+            "name": "Heightened Telekinesis",
+            "source": "XUA2025PsionUpdate",
+            "page": 9,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Psykinetic",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 14,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can cast Telekinesis without expending a spell slot by instead expending four Psionic Energy Dice. When you cast Telekinesis without expending a spell slot using this feature, you can modify the spell so that it doesn't require Concentration|XPHB. If you do so, the spell's duration becomes 1 minute for that casting, and you can target Gargantuan creatures and objects.</p>",
+            "rawEntries": [
+              "You can cast {@spell Telekinesis|XPHB} without expending a spell slot by instead expending four Psionic Energy Dice. When you cast {@spell Telekinesis|XPHB} without expending a spell slot using this feature, you can modify the spell so that it doesn't require {@status Concentration|XPHB}. If you do so, the spell's duration becomes 1 minute for that casting, and you can target Gargantuan creatures and objects."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_psion_telepath_xua2025psionupdate",
+        "name": "Telepath",
+        "shortName": "Telepath",
+        "source": "XUA2025PsionUpdate",
+        "page": 10,
+        "className": "Psion",
+        "classSource": "XUA2025PsionUpdate",
+        "features": [
+          {
+            "id": "scf_psion_telepath_xua2025psionupdate_mind_infiltrator_3",
+            "name": "Mind Infiltrator",
+            "source": "XUA2025PsionUpdate",
+            "page": 10,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Telepath",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you cast Detect Thoughts, you can expend one Psionic Energy Die to modify the spell so that the spell doesn't require spell components or Concentration|XPHB. In addition, when you use the Read Thoughts effect of the spell, the target doesn't know you're probing its mind if it fails the Wisdom saving throw.</p>",
+            "rawEntries": [
+              "When you cast {@spell Detect Thoughts|XPHB}, you can expend one Psionic Energy Die to modify the spell so that the spell doesn't require spell components or {@status Concentration|XPHB}. In addition, when you use the Read Thoughts effect of the spell, the target doesn't know you're probing its mind if it fails the Wisdom saving throw."
+            ]
+          },
+          {
+            "id": "scf_psion_telepath_xua2025psionupdate_telepath_3",
+            "name": "Telepath",
+            "source": "XUA2025PsionUpdate",
+            "page": 10,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Telepath",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Telepaths are masters of mind magic. They use their psionic powers for all matters of the mind, whether they bolster the mental defenses of allies or probe the thoughts of others undetected. A telepath can be a bastion of psionic aid or a crafty manipulator.</p>",
+            "rawEntries": [
+              "Telepaths are masters of mind magic. They use their psionic powers for all matters of the mind, whether they bolster the mental defenses of allies or probe the thoughts of others undetected. A telepath can be a bastion of psionic aid or a crafty manipulator.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Mind Infiltrator|Psion|XUA2025PsionUpdate|Telepath|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Telepath Spells|Psion|XUA2025PsionUpdate|Telepath|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Telepathic Distraction|Psion|XUA2025PsionUpdate|Telepath|XUA2025PsionUpdate|3|XUA2025PsionUpdate"
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_telepath_xua2025psionupdate_telepath_spells_3",
+            "name": "Telepath Spells",
+            "source": "XUA2025PsionUpdate",
+            "page": 10,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Telepath",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you reach a Psion level specified in the Telepath Spells table, you thereafter always have the listed spells prepared.</p>\n<div class=\"compendium-subentry\"><strong>Telepath Spells.</strong> </div>",
+            "rawEntries": [
+              "When you reach a Psion level specified in the {@table Telepath Spells|XUA2025PsionUpdate} table, you thereafter always have the listed spells prepared.",
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2025PsionUpdate",
+                "name": "Telepath Spells",
+                "page": 10
+              }
+            ]
+          },
+          {
+            "id": "scf_psion_telepath_xua2025psionupdate_telepathic_distraction_3",
+            "name": "Telepathic Distraction",
+            "source": "XUA2025PsionUpdate",
+            "page": 10,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Telepath",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When a creature you can see within range of your telepathy hits with an attack roll, you can take a Reaction|XPHB to roll one Psionic Energy Die and subtract the number rolled from attack roll, potentially causing the attack to miss. The die is expended only if the target misses the attack.</p>",
+            "rawEntries": [
+              "When a creature you can see within range of your telepathy hits with an attack roll, you can take a {@variantrule Reaction|XPHB} to roll one Psionic Energy Die and subtract the number rolled from attack roll, potentially causing the attack to miss. The die is expended only if the target misses the attack."
+            ]
+          },
+          {
+            "id": "scf_psion_telepath_xua2025psionupdate_bulwark_mind_6",
+            "name": "Bulwark Mind",
+            "source": "XUA2025PsionUpdate",
+            "page": 10,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Telepath",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>At the start of your turn, you can expend one Psionic Energy Die to strengthen your mind and enter a fortified state. For the next 10 minutes, you have Resistance|XPHB to Psychic damage; and whenever you make an Intelligence, Wisdom, or Charisma saving throw, you add a roll of your Psionic Energy Die to the save. Rolling the Psionic Energy Die doesn't expend it. You can't use this benefit if you have the Incapacitated condition.</p>",
+            "rawEntries": [
+              "At the start of your turn, you can expend one Psionic Energy Die to strengthen your mind and enter a fortified state. For the next 10 minutes, you have {@variantrule Resistance|XPHB} to Psychic damage; and whenever you make an Intelligence, Wisdom, or Charisma saving throw, you add a roll of your Psionic Energy Die to the save. Rolling the Psionic Energy Die doesn't expend it. You can't use this benefit if you have the {@condition Incapacitated|XPHB} condition."
+            ]
+          },
+          {
+            "id": "scf_psion_telepath_xua2025psionupdate_potent_thoughts_6",
+            "name": "Potent Thoughts",
+            "source": "XUA2025PsionUpdate",
+            "page": 10,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Telepath",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You have Telepathy|XPHB with a range of 60 feet. In addition, you add your Intelligence modifier to the damage you deal with any Psion cantrip.</p>",
+            "rawEntries": [
+              "You have {@variantrule Telepathy|XPHB} with a range of 60 feet. In addition, you add your Intelligence modifier to the damage you deal with any Psion cantrip."
+            ]
+          },
+          {
+            "id": "scf_psion_telepath_xua2025psionupdate_telepathic_bolstering_10",
+            "name": "Telepathic Bolstering",
+            "source": "XUA2025PsionUpdate",
+            "page": 10,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Telepath",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you or a creature you can see within range of your Telepathy|XPHB fails an ability check or misses with an attack roll, you can take a Reaction|XPHB to expend one Psionic Energy Die. Roll the die and add the number rolled to the d20, potentially turning a failed check into a success or a miss into a hit. The Psionic Energy Die is expended only if the check succeeds or the attack hits.</p>",
+            "rawEntries": [
+              "When you or a creature you can see within range of your {@variantrule Telepathy|XPHB} fails an ability check or misses with an attack roll, you can take a {@variantrule Reaction|XPHB} to expend one Psionic Energy Die. Roll the die and add the number rolled to the {@dice d20}, potentially turning a failed check into a success or a miss into a hit. The Psionic Energy Die is expended only if the check succeeds or the attack hits."
+            ]
+          },
+          {
+            "id": "scf_psion_telepath_xua2025psionupdate_scramble_minds_14",
+            "name": "Scramble Minds",
+            "source": "XUA2025PsionUpdate",
+            "page": 10,
+            "className": "Psion",
+            "classSource": "XUA2025PsionUpdate",
+            "subclassShortName": "Telepath",
+            "subclassSource": "XUA2025PsionUpdate",
+            "level": 14,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can cast Confusion without expending a spell slot by instead expending four Psionic Energy Dice. When you cast Confusion without a spell slot using this feature, you can modify the spell so that the radius of the spell's Sphere [Area of Effect]|XPHB|Sphere becomes 30 feet and you can choose one creature you can see in the spell's area to automatically succeed on their saving throw against the spell.</p>\n<p>In addition, when a creature under the effect of the spell starts its turn, you choose their behavior from the table for the turn instead of the creature rolling to determine its behavior.</p>",
+            "rawEntries": [
+              "You can cast {@spell Confusion|XPHB} without expending a spell slot by instead expending four Psionic Energy Dice. When you cast {@spell Confusion|XPHB} without a spell slot using this feature, you can modify the spell so that the radius of the spell's {@variantrule Sphere [Area of Effect]|XPHB|Sphere} becomes 30 feet and you can choose one creature you can see in the spell's area to automatically succeed on their saving throw against the spell.",
+              "In addition, when a creature under the effect of the spell starts its turn, you choose their behavior from the table for the turn instead of the creature rolling to determine its behavior."
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

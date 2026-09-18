@@ -1,0 +1,235 @@
+[
+  {
+    "id": "creature_vestige_companion_xua2026mysticsubclasses",
+    "name": "Vestige Companion",
+    "source": "XUA2026MysticSubclasses",
+    "edition": "2014",
+    "page": 5,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 5,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 1,
+        "mod": -5
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "str": 1,
+    "dex": 14,
+    "con": 10,
+    "int": 15,
+    "wis": 15,
+    "cha": 16,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [
+      {
+        "resist": [
+          "fire"
+        ],
+        "cond": true,
+        "note": "(fiend only)"
+      },
+      {
+        "resist": [
+          "necrotic"
+        ],
+        "cond": true,
+        "note": "(undead only)"
+      },
+      {
+        "resist": [
+          "radiant"
+        ],
+        "cond": true,
+        "note": "(celestial only)"
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "prone"
+    ],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "Speaks the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_pact_bond_hjb5",
+        "name": "Pact Bond",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Add your Proficiency to any ability check or saving throw the vestige makes.</p>",
+        "entries": [
+          "Add your {@variantrule Proficiency|XPHB|Proficiency Bonus} to any ability check or saving throw the vestige makes."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_vestige_s_strike_ifhy",
+        "name": "Vestige's Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee or Ranged Attack: Bonus equals your spell attack modifier, reach 5 ft. or range 60 ft. Hit: 1d6 + 3 plus your Charisma modifier Fire (Fiend), Necrotic (Undead), or Radiant (Celestial) damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. or range 60 ft. {@h}{@damage 1d6 + 3} plus your Charisma modifier Fire (Fiend), Necrotic (Undead), or Radiant (Celestial) damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_divine_power__1_day__rddg",
+        "name": "Divine Power (1/Day)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Your vestige manifests a remnant of its divine power in one of the following ways, based on its form:</p><ul><li><strong><em>Cursed Invocation (Undead Only).</em></strong> <p>The vestige places a curse on a creature you can see within 30 feet of the vestige for 1 minute. While cursed, the target has Disadvantage on attack rolls against you and the vestige.</p></li><li><strong><em>Fiendish Swap (Fiend Only).</em></strong> <p>If you and the vestige are within 60 feet of each other, you both teleport, swapping places.</p></li><li><strong><em>Healing Touch (Celestial Only).</em></strong> <p>The vestige touches another creature. The target regains Hit Points equal to 2d8 plus your Charisma modifier and ends one condition on it: Blinded, Deafened, or Poisoned.</p></li></ul>",
+        "entries": [
+          "Your vestige manifests a remnant of its divine power in one of the following ways, based on its form:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Cursed Invocation (Undead Only)",
+                "entries": [
+                  "The vestige places a curse on a creature you can see within 30 feet of the vestige for 1 minute. While cursed, the target has {@variantrule Disadvantage|XPHB} on attack rolls against you and the vestige."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Fiendish Swap (Fiend Only)",
+                "entries": [
+                  "If you and the vestige are within 60 feet of each other, you both teleport, swapping places."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Healing Touch (Celestial Only)",
+                "entries": [
+                  "The vestige touches another creature. The target regains {@variantrule Hit Points|XPHB} equal to {@dice 2d8} plus your Charisma modifier and ends one condition on it: {@condition Blinded|XPHB}, {@condition Deafened|XPHB}, or {@condition Poisoned|XPHB}."
+                ]
+              }
+            ]
+          }
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2026MysticSubclasses/Vestige Companion.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2026MysticSubclasses/Vestige Companion.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

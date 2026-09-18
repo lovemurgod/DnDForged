@@ -113,7 +113,7 @@
       {
         "id": "sc_adult_sapphire_dragon_0",
         "name": "Innate Spellcasting (Psionics)",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 4,
@@ -199,10 +199,13 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__2_day__qate",
+        "id": "act_legendary_resistance__2_day__w8k7",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the dragon fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -216,10 +219,13 @@
         }
       },
       {
-        "id": "act_spider_climb_u64t",
+        "id": "act_spider_climb_3yu6",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragon can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "entries": [
+          "The dragon can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -233,10 +239,13 @@
         }
       },
       {
-        "id": "act_tunneler_ubga",
+        "id": "act_tunneler_2xes",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragon can burrow through solid rock at half its burrow speed and can choose to leave a 10-foot-diameter tunnel in its wake.</p>",
+        "entries": [
+          "The dragon can burrow through solid rock at half its burrow speed and can choose to leave a 10-foot-diameter tunnel in its wake."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -252,10 +261,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_r69e",
+        "id": "act_multiattack_xq0v",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon can use its Frightful Presence. It then makes two melee attacks, one with its bite and one with its claws.</p>",
+        "entries": [
+          "The dragon can use its Frightful Presence. It then makes two melee attacks, one with its bite and one with its claws."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -269,10 +281,13 @@
         }
       },
       {
-        "id": "act_bite_ka2f",
+        "id": "act_bite_yj70",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}17 (2d10 + 6) piercing damage plus 3 (1d6) thunder damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 17 (2d10 + 6) piercing damage plus 3 (1d6) thunder damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 11} to hit, reach 10 ft., one target. {@h}17 ({@damage 2d10 + 6}) piercing damage plus 3 ({@damage 1d6}) thunder damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -295,10 +310,13 @@
         }
       },
       {
-        "id": "act_claws_8dem",
+        "id": "act_claws_3tet",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}19 (3d8 + 6) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 19 (3d8 + 6) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 11} to hit, reach 10 ft., one target. {@h}19 ({@damage 3d8 + 6}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -317,10 +335,13 @@
         }
       },
       {
-        "id": "act_tail_wgxa",
+        "id": "act_tail_dpwb",
         "name": "Tail",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +11 to hit, reach 10 ft., one target. {@h}15 (2d8 + 6) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 15 (2d8 + 6) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 11} to hit, reach 10 ft., one target. {@h}15 ({@damage 2d8 + 6}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -339,10 +360,13 @@
         }
       },
       {
-        "id": "act_frightful_presence_xrs5",
+        "id": "act_frightful_presence_xo1y",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
+        "entries": [
+          "Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a {@dc 17} Wisdom saving throw or become {@condition frightened} for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -359,10 +383,13 @@
         }
       },
       {
-        "id": "act_debilitating_breath__recharge_5__rqu3",
+        "id": "act_debilitating_breath__recharge_5__yih2",
         "name": "Debilitating Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales a pulse of high-pitched, nearly inaudible sound in a 60-foot-cone. Each creature in that cone must make a DC 18 Constitution saving throw. On a failed save, the creature takes 45 (13d6) thunder damage and is incapacitated until the end of its next turn. On a successful save, the creature takes half as much damage and isn't incapacitated.</p>",
+        "entries": [
+          "The dragon exhales a pulse of high-pitched, nearly inaudible sound in a 60-foot-cone. Each creature in that cone must make a {@dc 18} Constitution saving throw. On a failed save, the creature takes 45 ({@damage 13d6}) thunder damage and is {@condition incapacitated} until the end of its next turn. On a successful save, the creature takes half as much damage and isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -391,10 +418,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_tail_attack_fyi6",
+          "id": "act_tail_attack_sfyf",
           "name": "Tail Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a tail attack.</p>",
+          "entries": [
+            "The dragon makes a tail attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -408,10 +438,13 @@
           }
         },
         {
-          "id": "act_telekinetic_fling_528s",
+          "id": "act_telekinetic_fling_6k7r",
           "name": "Telekinetic Fling",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon chooses a Small or smaller object that isn't being worn or carried that it can see within 60 feet of it, and magically hurls the object at a creature it can see within 60 feet of the object. The target must succeed on a DC 17 Dexterity saving throw or take 15 (4d6) bludgeoning damage.</p>",
+          "entries": [
+            "The dragon chooses a Small or smaller object that isn't being worn or carried that it can see within 60 feet of it, and magically hurls the object at a creature it can see within 60 feet of the object. The target must succeed on a {@dc 17} Dexterity saving throw or take 15 ({@damage 4d6}) bludgeoning damage."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -433,10 +466,13 @@
           }
         },
         {
-          "id": "act_teleport__costs_2_actions__agm3",
+          "id": "act_teleport__costs_2_actions__49ua",
           "name": "Teleport (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon magically teleports to an unoccupied space it can see within 30 feet of it.</p>",
+          "entries": [
+            "The dragon magically teleports to an unoccupied space it can see within 30 feet of it."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -451,12 +487,16 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_lair_action_xpbx",
-        "name": "Lair Action",
+        "id": "act_dragon_targets_7u7n",
+        "name": "Dragon Targets",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon targets a creature within 120 feet of it that can hear and understand it. The creature must succeed on a DC 15 Wisdom saving throw or be charmed by the dragon until initiative count 20 on the following round. A creature charmed in this way obeys to the best of its ability any command the dragon issues that isn't directly harmful to itself.</p>",
+        "entries": [
+          "The dragon targets a creature within 120 feet of it that can hear and understand it. The creature must succeed on a {@dc 15} Wisdom saving throw or be {@condition charmed} by the dragon until initiative count 20 on the following round. A creature {@condition charmed} in this way obeys to the best of its ability any command the dragon issues that isn't directly harmful to itself."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -473,10 +513,13 @@
         }
       },
       {
-        "id": "act_lair_action_kgrj",
-        "name": "Lair Action",
+        "id": "act_dragon_touches_ocij",
+        "name": "Dragon Touches",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon touches a section of stone up to 10 feet in any dimension. The dragon can form the stone into any shape that suits its purpose.</p>",
+        "entries": [
+          "The dragon touches a section of stone up to 10 feet in any dimension. The dragon can form the stone into any shape that suits its purpose."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -490,10 +533,13 @@
         }
       },
       {
-        "id": "act_lair_action_bom7",
-        "name": "Lair Action",
+        "id": "act_wall_of_stone_jblc",
+        "name": "Wall Of Stone",
         "actionType": "lair",
         "descriptionHtml": "<p>A wall of stone springs into existence on a solid surface within 120 feet of the dragon. The wall is up to 60 feet long, 10 feet high, and 1 foot thick. When the wall appears, each creature in its space is pushed to either side of the wall the creature wants. Each 5-foot section of wall has AC 17, 20 hit points, vulnerability to thunder damage, and immunity to poison and psychic damage. The wall vanishes when the dragon uses this lair action again or when the dragon dies.</p>",
+        "entries": [
+          "A wall of stone springs into existence on a solid surface within 120 feet of the dragon. The wall is up to 60 feet long, 10 feet high, and 1 foot thick. When the wall appears, each creature in its space is pushed to either side of the wall the creature wants. Each 5-foot section of wall has AC 17, 20 hit points, vulnerability to thunder damage, and immunity to poison and psychic damage. The wall vanishes when the dragon uses this lair action again or when the dragon dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -507,9 +553,173 @@
         }
       }
     ],
+    "lairHeader": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects; the dragon can't use the same effect two rounds in a row:",
+    "lairActionsDesc": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects; the dragon can't use the same effect two rounds in a row:",
+    "regionalEffects": [
+      {
+        "id": "act_regional_effect_mwvt",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Giant spider are attracted to the area within 6 miles of the lair and settle there in large numbers.</p>",
+        "entries": [
+          "{@creature Giant spider||Giant spiders} are attracted to the area within 6 miles of the lair and settle there in large numbers."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_1bux",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Natural stone within 6 miles of the lair grows plentiful crystal formations and sapphire gemstone veins, particularly underground.</p>",
+        "entries": [
+          "Natural stone within 6 miles of the lair grows plentiful crystal formations and sapphire gemstone veins, particularly underground."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_6qrb",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Natural stone within 6 miles of the lair becomes a conduit for the dragon's psionic presence. As an action, the dragon can cast the clairvoyance spell, requiring no components, targeting any natural stone formation in that region.</p>",
+        "entries": [
+          "Natural stone within 6 miles of the lair becomes a conduit for the dragon's psionic presence. As an action, the dragon can cast the {@spell clairvoyance} spell, requiring no components, targeting any natural stone formation in that region."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "regionalEffectsHtml": "<p>The region surrounding a legendary sapphire dragon's lair is warped by the dragon's magic, which creates one or more of the following effects:</p><ul><li>Giant spider are attracted to the area within 6 miles of the lair and settle there in large numbers.</li><li>Natural stone within 6 miles of the lair grows plentiful crystal formations and sapphire gemstone veins, particularly underground.</li><li>Natural stone within 6 miles of the lair becomes a conduit for the dragon's psionic presence. As an action, the dragon can cast the clairvoyance spell, requiring no components, targeting any natural stone formation in that region.</li></ul>",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Customizing Dragons",
+        "descriptionHtml": "<p>You can customize any dragon's stat block to reflect the dragon's unique character. Minor changes such as those below are easy to make and have no impact on a dragon's challenge rating.</p><div><strong><em>Languages.</em></strong> <p>Most dragons prefer to speak Draconic but learn Common for dealing with allies and minions. But given their high Intelligence and long life span, dragons can easily learn additional languages. You can add languages to a dragon's stat block.</p></div><div><strong><em>Skills.</em></strong> <p>Most dragons are proficient in the Perception and Stealth skills, and many dragons have additional skill proficiencies. As with languages, you can customize a dragon's skill list (even doubling their proficiency bonus with certain skills) to reflect particular interests and activities. You can also give a dragon tool proficiencies, particularly if the dragon spends time in Humanoid form.</p></div><div><strong><em>Spells.</em></strong> <p><em>See the \"Variant: Dragons as Innate Spellcasters\" inset(s), below.</em></p></div><div><strong><em>Other Traits and Actions.</em></strong> <p>You can borrow traits and actions from other monsters to add unique flavor to a dragon. Consider these examples:</p><ul><li><strong><em>Change Shape.</em></strong> <p>You can decide that a dragon acquires this action at a younger age than usual, particularly if you want to feature a dragon in Humanoid form in your campaign:</p><p>The dragon magically polymorphs into a humanoid or beast that has a challenge rating no higher than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the dragon's choice).</p><p>In a new form, the dragon retains its alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Its statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form.</p></li><li><strong><em>Flyby.</em></strong> <p>The dragon is an agile flier, quick to fly out of enemies' reach.</p><p>The dragon doesn't provoke an opportunity attack when it flies out of an enemy's reach.</p></li><li><strong><em>Mimicry.</em></strong> <p>Impersonating characters or their allies could be a fun trick for a crafty dragon.</p><p>The dragon can mimic any sounds it has heard, including voices. A creature that hears the sounds can tell they are imitations with a successful DC 12 Wisdom (Insight) check.</p></li><li><strong><em>Rejuvenation.</em></strong> <p>You might decide that dragons in your campaign, being an essential part of the Material Plane, are nearly impossible to destroy. A dragon's life essence might be preserved in the egg from which it first emerged, in its hoard, or in a cavernous hall at the center of the world, just as a lich's essence is hidden in a phylactery.</p><p>If it has an essence-preserving object, a destroyed dragon gains a new body in 1d10 days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the object.</p></li><li><strong><em>Special Senses.</em></strong> <p>Most dragons have blindsight and darkvision. You might upgrade blindsight to truesight, or you could give a dragon with a burrowing speed tremorsense.</p></li><li><strong><em>Tunneler.</em></strong> <p>The dragon can burrow through solid rock at half its burrowing speed and leaves a tunnel in its wake.</p></li></ul></div>",
+        "entries": [
+          "You can customize any dragon's stat block to reflect the dragon's unique character. Minor changes such as those below are easy to make and have no impact on a dragon's challenge rating.",
+          {
+            "type": "entries",
+            "name": "Languages",
+            "entries": [
+              "Most dragons prefer to speak Draconic but learn Common for dealing with allies and minions. But given their high Intelligence and long life span, dragons can easily learn additional languages. You can add languages to a dragon's stat block."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Skills",
+            "entries": [
+              "Most dragons are proficient in the {@skill Perception} and {@skill Stealth} skills, and many dragons have additional skill proficiencies. As with languages, you can customize a dragon's skill list (even doubling their proficiency bonus with certain skills) to reflect particular interests and activities. You can also give a dragon tool proficiencies, particularly if the dragon spends time in Humanoid form."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Spells",
+            "entries": [
+              "{@note See the \"Variant: Dragons as Innate Spellcasters\" inset(s), below.}"
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Other Traits and Actions",
+            "entries": [
+              "You can borrow traits and actions from other monsters to add unique flavor to a dragon. Consider these examples:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Change Shape",
+                    "entries": [
+                      "You can decide that a dragon acquires this action at a younger age than usual, particularly if you want to feature a dragon in Humanoid form in your campaign:",
+                      "The dragon magically polymorphs into a humanoid or beast that has a challenge rating no higher than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the dragon's choice).",
+                      "In a new form, the dragon retains its alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Its statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Flyby",
+                    "entries": [
+                      "The dragon is an agile flier, quick to fly out of enemies' reach.",
+                      "The dragon doesn't provoke an opportunity attack when it flies out of an enemy's reach."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Mimicry",
+                    "entries": [
+                      "Impersonating characters or their allies could be a fun trick for a crafty dragon.",
+                      "The dragon can mimic any sounds it has heard, including voices. A creature that hears the sounds can tell they are imitations with a successful {@dc 12} Wisdom ({@skill Insight}) check."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Rejuvenation",
+                    "entries": [
+                      "You might decide that dragons in your campaign, being an essential part of the Material Plane, are nearly impossible to destroy. A dragon's life essence might be preserved in the egg from which it first emerged, in its hoard, or in a cavernous hall at the center of the world, just as a lich's essence is hidden in a phylactery.",
+                      "If it has an essence-preserving object, a destroyed dragon gains a new body in {@dice 1d10} days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the object."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Special Senses",
+                    "entries": [
+                      "Most dragons have {@sense blindsight} and {@sense darkvision}. You might upgrade {@sense blindsight} to {@sense truesight}, or you could give a dragon with a burrowing speed {@sense tremorsense|MM}."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Tunneler",
+                    "entries": [
+                      "The dragon can burrow through solid rock at half its burrowing speed and leaves a tunnel in its wake."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SADS/Adult Sapphire Dragon.webp",
     "tokenImg": "img/bestiary/tokens/SADS/Adult Sapphire Dragon.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": {
+      "name": "Sapphire Dragon",
+      "source": "SADS"
+    }
   }
 ]

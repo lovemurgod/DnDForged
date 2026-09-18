@@ -1,0 +1,195 @@
+[
+  {
+    "id": "creature_reanimated_companion_xua2025horrorsubclasses",
+    "name": "Reanimated Companion",
+    "source": "XUA2025HorrorSubclasses",
+    "edition": "2014",
+    "page": 2,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "str": 14,
+    "dex": 10,
+    "con": 16,
+    "int": 4,
+    "wis": 10,
+    "cha": 6,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "lightning"
+    ],
+    "resist": [
+      "necrotic",
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "poisoned"
+    ],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "Blindsight 60 ft."
+    },
+    "languages": [
+      "understands the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_death_burst_rqwg",
+        "name": "Death Burst",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The companion explodes when it dies. dex DC equals {@dcYourSpellSave}, each creature in a 10-foot Emanation [Area of Effect] originating from the companion. {@actSaveFail} 2d6 Necrotic damage.</p>",
+        "entries": [
+          "The companion explodes when it dies. {@actSave dex} DC equals {@dcYourSpellSave}, each creature in a 10-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the companion. {@actSaveFail} {@damage 2d6} Necrotic damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lightning_absorption_rum5",
+        "name": "Lightning Absorption",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Whenever the companion is subjected to Lightning damage, it regains a number of Hit Points equal to the Lightning damage dealt.</p>",
+        "entries": [
+          "Whenever the companion is subjected to Lightning damage, it regains a number of {@variantrule Hit Points|XPHB} equal to the Lightning damage dealt."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_dreadful_swipe_fz0f",
+        "name": "Dreadful Swipe",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d4 + 2 plus your Intelligence modifier Necrotic damage, and the target can't take Opportunity Attack until the start of its next turn.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}{@damage 1d4 + 2} plus your Intelligence modifier Necrotic damage, and the target can't take {@action Opportunity Attack|XPHB|Opportunity Attacks} until the start of its next turn."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2025HorrorSubclasses/Reanimated Companion.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2025HorrorSubclasses/Reanimated Companion.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

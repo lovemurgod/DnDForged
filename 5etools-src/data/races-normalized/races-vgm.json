@@ -6,7 +6,563 @@
     "page": 104,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Aasimar mature at the same rate as humans, but they can live up to 160 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Aasimar have the same range of height and weight as humans.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Celestial Resistance.</strong> <p>You have resistance to necrotic damage and radiant damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Healing Hands.</strong> <p>As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Light Bearer.</strong> <p>You know the light cantrip. Charisma is your spellcasting ability for it.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Celestial.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Aasimar mature at the same rate as humans, but they can live up to 160 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Aasimar have the same range of height and weight as humans.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Celestial Resistance.</strong> <p>You have resistance to necrotic damage and radiant damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Healing Hands.</strong> <p>As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Light Bearer.</strong> <p>You know the light cantrip. Charisma is your spellcasting ability for it.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Celestial.</p></div>",
+    "traits": [
+      {
+        "id": "trait_aasimar_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar mature at the same rate as humans, but they can live up to 160 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar mature at the same rate as humans, but they can live up to 160 years."
+        ]
+      },
+      {
+        "id": "trait_aasimar_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar have the same range of height and weight as humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar have the same range of height and weight as humans."
+        ]
+      },
+      {
+        "id": "trait_aasimar_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_aasimar_celestial_resistance_vgm",
+        "name": "Celestial Resistance",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You have resistance to necrotic damage and radiant damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to necrotic damage and radiant damage."
+        ]
+      },
+      {
+        "id": "trait_aasimar_healing_hands_vgm",
+        "name": "Healing Hands",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "action",
+        "description": "As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_aasimar_light_bearer_vgm",
+        "name": "Light Bearer",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You know the light cantrip. Charisma is your spellcasting ability for it.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell light} cantrip. Charisma is your spellcasting ability for it."
+        ]
+      },
+      {
+        "id": "trait_aasimar_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Celestial.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Celestial."
+        ]
+      }
+    ],
+    "description": "**Age**: Aasimar mature at the same rate as humans, but they can live up to 160 years.\n\n**Size**: Aasimar have the same range of height and weight as humans.\n\n**Darkvision**: Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Celestial Resistance**: You have resistance to necrotic damage and radiant damage.\n\n**Healing Hands**: As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.\n\n**Light Bearer**: You know the light cantrip. Charisma is your spellcasting ability for it.\n\n**Languages**: You can speak, read, and write Common and Celestial."
+  },
+  {
+    "id": "race_aasimar_fallen_vgm",
+    "name": "Aasimar (Fallen)",
+    "raceName": "Aasimar",
+    "subraceName": "Fallen",
+    "source": "VGM",
+    "page": 105,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Necrotic Shroud.</strong> <p>Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing your eyes to turn into pools of darkness and two skeletal, ghostly, flightless wings to sprout from your back. The instant you transform, other creatures within 10 feet of you that can see you must succeed on a Charisma saving throw (8 + your proficiency bonus + your Charisma modifier) or become frightened of you until the end of your next turn.</p>\n<p>Your transformation lasts for 1 minute or until you end it as a bonus action. During it, once on each of your turns, you can deal extra necrotic damage to one target when you deal damage to it with an attack or a spell. The extra necrotic damage equals your level.</p>\n<p>Once you use this trait, you can't use it again until you finish a long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_aasimar_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar mature at the same rate as humans, but they can live up to 160 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar mature at the same rate as humans, but they can live up to 160 years."
+        ]
+      },
+      {
+        "id": "trait_aasimar_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar have the same range of height and weight as humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar have the same range of height and weight as humans."
+        ]
+      },
+      {
+        "id": "trait_aasimar_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_aasimar_celestial_resistance_vgm",
+        "name": "Celestial Resistance",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You have resistance to necrotic damage and radiant damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to necrotic damage and radiant damage."
+        ]
+      },
+      {
+        "id": "trait_aasimar_healing_hands_vgm",
+        "name": "Healing Hands",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "action",
+        "description": "As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_aasimar_light_bearer_vgm",
+        "name": "Light Bearer",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You know the light cantrip. Charisma is your spellcasting ability for it.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell light} cantrip. Charisma is your spellcasting ability for it."
+        ]
+      },
+      {
+        "id": "trait_aasimar_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Celestial.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Celestial."
+        ]
+      },
+      {
+        "id": "trait_aasimar_fallen_necrotic_shroud_vgm",
+        "name": "Necrotic Shroud",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "subraceName": "Fallen",
+        "actionType": "bonus",
+        "description": "Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing your eyes to turn into pools of darkness and two skeletal, ghostly, flightless wings to sprout from your back. The instant you transform, other creatures within 10 feet of you that can see you must succeed on a Charisma saving throw (8 + your proficiency bonus + your Charisma modifier) or become frightened of you until the end of your next turn.\n\nYour transformation lasts for 1 minute or until you end it as a bonus action. During it, once on each of your turns, you can deal extra necrotic damage to one target when you deal damage to it with an attack or a spell. The extra necrotic damage equals your level.\n\nOnce you use this trait, you can't use it again until you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing your eyes to turn into pools of darkness and two skeletal, ghostly, flightless wings to sprout from your back. The instant you transform, other creatures within 10 feet of you that can see you must succeed on a Charisma saving throw ({@dc 8} + your proficiency bonus + your Charisma modifier) or become {@condition frightened} of you until the end of your next turn.",
+          "Your transformation lasts for 1 minute or until you end it as a bonus action. During it, once on each of your turns, you can deal extra necrotic damage to one target when you deal damage to it with an attack or a spell. The extra necrotic damage equals your level.",
+          "Once you use this trait, you can't use it again until you finish a long rest."
+        ]
+      }
+    ],
+    "description": "**Age**: Aasimar mature at the same rate as humans, but they can live up to 160 years.\n\n**Size**: Aasimar have the same range of height and weight as humans.\n\n**Darkvision**: Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Celestial Resistance**: You have resistance to necrotic damage and radiant damage.\n\n**Healing Hands**: As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.\n\n**Light Bearer**: You know the light cantrip. Charisma is your spellcasting ability for it.\n\n**Languages**: You can speak, read, and write Common and Celestial.\n\n**Necrotic Shroud**: Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing your eyes to turn into pools of darkness and two skeletal, ghostly, flightless wings to sprout from your back. The instant you transform, other creatures within 10 feet of you that can see you must succeed on a Charisma saving throw (8 + your proficiency bonus + your Charisma modifier) or become frightened of you until the end of your next turn.\n\nYour transformation lasts for 1 minute or until you end it as a bonus action. During it, once on each of your turns, you can deal extra necrotic damage to one target when you deal damage to it with an attack or a spell. The extra necrotic damage equals your level.\n\nOnce you use this trait, you can't use it again until you finish a long rest."
+  },
+  {
+    "id": "race_aasimar_protector_vgm",
+    "name": "Aasimar (Protector)",
+    "raceName": "Aasimar",
+    "subraceName": "Protector",
+    "source": "VGM",
+    "page": 105,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Radiant Soul.</strong> <p>Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing your eyes to glimmer and two luminous, incorporeal wings to sprout from your back.</p>\n<p>Your transformation lasts for 1 minute or until you end it as a bonus action. During it, you have a flying speed of 30 feet, and once on each of your turns, you can deal extra radiant damage to one target when you deal damage to it with an attack or a spell. The extra radiant damage equals your level.</p>\n<p>Once you use this trait, you can't use it again until you finish a long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_aasimar_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar mature at the same rate as humans, but they can live up to 160 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar mature at the same rate as humans, but they can live up to 160 years."
+        ]
+      },
+      {
+        "id": "trait_aasimar_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar have the same range of height and weight as humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar have the same range of height and weight as humans."
+        ]
+      },
+      {
+        "id": "trait_aasimar_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_aasimar_celestial_resistance_vgm",
+        "name": "Celestial Resistance",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You have resistance to necrotic damage and radiant damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to necrotic damage and radiant damage."
+        ]
+      },
+      {
+        "id": "trait_aasimar_healing_hands_vgm",
+        "name": "Healing Hands",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "action",
+        "description": "As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_aasimar_light_bearer_vgm",
+        "name": "Light Bearer",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You know the light cantrip. Charisma is your spellcasting ability for it.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell light} cantrip. Charisma is your spellcasting ability for it."
+        ]
+      },
+      {
+        "id": "trait_aasimar_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Celestial.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Celestial."
+        ]
+      },
+      {
+        "id": "trait_aasimar_protector_radiant_soul_vgm",
+        "name": "Radiant Soul",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "subraceName": "Protector",
+        "actionType": "bonus",
+        "description": "Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing your eyes to glimmer and two luminous, incorporeal wings to sprout from your back.\n\nYour transformation lasts for 1 minute or until you end it as a bonus action. During it, you have a flying speed of 30 feet, and once on each of your turns, you can deal extra radiant damage to one target when you deal damage to it with an attack or a spell. The extra radiant damage equals your level.\n\nOnce you use this trait, you can't use it again until you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing your eyes to glimmer and two luminous, incorporeal wings to sprout from your back.",
+          "Your transformation lasts for 1 minute or until you end it as a bonus action. During it, you have a flying speed of 30 feet, and once on each of your turns, you can deal extra radiant damage to one target when you deal damage to it with an attack or a spell. The extra radiant damage equals your level.",
+          "Once you use this trait, you can't use it again until you finish a long rest."
+        ]
+      }
+    ],
+    "description": "**Age**: Aasimar mature at the same rate as humans, but they can live up to 160 years.\n\n**Size**: Aasimar have the same range of height and weight as humans.\n\n**Darkvision**: Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Celestial Resistance**: You have resistance to necrotic damage and radiant damage.\n\n**Healing Hands**: As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.\n\n**Light Bearer**: You know the light cantrip. Charisma is your spellcasting ability for it.\n\n**Languages**: You can speak, read, and write Common and Celestial.\n\n**Radiant Soul**: Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing your eyes to glimmer and two luminous, incorporeal wings to sprout from your back.\n\nYour transformation lasts for 1 minute or until you end it as a bonus action. During it, you have a flying speed of 30 feet, and once on each of your turns, you can deal extra radiant damage to one target when you deal damage to it with an attack or a spell. The extra radiant damage equals your level.\n\nOnce you use this trait, you can't use it again until you finish a long rest."
+  },
+  {
+    "id": "race_aasimar_scourge_vgm",
+    "name": "Aasimar (Scourge)",
+    "raceName": "Aasimar",
+    "subraceName": "Scourge",
+    "source": "VGM",
+    "page": 105,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Radiant Consumption.</strong> <p>Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing a searing light to radiate from you, pour out of your eyes and mouth, and threaten to char you.</p>\n<p>Your transformation lasts for 1 minute or until you end it as a bonus action. During it, you shed bright light in a 10-foot radius and dim light for an additional 10 feet, and at the end of each of your turns, you and each creature within 10 feet of you take radiant damage equal to half your level (rounded up). In addition, once on each of your turns, you can deal extra radiant damage to one target when you deal damage to it with an attack or a spell. The extra radiant damage equals your level.</p>\n<p>Once you use this trait, you can't use it again until you finish a long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_aasimar_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar mature at the same rate as humans, but they can live up to 160 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar mature at the same rate as humans, but they can live up to 160 years."
+        ]
+      },
+      {
+        "id": "trait_aasimar_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar have the same range of height and weight as humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar have the same range of height and weight as humans."
+        ]
+      },
+      {
+        "id": "trait_aasimar_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_aasimar_celestial_resistance_vgm",
+        "name": "Celestial Resistance",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You have resistance to necrotic damage and radiant damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to necrotic damage and radiant damage."
+        ]
+      },
+      {
+        "id": "trait_aasimar_healing_hands_vgm",
+        "name": "Healing Hands",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "action",
+        "description": "As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_aasimar_light_bearer_vgm",
+        "name": "Light Bearer",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You know the light cantrip. Charisma is your spellcasting ability for it.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell light} cantrip. Charisma is your spellcasting ability for it."
+        ]
+      },
+      {
+        "id": "trait_aasimar_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Celestial.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Celestial."
+        ]
+      },
+      {
+        "id": "trait_aasimar_scourge_radiant_consumption_vgm",
+        "name": "Radiant Consumption",
+        "source": "VGM",
+        "raceName": "Aasimar",
+        "subraceName": "Scourge",
+        "actionType": "bonus",
+        "description": "Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing a searing light to radiate from you, pour out of your eyes and mouth, and threaten to char you.\n\nYour transformation lasts for 1 minute or until you end it as a bonus action. During it, you shed bright light in a 10-foot radius and dim light for an additional 10 feet, and at the end of each of your turns, you and each creature within 10 feet of you take radiant damage equal to half your level (rounded up). In addition, once on each of your turns, you can deal extra radiant damage to one target when you deal damage to it with an attack or a spell. The extra radiant damage equals your level.\n\nOnce you use this trait, you can't use it again until you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing a searing light to radiate from you, pour out of your eyes and mouth, and threaten to char you.",
+          "Your transformation lasts for 1 minute or until you end it as a bonus action. During it, you shed bright light in a 10-foot radius and dim light for an additional 10 feet, and at the end of each of your turns, you and each creature within 10 feet of you take radiant damage equal to half your level (rounded up). In addition, once on each of your turns, you can deal extra radiant damage to one target when you deal damage to it with an attack or a spell. The extra radiant damage equals your level.",
+          "Once you use this trait, you can't use it again until you finish a long rest."
+        ]
+      }
+    ],
+    "description": "**Age**: Aasimar mature at the same rate as humans, but they can live up to 160 years.\n\n**Size**: Aasimar have the same range of height and weight as humans.\n\n**Darkvision**: Blessed with a radiant soul, your vision can easily cut through darkness. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Celestial Resistance**: You have resistance to necrotic damage and radiant damage.\n\n**Healing Hands**: As an action, you can touch a creature and cause it to regain a number of hit points equal to your level. Once you use this trait, you can't use it again until you finish a long rest.\n\n**Light Bearer**: You know the light cantrip. Charisma is your spellcasting ability for it.\n\n**Languages**: You can speak, read, and write Common and Celestial.\n\n**Radiant Consumption**: Starting at 3rd level, you can use your action to unleash the divine energy within yourself, causing a searing light to radiate from you, pour out of your eyes and mouth, and threaten to char you.\n\nYour transformation lasts for 1 minute or until you end it as a bonus action. During it, you shed bright light in a 10-foot radius and dim light for an additional 10 feet, and at the end of each of your turns, you and each creature within 10 feet of you take radiant damage equal to half your level (rounded up). In addition, once on each of your turns, you can deal extra radiant damage to one target when you deal damage to it with an attack or a spell. The extra radiant damage equals your level.\n\nOnce you use this trait, you can't use it again until you finish a long rest."
   },
   {
     "id": "race_bugbear_vgm",
@@ -15,7 +571,143 @@
     "page": 119,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Bugbears reach adulthood at age 16 and live up to 80 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Bugbears are between 6 and 8 feet tall and weigh between 250 and 350 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Long-Limbed.</strong> <p>When you make a melee attack on your turn, your reach for it is 5 feet greater than normal.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>\n<div class=\"compendium-subentry\"><strong>Sneaky.</strong> <p>You are proficient in the Stealth skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Surprise Attack.</strong> <p>If you surprise a creature and hit it with an attack on your first turn in combat, the attack deals an extra 2d6 damage to it. You can use this trait only once per combat.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Bugbears reach adulthood at age 16 and live up to 80 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Bugbears are between 6 and 8 feet tall and weigh between 250 and 350 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Long-Limbed.</strong> <p>When you make a melee attack on your turn, your reach for it is 5 feet greater than normal.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>\n<div class=\"compendium-subentry\"><strong>Sneaky.</strong> <p>You are proficient in the Stealth skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Surprise Attack.</strong> <p>If you surprise a creature and hit it with an attack on your first turn in combat, the attack deals an extra 2d6 damage to it. You can use this trait only once per combat.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>",
+    "traits": [
+      {
+        "id": "trait_bugbear_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Bugbear",
+        "actionType": "passive",
+        "description": "Bugbears reach adulthood at age 16 and live up to 80 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Bugbears reach adulthood at age 16 and live up to 80 years."
+        ]
+      },
+      {
+        "id": "trait_bugbear_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Bugbear",
+        "actionType": "passive",
+        "description": "Bugbears are between 6 and 8 feet tall and weigh between 250 and 350 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Bugbears are between 6 and 8 feet tall and weigh between 250 and 350 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_bugbear_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Bugbear",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_bugbear_long_limbed_vgm",
+        "name": "Long-Limbed",
+        "source": "VGM",
+        "raceName": "Bugbear",
+        "actionType": "passive",
+        "description": "When you make a melee attack on your turn, your reach for it is 5 feet greater than normal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you make a melee attack on your turn, your reach for it is 5 feet greater than normal."
+        ]
+      },
+      {
+        "id": "trait_bugbear_powerful_build_vgm",
+        "name": "Powerful Build",
+        "source": "VGM",
+        "raceName": "Bugbear",
+        "actionType": "passive",
+        "description": "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+        ]
+      },
+      {
+        "id": "trait_bugbear_sneaky_vgm",
+        "name": "Sneaky",
+        "source": "VGM",
+        "raceName": "Bugbear",
+        "actionType": "passive",
+        "description": "You are proficient in the Stealth skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are proficient in the {@skill Stealth} skill."
+        ]
+      },
+      {
+        "id": "trait_bugbear_surprise_attack_vgm",
+        "name": "Surprise Attack",
+        "source": "VGM",
+        "raceName": "Bugbear",
+        "actionType": "passive",
+        "description": "If you surprise a creature and hit it with an attack on your first turn in combat, the attack deals an extra 2d6 damage to it. You can use this trait only once per combat.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "2d6",
+        "formulaConfig": {
+          "baseDice": "2d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "If you surprise a creature and hit it with an attack on your first turn in combat, the attack deals an extra {@damage 2d6} damage to it. You can use this trait only once per combat."
+        ]
+      },
+      {
+        "id": "trait_bugbear_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Bugbear",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Goblin.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Goblin."
+        ]
+      }
+    ],
+    "description": "**Age**: Bugbears reach adulthood at age 16 and live up to 80 years.\n\n**Size**: Bugbears are between 6 and 8 feet tall and weigh between 250 and 350 pounds. Your size is Medium.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Long-Limbed**: When you make a melee attack on your turn, your reach for it is 5 feet greater than normal.\n\n**Powerful Build**: You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.\n\n**Sneaky**: You are proficient in the Stealth skill.\n\n**Surprise Attack**: If you surprise a creature and hit it with an attack on your first turn in combat, the attack deals an extra 2d6 damage to it. You can use this trait only once per combat.\n\n**Languages**: You can speak, read, and write Common and Goblin."
   },
   {
     "id": "race_firbolg_vgm",
@@ -24,7 +716,122 @@
     "page": 107,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>As humanoids related to the fey, firbolg have long lifespans. A firbolg reaches adulthood around 30, and the oldest of them can live for 500 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Firbolg are between 7 and 8 feet tall and weigh between 240 and 300 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Firbolg Magic.</strong> <p>You can cast detect magic and disguise self with this trait, using Wisdom as your spellcasting ability for them. Once you cast either spell, you can't cast it again with this trait until you finish a short or long rest. When you use this version of disguise self, you can seem up to 3 feet shorter than normal, allowing you to more easily blend in with humans and elves.</p></div>\n<div class=\"compendium-subentry\"><strong>Hidden Step.</strong> <p>As a bonus action, you can magically turn invisible until the start of your next turn or until you attack, make a damage roll, or force someone to make a saving throw. Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>\n<div class=\"compendium-subentry\"><strong>Speech of Beast and Leaf.</strong> <p>You have the ability to communicate in a limited manner with beasts and plants. They can understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common, Elvish, and Giant.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>As humanoids related to the fey, firbolg have long lifespans. A firbolg reaches adulthood around 30, and the oldest of them can live for 500 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Firbolg are between 7 and 8 feet tall and weigh between 240 and 300 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Firbolg Magic.</strong> <p>You can cast detect magic and disguise self with this trait, using Wisdom as your spellcasting ability for them. Once you cast either spell, you can't cast it again with this trait until you finish a short or long rest. When you use this version of disguise self, you can seem up to 3 feet shorter than normal, allowing you to more easily blend in with humans and elves.</p></div>\n<div class=\"compendium-subentry\"><strong>Hidden Step.</strong> <p>As a bonus action, you can magically turn invisible until the start of your next turn or until you attack, make a damage roll, or force someone to make a saving throw. Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>\n<div class=\"compendium-subentry\"><strong>Speech of Beast and Leaf.</strong> <p>You have the ability to communicate in a limited manner with beasts and plants. They can understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common, Elvish, and Giant.</p></div>",
+    "traits": [
+      {
+        "id": "trait_firbolg_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Firbolg",
+        "actionType": "passive",
+        "description": "As humanoids related to the fey, firbolg have long lifespans. A firbolg reaches adulthood around 30, and the oldest of them can live for 500 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As humanoids related to the fey, firbolg have long lifespans. A firbolg reaches adulthood around 30, and the oldest of them can live for 500 years."
+        ]
+      },
+      {
+        "id": "trait_firbolg_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Firbolg",
+        "actionType": "passive",
+        "description": "Firbolg are between 7 and 8 feet tall and weigh between 240 and 300 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Firbolg are between 7 and 8 feet tall and weigh between 240 and 300 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_firbolg_firbolg_magic_vgm",
+        "name": "Firbolg Magic",
+        "source": "VGM",
+        "raceName": "Firbolg",
+        "actionType": "passive",
+        "description": "You can cast detect magic and disguise self with this trait, using Wisdom as your spellcasting ability for them. Once you cast either spell, you can't cast it again with this trait until you finish a short or long rest. When you use this version of disguise self, you can seem up to 3 feet shorter than normal, allowing you to more easily blend in with humans and elves.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can cast {@spell detect magic} and {@spell disguise self} with this trait, using Wisdom as your spellcasting ability for them. Once you cast either spell, you can't cast it again with this trait until you finish a short or long rest. When you use this version of {@spell disguise self}, you can seem up to 3 feet shorter than normal, allowing you to more easily blend in with humans and elves."
+        ]
+      },
+      {
+        "id": "trait_firbolg_hidden_step_vgm",
+        "name": "Hidden Step",
+        "source": "VGM",
+        "raceName": "Firbolg",
+        "actionType": "bonus",
+        "description": "As a bonus action, you can magically turn invisible until the start of your next turn or until you attack, make a damage roll, or force someone to make a saving throw. Once you use this trait, you can't use it again until you finish a short or long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a bonus action, you can magically turn {@condition invisible} until the start of your next turn or until you attack, make a damage roll, or force someone to make a saving throw. Once you use this trait, you can't use it again until you finish a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_firbolg_powerful_build_vgm",
+        "name": "Powerful Build",
+        "source": "VGM",
+        "raceName": "Firbolg",
+        "actionType": "passive",
+        "description": "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+        ]
+      },
+      {
+        "id": "trait_firbolg_speech_of_beast_and_leaf_vgm",
+        "name": "Speech of Beast and Leaf",
+        "source": "VGM",
+        "raceName": "Firbolg",
+        "actionType": "passive",
+        "description": "You have the ability to communicate in a limited manner with beasts and plants. They can understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have the ability to communicate in a limited manner with beasts and plants. They can understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them."
+        ]
+      },
+      {
+        "id": "trait_firbolg_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Firbolg",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common, Elvish, and Giant.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common, Elvish, and Giant."
+        ]
+      }
+    ],
+    "description": "**Age**: As humanoids related to the fey, firbolg have long lifespans. A firbolg reaches adulthood around 30, and the oldest of them can live for 500 years.\n\n**Size**: Firbolg are between 7 and 8 feet tall and weigh between 240 and 300 pounds. Your size is Medium.\n\n**Firbolg Magic**: You can cast detect magic and disguise self with this trait, using Wisdom as your spellcasting ability for them. Once you cast either spell, you can't cast it again with this trait until you finish a short or long rest. When you use this version of disguise self, you can seem up to 3 feet shorter than normal, allowing you to more easily blend in with humans and elves.\n\n**Hidden Step**: As a bonus action, you can magically turn invisible until the start of your next turn or until you attack, make a damage roll, or force someone to make a saving throw. Once you use this trait, you can't use it again until you finish a short or long rest.\n\n**Powerful Build**: You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.\n\n**Speech of Beast and Leaf**: You have the ability to communicate in a limited manner with beasts and plants. They can understand the meaning of your words, though you have no special ability to understand them in return. You have advantage on all Charisma checks you make to influence them.\n\n**Languages**: You can speak, read, and write Common, Elvish, and Giant."
   },
   {
     "id": "race_goblin_vgm",
@@ -33,7 +840,106 @@
     "page": 119,
     "size": "S",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Goblins reach adulthood at age 8 and live up to 60 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Goblins are between 3 and 4 feet tall and weigh between 40 and 80 pounds. Your size is Small.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Fury of the Small.</strong> <p>When you damage a creature with an attack or a spell and the creature's size is larger than yours, you can cause the attack or spell to deal extra damage to the creature. The extra damage equals your level. Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Nimble Escape.</strong> <p>You can take the Disengage or Hide action as a bonus action on each of your turns.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Goblins reach adulthood at age 8 and live up to 60 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Goblins are between 3 and 4 feet tall and weigh between 40 and 80 pounds. Your size is Small.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Fury of the Small.</strong> <p>When you damage a creature with an attack or a spell and the creature's size is larger than yours, you can cause the attack or spell to deal extra damage to the creature. The extra damage equals your level. Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Nimble Escape.</strong> <p>You can take the Disengage or Hide action as a bonus action on each of your turns.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>",
+    "traits": [
+      {
+        "id": "trait_goblin_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Goblin",
+        "actionType": "passive",
+        "description": "Goblins reach adulthood at age 8 and live up to 60 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Goblins reach adulthood at age 8 and live up to 60 years."
+        ]
+      },
+      {
+        "id": "trait_goblin_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Goblin",
+        "actionType": "passive",
+        "description": "Goblins are between 3 and 4 feet tall and weigh between 40 and 80 pounds. Your size is Small.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Goblins are between 3 and 4 feet tall and weigh between 40 and 80 pounds. Your size is Small."
+        ]
+      },
+      {
+        "id": "trait_goblin_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Goblin",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_goblin_fury_of_the_small_vgm",
+        "name": "Fury of the Small",
+        "source": "VGM",
+        "raceName": "Goblin",
+        "actionType": "passive",
+        "description": "When you damage a creature with an attack or a spell and the creature's size is larger than yours, you can cause the attack or spell to deal extra damage to the creature. The extra damage equals your level. Once you use this trait, you can't use it again until you finish a short or long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you damage a creature with an attack or a spell and the creature's size is larger than yours, you can cause the attack or spell to deal extra damage to the creature. The extra damage equals your level. Once you use this trait, you can't use it again until you finish a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_goblin_nimble_escape_vgm",
+        "name": "Nimble Escape",
+        "source": "VGM",
+        "raceName": "Goblin",
+        "actionType": "bonus",
+        "description": "You can take the Disengage or Hide action as a bonus action on each of your turns.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can take the {@action Disengage} or {@action Hide} action as a bonus action on each of your turns."
+        ]
+      },
+      {
+        "id": "trait_goblin_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Goblin",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Goblin.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Goblin."
+        ]
+      }
+    ],
+    "description": "**Age**: Goblins reach adulthood at age 8 and live up to 60 years.\n\n**Size**: Goblins are between 3 and 4 feet tall and weigh between 40 and 80 pounds. Your size is Small.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Fury of the Small**: When you damage a creature with an attack or a spell and the creature's size is larger than yours, you can cause the attack or spell to deal extra damage to the creature. The extra damage equals your level. Once you use this trait, you can't use it again until you finish a short or long rest.\n\n**Nimble Escape**: You can take the Disengage or Hide action as a bonus action on each of your turns.\n\n**Languages**: You can speak, read, and write Common and Goblin."
   },
   {
     "id": "race_goliath_vgm",
@@ -42,7 +948,122 @@
     "page": 108,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Goliaths have lifespans comparable to humans. They enter adulthood in their late teens and usually live less than a century.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Goliaths are between 7 and 8 feet tall and weigh between 280 and 340 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Athlete.</strong> <p>You have proficiency in the Athletics skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Stone's Endurance.</strong> <p>You can focus yourself to occasionally shrug off injury. When you take damage, you can use your reaction to roll a d12. Add your Constitution modifier to the number rolled, and reduce the damage by that total. After you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>\n<div class=\"compendium-subentry\"><strong>Mountain Born.</strong> <p>You have resistance to cold damage. You're also acclimated to high altitude, including elevations above 20,000 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Giant.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Goliaths have lifespans comparable to humans. They enter adulthood in their late teens and usually live less than a century.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Goliaths are between 7 and 8 feet tall and weigh between 280 and 340 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Athlete.</strong> <p>You have proficiency in the Athletics skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Stone's Endurance.</strong> <p>You can focus yourself to occasionally shrug off injury. When you take damage, you can use your reaction to roll a d12. Add your Constitution modifier to the number rolled, and reduce the damage by that total. After you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>\n<div class=\"compendium-subentry\"><strong>Mountain Born.</strong> <p>You have resistance to cold damage. You're also acclimated to high altitude, including elevations above 20,000 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Giant.</p></div>",
+    "traits": [
+      {
+        "id": "trait_goliath_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Goliath",
+        "actionType": "passive",
+        "description": "Goliaths have lifespans comparable to humans. They enter adulthood in their late teens and usually live less than a century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Goliaths have lifespans comparable to humans. They enter adulthood in their late teens and usually live less than a century."
+        ]
+      },
+      {
+        "id": "trait_goliath_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Goliath",
+        "actionType": "passive",
+        "description": "Goliaths are between 7 and 8 feet tall and weigh between 280 and 340 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Goliaths are between 7 and 8 feet tall and weigh between 280 and 340 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_goliath_natural_athlete_vgm",
+        "name": "Natural Athlete",
+        "source": "VGM",
+        "raceName": "Goliath",
+        "actionType": "passive",
+        "description": "You have proficiency in the Athletics skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Athletics} skill."
+        ]
+      },
+      {
+        "id": "trait_goliath_stone_s_endurance_vgm",
+        "name": "Stone's Endurance",
+        "source": "VGM",
+        "raceName": "Goliath",
+        "actionType": "passive",
+        "description": "You can focus yourself to occasionally shrug off injury. When you take damage, you can use your reaction to roll a d12. Add your Constitution modifier to the number rolled, and reduce the damage by that total. After you use this trait, you can't use it again until you finish a short or long rest.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can focus yourself to occasionally shrug off injury. When you take damage, you can use your reaction to roll a {@dice d12}. Add your Constitution modifier to the number rolled, and reduce the damage by that total. After you use this trait, you can't use it again until you finish a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_goliath_powerful_build_vgm",
+        "name": "Powerful Build",
+        "source": "VGM",
+        "raceName": "Goliath",
+        "actionType": "passive",
+        "description": "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+        ]
+      },
+      {
+        "id": "trait_goliath_mountain_born_vgm",
+        "name": "Mountain Born",
+        "source": "VGM",
+        "raceName": "Goliath",
+        "actionType": "passive",
+        "description": "You have resistance to cold damage. You're also acclimated to high altitude, including elevations above 20,000 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to cold damage. You're also acclimated to high altitude, including elevations above 20,000 feet."
+        ]
+      },
+      {
+        "id": "trait_goliath_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Goliath",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Giant.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Giant."
+        ]
+      }
+    ],
+    "description": "**Age**: Goliaths have lifespans comparable to humans. They enter adulthood in their late teens and usually live less than a century.\n\n**Size**: Goliaths are between 7 and 8 feet tall and weigh between 280 and 340 pounds. Your size is Medium.\n\n**Natural Athlete**: You have proficiency in the Athletics skill.\n\n**Stone's Endurance**: You can focus yourself to occasionally shrug off injury. When you take damage, you can use your reaction to roll a d12. Add your Constitution modifier to the number rolled, and reduce the damage by that total. After you use this trait, you can't use it again until you finish a short or long rest.\n\n**Powerful Build**: You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.\n\n**Mountain Born**: You have resistance to cold damage. You're also acclimated to high altitude, including elevations above 20,000 feet.\n\n**Languages**: You can speak, read, and write Common and Giant."
   },
   {
     "id": "race_hobgoblin_vgm",
@@ -51,7 +1072,106 @@
     "page": 119,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Hobgoblins mature at the same rate as humans and have lifespans similar in length to theirs.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Hobgoblins are between 5 and 6 feet tall and weigh between 150 and 200 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Martial Training.</strong> <p>You are proficient with two martial weapons|items|source=phb|category=basic|type=martial weapon of your choice and with light armor.</p></div>\n<div class=\"compendium-subentry\"><strong>Saving Face.</strong> <p>Hobgoblins are careful not to show weakness in front of their allies, for fear of losing status. If you miss with an attack roll or fail an ability check or a saving throw, you can gain a bonus to the roll equal to the number of allies you can see within 30 feet of you (maximum bonus of +5). Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Hobgoblins mature at the same rate as humans and have lifespans similar in length to theirs.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Hobgoblins are between 5 and 6 feet tall and weigh between 150 and 200 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Martial Training.</strong> <p>You are proficient with two martial weapons|items|source=phb|category=basic|type=martial weapon of your choice and with light armor.</p></div>\n<div class=\"compendium-subentry\"><strong>Saving Face.</strong> <p>Hobgoblins are careful not to show weakness in front of their allies, for fear of losing status. If you miss with an attack roll or fail an ability check or a saving throw, you can gain a bonus to the roll equal to the number of allies you can see within 30 feet of you (maximum bonus of +5). Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>",
+    "traits": [
+      {
+        "id": "trait_hobgoblin_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Hobgoblin",
+        "actionType": "passive",
+        "description": "Hobgoblins mature at the same rate as humans and have lifespans similar in length to theirs.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobgoblins mature at the same rate as humans and have lifespans similar in length to theirs."
+        ]
+      },
+      {
+        "id": "trait_hobgoblin_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Hobgoblin",
+        "actionType": "passive",
+        "description": "Hobgoblins are between 5 and 6 feet tall and weigh between 150 and 200 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobgoblins are between 5 and 6 feet tall and weigh between 150 and 200 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_hobgoblin_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Hobgoblin",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_hobgoblin_martial_training_vgm",
+        "name": "Martial Training",
+        "source": "VGM",
+        "raceName": "Hobgoblin",
+        "actionType": "passive",
+        "description": "You are proficient with two martial weapons|items|source=phb|category=basic|type=martial weapon of your choice and with light armor.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are proficient with two {@filter martial weapons|items|source=phb|category=basic|type=martial weapon} of your choice and with light armor."
+        ]
+      },
+      {
+        "id": "trait_hobgoblin_saving_face_vgm",
+        "name": "Saving Face",
+        "source": "VGM",
+        "raceName": "Hobgoblin",
+        "actionType": "passive",
+        "description": "Hobgoblins are careful not to show weakness in front of their allies, for fear of losing status. If you miss with an attack roll or fail an ability check or a saving throw, you can gain a bonus to the roll equal to the number of allies you can see within 30 feet of you (maximum bonus of +5). Once you use this trait, you can't use it again until you finish a short or long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Hobgoblins are careful not to show weakness in front of their allies, for fear of losing status. If you miss with an attack roll or fail an ability check or a saving throw, you can gain a bonus to the roll equal to the number of allies you can see within 30 feet of you (maximum bonus of +5). Once you use this trait, you can't use it again until you finish a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_hobgoblin_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Hobgoblin",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Goblin.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Goblin."
+        ]
+      }
+    ],
+    "description": "**Age**: Hobgoblins mature at the same rate as humans and have lifespans similar in length to theirs.\n\n**Size**: Hobgoblins are between 5 and 6 feet tall and weigh between 150 and 200 pounds. Your size is Medium.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Martial Training**: You are proficient with two martial weapons|items|source=phb|category=basic|type=martial weapon of your choice and with light armor.\n\n**Saving Face**: Hobgoblins are careful not to show weakness in front of their allies, for fear of losing status. If you miss with an attack roll or fail an ability check or a saving throw, you can gain a bonus to the roll equal to the number of allies you can see within 30 feet of you (maximum bonus of +5). Once you use this trait, you can't use it again until you finish a short or long rest.\n\n**Languages**: You can speak, read, and write Common and Goblin."
   },
   {
     "id": "race_kenku_vgm",
@@ -60,7 +1180,106 @@
     "page": 109,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Kenku have shorter lifespans than humans. They reach maturity at about 12 years old and can live to 60.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Kenku are around 5 feet tall and weigh between 90 and 120 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Expert Forgery.</strong> <p>You can duplicate other creatures' handwriting and craftwork. You have advantage on all checks made to produce forgeries or duplicates of existing objects.</p></div>\n<div class=\"compendium-subentry\"><strong>Kenku Training.</strong> <p>You are proficient in your choice of two of the following skills: Acrobatics, Deception, Stealth, and Sleight of Hand.</p></div>\n<div class=\"compendium-subentry\"><strong>Mimicry.</strong> <p>You can mimic sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful Wisdom (Insight) check opposed by your Charisma (Deception) check.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can read and write Common and Auran, but you can only speak using your Mimicry trait.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Kenku have shorter lifespans than humans. They reach maturity at about 12 years old and can live to 60.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Kenku are around 5 feet tall and weigh between 90 and 120 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Expert Forgery.</strong> <p>You can duplicate other creatures' handwriting and craftwork. You have advantage on all checks made to produce forgeries or duplicates of existing objects.</p></div>\n<div class=\"compendium-subentry\"><strong>Kenku Training.</strong> <p>You are proficient in your choice of two of the following skills: Acrobatics, Deception, Stealth, and Sleight of Hand.</p></div>\n<div class=\"compendium-subentry\"><strong>Mimicry.</strong> <p>You can mimic sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful Wisdom (Insight) check opposed by your Charisma (Deception) check.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can read and write Common and Auran, but you can only speak using your Mimicry trait.</p></div>",
+    "traits": [
+      {
+        "id": "trait_kenku_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Kenku",
+        "actionType": "passive",
+        "description": "Kenku have shorter lifespans than humans. They reach maturity at about 12 years old and can live to 60.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Kenku have shorter lifespans than humans. They reach maturity at about 12 years old and can live to 60."
+        ]
+      },
+      {
+        "id": "trait_kenku_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Kenku",
+        "actionType": "passive",
+        "description": "Kenku are around 5 feet tall and weigh between 90 and 120 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Kenku are around 5 feet tall and weigh between 90 and 120 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_kenku_expert_forgery_vgm",
+        "name": "Expert Forgery",
+        "source": "VGM",
+        "raceName": "Kenku",
+        "actionType": "passive",
+        "description": "You can duplicate other creatures' handwriting and craftwork. You have advantage on all checks made to produce forgeries or duplicates of existing objects.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can duplicate other creatures' handwriting and craftwork. You have advantage on all checks made to produce forgeries or duplicates of existing objects."
+        ]
+      },
+      {
+        "id": "trait_kenku_kenku_training_vgm",
+        "name": "Kenku Training",
+        "source": "VGM",
+        "raceName": "Kenku",
+        "actionType": "passive",
+        "description": "You are proficient in your choice of two of the following skills: Acrobatics, Deception, Stealth, and Sleight of Hand.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are proficient in your choice of two of the following skills: {@skill Acrobatics}, {@skill Deception}, {@skill Stealth}, and {@skill Sleight of Hand}."
+        ]
+      },
+      {
+        "id": "trait_kenku_mimicry_vgm",
+        "name": "Mimicry",
+        "source": "VGM",
+        "raceName": "Kenku",
+        "actionType": "passive",
+        "description": "You can mimic sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful Wisdom (Insight) check opposed by your Charisma (Deception) check.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can mimic sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful Wisdom ({@skill Insight}) check opposed by your Charisma ({@skill Deception}) check."
+        ]
+      },
+      {
+        "id": "trait_kenku_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Kenku",
+        "actionType": "passive",
+        "description": "You can read and write Common and Auran, but you can only speak using your Mimicry trait.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can read and write Common and Auran, but you can only speak using your Mimicry trait."
+        ]
+      }
+    ],
+    "description": "**Age**: Kenku have shorter lifespans than humans. They reach maturity at about 12 years old and can live to 60.\n\n**Size**: Kenku are around 5 feet tall and weigh between 90 and 120 pounds. Your size is Medium.\n\n**Expert Forgery**: You can duplicate other creatures' handwriting and craftwork. You have advantage on all checks made to produce forgeries or duplicates of existing objects.\n\n**Kenku Training**: You are proficient in your choice of two of the following skills: Acrobatics, Deception, Stealth, and Sleight of Hand.\n\n**Mimicry**: You can mimic sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful Wisdom (Insight) check opposed by your Charisma (Deception) check.\n\n**Languages**: You can read and write Common and Auran, but you can only speak using your Mimicry trait."
   },
   {
     "id": "race_kobold_vgm",
@@ -69,7 +1288,122 @@
     "page": 119,
     "size": "S",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Kobolds reach adulthood at age 6 and can live up to 120 years but rarely do so.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Kobolds are between 2 and 3 feet tall and weigh between 25 and 35 pounds. Your size is Small.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Grovel, Cower, and Beg.</strong> <p>As an action on your turn, you can cower pathetically to distract nearby foes. Until the end of your next turn, your allies gain advantage on attack rolls against enemies within 10 feet of you that you can see. Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Pack Tactics.</strong> <p>You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Sensitivity.</strong> <p>You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Draconic.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Kobolds reach adulthood at age 6 and can live up to 120 years but rarely do so.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Kobolds are between 2 and 3 feet tall and weigh between 25 and 35 pounds. Your size is Small.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Grovel, Cower, and Beg.</strong> <p>As an action on your turn, you can cower pathetically to distract nearby foes. Until the end of your next turn, your allies gain advantage on attack rolls against enemies within 10 feet of you that you can see. Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Pack Tactics.</strong> <p>You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Sensitivity.</strong> <p>You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Draconic.</p></div>",
+    "traits": [
+      {
+        "id": "trait_kobold_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "Kobolds reach adulthood at age 6 and can live up to 120 years but rarely do so.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Kobolds reach adulthood at age 6 and can live up to 120 years but rarely do so."
+        ]
+      },
+      {
+        "id": "trait_kobold_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "Kobolds are between 2 and 3 feet tall and weigh between 25 and 35 pounds. Your size is Small.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Kobolds are between 2 and 3 feet tall and weigh between 25 and 35 pounds. Your size is Small."
+        ]
+      },
+      {
+        "id": "trait_kobold_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_kobold_grovel_cower_and_beg_vgm",
+        "name": "Grovel, Cower, and Beg",
+        "source": "VGM",
+        "raceName": "Kobold",
+        "actionType": "action",
+        "description": "As an action on your turn, you can cower pathetically to distract nearby foes. Until the end of your next turn, your allies gain advantage on attack rolls against enemies within 10 feet of you that you can see. Once you use this trait, you can't use it again until you finish a short or long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As an action on your turn, you can cower pathetically to distract nearby foes. Until the end of your next turn, your allies gain advantage on attack rolls against enemies within 10 feet of you that you can see. Once you use this trait, you can't use it again until you finish a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_kobold_pack_tactics_vgm",
+        "name": "Pack Tactics",
+        "source": "VGM",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ]
+      },
+      {
+        "id": "trait_kobold_sunlight_sensitivity_vgm",
+        "name": "Sunlight Sensitivity",
+        "source": "VGM",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have disadvantage on attack rolls and on Wisdom ({@skill Perception}) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight."
+        ]
+      },
+      {
+        "id": "trait_kobold_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Draconic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Draconic."
+        ]
+      }
+    ],
+    "description": "**Age**: Kobolds reach adulthood at age 6 and can live up to 120 years but rarely do so.\n\n**Size**: Kobolds are between 2 and 3 feet tall and weigh between 25 and 35 pounds. Your size is Small.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Grovel, Cower, and Beg**: As an action on your turn, you can cower pathetically to distract nearby foes. Until the end of your next turn, your allies gain advantage on attack rolls against enemies within 10 feet of you that you can see. Once you use this trait, you can't use it again until you finish a short or long rest.\n\n**Pack Tactics**: You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.\n\n**Sunlight Sensitivity**: You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.\n\n**Languages**: You can speak, read, and write Common and Draconic."
   },
   {
     "id": "race_lizardfolk_vgm",
@@ -78,7 +1412,180 @@
     "page": 111,
     "size": "M",
     "speed": "30 ft, swim 30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Lizardfolk reach maturity around age 14 and rarely live longer than 60 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Lizardfolk are a little bulkier and taller than humans, and their colorful frills make them appear even larger. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Swim Speed.</strong> <p>You have a swimming speed of 30 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Bite.</strong> <p>Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to 1d6 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.</p></div>\n<div class=\"compendium-subentry\"><strong>Cunning Artisan.</strong> <p>As part of a short rest, you can harvest bone and hide from a slain beast, construct, dragon, monstrosity, or plant creature of size small or larger to create one of the following items: a shield, a club, a javelin, or 1d4 dart or blowgun needle. To use this trait, you need a blade, such as a dagger, or appropriate artisan's tools|items|source=phb|miscellaneous=mundane|type=artisan's tools, such as leatherworker's tools.</p></div>\n<div class=\"compendium-subentry\"><strong>Hold Breath.</strong> <p>You can hold your breath for up to 15 minutes at a time.</p></div>\n<div class=\"compendium-subentry\"><strong>Hunter's Lore.</strong> <p>You gain proficiency with two of the following skills of your choice: Animal Handling, Nature, Perception, Stealth, and Survival.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Armor.</strong> <p>You have tough, scaly skin. When you aren't wearing armor, your AC is 13 + your Dexterity modifier. You can use your natural armor to determine your AC if the armor you wear would leave you with a lower AC. A shield's benefits apply as normal while you use your natural armor.</p></div>\n<div class=\"compendium-subentry\"><strong>Hungry Jaws.</strong> <p>In battle, you can throw yourself into a vicious feeding frenzy. As a bonus action, you can make a special attack with your bite. If the attack hits, it deals its normal damage, and you gain temporary hit points equal to your Constitution modifier (minimum of 1), and you can't use this trait again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Draconic.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Lizardfolk reach maturity around age 14 and rarely live longer than 60 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Lizardfolk are a little bulkier and taller than humans, and their colorful frills make them appear even larger. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Swim Speed.</strong> <p>You have a swimming speed of 30 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Bite.</strong> <p>Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to 1d6 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.</p></div>\n<div class=\"compendium-subentry\"><strong>Cunning Artisan.</strong> <p>As part of a short rest, you can harvest bone and hide from a slain beast, construct, dragon, monstrosity, or plant creature of size small or larger to create one of the following items: a shield, a club, a javelin, or 1d4 dart or blowgun needle. To use this trait, you need a blade, such as a dagger, or appropriate artisan's tools|items|source=phb|miscellaneous=mundane|type=artisan's tools, such as leatherworker's tools.</p></div>\n<div class=\"compendium-subentry\"><strong>Hold Breath.</strong> <p>You can hold your breath for up to 15 minutes at a time.</p></div>\n<div class=\"compendium-subentry\"><strong>Hunter's Lore.</strong> <p>You gain proficiency with two of the following skills of your choice: Animal Handling, Nature, Perception, Stealth, and Survival.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Armor.</strong> <p>You have tough, scaly skin. When you aren't wearing armor, your AC is 13 + your Dexterity modifier. You can use your natural armor to determine your AC if the armor you wear would leave you with a lower AC. A shield's benefits apply as normal while you use your natural armor.</p></div>\n<div class=\"compendium-subentry\"><strong>Hungry Jaws.</strong> <p>In battle, you can throw yourself into a vicious feeding frenzy. As a bonus action, you can make a special attack with your bite. If the attack hits, it deals its normal damage, and you gain temporary hit points equal to your Constitution modifier (minimum of 1), and you can't use this trait again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Draconic.</p></div>",
+    "traits": [
+      {
+        "id": "trait_lizardfolk_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "Lizardfolk reach maturity around age 14 and rarely live longer than 60 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Lizardfolk reach maturity around age 14 and rarely live longer than 60 years."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "Lizardfolk are a little bulkier and taller than humans, and their colorful frills make them appear even larger. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Lizardfolk are a little bulkier and taller than humans, and their colorful frills make them appear even larger. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_swim_speed_vgm",
+        "name": "Swim Speed",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "You have a swimming speed of 30 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a swimming speed of 30 feet."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_bite_vgm",
+        "name": "Bite",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to 1d6 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6 + @str",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to {@damage 1d6} + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_cunning_artisan_vgm",
+        "name": "Cunning Artisan",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "As part of a short rest, you can harvest bone and hide from a slain beast, construct, dragon, monstrosity, or plant creature of size small or larger to create one of the following items: a shield, a club, a javelin, or 1d4 dart or blowgun needle. To use this trait, you need a blade, such as a dagger, or appropriate artisan's tools|items|source=phb|miscellaneous=mundane|type=artisan's tools, such as leatherworker's tools.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "As part of a short rest, you can harvest bone and hide from a slain beast, construct, dragon, monstrosity, or plant creature of size small or larger to create one of the following items: a {@item shield|phb}, a {@item club|phb}, a {@item javelin|phb}, or {@dice 1d4} {@item dart|phb|darts} or {@item blowgun needle|phb|blowgun needles}. To use this trait, you need a blade, such as a {@item dagger|phb}, or appropriate {@filter artisan's tools|items|source=phb|miscellaneous=mundane|type=artisan's tools}, such as {@item leatherworker's tools|phb}."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_hold_breath_vgm",
+        "name": "Hold Breath",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "You can hold your breath for up to 15 minutes at a time.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can hold your breath for up to 15 minutes at a time."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_hunter_s_lore_vgm",
+        "name": "Hunter's Lore",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "You gain proficiency with two of the following skills of your choice: Animal Handling, Nature, Perception, Stealth, and Survival.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency with two of the following skills of your choice: {@skill Animal Handling}, {@skill Nature}, {@skill Perception}, {@skill Stealth}, and {@skill Survival}."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_natural_armor_vgm",
+        "name": "Natural Armor",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "You have tough, scaly skin. When you aren't wearing armor, your AC is 13 + your Dexterity modifier. You can use your natural armor to determine your AC if the armor you wear would leave you with a lower AC. A shield's benefits apply as normal while you use your natural armor.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have tough, scaly skin. When you aren't wearing armor, your AC is 13 + your Dexterity modifier. You can use your natural armor to determine your AC if the armor you wear would leave you with a lower AC. A shield's benefits apply as normal while you use your natural armor."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_hungry_jaws_vgm",
+        "name": "Hungry Jaws",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "bonus",
+        "description": "In battle, you can throw yourself into a vicious feeding frenzy. As a bonus action, you can make a special attack with your bite. If the attack hits, it deals its normal damage, and you gain temporary hit points equal to your Constitution modifier (minimum of 1), and you can't use this trait again until you finish a short or long rest.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "In battle, you can throw yourself into a vicious feeding frenzy. As a bonus action, you can make a special attack with your bite. If the attack hits, it deals its normal damage, and you gain temporary hit points equal to your Constitution modifier (minimum of 1), and you can't use this trait again until you finish a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Draconic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Draconic."
+        ]
+      }
+    ],
+    "description": "**Age**: Lizardfolk reach maturity around age 14 and rarely live longer than 60 years.\n\n**Size**: Lizardfolk are a little bulkier and taller than humans, and their colorful frills make them appear even larger. Your size is Medium.\n\n**Swim Speed**: You have a swimming speed of 30 feet.\n\n**Bite**: Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to 1d6 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.\n\n**Cunning Artisan**: As part of a short rest, you can harvest bone and hide from a slain beast, construct, dragon, monstrosity, or plant creature of size small or larger to create one of the following items: a shield, a club, a javelin, or 1d4 dart or blowgun needle. To use this trait, you need a blade, such as a dagger, or appropriate artisan's tools|items|source=phb|miscellaneous=mundane|type=artisan's tools, such as leatherworker's tools.\n\n**Hold Breath**: You can hold your breath for up to 15 minutes at a time.\n\n**Hunter's Lore**: You gain proficiency with two of the following skills of your choice: Animal Handling, Nature, Perception, Stealth, and Survival.\n\n**Natural Armor**: You have tough, scaly skin. When you aren't wearing armor, your AC is 13 + your Dexterity modifier. You can use your natural armor to determine your AC if the armor you wear would leave you with a lower AC. A shield's benefits apply as normal while you use your natural armor.\n\n**Hungry Jaws**: In battle, you can throw yourself into a vicious feeding frenzy. As a bonus action, you can make a special attack with your bite. If the attack hits, it deals its normal damage, and you gain temporary hit points equal to your Constitution modifier (minimum of 1), and you can't use this trait again until you finish a short or long rest.\n\n**Languages**: You can speak, read, and write Common and Draconic."
   },
   {
     "id": "race_orc_vgm",
@@ -87,7 +1594,122 @@
     "page": 120,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Orcs reach adulthood at age 12 and live up to 50 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Orcs are usually over 6 feet tall and weigh between 230 and 280 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Aggressive.</strong> <p>As a bonus action, you can move up to your movement speed toward a hostile creature you can see or hear. You must end this move closer to the enemy than you started.</p></div>\n<div class=\"compendium-subentry\"><strong>Primal Intuition.</strong> <p>You have proficiency in two of the following skills of your choice: Animal Handling, Insight, Intimidation, Medicine, Nature, Perception, and Survival.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Orc.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Orcs reach adulthood at age 12 and live up to 50 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Orcs are usually over 6 feet tall and weigh between 230 and 280 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Aggressive.</strong> <p>As a bonus action, you can move up to your movement speed toward a hostile creature you can see or hear. You must end this move closer to the enemy than you started.</p></div>\n<div class=\"compendium-subentry\"><strong>Primal Intuition.</strong> <p>You have proficiency in two of the following skills of your choice: Animal Handling, Insight, Intimidation, Medicine, Nature, Perception, and Survival.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Orc.</p></div>",
+    "traits": [
+      {
+        "id": "trait_orc_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "Orcs reach adulthood at age 12 and live up to 50 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Orcs reach adulthood at age 12 and live up to 50 years."
+        ]
+      },
+      {
+        "id": "trait_orc_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "Orcs are usually over 6 feet tall and weigh between 230 and 280 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Orcs are usually over 6 feet tall and weigh between 230 and 280 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_orc_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_orc_aggressive_vgm",
+        "name": "Aggressive",
+        "source": "VGM",
+        "raceName": "Orc",
+        "actionType": "bonus",
+        "description": "As a bonus action, you can move up to your movement speed toward a hostile creature you can see or hear. You must end this move closer to the enemy than you started.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a bonus action, you can move up to your movement speed toward a hostile creature you can see or hear. You must end this move closer to the enemy than you started."
+        ]
+      },
+      {
+        "id": "trait_orc_primal_intuition_vgm",
+        "name": "Primal Intuition",
+        "source": "VGM",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You have proficiency in two of the following skills of your choice: Animal Handling, Insight, Intimidation, Medicine, Nature, Perception, and Survival.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in two of the following skills of your choice: {@skill Animal Handling}, {@skill Insight}, {@skill Intimidation}, {@skill Medicine}, {@skill Nature}, {@skill Perception}, and {@skill Survival}."
+        ]
+      },
+      {
+        "id": "trait_orc_powerful_build_vgm",
+        "name": "Powerful Build",
+        "source": "VGM",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+        ]
+      },
+      {
+        "id": "trait_orc_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Orc.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Orc."
+        ]
+      }
+    ],
+    "description": "**Age**: Orcs reach adulthood at age 12 and live up to 50 years.\n\n**Size**: Orcs are usually over 6 feet tall and weigh between 230 and 280 pounds. Your size is Medium.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Aggressive**: As a bonus action, you can move up to your movement speed toward a hostile creature you can see or hear. You must end this move closer to the enemy than you started.\n\n**Primal Intuition**: You have proficiency in two of the following skills of your choice: Animal Handling, Insight, Intimidation, Medicine, Nature, Perception, and Survival.\n\n**Powerful Build**: You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.\n\n**Languages**: You can speak, read, and write Common and Orc."
   },
   {
     "id": "race_tabaxi_vgm",
@@ -96,7 +1718,127 @@
     "page": 113,
     "size": "M",
     "speed": "30 ft, climb 20 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Tabaxi have lifespans equivalent to humans.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Tabaxi are taller on average than humans and relatively slender. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have a cat's keen senses, especially in the dark. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Feline Agility.</strong> <p>Your reflexes and agility allow you to move with a burst of speed. When you move on your turn in combat, you can double your speed until the end of the turn. Once you use this trait, you can't use it again until you move 0 feet on one of your turns.</p></div>\n<div class=\"compendium-subentry\"><strong>Cat's Claws.</strong> <p>Because of your claws, you have a climbing speed of 20 feet. In addition, your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you deal slashing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.</p></div>\n<div class=\"compendium-subentry\"><strong>Cat's Talents.</strong> <p>You have proficiency in the Perception and Stealth skills.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and one other language of your choice.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Tabaxi have lifespans equivalent to humans.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Tabaxi are taller on average than humans and relatively slender. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have a cat's keen senses, especially in the dark. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Feline Agility.</strong> <p>Your reflexes and agility allow you to move with a burst of speed. When you move on your turn in combat, you can double your speed until the end of the turn. Once you use this trait, you can't use it again until you move 0 feet on one of your turns.</p></div>\n<div class=\"compendium-subentry\"><strong>Cat's Claws.</strong> <p>Because of your claws, you have a climbing speed of 20 feet. In addition, your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you deal slashing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.</p></div>\n<div class=\"compendium-subentry\"><strong>Cat's Talents.</strong> <p>You have proficiency in the Perception and Stealth skills.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and one other language of your choice.</p></div>",
+    "traits": [
+      {
+        "id": "trait_tabaxi_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Tabaxi",
+        "actionType": "passive",
+        "description": "Tabaxi have lifespans equivalent to humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tabaxi have lifespans equivalent to humans."
+        ]
+      },
+      {
+        "id": "trait_tabaxi_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Tabaxi",
+        "actionType": "passive",
+        "description": "Tabaxi are taller on average than humans and relatively slender. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tabaxi are taller on average than humans and relatively slender. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_tabaxi_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Tabaxi",
+        "actionType": "passive",
+        "description": "You have a cat's keen senses, especially in the dark. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a cat's keen senses, especially in the dark. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_tabaxi_feline_agility_vgm",
+        "name": "Feline Agility",
+        "source": "VGM",
+        "raceName": "Tabaxi",
+        "actionType": "passive",
+        "description": "Your reflexes and agility allow you to move with a burst of speed. When you move on your turn in combat, you can double your speed until the end of the turn. Once you use this trait, you can't use it again until you move 0 feet on one of your turns.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your reflexes and agility allow you to move with a burst of speed. When you move on your turn in combat, you can double your speed until the end of the turn. Once you use this trait, you can't use it again until you move 0 feet on one of your turns."
+        ]
+      },
+      {
+        "id": "trait_tabaxi_cat_s_claws_vgm",
+        "name": "Cat's Claws",
+        "source": "VGM",
+        "raceName": "Tabaxi",
+        "actionType": "passive",
+        "description": "Because of your claws, you have a climbing speed of 20 feet. In addition, your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you deal slashing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4 + @str",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Because of your claws, you have a climbing speed of 20 feet. In addition, your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you deal slashing damage equal to {@damage 1d4} + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike."
+        ]
+      },
+      {
+        "id": "trait_tabaxi_cat_s_talents_vgm",
+        "name": "Cat's Talents",
+        "source": "VGM",
+        "raceName": "Tabaxi",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception and Stealth skills.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} and {@skill Stealth} skills."
+        ]
+      },
+      {
+        "id": "trait_tabaxi_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Tabaxi",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and one other language of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and one other language of your choice."
+        ]
+      }
+    ],
+    "description": "**Age**: Tabaxi have lifespans equivalent to humans.\n\n**Size**: Tabaxi are taller on average than humans and relatively slender. Your size is Medium.\n\n**Darkvision**: You have a cat's keen senses, especially in the dark. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Feline Agility**: Your reflexes and agility allow you to move with a burst of speed. When you move on your turn in combat, you can double your speed until the end of the turn. Once you use this trait, you can't use it again until you move 0 feet on one of your turns.\n\n**Cat's Claws**: Because of your claws, you have a climbing speed of 20 feet. In addition, your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you deal slashing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.\n\n**Cat's Talents**: You have proficiency in the Perception and Stealth skills.\n\n**Languages**: You can speak, read, and write Common and one other language of your choice."
   },
   {
     "id": "race_triton_vgm",
@@ -105,7 +1847,154 @@
     "page": 115,
     "size": "M",
     "speed": "30 ft, swim 30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Tritons reach maturity around age 15 and can live up to 200 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Tritons are slightly shorter than humans, averaging about 5 feet tall. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Swim Speed.</strong> <p>You have a swimming speed of 30 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Control Air and Water.</strong> <p>A child of the sea, you can call on the magic of elemental air and water. You can cast fog cloud with this trait. Starting at 3rd level, you can cast gust of wind with it, and starting at 5th level, you can also cast wall of water with it. Once you cast a spell with this trait, you can't cast that spell with it again until you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Emissary of the Sea.</strong> <p>Aquatic beasts have an extraordinary affinity with your people. You can communicate simple ideas with beasts that can breathe water. They can understand the meaning of your words, though you have no special ability to understand them in return.</p></div>\n<div class=\"compendium-subentry\"><strong>Guardians of the Depths.</strong> <p>Adapted to even the most extreme ocean depths, you have resistance to cold damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Primordial.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Tritons reach maturity around age 15 and can live up to 200 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Tritons are slightly shorter than humans, averaging about 5 feet tall. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Swim Speed.</strong> <p>You have a swimming speed of 30 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Control Air and Water.</strong> <p>A child of the sea, you can call on the magic of elemental air and water. You can cast fog cloud with this trait. Starting at 3rd level, you can cast gust of wind with it, and starting at 5th level, you can also cast wall of water with it. Once you cast a spell with this trait, you can't cast that spell with it again until you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Emissary of the Sea.</strong> <p>Aquatic beasts have an extraordinary affinity with your people. You can communicate simple ideas with beasts that can breathe water. They can understand the meaning of your words, though you have no special ability to understand them in return.</p></div>\n<div class=\"compendium-subentry\"><strong>Guardians of the Depths.</strong> <p>Adapted to even the most extreme ocean depths, you have resistance to cold damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Primordial.</p></div>",
+    "traits": [
+      {
+        "id": "trait_triton_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "Tritons reach maturity around age 15 and can live up to 200 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tritons reach maturity around age 15 and can live up to 200 years."
+        ]
+      },
+      {
+        "id": "trait_triton_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "Tritons are slightly shorter than humans, averaging about 5 feet tall. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tritons are slightly shorter than humans, averaging about 5 feet tall. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_triton_swim_speed_vgm",
+        "name": "Swim Speed",
+        "source": "VGM",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "You have a swimming speed of 30 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a swimming speed of 30 feet."
+        ]
+      },
+      {
+        "id": "trait_triton_amphibious_vgm",
+        "name": "Amphibious",
+        "source": "VGM",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "You can breathe air and water.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can breathe air and water."
+        ]
+      },
+      {
+        "id": "trait_triton_control_air_and_water_vgm",
+        "name": "Control Air and Water",
+        "source": "VGM",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "A child of the sea, you can call on the magic of elemental air and water. You can cast fog cloud with this trait. Starting at 3rd level, you can cast gust of wind with it, and starting at 5th level, you can also cast wall of water with it. Once you cast a spell with this trait, you can't cast that spell with it again until you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "A child of the sea, you can call on the magic of elemental air and water. You can cast {@spell fog cloud} with this trait. Starting at 3rd level, you can cast {@spell gust of wind} with it, and starting at 5th level, you can also cast {@spell wall of water|xge} with it. Once you cast a spell with this trait, you can't cast that spell with it again until you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_triton_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_triton_emissary_of_the_sea_vgm",
+        "name": "Emissary of the Sea",
+        "source": "VGM",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "Aquatic beasts have an extraordinary affinity with your people. You can communicate simple ideas with beasts that can breathe water. They can understand the meaning of your words, though you have no special ability to understand them in return.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aquatic beasts have an extraordinary affinity with your people. You can communicate simple ideas with beasts that can breathe water. They can understand the meaning of your words, though you have no special ability to understand them in return."
+        ]
+      },
+      {
+        "id": "trait_triton_guardians_of_the_depths_vgm",
+        "name": "Guardians of the Depths",
+        "source": "VGM",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "Adapted to even the most extreme ocean depths, you have resistance to cold damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Adapted to even the most extreme ocean depths, you have resistance to cold damage."
+        ]
+      },
+      {
+        "id": "trait_triton_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Primordial.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Primordial."
+        ]
+      }
+    ],
+    "description": "**Age**: Tritons reach maturity around age 15 and can live up to 200 years.\n\n**Size**: Tritons are slightly shorter than humans, averaging about 5 feet tall. Your size is Medium.\n\n**Swim Speed**: You have a swimming speed of 30 feet.\n\n**Amphibious**: You can breathe air and water.\n\n**Control Air and Water**: A child of the sea, you can call on the magic of elemental air and water. You can cast fog cloud with this trait. Starting at 3rd level, you can cast gust of wind with it, and starting at 5th level, you can also cast wall of water with it. Once you cast a spell with this trait, you can't cast that spell with it again until you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Emissary of the Sea**: Aquatic beasts have an extraordinary affinity with your people. You can communicate simple ideas with beasts that can breathe water. They can understand the meaning of your words, though you have no special ability to understand them in return.\n\n**Guardians of the Depths**: Adapted to even the most extreme ocean depths, you have resistance to cold damage.\n\n**Languages**: You can speak, read, and write Common and Primordial."
   },
   {
     "id": "race_yuan_ti_pureblood_vgm",
@@ -114,6 +2003,121 @@
     "page": 120,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Purebloods mature at the same rate as humans and have lifespans similar in length to theirs.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Purebloods match humans in average size and weight. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Innate Spellcasting.</strong> <p>You know the poison spray cantrip. You can cast animal friendship an unlimited number of times with this trait, but you can target only snakes with it. Starting at 3rd level, you can also cast suggestion with this trait. Once you cast it, you can't do so again until you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Magic Resistance.</strong> <p>You have advantage on saving throws against spells and other magical effects.</p></div>\n<div class=\"compendium-subentry\"><strong>Poison Immunity.</strong> <p>You are immune to poison damage and the poisoned condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common, Abyssal, and Draconic.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Purebloods mature at the same rate as humans and have lifespans similar in length to theirs.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Purebloods match humans in average size and weight. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Innate Spellcasting.</strong> <p>You know the poison spray cantrip. You can cast animal friendship an unlimited number of times with this trait, but you can target only snakes with it. Starting at 3rd level, you can also cast suggestion with this trait. Once you cast it, you can't do so again until you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Magic Resistance.</strong> <p>You have advantage on saving throws against spells and other magical effects.</p></div>\n<div class=\"compendium-subentry\"><strong>Poison Immunity.</strong> <p>You are immune to poison damage and the poisoned condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common, Abyssal, and Draconic.</p></div>",
+    "traits": [
+      {
+        "id": "trait_yuan_ti_pureblood_age_vgm",
+        "name": "Age",
+        "source": "VGM",
+        "raceName": "Yuan-ti Pureblood",
+        "actionType": "passive",
+        "description": "Purebloods mature at the same rate as humans and have lifespans similar in length to theirs.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Purebloods mature at the same rate as humans and have lifespans similar in length to theirs."
+        ]
+      },
+      {
+        "id": "trait_yuan_ti_pureblood_size_vgm",
+        "name": "Size",
+        "source": "VGM",
+        "raceName": "Yuan-ti Pureblood",
+        "actionType": "passive",
+        "description": "Purebloods match humans in average size and weight. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Purebloods match humans in average size and weight. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_yuan_ti_pureblood_darkvision_vgm",
+        "name": "Darkvision",
+        "source": "VGM",
+        "raceName": "Yuan-ti Pureblood",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_yuan_ti_pureblood_innate_spellcasting_vgm",
+        "name": "Innate Spellcasting",
+        "source": "VGM",
+        "raceName": "Yuan-ti Pureblood",
+        "actionType": "passive",
+        "description": "You know the poison spray cantrip. You can cast animal friendship an unlimited number of times with this trait, but you can target only snakes with it. Starting at 3rd level, you can also cast suggestion with this trait. Once you cast it, you can't do so again until you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell poison spray} cantrip. You can cast {@spell animal friendship} an unlimited number of times with this trait, but you can target only snakes with it. Starting at 3rd level, you can also cast {@spell suggestion} with this trait. Once you cast it, you can't do so again until you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_yuan_ti_pureblood_magic_resistance_vgm",
+        "name": "Magic Resistance",
+        "source": "VGM",
+        "raceName": "Yuan-ti Pureblood",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against spells and other magical effects.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against spells and other magical effects."
+        ]
+      },
+      {
+        "id": "trait_yuan_ti_pureblood_poison_immunity_vgm",
+        "name": "Poison Immunity",
+        "source": "VGM",
+        "raceName": "Yuan-ti Pureblood",
+        "actionType": "passive",
+        "description": "You are immune to poison damage and the poisoned condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are immune to poison damage and the {@condition poisoned} condition."
+        ]
+      },
+      {
+        "id": "trait_yuan_ti_pureblood_languages_vgm",
+        "name": "Languages",
+        "source": "VGM",
+        "raceName": "Yuan-ti Pureblood",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common, Abyssal, and Draconic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common, Abyssal, and Draconic."
+        ]
+      }
+    ],
+    "description": "**Age**: Purebloods mature at the same rate as humans and have lifespans similar in length to theirs.\n\n**Size**: Purebloods match humans in average size and weight. Your size is Medium.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Innate Spellcasting**: You know the poison spray cantrip. You can cast animal friendship an unlimited number of times with this trait, but you can target only snakes with it. Starting at 3rd level, you can also cast suggestion with this trait. Once you cast it, you can't do so again until you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Magic Resistance**: You have advantage on saving throws against spells and other magical effects.\n\n**Poison Immunity**: You are immune to poison damage and the poisoned condition.\n\n**Languages**: You can speak, read, and write Common, Abyssal, and Draconic."
   }
 ]

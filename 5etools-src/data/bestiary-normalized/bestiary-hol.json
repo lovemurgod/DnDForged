@@ -97,7 +97,7 @@
       {
         "id": "sc_apprentice_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 1,
@@ -208,10 +208,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_quarterstaff_61po",
+        "id": "act_quarterstaff_cb52",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}2 (1d6 - 1) bludgeoning damage, or 3 (1d8 - 1) bludgeoning damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 2 (1d6 - 1) bludgeoning damage, or 3 (1d8 - 1) bludgeoning damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 1} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d6 - 1}) bludgeoning damage, or 3 ({@damage 1d8 - 1}) bludgeoning damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -234,10 +237,13 @@
         }
       },
       {
-        "id": "act_burning_hands__1st_level_spell__2_day__isiu",
+        "id": "act_burning_hands__1st_level_spell__2_day__eu9u",
         "name": "Burning Hands (1st-Level Spell; 2/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>You shoot forth a 15-foot cone of fire. Each creature in that area must make a DC 11 Dexterity saving throw. A creature takes 10 (3d6) fire damage on a failed save, or half as much damage on a successful one The fire ignites any flammable objects in the area that aren't being worn or carried.</p>",
+        "entries": [
+          "You shoot forth a 15-foot cone of fire. Each creature in that area must make a {@dc 11} Dexterity saving throw. A creature takes 10 ({@damage 3d6}) fire damage on a failed save, or half as much damage on a successful one The fire ignites any flammable objects in the area that aren't being worn or carried."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -259,10 +265,13 @@
         }
       },
       {
-        "id": "act_fire_bolt__cantrip__w1ke",
+        "id": "act_fire_bolt__cantrip__q5lr",
         "name": "Fire Bolt (Cantrip)",
         "actionType": "action",
-        "descriptionHtml": "<p>rs Ranged Spell Attack: +3 to hit, range 120 ft., one target. {@h}5 (1d10) fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: Ranged Spell Attack: +3 to hit, range 120 ft., one target. Hit: 5 (1d10) fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.</p>",
+        "entries": [
+          "{@atk rs} Ranged Spell Attack: {@hit 3} to hit, range 120 ft., one target. {@h}5 ({@damage 1d10}) fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": "rs",
@@ -288,11 +297,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HoL/Apprentice.webp",
     "tokenImg": "img/bestiary/tokens/HoL/Apprentice.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_disciple_hol",
@@ -392,7 +413,7 @@
       {
         "id": "sc_disciple_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 1,
@@ -465,7 +486,9 @@
                 {
                   "formula": "2d8",
                   "type": "Healing",
-                  "stat": "spell"
+                  "stat": "spell",
+                  "upcastBonus": "2d8",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -485,10 +508,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_mace_mla9",
+        "id": "act_mace_bu13",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -507,10 +533,13 @@
         }
       },
       {
-        "id": "act_sacred_flame__cantrip__oby4",
+        "id": "act_sacred_flame__cantrip__1zsh",
         "name": "Sacred Flame (Cantrip)",
         "actionType": "action",
         "descriptionHtml": "<p>You target one creature you can see within 60 feet of you. The target must succeed on a DC 11 Dexterity saving throw or take 4 (1d8) radiant damage. The target gains no benefit from cover for this saving throw.</p>",
+        "entries": [
+          "You target one creature you can see within 60 feet of you. The target must succeed on a {@dc 11} Dexterity saving throw or take 4 ({@damage 1d8}) radiant damage. The target gains no benefit from cover for this saving throw."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -539,11 +568,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HoL/Disciple.webp",
     "tokenImg": "img/bestiary/tokens/HoL/Disciple.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_sneak_hol",
@@ -643,10 +684,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_dagger_aa0p",
+        "id": "act_dagger_0eu1",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +3 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 3} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}3 ({@damage 1d4 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -667,10 +711,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_disengage_39rn",
+        "id": "act_disengage_ufkx",
         "name": "Disengage",
         "actionType": "bonus",
         "descriptionHtml": "<p>You take the Disengage action.</p>",
+        "entries": [
+          "You take the {@action Disengage} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -690,11 +737,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HoL/Sneak.webp",
     "tokenImg": "img/bestiary/tokens/HoL/Sneak.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_squire_hol",
@@ -792,10 +851,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_longsword_mtou",
+        "id": "act_longsword_2mdw",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}5 (1d8 + 1) slashing damage, or 6 (1d10 + 1) slashing damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage, or 6 (1d10 + 1) slashing damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d8 + 1}) slashing damage, or 6 ({@damage 1d10 + 1}) slashing damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -820,10 +882,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shove_cjze",
+        "id": "act_shove_myyw",
         "name": "Shove",
         "actionType": "bonus",
         "descriptionHtml": "<p>While wielding a shield, you try to shove one creature within 5 feet of you.</p>",
+        "entries": [
+          "While wielding a shield, you try to shove one creature within 5 feet of you."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -843,10 +908,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HoL/Squire.webp",
     "tokenImg": "img/bestiary/tokens/HoL/Squire.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

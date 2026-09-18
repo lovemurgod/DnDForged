@@ -1,0 +1,1535 @@
+[
+  {
+    "id": "creature_fleshling_construct_grimhollowpg24",
+    "name": "Fleshling Construct",
+    "source": "GrimHollowPG24",
+    "edition": "2014",
+    "page": 192,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 18,
+        "mod": 4
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 4,
+        "mod": -3
+      }
+    },
+    "str": 14,
+    "dex": 18,
+    "con": 18,
+    "int": 11,
+    "wis": 14,
+    "cha": 4,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned"
+    ],
+    "passive": 12,
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages known by the target"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_strangle_pld4",
+        "name": "Strangle",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 2d8 + summonSpellLevel Bludgeoning damage, and the target has the Grappled condition (escape DC equals your spell save DC) and can't speak. Until the grapple ends, the target has the Restrained condition and is Suffocation.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}{@damage 2d8 + summonSpellLevel} Bludgeoning damage, and the target has the {@condition Grappled|XPHB} condition (escape DC equals your spell save DC) and can't speak. Until the grapple ends, the target has the {@condition Restrained|XPHB} condition and is {@hazard Suffocation|XPHB|suffocating}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + summonSpellLevel",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_constrict_v2lb",
+        "name": "Constrict",
+        "actionType": "action",
+        "descriptionHtml": "<p>The fleshling construct constricts a target that it is grappling, doing 2d8 + summonSpellLevel Bludgeoning damage.</p>",
+        "entries": [
+          "The fleshling construct constricts a target that it is grappling, doing {@damage 2d8 + summonSpellLevel} Bludgeoning damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + summonSpellLevel",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/GrimHollowPG24/Fleshling Construct.webp",
+    "tokenImg": "img/bestiary/tokens/GrimHollowPG24/Fleshling Construct.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_gasdra_grimhollowpg24",
+    "name": "Gasdra",
+    "source": "GrimHollowPG24",
+    "edition": "2014",
+    "page": 149,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 22,
+      "formula": "4d6 + 8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 40,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 7,
+        "mod": -2
+      }
+    },
+    "str": 8,
+    "dex": 15,
+    "con": 15,
+    "int": 6,
+    "wis": 10,
+    "cha": 7,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+2"
+    },
+    "skills": {
+      "perception": "+2"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "understands Sylvan but can't speak"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_three_heads_e0hi",
+        "name": "Three Heads",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The gasdra has Advantage on Wisdom (Perception) checks and on saving throws to avoid or end the Blinded, Charmed, Deafened, Frightened, Stunned, or Unconscious conditions. The gasdra can take one Reaction for each of its heads. The extra Reaction can be used only for Opportunity Attack.</p>",
+        "entries": [
+          "The gasdra has {@variantrule Advantage|XPHB} on Wisdom ({@skill Perception|XPHB}) checks and on saving throws to avoid or end the {@condition Blinded|XPHB}, {@condition Charmed|XPHB}, {@condition Deafened|XPHB}, {@condition Frightened|XPHB}, {@condition Stunned|XPHB}, or {@condition Unconscious|XPHB} conditions. The gasdra can take one {@variantrule Reaction|XPHB} for each of its heads. The extra {@variantrule Reaction|XPHB|Reactions} can be used only for {@action Opportunity Attack|XPHB|Opportunity Attacks}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_wakeful_6bzh",
+        "name": "Wakeful",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While the gasdra sleeps, at least one of its heads is awake.</p>",
+        "entries": [
+          "While the gasdra sleeps, at least one of its heads is awake."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_ixk8",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The gasdra makes three Beak attacks.</p>",
+        "entries": [
+          "The gasdra makes three Beak attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_beak_lzd0",
+        "name": "Beak",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}5 ({@damage 1d6 + 2}) Bludgeoning damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/GrimHollowPG24/Gasdra.webp",
+    "tokenImg": "img/bestiary/tokens/GrimHollowPG24/Gasdra.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_plant_spirit_grimhollowpg24",
+    "name": "Plant Spirit",
+    "source": "GrimHollowPG24",
+    "edition": "2014",
+    "page": 203,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Plant",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 19,
+        "mod": 4
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": 16,
+    "dex": 13,
+    "con": 19,
+    "int": 4,
+    "wis": 12,
+    "cha": 10,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "deafened",
+      "exhaustion",
+      "stunned"
+    ],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "Tremorsense 30 ft. (Blind beyond this radius)"
+    },
+    "languages": [
+      "understands the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_sylvan_regeneration_2bzx",
+        "name": "Sylvan Regeneration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spirit regains 1 Hit Points at the start of its turn if it has at least 1 Hit Points and is in direct sunlight.</p>",
+        "entries": [
+          "The spirit regains 1 {@variantrule Hit Points|XPHB|Hit Point} at the start of its turn if it has at least 1 {@variantrule Hit Points|XPHB|Hit Point} and is in direct sunlight."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_15xj",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The plant makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The plant makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_petal_burst__blooming_only__wjcj",
+        "name": "Petal Burst (Blooming Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The plant causes a burst of petals to fill the air within a 10-foot Emanation [Area of Effect]. The area is Heavily Obscured for 1 minute.</p>",
+        "entries": [
+          "The plant causes a burst of petals to fill the air within a 10-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation}. The area is {@variantrule Heavily Obscured|XPHB} for 1 minute."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_slam_xab0",
+        "name": "Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d8 + 3 + summonSpellLevel Bludgeoning or Piercing damage (Thorny Only).</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}{@damage 1d8 + 3 + summonSpellLevel} Bludgeoning or Piercing damage (Thorny Only)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 3 + summonSpellLevel",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_oaken_shield__oaken_only__x9q3",
+        "name": "Oaken Shield (Oaken Only)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When a creature within 5 feet of the plant takes damage from an attack, the plant takes the damage instead.</p>",
+        "entries": [
+          "When a creature within 5 feet of the plant takes damage from an attack, the plant takes the damage instead."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_prickly_protection__thorny_only__lnkp",
+        "name": "Prickly Protection (Thorny Only)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When a creature within 5 feet of the plant attacks it, the plant makes a Slam attack with Advantage against the creature.</p>",
+        "entries": [
+          "When a creature within 5 feet of the plant attacks it, the plant makes a Slam attack with {@variantrule Advantage|XPHB} against the creature."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/GrimHollowPG24/Plant Spirit.webp",
+    "tokenImg": "img/bestiary/tokens/GrimHollowPG24/Plant Spirit.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_primal_guardian_grimhollowpg24",
+    "name": "Primal Guardian",
+    "source": "GrimHollowPG24",
+    "edition": "2014",
+    "page": 62,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "str": 15,
+    "dex": 12,
+    "con": 16,
+    "int": 4,
+    "wis": 12,
+    "cha": 6,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_protective_instinct_kgc0",
+        "name": "Protective Instinct",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When the guardian becomes Bloodied, it gains Temporary Hit Points equal to half of its maximum Hit Points and is enraged for 10 minutes. While enraged, Hostile [Attitude] creatures within 5 feet have Disadvantage on attack rolls against creatures other than the guardian.</p>",
+        "entries": [
+          "When the guardian becomes {@condition Bloodied|XPHB}, it gains {@variantrule Temporary Hit Points|XPHB} equal to half of its maximum {@variantrule Hit Points|XPHB} and is enraged for 10 minutes. While enraged, {@variantrule Hostile [Attitude]|XPHB|Hostile} creatures within 5 feet have {@variantrule Disadvantage|XPHB} on attack rolls against creatures other than the guardian."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_vigilant_dxjv",
+        "name": "Vigilant",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The guardian can't be surprised.</p>",
+        "entries": [
+          "The guardian can't be {@status surprised|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_wild_bond_0qxx",
+        "name": "Wild Bond",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Add your Proficiency to any ability check, attack roll, or saving throw the beast makes.</p>",
+        "entries": [
+          "Add your {@variantrule Proficiency|XPHB|Proficiency Bonus} to any ability check, attack roll, or saving throw the beast makes."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_natural_weapon_hnvn",
+        "name": "Natural Weapon",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your attack modifier using Strength, reach 5 ft. Hit: 1d4 + 2 plus your Rage Damage bonus Bludgeoning, Piercing, or Slashing damage (your choice when you summon the beast).</p>",
+        "entries": [
+          "{@atkr m} Bonus equals your attack modifier using Strength, reach 5 ft. {@h}{@damage 1d4 + 2} plus your Rage Damage bonus Bludgeoning, Piercing, or Slashing damage (your choice when you summon the beast)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_body_block_76ht",
+        "name": "Body Block",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} When a creature the beast can see attacks a target other than itself that is within 5 feet of it. {@actResponse} The guardian takes the damage instead of the target.</p>",
+        "entries": [
+          "{@actTrigger} When a creature the beast can see attacks a target other than itself that is within 5 feet of it. {@actResponse} The guardian takes the damage instead of the target."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/GrimHollowPG24/Primal Guardian.webp",
+    "tokenImg": "img/bestiary/tokens/GrimHollowPG24/Primal Guardian.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_primal_striker_grimhollowpg24",
+    "name": "Primal Striker",
+    "source": "GrimHollowPG24",
+    "edition": "2014",
+    "page": 62,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 7,
+        "mod": -2
+      }
+    },
+    "str": 15,
+    "dex": 15,
+    "con": 15,
+    "int": 4,
+    "wis": 12,
+    "cha": 7,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_aquatic_assault__sea_only__fe7t",
+        "name": "Aquatic Assault (Sea Only)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While the beast is submerged in water, it has Advantage on attack rolls against creatures without a Swim Speed submerged in water.</p>",
+        "entries": [
+          "While the beast is submerged in water, it has {@variantrule Advantage|XPHB} on attack rolls against creatures without a {@variantrule Swim Speed|XPHB} submerged in water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_enraged_strikes_61kq",
+        "name": "Enraged Strikes",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While your Rage is active, the beast's attack rolls have Advantage.</p>",
+        "entries": [
+          "While your {@classFeature Rage|Barbarian|XPHB|1} is active, the beast's attack rolls have {@variantrule Advantage|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_flyby__sky_only__yns5",
+        "name": "Flyby (Sky Only)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The beast doesn't provoke Opportunity Attack when it flies out of an enemy's reach.</p>",
+        "entries": [
+          "The beast doesn't provoke {@action Opportunity Attack|XPHB|Opportunity Attacks} when it flies out of an enemy's reach."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_wild_bond_16ep",
+        "name": "Wild Bond",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Add your Proficiency to any ability check, attack roll, or saving throw the beast makes.</p>",
+        "entries": [
+          "Add your {@variantrule Proficiency|XPHB|Proficiency Bonus} to any ability check, attack roll, or saving throw the beast makes."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_natural_weapon_bvfr",
+        "name": "Natural Weapon",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your attack modifier using Strength, reach 5 ft. Hit: 1d8 + 2 plus your Rage Damage bonus Bludgeoning, Piercing, or Slashing damage (your choice when you summon the beast).</p>",
+        "entries": [
+          "{@atkr m} Bonus equals your attack modifier using Strength, reach 5 ft. {@h}{@damage 1d8 + 2} plus your Rage Damage bonus Bludgeoning, Piercing, or Slashing damage (your choice when you summon the beast)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_harry__land_only__tb8k",
+        "name": "Harry (Land Only)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} When a creature the beast can see within 5 feet of it makes an attack roll. {@actResponse} The triggering attack roll has Advantage.</p>",
+        "entries": [
+          "{@actTrigger} When a creature the beast can see within 5 feet of it makes an attack roll. {@actResponse} The triggering attack roll has {@variantrule Advantage|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/GrimHollowPG24/Primal Striker.webp",
+    "tokenImg": "img/bestiary/tokens/GrimHollowPG24/Primal Striker.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_sea_serpent_spirit_grimhollowpg24",
+    "name": "Sea Serpent Spirit",
+    "source": "GrimHollowPG24",
+    "edition": "2014",
+    "page": 203,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 60,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": 16,
+    "dex": 14,
+    "con": 13,
+    "int": 4,
+    "wis": 10,
+    "cha": 10,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [
+      "cold"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "prone"
+    ],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_flyby__scaled_wings_only__vol1",
+        "name": "Flyby (Scaled Wings only)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sea serpent doesn't provoke Opportunity Attack when it flies out of an enemy's reach.</p>",
+        "entries": [
+          "The sea serpent doesn't provoke {@action Opportunity Attack|XPHB|Opportunity Attacks} when it flies out of an enemy's reach."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_8u4w",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The sea serpent makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The sea serpent makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_allure__glowing_lantern_only__ui7s",
+        "name": "Allure (Glowing Lantern only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The sea serpent causes a lantern hanging from one of its fins to glow eerily. wis DC equals your spell save DC, each creature in a 30-foot Emanation [Area of Effect] originating from the sea serpent. {@actSaveFail} The target is Charmed by the sea serpent until the start of its next turn. Creatures have Advantage on the saving throw if the sea serpent has dealt damage to them already this turn, and the Charmed condition ends immediately if the sea serpent deals damage to a creature Charmed by this ability.</p>",
+        "entries": [
+          "The sea serpent causes a lantern hanging from one of its fins to glow eerily. {@actSave wis} DC equals your spell save DC, each creature in a 30-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the sea serpent. {@actSaveFail} The target is {@condition Charmed|XPHB} by the sea serpent until the start of its next turn. Creatures have {@variantrule Advantage|XPHB} on the saving throw if the sea serpent has dealt damage to them already this turn, and the {@condition Charmed|XPHB} condition ends immediately if the sea serpent deals damage to a creature {@condition Charmed|XPHB} by this ability."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_inhale__enormous_mouth_only__87zm",
+        "name": "Inhale (Enormous Mouth only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>str DC equals your spell save DC, each creature in a 15-foot Cone [Area of Effect]. {@actSaveFail} 1d6 + summonSpellLevel Psychic damage and the creature is pulled 5 feet straight toward it or, if the creature is already within 5 feet of the sea serpent, it takes an additional 2d6 Piercing damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave str} DC equals your spell save DC, each creature in a 15-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} {@damage 1d6 + summonSpellLevel} Psychic damage and the creature is pulled 5 feet straight toward it or, if the creature is already within 5 feet of the sea serpent, it takes an additional {@damage 2d6} Piercing damage. {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + summonSpellLevel",
+              "type": "Psychic"
+            },
+            {
+              "formula": "2d6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_w89u",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d6 + 3 + summonSpellLevel Piercing damage and the creature has the Grappled condition (escape DC equals your spell save DC). The Grappled condition ends if the sea serpent bites a different creature.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}{@damage 1d6 + 3 + summonSpellLevel} Piercing damage and the creature has the {@condition Grappled|XPHB} condition (escape DC equals your spell save DC). The {@condition Grappled|XPHB} condition ends if the sea serpent bites a different creature."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3 + summonSpellLevel",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_thrash_y6s6",
+        "name": "Thrash",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d10 + 3 + summonSpellLevel Bludgeoning damage and the target is pushed 5 feet away from the sea serpent.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 10 ft. {@h}{@damage 1d10 + 3 + summonSpellLevel} Bludgeoning damage and the target is pushed 5 feet away from the sea serpent."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 3 + summonSpellLevel",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/GrimHollowPG24/Sea Serpent Spirit.webp",
+    "tokenImg": "img/bestiary/tokens/GrimHollowPG24/Sea Serpent Spirit.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_swarm_of_vermin_grimhollowpg24",
+    "name": "Swarm of Vermin",
+    "source": "GrimHollowPG24",
+    "edition": "2014",
+    "page": 88,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 30,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 9,
+        "mod": -1
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 2,
+        "mod": -4
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "str": 9,
+    "dex": 13,
+    "con": 12,
+    "int": 2,
+    "wis": 10,
+    "cha": 5,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "prone",
+      "restrained",
+      "stunned"
+    ],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "Darkvision 30 ft."
+    },
+    "languages": [
+      "understands the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_pack_tactics_iz9x",
+        "name": "Pack Tactics",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The swarm has Advantage on an attack roll against a creature if at least one of the swarm's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
+        "entries": [
+          "The swarm has {@variantrule Advantage|XPHB} on an attack roll against a creature if at least one of the swarm's allies is within 5 feet of the creature and the ally doesn't have the {@condition Incapacitated|XPHB} condition."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_swarm_1uug",
+        "name": "Swarm",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The swarm can enter and occupy the space of another creature and vice versa, and the swarm can move through any opening large enough for a Tiny Beast.</p>",
+        "entries": [
+          "The swarm can enter and occupy the space of another creature and vice versa, and the swarm can move through any opening large enough for a Tiny Beast."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bites_entu",
+        "name": "Bites",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 0 ft. Hit: 2d6 + 1 + summonSpellLevel Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 0 ft. {@h}{@damage 2d6 + 1 + summonSpellLevel} Piercing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 1 + summonSpellLevel",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/GrimHollowPG24/Swarm of Vermin.webp",
+    "tokenImg": "img/bestiary/tokens/GrimHollowPG24/Swarm of Vermin.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

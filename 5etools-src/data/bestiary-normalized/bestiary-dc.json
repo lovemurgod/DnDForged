@@ -114,10 +114,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ethereal_sight_22kp",
+        "id": "act_ethereal_sight_lvtb",
         "name": "Ethereal Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>Ebondeath can see 60 feet into the Ethereal Plane when it is on the Material Plane, and vice versa.</p>",
+        "entries": [
+          "Ebondeath can see 60 feet into the Ethereal Plane when it is on the Material Plane, and vice versa."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -131,10 +134,13 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_afha",
+        "id": "act_incorporeal_movement_d3pf",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>Ebondeath can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
+        "entries": [
+          "Ebondeath can move through other creatures and objects as if they were {@quickref difficult terrain||3}. It takes 5 ({@damage 1d10}) force damage if it ends its turn inside an object."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -153,10 +159,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__1iyp",
+        "id": "act_legendary_resistance__3_day__mr3q",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the dragon fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -172,10 +181,13 @@
     ],
     "actions": [
       {
-        "id": "act_withering_touch_49ig",
+        "id": "act_withering_touch_dat4",
         "name": "Withering Touch",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}17 (4d6 + 3) necrotic damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 17 (4d6 + 3) necrotic damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}17 ({@damage 4d6 + 3}) necrotic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -194,10 +206,13 @@
         }
       },
       {
-        "id": "act_etherealness_7x95",
+        "id": "act_etherealness_lfuq",
         "name": "Etherealness",
         "actionType": "action",
         "descriptionHtml": "<p>Ebondeath enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can't affect or be affected by anything on the other plane.</p>",
+        "entries": [
+          "Ebondeath enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can't affect or be affected by anything on the other plane."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -211,10 +226,13 @@
         }
       },
       {
-        "id": "act_horrifying_visage_d9dp",
+        "id": "act_horrifying_visage_ba4c",
         "name": "Horrifying Visage",
         "actionType": "action",
         "descriptionHtml": "<p>Each non-undead creature within 60 feet of Ebondeath that can see it must succeed on a DC 13 Wisdom saving throw or be frightened for 1 minute. If the save fails by 5 or more, the target also ages 1d4 × 10 years. A frightened target can repeat the saving throw at the end of each of its turns, ending the frightened condition on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to this Ebondeath's Horrifying Visage for the next 24 hours. The aging effect can be reversed with a greater restoration spell, but only within 24 hours of it occurring.</p>",
+        "entries": [
+          "Each non-undead creature within 60 feet of Ebondeath that can see it must succeed on a {@dc 13} Wisdom saving throw or be {@condition frightened} for 1 minute. If the save fails by 5 or more, the target also ages {@dice 1d4 × 10} years. A {@condition frightened} target can repeat the saving throw at the end of each of its turns, ending the {@condition frightened} condition on itself on a success. If a target's saving throw is successful or the effect ends for it, the target is immune to this Ebondeath's Horrifying Visage for the next 24 hours. The aging effect can be reversed with a {@spell greater restoration} spell, but only within 24 hours of it occurring."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -231,10 +249,14 @@
         }
       },
       {
-        "id": "act_possession___recharge__zkns",
+        "id": "act_possession___recharge__6168",
         "name": "Possession {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>One humanoid that Ebondeath can see within 5 feet of it must succeed on a DC 20 Charisma saving throw or be possessed by Ebondeath; Ebondeath then disappears, and the target is incapacitated and loses control of its body. Ebondeath now controls the body but doesn't deprive the target of awareness. Ebondeath can't be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being charmed and frightened. It otherwise uses the possessed target's statistics, including gaining access to the target's knowledge, class features, and proficiencies.</p><p>The possession lasts until the body drops to 0 hit points, Ebondeath ends it as a bonus action, or Ebondeath is turned or forced out by an effect like the dispel evil and good spell. When the possession ends, Ebondeath reappears in an unoccupied space within 5 feet of the body. The target is immune to Ebondeath Possession for 24 hours after succeeding on the saving throw or after the possession ends.</p>",
+        "entries": [
+          "One humanoid that Ebondeath can see within 5 feet of it must succeed on a {@dc 20} Charisma saving throw or be possessed by Ebondeath; Ebondeath then disappears, and the target is {@condition incapacitated} and loses control of its body. Ebondeath now controls the body but doesn't deprive the target of awareness. Ebondeath can't be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being {@condition charmed} and {@condition frightened}. It otherwise uses the possessed target's statistics, including gaining access to the target's knowledge, class features, and proficiencies.",
+          "The possession lasts until the body drops to 0 hit points, Ebondeath ends it as a bonus action, or Ebondeath is turned or forced out by an effect like the {@spell dispel evil and good} spell. When the possession ends, Ebondeath reappears in an unoccupied space within 5 feet of the body. The target is immune to Ebondeath Possession for 24 hours after succeeding on the saving throw or after the possession ends."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -258,11 +280,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DC/Ebondeath.webp",
     "tokenImg": "img/bestiary/tokens/DC/Ebondeath.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_expert_dc",
@@ -368,10 +402,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_helpful_09qf",
+        "id": "act_helpful_royd",
         "name": "Helpful",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert can take the Help action as a bonus action, and the creature who receives the help gains a 1d6 bonus to the d20 roll. If that roll is an attack roll, the creature can forgo adding the bonus to it, and then if the attack hits, the creature can add the bonus to the attack's damage roll against one target.</p>",
+        "entries": [
+          "The expert can take the Help action as a bonus action, and the creature who receives the help gains a {@dice 1d6} bonus to the {@dice d20} roll. If that roll is an attack roll, the creature can forgo adding the bonus to it, and then if the attack hits, the creature can add the bonus to the attack's damage roll against one target."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -385,10 +422,13 @@
         }
       },
       {
-        "id": "act_evasion_ipsc",
+        "id": "act_evasion_esrt",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>When the expert is not incapacitated and subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it failed.</p>",
+        "entries": [
+          "When the expert is not {@condition incapacitated} and subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it failed."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -402,10 +442,13 @@
         }
       },
       {
-        "id": "act_reliable_talent_6tm6",
+        "id": "act_reliable_talent_xiss",
         "name": "Reliable Talent",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the expert makes an ability check that includes its whole proficiency bonus, it can treat a d20 roll of 9 or lower as a 10.</p>",
+        "entries": [
+          "Whenever the expert makes an ability check that includes its whole proficiency bonus, it can treat a {@dice d20} roll of 9 or lower as a 10."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -419,10 +462,13 @@
         }
       },
       {
-        "id": "act_tools_p2z6",
+        "id": "act_tools_br7n",
         "name": "Tools",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert has thieves' tools and a musical instrument.</p>",
+        "entries": [
+          "The expert has {@item thieves' tools|phb} and a musical instrument."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -438,10 +484,13 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_8l3t",
+        "id": "act_extra_attack_rjg1",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The expert can attack twice, instead of once, whenever it takes the attack action on its turn.</p>",
+        "entries": [
+          "The expert can attack twice, instead of once, whenever it takes the attack action on its turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -455,10 +504,13 @@
         }
       },
       {
-        "id": "act_shortsword_alcz",
+        "id": "act_shortsword_4x7j",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}8 (1d6 + 5) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 8 (1d6 + 5) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d6 + 5}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -477,10 +529,13 @@
         }
       },
       {
-        "id": "act_dagger_0086",
+        "id": "act_dagger_n8nn",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +9 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}7 (1d4 + 5) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +9 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 7 (1d4 + 5) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 9} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}7 ({@damage 1d4 + 5}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -499,10 +554,13 @@
         }
       },
       {
-        "id": "act_shortbow_hape",
+        "id": "act_shortbow_4syb",
         "name": "Shortbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +9 to hit, range 80/320 ft., one target. {@h}8 (1d6 + 5) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +9 to hit, range 80/320 ft., one target. Hit: 8 (1d6 + 5) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 9} to hit, range 80/320 ft., one target. {@h}8 ({@damage 1d6 + 5}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -528,11 +586,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DC/Expert.webp",
     "tokenImg": "img/bestiary/tokens/DC/Expert.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_spellcaster__healer__dc",
@@ -635,7 +705,7 @@
       {
         "id": "sc_spellcaster__healer__0",
         "name": "Spellcasting (Healer)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 4,
@@ -725,7 +795,8 @@
                     "formula": "1d8",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -793,7 +864,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -990,7 +1063,9 @@
                   {
                     "formula": "5d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1020,7 +1095,9 @@
                   {
                     "formula": "70",
                     "type": "Healing",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "10",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1036,10 +1113,13 @@
     ],
     "traits": [
       {
-        "id": "act_empowered_spells_dh55",
+        "id": "act_empowered_spells_a5bd",
         "name": "Empowered Spells",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the spellcaster casts a spell of the evocation school by expending a spell slot, the spellcaster can add its spellcasting ability modifier to the spell's damage roll or healing roll, if any.</p>",
+        "entries": [
+          "Whenever the spellcaster casts a spell of the evocation school by expending a spell slot, the spellcaster can add its spellcasting ability modifier to the spell's damage roll or healing roll, if any."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1053,10 +1133,13 @@
         }
       },
       {
-        "id": "act_potent_cantrip_o34j",
+        "id": "act_potent_cantrip_tm8q",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
+        "entries": [
+          "The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1072,10 +1155,13 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_lqo8",
+        "id": "act_quarterstaff_nvfw",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) bludgeoning damage, or 4 ({@damage 1d8}) bludgeoning damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1105,11 +1191,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DC/Spellcaster (Healer).webp",
     "tokenImg": "img/bestiary/tokens/DC/Spellcaster (Healer).webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_spellcaster__mage__dc",
@@ -1212,7 +1310,7 @@
       {
         "id": "sc_spellcaster__mage__0",
         "name": "Spellcasting (Mage)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 4,
@@ -1245,7 +1343,8 @@
                     "formula": "1d10",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -1328,7 +1427,8 @@
                     "formula": "1d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -1359,7 +1459,9 @@
                     "formula": "3d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1428,7 +1530,9 @@
                     "formula": "2d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of wax)",
@@ -1478,7 +1582,9 @@
                     "formula": "8d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -1547,13 +1653,17 @@
                     "formula": "5d8",
                     "type": "Fire",
                     "label": "Damage 1",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "5d8",
                     "type": "Fire",
                     "label": "Damage 2",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a piece of charcoal)",
@@ -1584,7 +1694,9 @@
                     "formula": "8d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a small crystal or glass cone)",
@@ -1634,7 +1746,9 @@
                     "formula": "10d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (three silver pins)",
@@ -1650,10 +1764,13 @@
     ],
     "traits": [
       {
-        "id": "act_empowered_spells_bnd4",
+        "id": "act_empowered_spells_g5q4",
         "name": "Empowered Spells",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the spellcaster casts a spell of the evocation school by expending a spell slot, the spellcaster can add its spellcasting ability modifier to the spell's damage roll or healing roll, if any.</p>",
+        "entries": [
+          "Whenever the spellcaster casts a spell of the evocation school by expending a spell slot, the spellcaster can add its spellcasting ability modifier to the spell's damage roll or healing roll, if any."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1667,10 +1784,13 @@
         }
       },
       {
-        "id": "act_potent_cantrip_l3y6",
+        "id": "act_potent_cantrip_4949",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
+        "entries": [
+          "The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1686,10 +1806,13 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_s553",
+        "id": "act_quarterstaff_1lkx",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) bludgeoning damage, or 4 ({@damage 1d8}) bludgeoning damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1719,11 +1842,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DC/Spellcaster (Mage).webp",
     "tokenImg": "img/bestiary/tokens/DC/Spellcaster (Mage).webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_warrior_dc",
@@ -1828,10 +1963,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_battle_readiness_3vqi",
+        "id": "act_battle_readiness_sll6",
         "name": "Battle Readiness",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has advantage on initiative rolls.</p>",
+        "entries": [
+          "The warrior has advantage on initiative rolls."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1845,10 +1983,13 @@
         }
       },
       {
-        "id": "act_improved_critical_dtlc",
+        "id": "act_improved_critical_t28m",
         "name": "Improved Critical",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior's attack rolls score a critical hit on a roll of 19 or 20 on the d20.</p>",
+        "entries": [
+          "The warrior's attack rolls score a critical hit on a roll of 19 or 20 on the {@dice d20}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1862,10 +2003,13 @@
         }
       },
       {
-        "id": "act_improved_defense_y3u4",
+        "id": "act_improved_defense_a9jx",
         "name": "Improved Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior's AC increases by 1.</p>",
+        "entries": [
+          "The warrior's AC increases by 1."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1879,10 +2023,13 @@
         }
       },
       {
-        "id": "act_indomitable__1_day__fnud",
+        "id": "act_indomitable__1_day__goid",
         "name": "Indomitable (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior can reroll a saving throw that it fails, but it must use the new result.</p>",
+        "entries": [
+          "The warrior can reroll a saving throw that it fails, but it must use the new result."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1896,10 +2043,33 @@
         }
       },
       {
-        "id": "act_martial_role_ltgv",
+        "id": "act_martial_role_1dfg",
         "name": "Martial Role",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has one of the following traits of your choice:</p><ul><li><strong><em>Attacker.</em></strong> <p>The warrior gains a +2 bonus to attack rolls.</p></li><li><strong><em>Defender.</em></strong> <p>The warrior gains the Protection reaction below.</p></li></ul>",
+        "entries": [
+          "The warrior has one of the following traits of your choice:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Attacker",
+                "entries": [
+                  "The warrior gains a +2 bonus to attack rolls."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Defender",
+                "entries": [
+                  "The warrior gains the Protection reaction below."
+                ]
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1913,10 +2083,13 @@
         }
       },
       {
-        "id": "act_second_wind__recharges_after_a_short_or_long_rest__88cb",
+        "id": "act_second_wind__recharges_after_a_short_or_long_rest__v3t4",
         "name": "Second Wind (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior can use a bonus action on its turn to regain hit points equal to 1d10 + its level.</p>",
+        "entries": [
+          "The warrior can use a bonus action on its turn to regain hit points equal to {@dice 1d10} + its level."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1932,10 +2105,13 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_pazl",
+        "id": "act_extra_attack_hylp",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The warrior can attack three times, instead of once, whenever it takes the attack action on its turn.</p>",
+        "entries": [
+          "The warrior can attack three times, instead of once, whenever it takes the attack action on its turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1949,10 +2125,13 @@
         }
       },
       {
-        "id": "act_longsword_z0mv",
+        "id": "act_longsword_3uov",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d8 + 4}) slashing damage, or 9 ({@damage 1d10 + 4}) slashing damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1975,10 +2154,13 @@
         }
       },
       {
-        "id": "act_longbow_rfhp",
+        "id": "act_longbow_07d4",
         "name": "Longbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +6 to hit, range 150/600 ft., one target. {@h}6 (1d8 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 6} to hit, range 150/600 ft., one target. {@h}6 ({@damage 1d8 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2000,10 +2182,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_protection__defender_only__ft3t",
+        "id": "act_protection__defender_only__cfav",
         "name": "Protection (Defender Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature the warrior can see attacks a target other than the warrior that is within 5 feet of the warrior, the warrior can use their reaction to impose disadvantage on the attack roll. The warrior must be wielding a shield.</p>",
+        "entries": [
+          "When a creature the warrior can see attacks a target other than the warrior that is within 5 feet of the warrior, the warrior can use their reaction to impose disadvantage on the attack roll. The warrior must be wielding a shield."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2022,10 +2207,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DC/Warrior.webp",
     "tokenImg": "img/bestiary/tokens/DC/Warrior.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

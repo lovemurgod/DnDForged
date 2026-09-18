@@ -84,10 +84,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_tunneler_vglo",
+        "id": "act_tunneler_q5dy",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The ankheg can burrow through solid rock at half its Burrow Speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
+        "entries": [
+          "The ankheg can burrow through solid rock at half its {@variantrule Burrow Speed|XPHB} and leaves a 10-foot-diameter tunnel in its wake."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -103,10 +106,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_6se3",
+        "id": "act_bite_kca8",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5 (with Advantage if the target is Grappled by the ankheg), reach 5 ft. {@h}10 (2d6 + 3) Slashing damage plus 3 (1d6) Acid damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 13).</p>",
+        "descriptionHtml": "<p>Melee Attack: +5 (with Advantage if the target is Grappled by the ankheg), reach 5 ft. Hit: 10 (2d6 + 3) Slashing damage plus 3 (1d6) Acid damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 13).</p>",
+        "entries": [
+          "{@atkr m} {@hit 5} (with {@variantrule Advantage|XPHB} if the target is {@condition Grappled|XPHB} by the ankheg), reach 5 ft. {@h}10 ({@damage 2d6 + 3}) Slashing damage plus 3 ({@damage 1d6}) Acid damage. If the target is a Large or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 13})."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -116,7 +122,7 @@
           "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 13})",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -132,10 +138,13 @@
         }
       },
       {
-        "id": "act_acid_spray___recharge__be3h",
+        "id": "act_acid_spray___recharge__rqjs",
         "name": "Acid Spray {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 12, each creature in a 30-foot-long, 5-foot-wide Line [Area of Effect]. {@actSaveFail} 14 (4d6) Acid damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave dex} {@dc 12}, each creature in a 30-foot-long, 5-foot-wide {@variantrule Line [Area of Effect]|XPHB|Line}. {@actSaveFail} 14 ({@damage 4d6}) Acid damage. {@actSaveSuccess} Half damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -145,7 +154,7 @@
           "targets": null,
           "save": {
             "dc": 12,
-            "ability": "Save"
+            "ability": "DEX"
           },
           "damages": [
             {
@@ -164,11 +173,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Ankheg.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Ankheg.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_barbed_devil_wtthc",
@@ -282,10 +303,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_barbed_hide_5o15",
+        "id": "act_barbed_hide_amlm",
         "name": "Barbed Hide",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of its turns, the devil deals 5 (1d10) Piercing damage to any creature it is grappling or any creature grappling it.</p>",
+        "entries": [
+          "At the start of each of its turns, the devil deals 5 ({@damage 1d10}) Piercing damage to any creature it is grappling or any creature grappling it."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -304,10 +328,13 @@
         }
       },
       {
-        "id": "act_diabolical_restoration_k7ed",
+        "id": "act_diabolical_restoration_yrvi",
         "name": "Diabolical Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells.</p>",
+        "entries": [
+          "If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its {@variantrule Hit Points|XPHB} somewhere in the Nine Hells."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -321,10 +348,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_rsh0",
+        "id": "act_magic_resistance_jb2s",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The devil has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -340,10 +370,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vouy",
+        "id": "act_multiattack_94df",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The devil makes one Claws attack and one Tail attack, or it makes two Hurl Flame attacks.</p>",
+        "entries": [
+          "The devil makes one Claws attack and one Tail attack, or it makes two Hurl Flame attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -357,10 +390,13 @@
         }
       },
       {
-        "id": "act_claws_gp48",
+        "id": "act_claws_ujjo",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>m +6, reach 5 ft. {@h}10 (2d6 + 3) Piercing damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 13) from both claws.</p>",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 10 (2d6 + 3) Piercing damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 13) from both claws.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 5 ft. {@h}10 ({@damage 2d6 + 3}) Piercing damage. If the target is a Large or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from both claws."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -370,7 +406,7 @@
           "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from both claws",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -382,10 +418,13 @@
         }
       },
       {
-        "id": "act_tail_wh7v",
+        "id": "act_tail_m7bt",
         "name": "Tail",
         "actionType": "action",
-        "descriptionHtml": "<p>m +6, reach 10 ft. {@h}14 (2d10 + 3) Slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 10 ft. Hit: 14 (2d10 + 3) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 10 ft. {@h}14 ({@damage 2d10 + 3}) Slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -404,10 +443,13 @@
         }
       },
       {
-        "id": "act_hurl_flame_xjc8",
+        "id": "act_hurl_flame_30hx",
         "name": "Hurl Flame",
         "actionType": "action",
-        "descriptionHtml": "<p>r +5, range 150 ft. {@h}17 (5d6) Fire damage. If the target is a flammable object that isn't being worn or carried, it starts burning.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +5, range 150 ft. Hit: 17 (5d6) Fire damage. If the target is a flammable object that isn't being worn or carried, it starts burning.</p>",
+        "entries": [
+          "{@atkr r} {@hit 5}, range 150 ft. {@h}17 ({@damage 5d6}) Fire damage. If the target is a flammable object that isn't being worn or carried, it starts {@hazard burning|XPHB}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -433,11 +475,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Barbed Devil.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Barbed Devil.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_bearded_devil_wtthc",
@@ -542,10 +596,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_n8br",
+        "id": "act_magic_resistance_td4s",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The devil has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -561,10 +618,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tk4v",
+        "id": "act_multiattack_0i5g",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The devil makes one Beard attack and one Infernal Glaive attack.</p>",
+        "entries": [
+          "The devil makes one Beard attack and one Infernal Glaive attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -578,10 +638,13 @@
         }
       },
       {
-        "id": "act_beard_zggk",
+        "id": "act_beard_n5n2",
         "name": "Beard",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}7 (1d8 + 3) Piercing damage, and the target has the Poisoned condition until the start of the devil's next turn. Until this poison ends, the target can't regain Hit Points.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Piercing damage, and the target has the Poisoned condition until the start of the devil's next turn. Until this poison ends, the target can't regain Hit Points.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Piercing damage, and the target has the {@condition Poisoned|XPHB} condition until the start of the devil's next turn. Until this poison ends, the target can't regain {@variantrule Hit Points|XPHB}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -600,10 +663,13 @@
         }
       },
       {
-        "id": "act_infernal_glaive_9x9z",
+        "id": "act_infernal_glaive_lmlk",
         "name": "Infernal Glaive",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 10 ft. {@h}8 (1d10 + 3) Slashing damage. If the target is a creature and doesn't already have an infernal wound, it is subjected to the following effect. con DC 12. {@actSaveFail} The target receives an infernal wound. While wounded, the target loses 5 (1d10) Hit Points at the start of each of its turns. The wound closes after 1 minute, after a spell restores Hit Points to the target, or after the target or a creature within 5 feet of it takes an action to stanch the wound, doing so by succeeding on a DC 12 Wisdom (Medicine) check.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 10 ft. Hit: 8 (1d10 + 3) Slashing damage. If the target is a creature and doesn't already have an infernal wound, it is subjected to the following effect. con DC 12. {@actSaveFail} The target receives an infernal wound. While wounded, the target loses 5 (1d10) Hit Points at the start of each of its turns. The wound closes after 1 minute, after a spell restores Hit Points to the target, or after the target or a creature within 5 feet of it takes an action to stanch the wound, doing so by succeeding on a DC 12 Wisdom (Medicine) check.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 10 ft. {@h}8 ({@damage 1d10 + 3}) Slashing damage. If the target is a creature and doesn't already have an infernal wound, it is subjected to the following effect. {@actSave con} {@dc 12}. {@actSaveFail} The target receives an infernal wound. While wounded, the target loses 5 ({@dice 1d10}) {@variantrule Hit Points|XPHB} at the start of each of its turns. The wound closes after 1 minute, after a spell restores {@variantrule Hit Points|XPHB} to the target, or after the target or a creature within 5 feet of it takes an action to stanch the wound, doing so by succeeding on a {@dc 12} Wisdom ({@skill Medicine|XPHB}) check."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -613,7 +679,7 @@
           "targets": "it is subjected to the following effect",
           "save": {
             "dc": 12,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [
             {
@@ -632,11 +698,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Bearded Devil.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Bearded Devil.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_commoner_wtthc",
@@ -725,10 +803,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_training_zw7l",
+        "id": "act_training_j4xl",
         "name": "Training",
         "actionType": "trait",
         "descriptionHtml": "<p>The commoner has proficiency in one skill of the DM's choice and has Advantage whenever it makes an ability check using that skill.</p>",
+        "entries": [
+          "The commoner has proficiency in one skill of the DM's choice and has {@variantrule Advantage|XPHB} whenever it makes an ability check using that skill."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -744,10 +825,13 @@
     ],
     "actions": [
       {
-        "id": "act_club_8l53",
+        "id": "act_club_pj5s",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>m +2, reach 5 ft. {@h}2 (1d4) Bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +2, reach 5 ft. Hit: 2 (1d4) Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 2}, reach 5 ft. {@h}2 ({@damage 1d4}) Bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -773,11 +857,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Commoner.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Commoner.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_corrupted_rat_wtthc",
@@ -870,10 +966,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_agile_xkge",
+        "id": "act_agile_o8dn",
         "name": "Agile",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat doesn't provoke Opportunity Attacks when it moves out of an enemy's reach.</p>",
+        "entries": [
+          "The rat doesn't provoke Opportunity Attacks when it moves out of an enemy's reach."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -887,10 +986,13 @@
         }
       },
       {
-        "id": "act_death_burst_r0hc",
+        "id": "act_death_burst_j3at",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat explodes when it dies. con DC 9, each creature in a 5-foot Emanation [Area of Effect] originating from the rat. {@actSaveFail} 1 Acid damage.</p>",
+        "entries": [
+          "The rat explodes when it dies. {@actSave con} {@dc 9}, each creature in a 5-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the rat. {@actSaveFail} 1 Acid damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -900,7 +1002,7 @@
           "targets": null,
           "save": {
             "dc": 9,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [],
           "recharge": null
@@ -909,10 +1011,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_obwc",
+        "id": "act_bite_6b4p",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +2, reach 5 ft. {@h}1 Piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +2, reach 5 ft. Hit: 1 Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 2}, reach 5 ft. {@h}1 Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -933,11 +1038,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Corrupted Rat.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Corrupted Rat.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_cultist_of_demogorgon_wtthc",
@@ -1037,10 +1154,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_ritual_sickle_tnta",
+        "id": "act_ritual_sickle_046v",
         "name": "Ritual Sickle",
         "actionType": "action",
-        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}1d4 + 2 Slashing damage plus 1 Necrotic damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 1d4 + 2 Slashing damage plus 1 Necrotic damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}{@damage 1d4 + 2} Slashing damage plus 1 Necrotic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1066,11 +1186,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Cultist of Demogorgon.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Cultist of Demogorgon.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dardew_wtthc",
@@ -1183,10 +1315,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_lb7r",
+        "id": "act_multiattack_oh3j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Dardew makes two attacks, using Fiery Claw or Power Chord in any combination.</p>",
+        "entries": [
+          "Dardew makes two attacks, using Fiery Claw or Power Chord in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1200,10 +1335,13 @@
         }
       },
       {
-        "id": "act_fiery_claw_0qoa",
+        "id": "act_fiery_claw_0kus",
         "name": "Fiery Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>m +7, reach 5 ft. {@h}8 (1d8 + 4) Slashing damage plus 7 (2d6) Fire damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +7, reach 5 ft. Hit: 8 (1d8 + 4) Slashing damage plus 7 (2d6) Fire damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 7}, reach 5 ft. {@h}8 ({@damage 1d8 + 4}) Slashing damage plus 7 ({@damage 2d6}) Fire damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1226,10 +1364,13 @@
         }
       },
       {
-        "id": "act_power_chord_1kfw",
+        "id": "act_power_chord_r71i",
         "name": "Power Chord",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 14, one creature Dardew can see within 120 ft. {@actSaveFail} 13 (3d6 + 3) Thunder damage.</p>",
+        "entries": [
+          "{@actSave con} {@dc 14}, one creature Dardew can see within 120 ft. {@actSaveFail} 13 ({@damage 3d6 + 3}) Thunder damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1239,7 +1380,7 @@
           "targets": null,
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [
             {
@@ -1253,10 +1394,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_silver_tongue_rn2m",
+        "id": "act_silver_tongue_usrt",
         "name": "Silver Tongue",
         "actionType": "bonus",
         "descriptionHtml": "<p>cha DC 14, one creature Dardew can see within 60 feet. {@actSaveFail} The creature has the Charmed condition until the start of Dardew's next turn.</p>",
+        "entries": [
+          "{@actSave cha} {@dc 14}, one creature Dardew can see within 60 feet. {@actSaveFail} The creature has the {@condition Charmed|XPHB} condition until the start of Dardew's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1266,7 +1410,7 @@
           "targets": null,
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": "CHA"
           },
           "damages": [],
           "recharge": null
@@ -1279,11 +1423,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Dardew.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Dardew.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_demobat_wtthc",
@@ -1378,10 +1534,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_yjdq",
+        "id": "act_bite_262i",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5 (with Advantage if the target is Grappled by a Demobat), reach 5 ft. {@h}10 (2d6 + 3) Piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5 (with Advantage if the target is Grappled by a Demobat), reach 5 ft. Hit: 10 (2d6 + 3) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5} (with {@variantrule Advantage|XPHB} if the target is {@condition Grappled|XPHB} by a Demobat), reach 5 ft. {@h}10 ({@damage 2d6 + 3}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1400,10 +1559,13 @@
         }
       },
       {
-        "id": "act_tentacles_fil5",
+        "id": "act_tentacles_ea6t",
         "name": "Tentacles",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}7 (1d8 + 3) Slashing damage. If the target is a Medium or smaller creature, the target has the Grappled condition (escape DC 13) from all four tentacles.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Slashing damage. If the target is a Medium or smaller creature, the target has the Grappled condition (escape DC 13) from all four tentacles.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Slashing damage. If the target is a Medium or smaller creature, the target has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from all four tentacles."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1413,7 +1575,7 @@
           "targets": "the target has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from all four tentacles",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -1432,11 +1594,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Demobat.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Demobat.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_demodog_wtthc",
@@ -1534,10 +1708,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_ybyy",
+        "id": "act_pack_tactics_2ffc",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The demodog has Advantage on an attack roll against a creature if at least one of the demodog's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
+        "entries": [
+          "The demodog has {@variantrule Advantage|XPHB} on an attack roll against a creature if at least one of the demodog's allies is within 5 feet of the creature and the ally doesn't have the {@condition Incapacitated|XPHB} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1553,10 +1730,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_577s",
+        "id": "act_bite_aeor",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}8 (1d10 + 3) Piercing damage. If the target is a Medium or smaller creature, it has the Prone condition.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 8 (1d10 + 3) Piercing damage. If the target is a Medium or smaller creature, it has the Prone condition.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}8 ({@damage 1d10 + 3}) Piercing damage. If the target is a Medium or smaller creature, it has the {@condition Prone|XPHB} condition."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1582,11 +1762,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Demodog.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Demodog.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_demodragon_wtthc",
@@ -1692,10 +1884,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_baleful_presence_6z41",
+        "id": "act_baleful_presence_z8jl",
         "name": "Baleful Presence",
         "actionType": "trait",
         "descriptionHtml": "<p>Sources of light in a 120-foot Emanation [Area of Effect] originating from the demodragon flicker wildly. Nonmagical sources of Bright Light in that area instead shed Dim Light.</p>",
+        "entries": [
+          "Sources of light in a 120-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the demodragon flicker wildly. Nonmagical sources of {@variantrule Bright Light|XPHB} in that area instead shed {@variantrule Dim Light|XPHB}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1709,10 +1904,13 @@
         }
       },
       {
-        "id": "act_regeneration_5wh8",
+        "id": "act_regeneration_nciu",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The demodragon regains 10 Hit Points at the start of each of its turns if it has at least 1 Hit Points</p>",
+        "entries": [
+          "The demodragon regains 10 {@variantrule Hit Points|XPHB} at the start of each of its turns if it has at least 1 {@variantrule Hit Points|XPHB|Hit Point}"
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1728,10 +1926,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_g6jf",
+        "id": "act_multiattack_3lp0",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The demodragon makes two Bite attacks.</p>",
+        "entries": [
+          "The demodragon makes two Bite attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1745,10 +1946,13 @@
         }
       },
       {
-        "id": "act_bite_yle4",
+        "id": "act_bite_oneq",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +7, reach 10 ft. {@h}11 (2d6 + 4) Piercing damage plus 4 (1d8) Acid damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +7, reach 10 ft. Hit: 11 (2d6 + 4) Piercing damage plus 4 (1d8) Acid damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 7}, reach 10 ft. {@h}11 ({@damage 2d6 + 4}) Piercing damage plus 4 ({@damage 1d8}) Acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1771,10 +1975,13 @@
         }
       },
       {
-        "id": "act_acid_breath__recharge_5__anjf",
+        "id": "act_acid_breath__recharge_5__jw24",
         "name": "Acid Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 13, each creature in a 30-foot-long, 5-foot-wide Line [Area of Effect]. {@actSaveFail} 22 (4d10) Acid damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave dex} {@dc 13}, each creature in a 30-foot-long, 5-foot-wide {@variantrule Line [Area of Effect]|XPHB|Line}. {@actSaveFail} 22 ({@damage 4d10}) Acid damage. {@actSaveSuccess} Half damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1784,7 +1991,7 @@
           "targets": null,
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": "DEX"
           },
           "damages": [
             {
@@ -1803,11 +2010,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Demodragon.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Demodragon.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_demogorgon_spawn_wtthc",
@@ -1909,10 +2128,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_baleful_presence_c6uw",
+        "id": "act_baleful_presence_2iiq",
         "name": "Baleful Presence",
         "actionType": "trait",
         "descriptionHtml": "<p>Sources of light in a 60-foot Emanation [Area of Effect] originating from the spawn flicker wildly. Nonmagical sources of Bright Light in that area instead shed Dim Light.</p>",
+        "entries": [
+          "Sources of light in a 60-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the spawn flicker wildly. Nonmagical sources of {@variantrule Bright Light|XPHB} in that area instead shed {@variantrule Dim Light|XPHB}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1926,10 +2148,13 @@
         }
       },
       {
-        "id": "act_regeneration_4vwf",
+        "id": "act_regeneration_nguy",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The spawn regains 5 Hit Points at the start of each of its turns if it has at least 1 Hit Points.</p>",
+        "entries": [
+          "The spawn regains 5 {@variantrule Hit Points|XPHB} at the start of each of its turns if it has at least 1 {@variantrule Hit Points|XPHB|Hit Point}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1943,10 +2168,13 @@
         }
       },
       {
-        "id": "act_running_leap_1a0c",
+        "id": "act_running_leap_zg38",
         "name": "Running Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>With a 10-foot running start, the spawn can Long Jump up to 30 feet.</p>",
+        "entries": [
+          "With a 10-foot running start, the spawn can {@variantrule Long Jump|XPHB} up to 30 feet."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1962,10 +2190,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3bc4",
+        "id": "act_multiattack_iuy3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spawn makes two Claw attacks.</p>",
+        "entries": [
+          "The spawn makes two Claw attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1979,10 +2210,13 @@
         }
       },
       {
-        "id": "act_claw_prt2",
+        "id": "act_claw_1p0a",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 10 ft. {@h}6 (1d6 + 3) Slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 10 ft. Hit: 6 (1d6 + 3) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 10 ft. {@h}6 ({@damage 1d6 + 3}) Slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2001,10 +2235,13 @@
         }
       },
       {
-        "id": "act_bite_99oi",
+        "id": "act_bite_l7hl",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}5 (1d4 + 3) Piercing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13). While Grappled, the target has the Blinded condition.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 5 (1d4 + 3) Piercing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13). While Grappled, the target has the Blinded condition.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}5 ({@damage 1d4 + 3}) Piercing damage. If the target is a Medium or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 13}). While {@condition Grappled|XPHB}, the target has the {@condition Blinded|XPHB} condition."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2014,7 +2251,7 @@
           "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 13})",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -2033,11 +2270,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Demogorgon Spawn.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Demogorgon Spawn.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dretch_wtthc",
@@ -2135,10 +2384,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_rend_ediz",
+        "id": "act_rend_eal6",
         "name": "Rend",
         "actionType": "action",
-        "descriptionHtml": "<p>m +3, reach 5 ft. {@h}4 (1d6 + 1) Slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}4 ({@damage 1d6 + 1}) Slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2157,10 +2409,13 @@
         }
       },
       {
-        "id": "act_fetid_cloud__1_day__u68n",
+        "id": "act_fetid_cloud__1_day__w1wc",
         "name": "Fetid Cloud (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 11, each creature in a 10-foot Emanation [Area of Effect] originating from the dretch. {@actSaveFail} The target has the Poisoned condition until the end of its next turn. While Poisoned, the creature can take either an action or a Bonus Action on its turn, not both, and it can't take Reactions.</p>",
+        "entries": [
+          "{@actSave con} {@dc 11}, each creature in a 10-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the dretch. {@actSaveFail} The target has the {@condition Poisoned|XPHB} condition until the end of its next turn. While {@condition Poisoned|XPHB}, the creature can take either an action or a {@variantrule Bonus Action|XPHB} on its turn, not both, and it can't take Reactions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2170,7 +2425,7 @@
           "targets": null,
           "save": {
             "dc": 11,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [],
           "recharge": null
@@ -2184,11 +2439,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Dretch.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Dretch.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_flizzlebin_wtthc",
@@ -2285,10 +2552,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_kn1n",
+        "id": "act_magic_resistance_6dos",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Flizzlebin has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "Flizzlebin has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2302,10 +2572,13 @@
         }
       },
       {
-        "id": "act_ventriloquist_wyr4",
+        "id": "act_ventriloquist_ij41",
         "name": "Ventriloquist",
         "actionType": "trait",
         "descriptionHtml": "<p>Flizzlebin can project his voice from anywhere within 1 mile of himself.</p>",
+        "entries": [
+          "Flizzlebin can project his voice from anywhere within 1 mile of himself."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2321,10 +2594,13 @@
     ],
     "actions": [
       {
-        "id": "act_dazzling_confetti_e5sd",
+        "id": "act_dazzling_confetti_s5mn",
         "name": "Dazzling Confetti",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +5, reach 5 ft. or range 60 ft. {@h}10 (2d6 + 3) Radiant damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +5, reach 5 ft. or range 60 ft. Hit: 10 (2d6 + 3) Radiant damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 5}, reach 5 ft. or range 60 ft. {@h}10 ({@damage 2d6 + 3}) Radiant damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2343,10 +2619,13 @@
         }
       },
       {
-        "id": "act_vanishing_trick__3_day__w6ot",
+        "id": "act_vanishing_trick__3_day__e1tk",
         "name": "Vanishing Trick (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Flizzlebin has the Invisible condition for 10 minutes. This effect ends early immediately after Flizzlebin makes an attack roll, deals damage, or has the Incapacitated condition, or if his hat is removed.</p>",
+        "entries": [
+          "Flizzlebin has the {@condition Invisible|XPHB} condition for 10 minutes. This effect ends early immediately after Flizzlebin makes an attack roll, deals damage, or has the {@condition Incapacitated|XPHB} condition, or if his hat is removed."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2363,10 +2642,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_distracting_glitter_lvqp",
+        "id": "act_distracting_glitter_ephc",
         "name": "Distracting Glitter",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} Flizzlebin is hit by an attack roll. {@actResponse} Flizzlebin adds 2 to his AC against that attack, possibly causing it to miss.</p>",
+        "entries": [
+          "{@actTrigger} Flizzlebin is hit by an attack roll. {@actResponse} Flizzlebin adds 2 to his AC against that attack, possibly causing it to miss."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2385,11 +2667,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Flizzlebin.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Flizzlebin.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_giant_corrupted_rat_wtthc",
@@ -2482,10 +2776,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_burst_aojq",
+        "id": "act_death_burst_dyr8",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat explodes when it dies. Constitution Saving Throw DC 11, each creature in a 5-foot Emanation [Area of Effect] originating from the rat. {@actSaveFail} 5 (2d4) Acid damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "The rat explodes when it dies. Constitution {@variantrule Saving Throw|XPHB} {@dc 11}, each creature in a 5-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the rat. {@actSaveFail} 5 ({@damage 2d4}) Acid damage. {@actSaveSuccess} Half damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2495,7 +2792,7 @@
           "targets": null,
           "save": {
             "dc": 11,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -2509,10 +2806,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_yj2h",
+        "id": "act_bite_oc1s",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, Reach 5 ft. {@h}6 (1d6 + 3) Piercing damage plus 5 (2d4) Acid damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, Reach 5 ft. Hit: 6 (1d6 + 3) Piercing damage plus 5 (2d4) Acid damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, Reach 5 ft. {@h}6 ({@damage 1d6 + 3}) Piercing damage plus 5 ({@damage 2d4}) Acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2542,11 +2842,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Giant Corrupted Rat.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Giant Corrupted Rat.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_giant_spider_wtthc",
@@ -2639,10 +2951,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_spider_climb_n22c",
+        "id": "act_spider_climb_ykj3",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The spider can climb difficult surfaces, including along ceilings, without needing to make an ability check.</p>",
+        "entries": [
+          "The spider can climb difficult surfaces, including along ceilings, without needing to make an ability check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2656,10 +2971,13 @@
         }
       },
       {
-        "id": "act_web_walker_saoh",
+        "id": "act_web_walker_isgf",
         "name": "Web Walker",
         "actionType": "trait",
         "descriptionHtml": "<p>The spider ignores movement restrictions caused by webs, and it knows the location of any other creature in contact with the same web.</p>",
+        "entries": [
+          "The spider ignores movement restrictions caused by webs, and it knows the location of any other creature in contact with the same web."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2675,10 +2993,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_f4yi",
+        "id": "act_bite_uajy",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}7 (1d8 + 3) Piercing damage plus 7 (2d6) Poison damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Piercing damage plus 7 (2d6) Poison damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Piercing damage plus 7 ({@damage 2d6}) Poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2701,10 +3022,13 @@
         }
       },
       {
-        "id": "act_web__recharge_5__8qmf",
+        "id": "act_web__recharge_5__6mup",
         "name": "Web (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 13, one creature the spider can see within 60 feet. {@actSaveFail} The target has the Restrained condition until the web is destroyed (AC 10; HP 5; Vulnerability to Fire damage; Immunity to Poison and Psychic damage).</p>",
+        "entries": [
+          "{@actSave dex} {@dc 13}, one creature the spider can see within 60 feet. {@actSaveFail} The target has the {@condition Restrained|XPHB} condition until the web is destroyed (AC 10; HP 5; {@variantrule Vulnerability|XPHB} to Fire damage; {@variantrule Immunity|XPHB} to Poison and Psychic damage)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2714,7 +3038,7 @@
           "targets": null,
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": "DEX"
           },
           "damages": [],
           "recharge": "5"
@@ -2728,11 +3052,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Giant Spider.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Giant Spider.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_gnoll_warrior_wtthc",
@@ -2822,10 +3158,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_rend_oxtg",
+        "id": "act_rend_6kt6",
         "name": "Rend",
         "actionType": "action",
-        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}5 ({@damage 1d6 + 2}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2844,10 +3183,13 @@
         }
       },
       {
-        "id": "act_bone_bow_kq49",
+        "id": "act_bone_bow_0hk4",
         "name": "Bone Bow",
         "actionType": "action",
-        "descriptionHtml": "<p>r +3, range 150/600 ft. {@h}6 (1d10 + 1) Piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +3, range 150/600 ft. Hit: 6 (1d10 + 1) Piercing damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 3}, range 150/600 ft. {@h}6 ({@damage 1d10 + 1}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2868,10 +3210,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_rampage__1_day__jmiy",
+        "id": "act_rampage__1_day__np0r",
         "name": "Rampage (1/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Immediately after dealing damage to a creature that is already Bloodied, the gnoll moves up to half its Speed, and it makes one Rend attack.</p>",
+        "entries": [
+          "Immediately after dealing damage to a creature that is already {@status Bloodied|XPHB}, the gnoll moves up to half its {@variantrule Speed|XPHB}, and it makes one Rend attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2891,11 +3236,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Gnoll Warrior.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Gnoll Warrior.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_goblin_warrior_wtthc",
@@ -2990,10 +3347,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_scimitar_em02",
+        "id": "act_scimitar_2tja",
         "name": "Scimitar",
         "actionType": "action",
-        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Slashing damage, plus 2 (1d4) Slashing damage if the attack roll had Advantage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Slashing damage, plus 2 (1d4) Slashing damage if the attack roll had Advantage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}5 ({@damage 1d6 + 2}) Slashing damage, plus 2 ({@damage 1d4}) Slashing damage if the attack roll had {@variantrule Advantage|XPHB}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3016,10 +3376,13 @@
         }
       },
       {
-        "id": "act_shortbow_6cum",
+        "id": "act_shortbow_gjei",
         "name": "Shortbow",
         "actionType": "action",
-        "descriptionHtml": "<p>r +4, range 80/320 ft. {@h}5 (1d6 + 2) Piercing damage, plus 2 (1d4) Piercing damage if the attack roll had Advantage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +4, range 80/320 ft. Hit: 5 (1d6 + 2) Piercing damage, plus 2 (1d4) Piercing damage if the attack roll had Advantage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 4}, range 80/320 ft. {@h}5 ({@damage 1d6 + 2}) Piercing damage, plus 2 ({@damage 1d4}) Piercing damage if the attack roll had {@variantrule Advantage|XPHB}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3044,10 +3407,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_ehnk",
+        "id": "act_nimble_escape_2bod",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The goblin takes the Disengage or Hide action.</p>",
+        "entries": [
+          "The goblin takes the {@action Disengage|XPHB} or {@action Hide|XPHB} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3067,11 +3433,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Goblin Warrior.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Goblin Warrior.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_guard_wtthc",
@@ -3165,10 +3543,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_spear_4dp0",
+        "id": "act_spear_3zzt",
         "name": "Spear",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +3, reach 5 ft. or range 20/60 ft. {@h}4 (1d6 + 1) Piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +3, reach 5 ft. or range 20/60 ft. Hit: 4 (1d6 + 1) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 3}, reach 5 ft. or range 20/60 ft. {@h}4 ({@damage 1d6 + 1}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3194,11 +3575,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Guard.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Guard.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_hell_hound_wtthc",
@@ -3293,10 +3686,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_qc9f",
+        "id": "act_pack_tactics_xpeb",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The hound has Advantage on an attack roll against a creature if at least one of the hound's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
+        "entries": [
+          "The hound has {@variantrule Advantage|XPHB} on an attack roll against a creature if at least one of the hound's allies is within 5 feet of the creature and the ally doesn't have the {@condition Incapacitated|XPHB} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3312,10 +3708,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_g0ba",
+        "id": "act_multiattack_23aw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hound makes two Bite attacks.</p>",
+        "entries": [
+          "The hound makes two Bite attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3329,10 +3728,13 @@
         }
       },
       {
-        "id": "act_bite_q2dm",
+        "id": "act_bite_bpww",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}7 (1d8 + 3) Piercing damage plus 3 (1d6) Fire damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Piercing damage plus 3 (1d6) Fire damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Piercing damage plus 3 ({@damage 1d6}) Fire damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3355,10 +3757,13 @@
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__35wi",
+        "id": "act_fire_breath__recharge_5__625s",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 12, each creature in a 15-foot Cone [Area of Effect]. {@actSaveFail} 17 (5d6) Fire damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave dex} {@dc 12}, each creature in a 15-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} 17 ({@damage 5d6}) Fire damage. {@actSaveSuccess} Half damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3368,7 +3773,7 @@
           "targets": null,
           "save": {
             "dc": 12,
-            "ability": "Save"
+            "ability": "DEX"
           },
           "damages": [
             {
@@ -3387,11 +3792,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Hell Hound.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Hell Hound.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_imp_trickster_wtthc",
@@ -3496,10 +3913,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_sbi4",
+        "id": "act_magic_resistance_clhm",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The imp has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The imp has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3515,10 +3935,13 @@
     ],
     "actions": [
       {
-        "id": "act_sting_wdfy",
+        "id": "act_sting_etq7",
         "name": "Sting",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}1d6 + 3 Piercing damage plus 2d6 Poison damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 1d6 + 3 Piercing damage plus 2d6 Poison damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}{@damage 1d6 + 3} Piercing damage plus {@damage 2d6} Poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3541,10 +3964,13 @@
         }
       },
       {
-        "id": "act_invisibility_a84p",
+        "id": "act_invisibility_bh88",
         "name": "Invisibility",
         "actionType": "action",
         "descriptionHtml": "<p>The imp has the Invisible condition for 1 minute. This effect ends early immediately after the imp makes an attack roll or deals damage, or if the imp has the Incapacitated condition.</p>",
+        "entries": [
+          "The imp has the {@condition Invisible|XPHB} condition for 1 minute. This effect ends early immediately after the imp makes an attack roll or deals damage, or if the imp has the {@condition Incapacitated|XPHB} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3558,10 +3984,13 @@
         }
       },
       {
-        "id": "act_shape_shift_orxl",
+        "id": "act_shape_shift_0gtr",
         "name": "Shape-Shift",
         "actionType": "action",
         "descriptionHtml": "<p>The imp shape-shifts to resemble a rat (Speed 20 ft.), a raven (20 ft., Fly 60 ft.), or a spider (20 ft., Climb 20 ft.), or it returns to its true form. Its game statistics are the same in each form, except for its Speed. Any equipment it is wearing or carrying isn't transformed.</p>",
+        "entries": [
+          "The imp shape-shifts to resemble a rat ({@variantrule Speed|XPHB} 20 ft.), a raven (20 ft., Fly 60 ft.), or a spider (20 ft., Climb 20 ft.), or it returns to its true form. Its game statistics are the same in each form, except for its {@variantrule Speed|XPHB}. Any equipment it is wearing or carrying isn't transformed."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3582,11 +4011,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Imp Trickster.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Imp Trickster.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_korex_wtthc",
@@ -3688,10 +4129,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sewer_speech_piks",
+        "id": "act_sewer_speech_nhef",
         "name": "Sewer Speech",
         "actionType": "trait",
         "descriptionHtml": "<p>Korex can comprehend and verbally communicate with Monstrosities.</p>",
+        "entries": [
+          "Korex can comprehend and verbally communicate with Monstrosities."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3707,10 +4151,13 @@
     ],
     "actions": [
       {
-        "id": "act_rancid_knife_p57c",
+        "id": "act_rancid_knife_8erg",
         "name": "Rancid Knife",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}8 (2d4 + 3) Piercing damage plus 7 (2d6) Poison damage, and the target has the Poisoned condition until the start of Korex's next turn.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 8 (2d4 + 3) Piercing damage plus 7 (2d6) Poison damage, and the target has the Poisoned condition until the start of Korex's next turn.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}8 ({@damage 2d4 + 3}) Piercing damage plus 7 ({@damage 2d6}) Poison damage, and the target has the {@condition Poisoned|XPHB} condition until the start of Korex's next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3733,10 +4180,13 @@
         }
       },
       {
-        "id": "act_entrancing_pipes_7ruq",
+        "id": "act_entrancing_pipes_th9o",
         "name": "Entrancing Pipes",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 12, one creature Korex can see within 120 feet. {@actSaveFail} 14 (4d6) Psychic damage, and the target has the Charmed condition until the start of Korex's next turn. {@actSaveSuccess} Half damage only.</p>",
+        "entries": [
+          "{@actSave wis} {@dc 12}, one creature Korex can see within 120 feet. {@actSaveFail} 14 ({@damage 4d6}) Psychic damage, and the target has the {@condition Charmed|XPHB} condition until the start of Korex's next turn. {@actSaveSuccess} Half damage only."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3746,7 +4196,7 @@
           "targets": null,
           "save": {
             "dc": 12,
-            "ability": "Save"
+            "ability": "WIS"
           },
           "damages": [
             {
@@ -3760,10 +4210,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_skitter_1tac",
+        "id": "act_skitter_5h9v",
         "name": "Skitter",
         "actionType": "bonus",
         "descriptionHtml": "<p>Korex takes the Dash or Disengage action.</p>",
+        "entries": [
+          "Korex takes the {@action Dash|XPHB} or {@action Disengage|XPHB} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3783,11 +4236,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Korex.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Korex.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_medusa_wtthc",
@@ -3892,10 +4357,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_fcv4",
+        "id": "act_multiattack_wd1y",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The medusa makes two Claw attacks and one Snake Hair attack, or it makes three Poison Ray attacks.</p>",
+        "entries": [
+          "The medusa makes two Claw attacks and one Snake Hair attack, or it makes three Poison Ray attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3909,10 +4377,13 @@
         }
       },
       {
-        "id": "act_claw_fztm",
+        "id": "act_claw_hd2o",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>m +6, reach 5 ft. {@h}10 (2d6 + 3) Slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 10 (2d6 + 3) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 5 ft. {@h}10 ({@damage 2d6 + 3}) Slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3931,10 +4402,13 @@
         }
       },
       {
-        "id": "act_snake_hair_rvhd",
+        "id": "act_snake_hair_kf5e",
         "name": "Snake Hair",
         "actionType": "action",
-        "descriptionHtml": "<p>m +6, reach 5 ft. {@h}5 (1d4 + 3) Piercing damage plus 14 (4d6) Poison damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 5 (1d4 + 3) Piercing damage plus 14 (4d6) Poison damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 5 ft. {@h}5 ({@damage 1d4 + 3}) Piercing damage plus 14 ({@damage 4d6}) Poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3957,10 +4431,13 @@
         }
       },
       {
-        "id": "act_poison_ray_3dwi",
+        "id": "act_poison_ray_wq6w",
         "name": "Poison Ray",
         "actionType": "action",
-        "descriptionHtml": "<p>r +5, range 150 ft. {@h}11 (2d8 + 2) Poison damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +5, range 150 ft. Hit: 11 (2d8 + 2) Poison damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 5}, range 150 ft. {@h}11 ({@damage 2d8 + 2}) Poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3981,10 +4458,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_petrifying_gaze__recharge_5__g1fp",
+        "id": "act_petrifying_gaze__recharge_5__3fh5",
         "name": "Petrifying Gaze (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>con DC 13, each creature in a 30-foot Cone [Area of Effect]. If the medusa sees its reflection in the Cone [Area of Effect], the medusa must make this save. 1 The target has the Restrained condition and repeats the save at the end of its next turn if it is still Restrained, ending the effect on itself on a success. 2 The target has the Petrified condition instead of the Restrained condition.</p>",
+        "entries": [
+          "{@actSave con} {@dc 13}, each creature in a 30-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. If the medusa sees its reflection in the {@variantrule Cone [Area of Effect]|XPHB|Cone}, the medusa must make this save. {@actSaveFail 1} The target has the {@condition Restrained|XPHB} condition and repeats the save at the end of its next turn if it is still {@condition Restrained|XPHB}, ending the effect on itself on a success. {@actSaveFail 2} The target has the {@condition Petrified|XPHB} condition instead of the {@condition Restrained|XPHB} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3994,7 +4474,7 @@
           "targets": null,
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [],
           "recharge": "5"
@@ -4007,11 +4487,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Medusa.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Medusa.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_myconid_adult_wtthc",
@@ -4100,10 +4592,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sun_sickness_cu2x",
+        "id": "act_sun_sickness_7zhy",
         "name": "Sun Sickness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the myconid has Disadvantage on D20 Test. The myconid dies if it spends more than 1 hour in sunlight.</p>",
+        "entries": [
+          "While in sunlight, the myconid has {@variantrule Disadvantage|XPHB} on {@variantrule D20 Test|XPHB|D20 Tests}. The myconid dies if it spends more than 1 hour in sunlight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4119,10 +4614,13 @@
     ],
     "actions": [
       {
-        "id": "act_slam_lghl",
+        "id": "act_slam_l7h5",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>m +2, reach 5 ft. {@h}4 (1d8) Bludgeoning damage plus 3 (1d6) Poison damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +2, reach 5 ft. Hit: 4 (1d8) Bludgeoning damage plus 3 (1d6) Poison damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 2}, reach 5 ft. {@h}4 ({@damage 1d8}) Bludgeoning damage plus 3 ({@damage 1d6}) Poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4145,10 +4643,13 @@
         }
       },
       {
-        "id": "act_pacifying_spores__1_day__evqb",
+        "id": "act_pacifying_spores__1_day__mtpl",
         "name": "Pacifying Spores (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 11, one creature the myconid can see within 10 feet. {@actSaveFail} The target has the Stunned condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
+        "entries": [
+          "{@actSave con} {@dc 11}, one creature the myconid can see within 10 feet. {@actSaveFail} The target has the {@condition Stunned|XPHB} condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4158,17 +4659,20 @@
           "targets": null,
           "save": {
             "dc": 11,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_rapport_spores_cies",
+        "id": "act_rapport_spores_57z4",
         "name": "Rapport Spores",
         "actionType": "action",
         "descriptionHtml": "<p>The myconid expels spores in a 30-foot Emanation [Area of Effect] originating from itself. Creatures in that area with an Intelligence score of 2 or higher that aren't Constructs, Elementals, or Undead gain telepathy with a range of 30 feet for 1 hour.</p>",
+        "entries": [
+          "The myconid expels spores in a 30-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from itself. Creatures in that area with an Intelligence score of 2 or higher that aren't Constructs, Elementals, or Undead gain telepathy with a range of 30 feet for 1 hour."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4189,11 +4693,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Myconid Adult.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Myconid Adult.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_needle_blight_wtthc",
@@ -4285,10 +4801,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_claw_wayb",
+        "id": "act_claw_l2i2",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>m +3, reach 5 ft. {@h}6 (2d4 + 1) Slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 6 (2d4 + 1) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}6 ({@damage 2d4 + 1}) Slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4307,10 +4826,13 @@
         }
       },
       {
-        "id": "act_needles_2xts",
+        "id": "act_needles_z3vb",
         "name": "Needles",
         "actionType": "action",
-        "descriptionHtml": "<p>r +3, range 30/60 ft. {@h}6 (2d4 + 1) Piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +3, range 30/60 ft. Hit: 6 (2d4 + 1) Piercing damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 3}, range 30/60 ft. {@h}6 ({@damage 2d4 + 1}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4336,11 +4858,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Needle Blight.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Needle Blight.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_rilly_june_wtthc",
@@ -4443,10 +4977,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_yn74",
+        "id": "act_multiattack_okks",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Rilly June makes two Hayfork attacks.</p>",
+        "entries": [
+          "Rilly June makes two Hayfork attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4460,10 +4997,13 @@
         }
       },
       {
-        "id": "act_hayfork_4biz",
+        "id": "act_hayfork_318c",
         "name": "Hayfork",
         "actionType": "action",
-        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}6 (1d8 + 2) Piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 6 (1d8 + 2) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}6 ({@damage 1d8 + 2}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4482,10 +5022,13 @@
         }
       },
       {
-        "id": "act_g_wan__git___1_day__4vfq",
+        "id": "act_g_wan__git___1_day__tpa5",
         "name": "G'wan, Git! (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 11, one creature Rilly June can see within 60 feet. {@actSaveFail} 10 (3d6) Psychic damage, and the target has the Frightened condition until the end of its next turn. {@actSaveSuccess} Half damage only.</p>",
+        "entries": [
+          "{@actSave wis} {@dc 11}, one creature Rilly June can see within 60 feet. {@actSaveFail} 10 ({@damage 3d6}) Psychic damage, and the target has the {@condition Frightened|XPHB} condition until the end of its next turn. {@actSaveSuccess} Half damage only."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4495,7 +5038,7 @@
           "targets": null,
           "save": {
             "dc": 11,
-            "ability": "Save"
+            "ability": "WIS"
           },
           "damages": [
             {
@@ -4514,11 +5057,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Rilly June.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Rilly June.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_scarecrow_wtthc",
@@ -4623,10 +5178,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_fearsome_claw_swqp",
+        "id": "act_fearsome_claw_ruum",
         "name": "Fearsome Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>m +3, reach 5 ft. {@h}6 (2d4 + 1) Slashing damage, and the target has the Frightened condition until the end of the scarecrow's next turn.</p>",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 6 (2d4 + 1) Slashing damage, and the target has the Frightened condition until the end of the scarecrow's next turn.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}6 ({@damage 2d4 + 1}) Slashing damage, and the target has the {@condition Frightened|XPHB} condition until the end of the scarecrow's next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4645,10 +5203,13 @@
         }
       },
       {
-        "id": "act_terrifying_glare_6ave",
+        "id": "act_terrifying_glare_4dgt",
         "name": "Terrifying Glare",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 11, one creature the scarecrow can see within 30 feet. {@actSaveFail} The target has the Frightened condition until the end of the scarecrow's next turn. While Frightened, the target has the Paralyzed condition.</p>",
+        "entries": [
+          "{@actSave wis} {@dc 11}, one creature the scarecrow can see within 30 feet. {@actSaveFail} The target has the {@condition Frightened|XPHB} condition until the end of the scarecrow's next turn. While {@condition Frightened|XPHB}, the target has the {@condition Paralyzed|XPHB} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4658,7 +5219,7 @@
           "targets": null,
           "save": {
             "dc": 11,
-            "ability": "Save"
+            "ability": "WIS"
           },
           "damages": [],
           "recharge": null
@@ -4672,11 +5233,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Scarecrow.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Scarecrow.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_shadow_wtthc",
@@ -4788,10 +5361,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_a8x3",
+        "id": "act_amorphous_fvlm",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The shadow can move through a space as narrow as 1 inch without expending extra movement to do so.</p>",
+        "entries": [
+          "The shadow can move through a space as narrow as 1 inch without expending extra movement to do so."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4805,10 +5381,13 @@
         }
       },
       {
-        "id": "act_sunlight_weakness_pyg1",
+        "id": "act_sunlight_weakness_6qwf",
         "name": "Sunlight Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the shadow has Disadvantage on D20 Test.</p>",
+        "entries": [
+          "While in sunlight, the shadow has {@variantrule Disadvantage|XPHB} on {@variantrule D20 Test|XPHB|D20 Tests}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4824,10 +5403,13 @@
     ],
     "actions": [
       {
-        "id": "act_draining_swipe_75sj",
+        "id": "act_draining_swipe_6jd3",
         "name": "Draining Swipe",
         "actionType": "action",
-        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}5 (1d6 + 2) Necrotic damage, and the target's Strength score decreases by 1d4. The target dies if this reduces that score to 0. If a Humanoid is slain by this attack, a Shadow rises from the corpse 1d4 hours later.</p>",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Necrotic damage, and the target's Strength score decreases by 1d4. The target dies if this reduces that score to 0. If a Humanoid is slain by this attack, a Shadow rises from the corpse 1d4 hours later.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}5 ({@damage 1d6 + 2}) Necrotic damage, and the target's Strength score decreases by {@dice 1d4}. The target dies if this reduces that score to 0. If a Humanoid is slain by this attack, a Shadow rises from the corpse {@dice 1d4} hours later."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4848,10 +5430,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_stealth_15sv",
+        "id": "act_shadow_stealth_sghr",
         "name": "Shadow Stealth",
         "actionType": "bonus",
         "descriptionHtml": "<p>While in Dim Light or Darkness, the shadow takes the Hide action.</p>",
+        "entries": [
+          "While in {@variantrule Dim Light|XPHB} or {@variantrule Darkness|XPHB}, the shadow takes the {@action Hide|XPHB} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4871,11 +5456,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Shadow.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Shadow.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_shrieker_fungus_wtthc",
@@ -4970,10 +5567,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shriek_fny2",
+        "id": "act_shriek_tqnc",
         "name": "Shriek",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} A creature or a source of Bright Light moves within 30 feet of the shrieker. {@actResponse} The shrieker emits a shriek audible within 300 feet of itself for 1 minute or until the shrieker dies.</p>",
+        "entries": [
+          "{@actTrigger} A creature or a source of {@variantrule Bright Light|XPHB} moves within 30 feet of the shrieker. {@actResponse} The shrieker emits a shriek audible within 300 feet of itself for 1 minute or until the shrieker dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4992,11 +5592,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Shrieker Fungus.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Shrieker Fungus.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_swarm_of_corrupted_rats_wtthc",
@@ -5100,10 +5712,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_burst_0q1i",
+        "id": "act_death_burst_aabr",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat explodes when it dies. con DC 10, each creature in a 10-foot Emanation [Area of Effect] originating from the rat. {@actSaveFail} 2d4 Acid Damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "The rat explodes when it dies. {@actSave con} {@dc 10}, each creature in a 10-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the rat. {@actSaveFail} {@damage 2d4} Acid Damage. {@actSaveSuccess} Half damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5113,7 +5728,7 @@
           "targets": null,
           "save": {
             "dc": 10,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [
             {
@@ -5125,10 +5740,13 @@
         }
       },
       {
-        "id": "act_swarm_i0bl",
+        "id": "act_swarm_d0oc",
         "name": "Swarm",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny rat. The swarm can't regain Hit Points.</p>",
+        "entries": [
+          "The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny rat. The swarm can't regain {@variantrule Hit Points|XPHB}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5144,10 +5762,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_x2fc",
+        "id": "act_bite_hx2b",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +4, Reach 5 ft. {@h}6 (2d4 + 2) Piercing damage or 1d4 + 2 Piercing damage if the swarm is Bloodied.</p>",
+        "descriptionHtml": "<p>Melee Attack: +4, Reach 5 ft. Hit: 6 (2d4 + 2) Piercing damage or 1d4 + 2 Piercing damage if the swarm is Bloodied.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, Reach 5 ft. {@h}6 ({@damage 2d4 + 2}) Piercing damage or {@damage 1d4 + 2} Piercing damage if the swarm is Bloodied."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5177,11 +5798,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Swarm of Corrupted Rats.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Swarm of Corrupted Rats.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_vine_blight_tangler_wtthc",
@@ -5277,10 +5910,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_constricting_vine_dfhu",
+        "id": "act_constricting_vine_k0q9",
         "name": "Constricting Vine",
         "actionType": "action",
-        "descriptionHtml": "<p>m +4, reach 10 ft. {@h}1d10 + 2 Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 12) from one of three vines.</p>",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 10 ft. Hit: 1d10 + 2 Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 12) from one of three vines.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 10 ft. {@h}{@damage 1d10 + 2} Bludgeoning damage. If the target is a Large or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 12}) from one of three vines."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5290,7 +5926,7 @@
           "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 12}) from one of three vines",
           "save": {
             "dc": 12,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -5302,10 +5938,13 @@
         }
       },
       {
-        "id": "act_entangling_vines__recharge_5__vp2v",
+        "id": "act_entangling_vines__recharge_5__ctmh",
         "name": "Entangling Vines (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Grasping vines momentarily appear on each enemy in a 10-foot-radius Sphere [Area of Effect] centered on a point of the blight's choice within 60 feet of it. Each target must succeed on a DC 12 Strength saving throw or have the Restrained condition until the start of the blight's next turn.</p>",
+        "entries": [
+          "Grasping vines momentarily appear on each enemy in a 10-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on a point of the blight's choice within 60 feet of it. Each target must succeed on a {@dc 12} Strength saving throw or have the {@condition Restrained|XPHB} condition until the start of the blight's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5329,11 +5968,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Vine Blight Tangler.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Vine Blight Tangler.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_violet_fungus_wtthc",
@@ -5426,10 +6077,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_hciy",
+        "id": "act_multiattack_f40k",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fungus makes two Rotting Touch attacks.</p>",
+        "entries": [
+          "The fungus makes two Rotting Touch attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5443,10 +6097,13 @@
         }
       },
       {
-        "id": "act_rotting_touch_t7gg",
+        "id": "act_rotting_touch_nij4",
         "name": "Rotting Touch",
         "actionType": "action",
-        "descriptionHtml": "<p>m +2, reach 10 ft. {@h}4 (1d8) Necrotic damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +2, reach 10 ft. Hit: 4 (1d8) Necrotic damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 2}, reach 10 ft. {@h}4 ({@damage 1d8}) Necrotic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5472,10 +6129,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/WttHC/Violet Fungus.webp",
     "tokenImg": "img/bestiary/tokens/WttHC/Violet Fungus.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

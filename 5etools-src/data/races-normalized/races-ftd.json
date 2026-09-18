@@ -6,7 +6,114 @@
     "page": 10,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Chromatic Ancestry.</strong> <p>You have a chromatic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Chromatic Ancestry table. This determines the damage type for your other traits, as shown in the table.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th></tr></thead><tbody><tr><td>Black</td><td>Acid</td></tr><tr><td>Blue</td><td>Lightning</td></tr><tr><td>Green</td><td>Poison</td></tr><tr><td>Red</td><td>Fire</td></tr><tr><td>White</td><td>Cold</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Breath Weapon.</strong> <p>When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 30-foot line that is 5 feet wide. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Chromatic Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).</p>\n<p>You can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Resistance.</strong> <p>You have resistance to the damage type associated with your Chromatic Ancestry.</p></div>\n<div class=\"compendium-subentry\"><strong>Chromatic Warding.</strong> <p>Starting at 5th level, as an action, you can channel your draconic energy to protect yourself. For 1 minute, you become immune to the damage type associated with your Chromatic Ancestry. Once you use this trait, you can't do so again until you finish a long rest.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Chromatic Ancestry.</strong> <p>You have a chromatic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Chromatic Ancestry table. This determines the damage type for your other traits, as shown in the table.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th></tr></thead><tbody><tr><td>Black</td><td>Acid</td></tr><tr><td>Blue</td><td>Lightning</td></tr><tr><td>Green</td><td>Poison</td></tr><tr><td>Red</td><td>Fire</td></tr><tr><td>White</td><td>Cold</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Breath Weapon.</strong> <p>When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 30-foot line that is 5 feet wide. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Chromatic Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).</p>\n<p>You can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Resistance.</strong> <p>You have resistance to the damage type associated with your Chromatic Ancestry.</p></div>\n<div class=\"compendium-subentry\"><strong>Chromatic Warding.</strong> <p>Starting at 5th level, as an action, you can channel your draconic energy to protect yourself. For 1 minute, you become immune to the damage type associated with your Chromatic Ancestry. Once you use this trait, you can't do so again until you finish a long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dragonborn_chromatic_chromatic_ancestry_ftd",
+        "name": "Chromatic Ancestry",
+        "source": "FTD",
+        "raceName": "Dragonborn (Chromatic)",
+        "actionType": "passive",
+        "description": "You have a chromatic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Chromatic Ancestry table. This determines the damage type for your other traits, as shown in the table.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a chromatic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Chromatic Ancestry table. This determines the damage type for your other traits, as shown in the table.",
+          {
+            "type": "table",
+            "caption": "Chromatic Ancestry",
+            "colLabels": [
+              "Dragon",
+              "Damage Type"
+            ],
+            "colStyles": [
+              "col-6 text-center",
+              "col-6 text-center"
+            ],
+            "rows": [
+              [
+                "Black",
+                "Acid"
+              ],
+              [
+                "Blue",
+                "Lightning"
+              ],
+              [
+                "Green",
+                "Poison"
+              ],
+              [
+                "Red",
+                "Fire"
+              ],
+              [
+                "White",
+                "Cold"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dragonborn_chromatic_breath_weapon_ftd",
+        "name": "Breath Weapon",
+        "source": "FTD",
+        "raceName": "Dragonborn (Chromatic)",
+        "actionType": "passive",
+        "description": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 30-foot line that is 5 feet wide. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Chromatic Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).\n\nYou can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "1d10",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you take the {@action Attack} action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 30-foot line that is 5 feet wide. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes {@damage 1d10} damage of the type associated with your Chromatic Ancestry. On a successful save, it takes half as much damage. This damage increases by {@damage 1d10} when you reach 5th level ({@damage 2d10}), 11th level ({@damage 3d10}), and 17th level ({@damage 4d10}).",
+          "You can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_chromatic_draconic_resistance_ftd",
+        "name": "Draconic Resistance",
+        "source": "FTD",
+        "raceName": "Dragonborn (Chromatic)",
+        "actionType": "passive",
+        "description": "You have resistance to the damage type associated with your Chromatic Ancestry.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to the damage type associated with your Chromatic Ancestry."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_chromatic_chromatic_warding_ftd",
+        "name": "Chromatic Warding",
+        "source": "FTD",
+        "raceName": "Dragonborn (Chromatic)",
+        "actionType": "action",
+        "description": "Starting at 5th level, as an action, you can channel your draconic energy to protect yourself. For 1 minute, you become immune to the damage type associated with your Chromatic Ancestry. Once you use this trait, you can't do so again until you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Starting at 5th level, as an action, you can channel your draconic energy to protect yourself. For 1 minute, you become immune to the damage type associated with your Chromatic Ancestry. Once you use this trait, you can't do so again until you finish a long rest."
+        ]
+      }
+    ],
+    "description": "**Chromatic Ancestry**: You have a chromatic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Chromatic Ancestry table. This determines the damage type for your other traits, as shown in the table.\n\n**Breath Weapon**: When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 30-foot line that is 5 feet wide. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Chromatic Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).\n\nYou can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.\n\n**Draconic Resistance**: You have resistance to the damage type associated with your Chromatic Ancestry.\n\n**Chromatic Warding**: Starting at 5th level, as an action, you can channel your draconic energy to protect yourself. For 1 minute, you become immune to the damage type associated with your Chromatic Ancestry. Once you use this trait, you can't do so again until you finish a long rest."
   },
   {
     "id": "race_dragonborn_gem_ftd",
@@ -15,7 +122,130 @@
     "page": 11,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Gem Ancestry.</strong> <p>You have a gem dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Gem Ancestry table. This determines the damage type for your other traits, as shown in the table.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th></tr></thead><tbody><tr><td>Amethyst</td><td>Force</td></tr><tr><td>Crystal</td><td>Radiant</td></tr><tr><td>Emerald</td><td>Psychic</td></tr><tr><td>Sapphire</td><td>Thunder</td></tr><tr><td>Topaz</td><td>Necrotic</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Breath Weapon.</strong> <p>When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Gem Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).</p>\n<p>You can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Resistance.</strong> <p>You have resistance to the damage type associated with your Gem Ancestry.</p></div>\n<div class=\"compendium-subentry\"><strong>Psionic Mind.</strong> <p>You can send telepathic messages to any creature you can see within 30 feet of you. You don't need to share a language with the creature for it to understand these messages, but it must be able to understand at least one language to comprehend them.</p></div>\n<div class=\"compendium-subentry\"><strong>Gem Flight.</strong> <p>Starting at 5th level, you can use a bonus action to manifest spectral wings on your body. These wings last for 1 minute. For the duration, you gain a flying speed equal to your walking speed and can hover. Once you use this trait, you can't do so again until you finish a long rest.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Gem Ancestry.</strong> <p>You have a gem dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Gem Ancestry table. This determines the damage type for your other traits, as shown in the table.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th></tr></thead><tbody><tr><td>Amethyst</td><td>Force</td></tr><tr><td>Crystal</td><td>Radiant</td></tr><tr><td>Emerald</td><td>Psychic</td></tr><tr><td>Sapphire</td><td>Thunder</td></tr><tr><td>Topaz</td><td>Necrotic</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Breath Weapon.</strong> <p>When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Gem Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).</p>\n<p>You can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Resistance.</strong> <p>You have resistance to the damage type associated with your Gem Ancestry.</p></div>\n<div class=\"compendium-subentry\"><strong>Psionic Mind.</strong> <p>You can send telepathic messages to any creature you can see within 30 feet of you. You don't need to share a language with the creature for it to understand these messages, but it must be able to understand at least one language to comprehend them.</p></div>\n<div class=\"compendium-subentry\"><strong>Gem Flight.</strong> <p>Starting at 5th level, you can use a bonus action to manifest spectral wings on your body. These wings last for 1 minute. For the duration, you gain a flying speed equal to your walking speed and can hover. Once you use this trait, you can't do so again until you finish a long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dragonborn_gem_gem_ancestry_ftd",
+        "name": "Gem Ancestry",
+        "source": "FTD",
+        "raceName": "Dragonborn (Gem)",
+        "actionType": "passive",
+        "description": "You have a gem dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Gem Ancestry table. This determines the damage type for your other traits, as shown in the table.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a gem dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Gem Ancestry table. This determines the damage type for your other traits, as shown in the table.",
+          {
+            "type": "table",
+            "caption": "Gem Ancestry",
+            "colLabels": [
+              "Dragon",
+              "Damage Type"
+            ],
+            "colStyles": [
+              "col-6 text-center",
+              "col-6 text-center"
+            ],
+            "rows": [
+              [
+                "Amethyst",
+                "Force"
+              ],
+              [
+                "Crystal",
+                "Radiant"
+              ],
+              [
+                "Emerald",
+                "Psychic"
+              ],
+              [
+                "Sapphire",
+                "Thunder"
+              ],
+              [
+                "Topaz",
+                "Necrotic"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dragonborn_gem_breath_weapon_ftd",
+        "name": "Breath Weapon",
+        "source": "FTD",
+        "raceName": "Dragonborn (Gem)",
+        "actionType": "passive",
+        "description": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Gem Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).\n\nYou can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "1d10",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you take the {@action Attack} action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes {@damage 1d10} damage of the type associated with your Gem Ancestry. On a successful save, it takes half as much damage. This damage increases by {@damage 1d10} when you reach 5th level ({@damage 2d10}), 11th level ({@damage 3d10}), and 17th level ({@damage 4d10}).",
+          "You can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_gem_draconic_resistance_ftd",
+        "name": "Draconic Resistance",
+        "source": "FTD",
+        "raceName": "Dragonborn (Gem)",
+        "actionType": "passive",
+        "description": "You have resistance to the damage type associated with your Gem Ancestry.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to the damage type associated with your Gem Ancestry."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_gem_psionic_mind_ftd",
+        "name": "Psionic Mind",
+        "source": "FTD",
+        "raceName": "Dragonborn (Gem)",
+        "actionType": "passive",
+        "description": "You can send telepathic messages to any creature you can see within 30 feet of you. You don't need to share a language with the creature for it to understand these messages, but it must be able to understand at least one language to comprehend them.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can send telepathic messages to any creature you can see within 30 feet of you. You don't need to share a language with the creature for it to understand these messages, but it must be able to understand at least one language to comprehend them."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_gem_gem_flight_ftd",
+        "name": "Gem Flight",
+        "source": "FTD",
+        "raceName": "Dragonborn (Gem)",
+        "actionType": "passive",
+        "description": "Starting at 5th level, you can use a bonus action to manifest spectral wings on your body. These wings last for 1 minute. For the duration, you gain a flying speed equal to your walking speed and can hover. Once you use this trait, you can't do so again until you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Starting at 5th level, you can use a bonus action to manifest spectral wings on your body. These wings last for 1 minute. For the duration, you gain a flying speed equal to your walking speed and can hover. Once you use this trait, you can't do so again until you finish a long rest."
+        ]
+      }
+    ],
+    "description": "**Gem Ancestry**: You have a gem dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Gem Ancestry table. This determines the damage type for your other traits, as shown in the table.\n\n**Breath Weapon**: When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Gem Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).\n\nYou can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.\n\n**Draconic Resistance**: You have resistance to the damage type associated with your Gem Ancestry.\n\n**Psionic Mind**: You can send telepathic messages to any creature you can see within 30 feet of you. You don't need to share a language with the creature for it to understand these messages, but it must be able to understand at least one language to comprehend them.\n\n**Gem Flight**: Starting at 5th level, you can use a bonus action to manifest spectral wings on your body. These wings last for 1 minute. For the duration, you gain a flying speed equal to your walking speed and can hover. Once you use this trait, you can't do so again until you finish a long rest."
   },
   {
     "id": "race_dragonborn_metallic_ftd",
@@ -24,6 +254,134 @@
     "page": 12,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Metallic Ancestry.</strong> <p>You have a metallic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Metallic Ancestry table. This determines the damage type for your other traits, as shown in the table.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th></tr></thead><tbody><tr><td>Brass</td><td>Fire</td></tr><tr><td>Bronze</td><td>Lightning</td></tr><tr><td>Copper</td><td>Acid</td></tr><tr><td>Gold</td><td>Fire</td></tr><tr><td>Silver</td><td>Cold</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Breath Weapon.</strong> <p>When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Metallic Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).</p>\n<p>You can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Resistance.</strong> <p>You have resistance to the damage type associated with your Metallic Ancestry.</p></div>\n<div class=\"compendium-subentry\"><strong>Metallic Breath Weapon.</strong> <p>At 5th level, you gain a second breath weapon. When you take the Attack action on your turn, you can replace one of your attacks with an exhalation in a 15-foot cone. The save DC for this breath is 8 + your Constitution modifier + your proficiency bonus. Whenever you use this trait, choose one:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Enervating Breath.</strong> <p>Each creature in the cone must succeed on a Constitution saving throw or become incapacitated until the start of your next turn.</p></div></li><li><div class=\"compendium-subentry\"><strong>Repulsion Breath.</strong> <p>Each creature in the cone must succeed on a Strength saving throw or be pushed 20 feet away from you and be knocked prone.</p></div></li></ul>\n<p>Once you use your Metallic Breath Weapon, you can't do so again until you finish a long rest.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Metallic Ancestry.</strong> <p>You have a metallic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Metallic Ancestry table. This determines the damage type for your other traits, as shown in the table.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th></tr></thead><tbody><tr><td>Brass</td><td>Fire</td></tr><tr><td>Bronze</td><td>Lightning</td></tr><tr><td>Copper</td><td>Acid</td></tr><tr><td>Gold</td><td>Fire</td></tr><tr><td>Silver</td><td>Cold</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Breath Weapon.</strong> <p>When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Metallic Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).</p>\n<p>You can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Resistance.</strong> <p>You have resistance to the damage type associated with your Metallic Ancestry.</p></div>\n<div class=\"compendium-subentry\"><strong>Metallic Breath Weapon.</strong> <p>At 5th level, you gain a second breath weapon. When you take the Attack action on your turn, you can replace one of your attacks with an exhalation in a 15-foot cone. The save DC for this breath is 8 + your Constitution modifier + your proficiency bonus. Whenever you use this trait, choose one:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Enervating Breath.</strong> <p>Each creature in the cone must succeed on a Constitution saving throw or become incapacitated until the start of your next turn.</p></div></li><li><div class=\"compendium-subentry\"><strong>Repulsion Breath.</strong> <p>Each creature in the cone must succeed on a Strength saving throw or be pushed 20 feet away from you and be knocked prone.</p></div></li></ul>\n<p>Once you use your Metallic Breath Weapon, you can't do so again until you finish a long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dragonborn_metallic_metallic_ancestry_ftd",
+        "name": "Metallic Ancestry",
+        "source": "FTD",
+        "raceName": "Dragonborn (Metallic)",
+        "actionType": "passive",
+        "description": "You have a metallic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Metallic Ancestry table. This determines the damage type for your other traits, as shown in the table.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a metallic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Metallic Ancestry table. This determines the damage type for your other traits, as shown in the table.",
+          {
+            "type": "table",
+            "caption": "Metallic Ancestry",
+            "colLabels": [
+              "Dragon",
+              "Damage Type"
+            ],
+            "colStyles": [
+              "col-6 text-center",
+              "col-6 text-center"
+            ],
+            "rows": [
+              [
+                "Brass",
+                "Fire"
+              ],
+              [
+                "Bronze",
+                "Lightning"
+              ],
+              [
+                "Copper",
+                "Acid"
+              ],
+              [
+                "Gold",
+                "Fire"
+              ],
+              [
+                "Silver",
+                "Cold"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dragonborn_metallic_breath_weapon_ftd",
+        "name": "Breath Weapon",
+        "source": "FTD",
+        "raceName": "Dragonborn (Metallic)",
+        "actionType": "passive",
+        "description": "When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Metallic Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).\n\nYou can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "1d10",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you take the {@action Attack} action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes {@damage 1d10} damage of the type associated with your Metallic Ancestry. On a successful save, it takes half as much damage. This damage increases by {@damage 1d10} when you reach 5th level ({@damage 2d10}), 11th level ({@damage 3d10}), and 17th level ({@damage 4d10}).",
+          "You can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_metallic_draconic_resistance_ftd",
+        "name": "Draconic Resistance",
+        "source": "FTD",
+        "raceName": "Dragonborn (Metallic)",
+        "actionType": "passive",
+        "description": "You have resistance to the damage type associated with your Metallic Ancestry.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to the damage type associated with your Metallic Ancestry."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_metallic_metallic_breath_weapon_ftd",
+        "name": "Metallic Breath Weapon",
+        "source": "FTD",
+        "raceName": "Dragonborn (Metallic)",
+        "actionType": "passive",
+        "description": "At 5th level, you gain a second breath weapon. When you take the Attack action on your turn, you can replace one of your attacks with an exhalation in a 15-foot cone. The save DC for this breath is 8 + your Constitution modifier + your proficiency bonus. Whenever you use this trait, choose one:\n\n- **Enervating Breath**\n\nEach creature in the cone must succeed on a Constitution saving throw or become incapacitated until the start of your next turn.\n- **Repulsion Breath**\n\nEach creature in the cone must succeed on a Strength saving throw or be pushed 20 feet away from you and be knocked prone.\n\nOnce you use your Metallic Breath Weapon, you can't do so again until you finish a long rest.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "At 5th level, you gain a second breath weapon. When you take the {@action Attack} action on your turn, you can replace one of your attacks with an exhalation in a 15-foot cone. The save DC for this breath is 8 + your Constitution modifier + your proficiency bonus. Whenever you use this trait, choose one:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Enervating Breath",
+                "entries": [
+                  "Each creature in the cone must succeed on a Constitution saving throw or become {@condition incapacitated} until the start of your next turn."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Repulsion Breath",
+                "entries": [
+                  "Each creature in the cone must succeed on a Strength saving throw or be pushed 20 feet away from you and be knocked {@condition prone}."
+                ]
+              }
+            ]
+          },
+          "Once you use your Metallic Breath Weapon, you can't do so again until you finish a long rest."
+        ]
+      }
+    ],
+    "description": "**Metallic Ancestry**: You have a metallic dragon ancestor, granting you a special magical affinity. Choose one kind of dragon from the Metallic Ancestry table. This determines the damage type for your other traits, as shown in the table.\n\n**Breath Weapon**: When you take the Attack action on your turn, you can replace one of your attacks with an exhalation of magical energy in a 15-foot cone. Each creature in that area must make a Dexterity saving throw (DC = 8 + your Constitution modifier + your proficiency bonus). On a failed save, the creature takes 1d10 damage of the type associated with your Metallic Ancestry. On a successful save, it takes half as much damage. This damage increases by 1d10 when you reach 5th level (2d10), 11th level (3d10), and 17th level (4d10).\n\nYou can use your Breath Weapon a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.\n\n**Draconic Resistance**: You have resistance to the damage type associated with your Metallic Ancestry.\n\n**Metallic Breath Weapon**: At 5th level, you gain a second breath weapon. When you take the Attack action on your turn, you can replace one of your attacks with an exhalation in a 15-foot cone. The save DC for this breath is 8 + your Constitution modifier + your proficiency bonus. Whenever you use this trait, choose one:\n\n- **Enervating Breath**\n\nEach creature in the cone must succeed on a Constitution saving throw or become incapacitated until the start of your next turn.\n- **Repulsion Breath**\n\nEach creature in the cone must succeed on a Strength saving throw or be pushed 20 feet away from you and be knocked prone.\n\nOnce you use your Metallic Breath Weapon, you can't do so again until you finish a long rest."
   }
 ]

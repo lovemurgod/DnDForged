@@ -88,10 +88,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_greatclub_p1n6",
+        "id": "act_greatclub_kfd2",
         "name": "Greatclub",
         "actionType": "action",
-        "descriptionHtml": "<p>m +6, reach 5 ft. {@h}13 (2d8 + 4) Bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 13 (2d8 + 4) Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 5 ft. {@h}13 ({@damage 2d8 + 4}) Bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -110,10 +113,13 @@
         }
       },
       {
-        "id": "act_javelin_bbd3",
+        "id": "act_javelin_bper",
         "name": "Javelin",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 30/120 ft. {@h}11 (2d6 + 4) Piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +6, reach 5 ft. or range 30/120 ft. Hit: 11 (2d6 + 4) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 6}, reach 5 ft. or range 30/120 ft. {@h}11 ({@damage 2d6 + 4}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -139,10 +145,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DrDe-BD/Bubba Wugga.webp",
     "tokenImg": "img/bestiary/tokens/DrDe-BD/Bubba Wugga.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

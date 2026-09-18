@@ -1,0 +1,241 @@
+[
+  {
+    "id": "creature_ancient_companion_ua2021magesofstrixhaven",
+    "name": "Ancient Companion",
+    "source": "UA2021MagesOfStrixhaven",
+    "edition": "2014",
+    "page": 3,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 9,
+        "mod": -1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "str": 14,
+    "dex": 9,
+    "con": 15,
+    "int": 14,
+    "wis": 14,
+    "cha": 11,
+    "proficiencyBonus": 2,
+    "save": {
+      "con": "+2 + PB",
+      "int": "+2 + PB",
+      "wis": "+2 + PB"
+    },
+    "saves": {
+      "con": "+2 + PB",
+      "int": "+2 + PB",
+      "wis": "+2 + PB"
+    },
+    "skill": {
+      "history": "+2 + PB",
+      "perception": "+ 2 + (PB × 2)"
+    },
+    "skills": {
+      "history": "+2 + PB",
+      "perception": "+ 2 + (PB × 2)"
+    },
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion"
+    ],
+    "passive": "12 + (PB × 2)",
+    "senses": {
+      "passivePerception": "12 + (PB × 2)",
+      "sensesString": ""
+    },
+    "languages": [
+      "speaks and understands the languages you speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_ancient_fortitude_27yg",
+        "name": "Ancient Fortitude",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If damage reduces the companion to 0 hit points, it can make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is from a critical hit. On a success, the companion drops to 1 hit point instead.</p>",
+        "entries": [
+          "If damage reduces the companion to 0 hit points, it can make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is from a critical hit. On a success, the companion drops to 1 hit point instead."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sage_s_counsel__sage_only__zjw9",
+        "name": "Sage's Counsel (Sage Only)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While within 15 feet of the companion, you and your allies gain a +2 bonus to Intelligence and Wisdom checks.</p>",
+        "entries": [
+          "While within 15 feet of the companion, you and your allies gain a +2 bonus to Intelligence and Wisdom checks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_spirit_strike_4kxg",
+        "name": "Spirit Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: your spell attack modifier to hit, reach 5 ft., one target you can see. Hit: 1d8 + 2 + PB force damage.</p>",
+        "entries": [
+          "{@atk mw} your spell attack modifier to hit, reach 5 ft., one target you can see. {@h}{@damage 1d8 + 2 + PB} force damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2 + PB",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_healer_s_light__healer_only__elpq",
+        "name": "Healer's Light (Healer Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The companion chooses a creature it can see within 15 feet of itself and flares with invigorating light. The creature gains 1d8 + PB temporary hit points.</p>",
+        "entries": [
+          "The companion chooses a creature it can see within 15 feet of itself and flares with invigorating light. The creature gains {@dice 1d8 + PB} temporary hit points."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_warrior_s_protection__warrior_only__p1kc",
+        "name": "Warrior's Protection (Warrior Only)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When a creature within 5 feet of the companion makes a Strength or Dexterity saving throw, the companion imposes itself between the creature and the danger. The creature can roll a d4 and add the number rolled to the saving throw.</p>",
+        "entries": [
+          "When a creature within 5 feet of the companion makes a Strength or Dexterity saving throw, the companion imposes itself between the creature and the danger. The creature can roll a {@dice d4} and add the number rolled to the saving throw."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UA2021MagesOfStrixhaven/Ancient Companion.webp",
+    "tokenImg": "img/bestiary/tokens/UA2021MagesOfStrixhaven/Ancient Companion.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

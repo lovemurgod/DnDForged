@@ -90,10 +90,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_rpr8",
+        "id": "act_keen_smell_gkyg",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The demogorgon has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "entries": [
+          "The demogorgon has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -107,10 +110,13 @@
         }
       },
       {
-        "id": "act_blood_frenzy_c9tj",
+        "id": "act_blood_frenzy_68at",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The demogorgon has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
+        "entries": [
+          "The demogorgon has advantage on melee attack rolls against any creature that doesn't have all its hit points."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -124,10 +130,13 @@
         }
       },
       {
-        "id": "act_regeneration_tvxq",
+        "id": "act_regeneration_rzmr",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The demogorgon regains 10 hit points at the start of its turn. If the demogorgon takes acid or fire damage, this trait doesn't function at the start of the demogorgon's next turn. The demogorgon dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
+        "entries": [
+          "The demogorgon regains 10 hit points at the start of its turn. If the demogorgon takes acid or fire damage, this trait doesn't function at the start of the demogorgon's next turn. The demogorgon dies only if it starts its turn with 0 hit points and doesn't regenerate."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -143,10 +152,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_c6bx",
+        "id": "act_multiattack_03o4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The demogorgon makes three attacks: one with its bite and two with its claws.</p>",
+        "entries": [
+          "The demogorgon makes three attacks: one with its bite and two with its claws."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -160,10 +172,13 @@
         }
       },
       {
-        "id": "act_bite_zltl",
+        "id": "act_bite_m3i0",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -182,10 +197,13 @@
         }
       },
       {
-        "id": "act_claw_q5m8",
+        "id": "act_claw_iig9",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}12 (2d8 + 3) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 12 (2d8 + 3) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}12 ({@damage 2d8 + 3}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -211,11 +229,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HftT/Demogorgon.webp",
     "tokenImg": "img/bestiary/tokens/HftT/Demogorgon.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_evil_mage_hftt",
@@ -320,7 +350,7 @@
       {
         "id": "sc_evil_mage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -391,7 +421,8 @@
                     "formula": "1d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -441,7 +472,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -501,10 +534,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_quarterstaff_jsq6",
+        "id": "act_quarterstaff_q6iz",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}3 (1d8 -1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 3 (1d8 -1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 1} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d8 -1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -530,11 +566,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HftT/Evil Mage.webp",
     "tokenImg": "img/bestiary/tokens/HftT/Evil Mage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_thessalhydra_hftt",
@@ -634,10 +682,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_p6pq",
+        "id": "act_multiattack_puro",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The thessalhydra makes one maw attack and one Flurry of Bites.</p>",
+        "entries": [
+          "The thessalhydra makes one maw attack and one Flurry of Bites."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -651,10 +702,13 @@
         }
       },
       {
-        "id": "act_flurry_of_bites_5481",
+        "id": "act_flurry_of_bites_nlv6",
         "name": "Flurry of Bites",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}7 (1d6 + 4) piercing damage plus 10 (4d4) poison damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 10 (4d4) poison damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 10 ft., one target. {@h}7 ({@damage 1d6 + 4}) piercing damage plus 10 ({@damage 4d4}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -677,10 +731,13 @@
         }
       },
       {
-        "id": "act_maw_2lty",
+        "id": "act_maw_thlm",
         "name": "Maw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}9 (1d10 + 4) piercing damage plus 5 (1d10) acid damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage plus 5 (1d10) acid damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}9 ({@damage 1d10 + 4}) piercing damage plus 5 ({@damage 1d10}) acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -703,10 +760,13 @@
         }
       },
       {
-        "id": "act_tail_pincer_vtb5",
+        "id": "act_tail_pincer_wia7",
         "name": "Tail Pincer",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}10 (1d12 + 4) slashing damage, and the target is grappled. As an action, the target can escape the grapple by succeeding on a DC 14 Strength (Athletics) or Dexterity (Acrobatics) check (its choice). Until this grapple ends, the thessalhydra can't use its tail pincer.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 10 (1d12 + 4) slashing damage, and the target is grappled. As an action, the target can escape the grapple by succeeding on a DC 14 Strength (Athletics) or Dexterity (Acrobatics) check (its choice). Until this grapple ends, the thessalhydra can't use its tail pincer.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 10 ft., one target. {@h}10 ({@damage 1d12 + 4}) slashing damage, and the target is {@condition grappled}. As an action, the target can escape the grapple by succeeding on a {@dc 14} Strength ({@skill Athletics}) or Dexterity ({@skill Acrobatics}) check (its choice). Until this grapple ends, the thessalhydra can't use its tail pincer."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -716,7 +776,7 @@
           "targets": "one target",
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -728,10 +788,13 @@
         }
       },
       {
-        "id": "act_acid_saliva__recharge_5__c0x6",
+        "id": "act_acid_saliva__recharge_5__0i1j",
         "name": "Acid Saliva (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The thessalhydra spits a glob of acid at a point it can see within 30 feet of it. Each creature within 10 feet of that point must make a DC 15 Dexterity saving throw, taking 18 (4d8) acid damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The thessalhydra spits a glob of acid at a point it can see within 30 feet of it. Each creature within 10 feet of that point must make a {@dc 15} Dexterity saving throw, taking 18 ({@damage 4d8}) acid damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -760,10 +823,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_ow51",
+          "id": "act_detect_fkkd",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>The thessalhydra makes a Wisdom (Perception) check with advantage.</p>",
+          "entries": [
+            "The thessalhydra makes a Wisdom ({@skill Perception}) check with advantage."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -777,10 +843,13 @@
           }
         },
         {
-          "id": "act_tail_swipe_jla0",
+          "id": "act_tail_swipe_0hgs",
           "name": "Tail Swipe",
           "actionType": "legendary",
           "descriptionHtml": "<p>The thessalhydra makes a tail pincer attack.</p>",
+          "entries": [
+            "The thessalhydra makes a tail pincer attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -795,10 +864,22 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HftT/Thessalhydra.webp",
     "tokenImg": "img/bestiary/tokens/HftT/Thessalhydra.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

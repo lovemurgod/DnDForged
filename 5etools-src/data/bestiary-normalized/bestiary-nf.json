@@ -105,10 +105,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_disintegration_5xq1",
+        "id": "act_disintegration_c49l",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
+        "entries": [
+          "If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -122,10 +125,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_pt0c",
+        "id": "act_magic_resistance_qcb1",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The magen has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -141,10 +147,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_63r6",
+        "id": "act_multiattack_wddj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The magen makes two attacks, using Extended Fist or Acid Spittle in any combination.</p>",
+        "entries": [
+          "The magen makes two attacks, using Extended Fist or Acid Spittle in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -158,10 +167,13 @@
         }
       },
       {
-        "id": "act_extended_fist_tj5w",
+        "id": "act_extended_fist_ih8h",
         "name": "Extended Fist",
         "actionType": "action",
-        "descriptionHtml": "<p>m +6, reach 15 ft. {@h}8 (1d8 + 4) Bludgeoning damage plus 5 (1d10) Acid damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 14) from one of two fists.</p>",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 15 ft. Hit: 8 (1d8 + 4) Bludgeoning damage plus 5 (1d10) Acid damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 14) from one of two fists.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 15 ft. {@h}8 ({@damage 1d8 + 4}) Bludgeoning damage plus 5 ({@damage 1d10}) Acid damage. If the target is a Medium or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 14}) from one of two fists."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -171,7 +183,7 @@
           "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 14}) from one of two fists",
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -187,10 +199,13 @@
         }
       },
       {
-        "id": "act_acid_spittle_cb3o",
+        "id": "act_acid_spittle_eiac",
         "name": "Acid Spittle",
         "actionType": "action",
-        "descriptionHtml": "<p>r +6, range 60 ft. {@h}13 (2d8 + 4) Acid damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +6, range 60 ft. Hit: 13 (2d8 + 4) Acid damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 6}, range 60 ft. {@h}13 ({@damage 2d8 + 4}) Acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -216,11 +231,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NF/Caldron Magen.webp",
     "tokenImg": "img/bestiary/tokens/NF/Caldron Magen.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_eldritch_eddy_nf",
@@ -329,10 +356,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_j6pz",
+        "id": "act_magic_resistance_s71o",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The eddy has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The eddy has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -348,10 +378,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1ld1",
+        "id": "act_multiattack_eu6x",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The eddy makes two attacks, using Searing Swipe or Arcane Bolt in any combination.</p>",
+        "entries": [
+          "The eddy makes two attacks, using Searing Swipe or Arcane Bolt in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -365,10 +398,13 @@
         }
       },
       {
-        "id": "act_searing_swipe_2hj8",
+        "id": "act_searing_swipe_ubwk",
         "name": "Searing Swipe",
         "actionType": "action",
-        "descriptionHtml": "<p>m +6, reach 10 ft. {@h}13 (3d6 + 3) Fire or Lightning damage (eddy's choice).</p>",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 10 ft. Hit: 13 (3d6 + 3) Fire or Lightning damage (eddy's choice).</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 10 ft. {@h}13 ({@damage 3d6 + 3}) Fire or Lightning damage (eddy's choice)."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -387,10 +423,13 @@
         }
       },
       {
-        "id": "act_arcane_bolt_huqm",
+        "id": "act_arcane_bolt_elmk",
         "name": "Arcane Bolt",
         "actionType": "action",
-        "descriptionHtml": "<p>r +6, range 120 ft. {@h}14 (2d10 + 3) Force damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +6, range 120 ft. Hit: 14 (2d10 + 3) Force damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 6}, range 120 ft. {@h}14 ({@damage 2d10 + 3}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -412,10 +451,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_eldritch_overload_m771",
+        "id": "act_eldritch_overload_umg8",
         "name": "Eldritch Overload",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The eddy takes damage. dstr DC 14, each creature of the eddy's choice in a 5-foot Emanation [Area of Effect] originating from the eddy. {@actSaveFail} 7 (2d6) Force damage, and the target has the Prone condition.</p>",
+        "entries": [
+          "{@actTrigger} The eddy takes damage. {@actResponse d}{@actSave str} {@dc 14}, each creature of the eddy's choice in a 5-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the eddy. {@actSaveFail} 7 ({@damage 2d6}) Force damage, and the target has the {@condition Prone|XPHB} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -425,7 +467,7 @@
           "targets": null,
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": "STR"
           },
           "damages": [
             {
@@ -442,11 +484,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NF/Eldritch Eddy.webp",
     "tokenImg": "img/bestiary/tokens/NF/Eldritch Eddy.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_phaerimm_elder_nf",
@@ -560,7 +614,7 @@
       {
         "id": "sc_phaerimm_elder_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 4,
@@ -696,7 +750,9 @@
                   "formula": "5d10",
                   "type": "Psychic",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -761,7 +817,7 @@
       {
         "id": "sc_phaerimm_elder_1",
         "name": "Protective Magic (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "cha",
         "abilityMod": 4,
@@ -825,10 +881,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_02gf",
+        "id": "act_magic_resistance_d5se",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The phaerimm has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The phaerimm has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -844,10 +903,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_n20a",
+        "id": "act_multiattack_2ib9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The phaerimm makes three Mind Lash attacks. It can replace one attack with either (A) a Vicious Stinger attack or (B) a use of Spellcasting to cast Command (level 3 version).</p>",
+        "entries": [
+          "The phaerimm makes three Mind Lash attacks. It can replace one attack with either (A) a Vicious Stinger attack or (B) a use of Spellcasting to cast {@spell Command|XPHB} (level 3 version)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -861,10 +923,13 @@
         }
       },
       {
-        "id": "act_mind_lash_r5l3",
+        "id": "act_mind_lash_cxyb",
         "name": "Mind Lash",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +9, reach 10 ft. or range 120 ft. {@h}32 (6d8 + 4) Psychic damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +9, reach 10 ft. or range 120 ft. Hit: 32 (6d8 + 4) Psychic damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 9}, reach 10 ft. or range 120 ft. {@h}32 ({@damage 6d8 + 4}) Psychic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -883,10 +948,13 @@
         }
       },
       {
-        "id": "act_vicious_stinger_db18",
+        "id": "act_vicious_stinger_clti",
         "name": "Vicious Stinger",
         "actionType": "action",
-        "descriptionHtml": "<p>m +9, reach 5 ft. {@h}11 (2d6 + 4) Piercing damage plus 26 (4d12) Poison damage, and the target's Speed is reduced to 0 feet until the start of the phaerimm's next turn.</p>",
+        "descriptionHtml": "<p>Melee Attack: +9, reach 5 ft. Hit: 11 (2d6 + 4) Piercing damage plus 26 (4d12) Poison damage, and the target's Speed is reduced to 0 feet until the start of the phaerimm's next turn.</p>",
+        "entries": [
+          "{@atkr m} {@hit 9}, reach 5 ft. {@h}11 ({@damage 2d6 + 4}) Piercing damage plus 26 ({@damage 4d12}) Poison damage, and the target's {@variantrule Speed|XPHB} is reduced to 0 feet until the start of the phaerimm's next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -909,10 +977,13 @@
         }
       },
       {
-        "id": "act_siphon_magic__recharge_5__bnj9",
+        "id": "act_siphon_magic__recharge_5__bu4t",
         "name": "Siphon Magic (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The phaerimm focuses on a magic item it can see within 10 feet. When it does, the phaerimm drains the magic item of any charges. Regardless of whether charges are drained, the phaerimm can cast Clairvoyance, Geas, Major Image, and Mirage Arcane one additional time that day.</p>",
+        "entries": [
+          "The phaerimm focuses on a magic item it can see within 10 feet. When it does, the phaerimm drains the magic item of any charges. Regardless of whether charges are drained, the phaerimm can cast {@spell Clairvoyance|XPHB}, {@spell Geas|XPHB}, {@spell Major Image|XPHB}, and {@spell Mirage Arcane|XPHB} one additional time that day."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -928,10 +999,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_teleport_ko6z",
+        "id": "act_teleport_ap6m",
         "name": "Teleport",
         "actionType": "bonus",
         "descriptionHtml": "<p>The phaerimm teleports up to 30 feet to an unoccupied space it can see.</p>",
+        "entries": [
+          "The phaerimm teleports up to 30 feet to an unoccupied space it can see."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -951,11 +1025,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NF/Phaerimm Elder.webp",
     "tokenImg": "img/bestiary/tokens/NF/Phaerimm Elder.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_phaerimm_scout_nf",
@@ -1060,7 +1146,7 @@
       {
         "id": "sc_phaerimm_scout_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 3,
@@ -1167,10 +1253,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_586m",
+        "id": "act_magic_resistance_jqmw",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The phaerimm has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The phaerimm has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1186,10 +1275,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3y4g",
+        "id": "act_multiattack_qdoc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The phaerimm makes two attacks, using Stinger or Mindwarp Ray in any combination.</p>",
+        "entries": [
+          "The phaerimm makes two attacks, using Stinger or Mindwarp Ray in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1203,10 +1295,13 @@
         }
       },
       {
-        "id": "act_stinger_qxm6",
+        "id": "act_stinger_nqny",
         "name": "Stinger",
         "actionType": "action",
-        "descriptionHtml": "<p>m +3, reach 5 ft. {@h}4 (1d6 + 1) Piercing damage plus 9 (2d8) Poison damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Piercing damage plus 9 (2d8) Poison damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}4 ({@damage 1d6 + 1}) Piercing damage plus 9 ({@damage 2d8}) Poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1229,10 +1324,13 @@
         }
       },
       {
-        "id": "act_mindwarp_ray_gmn0",
+        "id": "act_mindwarp_ray_case",
         "name": "Mindwarp Ray",
         "actionType": "action",
-        "descriptionHtml": "<p>r +5, range 120 ft. {@h}6 (1d6 + 3) Psychic damage, and the target has the Charmed condition until the start of the phaerimm's next turn.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +5, range 120 ft. Hit: 6 (1d6 + 3) Psychic damage, and the target has the Charmed condition until the start of the phaerimm's next turn.</p>",
+        "entries": [
+          "{@atkr r} {@hit 5}, range 120 ft. {@h}6 ({@damage 1d6 + 3}) Psychic damage, and the target has the {@condition Charmed|XPHB} condition until the start of the phaerimm's next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1254,10 +1352,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_gl3v",
+        "id": "act_uncanny_dodge_asdc",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The phaerimm is hit by an attack roll. {@actResponse} The phaerimm halves the damage (round down) it takes from that attack.</p>",
+        "entries": [
+          "{@actTrigger} The phaerimm is hit by an attack roll. {@actResponse} The phaerimm halves the damage (round down) it takes from that attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1276,11 +1377,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NF/Phaerimm Scout.webp",
     "tokenImg": "img/bestiary/tokens/NF/Phaerimm Scout.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_terran_magen_nf",
@@ -1393,7 +1506,7 @@
       {
         "id": "sc_terran_magen_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 4,
@@ -1487,7 +1600,9 @@
                   "formula": "10d6 + 40",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "3d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a lodestone and dust)",
@@ -1551,10 +1666,13 @@
     ],
     "traits": [
       {
-        "id": "act_disintegration_eyda",
+        "id": "act_disintegration_49k9",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
+        "entries": [
+          "If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1568,10 +1686,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_kq1a",
+        "id": "act_magic_resistance_1fgr",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The magen has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1587,10 +1708,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_x7vh",
+        "id": "act_multiattack_q4hu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The magen makes two attacks, using Hammer Fist or Thunderous Boom in any combination.</p>",
+        "entries": [
+          "The magen makes two attacks, using Hammer Fist or Thunderous Boom in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1604,10 +1728,13 @@
         }
       },
       {
-        "id": "act_hammer_fist_ps8c",
+        "id": "act_hammer_fist_c2je",
         "name": "Hammer Fist",
         "actionType": "action",
-        "descriptionHtml": "<p>m +6, reach 5 ft. {@h}16 (3d8 + 3) Bludgeoning damage plus 13 (3d8) Force damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 16 (3d8 + 3) Bludgeoning damage plus 13 (3d8) Force damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 5 ft. {@h}16 ({@damage 3d8 + 3}) Bludgeoning damage plus 13 ({@damage 3d8}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1630,10 +1757,13 @@
         }
       },
       {
-        "id": "act_thunderous_boom_83jn",
+        "id": "act_thunderous_boom_gww1",
         "name": "Thunderous Boom",
         "actionType": "action",
-        "descriptionHtml": "<p>r +7, range 60 ft. {@h}28 (8d6) Thunder damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +7, range 60 ft. Hit: 28 (8d6) Thunder damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 7}, range 60 ft. {@h}28 ({@damage 8d6}) Thunder damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1659,11 +1789,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NF/Terran Magen.webp",
     "tokenImg": "img/bestiary/tokens/NF/Terran Magen.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_virvos_magen_nf",
@@ -1772,7 +1914,7 @@
       {
         "id": "sc_virvos_magen_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 3,
@@ -1880,10 +2022,13 @@
     ],
     "traits": [
       {
-        "id": "act_disintegration_9o29",
+        "id": "act_disintegration_t50d",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
+        "entries": [
+          "If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1897,10 +2042,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_oh1c",
+        "id": "act_magic_resistance_tjet",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The magen has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1916,10 +2064,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6ryg",
+        "id": "act_multiattack_0phn",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The magen makes two Psychic Blast attacks.</p>",
+        "entries": [
+          "The magen makes two Psychic Blast attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1933,10 +2084,13 @@
         }
       },
       {
-        "id": "act_psychic_blast_28qb",
+        "id": "act_psychic_blast_bdlw",
         "name": "Psychic Blast",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 60 ft. {@h}21 (6d6) Psychic damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +6, reach 5 ft. or range 60 ft. Hit: 21 (6d6) Psychic damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 6}, reach 5 ft. or range 60 ft. {@h}21 ({@damage 6d6}) Psychic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1962,10 +2116,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NF/Virvos Magen.webp",
     "tokenImg": "img/bestiary/tokens/NF/Virvos Magen.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

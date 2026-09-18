@@ -1,0 +1,1136 @@
+[
+  {
+    "id": "race_ashborn_crookedmoon24",
+    "name": "Ashborn",
+    "source": "CrookedMoon24",
+    "page": 53,
+    "size": "S",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Ashen Legacy.</strong> <p>You know the Minor Illusion cantrip. Additionally, starting at character level 3 you always have the Charm Person spell prepared, and starting at character level 5 you always have the Invisibility spell prepared. You can cast them each once without a spell slot, and you regain the ability to cast them in that way when you finish a Long Rest|XPHB. You can also cast them using any spell slots you have of the appropriate level.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Fiendish Fortune.</strong> <p>When you're hit by an attack roll that isn't a Critical Hit|XPHB, you can take a Reaction|XPHB to magically cause the attack to miss you, and a creature of your choice within 5 feet of you takes Force damage equal to your Proficiency|XPHB|Proficiency Bonus. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Scorpion Sting.</strong> <p>You have a tail stinger you can use to make Unarmed Strike|XPHB|Unarmed Strikes using your Strength or Dexterity (your choice) for attack and damage rolls. On a hit, you deal 1d4 Piercing damage, and you can deal an extra 1d6 Poison damage. You can deal this extra damage a number of times equal to your Proficiency|XPHB|Proficiency Bonus. You regain one expended use when you finish a Short Rest|XPHB, and you regain all expended uses when you finish a Long Rest|XPHB.</p>\n<p>When you reach character level 10, this extra damage increases to 2d6.</p></div>",
+    "traits": [
+      {
+        "id": "trait_ashborn_ashen_legacy_crookedmoon24",
+        "name": "Ashen Legacy",
+        "source": "CrookedMoon24",
+        "raceName": "Ashborn",
+        "actionType": "passive",
+        "description": "You know the Minor Illusion cantrip. Additionally, starting at character level 3 you always have the Charm Person spell prepared, and starting at character level 5 you always have the Invisibility spell prepared. You can cast them each once without a spell slot, and you regain the ability to cast them in that way when you finish a Long Rest|XPHB. You can also cast them using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Minor Illusion|XPHB} cantrip. Additionally, starting at character level 3 you always have the {@spell Charm Person|XPHB} spell prepared, and starting at character level 5 you always have the {@spell Invisibility|XPHB} spell prepared. You can cast them each once without a spell slot, and you regain the ability to cast them in that way when you finish a {@variantrule Long Rest|XPHB}. You can also cast them using any spell slots you have of the appropriate level.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_ashborn_darkvision_crookedmoon24",
+        "name": "Darkvision",
+        "source": "CrookedMoon24",
+        "raceName": "Ashborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_ashborn_fiendish_fortune_crookedmoon24",
+        "name": "Fiendish Fortune",
+        "source": "CrookedMoon24",
+        "raceName": "Ashborn",
+        "actionType": "passive",
+        "description": "When you're hit by an attack roll that isn't a Critical Hit|XPHB, you can take a Reaction|XPHB to magically cause the attack to miss you, and a creature of your choice within 5 feet of you takes Force damage equal to your Proficiency|XPHB|Proficiency Bonus. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you're hit by an attack roll that isn't a {@variantrule Critical Hit|XPHB}, you can take a {@variantrule Reaction|XPHB} to magically cause the attack to miss you, and a creature of your choice within 5 feet of you takes Force damage equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}. Once you use this trait, you can't do so again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_ashborn_scorpion_sting_crookedmoon24",
+        "name": "Scorpion Sting",
+        "source": "CrookedMoon24",
+        "raceName": "Ashborn",
+        "actionType": "passive",
+        "description": "You have a tail stinger you can use to make Unarmed Strike|XPHB|Unarmed Strikes using your Strength or Dexterity (your choice) for attack and damage rolls. On a hit, you deal 1d4 Piercing damage, and you can deal an extra 1d6 Poison damage. You can deal this extra damage a number of times equal to your Proficiency|XPHB|Proficiency Bonus. You regain one expended use when you finish a Short Rest|XPHB, and you regain all expended uses when you finish a Long Rest|XPHB.\n\nWhen you reach character level 10, this extra damage increases to 2d6.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You have a tail stinger you can use to make {@variantrule Unarmed Strike|XPHB|Unarmed Strikes} using your Strength or Dexterity (your choice) for attack and damage rolls. On a hit, you deal {@damage 1d4} Piercing damage, and you can deal an extra {@damage 1d6} Poison damage. You can deal this extra damage a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}. You regain one expended use when you finish a {@variantrule Short Rest|XPHB}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}.",
+          "When you reach character level 10, this extra damage increases to {@dice 2d6}."
+        ]
+      }
+    ],
+    "description": "**Ashen Legacy**: You know the Minor Illusion cantrip. Additionally, starting at character level 3 you always have the Charm Person spell prepared, and starting at character level 5 you always have the Invisibility spell prepared. You can cast them each once without a spell slot, and you regain the ability to cast them in that way when you finish a Long Rest|XPHB. You can also cast them using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Fiendish Fortune**: When you're hit by an attack roll that isn't a Critical Hit|XPHB, you can take a Reaction|XPHB to magically cause the attack to miss you, and a creature of your choice within 5 feet of you takes Force damage equal to your Proficiency|XPHB|Proficiency Bonus. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Scorpion Sting**: You have a tail stinger you can use to make Unarmed Strike|XPHB|Unarmed Strikes using your Strength or Dexterity (your choice) for attack and damage rolls. On a hit, you deal 1d4 Piercing damage, and you can deal an extra 1d6 Poison damage. You can deal this extra damage a number of times equal to your Proficiency|XPHB|Proficiency Bonus. You regain one expended use when you finish a Short Rest|XPHB, and you regain all expended uses when you finish a Long Rest|XPHB.\n\nWhen you reach character level 10, this extra damage increases to 2d6."
+  },
+  {
+    "id": "race_azureborn_crookedmoon24",
+    "name": "Azureborn",
+    "source": "CrookedMoon24",
+    "page": 54,
+    "size": "M",
+    "speed": "30 ft, fly true ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Azure Legacy.</strong> <p>You know the Guidance cantrip. Starting at character level 3, you always have the Augury spell prepared and can cast it once without a spell slot or Material components, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast it using any spell slots you have of the appropriate level.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Glimpse Fate.</strong> <p>When you roll Initiative|XPHB, if you aren't surprised|XPHB, you can choose a number of creatures that you can see equal to your Proficiency|XPHB|Proficiency Bonus. The targets have Advantage|XPHB on their Initiative|XPHB rolls. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Winds of Magic.</strong> <p>As a Bonus Action|XPHB, you can take the Dash action and increase your Fly Speed|XPHB by 10 feet until the end of the turn. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>",
+    "traits": [
+      {
+        "id": "trait_azureborn_azure_legacy_crookedmoon24",
+        "name": "Azure Legacy",
+        "source": "CrookedMoon24",
+        "raceName": "Azureborn",
+        "actionType": "passive",
+        "description": "You know the Guidance cantrip. Starting at character level 3, you always have the Augury spell prepared and can cast it once without a spell slot or Material components, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast it using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Guidance|XPHB} cantrip. Starting at character level 3, you always have the {@spell Augury|XPHB} spell prepared and can cast it once without a spell slot or Material components, and you regain the ability to cast it in that way when you finish a {@variantrule Long Rest|XPHB}. You can also cast it using any spell slots you have of the appropriate level.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_azureborn_darkvision_crookedmoon24",
+        "name": "Darkvision",
+        "source": "CrookedMoon24",
+        "raceName": "Azureborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_azureborn_glimpse_fate_crookedmoon24",
+        "name": "Glimpse Fate",
+        "source": "CrookedMoon24",
+        "raceName": "Azureborn",
+        "actionType": "passive",
+        "description": "When you roll Initiative|XPHB, if you aren't surprised|XPHB, you can choose a number of creatures that you can see equal to your Proficiency|XPHB|Proficiency Bonus. The targets have Advantage|XPHB on their Initiative|XPHB rolls. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you roll {@variantrule Initiative|XPHB}, if you aren't {@status surprised|XPHB}, you can choose a number of creatures that you can see equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}. The targets have {@variantrule Advantage|XPHB} on their {@variantrule Initiative|XPHB} rolls. Once you use this trait, you can't do so again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_azureborn_winds_of_magic_crookedmoon24",
+        "name": "Winds of Magic",
+        "source": "CrookedMoon24",
+        "raceName": "Azureborn",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can take the Dash action and increase your Fly Speed|XPHB by 10 feet until the end of the turn. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can take the {@action Dash|XPHB} action and increase your {@variantrule Fly Speed|XPHB} by 10 feet until the end of the turn. You can use this trait a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Azure Legacy**: You know the Guidance cantrip. Starting at character level 3, you always have the Augury spell prepared and can cast it once without a spell slot or Material components, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast it using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Glimpse Fate**: When you roll Initiative|XPHB, if you aren't surprised|XPHB, you can choose a number of creatures that you can see equal to your Proficiency|XPHB|Proficiency Bonus. The targets have Advantage|XPHB on their Initiative|XPHB rolls. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Winds of Magic**: As a Bonus Action|XPHB, you can take the Dash action and increase your Fly Speed|XPHB by 10 feet until the end of the turn. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB."
+  },
+  {
+    "id": "race_bogborn_crookedmoon24",
+    "name": "Bogborn",
+    "source": "CrookedMoon24",
+    "page": 55,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Bog Bulk.</strong> <p>You have Advantage|XPHB on any ability check you make to end the Grappled condition.</p>\n<p>You also count as one size larger when determining your carrying capacity.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Guiding Bond.</strong> <p>As a Bonus Action|XPHB, you can magically place a mark on a creature you can see within 60 feet of yourself.</p>\n<p>The mark lasts for 1 minute, and takes the form of ephemeral plants, moss, fungus, or swamp animals that only you can see. For the duration, you can add 1d4 to ability checks and attack rolls you make against the marked creature. You can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Keen Senses.</strong> <p>You have proficiency in the Perception or Survival skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Regeneration.</strong> <p>As a Bonus Action|XPHB, you can expend one of your Hit Point Dice|XPHB, roll the die, and regain a number of Hit Points|XPHB equal to the number rolled plus your Constitution modifier (minimum of 1 Hit Points|XPHB|Hit Point).</p>\n<p>If you take Acid or Fire damage, this trait doesn't function until the end of your next turn.</p></div>",
+    "traits": [
+      {
+        "id": "trait_bogborn_bog_bulk_crookedmoon24",
+        "name": "Bog Bulk",
+        "source": "CrookedMoon24",
+        "raceName": "Bogborn",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on any ability check you make to end the Grappled condition.\n\nYou also count as one size larger when determining your carrying capacity.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on any ability check you make to end the {@condition Grappled|XPHB} condition.",
+          "You also count as one size larger when determining your carrying capacity."
+        ]
+      },
+      {
+        "id": "trait_bogborn_darkvision_crookedmoon24",
+        "name": "Darkvision",
+        "source": "CrookedMoon24",
+        "raceName": "Bogborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_bogborn_guiding_bond_crookedmoon24",
+        "name": "Guiding Bond",
+        "source": "CrookedMoon24",
+        "raceName": "Bogborn",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can magically place a mark on a creature you can see within 60 feet of yourself.\n\nThe mark lasts for 1 minute, and takes the form of ephemeral plants, moss, fungus, or swamp animals that only you can see. For the duration, you can add 1d4 to ability checks and attack rolls you make against the marked creature. You can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can magically place a mark on a creature you can see within 60 feet of yourself.",
+          "The mark lasts for 1 minute, and takes the form of ephemeral plants, moss, fungus, or swamp animals that only you can see. For the duration, you can add {@dice 1d4} to ability checks and attack rolls you make against the marked creature. You can use this {@variantrule Bonus Action|XPHB} a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_bogborn_keen_senses_crookedmoon24",
+        "name": "Keen Senses",
+        "source": "CrookedMoon24",
+        "raceName": "Bogborn",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception|XPHB} or {@skill Survival|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_bogborn_regeneration_crookedmoon24",
+        "name": "Regeneration",
+        "source": "CrookedMoon24",
+        "raceName": "Bogborn",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can expend one of your Hit Point Dice|XPHB, roll the die, and regain a number of Hit Points|XPHB equal to the number rolled plus your Constitution modifier (minimum of 1 Hit Points|XPHB|Hit Point).\n\nIf you take Acid or Fire damage, this trait doesn't function until the end of your next turn.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can expend one of your {@variantrule Hit Point Dice|XPHB}, roll the die, and regain a number of {@variantrule Hit Points|XPHB} equal to the number rolled plus your Constitution modifier (minimum of 1 {@variantrule Hit Points|XPHB|Hit Point}).",
+          "If you take Acid or Fire damage, this trait doesn't function until the end of your next turn."
+        ]
+      }
+    ],
+    "description": "**Bog Bulk**: You have Advantage|XPHB on any ability check you make to end the Grappled condition.\n\nYou also count as one size larger when determining your carrying capacity.\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Guiding Bond**: As a Bonus Action|XPHB, you can magically place a mark on a creature you can see within 60 feet of yourself.\n\nThe mark lasts for 1 minute, and takes the form of ephemeral plants, moss, fungus, or swamp animals that only you can see. For the duration, you can add 1d4 to ability checks and attack rolls you make against the marked creature. You can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\n**Keen Senses**: You have proficiency in the Perception or Survival skill.\n\n**Regeneration**: As a Bonus Action|XPHB, you can expend one of your Hit Point Dice|XPHB, roll the die, and regain a number of Hit Points|XPHB equal to the number rolled plus your Constitution modifier (minimum of 1 Hit Points|XPHB|Hit Point).\n\nIf you take Acid or Fire damage, this trait doesn't function until the end of your next turn."
+  },
+  {
+    "id": "race_curseborn_crookedmoon24",
+    "name": "Curseborn",
+    "source": "CrookedMoon24",
+    "page": 56,
+    "size": "M",
+    "speed": "35 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Cursed Claws.</strong> <p>You have claws you can use to make Unarmed Strike|XPHB|Unarmed Strikes, which deal 1d6 Slashing damage on a hit. You can use Strength or Dexterity for attack and damage rolls with your claws.</p>\n<p>When you hit a creature with your claws, you can curse the target until the start of your next turn. While cursed, the target emits wisps of fog and has Disadvantage|XPHB on D20 Test|XPHB|D20 Tests. You can curse a creature a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Grey Balance.</strong> <p>When you fail a saving throw, you can take a Reaction|XPHB to succeed instead. When you do, you have Disadvantage|XPHB on D20 Test|XPHB|D20 Tests until the end of your next turn. You can use this trait once, and you regain the ability to do so when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Lupine Sense.</strong> <p>You have proficiency in the Investigation, Perception, or Survival skill.</p></div>",
+    "traits": [
+      {
+        "id": "trait_curseborn_cursed_claws_crookedmoon24",
+        "name": "Cursed Claws",
+        "source": "CrookedMoon24",
+        "raceName": "Curseborn",
+        "actionType": "passive",
+        "description": "You have claws you can use to make Unarmed Strike|XPHB|Unarmed Strikes, which deal 1d6 Slashing damage on a hit. You can use Strength or Dexterity for attack and damage rolls with your claws.\n\nWhen you hit a creature with your claws, you can curse the target until the start of your next turn. While cursed, the target emits wisps of fog and has Disadvantage|XPHB on D20 Test|XPHB|D20 Tests. You can curse a creature a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You have claws you can use to make {@variantrule Unarmed Strike|XPHB|Unarmed Strikes}, which deal {@damage 1d6} Slashing damage on a hit. You can use Strength or Dexterity for attack and damage rolls with your claws.",
+          "When you hit a creature with your claws, you can curse the target until the start of your next turn. While cursed, the target emits wisps of fog and has {@variantrule Disadvantage|XPHB} on {@variantrule D20 Test|XPHB|D20 Tests}. You can curse a creature a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_curseborn_darkvision_crookedmoon24",
+        "name": "Darkvision",
+        "source": "CrookedMoon24",
+        "raceName": "Curseborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_curseborn_grey_balance_crookedmoon24",
+        "name": "Grey Balance",
+        "source": "CrookedMoon24",
+        "raceName": "Curseborn",
+        "actionType": "passive",
+        "description": "When you fail a saving throw, you can take a Reaction|XPHB to succeed instead. When you do, you have Disadvantage|XPHB on D20 Test|XPHB|D20 Tests until the end of your next turn. You can use this trait once, and you regain the ability to do so when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you fail a saving throw, you can take a {@variantrule Reaction|XPHB} to succeed instead. When you do, you have {@variantrule Disadvantage|XPHB} on {@variantrule D20 Test|XPHB|D20 Tests} until the end of your next turn. You can use this trait once, and you regain the ability to do so when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_curseborn_lupine_sense_crookedmoon24",
+        "name": "Lupine Sense",
+        "source": "CrookedMoon24",
+        "raceName": "Curseborn",
+        "actionType": "passive",
+        "description": "You have proficiency in the Investigation, Perception, or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Investigation|XPHB}, {@skill Perception|XPHB}, or {@skill Survival|XPHB} skill."
+        ]
+      }
+    ],
+    "description": "**Cursed Claws**: You have claws you can use to make Unarmed Strike|XPHB|Unarmed Strikes, which deal 1d6 Slashing damage on a hit. You can use Strength or Dexterity for attack and damage rolls with your claws.\n\nWhen you hit a creature with your claws, you can curse the target until the start of your next turn. While cursed, the target emits wisps of fog and has Disadvantage|XPHB on D20 Test|XPHB|D20 Tests. You can curse a creature a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Grey Balance**: When you fail a saving throw, you can take a Reaction|XPHB to succeed instead. When you do, you have Disadvantage|XPHB on D20 Test|XPHB|D20 Tests until the end of your next turn. You can use this trait once, and you regain the ability to do so when you finish a Long Rest|XPHB.\n\n**Lupine Sense**: You have proficiency in the Investigation, Perception, or Survival skill."
+  },
+  {
+    "id": "race_deepborn_crookedmoon24",
+    "name": "Deepborn",
+    "source": "CrookedMoon24",
+    "page": 57,
+    "size": "M",
+    "speed": "30 ft, swim true ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Eldritch Gibbering.</strong> <p>Thanks to your eldritch connection to the Hungering Ones, you speak Deep Speech|XPHB. As a Magic action, you can gibber in that language. Each creature of your choice in a 30-foot Emanation [Area of Effect]|XPHB|Emanation originating from you must succeed on a Wisdom saving throw (DC 8 plus your Proficiency|XPHB|Proficiency Bonus and Intelligence, Wisdom, or Charisma modifier; choose the ability when you select this species) or roll a d6 and consult the table below. The effect lasts until the start of your next turn. Once any target fails its save against this trait, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p>\n<table class=\"compendium-table\"><thead><tr><th>1d6</th><th>Effect</th></tr></thead><tbody><tr><td>1-2</td><td>The target has Disadvantage|XPHB on attack rolls.</td></tr><tr><td>3-4</td><td>The target's Speed|XPHB becomes 0.</td></tr><tr><td>5-6</td><td>The target can't take Reaction|XPHB|Reactions.</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Endless Hunger.</strong> <p>As a Bonus Action|XPHB, you can embrace your connection to the Hungering Ones. Until the start of your next turn, you know the location of any creatures that aren't Constructs or Undead within 60 feet of yourself, and your attack rolls against those creatures can't have Disadvantage|XPHB. Once you use this trait, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>",
+    "traits": [
+      {
+        "id": "trait_deepborn_amphibious_crookedmoon24",
+        "name": "Amphibious",
+        "source": "CrookedMoon24",
+        "raceName": "Deepborn",
+        "actionType": "passive",
+        "description": "You can breathe air and water.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can breathe air and water."
+        ]
+      },
+      {
+        "id": "trait_deepborn_darkvision_crookedmoon24",
+        "name": "Darkvision",
+        "source": "CrookedMoon24",
+        "raceName": "Deepborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_deepborn_eldritch_gibbering_crookedmoon24",
+        "name": "Eldritch Gibbering",
+        "source": "CrookedMoon24",
+        "raceName": "Deepborn",
+        "actionType": "action",
+        "description": "Thanks to your eldritch connection to the Hungering Ones, you speak Deep Speech|XPHB. As a Magic action, you can gibber in that language. Each creature of your choice in a 30-foot Emanation [Area of Effect]|XPHB|Emanation originating from you must succeed on a Wisdom saving throw (DC 8 plus your Proficiency|XPHB|Proficiency Bonus and Intelligence, Wisdom, or Charisma modifier; choose the ability when you select this species) or roll a d6 and consult the table below. The effect lasts until the start of your next turn. Once any target fails its save against this trait, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your eldritch connection to the Hungering Ones, you speak {@language Deep Speech|XPHB}. As a {@action Magic|XPHB} action, you can gibber in that language. Each creature of your choice in a 30-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from you must succeed on a Wisdom saving throw (DC 8 plus your {@variantrule Proficiency|XPHB|Proficiency Bonus} and Intelligence, Wisdom, or Charisma modifier; choose the ability when you select this species) or roll a {@dice d6} and consult the table below. The effect lasts until the start of your next turn. Once any target fails its save against this trait, you can't use it again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}.",
+          {
+            "type": "table",
+            "colLabels": [
+              "1d6",
+              "Effect"
+            ],
+            "colStyles": [
+              "col-1 text-center",
+              "col-11"
+            ],
+            "rows": [
+              [
+                "1-2",
+                "The target has {@variantrule Disadvantage|XPHB} on attack rolls."
+              ],
+              [
+                "3-4",
+                "The target's {@variantrule Speed|XPHB} becomes 0."
+              ],
+              [
+                "5-6",
+                "The target can't take {@variantrule Reaction|XPHB|Reactions}."
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_deepborn_endless_hunger_crookedmoon24",
+        "name": "Endless Hunger",
+        "source": "CrookedMoon24",
+        "raceName": "Deepborn",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can embrace your connection to the Hungering Ones. Until the start of your next turn, you know the location of any creatures that aren't Constructs or Undead within 60 feet of yourself, and your attack rolls against those creatures can't have Disadvantage|XPHB. Once you use this trait, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can embrace your connection to the Hungering Ones. Until the start of your next turn, you know the location of any creatures that aren't Constructs or Undead within 60 feet of yourself, and your attack rolls against those creatures can't have {@variantrule Disadvantage|XPHB}. Once you use this trait, you can't use it again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Amphibious**: You can breathe air and water.\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Eldritch Gibbering**: Thanks to your eldritch connection to the Hungering Ones, you speak Deep Speech|XPHB. As a Magic action, you can gibber in that language. Each creature of your choice in a 30-foot Emanation [Area of Effect]|XPHB|Emanation originating from you must succeed on a Wisdom saving throw (DC 8 plus your Proficiency|XPHB|Proficiency Bonus and Intelligence, Wisdom, or Charisma modifier; choose the ability when you select this species) or roll a d6 and consult the table below. The effect lasts until the start of your next turn. Once any target fails its save against this trait, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Endless Hunger**: As a Bonus Action|XPHB, you can embrace your connection to the Hungering Ones. Until the start of your next turn, you know the location of any creatures that aren't Constructs or Undead within 60 feet of yourself, and your attack rolls against those creatures can't have Disadvantage|XPHB. Once you use this trait, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB."
+  },
+  {
+    "id": "race_gnarlborn_crookedmoon24",
+    "name": "Gnarlborn",
+    "source": "CrookedMoon24",
+    "page": 58,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Deep Roots.</strong> <p>You have Advantage|XPHB on ability checks and saving throws against being moved against your will or to avoid the Prone condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Elderwood Whispers.</strong> <p>You can draw on the memory of the Elderwood spirits. When you finish a Long Rest|XPHB, you gain proficiency with a skill, a tool, or learn one language of your choice until you next finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Grasping Branches.</strong> <p>As a Bonus Action|XPHB, you can magically unleash the binding power of the dark wood. Choose a Large or smaller creature within 30 feet of yourself. The creature must make a Strength saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus). On a failed save, the target has the Restrained condition for 1 minute as branches appear and ensnare it. On a successful save, its Speed|XPHB is halved until the end of its next turn. A Restrained creature repeats the save at the end of each of its turns, ending the effect on itself on a success. The branches vanish when the condition ends.</p>\n<p>Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Root Sense.</strong> <p>As a Bonus Action|XPHB, you gain Tremorsense with a range of 60 feet for 10 minutes. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Towering Size.</strong> <p>You have Advantage|XPHB on any ability check you make to end the Grappled condition. You also count as one size larger when determining your carrying capacity.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gnarlborn_deep_roots_crookedmoon24",
+        "name": "Deep Roots",
+        "source": "CrookedMoon24",
+        "raceName": "Gnarlborn",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on ability checks and saving throws against being moved against your will or to avoid the Prone condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on ability checks and saving throws against being moved against your will or to avoid the {@condition Prone|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_gnarlborn_elderwood_whispers_crookedmoon24",
+        "name": "Elderwood Whispers",
+        "source": "CrookedMoon24",
+        "raceName": "Gnarlborn",
+        "actionType": "passive",
+        "description": "You can draw on the memory of the Elderwood spirits. When you finish a Long Rest|XPHB, you gain proficiency with a skill, a tool, or learn one language of your choice until you next finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can draw on the memory of the Elderwood spirits. When you finish a {@variantrule Long Rest|XPHB}, you gain proficiency with a skill, a tool, or learn one language of your choice until you next finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_gnarlborn_grasping_branches_crookedmoon24",
+        "name": "Grasping Branches",
+        "source": "CrookedMoon24",
+        "raceName": "Gnarlborn",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can magically unleash the binding power of the dark wood. Choose a Large or smaller creature within 30 feet of yourself. The creature must make a Strength saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus). On a failed save, the target has the Restrained condition for 1 minute as branches appear and ensnare it. On a successful save, its Speed|XPHB is halved until the end of its next turn. A Restrained creature repeats the save at the end of each of its turns, ending the effect on itself on a success. The branches vanish when the condition ends.\n\nOnce you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can magically unleash the binding power of the dark wood. Choose a Large or smaller creature within 30 feet of yourself. The creature must make a Strength saving throw (DC 8 plus your Constitution modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}). On a failed save, the target has the {@condition Restrained|XPHB} condition for 1 minute as branches appear and ensnare it. On a successful save, its {@variantrule Speed|XPHB} is halved until the end of its next turn. A {@condition Restrained|XPHB} creature repeats the save at the end of each of its turns, ending the effect on itself on a success. The branches vanish when the condition ends.",
+          "Once you use this trait, you can't do so again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_gnarlborn_root_sense_crookedmoon24",
+        "name": "Root Sense",
+        "source": "CrookedMoon24",
+        "raceName": "Gnarlborn",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you gain Tremorsense with a range of 60 feet for 10 minutes. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you gain {@sense Tremorsense|XPHB} with a range of 60 feet for 10 minutes. Once you use this trait, you can't do so again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_gnarlborn_towering_size_crookedmoon24",
+        "name": "Towering Size",
+        "source": "CrookedMoon24",
+        "raceName": "Gnarlborn",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on any ability check you make to end the Grappled condition. You also count as one size larger when determining your carrying capacity.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on any ability check you make to end the {@condition Grappled|XPHB} condition. You also count as one size larger when determining your carrying capacity."
+        ]
+      }
+    ],
+    "description": "**Deep Roots**: You have Advantage|XPHB on ability checks and saving throws against being moved against your will or to avoid the Prone condition.\n\n**Elderwood Whispers**: You can draw on the memory of the Elderwood spirits. When you finish a Long Rest|XPHB, you gain proficiency with a skill, a tool, or learn one language of your choice until you next finish a Long Rest|XPHB.\n\n**Grasping Branches**: As a Bonus Action|XPHB, you can magically unleash the binding power of the dark wood. Choose a Large or smaller creature within 30 feet of yourself. The creature must make a Strength saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus). On a failed save, the target has the Restrained condition for 1 minute as branches appear and ensnare it. On a successful save, its Speed|XPHB is halved until the end of its next turn. A Restrained creature repeats the save at the end of each of its turns, ending the effect on itself on a success. The branches vanish when the condition ends.\n\nOnce you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Root Sense**: As a Bonus Action|XPHB, you gain Tremorsense with a range of 60 feet for 10 minutes. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Towering Size**: You have Advantage|XPHB on any ability check you make to end the Grappled condition. You also count as one size larger when determining your carrying capacity."
+  },
+  {
+    "id": "race_graveborn_crookedmoon24",
+    "name": "Graveborn",
+    "source": "CrookedMoon24",
+    "page": 59,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Devour Corpse.</strong> <p>You can eat spoiled and rotten food as if it were fresh.</p>\n<p>Additionally, if you spend 1 minute eating flesh from the corpse of a Small or larger creature that isn't a Construct, roll one of your Hit Point Dice|XPHB without expending it (even if you have none remaining). You regain a number of Hit Points|XPHB equal to the number rolled plus your Constitution modifier (minimum of 1 Hit Points|XPHB|Hit Point). Once you regain Hit Points|XPHB using this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Frozen Waste.</strong> <p>You have Resistance|XPHB to Cold damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Infused Drakkonite.</strong> <p>When you damage a creature, you can ignore any Resistance|XPHB|Resistances it has, and it takes extra Necrotic damage equal to your Proficiency|XPHB|Proficiency Bonus. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>",
+    "traits": [
+      {
+        "id": "trait_graveborn_darkvision_crookedmoon24",
+        "name": "Darkvision",
+        "source": "CrookedMoon24",
+        "raceName": "Graveborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_graveborn_devour_corpse_crookedmoon24",
+        "name": "Devour Corpse",
+        "source": "CrookedMoon24",
+        "raceName": "Graveborn",
+        "actionType": "passive",
+        "description": "You can eat spoiled and rotten food as if it were fresh.\n\nAdditionally, if you spend 1 minute eating flesh from the corpse of a Small or larger creature that isn't a Construct, roll one of your Hit Point Dice|XPHB without expending it (even if you have none remaining). You regain a number of Hit Points|XPHB equal to the number rolled plus your Constitution modifier (minimum of 1 Hit Points|XPHB|Hit Point). Once you regain Hit Points|XPHB using this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can eat spoiled and rotten food as if it were fresh.",
+          "Additionally, if you spend 1 minute eating flesh from the corpse of a Small or larger creature that isn't a Construct, roll one of your {@variantrule Hit Point Dice|XPHB} without expending it (even if you have none remaining). You regain a number of {@variantrule Hit Points|XPHB} equal to the number rolled plus your Constitution modifier (minimum of 1 {@variantrule Hit Points|XPHB|Hit Point}). Once you regain {@variantrule Hit Points|XPHB} using this trait, you can't do so again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_graveborn_frozen_waste_crookedmoon24",
+        "name": "Frozen Waste",
+        "source": "CrookedMoon24",
+        "raceName": "Graveborn",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Cold damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Cold damage."
+        ]
+      },
+      {
+        "id": "trait_graveborn_infused_drakkonite_crookedmoon24",
+        "name": "Infused Drakkonite",
+        "source": "CrookedMoon24",
+        "raceName": "Graveborn",
+        "actionType": "passive",
+        "description": "When you damage a creature, you can ignore any Resistance|XPHB|Resistances it has, and it takes extra Necrotic damage equal to your Proficiency|XPHB|Proficiency Bonus. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you damage a creature, you can ignore any {@variantrule Resistance|XPHB|Resistances} it has, and it takes extra Necrotic damage equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}. Once you use this trait, you can't do so again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Devour Corpse**: You can eat spoiled and rotten food as if it were fresh.\n\nAdditionally, if you spend 1 minute eating flesh from the corpse of a Small or larger creature that isn't a Construct, roll one of your Hit Point Dice|XPHB without expending it (even if you have none remaining). You regain a number of Hit Points|XPHB equal to the number rolled plus your Constitution modifier (minimum of 1 Hit Points|XPHB|Hit Point). Once you regain Hit Points|XPHB using this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Frozen Waste**: You have Resistance|XPHB to Cold damage.\n\n**Infused Drakkonite**: When you damage a creature, you can ignore any Resistance|XPHB|Resistances it has, and it takes extra Necrotic damage equal to your Proficiency|XPHB|Proficiency Bonus. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB."
+  },
+  {
+    "id": "race_harvestborn_crookedmoon24",
+    "name": "Harvestborn",
+    "source": "CrookedMoon24",
+    "page": 60,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Culling.</strong> <p>When you damage a Bloodied|XPHB creature, you can deal an extra 1d12 Necrotic damage to it. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Gift of the Green.</strong> <p>As a Bonus Action|XPHB, you can touch the ground and choose a creature also touching the ground within 30 feet of yourself. That creature can expend and roll one Hit Point Dice|XPHB|Hit Points Die, and it regains a number of Hit Points|XPHB equal to the number rolled plus your Proficiency|XPHB|Proficiency Bonus. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus. You regain one expended use when you finish a Short Rest|XPHB, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Jack-O-Lantern.</strong> <p>You know the Dancing Lights cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for it (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Scarecrow Nature.</strong> <p>You don't require air, food, or drink.</p></div>\n<div class=\"compendium-subentry\"><strong>Watchful Rest.</strong> <p>You don't need to sleep, and magic can't put you to sleep. Moreover, you can finish a Long Rest|XPHB in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness.</p></div>",
+    "traits": [
+      {
+        "id": "trait_harvestborn_culling_crookedmoon24",
+        "name": "Culling",
+        "source": "CrookedMoon24",
+        "raceName": "Harvestborn",
+        "actionType": "passive",
+        "description": "When you damage a Bloodied|XPHB creature, you can deal an extra 1d12 Necrotic damage to it. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d12",
+        "formulaConfig": {
+          "baseDice": "1d12",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you damage a {@status Bloodied|XPHB} creature, you can deal an extra {@damage 1d12} Necrotic damage to it. You can use this trait a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_harvestborn_gift_of_the_green_crookedmoon24",
+        "name": "Gift of the Green",
+        "source": "CrookedMoon24",
+        "raceName": "Harvestborn",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can touch the ground and choose a creature also touching the ground within 30 feet of yourself. That creature can expend and roll one Hit Point Dice|XPHB|Hit Points Die, and it regains a number of Hit Points|XPHB equal to the number rolled plus your Proficiency|XPHB|Proficiency Bonus. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus. You regain one expended use when you finish a Short Rest|XPHB, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can touch the ground and choose a creature also touching the ground within 30 feet of yourself. That creature can expend and roll one {@variantrule Hit Point Dice|XPHB|Hit Points Die}, and it regains a number of {@variantrule Hit Points|XPHB} equal to the number rolled plus your {@variantrule Proficiency|XPHB|Proficiency Bonus}. You can use this trait a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}. You regain one expended use when you finish a {@variantrule Short Rest|XPHB}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_harvestborn_jack_o_lantern_crookedmoon24",
+        "name": "Jack-O-Lantern",
+        "source": "CrookedMoon24",
+        "raceName": "Harvestborn",
+        "actionType": "passive",
+        "description": "You know the Dancing Lights cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for it (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Dancing Lights|XPHB} cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for it (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_harvestborn_scarecrow_nature_crookedmoon24",
+        "name": "Scarecrow Nature",
+        "source": "CrookedMoon24",
+        "raceName": "Harvestborn",
+        "actionType": "passive",
+        "description": "You don't require air, food, or drink.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't require air, food, or drink."
+        ]
+      },
+      {
+        "id": "trait_harvestborn_watchful_rest_crookedmoon24",
+        "name": "Watchful Rest",
+        "source": "CrookedMoon24",
+        "raceName": "Harvestborn",
+        "actionType": "passive",
+        "description": "You don't need to sleep, and magic can't put you to sleep. Moreover, you can finish a Long Rest|XPHB in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't need to sleep, and magic can't put you to sleep. Moreover, you can finish a {@variantrule Long Rest|XPHB} in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness."
+        ]
+      }
+    ],
+    "description": "**Culling**: When you damage a Bloodied|XPHB creature, you can deal an extra 1d12 Necrotic damage to it. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\n**Gift of the Green**: As a Bonus Action|XPHB, you can touch the ground and choose a creature also touching the ground within 30 feet of yourself. That creature can expend and roll one Hit Point Dice|XPHB|Hit Points Die, and it regains a number of Hit Points|XPHB equal to the number rolled plus your Proficiency|XPHB|Proficiency Bonus. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus. You regain one expended use when you finish a Short Rest|XPHB, and you regain all expended uses when you finish a Long Rest|XPHB.\n\n**Jack-O-Lantern**: You know the Dancing Lights cantrip. Intelligence, Wisdom, or Charisma is your spellcasting ability for it (choose the ability when you select this species).\n\n**Scarecrow Nature**: You don't require air, food, or drink.\n\n**Watchful Rest**: You don't need to sleep, and magic can't put you to sleep. Moreover, you can finish a Long Rest|XPHB in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness."
+  },
+  {
+    "id": "race_plagueborn_crookedmoon24",
+    "name": "Plagueborn",
+    "source": "CrookedMoon24",
+    "page": 61,
+    "size": "S/M",
+    "speed": "30 ft, climb true ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Born in Filth.</strong> <p>You have Advantage|XPHB on saving throws to avoid or end the Poisoned condition or magical contagions.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Infected Cunning.</strong> <p>The plague you carry binds you to rats and imparts their cunning. You gain proficiency in the Deception or Stealth skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Plague Bearer.</strong> <p>When you hit a creature with an attack roll, you can spread your magical contagion to the target. The target must succeed on a Constitution saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus) or become afflicted with your plague for 1 minute.</p>\n<p>While afflicted, the target has Disadvantage|XPHB on attack rolls and ability checks and takes 1d4 Poison damage at the start of each of its turns. The target repeats the save at the end of each of its turns, ending the plague on itself on a success.</p>\n<p>Once you use this trait, you can't do so again until you finish a Long Rest|XPHB.</p></div>",
+    "traits": [
+      {
+        "id": "trait_plagueborn_born_in_filth_crookedmoon24",
+        "name": "Born in Filth",
+        "source": "CrookedMoon24",
+        "raceName": "Plagueborn",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on saving throws to avoid or end the Poisoned condition or magical contagions.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws to avoid or end the {@condition Poisoned|XPHB} condition or magical contagions."
+        ]
+      },
+      {
+        "id": "trait_plagueborn_darkvision_crookedmoon24",
+        "name": "Darkvision",
+        "source": "CrookedMoon24",
+        "raceName": "Plagueborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_plagueborn_infected_cunning_crookedmoon24",
+        "name": "Infected Cunning",
+        "source": "CrookedMoon24",
+        "raceName": "Plagueborn",
+        "actionType": "passive",
+        "description": "The plague you carry binds you to rats and imparts their cunning. You gain proficiency in the Deception or Stealth skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "The plague you carry binds you to rats and imparts their cunning. You gain proficiency in the {@skill Deception|XPHB} or {@skill Stealth|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_plagueborn_plague_bearer_crookedmoon24",
+        "name": "Plague Bearer",
+        "source": "CrookedMoon24",
+        "raceName": "Plagueborn",
+        "actionType": "passive",
+        "description": "When you hit a creature with an attack roll, you can spread your magical contagion to the target. The target must succeed on a Constitution saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus) or become afflicted with your plague for 1 minute.\n\nWhile afflicted, the target has Disadvantage|XPHB on attack rolls and ability checks and takes 1d4 Poison damage at the start of each of its turns. The target repeats the save at the end of each of its turns, ending the plague on itself on a success.\n\nOnce you use this trait, you can't do so again until you finish a Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you hit a creature with an attack roll, you can spread your magical contagion to the target. The target must succeed on a Constitution saving throw (DC 8 plus your Constitution modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or become afflicted with your plague for 1 minute.",
+          "While afflicted, the target has {@variantrule Disadvantage|XPHB} on attack rolls and ability checks and takes {@damage 1d4} Poison damage at the start of each of its turns. The target repeats the save at the end of each of its turns, ending the plague on itself on a success.",
+          "Once you use this trait, you can't do so again until you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Born in Filth**: You have Advantage|XPHB on saving throws to avoid or end the Poisoned condition or magical contagions.\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Infected Cunning**: The plague you carry binds you to rats and imparts their cunning. You gain proficiency in the Deception or Stealth skill.\n\n**Plague Bearer**: When you hit a creature with an attack roll, you can spread your magical contagion to the target. The target must succeed on a Constitution saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus) or become afflicted with your plague for 1 minute.\n\nWhile afflicted, the target has Disadvantage|XPHB on attack rolls and ability checks and takes 1d4 Poison damage at the start of each of its turns. The target repeats the save at the end of each of its turns, ending the plague on itself on a success.\n\nOnce you use this trait, you can't do so again until you finish a Long Rest|XPHB."
+  },
+  {
+    "id": "race_relicborn_crookedmoon24",
+    "name": "Relicborn",
+    "source": "CrookedMoon24",
+    "page": 62,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Dance of Death.</strong> <p>As a Bonus Action|XPHB, you can make a DC 15 Charisma (Musical Instrument or Performance) check. If you succeed, the next attack roll you make before the end of your turn has Advantage|XPHB. If you succeed on the check by 5 or more, you can roll one of your Hit Point Dice|XPHB (without expending it) and gain Temporary Hit Points|XPHB equal to the number rolled.</p></div>\n<div class=\"compendium-subentry\"><strong>Eternal Party.</strong> <p>You don't need to sleep, and you can finish a Long Rest|XPHB in 4 hours if you spend those hours enjoying revelry, such as telling stories or playing music.</p></div>\n<div class=\"compendium-subentry\"><strong>Moment of Remembrance.</strong> <p>When another creature you can see within 30 feet of you fails a D20 Test|XPHB, you can take a Reaction|XPHB to let the target add 1d4 to the total, potentially causing it to succeed. Once this trait changes a failed roll into a success, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Soul of Revelry.</strong> <p>You gain proficiency in the Performance skill or with one kind of Musical Instrument.</p></div>",
+    "traits": [
+      {
+        "id": "trait_relicborn_dance_of_death_crookedmoon24",
+        "name": "Dance of Death",
+        "source": "CrookedMoon24",
+        "raceName": "Relicborn",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can make a DC 15 Charisma (Musical Instrument or Performance) check. If you succeed, the next attack roll you make before the end of your turn has Advantage|XPHB. If you succeed on the check by 5 or more, you can roll one of your Hit Point Dice|XPHB (without expending it) and gain Temporary Hit Points|XPHB equal to the number rolled.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can make a DC 15 Charisma ({@item Musical Instrument|XPHB} or {@skill Performance|XPHB}) check. If you succeed, the next attack roll you make before the end of your turn has {@variantrule Advantage|XPHB}. If you succeed on the check by 5 or more, you can roll one of your {@variantrule Hit Point Dice|XPHB} (without expending it) and gain {@variantrule Temporary Hit Points|XPHB} equal to the number rolled."
+        ]
+      },
+      {
+        "id": "trait_relicborn_eternal_party_crookedmoon24",
+        "name": "Eternal Party",
+        "source": "CrookedMoon24",
+        "raceName": "Relicborn",
+        "actionType": "passive",
+        "description": "You don't need to sleep, and you can finish a Long Rest|XPHB in 4 hours if you spend those hours enjoying revelry, such as telling stories or playing music.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't need to sleep, and you can finish a {@variantrule Long Rest|XPHB} in 4 hours if you spend those hours enjoying revelry, such as telling stories or playing music."
+        ]
+      },
+      {
+        "id": "trait_relicborn_moment_of_remembrance_crookedmoon24",
+        "name": "Moment of Remembrance",
+        "source": "CrookedMoon24",
+        "raceName": "Relicborn",
+        "actionType": "passive",
+        "description": "When another creature you can see within 30 feet of you fails a D20 Test|XPHB, you can take a Reaction|XPHB to let the target add 1d4 to the total, potentially causing it to succeed. Once this trait changes a failed roll into a success, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When another creature you can see within 30 feet of you fails a {@variantrule D20 Test|XPHB}, you can take a {@variantrule Reaction|XPHB} to let the target add {@dice 1d4} to the total, potentially causing it to succeed. Once this trait changes a failed roll into a success, you can't use it again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_relicborn_soul_of_revelry_crookedmoon24",
+        "name": "Soul of Revelry",
+        "source": "CrookedMoon24",
+        "raceName": "Relicborn",
+        "actionType": "passive",
+        "description": "You gain proficiency in the Performance skill or with one kind of Musical Instrument.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency in the {@skill Performance|XPHB} skill or with one kind of {@item Musical Instrument|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Dance of Death**: As a Bonus Action|XPHB, you can make a DC 15 Charisma (Musical Instrument or Performance) check. If you succeed, the next attack roll you make before the end of your turn has Advantage|XPHB. If you succeed on the check by 5 or more, you can roll one of your Hit Point Dice|XPHB (without expending it) and gain Temporary Hit Points|XPHB equal to the number rolled.\n\n**Eternal Party**: You don't need to sleep, and you can finish a Long Rest|XPHB in 4 hours if you spend those hours enjoying revelry, such as telling stories or playing music.\n\n**Moment of Remembrance**: When another creature you can see within 30 feet of you fails a D20 Test|XPHB, you can take a Reaction|XPHB to let the target add 1d4 to the total, potentially causing it to succeed. Once this trait changes a failed roll into a success, you can't use it again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Soul of Revelry**: You gain proficiency in the Performance skill or with one kind of Musical Instrument."
+  },
+  {
+    "id": "race_silkborn_crookedmoon24",
+    "name": "Silkborn",
+    "source": "CrookedMoon24",
+    "page": 63,
+    "size": "M",
+    "speed": "30 ft, climb true ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Bejeweled Carapace.</strong> <p>When you are hit with an attack roll, you can take a Reaction|XPHB to add your Proficiency|XPHB|Proficiency Bonus to your AC against that attack, potentially causing it to miss. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Silken Legacy.</strong> <p>You know the Thaumaturgy cantrip. Starting at character level 3, you always have the Find Familiar spell (the familiar takes the form of a jeweled insect or arachnid) prepared, and starting at character level 5, you always have the Web spell prepared. You can cast each spell once without a spell slot or Material components. You regain the ability to cast them in that way when you finish a Long Rest|XPHB. You can also cast either spell using any spell slots you have of the appropriate level.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Spider Climb.</strong> <p>You can climb difficult surfaces, including along ceilings, without needing an ability check and while leaving your hands free.</p></div>",
+    "traits": [
+      {
+        "id": "trait_silkborn_bejeweled_carapace_crookedmoon24",
+        "name": "Bejeweled Carapace",
+        "source": "CrookedMoon24",
+        "raceName": "Silkborn",
+        "actionType": "passive",
+        "description": "When you are hit with an attack roll, you can take a Reaction|XPHB to add your Proficiency|XPHB|Proficiency Bonus to your AC against that attack, potentially causing it to miss. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you are hit with an attack roll, you can take a {@variantrule Reaction|XPHB} to add your {@variantrule Proficiency|XPHB|Proficiency Bonus} to your AC against that attack, potentially causing it to miss. Once you use this trait, you can't do so again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_silkborn_darkvision_crookedmoon24",
+        "name": "Darkvision",
+        "source": "CrookedMoon24",
+        "raceName": "Silkborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_silkborn_silken_legacy_crookedmoon24",
+        "name": "Silken Legacy",
+        "source": "CrookedMoon24",
+        "raceName": "Silkborn",
+        "actionType": "passive",
+        "description": "You know the Thaumaturgy cantrip. Starting at character level 3, you always have the Find Familiar spell (the familiar takes the form of a jeweled insect or arachnid) prepared, and starting at character level 5, you always have the Web spell prepared. You can cast each spell once without a spell slot or Material components. You regain the ability to cast them in that way when you finish a Long Rest|XPHB. You can also cast either spell using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Thaumaturgy|XPHB} cantrip. Starting at character level 3, you always have the {@spell Find Familiar|XPHB} spell (the familiar takes the form of a jeweled insect or arachnid) prepared, and starting at character level 5, you always have the {@spell Web|XPHB} spell prepared. You can cast each spell once without a spell slot or Material components. You regain the ability to cast them in that way when you finish a {@variantrule Long Rest|XPHB}. You can also cast either spell using any spell slots you have of the appropriate level.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_silkborn_spider_climb_crookedmoon24",
+        "name": "Spider Climb",
+        "source": "CrookedMoon24",
+        "raceName": "Silkborn",
+        "actionType": "passive",
+        "description": "You can climb difficult surfaces, including along ceilings, without needing an ability check and while leaving your hands free.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can climb difficult surfaces, including along ceilings, without needing an ability check and while leaving your hands free."
+        ]
+      }
+    ],
+    "description": "**Bejeweled Carapace**: When you are hit with an attack roll, you can take a Reaction|XPHB to add your Proficiency|XPHB|Proficiency Bonus to your AC against that attack, potentially causing it to miss. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Silken Legacy**: You know the Thaumaturgy cantrip. Starting at character level 3, you always have the Find Familiar spell (the familiar takes the form of a jeweled insect or arachnid) prepared, and starting at character level 5, you always have the Web spell prepared. You can cast each spell once without a spell slot or Material components. You regain the ability to cast them in that way when you finish a Long Rest|XPHB. You can also cast either spell using any spell slots you have of the appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).\n\n**Spider Climb**: You can climb difficult surfaces, including along ceilings, without needing an ability check and while leaving your hands free."
+  },
+  {
+    "id": "race_stoneborn_crookedmoon24",
+    "name": "Stoneborn",
+    "source": "CrookedMoon24",
+    "page": 64,
+    "size": "S/M",
+    "speed": "30 ft, fly 15 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Argent Gleam.</strong> <p>As a Bonus Action|XPHB, you can channel a mote of the Silver Path's light with your choice of one of the following options:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Path's Grace.</strong> <p>You cast the Bless spell, requiring no Material components.</p></div></li><li><div class=\"compendium-subentry\"><strong>Zealous Charge.</strong> <p>You take the Dash action. The first time you make an attack roll before the end of your turn, on a hit or miss, the target takes an extra 2d6 Radiant damage.</p></div></li></ul>\n<p>Once you use this trait's Bonus Action|XPHB, you can't do so again until you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Silver Bulwark.</strong> <p>You can call upon the Silver Path to protect you. When you take Bludgeoning, Piercing, or Slashing damage, you can take a Reaction|XPHB to gain Resistance|XPHB to those three damage types until the start of your next turn. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Watchful Senses.</strong> <p>You gain proficiency in the Insight, Perception, or Survival skill.</p></div>",
+    "traits": [
+      {
+        "id": "trait_stoneborn_argent_gleam_crookedmoon24",
+        "name": "Argent Gleam",
+        "source": "CrookedMoon24",
+        "raceName": "Stoneborn",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can channel a mote of the Silver Path's light with your choice of one of the following options:\n\n- **Path's Grace**\n\nYou cast the Bless spell, requiring no Material components.\n- **Zealous Charge**\n\nYou take the Dash action. The first time you make an attack roll before the end of your turn, on a hit or miss, the target takes an extra 2d6 Radiant damage.\n\nOnce you use this trait's Bonus Action|XPHB, you can't do so again until you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "2d6",
+        "formulaConfig": {
+          "baseDice": "2d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can channel a mote of the Silver Path's light with your choice of one of the following options:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "entries",
+                "name": "Path's Grace",
+                "entries": [
+                  "You cast the {@spell Bless|XPHB} spell, requiring no Material components."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Zealous Charge",
+                "entries": [
+                  "You take the {@action Dash|XPHB} action. The first time you make an attack roll before the end of your turn, on a hit or miss, the target takes an extra {@damage 2d6} Radiant damage."
+                ]
+              }
+            ]
+          },
+          "Once you use this trait's {@variantrule Bonus Action|XPHB}, you can't do so again until you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_stoneborn_silver_bulwark_crookedmoon24",
+        "name": "Silver Bulwark",
+        "source": "CrookedMoon24",
+        "raceName": "Stoneborn",
+        "actionType": "passive",
+        "description": "You can call upon the Silver Path to protect you. When you take Bludgeoning, Piercing, or Slashing damage, you can take a Reaction|XPHB to gain Resistance|XPHB to those three damage types until the start of your next turn. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can call upon the Silver Path to protect you. When you take Bludgeoning, Piercing, or Slashing damage, you can take a {@variantrule Reaction|XPHB} to gain {@variantrule Resistance|XPHB} to those three damage types until the start of your next turn. Once you use this trait, you can't do so again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_stoneborn_watchful_senses_crookedmoon24",
+        "name": "Watchful Senses",
+        "source": "CrookedMoon24",
+        "raceName": "Stoneborn",
+        "actionType": "passive",
+        "description": "You gain proficiency in the Insight, Perception, or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency in the {@skill Insight|XPHB}, {@skill Perception|XPHB}, or {@skill Survival|XPHB} skill."
+        ]
+      }
+    ],
+    "description": "**Argent Gleam**: As a Bonus Action|XPHB, you can channel a mote of the Silver Path's light with your choice of one of the following options:\n\n- **Path's Grace**\n\nYou cast the Bless spell, requiring no Material components.\n- **Zealous Charge**\n\nYou take the Dash action. The first time you make an attack roll before the end of your turn, on a hit or miss, the target takes an extra 2d6 Radiant damage.\n\nOnce you use this trait's Bonus Action|XPHB, you can't do so again until you finish a Long Rest|XPHB.\n\n**Silver Bulwark**: You can call upon the Silver Path to protect you. When you take Bludgeoning, Piercing, or Slashing damage, you can take a Reaction|XPHB to gain Resistance|XPHB to those three damage types until the start of your next turn. Once you use this trait, you can't do so again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.\n\n**Watchful Senses**: You gain proficiency in the Insight, Perception, or Survival skill."
+  },
+  {
+    "id": "race_threadborn_crookedmoon24",
+    "name": "Threadborn",
+    "source": "CrookedMoon24",
+    "page": 65,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Ball-Jointed.</strong> <p>You can move through a space as narrow as 1 foot wide as if it were Difficult Terrain|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Innocent Mind.</strong> <p>You have Resistance|XPHB to Psychic damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Sewn Nature.</strong> <p>You don't require air, food, or drink.</p></div>\n<div class=\"compendium-subentry\"><strong>Soothing Heart.</strong> <p>You know the Guidance cantrip. Starting at character level 3, you always have the Sanctuary spell prepared, and starting at character level 5, you always have the Calm Emotions spell prepared. You can cast each spell once without a spell slot. When you cast Calm Emotions in this way, it can target creatures of any type. You regain the ability to cast them using this trait when you finish a Long Rest|XPHB. You can also cast either spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>You've Got a Friend.</strong> <p>When a creature you can see within 30 feet of yourself fails an ability check using a skill, you can take a Reaction|XPHB to cast Guidance on the creature, ignoring the spell's normal range. The creature can add the spell's 1d4 to its ability check, potentially causing it to succeed, then the spell ends. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>",
+    "traits": [
+      {
+        "id": "trait_threadborn_ball_jointed_crookedmoon24",
+        "name": "Ball-Jointed",
+        "source": "CrookedMoon24",
+        "raceName": "Threadborn",
+        "actionType": "passive",
+        "description": "You can move through a space as narrow as 1 foot wide as if it were Difficult Terrain|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through a space as narrow as 1 foot wide as if it were {@variantrule Difficult Terrain|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_threadborn_innocent_mind_crookedmoon24",
+        "name": "Innocent Mind",
+        "source": "CrookedMoon24",
+        "raceName": "Threadborn",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Psychic damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Psychic damage."
+        ]
+      },
+      {
+        "id": "trait_threadborn_sewn_nature_crookedmoon24",
+        "name": "Sewn Nature",
+        "source": "CrookedMoon24",
+        "raceName": "Threadborn",
+        "actionType": "passive",
+        "description": "You don't require air, food, or drink.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't require air, food, or drink."
+        ]
+      },
+      {
+        "id": "trait_threadborn_soothing_heart_crookedmoon24",
+        "name": "Soothing Heart",
+        "source": "CrookedMoon24",
+        "raceName": "Threadborn",
+        "actionType": "passive",
+        "description": "You know the Guidance cantrip. Starting at character level 3, you always have the Sanctuary spell prepared, and starting at character level 5, you always have the Calm Emotions spell prepared. You can cast each spell once without a spell slot. When you cast Calm Emotions in this way, it can target creatures of any type. You regain the ability to cast them using this trait when you finish a Long Rest|XPHB. You can also cast either spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Guidance|XPHB} cantrip. Starting at character level 3, you always have the {@spell Sanctuary|XPHB} spell prepared, and starting at character level 5, you always have the {@spell Calm Emotions|XPHB} spell prepared. You can cast each spell once without a spell slot. When you cast {@spell Calm Emotions|XPHB} in this way, it can target creatures of any type. You regain the ability to cast them using this trait when you finish a {@variantrule Long Rest|XPHB}. You can also cast either spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_threadborn_you_ve_got_a_friend_crookedmoon24",
+        "name": "You've Got a Friend",
+        "source": "CrookedMoon24",
+        "raceName": "Threadborn",
+        "actionType": "passive",
+        "description": "When a creature you can see within 30 feet of yourself fails an ability check using a skill, you can take a Reaction|XPHB to cast Guidance on the creature, ignoring the spell's normal range. The creature can add the spell's 1d4 to its ability check, potentially causing it to succeed, then the spell ends. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When a creature you can see within 30 feet of yourself fails an ability check using a skill, you can take a {@variantrule Reaction|XPHB} to cast {@spell Guidance|XPHB} on the creature, ignoring the spell's normal range. The creature can add the spell's {@dice 1d4} to its ability check, potentially causing it to succeed, then the spell ends. You can use this trait a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Ball-Jointed**: You can move through a space as narrow as 1 foot wide as if it were Difficult Terrain|XPHB.\n\n**Innocent Mind**: You have Resistance|XPHB to Psychic damage.\n\n**Sewn Nature**: You don't require air, food, or drink.\n\n**Soothing Heart**: You know the Guidance cantrip. Starting at character level 3, you always have the Sanctuary spell prepared, and starting at character level 5, you always have the Calm Emotions spell prepared. You can cast each spell once without a spell slot. When you cast Calm Emotions in this way, it can target creatures of any type. You regain the ability to cast them using this trait when you finish a Long Rest|XPHB. You can also cast either spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).\n\n**You've Got a Friend**: When a creature you can see within 30 feet of yourself fails an ability check using a skill, you can take a Reaction|XPHB to cast Guidance on the creature, ignoring the spell's normal range. The creature can add the spell's 1d4 to its ability check, potentially causing it to succeed, then the spell ends. You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB."
+  }
+]

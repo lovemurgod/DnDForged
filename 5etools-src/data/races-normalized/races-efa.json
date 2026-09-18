@@ -6,7 +6,44 @@
     "page": 34,
     "size": "S/M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Changeling Instincts.</strong> <p>Thanks to your connection to the fey realm, you gain proficiency in two of the following skills of your choice: Deception, Insight, Intimidation, Performance, or Persuasion.</p></div>\n<div class=\"compendium-subentry\"><strong>Shape-Shifter.</strong> <p>As an action, you can shape-shift to change your appearance and your voice. You determine the specifics of the changes, including your coloration, hair length, and sex. You can also adjust your height and weight and can change your size between Medium and Small. You can make yourself appear as a member of another playable species, though none of your game statistics change. You can't duplicate the appearance of an individual you've never seen, and you must adopt a form that has the same basic arrangement of limbs that you have. This trait doesn't change your clothing and equipment.</p>\n<p>While shape-shifted with this trait, you have Advantage|XPHB on Charisma checks.</p>\n<p>You stay in the new form until you take an action to revert to your true form.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Changeling Instincts.</strong> <p>Thanks to your connection to the fey realm, you gain proficiency in two of the following skills of your choice: Deception, Insight, Intimidation, Performance, or Persuasion.</p></div>\n<div class=\"compendium-subentry\"><strong>Shape-Shifter.</strong> <p>As an action, you can shape-shift to change your appearance and your voice. You determine the specifics of the changes, including your coloration, hair length, and sex. You can also adjust your height and weight and can change your size between Medium and Small. You can make yourself appear as a member of another playable species, though none of your game statistics change. You can't duplicate the appearance of an individual you've never seen, and you must adopt a form that has the same basic arrangement of limbs that you have. This trait doesn't change your clothing and equipment.</p>\n<p>While shape-shifted with this trait, you have Advantage|XPHB on Charisma checks.</p>\n<p>You stay in the new form until you take an action to revert to your true form.</p></div>",
+    "traits": [
+      {
+        "id": "trait_changeling_changeling_instincts_efa",
+        "name": "Changeling Instincts",
+        "source": "EFA",
+        "raceName": "Changeling",
+        "actionType": "passive",
+        "description": "Thanks to your connection to the fey realm, you gain proficiency in two of the following skills of your choice: Deception, Insight, Intimidation, Performance, or Persuasion.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your connection to the fey realm, you gain proficiency in two of the following skills of your choice: {@skill Deception|XPHB}, {@skill Insight|XPHB}, {@skill Intimidation|XPHB}, {@skill Performance|XPHB}, or {@skill Persuasion|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_changeling_shape_shifter_efa",
+        "name": "Shape-Shifter",
+        "source": "EFA",
+        "raceName": "Changeling",
+        "actionType": "action",
+        "description": "As an action, you can shape-shift to change your appearance and your voice. You determine the specifics of the changes, including your coloration, hair length, and sex. You can also adjust your height and weight and can change your size between Medium and Small. You can make yourself appear as a member of another playable species, though none of your game statistics change. You can't duplicate the appearance of an individual you've never seen, and you must adopt a form that has the same basic arrangement of limbs that you have. This trait doesn't change your clothing and equipment.\n\nWhile shape-shifted with this trait, you have Advantage|XPHB on Charisma checks.\n\nYou stay in the new form until you take an action to revert to your true form.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As an action, you can shape-shift to change your appearance and your voice. You determine the specifics of the changes, including your coloration, hair length, and sex. You can also adjust your height and weight and can change your size between Medium and Small. You can make yourself appear as a member of another playable species, though none of your game statistics change. You can't duplicate the appearance of an individual you've never seen, and you must adopt a form that has the same basic arrangement of limbs that you have. This trait doesn't change your clothing and equipment.",
+          "While shape-shifted with this trait, you have {@variantrule Advantage|XPHB} on Charisma checks.",
+          "You stay in the new form until you take an action to revert to your true form."
+        ]
+      }
+    ],
+    "description": "**Changeling Instincts**: Thanks to your connection to the fey realm, you gain proficiency in two of the following skills of your choice: Deception, Insight, Intimidation, Performance, or Persuasion.\n\n**Shape-Shifter**: As an action, you can shape-shift to change your appearance and your voice. You determine the specifics of the changes, including your coloration, hair length, and sex. You can also adjust your height and weight and can change your size between Medium and Small. You can make yourself appear as a member of another playable species, though none of your game statistics change. You can't duplicate the appearance of an individual you've never seen, and you must adopt a form that has the same basic arrangement of limbs that you have. This trait doesn't change your clothing and equipment.\n\nWhile shape-shifted with this trait, you have Advantage|XPHB on Charisma checks.\n\nYou stay in the new form until you take an action to revert to your true form."
   },
   {
     "id": "race_kalashtar_efa",
@@ -15,7 +52,74 @@
     "page": 35,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Dual Mind.</strong> <p>You have Advantage|XPHB on Wisdom and Charisma saving throws.</p></div>\n<div class=\"compendium-subentry\"><strong>Mental Discipline.</strong> <p>You have Resistance|XPHB to Psychic damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Mind Link.</strong> <p>You have telepathy with a range in feet equal to 10 times your level. When you're using this trait to speak telepathically to a creature, you can take a Magic action to give that creature the ability to speak telepathically with you for 1 hour or until you take another Magic action to end this effect.</p></div>\n<div class=\"compendium-subentry\"><strong>Severed from Dreams.</strong> <p>You can't be the target of the Dream spell. In addition, when you finish a Long Rest|XPHB, you gain proficiency in one skill of your choice. This proficiency lasts until you finish another Long Rest|XPHB.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Dual Mind.</strong> <p>You have Advantage|XPHB on Wisdom and Charisma saving throws.</p></div>\n<div class=\"compendium-subentry\"><strong>Mental Discipline.</strong> <p>You have Resistance|XPHB to Psychic damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Mind Link.</strong> <p>You have telepathy with a range in feet equal to 10 times your level. When you're using this trait to speak telepathically to a creature, you can take a Magic action to give that creature the ability to speak telepathically with you for 1 hour or until you take another Magic action to end this effect.</p></div>\n<div class=\"compendium-subentry\"><strong>Severed from Dreams.</strong> <p>You can't be the target of the Dream spell. In addition, when you finish a Long Rest|XPHB, you gain proficiency in one skill of your choice. This proficiency lasts until you finish another Long Rest|XPHB.</p></div>",
+    "traits": [
+      {
+        "id": "trait_kalashtar_dual_mind_efa",
+        "name": "Dual Mind",
+        "source": "EFA",
+        "raceName": "Kalashtar",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on Wisdom and Charisma saving throws.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on Wisdom and Charisma saving throws."
+        ]
+      },
+      {
+        "id": "trait_kalashtar_mental_discipline_efa",
+        "name": "Mental Discipline",
+        "source": "EFA",
+        "raceName": "Kalashtar",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Psychic damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Psychic damage."
+        ]
+      },
+      {
+        "id": "trait_kalashtar_mind_link_efa",
+        "name": "Mind Link",
+        "source": "EFA",
+        "raceName": "Kalashtar",
+        "actionType": "passive",
+        "description": "You have telepathy with a range in feet equal to 10 times your level. When you're using this trait to speak telepathically to a creature, you can take a Magic action to give that creature the ability to speak telepathically with you for 1 hour or until you take another Magic action to end this effect.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have telepathy with a range in feet equal to 10 times your level. When you're using this trait to speak telepathically to a creature, you can take a {@action Magic|XPHB} action to give that creature the ability to speak telepathically with you for 1 hour or until you take another {@action Magic|XPHB} action to end this effect."
+        ]
+      },
+      {
+        "id": "trait_kalashtar_severed_from_dreams_efa",
+        "name": "Severed from Dreams",
+        "source": "EFA",
+        "raceName": "Kalashtar",
+        "actionType": "passive",
+        "description": "You can't be the target of the Dream spell. In addition, when you finish a Long Rest|XPHB, you gain proficiency in one skill of your choice. This proficiency lasts until you finish another Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can't be the target of the {@spell Dream|XPHB} spell. In addition, when you finish a {@variantrule Long Rest|XPHB}, you gain proficiency in one skill of your choice. This proficiency lasts until you finish another {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Dual Mind**: You have Advantage|XPHB on Wisdom and Charisma saving throws.\n\n**Mental Discipline**: You have Resistance|XPHB to Psychic damage.\n\n**Mind Link**: You have telepathy with a range in feet equal to 10 times your level. When you're using this trait to speak telepathically to a creature, you can take a Magic action to give that creature the ability to speak telepathically with you for 1 hour or until you take another Magic action to end this effect.\n\n**Severed from Dreams**: You can't be the target of the Dream spell. In addition, when you finish a Long Rest|XPHB, you gain proficiency in one skill of your choice. This proficiency lasts until you finish another Long Rest|XPHB."
   },
   {
     "id": "race_khoravar_efa",
@@ -24,7 +128,95 @@
     "page": 36,
     "size": "S/M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Fey Ancestry.</strong> <p>You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Fey Gift.</strong> <p>You know the Friends cantrip. Whenever you finish a Long Rest|XPHB, you can replace that cantrip with a different cantrip from the Cleric, Druid, or Wizard spell list. Intelligence, Wisdom, or Charisma is your spellcasting ability for it (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Lethargy Resilience.</strong> <p>When you fail a saving throw to avoid or end the Unconscious condition, you can succeed instead. Once you use this trait, you can't do so again until you finish 1d4 Long Rest|XPHB|Long Rests.</p></div>\n<div class=\"compendium-subentry\"><strong>Skill Versatility.</strong> <p>You gain proficiency in one skill or with one tool of your choice. Whenever you finish a Long Rest|XPHB, you can replace it with another skill or tool proficiency.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Fey Ancestry.</strong> <p>You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Fey Gift.</strong> <p>You know the Friends cantrip. Whenever you finish a Long Rest|XPHB, you can replace that cantrip with a different cantrip from the Cleric, Druid, or Wizard spell list. Intelligence, Wisdom, or Charisma is your spellcasting ability for it (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Lethargy Resilience.</strong> <p>When you fail a saving throw to avoid or end the Unconscious condition, you can succeed instead. Once you use this trait, you can't do so again until you finish 1d4 Long Rest|XPHB|Long Rests.</p></div>\n<div class=\"compendium-subentry\"><strong>Skill Versatility.</strong> <p>You gain proficiency in one skill or with one tool of your choice. Whenever you finish a Long Rest|XPHB, you can replace it with another skill or tool proficiency.</p></div>",
+    "traits": [
+      {
+        "id": "trait_khoravar_darkvision_efa",
+        "name": "Darkvision",
+        "source": "EFA",
+        "raceName": "Khoravar",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_khoravar_fey_ancestry_efa",
+        "name": "Fey Ancestry",
+        "source": "EFA",
+        "raceName": "Khoravar",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Charmed|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_khoravar_fey_gift_efa",
+        "name": "Fey Gift",
+        "source": "EFA",
+        "raceName": "Khoravar",
+        "actionType": "passive",
+        "description": "You know the Friends cantrip. Whenever you finish a Long Rest|XPHB, you can replace that cantrip with a different cantrip from the Cleric, Druid, or Wizard spell list. Intelligence, Wisdom, or Charisma is your spellcasting ability for it (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Friends|XPHB} cantrip. Whenever you finish a {@variantrule Long Rest|XPHB}, you can replace that cantrip with a different cantrip from the Cleric, Druid, or Wizard spell list. Intelligence, Wisdom, or Charisma is your spellcasting ability for it (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_khoravar_lethargy_resilience_efa",
+        "name": "Lethargy Resilience",
+        "source": "EFA",
+        "raceName": "Khoravar",
+        "actionType": "passive",
+        "description": "When you fail a saving throw to avoid or end the Unconscious condition, you can succeed instead. Once you use this trait, you can't do so again until you finish 1d4 Long Rest|XPHB|Long Rests.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you fail a saving throw to avoid or end the {@condition Unconscious|XPHB} condition, you can succeed instead. Once you use this trait, you can't do so again until you finish {@dice 1d4} {@variantrule Long Rest|XPHB|Long Rests}."
+        ]
+      },
+      {
+        "id": "trait_khoravar_skill_versatility_efa",
+        "name": "Skill Versatility",
+        "source": "EFA",
+        "raceName": "Khoravar",
+        "actionType": "passive",
+        "description": "You gain proficiency in one skill or with one tool of your choice. Whenever you finish a Long Rest|XPHB, you can replace it with another skill or tool proficiency.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency in one skill or with one tool of your choice. Whenever you finish a {@variantrule Long Rest|XPHB}, you can replace it with another skill or tool proficiency."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Fey Ancestry**: You have Advantage|XPHB on saving throws you make to avoid or end the Charmed condition.\n\n**Fey Gift**: You know the Friends cantrip. Whenever you finish a Long Rest|XPHB, you can replace that cantrip with a different cantrip from the Cleric, Druid, or Wizard spell list. Intelligence, Wisdom, or Charisma is your spellcasting ability for it (choose the ability when you select this species).\n\n**Lethargy Resilience**: When you fail a saving throw to avoid or end the Unconscious condition, you can succeed instead. Once you use this trait, you can't do so again until you finish 1d4 Long Rest|XPHB|Long Rests.\n\n**Skill Versatility**: You gain proficiency in one skill or with one tool of your choice. Whenever you finish a Long Rest|XPHB, you can replace it with another skill or tool proficiency."
   },
   {
     "id": "race_shifter_efa",
@@ -33,7 +225,98 @@
     "page": 37,
     "size": "S/M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Bestial Instincts.</strong> <p>Channeling the beast within, you gain proficiency in one of the following skills of your choice: Acrobatics, Athletics, Intimidation, or Survival.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Shifting.</strong> <p>As a Bonus Action|XPHB, you can shape-shift to assume a more bestial appearance. This transformation lasts for 1 minute or until you revert to your normal appearance as a Bonus Action|XPHB. When you shift, you gain Temporary Hit Points|XPHB equal to 2 times your Proficiency|XPHB|Proficiency Bonus. You can shift a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p>\n<p>Whenever you shift, you gain the benefit of one of the following options (choose when you select this species)</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Beasthide.</strong> <p>You gain 1d6 additional Temporary Hit Points|XPHB. While shifted, you have a +1 bonus to your Armor Class|XPHB.</p></div></li><li><div class=\"compendium-subentry\"><strong>Longtooth.</strong> <p>When you shift and as a Bonus Action|XPHB on your other turns while shifted, you can use your elongated fangs to make an Unarmed Strike|XPHB. If you hit with this Unarmed Strike|XPHB and deal damage, you can deal Piercing damage equal to 1d6 plus your Strength modifier, instead of the normal damage of an Unarmed Strike|XPHB.</p></div></li><li><div class=\"compendium-subentry\"><strong>Swiftstride.</strong> <p>While you are shifted, your Speed|XPHB increases by 10 feet. Additionally, you can move up to 10 feet as a Reaction|XPHB when a creature ends its turn within 5 feet of you. This reactive movement doesn't provoke Opportunity Attack.</p></div></li><li><div class=\"compendium-subentry\"><strong>Wildhunt.</strong> <p>While shifted, you have Advantage|XPHB on Wisdom checks. Additionally, no creature within 30 feet of you can have Advantage|XPHB on an attack roll against you unless you have the Incapacitated condition.</p></div></li></ul></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Bestial Instincts.</strong> <p>Channeling the beast within, you gain proficiency in one of the following skills of your choice: Acrobatics, Athletics, Intimidation, or Survival.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Shifting.</strong> <p>As a Bonus Action|XPHB, you can shape-shift to assume a more bestial appearance. This transformation lasts for 1 minute or until you revert to your normal appearance as a Bonus Action|XPHB. When you shift, you gain Temporary Hit Points|XPHB equal to 2 times your Proficiency|XPHB|Proficiency Bonus. You can shift a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p>\n<p>Whenever you shift, you gain the benefit of one of the following options (choose when you select this species)</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Beasthide.</strong> <p>You gain 1d6 additional Temporary Hit Points|XPHB. While shifted, you have a +1 bonus to your Armor Class|XPHB.</p></div></li><li><div class=\"compendium-subentry\"><strong>Longtooth.</strong> <p>When you shift and as a Bonus Action|XPHB on your other turns while shifted, you can use your elongated fangs to make an Unarmed Strike|XPHB. If you hit with this Unarmed Strike|XPHB and deal damage, you can deal Piercing damage equal to 1d6 plus your Strength modifier, instead of the normal damage of an Unarmed Strike|XPHB.</p></div></li><li><div class=\"compendium-subentry\"><strong>Swiftstride.</strong> <p>While you are shifted, your Speed|XPHB increases by 10 feet. Additionally, you can move up to 10 feet as a Reaction|XPHB when a creature ends its turn within 5 feet of you. This reactive movement doesn't provoke Opportunity Attack.</p></div></li><li><div class=\"compendium-subentry\"><strong>Wildhunt.</strong> <p>While shifted, you have Advantage|XPHB on Wisdom checks. Additionally, no creature within 30 feet of you can have Advantage|XPHB on an attack roll against you unless you have the Incapacitated condition.</p></div></li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_shifter_bestial_instincts_efa",
+        "name": "Bestial Instincts",
+        "source": "EFA",
+        "raceName": "Shifter",
+        "actionType": "passive",
+        "description": "Channeling the beast within, you gain proficiency in one of the following skills of your choice: Acrobatics, Athletics, Intimidation, or Survival.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Channeling the beast within, you gain proficiency in one of the following skills of your choice: {@skill Acrobatics|XPHB}, {@skill Athletics|XPHB}, {@skill Intimidation|XPHB}, or {@skill Survival|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_shifter_darkvision_efa",
+        "name": "Darkvision",
+        "source": "EFA",
+        "raceName": "Shifter",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_shifter_shifting_efa",
+        "name": "Shifting",
+        "source": "EFA",
+        "raceName": "Shifter",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can shape-shift to assume a more bestial appearance. This transformation lasts for 1 minute or until you revert to your normal appearance as a Bonus Action|XPHB. When you shift, you gain Temporary Hit Points|XPHB equal to 2 times your Proficiency|XPHB|Proficiency Bonus. You can shift a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\nWhenever you shift, you gain the benefit of one of the following options (choose when you select this species)\n\n- **Beasthide**\n\nYou gain 1d6 additional Temporary Hit Points|XPHB. While shifted, you have a +1 bonus to your Armor Class|XPHB.\n- **Longtooth**\n\nWhen you shift and as a Bonus Action|XPHB on your other turns while shifted, you can use your elongated fangs to make an Unarmed Strike|XPHB. If you hit with this Unarmed Strike|XPHB and deal damage, you can deal Piercing damage equal to 1d6 plus your Strength modifier, instead of the normal damage of an Unarmed Strike|XPHB.\n- **Swiftstride**\n\nWhile you are shifted, your Speed|XPHB increases by 10 feet. Additionally, you can move up to 10 feet as a Reaction|XPHB when a creature ends its turn within 5 feet of you. This reactive movement doesn't provoke Opportunity Attack.\n- **Wildhunt**\n\nWhile shifted, you have Advantage|XPHB on Wisdom checks. Additionally, no creature within 30 feet of you can have Advantage|XPHB on an attack roll against you unless you have the Incapacitated condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6 + @str",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can shape-shift to assume a more bestial appearance. This transformation lasts for 1 minute or until you revert to your normal appearance as a {@variantrule Bonus Action|XPHB}. When you shift, you gain {@variantrule Temporary Hit Points|XPHB} equal to 2 times your {@variantrule Proficiency|XPHB|Proficiency Bonus}. You can shift a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}.",
+          "Whenever you shift, you gain the benefit of one of the following options (choose when you select this species)",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Beasthide",
+                "entries": [
+                  "You gain {@dice 1d6} additional {@variantrule Temporary Hit Points|XPHB}. While shifted, you have a +1 bonus to your {@variantrule Armor Class|XPHB}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Longtooth",
+                "entries": [
+                  "When you shift and as a {@variantrule Bonus Action|XPHB} on your other turns while shifted, you can use your elongated fangs to make an {@variantrule Unarmed Strike|XPHB}. If you hit with this {@variantrule Unarmed Strike|XPHB} and deal damage, you can deal Piercing damage equal to {@dice 1d6} plus your Strength modifier, instead of the normal damage of an {@variantrule Unarmed Strike|XPHB}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Swiftstride",
+                "entries": [
+                  "While you are shifted, your {@variantrule Speed|XPHB} increases by 10 feet. Additionally, you can move up to 10 feet as a {@variantrule Reaction|XPHB} when a creature ends its turn within 5 feet of you. This reactive movement doesn't provoke {@action Opportunity Attack|XPHB|Opportunity Attacks}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Wildhunt",
+                "entries": [
+                  "While shifted, you have {@variantrule Advantage|XPHB} on Wisdom checks. Additionally, no creature within 30 feet of you can have {@variantrule Advantage|XPHB} on an attack roll against you unless you have the {@condition Incapacitated|XPHB} condition."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Bestial Instincts**: Channeling the beast within, you gain proficiency in one of the following skills of your choice: Acrobatics, Athletics, Intimidation, or Survival.\n\n**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Shifting**: As a Bonus Action|XPHB, you can shape-shift to assume a more bestial appearance. This transformation lasts for 1 minute or until you revert to your normal appearance as a Bonus Action|XPHB. When you shift, you gain Temporary Hit Points|XPHB equal to 2 times your Proficiency|XPHB|Proficiency Bonus. You can shift a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\nWhenever you shift, you gain the benefit of one of the following options (choose when you select this species)\n\n- **Beasthide**\n\nYou gain 1d6 additional Temporary Hit Points|XPHB. While shifted, you have a +1 bonus to your Armor Class|XPHB.\n- **Longtooth**\n\nWhen you shift and as a Bonus Action|XPHB on your other turns while shifted, you can use your elongated fangs to make an Unarmed Strike|XPHB. If you hit with this Unarmed Strike|XPHB and deal damage, you can deal Piercing damage equal to 1d6 plus your Strength modifier, instead of the normal damage of an Unarmed Strike|XPHB.\n- **Swiftstride**\n\nWhile you are shifted, your Speed|XPHB increases by 10 feet. Additionally, you can move up to 10 feet as a Reaction|XPHB when a creature ends its turn within 5 feet of you. This reactive movement doesn't provoke Opportunity Attack.\n- **Wildhunt**\n\nWhile shifted, you have Advantage|XPHB on Wisdom checks. Additionally, no creature within 30 feet of you can have Advantage|XPHB on an attack roll against you unless you have the Incapacitated condition."
   },
   {
     "id": "race_warforged_efa",
@@ -42,6 +325,89 @@
     "page": 38,
     "size": "S/M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Construct Resilience.</strong> <p>You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws to avoid or end the Poisoned condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Integrated Protection.</strong> <p>You gain a +1 bonus to your Armor Class|XPHB. In addition, armor you have donned can't be removed against your will while you're alive.</p></div>\n<div class=\"compendium-subentry\"><strong>Sentry's Rest.</strong> <p>You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 6 hours if you spend those hours in an inactive, motionless state. During this time, you appear inert but remain conscious.</p></div>\n<div class=\"compendium-subentry\"><strong>Specialized Design.</strong> <p>You gain one skill proficiency and one tool proficiency of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Tireless.</strong> <p>You don't gain Exhaustion levels from dehydration, malnutrition, or suffocation.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Construct Resilience.</strong> <p>You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws to avoid or end the Poisoned condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Integrated Protection.</strong> <p>You gain a +1 bonus to your Armor Class|XPHB. In addition, armor you have donned can't be removed against your will while you're alive.</p></div>\n<div class=\"compendium-subentry\"><strong>Sentry's Rest.</strong> <p>You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 6 hours if you spend those hours in an inactive, motionless state. During this time, you appear inert but remain conscious.</p></div>\n<div class=\"compendium-subentry\"><strong>Specialized Design.</strong> <p>You gain one skill proficiency and one tool proficiency of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Tireless.</strong> <p>You don't gain Exhaustion levels from dehydration, malnutrition, or suffocation.</p></div>",
+    "traits": [
+      {
+        "id": "trait_warforged_construct_resilience_efa",
+        "name": "Construct Resilience",
+        "source": "EFA",
+        "raceName": "Warforged",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws to avoid or end the Poisoned condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Poison damage. You also have {@variantrule Advantage|XPHB} on saving throws to avoid or end the {@condition Poisoned|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_warforged_integrated_protection_efa",
+        "name": "Integrated Protection",
+        "source": "EFA",
+        "raceName": "Warforged",
+        "actionType": "passive",
+        "description": "You gain a +1 bonus to your Armor Class|XPHB. In addition, armor you have donned can't be removed against your will while you're alive.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain a +1 bonus to your {@variantrule Armor Class|XPHB}. In addition, armor you have donned can't be removed against your will while you're alive."
+        ]
+      },
+      {
+        "id": "trait_warforged_sentry_s_rest_efa",
+        "name": "Sentry's Rest",
+        "source": "EFA",
+        "raceName": "Warforged",
+        "actionType": "passive",
+        "description": "You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 6 hours if you spend those hours in an inactive, motionless state. During this time, you appear inert but remain conscious.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't need to sleep, and magic can't put you to sleep. You can finish a {@variantrule Long Rest|XPHB} in 6 hours if you spend those hours in an inactive, motionless state. During this time, you appear inert but remain conscious."
+        ]
+      },
+      {
+        "id": "trait_warforged_specialized_design_efa",
+        "name": "Specialized Design",
+        "source": "EFA",
+        "raceName": "Warforged",
+        "actionType": "passive",
+        "description": "You gain one skill proficiency and one tool proficiency of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain one skill proficiency and one tool proficiency of your choice."
+        ]
+      },
+      {
+        "id": "trait_warforged_tireless_efa",
+        "name": "Tireless",
+        "source": "EFA",
+        "raceName": "Warforged",
+        "actionType": "passive",
+        "description": "You don't gain Exhaustion levels from dehydration, malnutrition, or suffocation.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't gain {@condition Exhaustion|XPHB} levels from dehydration, malnutrition, or suffocation."
+        ]
+      }
+    ],
+    "description": "**Construct Resilience**: You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws to avoid or end the Poisoned condition.\n\n**Integrated Protection**: You gain a +1 bonus to your Armor Class|XPHB. In addition, armor you have donned can't be removed against your will while you're alive.\n\n**Sentry's Rest**: You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 6 hours if you spend those hours in an inactive, motionless state. During this time, you appear inert but remain conscious.\n\n**Specialized Design**: You gain one skill proficiency and one tool proficiency of your choice.\n\n**Tireless**: You don't gain Exhaustion levels from dehydration, malnutrition, or suffocation."
   }
 ]

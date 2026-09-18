@@ -192,6 +192,102 @@
     "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
+    "id": "it_bloodshed_greatsword__silver_bgg",
+    "name": "Bloodshed Greatsword, Silver",
+    "source": "BGG",
+    "page": 111,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 6,
+    "value": "53 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "2d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Two-Handed"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Greatsword, Silver",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "2d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 2d6 slashing | **Properties:** Heavy, Two-Handed | **Weight:** 6 lb | **Value:** 53 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_long_sword_bgg",
+    "name": "Bloodshed Long Sword",
+    "source": "BGG",
+    "page": 111,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "2 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Heavy",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Long Sword",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Heavy, Versatile | **Weight:** 3 lb | **Value:** 2 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
+  },
+  {
     "id": "it_bloodshed_longsword_bgg",
     "name": "Bloodshed Longsword",
     "source": "BGG",
@@ -239,6 +335,53 @@
     "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
+    "id": "it_bloodshed_longsword__silver_bgg",
+    "name": "Bloodshed Longsword, Silver",
+    "source": "BGG",
+    "page": 111,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "17 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": "1d10",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Longsword, Silver",
+      "attackStat": "str",
+      "isFinesse": false,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d10"
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 slashing (or 1d10 slashing versatile) | **Properties:** Versatile | **Weight:** 3 lb | **Value:** 17 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
     "id": "it_bloodshed_rapier_bgg",
     "name": "Bloodshed Rapier",
     "source": "BGG",
@@ -284,6 +427,53 @@
     },
     "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 piercing | **Properties:** Finesse | **Weight:** 2 lb | **Value:** 25 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_rapier__silver_bgg",
+    "name": "Bloodshed Rapier, Silver",
+    "source": "BGG",
+    "page": 111,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "26 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d8",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Rapier, Silver",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d8",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d8 piercing | **Properties:** Finesse | **Weight:** 2 lb | **Value:** 26 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
   },
   {
     "id": "it_bloodshed_scimitar_bgg",
@@ -334,6 +524,54 @@
     "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
+    "id": "it_bloodshed_scimitar__silver_bgg",
+    "name": "Bloodshed Scimitar, Silver",
+    "source": "BGG",
+    "page": 111,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 3,
+    "value": "27 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Scimitar, Silver",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 slashing | **Properties:** Finesse, Light | **Weight:** 3 lb | **Value:** 27 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
     "id": "it_bloodshed_shortsword_bgg",
     "name": "Bloodshed Shortsword",
     "source": "BGG",
@@ -379,6 +617,102 @@
       "versatile": null
     },
     "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 piercing | **Properties:** Finesse, Light | **Weight:** 2 lb | **Value:** 10 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_shortsword__silver_bgg",
+    "name": "Bloodshed Shortsword, Silver",
+    "source": "BGG",
+    "page": 111,
+    "type": "Martial Weapon",
+    "rawType": "M|XPHB",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "11 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": null,
+    "dmgType": "piercing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Light"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Shortsword, Silver",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Piercing"
+        }
+      ],
+      "versatile": null
+    },
+    "descriptionMarkdown": "*Martial Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 piercing | **Properties:** Finesse, Light | **Weight:** 2 lb | **Value:** 11 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.\n\n**Upkeep.** When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.",
+    "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<div class=\"item-subentry\"><strong>Upkeep.</strong> <p>When you make an attack roll with a silver weapon or piece of ammunition, it takes a cumulative -1 penalty to attack rolls. The weapon or piece of ammunition is destroyed if the penalty reaches -5. The penalty can be removed by casting the Mending spell on the object or by succeeding on a DC 10 Dexterity check using Smith's Tools as part of a Short Rest|XPHB or Long Rest|XPHB.</p></div>"
+  },
+  {
+    "id": "it_bloodshed_sword_bgg",
+    "name": "Bloodshed Sword",
+    "source": "BGG",
+    "page": 111,
+    "type": "Melee Weapon",
+    "rawType": "M",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 2,
+    "value": "1.50 gp",
+    "ac": null,
+    "bonusAc": null,
+    "dmg1": "1d6",
+    "dmg2": "1d8",
+    "dmgType": "slashing",
+    "bonusWeapon": null,
+    "properties": [
+      "Finesse",
+      "Versatile"
+    ],
+    "isWeapon": true,
+    "isArmor": false,
+    "packContents": null,
+    "attachedSpells": null,
+    "macroTemplate": {
+      "name": "Bloodshed Sword",
+      "attackStat": "auto",
+      "isFinesse": true,
+      "isRanged": false,
+      "attackProf": true,
+      "attackExtra": 0,
+      "critRange": 20,
+      "range": "5 ft",
+      "target": "1 target",
+      "damageRows": [
+        {
+          "formula": "1d6",
+          "stat": "auto",
+          "extra": 0,
+          "type": "Slashing"
+        }
+      ],
+      "versatile": "1d8"
+    },
+    "descriptionMarkdown": "*Melee Weapon, very rare (Requires Attunement)*\n\n**Damage:** 1d6 slashing (or 1d8 slashing versatile) | **Properties:** Finesse, Versatile | **Weight:** 2 lb | **Value:** 1.50 gp\n\n---\n\nThe hilt of this sword bears a carnelian engraved with the blood rune.\n\nYou can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.\n\n**Invoking the Rune.** When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.\n\nIf this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.\n\nOnce the rune has been invoked, it can't be invoked again until the next dawn.",
     "descriptionHtml": "<p>The hilt of this sword bears a carnelian engraved with the blood rune.</p>\n<p>You can add your Constitution modifier (minimum of {=bonusWeaponDamage}) to the damage rolls of attacks made with this weapon.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When you target a creature with an attack using this weapon, you can invoke the sword's rune, causing it to flare with crimson light and infusing your attack with bloodthirsty precision. You then spend and roll one of your unspent Hit Dice and add the number rolled to the attack roll. You can choose to invoke the rune after rolling the d20.</p>\n<p>If this attack hits, you can also spend and roll any number of your unspent Hit Dice and add the total rolled to the weapon's damage.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
@@ -1251,6 +1585,38 @@
     "descriptionHtml": "<p>This ring is carved from hematite and bears an engraving of the friend rune.</p>\n<p>When you first attune to this ring, you can touch one willing creature and form a magical bond between the two of you. While this bond lasts, whenever you are subjected to a spell or magical effect that restores hit points, the bonded creature also receives the benefits of the spell or effect.</p>\n<p>You can bond with a different creature whenever you finish a long rest, provided that you can touch the creature and the creature is willing.</p>\n<p>A creature can benefit from only one ring of amity's bond at a time. The bond ends if either you or the creature travels to a different plane of existence, if you bond with a different creature at the end of a long rest, or if you sever the bond as a bonus action.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>When the bonded creature hits a target with an attack roll, you can use your reaction to invoke the ring's rune if you are within 60 feet of the bonded creature. The bonded creature's attack is then turned into a critical hit.</p>\n<p>Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>"
   },
   {
+    "id": "it_ring_mail_of_safeguarding_bgg",
+    "name": "Ring-Mail of Safeguarding",
+    "source": "BGG",
+    "page": 111,
+    "type": "Heavy Armor",
+    "rawType": "HA",
+    "rarity": "very rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 50,
+    "value": "5 gp",
+    "ac": 15,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Beacon Of Hope",
+        "cleanName": "beacon of hope",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Heavy Armor, very rare (Requires Attunement)*\n\n**Armor Class:** 15 | **Weight:** 50 lb | **Value:** 5 gp\n\n---\n\nSet in the center of this armor's chest is a citrine engraved with the shield rune.\n\nWhile wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nThis armour is leather armour with heavy rings sewn into it. The rings help reinforce the armour against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.",
+    "descriptionHtml": "<p>Set in the center of this armor's chest is a citrine engraved with the shield rune.</p>\n<p>While wearing this armor, your hit point maximum increases by an amount equal to 10 + your level.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the beacon of hope spell with it; the spell has a duration of 1 minute and doesn't require concentration. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>This armour is leather armour with heavy rings sewn into it. The rings help reinforce the armour against blows from swords and axes. Ring mail is inferior to chain mail, and it's usually worn only by those who can't afford better armor.</p>"
+  },
+  {
     "id": "it_sanctum_amulet_bgg",
     "name": "Sanctum Amulet",
     "source": "BGG",
@@ -1590,6 +1956,70 @@
     "macroTemplate": null,
     "descriptionMarkdown": "*Light Armor, rare (Requires Attunement)*\n\n**Armor Class:** 11 | **Weight:** 10 lb | **Value:** 10 gp\n\n---\n\nThis fine set of white-and-silver armor bears the wind rune upon its chest.\n\nWhile wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nThe breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials.",
     "descriptionHtml": "<p>This fine set of white-and-silver armor bears the wind rune upon its chest.</p>\n<p>While wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>The breastplate and shoulder protectors of this armor are made of leather that has been stiffened by being boiled in oil. The rest of the armor is made of softer and more flexible materials.</p>"
+  },
+  {
+    "id": "it_zephyr_leather_corslet_bgg",
+    "name": "Zephyr Leather Corslet",
+    "source": "BGG",
+    "page": 117,
+    "type": "Light Armor",
+    "rawType": "LA",
+    "rarity": "rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 10,
+    "value": "4.50 gp",
+    "ac": 12,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Wind Wall",
+        "cleanName": "wind wall",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Light Armor, rare (Requires Attunement)*\n\n**Armor Class:** 12 | **Weight:** 10 lb | **Value:** 4.50 gp\n\n---\n\nThis fine set of white-and-silver armor bears the wind rune upon its chest.\n\nWhile wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nA close-fitting shirt of hardened leather with long sleeves.",
+    "descriptionHtml": "<p>This fine set of white-and-silver armor bears the wind rune upon its chest.</p>\n<p>While wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>A close-fitting shirt of hardened leather with long sleeves.</p>"
+  },
+  {
+    "id": "it_zephyr_leather_shirt_bgg",
+    "name": "Zephyr Leather Shirt",
+    "source": "BGG",
+    "page": 117,
+    "type": "Light Armor",
+    "rawType": "LA",
+    "rarity": "rare",
+    "reqAttune": "Requires Attunement",
+    "weight": 8,
+    "value": "1 gp",
+    "ac": 11,
+    "bonusAc": null,
+    "dmg1": null,
+    "dmg2": null,
+    "dmgType": null,
+    "bonusWeapon": null,
+    "properties": [],
+    "isWeapon": false,
+    "isArmor": true,
+    "packContents": null,
+    "attachedSpells": [
+      {
+        "name": "Wind Wall",
+        "cleanName": "wind wall",
+        "castLevel": null
+      }
+    ],
+    "macroTemplate": null,
+    "descriptionMarkdown": "*Light Armor, rare (Requires Attunement)*\n\n**Armor Class:** 11 | **Weight:** 8 lb | **Value:** 1 gp\n\n---\n\nThis fine set of white-and-silver armor bears the wind rune upon its chest.\n\nWhile wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.\n\n**Invoking the Rune.** As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.\n\nA lightweight garment of hardened leather, providing some protection to its wearer while allowing for great freedom of movement.",
+    "descriptionHtml": "<p>This fine set of white-and-silver armor bears the wind rune upon its chest.</p>\n<p>While wearing this armor, you have advantage on Dexterity (Acrobatics) checks and Dexterity saving throws as your movements are bolstered by gentle currents of wind.</p>\n<div class=\"item-subentry\"><strong>Invoking the Rune.</strong> <p>As an action, you can invoke the armor's rune to cast the wind wall spell (save 15) with it. Once the rune has been invoked, it can't be invoked again until the next dawn.</p></div>\n<p>A lightweight garment of hardened leather, providing some protection to its wearer while allowing for great freedom of movement.</p>"
   },
   {
     "id": "it_zephyr_padded_armor_bgg",

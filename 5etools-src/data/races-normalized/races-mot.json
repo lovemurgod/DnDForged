@@ -6,7 +6,160 @@
     "page": 18,
     "size": "Medium",
     "speed": "30 ft",
-    "traitsHtml": ""
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_centaur_age_mot",
+        "name": "Age",
+        "source": "MOT",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "Centaurs mature and age at about the same rate as humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Centaurs mature and age at about the same rate as humans."
+        ]
+      },
+      {
+        "id": "trait_centaur_alignment_mot",
+        "name": "Alignment",
+        "source": "MOT",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "Centaurs are inclined toward neutrality. Lagonna centaurs tend to be more lawful, while Pheres centaurs are more often chaotic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Centaurs are inclined toward neutrality. Lagonna centaurs tend to be more lawful, while Pheres centaurs are more often chaotic."
+        ]
+      },
+      {
+        "id": "trait_centaur_size_mot",
+        "name": "Size",
+        "source": "MOT",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "Centaurs stand between 6 and 7 feet tall, with their equine bodies reaching about 4 feet at the withers. Pheres centaurs tend to be slightly larger than Lagonna centaurs. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Centaurs stand between 6 and 7 feet tall, with their equine bodies reaching about 4 feet at the withers. Pheres centaurs tend to be slightly larger than Lagonna centaurs. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_centaur_fey_mot",
+        "name": "Fey",
+        "source": "MOT",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "Your creature type is fey, rather than humanoid.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your creature type is fey, rather than humanoid."
+        ]
+      },
+      {
+        "id": "trait_centaur_charge_mot",
+        "name": "Charge",
+        "source": "MOT",
+        "raceName": "Centaur",
+        "actionType": "bonus",
+        "description": "If you move at least 30 feet straight toward a target and then hit it with a melee weapon attack on the same turn, you can immediately follow that attack with a bonus action, making one attack against the target with your hooves.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "If you move at least 30 feet straight toward a target and then hit it with a melee weapon attack on the same turn, you can immediately follow that attack with a bonus action, making one attack against the target with your hooves."
+        ]
+      },
+      {
+        "id": "trait_centaur_hooves_mot",
+        "name": "Hooves",
+        "source": "MOT",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "Your hooves are natural melee weapons, which you can use to make unarmed strikes. If you hit with them, you deal bludgeoning damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4 + @str",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your hooves are natural melee weapons, which you can use to make unarmed strikes. If you hit with them, you deal bludgeoning damage equal to {@damage 1d4} + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike."
+        ]
+      },
+      {
+        "id": "trait_centaur_equine_build_mot",
+        "name": "Equine Build",
+        "source": "MOT",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "You count as one size larger when determining your carrying capacity and the weight you can push or drag.\n\nIn addition, any climb that requires hands and feet is especially difficult for you because of your equine legs. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You count as one size larger when determining your carrying capacity and the weight you can push or drag.",
+          "In addition, any climb that requires hands and feet is especially difficult for you because of your equine legs. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot."
+        ]
+      },
+      {
+        "id": "trait_centaur_survivor_mot",
+        "name": "Survivor",
+        "source": "MOT",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "You have proficiency in one of the following skills of your choice: Animal Handling, Medicine, Nature, or Survival.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in one of the following skills of your choice: {@skill Animal Handling}, {@skill Medicine}, {@skill Nature}, or {@skill Survival}."
+        ]
+      },
+      {
+        "id": "trait_centaur_languages_mot",
+        "name": "Languages",
+        "source": "MOT",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Sylvan.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Sylvan."
+        ]
+      }
+    ],
+    "description": "**Age**: Centaurs mature and age at about the same rate as humans.\n\n**Alignment**: Centaurs are inclined toward neutrality. Lagonna centaurs tend to be more lawful, while Pheres centaurs are more often chaotic.\n\n**Size**: Centaurs stand between 6 and 7 feet tall, with their equine bodies reaching about 4 feet at the withers. Pheres centaurs tend to be slightly larger than Lagonna centaurs. Your size is Medium.\n\n**Fey**: Your creature type is fey, rather than humanoid.\n\n**Charge**: If you move at least 30 feet straight toward a target and then hit it with a melee weapon attack on the same turn, you can immediately follow that attack with a bonus action, making one attack against the target with your hooves.\n\n**Hooves**: Your hooves are natural melee weapons, which you can use to make unarmed strikes. If you hit with them, you deal bludgeoning damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.\n\n**Equine Build**: You count as one size larger when determining your carrying capacity and the weight you can push or drag.\n\nIn addition, any climb that requires hands and feet is especially difficult for you because of your equine legs. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot.\n\n**Survivor**: You have proficiency in one of the following skills of your choice: Animal Handling, Medicine, Nature, or Survival.\n\n**Languages**: You can speak, read, and write Common and Sylvan."
   },
   {
     "id": "race_leonin_mot",
@@ -15,7 +168,143 @@
     "page": 20,
     "size": "M",
     "speed": "35 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Leonin mature and age at about the same rate as humans.</p></div>\n<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Leonin tend toward good alignments. Leonin who are focused on the pride lean toward lawful good.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Leonin are typically over 6 feet tall, with some standing over 7 feet. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Claws.</strong> <p>Your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you can deal slashing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.</p></div>\n<div class=\"compendium-subentry\"><strong>Hunter's Instincts.</strong> <p>You have proficiency in one of the following skills of your choice: Athletics, Intimidation, Perception, or Survival.</p></div>\n<div class=\"compendium-subentry\"><strong>Daunting Roar.</strong> <p>As a bonus action, you can let out an especially menacing roar. Creatures of your choice within 10 feet of you that can hear you must succeed on a Wisdom saving throw or become frightened of you until the end of your next turn. The DC of the save equals 8 + your proficiency bonus + your Constitution modifier. Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Leonin.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Leonin mature and age at about the same rate as humans.</p></div>\n<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Leonin tend toward good alignments. Leonin who are focused on the pride lean toward lawful good.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Leonin are typically over 6 feet tall, with some standing over 7 feet. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Claws.</strong> <p>Your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you can deal slashing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.</p></div>\n<div class=\"compendium-subentry\"><strong>Hunter's Instincts.</strong> <p>You have proficiency in one of the following skills of your choice: Athletics, Intimidation, Perception, or Survival.</p></div>\n<div class=\"compendium-subentry\"><strong>Daunting Roar.</strong> <p>As a bonus action, you can let out an especially menacing roar. Creatures of your choice within 10 feet of you that can hear you must succeed on a Wisdom saving throw or become frightened of you until the end of your next turn. The DC of the save equals 8 + your proficiency bonus + your Constitution modifier. Once you use this trait, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Leonin.</p></div>",
+    "traits": [
+      {
+        "id": "trait_leonin_age_mot",
+        "name": "Age",
+        "source": "MOT",
+        "raceName": "Leonin",
+        "actionType": "passive",
+        "description": "Leonin mature and age at about the same rate as humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Leonin mature and age at about the same rate as humans."
+        ]
+      },
+      {
+        "id": "trait_leonin_alignment_mot",
+        "name": "Alignment",
+        "source": "MOT",
+        "raceName": "Leonin",
+        "actionType": "passive",
+        "description": "Leonin tend toward good alignments. Leonin who are focused on the pride lean toward lawful good.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Leonin tend toward good alignments. Leonin who are focused on the pride lean toward lawful good."
+        ]
+      },
+      {
+        "id": "trait_leonin_size_mot",
+        "name": "Size",
+        "source": "MOT",
+        "raceName": "Leonin",
+        "actionType": "passive",
+        "description": "Leonin are typically over 6 feet tall, with some standing over 7 feet. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Leonin are typically over 6 feet tall, with some standing over 7 feet. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_leonin_darkvision_mot",
+        "name": "Darkvision",
+        "source": "MOT",
+        "raceName": "Leonin",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_leonin_claws_mot",
+        "name": "Claws",
+        "source": "MOT",
+        "raceName": "Leonin",
+        "actionType": "passive",
+        "description": "Your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you can deal slashing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4 + @str",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you can deal slashing damage equal to {@damage 1d4} + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike."
+        ]
+      },
+      {
+        "id": "trait_leonin_hunter_s_instincts_mot",
+        "name": "Hunter's Instincts",
+        "source": "MOT",
+        "raceName": "Leonin",
+        "actionType": "passive",
+        "description": "You have proficiency in one of the following skills of your choice: Athletics, Intimidation, Perception, or Survival.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in one of the following skills of your choice: {@skill Athletics}, {@skill Intimidation}, {@skill Perception}, or {@skill Survival}."
+        ]
+      },
+      {
+        "id": "trait_leonin_daunting_roar_mot",
+        "name": "Daunting Roar",
+        "source": "MOT",
+        "raceName": "Leonin",
+        "actionType": "bonus",
+        "description": "As a bonus action, you can let out an especially menacing roar. Creatures of your choice within 10 feet of you that can hear you must succeed on a Wisdom saving throw or become frightened of you until the end of your next turn. The DC of the save equals 8 + your proficiency bonus + your Constitution modifier. Once you use this trait, you can't use it again until you finish a short or long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a bonus action, you can let out an especially menacing roar. Creatures of your choice within 10 feet of you that can hear you must succeed on a Wisdom saving throw or become {@condition frightened} of you until the end of your next turn. The DC of the save equals 8 + your proficiency bonus + your Constitution modifier. Once you use this trait, you can't use it again until you finish a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_leonin_languages_mot",
+        "name": "Languages",
+        "source": "MOT",
+        "raceName": "Leonin",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Leonin.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Leonin."
+        ]
+      }
+    ],
+    "description": "**Age**: Leonin mature and age at about the same rate as humans.\n\n**Alignment**: Leonin tend toward good alignments. Leonin who are focused on the pride lean toward lawful good.\n\n**Size**: Leonin are typically over 6 feet tall, with some standing over 7 feet. Your size is Medium.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Claws**: Your claws are natural weapons, which you can use to make unarmed strikes. If you hit with them, you can deal slashing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.\n\n**Hunter's Instincts**: You have proficiency in one of the following skills of your choice: Athletics, Intimidation, Perception, or Survival.\n\n**Daunting Roar**: As a bonus action, you can let out an especially menacing roar. Creatures of your choice within 10 feet of you that can hear you must succeed on a Wisdom saving throw or become frightened of you until the end of your next turn. The DC of the save equals 8 + your proficiency bonus + your Constitution modifier. Once you use this trait, you can't use it again until you finish a short or long rest.\n\n**Languages**: You can speak, read, and write Common and Leonin."
   },
   {
     "id": "race_minotaur_mot",
@@ -24,7 +313,143 @@
     "page": 22,
     "size": "Medium",
     "speed": "30 ft",
-    "traitsHtml": ""
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_minotaur_age_mot",
+        "name": "Age",
+        "source": "MOT",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Minotaurs mature and age at about the same rate as humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Minotaurs mature and age at about the same rate as humans."
+        ]
+      },
+      {
+        "id": "trait_minotaur_alignment_mot",
+        "name": "Alignment",
+        "source": "MOT",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Minotaurs who leave the walls of Skophos have the opportunity to be free of its culture and pursue chaotic alignments, while those who remain within the polis and its tyrannical regime tend toward lawful alignments.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Minotaurs who leave the walls of Skophos have the opportunity to be free of its culture and pursue chaotic alignments, while those who remain within the polis and its tyrannical regime tend toward lawful alignments."
+        ]
+      },
+      {
+        "id": "trait_minotaur_size_mot",
+        "name": "Size",
+        "source": "MOT",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Minotaurs average over 6 feet in height, and they have stocky builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Minotaurs average over 6 feet in height, and they have stocky builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_minotaur_horns_mot",
+        "name": "Horns",
+        "source": "MOT",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Your horns are natural melee weapons, which you can use to make unarmed strikes. If you hit with them, you deal piercing damage equal to 1d6 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6 + @str",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your horns are natural melee weapons, which you can use to make unarmed strikes. If you hit with them, you deal piercing damage equal to {@damage 1d6} + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike."
+        ]
+      },
+      {
+        "id": "trait_minotaur_goring_rush_mot",
+        "name": "Goring Rush",
+        "source": "MOT",
+        "raceName": "Minotaur",
+        "actionType": "bonus",
+        "description": "Immediately after you use the Dash action on your turn and move at least 20 feet, you can make one melee attack with your horns as a bonus action.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Immediately after you use the {@action Dash} action on your turn and move at least 20 feet, you can make one melee attack with your horns as a bonus action."
+        ]
+      },
+      {
+        "id": "trait_minotaur_hammering_horns_mot",
+        "name": "Hammering Horns",
+        "source": "MOT",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Immediately after you hit a creature with a melee attack as part of the Attack action on your turn, you can use a bonus action to attempt to shove that target with your horns. The target must be no more than one size larger than you and within 5 feet of you. Unless it succeeds on a Strength saving throw against a DC equal to 8 + your proficiency bonus + your Strength modifier, you push it up to 10 feet away from you.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Immediately after you hit a creature with a melee attack as part of the {@action Attack} action on your turn, you can use a bonus action to attempt to shove that target with your horns. The target must be no more than one size larger than you and within 5 feet of you. Unless it succeeds on a Strength saving throw against a DC equal to 8 + your proficiency bonus + your Strength modifier, you push it up to 10 feet away from you."
+        ]
+      },
+      {
+        "id": "trait_minotaur_imposing_presence_mot",
+        "name": "Imposing Presence",
+        "source": "MOT",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "You have proficiency in one of the following skills of your choice: Intimidation or Persuasion.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in one of the following skills of your choice: {@skill Intimidation} or {@skill Persuasion}."
+        ]
+      },
+      {
+        "id": "trait_minotaur_languages_mot",
+        "name": "Languages",
+        "source": "MOT",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Minotaur.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Minotaur."
+        ]
+      }
+    ],
+    "description": "Note: These traits are also suitable for minotaurs in other D&D worlds where these people have avoided the demonic influence of Baphomet."
   },
   {
     "id": "race_satyr_mot",
@@ -33,7 +458,159 @@
     "page": 24,
     "size": "M",
     "speed": "35 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Satyrs mature and age at about the same rate as humans.</p></div>\n<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Satyrs delight in living a life free of the mantle of law. They gravitate toward being good, but some have devious streaks and enjoy causing dismay.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Satyrs range from just under 5 feet to about 6 feet in height, with generally slender builds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Fey.</strong> <p>Your creature type is fey, rather than humanoid.</p></div>\n<div class=\"compendium-subentry\"><strong>Ram.</strong> <p>You can use your head and horns to make unarmed strikes. If you hit with them, you deal bludgeoning damage equal to 1d4 + your Strength modifier.</p></div>\n<div class=\"compendium-subentry\"><strong>Magic Resistance.</strong> <p>You have advantage on saving throws against spells and other magical effects.</p></div>\n<div class=\"compendium-subentry\"><strong>Mirthful Leaps.</strong> <p>Whenever you make a long or high jump, you can roll a d8 and add the number rolled to the number of feet you cover, even when making a standing jump. This extra distance costs movement as normal.</p></div>\n<div class=\"compendium-subentry\"><strong>Reveler.</strong> <p>You have proficiency in the Performance and Persuasion skills, and you have proficiency with one musical instrument of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Sylvan.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Satyrs mature and age at about the same rate as humans.</p></div>\n<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Satyrs delight in living a life free of the mantle of law. They gravitate toward being good, but some have devious streaks and enjoy causing dismay.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Satyrs range from just under 5 feet to about 6 feet in height, with generally slender builds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Fey.</strong> <p>Your creature type is fey, rather than humanoid.</p></div>\n<div class=\"compendium-subentry\"><strong>Ram.</strong> <p>You can use your head and horns to make unarmed strikes. If you hit with them, you deal bludgeoning damage equal to 1d4 + your Strength modifier.</p></div>\n<div class=\"compendium-subentry\"><strong>Magic Resistance.</strong> <p>You have advantage on saving throws against spells and other magical effects.</p></div>\n<div class=\"compendium-subentry\"><strong>Mirthful Leaps.</strong> <p>Whenever you make a long or high jump, you can roll a d8 and add the number rolled to the number of feet you cover, even when making a standing jump. This extra distance costs movement as normal.</p></div>\n<div class=\"compendium-subentry\"><strong>Reveler.</strong> <p>You have proficiency in the Performance and Persuasion skills, and you have proficiency with one musical instrument of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Sylvan.</p></div>",
+    "traits": [
+      {
+        "id": "trait_satyr_age_mot",
+        "name": "Age",
+        "source": "MOT",
+        "raceName": "Satyr",
+        "actionType": "passive",
+        "description": "Satyrs mature and age at about the same rate as humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Satyrs mature and age at about the same rate as humans."
+        ]
+      },
+      {
+        "id": "trait_satyr_alignment_mot",
+        "name": "Alignment",
+        "source": "MOT",
+        "raceName": "Satyr",
+        "actionType": "passive",
+        "description": "Satyrs delight in living a life free of the mantle of law. They gravitate toward being good, but some have devious streaks and enjoy causing dismay.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Satyrs delight in living a life free of the mantle of law. They gravitate toward being good, but some have devious streaks and enjoy causing dismay."
+        ]
+      },
+      {
+        "id": "trait_satyr_size_mot",
+        "name": "Size",
+        "source": "MOT",
+        "raceName": "Satyr",
+        "actionType": "passive",
+        "description": "Satyrs range from just under 5 feet to about 6 feet in height, with generally slender builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Satyrs range from just under 5 feet to about 6 feet in height, with generally slender builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_satyr_fey_mot",
+        "name": "Fey",
+        "source": "MOT",
+        "raceName": "Satyr",
+        "actionType": "passive",
+        "description": "Your creature type is fey, rather than humanoid.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your creature type is fey, rather than humanoid."
+        ]
+      },
+      {
+        "id": "trait_satyr_ram_mot",
+        "name": "Ram",
+        "source": "MOT",
+        "raceName": "Satyr",
+        "actionType": "passive",
+        "description": "You can use your head and horns to make unarmed strikes. If you hit with them, you deal bludgeoning damage equal to 1d4 + your Strength modifier.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4 + @str",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You can use your head and horns to make unarmed strikes. If you hit with them, you deal bludgeoning damage equal to {@damage 1d4} + your Strength modifier."
+        ]
+      },
+      {
+        "id": "trait_satyr_magic_resistance_mot",
+        "name": "Magic Resistance",
+        "source": "MOT",
+        "raceName": "Satyr",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against spells and other magical effects.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against spells and other magical effects."
+        ]
+      },
+      {
+        "id": "trait_satyr_mirthful_leaps_mot",
+        "name": "Mirthful Leaps",
+        "source": "MOT",
+        "raceName": "Satyr",
+        "actionType": "passive",
+        "description": "Whenever you make a long or high jump, you can roll a d8 and add the number rolled to the number of feet you cover, even when making a standing jump. This extra distance costs movement as normal.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Whenever you make a long or high jump, you can roll a {@dice d8} and add the number rolled to the number of feet you cover, even when making a standing jump. This extra distance costs movement as normal."
+        ]
+      },
+      {
+        "id": "trait_satyr_reveler_mot",
+        "name": "Reveler",
+        "source": "MOT",
+        "raceName": "Satyr",
+        "actionType": "passive",
+        "description": "You have proficiency in the Performance and Persuasion skills, and you have proficiency with one musical instrument of your choice.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Performance} and {@skill Persuasion} skills, and you have proficiency with one {@item musical instrument|PHB} of your choice."
+        ]
+      },
+      {
+        "id": "trait_satyr_languages_mot",
+        "name": "Languages",
+        "source": "MOT",
+        "raceName": "Satyr",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Sylvan.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Sylvan."
+        ]
+      }
+    ],
+    "description": "**Age**: Satyrs mature and age at about the same rate as humans.\n\n**Alignment**: Satyrs delight in living a life free of the mantle of law. They gravitate toward being good, but some have devious streaks and enjoy causing dismay.\n\n**Size**: Satyrs range from just under 5 feet to about 6 feet in height, with generally slender builds. Your size is Medium.\n\n**Fey**: Your creature type is fey, rather than humanoid.\n\n**Ram**: You can use your head and horns to make unarmed strikes. If you hit with them, you deal bludgeoning damage equal to 1d4 + your Strength modifier.\n\n**Magic Resistance**: You have advantage on saving throws against spells and other magical effects.\n\n**Mirthful Leaps**: Whenever you make a long or high jump, you can roll a d8 and add the number rolled to the number of feet you cover, even when making a standing jump. This extra distance costs movement as normal.\n\n**Reveler**: You have proficiency in the Performance and Persuasion skills, and you have proficiency with one musical instrument of your choice.\n\n**Languages**: You can speak, read, and write Common and Sylvan."
   },
   {
     "id": "race_triton_mot",
@@ -42,6 +619,169 @@
     "page": 26,
     "size": "Medium",
     "speed": "30 ft",
-    "traitsHtml": ""
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_triton_age_mot",
+        "name": "Age",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "Tritons reach maturity around age 15 and can live up to 200 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tritons reach maturity around age 15 and can live up to 200 years."
+        ]
+      },
+      {
+        "id": "trait_triton_size_mot",
+        "name": "Size",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "Tritons are slightly shorter than humans, averaging about 5 feet tall. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tritons are slightly shorter than humans, averaging about 5 feet tall. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_triton_swim_speed_mot",
+        "name": "Swim Speed",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "You have a swimming speed of 30 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a swimming speed of 30 feet."
+        ]
+      },
+      {
+        "id": "trait_triton_amphibious_mot",
+        "name": "Amphibious",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "You can breathe air and water.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can breathe air and water."
+        ]
+      },
+      {
+        "id": "trait_triton_control_air_and_water_mot",
+        "name": "Control Air and Water",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "A child of the sea, you can call on the magic of elemental air and water. You can cast fog cloud with this trait. Starting at 3rd level, you can cast gust of wind with it, and starting at 5th level, you can also cast wall of water with it. Once you cast a spell with this trait, you can't cast that spell with it again until you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "A child of the sea, you can call on the magic of elemental air and water. You can cast {@spell fog cloud} with this trait. Starting at 3rd level, you can cast {@spell gust of wind} with it, and starting at 5th level, you can also cast {@spell wall of water|xge} with it. Once you cast a spell with this trait, you can't cast that spell with it again until you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_triton_darkvision_mot",
+        "name": "Darkvision",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_triton_emissary_of_the_sea_mot",
+        "name": "Emissary of the Sea",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "Aquatic beasts have an extraordinary affinity with your people. You can communicate simple ideas with beasts that can breathe water. They can understand the meaning of your words, though you have no special ability to understand them in return.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aquatic beasts have an extraordinary affinity with your people. You can communicate simple ideas with beasts that can breathe water. They can understand the meaning of your words, though you have no special ability to understand them in return."
+        ]
+      },
+      {
+        "id": "trait_triton_guardians_of_the_depths_mot",
+        "name": "Guardians of the Depths",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "Adapted to even the most extreme ocean depths, you have resistance to cold damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Adapted to even the most extreme ocean depths, you have resistance to cold damage."
+        ]
+      },
+      {
+        "id": "trait_triton_languages_mot",
+        "name": "Languages",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Primordial.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Primordial."
+        ]
+      },
+      {
+        "id": "trait_triton_alignment_mot",
+        "name": "Alignment",
+        "source": "MOT",
+        "raceName": "Triton",
+        "actionType": "passive",
+        "description": "Tritons tend toward neutrality. Their culture encourages them to be mindful of life's currents, knowing when to harness fate's tides and when to flow along with them.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Tritons tend toward neutrality. Their culture encourages them to be mindful of life's currents, knowing when to harness fate's tides and when to flow along with them."
+        ]
+      }
+    ],
+    "description": "**Age**: Tritons reach maturity around age 15 and can live up to 200 years.\n\n**Size**: Tritons are slightly shorter than humans, averaging about 5 feet tall. Your size is Medium.\n\n**Swim Speed**: You have a swimming speed of 30 feet.\n\n**Amphibious**: You can breathe air and water.\n\n**Control Air and Water**: A child of the sea, you can call on the magic of elemental air and water. You can cast fog cloud with this trait. Starting at 3rd level, you can cast gust of wind with it, and starting at 5th level, you can also cast wall of water with it. Once you cast a spell with this trait, you can't cast that spell with it again until you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Emissary of the Sea**: Aquatic beasts have an extraordinary affinity with your people. You can communicate simple ideas with beasts that can breathe water. They can understand the meaning of your words, though you have no special ability to understand them in return.\n\n**Guardians of the Depths**: Adapted to even the most extreme ocean depths, you have resistance to cold damage.\n\n**Languages**: You can speak, read, and write Common and Primordial.\n\n**Alignment**: Tritons tend toward neutrality. Their culture encourages them to be mindful of life's currents, knowing when to harness fate's tides and when to flow along with them."
   }
 ]

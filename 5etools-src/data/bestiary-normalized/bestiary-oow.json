@@ -103,10 +103,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_p6qr",
+        "id": "act_multiattack_jd9s",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes two attacks: one with its bite and one to constrict.</p>",
+        "entries": [
+          "The behir makes two attacks: one with its bite and one to constrict."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -120,10 +123,13 @@
         }
       },
       {
-        "id": "act_bite_6n4h",
+        "id": "act_bite_8qnz",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}22 (3d10 + 6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 22 (3d10 + 6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 10} to hit, reach 10 ft., one target. {@h}22 ({@damage 3d10 + 6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -142,10 +148,13 @@
         }
       },
       {
-        "id": "act_constrict_zz13",
+        "id": "act_constrict_0rcu",
         "name": "Constrict",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +10 to hit, reach 5 ft., one Large or smaller creature. {@h}17 (2d10 + 6) bludgeoning damage plus 17 (2d10 + 6) slashing damage. The target is grappled (escape DC 16) if the behir isn't already constricting a creature, and the target is restrained until this grapple ends.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one Large or smaller creature. Hit: 17 (2d10 + 6) bludgeoning damage plus 17 (2d10 + 6) slashing damage. The target is grappled (escape DC 16) if the behir isn't already constricting a creature, and the target is restrained until this grapple ends.</p>",
+        "entries": [
+          "{@atk mw} {@hit 10} to hit, reach 5 ft., one Large or smaller creature. {@h}17 ({@damage 2d10 + 6}) bludgeoning damage plus 17 ({@damage 2d10 + 6}) slashing damage. The target is {@condition grappled} (escape {@dc 16}) if the behir isn't already constricting a creature, and the target is {@condition restrained} until this grapple ends."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -155,7 +164,7 @@
           "targets": "one Large or smaller creature",
           "save": {
             "dc": 16,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -171,10 +180,13 @@
         }
       },
       {
-        "id": "act_lightning_breath__recharge_5__fsco",
+        "id": "act_lightning_breath__recharge_5__x94w",
         "name": "Lightning Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The behir exhales a line of lightning that is 20 feet long and 5 feet wide. Each creature in that line must make a DC 16 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The behir exhales a line of lightning that is 20 feet long and 5 feet wide. Each creature in that line must make a {@dc 16} Dexterity saving throw, taking 66 ({@damage 12d10}) lightning damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -196,10 +208,14 @@
         }
       },
       {
-        "id": "act_swallow_a84v",
+        "id": "act_swallow_qhun",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is blinded and restrained, it has Cover against attacks and other effects outside the behir, and it takes 21 (6d6) acid damage at the start of each of the behir's turns. A behir can have only one creature swallowed at a time.</p><p>If the behir takes 30 damage or more on a single turn from the swallowed creature, the behir must succeed on a DC 14 Constitution saving throw at the end of that turn or regurgitate the creature, which falls prone in a space within 10 feet of the behir. If the behir dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 15 feet of movement, exiting prone.</p>",
+        "entries": [
+          "The behir makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is {@condition blinded} and {@condition restrained}, it has {@quickref Cover||3||total cover} against attacks and other effects outside the behir, and it takes 21 ({@damage 6d6}) acid damage at the start of each of the behir's turns. A behir can have only one creature swallowed at a time.",
+          "If the behir takes 30 damage or more on a single turn from the swallowed creature, the behir must succeed on a {@dc 14} Constitution saving throw at the end of that turn or regurgitate the creature, which falls {@condition prone} in a space within 10 feet of the behir. If the behir dies, a swallowed creature is no longer {@condition restrained} by it and can escape from the corpse by using 15 feet of movement, exiting {@condition prone}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -228,11 +244,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Clockwork Behir.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Clockwork Behir.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dagdra_deepforge_oow",
@@ -330,14 +358,14 @@
       {
         "id": "sc_dagdra_deepforge_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 3,
         "casterLevel": 5,
         "dc": 13,
         "atkMod": 5,
-        "header": "The priest is a 5th-level spellcaster. Its spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). The priest has the following cleric spells prepared:",
+        "header": "Dagdra is a 5th-level spellcaster. Its spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). The priest has the following cleric spells prepared:",
         "footer": "",
         "spellsByLevel": {
           "0": {
@@ -382,7 +410,8 @@
                     "formula": "1d8",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -431,7 +460,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -457,7 +488,9 @@
                     "formula": "4d6",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -526,7 +559,9 @@
                     "formula": "1d8",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -575,12 +610,16 @@
                   {
                     "formula": "3d8",
                     "type": "Necrotic",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "3d8",
                     "type": "Radiant",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a prayer scroll)",
@@ -596,10 +635,13 @@
     ],
     "traits": [
       {
-        "id": "act_divine_eminence_l1p7",
+        "id": "act_divine_eminence_eusx",
         "name": "Divine Eminence",
         "actionType": "trait",
-        "descriptionHtml": "<p>As a bonus action, the priest can expend a spell slot to cause its melee weapon attacks to magically deal an extra 10 (3d6) radiant damage to a target on a hit. This benefit lasts until the end of the turn. If the priest expends a spell slot of 2nd level or higher, the extra damage increases by 1d6 for each level above 1st.</p>",
+        "descriptionHtml": "<p>As a bonus action, Dagdra can expend a spell slot to cause its melee weapon attacks to magically deal an extra 10 (3d6) radiant damage to a target on a hit. This benefit lasts until the end of the turn. If the priest expends a spell slot of 2nd level or higher, the extra damage increases by 1d6 for each level above 1st.</p>",
+        "entries": [
+          "As a bonus action, Dagdra can expend a spell slot to cause its melee weapon attacks to magically deal an extra 10 ({@damage 3d6}) radiant damage to a target on a hit. This benefit lasts until the end of the turn. If the priest expends a spell slot of 2nd level or higher, the extra damage increases by {@damage 1d6} for each level above 1st."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -624,10 +666,13 @@
     ],
     "actions": [
       {
-        "id": "act_mace_zavf",
+        "id": "act_mace_rgra",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -644,6 +689,26 @@
           ],
           "recharge": null
         }
+      },
+      {
+        "id": "act_scroll_service__1_day__g95c",
+        "name": "Scroll Service (1/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>As an action, Dagdra draws a spell scroll from her documancy satchel. The scroll contains a spell of up to 3rd level of Dagdra's choice. Only Dagdra can use the scroll, which vanishes after 1 minute.</p>",
+        "entries": [
+          "As an action, Dagdra draws a {@item spell scroll} from her {@item documancy satchel|AI}. The scroll contains a spell of up to 3rd level of Dagdra's choice. Only Dagdra can use the scroll, which vanishes after 1 minute."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
       }
     ],
     "bonusActions": [],
@@ -653,11 +718,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Dagdra Deepforge.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Dagdra Deepforge.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_devil_dog_oow",
@@ -753,14 +830,14 @@
       {
         "id": "sc_devil_dog_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 2,
         "casterLevel": 1,
         "dc": 12,
         "atkMod": 4,
-        "header": "The acolyte is a 1st-level spellcaster. Its spellcasting ability is Wisdom (spell save DC 12, +4 to hit with spell attacks). The acolyte has the following cleric spells prepared:",
+        "header": "Devil Dog is a 1st-level spellcaster. Its spellcasting ability is Wisdom (spell save DC 12, +4 to hit with spell attacks). The acolyte has the following cleric spells prepared:",
         "footer": "",
         "spellsByLevel": {
           "0": {
@@ -805,7 +882,8 @@
                     "formula": "1d8",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -873,7 +951,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -909,10 +989,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_lqf5",
+        "id": "act_club_eiyf",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -938,11 +1021,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Devil Dog.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Devil Dog.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_enormous_tentacle_oow",
@@ -1033,10 +1128,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reach_ttun",
+        "id": "act_reach_lm3x",
         "name": "Reach",
         "actionType": "trait",
         "descriptionHtml": "<p>The tentacle can reach anywhere in the room.</p>",
+        "entries": [
+          "The tentacle can reach anywhere in the room."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1052,10 +1150,13 @@
     ],
     "actions": [
       {
-        "id": "act_constrict_5ceq",
+        "id": "act_constrict_sroz",
         "name": "Constrict",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 35 ft., one creature. {@h}13 (2d8 + 4) bludgeoning damage, and the target is grappled (escape DC 16). Until this grapple ends, the creature is restrained, and the tentacle can't constrict another target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 35 ft., one creature. Hit: 13 (2d8 + 4) bludgeoning damage, and the target is grappled (escape DC 16). Until this grapple ends, the creature is restrained, and the tentacle can't constrict another target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 35 ft., one creature. {@h}13 ({@damage 2d8 + 4}) bludgeoning damage, and the target is {@condition grappled} (escape {@dc 16}). Until this grapple ends, the creature is {@condition restrained}, and the tentacle can't constrict another target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1065,7 +1166,7 @@
           "targets": "one creature",
           "save": {
             "dc": 16,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -1084,11 +1185,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Enormous Tentacle.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Enormous Tentacle.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_gildha_duhn_oow",
@@ -1184,14 +1297,14 @@
       {
         "id": "sc_gildha_duhn_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 2,
         "casterLevel": 1,
         "dc": 12,
         "atkMod": 4,
-        "header": "The acolyte is a 1st-level spellcaster. Its spellcasting ability is Wisdom (spell save DC 12, +4 to hit with spell attacks). The acolyte has the following cleric spells prepared:",
+        "header": "Gildha is a 1st-level spellcaster. Its spellcasting ability is Wisdom (spell save DC 12, +4 to hit with spell attacks). The acolyte has the following cleric spells prepared:",
         "footer": "",
         "spellsByLevel": {
           "0": {
@@ -1236,7 +1349,8 @@
                     "formula": "1d8",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -1304,7 +1418,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1340,10 +1456,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_oa58",
+        "id": "act_club_zv1j",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1369,11 +1488,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Gildha Duhn.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Gildha Duhn.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_grunka_oow",
@@ -1463,10 +1594,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_martial_advantage_xru8",
+        "id": "act_martial_advantage_gskt",
         "name": "Martial Advantage",
         "actionType": "trait",
-        "descriptionHtml": "<p>Once per turn, the hobgoblin can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the hobgoblin that isn't incapacitated.</p>",
+        "descriptionHtml": "<p>Once per turn, Grunka can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the hobgoblin that isn't incapacitated.</p>",
+        "entries": [
+          "Once per turn, Grunka can deal an extra 7 ({@damage 2d6}) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the hobgoblin that isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1487,10 +1621,13 @@
     ],
     "actions": [
       {
-        "id": "act_longsword_eosy",
+        "id": "act_longsword_r5c2",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}5 (1d8 + 1) slashing damage, or 6 (1d10 + 1) slashing damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage, or 6 (1d10 + 1) slashing damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d8 + 1}) slashing damage, or 6 ({@damage 1d10 + 1}) slashing damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1513,10 +1650,13 @@
         }
       },
       {
-        "id": "act_longbow_mwwp",
+        "id": "act_longbow_gkpe",
         "name": "Longbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +3 to hit, range 150/600 ft., one target. {@h}5 (1d8 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +3 to hit, range 150/600 ft., one target. Hit: 5 (1d8 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 3} to hit, range 150/600 ft., one target. {@h}5 ({@damage 1d8 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1533,6 +1673,35 @@
           ],
           "recharge": null
         }
+      },
+      {
+        "id": "act_acid_spray_gun__recharge_5__vth3",
+        "name": "Acid Spray Gun (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The hobgoblin sprays acid in a 10-foot cone. Each creature in the area must make a DC 10 Dexterity saving throw, taking 7 (2d6) acid damage on a failed save, or half as much damage on a successful one.</p><p>The spray gun has a tank that can be filled with ten standard vials of acid mixed with water, allowing it to be used five times.</p>",
+        "entries": [
+          "The hobgoblin sprays acid in a 10-foot cone. Each creature in the area must make a {@dc 10} Dexterity saving throw, taking 7 ({@damage 2d6}) acid damage on a failed save, or half as much damage on a successful one.",
+          "The spray gun has a tank that can be filled with ten standard vials of acid mixed with water, allowing it to be used five times."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 10,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Acid"
+            }
+          ],
+          "recharge": "5"
+        }
       }
     ],
     "bonusActions": [],
@@ -1542,11 +1711,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Grunka.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Grunka.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_jelayne_oow",
@@ -1643,10 +1824,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_shortsword_ehjk",
+        "id": "act_shortsword_r03m",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1665,10 +1849,13 @@
         }
       },
       {
-        "id": "act_shortbow_6tya",
+        "id": "act_shortbow_1do9",
         "name": "Shortbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range 80/320 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 80/320 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1694,11 +1881,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Jelayne.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Jelayne.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_mechachimera_oow",
@@ -1795,10 +1994,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_nvqb",
+        "id": "act_multiattack_3p60",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The chimera makes three attacks: one with its bite, one with its horns, and one with its claws. When its fire breath is available, it can use the breath in place of its bite or horns.</p>",
+        "entries": [
+          "The chimera makes three attacks: one with its bite, one with its horns, and one with its claws. When its fire breath is available, it can use the breath in place of its bite or horns."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1812,10 +2014,13 @@
         }
       },
       {
-        "id": "act_bite_n6sg",
+        "id": "act_bite_v5ry",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1834,10 +2039,13 @@
         }
       },
       {
-        "id": "act_horns_ss5b",
+        "id": "act_horns_15bu",
         "name": "Horns",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}10 (1d12 + 4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 10 (1d12 + 4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}10 ({@damage 1d12 + 4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1856,10 +2064,13 @@
         }
       },
       {
-        "id": "act_claws_rics",
+        "id": "act_claws_grn6",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1878,10 +2089,13 @@
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__g9ew",
+        "id": "act_fire_breath__recharge_5__ptb2",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon head exhales fire in a 15-foot cone. Each creature in that area must make a DC 15 Dexterity saving throw, taking 31 (7d8) fire damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The dragon head exhales fire in a 15-foot cone. Each creature in that area must make a {@dc 15} Dexterity saving throw, taking 31 ({@damage 7d8}) fire damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1910,11 +2124,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Mechachimera.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Mechachimera.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_onyx_oow",
@@ -2007,10 +2233,53 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_6jxw",
+        "id": "act_keen_smell_39px",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The cat has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "entries": [
+          "The cat has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_relative_size_rnru",
+        "name": "Relative Size",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Any damage Onyx would take is reduced to 0. She has advantage on ability checks and saving throws.</p>",
+        "entries": [
+          "Any damage Onyx would take is reduced to 0. She has advantage on ability checks and saving throws."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_dealing_with_onyx_o3jy",
+        "name": "Dealing with Onyx",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Onyx cannot be overcome or killed by combat. Any weapon attack against her that hits AC 12 makes contact but deals no lasting damage. However, if the attack would deal 10 or more damage, Onyx has disadvantage on attack rolls until the end of her next turn. If Onyx would take 10 or more damage from spells or other effects, it yields the same result. Spells that impose conditions function normally against Onyx, but those conditions end automatically at the end of the cat's next turn.</p>",
+        "entries": [
+          "Onyx cannot be overcome or killed by combat. Any weapon attack against her that hits AC 12 makes contact but deals no lasting damage. However, if the attack would deal 10 or more damage, Onyx has disadvantage on attack rolls until the end of her next turn. If Onyx would take 10 or more damage from spells or other effects, it yields the same result. Spells that impose conditions function normally against Onyx, but those conditions end automatically at the end of the cat's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2026,10 +2295,13 @@
     ],
     "actions": [
       {
-        "id": "act_claws_311r",
+        "id": "act_claws_zvs8",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 20 ft., one target. {@h}11 (2d10) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 20 ft., one target. Hit: 11 (2d10) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 20 ft., one target. {@h}11 ({@damage 2d10}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2055,11 +2327,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Onyx.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Onyx.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_replica_duodrone_oow",
@@ -2149,10 +2433,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_kxdu",
+        "id": "act_axiomatic_mind_6246",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The duodrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
+        "entries": [
+          "The duodrone can't be compelled to act in a manner contrary to its nature or its instructions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2166,10 +2453,13 @@
         }
       },
       {
-        "id": "act_disintegration_mmox",
-        "name": "Disintegration",
+        "id": "act_dismantlable_aajd",
+        "name": "Dismantlable",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the duodrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
+        "descriptionHtml": "<p>If the replica duodrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
+        "entries": [
+          "If the replica duodrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2185,10 +2475,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9viw",
+        "id": "act_multiattack_03va",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The duodrone makes two fist attacks or two javelin attacks.</p>",
+        "entries": [
+          "The duodrone makes two fist attacks or two javelin attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2202,10 +2495,13 @@
         }
       },
       {
-        "id": "act_fist_k8fh",
+        "id": "act_fist_oqbt",
         "name": "Fist",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2224,10 +2520,13 @@
         }
       },
       {
-        "id": "act_javelin_zg2n",
+        "id": "act_javelin_p8hz",
         "name": "Javelin",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +3 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}4 (1d6 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 4 (1d6 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 3} to hit, reach 5 ft. or range 30/120 ft., one target. {@h}4 ({@damage 1d6 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2253,11 +2552,32 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Rogue Modrons",
+        "descriptionHtml": "<p>A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.</p><p>A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank.</p>",
+        "entries": [
+          "A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.",
+          "A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank."
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Replica Duodrone.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Replica Duodrone.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_replica_monodrone_oow",
@@ -2347,10 +2667,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_xdxs",
+        "id": "act_axiomatic_mind_tnyh",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The monodrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
+        "entries": [
+          "The monodrone can't be compelled to act in a manner contrary to its nature or its instructions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2364,10 +2687,13 @@
         }
       },
       {
-        "id": "act_disintegration_rgab",
-        "name": "Disintegration",
+        "id": "act_dismantlable_dm7r",
+        "name": "Dismantlable",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the monodrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
+        "descriptionHtml": "<p>If the replica monodrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
+        "entries": [
+          "If the replica monodrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2383,10 +2709,13 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_90zf",
+        "id": "act_dagger_op7v",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2405,10 +2734,13 @@
         }
       },
       {
-        "id": "act_javelin_0lwk",
+        "id": "act_javelin_n7yk",
         "name": "Javelin",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +2 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}3 (1d6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +2 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 3 (1d6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 2} to hit, reach 5 ft. or range 30/120 ft., one target. {@h}3 ({@damage 1d6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2434,11 +2766,32 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Rogue Modrons",
+        "descriptionHtml": "<p>A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.</p><p>A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank.</p>",
+        "entries": [
+          "A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.",
+          "A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank."
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Replica Monodrone.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Replica Monodrone.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_replica_pentadrone_oow",
@@ -2532,10 +2885,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_74uv",
+        "id": "act_axiomatic_mind_mx71",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The pentadrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
+        "entries": [
+          "The pentadrone can't be compelled to act in a manner contrary to its nature or its instructions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2549,10 +2905,13 @@
         }
       },
       {
-        "id": "act_disintegration_rzd8",
-        "name": "Disintegration",
+        "id": "act_dismantlable_qyzt",
+        "name": "Dismantlable",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the pentadrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
+        "descriptionHtml": "<p>If the replica pentadrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
+        "entries": [
+          "If the replica pentadrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2568,10 +2927,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ka96",
+        "id": "act_multiattack_ihq6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The pentadrone makes five arm attacks.</p>",
+        "entries": [
+          "The pentadrone makes five arm attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2585,10 +2947,13 @@
         }
       },
       {
-        "id": "act_arm_y5x2",
+        "id": "act_arm_nkay",
         "name": "Arm",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2607,10 +2972,13 @@
         }
       },
       {
-        "id": "act_paralysis_gas__recharge_5__3233",
+        "id": "act_paralysis_gas__recharge_5__wdi4",
         "name": "Paralysis Gas (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The pentadrone exhales a 30-foot cone of gas. Each creature in that area must succeed on a DC 11 Constitution saving throw or be paralyzed for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "entries": [
+          "The pentadrone exhales a 30-foot cone of gas. Each creature in that area must succeed on a {@dc 11} Constitution saving throw or be {@condition paralyzed} for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2634,11 +3002,32 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Rogue Modrons",
+        "descriptionHtml": "<p>A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.</p><p>A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank.</p>",
+        "entries": [
+          "A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.",
+          "A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank."
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Replica Pentadrone.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Replica Pentadrone.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_replica_quadrone_oow",
@@ -2732,10 +3121,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_tlr3",
+        "id": "act_axiomatic_mind_xklr",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The quadrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
+        "entries": [
+          "The quadrone can't be compelled to act in a manner contrary to its nature or its instructions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2749,10 +3141,13 @@
         }
       },
       {
-        "id": "act_disintegration_n9r1",
-        "name": "Disintegration",
+        "id": "act_dismantlable_7wf9",
+        "name": "Dismantlable",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the quadrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
+        "descriptionHtml": "<p>If the replica quadrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
+        "entries": [
+          "If the replica quadrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2768,10 +3163,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7h1n",
+        "id": "act_multiattack_ekys",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The quadrone makes two fist attacks or four shortbow attacks.</p>",
+        "entries": [
+          "The quadrone makes two fist attacks or four shortbow attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2785,10 +3183,13 @@
         }
       },
       {
-        "id": "act_fist_aqc2",
+        "id": "act_fist_qzlh",
         "name": "Fist",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2807,10 +3208,13 @@
         }
       },
       {
-        "id": "act_shortbow_2vr1",
+        "id": "act_shortbow_dltf",
         "name": "Shortbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range 80/320 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 80/320 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2836,11 +3240,32 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Rogue Modrons",
+        "descriptionHtml": "<p>A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.</p><p>A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank.</p>",
+        "entries": [
+          "A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.",
+          "A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank."
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Replica Quadrone.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Replica Quadrone.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_replica_tridrone_oow",
@@ -2930,10 +3355,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_nr9a",
+        "id": "act_axiomatic_mind_5e3d",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The tridrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
+        "entries": [
+          "The tridrone can't be compelled to act in a manner contrary to its nature or its instructions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2947,10 +3375,13 @@
         }
       },
       {
-        "id": "act_disintegration_ta0x",
-        "name": "Disintegration",
+        "id": "act_dismantlable_uw99",
+        "name": "Dismantlable",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the tridrone dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
+        "descriptionHtml": "<p>If the replica tridrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
+        "entries": [
+          "If the replica tridrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2966,10 +3397,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_esie",
+        "id": "act_multiattack_cuow",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The tridrone makes three fist attacks or three javelin attacks.</p>",
+        "entries": [
+          "The tridrone makes three fist attacks or three javelin attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2983,10 +3417,13 @@
         }
       },
       {
-        "id": "act_fist_kt0f",
+        "id": "act_fist_geod",
         "name": "Fist",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3005,10 +3442,13 @@
         }
       },
       {
-        "id": "act_javelin_doo3",
+        "id": "act_javelin_ty39",
         "name": "Javelin",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +3 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}4 (1d6 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 4 (1d6 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 3} to hit, reach 5 ft. or range 30/120 ft., one target. {@h}4 ({@damage 1d6 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3034,11 +3474,32 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Rogue Modrons",
+        "descriptionHtml": "<p>A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.</p><p>A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank.</p>",
+        "entries": [
+          "A modron unit sometimes becomes defective, either through natural decay or exposure to chaotic forces. Rogue modrons don't act in accordance with Primus's wishes and directives, breaking laws, disobeying orders, and even engaging in violence. Other modrons hunt down such rogues.",
+          "A rogue modron loses the Axiomatic Mind trait and can have any alignment other than lawful neutral. Otherwise, it has the same statistics as a regular modron of its rank."
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Replica Tridrone.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Replica Tridrone.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_stomping_foot_oow",
@@ -3133,10 +3594,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_turn_immunity_p35q",
+        "id": "act_turn_immunity_5njs",
         "name": "Turn Immunity",
         "actionType": "trait",
-        "descriptionHtml": "<p>The claw is immune to effects that turn undead.</p>",
+        "descriptionHtml": "<p>The foot is immune to effects that turn undead.</p>",
+        "entries": [
+          "The foot is immune to effects that turn undead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3152,10 +3616,13 @@
     ],
     "actions": [
       {
-        "id": "act_stomp_ggua",
+        "id": "act_stomp_ogkx",
         "name": "Stomp",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3181,11 +3648,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Stomping Foot.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Stomping Foot.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_two_dry_cloaks_oow",
@@ -3290,10 +3769,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cunning_action_vu0q",
+        "id": "act_cunning_action_oxuj",
         "name": "Cunning Action",
         "actionType": "trait",
-        "descriptionHtml": "<p>On each of its turns, the spy can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
+        "descriptionHtml": "<p>On each of its turns, Two Dry Cloaks can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
+        "entries": [
+          "On each of its turns, Two Dry Cloaks can use a bonus action to take the {@action Dash}, {@action Disengage}, or {@action Hide} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3307,10 +3789,13 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__jy9b",
+        "id": "act_sneak_attack__1_turn__afum",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
-        "descriptionHtml": "<p>The spy deals an extra 7 (2d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't incapacitated and the spy doesn't have disadvantage on the attack roll.</p>",
+        "descriptionHtml": "<p>Two Dry Cloaks deals an extra 7 (2d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't incapacitated and the spy doesn't have disadvantage on the attack roll.</p>",
+        "entries": [
+          "Two Dry Cloaks deals an extra 7 ({@damage 2d6}) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't {@condition incapacitated} and the spy doesn't have disadvantage on the attack roll."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3331,10 +3816,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_c64x",
+        "id": "act_multiattack_1f0f",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The spy makes two melee attacks.</p>",
+        "descriptionHtml": "<p>Two Dry Cloaks makes two melee attacks.</p>",
+        "entries": [
+          "Two Dry Cloaks makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3348,10 +3836,13 @@
         }
       },
       {
-        "id": "act_shortsword_ibxt",
+        "id": "act_shortsword_2luh",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3370,10 +3861,13 @@
         }
       },
       {
-        "id": "act_hand_crossbow_z7qq",
+        "id": "act_hand_crossbow_o38q",
         "name": "Hand Crossbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 30/120 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3399,11 +3893,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Two Dry Cloaks.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Two Dry Cloaks.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_undead_cockatrice_oow",
@@ -3495,10 +4001,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_rvm5",
+        "id": "act_bite_tkhe",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one creature. {@h}3 (1d4 + 1) piercing damage, and the target must succeed on a DC 11 Constitution saving throw against being magically petrified. On a failed save, the creature begins to turn to stone and is restrained. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is petrified for 24 hours.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one creature. Hit: 3 (1d4 + 1) piercing damage, and the target must succeed on a DC 11 Constitution saving throw against being magically petrified. On a failed save, the creature begins to turn to stone and is restrained. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is petrified for 24 hours.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one creature. {@h}3 ({@damage 1d4 + 1}) piercing damage, and the target must succeed on a {@dc 11} Constitution saving throw against being magically {@condition petrified}. On a failed save, the creature begins to turn to stone and is {@condition restrained}. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is {@condition petrified} for 24 hours."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3527,10 +4036,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/OoW/Undead Cockatrice.webp",
     "tokenImg": "img/bestiary/tokens/OoW/Undead Cockatrice.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

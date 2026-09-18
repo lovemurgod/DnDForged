@@ -1,0 +1,4282 @@
+[
+  {
+    "id": "creature_glacier_bulette_24griffonssaddlebag1",
+    "name": "Glacier Bulette",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 103,
+      "formula": "9d10 + 54"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 40,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 11,
+        "mod": 0
+      },
+      "con": {
+        "score": 22,
+        "mod": 6
+      },
+      "int": {
+        "score": 2,
+        "mod": -4
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "str": 19,
+    "dex": 11,
+    "con": 22,
+    "int": 2,
+    "wis": 10,
+    "cha": 5,
+    "proficiencyBonus": 3,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+6"
+    },
+    "skills": {
+      "perception": "+6"
+    },
+    "immune": [
+      "fire"
+    ],
+    "resist": [
+      "cold"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
+    "initiative": {
+      "initiative": 1
+    },
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": "Darkvision 60 ft., Tremorsense 120 ft."
+    },
+    "languages": [],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_ice_walk_8zz5",
+        "name": "Ice Walk",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The bulette can move across and climb icy surfaces without needing to make an ability check. Additionally, Difficult Terrain composed of ice or snow doesn't cost it extra movement.</p>",
+        "entries": [
+          "The bulette can move across and climb icy surfaces without needing to make an ability check. Additionally, {@variantrule Difficult Terrain|XPHB} composed of ice or snow doesn't cost it extra movement."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_steam_aura_k3cw",
+        "name": "Steam Aura",
+        "actionType": "trait",
+        "descriptionHtml": "<p>At the end of each of the bulette's turns, each creature of the bulette's choice in a 5-foot Emanation [Area of Effect] originating from the bulette takes 5 (1d10) Fire damage unless the bulette has the Incapacitated condition.</p>",
+        "entries": [
+          "At the end of each of the bulette's turns, each creature of the bulette's choice in a 5-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the bulette takes 5 ({@damage 1d10}) Fire damage unless the bulette has the {@condition Incapacitated|XPHB} condition."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tunneler_wp8b",
+        "name": "Tunneler",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The bulette can burrow through solid ice and leaves a slick, 10-foot-diameter tunnel in its wake.</p>",
+        "entries": [
+          "The bulette can burrow through solid ice and leaves a slick, 10-foot-diameter tunnel in its wake."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_8v0d",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The bulette makes two Bite attacks.</p>",
+        "entries": [
+          "The bulette makes two Bite attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_zlvi",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +7, reach 5 ft. Hit: 17 (2d12 + 4) Piercing damage plus 3 (1d6) Fire damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 7}, reach 5 ft. {@h}17 ({@damage 2d12 + 4}) Piercing damage plus 3 ({@damage 1d6}) Fire damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d12 + 4",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_steam_eruption__recharge_5__hsjw",
+        "name": "Steam Eruption (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>If the bulette is burrowed no more than 20 feet deep in solid ice, it spends 5 feet of movement to burrow directly upward, emerging from the ice and jumping to a space within 5 feet of where it emerged. dex DC 15, each creature in the space where the bulette emerged or its destination space. {@actSaveFail} 11 (2d10) Bludgeoning damage plus 7 (2d6) Fire damage, and the target has the Prone condition. {@actSaveSuccess} Half damage. {@actSaveSuccessOrFail} The target is pushed to the nearest unoccupied space within 5 feet of where the bulette emerged or its destination space.</p>",
+        "entries": [
+          "If the bulette is burrowed no more than 20 feet deep in solid ice, it spends 5 feet of movement to burrow directly upward, emerging from the ice and jumping to a space within 5 feet of where it emerged. {@actSave dex} {@dc 15}, each creature in the space where the bulette emerged or its destination space. {@actSaveFail} 11 ({@damage 2d10}) Bludgeoning damage plus 7 ({@damage 2d6}) Fire damage, and the target has the {@condition Prone|XPHB} condition. {@actSaveSuccess} Half damage. {@actSaveSuccessOrFail} The target is pushed to the nearest unoccupied space within 5 feet of where the bulette emerged or its destination space."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "2d10",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "2d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Glacier Bulette.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Glacier Bulette.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_greater_winged_wretch_24griffonssaddlebag1",
+    "name": "Greater Winged Wretch",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 75,
+      "formula": "10d10 + 20"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 60,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 17,
+        "mod": 3
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "str": 18,
+    "dex": 17,
+    "con": 15,
+    "int": 10,
+    "wis": 12,
+    "cha": 9,
+    "proficiencyBonus": 2,
+    "save": {
+      "str": "+6",
+      "con": "+4",
+      "wis": "+3"
+    },
+    "saves": {
+      "str": "+6",
+      "con": "+4",
+      "wis": "+3"
+    },
+    "skill": {
+      "perception": "+5"
+    },
+    "skills": {
+      "perception": "+5"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": "Blindsight 60 ft."
+    },
+    "languages": [
+      "Undercommon"
+    ],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_k0k9",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The winged wretch makes three Rend attacks.</p>",
+        "entries": [
+          "The winged wretch makes three Rend attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rend_l2o6",
+        "name": "Rend",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 11 (2d6 + 4) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 5 ft. {@h}11 ({@damage 2d6 + 4}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_thunderous_shriek__recharge_5__i29p",
+        "name": "Thunderous Shriek (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The winged wretch emits a cacophonous wave of energy. con DC 12, each creature in a 30-foot Cone [Area of Effect]. {@actSaveFail} 17 (5d6) Thunder damage, and the target has the Deafened condition for 1 minute. {@actSaveSuccess} Half damage only.</p>",
+        "entries": [
+          "The winged wretch emits a cacophonous wave of energy. {@actSave con} {@dc 12}, each creature in a 30-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} 17 ({@damage 5d6}) Thunder damage, and the target has the {@condition Deafened|XPHB} condition for 1 minute. {@actSaveSuccess} Half damage only."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "5d6",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Greater Winged Wretch.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Greater Winged Wretch.webp",
+    "fluff": {
+      "_monsterFluff": {
+        "name": "Winged Wretch",
+        "source": "24GriffonsSaddlebag1"
+      }
+    },
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_ice_gargoyle_24griffonssaddlebag1",
+    "name": "Ice Gargoyle",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 58,
+      "formula": "9d8 + 18"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 60,
+      "swim": 0,
+      "climb": 20,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 6,
+        "mod": -2
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "str": 15,
+    "dex": 13,
+    "con": 15,
+    "int": 6,
+    "wis": 6,
+    "cha": 5,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "stealth": "+5"
+    },
+    "skills": {
+      "stealth": "+5"
+    },
+    "immune": [
+      "cold",
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "exhaustion",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 11,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "Primordial (Aquan, Auran)"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_flyby_f0zu",
+        "name": "Flyby",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The gargoyle doesn't provoke an Opportunity Attack when it flies out of an enemy's reach.</p>",
+        "entries": [
+          "The gargoyle doesn't provoke an Opportunity Attack when it flies out of an enemy's reach."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_i54h",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The gargoyle makes two attacks, using Claw or Ice Dart in any combination.</p>",
+        "entries": [
+          "The gargoyle makes two attacks, using Claw or Ice Dart in any combination."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_nb03",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 7 (1d10 + 2) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}7 ({@damage 1d10 + 2}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 2",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_ice_dart_h67p",
+        "name": "Ice Dart",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: +4, range 30/60 ft. Hit: 7 (2d4 + 2) Piercing damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 4}, range 30/60 ft. {@h}7 ({@damage 2d4 + 2}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "30/60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d4 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Ice Gargoyle.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Ice Gargoyle.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_invisiboar_24griffonssaddlebag1",
+    "name": "Invisiboar",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 30,
+      "formula": "4d10 + 8"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 2,
+        "mod": -4
+      },
+      "wis": {
+        "score": 8,
+        "mod": -1
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "str": 16,
+    "dex": 12,
+    "con": 15,
+    "int": 2,
+    "wis": 8,
+    "cha": 5,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "stealth": "+3"
+    },
+    "skills": {
+      "stealth": "+3"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 9,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 9,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_death_flash_gj25",
+        "name": "Death Flash",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The invisiboar emits a bright flash of light when it dies. con DC 13, each creature in a 10-foot Emanation [Area of Effect] originating from the invisiboar. {@actSaveFail} The target has the Blinded condition. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
+        "entries": [
+          "The invisiboar emits a bright flash of light when it dies. {@actSave con} {@dc 13}, each creature in a 10-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the invisiboar. {@actSaveFail} The target has the {@condition Blinded|XPHB} condition. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 13,
+            "ability": "CON"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_invisible_g49v",
+        "name": "Invisible",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The invisiboar always has the Invisible condition unless it's in the area of an Antimagic Field spell or similar effect.</p>",
+        "entries": [
+          "The invisiboar always has the Invisible condition unless it's in the area of an {@spell Antimagic Field|XPHB} spell or similar effect."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_gore_hdbo",
+        "name": "Gore",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 10 (2d6 + 3) Slashing damage. If the target is a Large or smaller creature and the boar moved 20+ feet straight toward it immediately before the hit, the target takes an extra 7 (2d6) Piercing damage and has the Prone condition.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}10 ({@damage 2d6 + 3}) Slashing damage. If the target is a Large or smaller creature and the boar moved 20+ feet straight toward it immediately before the hit, the target takes an extra 7 ({@damage 2d6}) Piercing damage and has the {@condition Prone|XPHB} condition."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "the target takes an extra 7 ({@damage 2d6}) Piercing damage and has the {@condition Prone|XPHB} condition",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 3",
+              "type": "Slashing"
+            },
+            {
+              "formula": "2d6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Invisiboar.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Invisiboar.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_nicrone_dendallen_24griffonssaddlebag1",
+    "name": "Nicrone Dendallen",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "wizard",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 156,
+      "formula": "24d8 + 48"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 11,
+        "mod": 0
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 20,
+        "mod": 5
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "str": 11,
+    "dex": 16,
+    "con": 14,
+    "int": 20,
+    "wis": 13,
+    "cha": 16,
+    "proficiencyBonus": 4,
+    "save": {
+      "int": "+9",
+      "wis": "+5"
+    },
+    "saves": {
+      "int": "+9",
+      "wis": "+5"
+    },
+    "skill": {
+      "arcana": "+9",
+      "history": "+9",
+      "medicine": "+9",
+      "perception": "+9"
+    },
+    "skills": {
+      "arcana": "+9",
+      "history": "+9",
+      "medicine": "+9",
+      "perception": "+9"
+    },
+    "immune": [],
+    "resist": [
+      "necrotic",
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 19,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 19,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common plus three other languages"
+    ],
+    "cr": "11",
+    "crNumeric": 11,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_nicrone_dendallen_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 1,
+        "dc": 17,
+        "atkMod": 9,
+        "header": "Dendallen casts one of the following spells, using Intelligence as the spellcasting ability (spell save DC 17):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_bestow_curse_xphb",
+            "name": "Bestow Curse",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Necromancy",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 17,
+            "damageList": [
+              {
+                "formula": "1d8",
+                "type": "Necrotic",
+                "label": "",
+                "stat": "none",
+                "upcastBonus": "",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_darkness_xphb",
+            "name": "Darkness",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, M (bat fur and a piece of coal)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_dispel_magic_xphb",
+            "name": "Dispel Magic",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_hold_person_xphb",
+            "name": "Hold Person",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 17,
+            "damageList": [],
+            "components": "V, S, M (a straight piece of iron)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_armor_xphb",
+            "name": "Mage Armor",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "8 hours",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a piece of cured leather)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_magic_missile_xphb",
+            "name": "Magic Missile",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [
+              {
+                "formula": "1d4 + 1",
+                "type": "Force",
+                "label": "",
+                "stat": "none",
+                "upcastBonus": "",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_blight_xphb",
+              "name": "Blight",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [
+                {
+                  "formula": "8d8",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_circle_of_death_xphb",
+              "name": "Circle of Death",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "150 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [
+                {
+                  "formula": "8d8",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "2d8",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (the powder of a crushed black pearl worth 500+ GP)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_cloudkill_xphb",
+              "name": "Cloudkill",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [
+                {
+                  "formula": "5d8",
+                  "type": "Poison",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_telekinesis_xphb",
+              "name": "Telekinesis",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_wall_of_force_xphb",
+              "name": "Wall of Force",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a shard of glass)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_finger_of_death_xphb",
+              "name": "Finger of Death",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [
+                {
+                  "formula": "7d8 + 30",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_prismatic_spray_xphb",
+              "name": "Prismatic Spray",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "Self (60 feet cone)",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [
+                {
+                  "formula": "12d6",
+                  "type": "Acid",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "12d6",
+                  "type": "Cold",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "12d6",
+                  "type": "Fire",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "12d6",
+                  "type": "Lightning",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "12d6",
+                  "type": "Poison",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_weird_xphb",
+              "name": "Weird",
+              "source": "XPHB",
+              "level": 9,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [
+                {
+                  "formula": "10d10",
+                  "type": "Psychic",
+                  "label": "Damage 1",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "5d10",
+                  "type": "Psychic",
+                  "label": "Damage 2",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Bestow Curse",
+          "Darkness",
+          "Dispel Magic",
+          "Hold Person",
+          "Mage Armor",
+          "Mage Hand",
+          "Magic Missile"
+        ]
+      },
+      {
+        "id": "sc_nicrone_dendallen_1",
+        "name": "Protective Magic (3/Day)",
+        "type": "slot",
+        "displayAs": "reaction",
+        "ability": "int",
+        "abilityMod": 5,
+        "casterLevel": 1,
+        "dc": 17,
+        "atkMod": 9,
+        "header": "Dendallen casts Counterspell or Shield in response to the spell's trigger, using the same spellcasting ability as Spellcasting.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "3": [
+            {
+              "spellId": "sp_counterspell_xphb",
+              "name": "Counterspell",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Abjuration",
+              "castingTime": "1 reaction (which you take when you see a creature within 60 feet of yourself casting a spell with Verbal, Somatic, or Material components)",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 17,
+              "damageList": [],
+              "components": "S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_shield_xphb",
+              "name": "Shield",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+              "range": "self",
+              "duration": "1 round",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_90wl",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Dendallen makes four attacks, using Staff or Chilling Ray in any combination. He can (A) replace one attack with a use of Spellcasting to cast Magic Missile or (B) replace two attacks with a use of Spellcasting to cast Blight (level 5 version).</p>",
+        "entries": [
+          "Dendallen makes four attacks, using Staff or Chilling Ray in any combination. He can (A) replace one attack with a use of Spellcasting to cast {@spell Magic Missile|XPHB} or (B) replace two attacks with a use of Spellcasting to cast {@spell Blight|XPHB} (level 5 version)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_staff_gp70",
+        "name": "Staff",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +9, reach 5 ft. Hit: 8 (1d6 + 5) Force damage. If the target is a creature, it is subjected to the following effect. con DC 17. {@actSaveFail} 11 (2d10) Necrotic damage, and the target has Disadvantage on any ability check or saving throw that uses Strength or Constitution. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
+        "entries": [
+          "{@atkr m} {@hit 9}, reach 5 ft. {@h}8 ({@damage 1d6 + 5}) Force damage. If the target is a creature, it is subjected to the following effect. {@actSave con} {@dc 17}. {@actSaveFail} 11 ({@damage 2d10}) Necrotic damage, and the target has {@variantrule Disadvantage|XPHB} on any ability check or saving throw that uses Strength or Constitution. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 5,
+          "range": null,
+          "targets": "it is subjected to the following effect",
+          "save": {
+            "dc": 17,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "1d6 + 5",
+              "type": "Force"
+            },
+            {
+              "formula": "2d10",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_chilling_ray_hblo",
+        "name": "Chilling Ray",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: +9, range 120 ft. Hit: 18 (4d8) Cold damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 9}, range 120 ft. {@h}18 ({@damage 4d8}) Cold damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": null,
+          "range": "120 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d8",
+              "type": "Cold"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Nicrone Dendallen.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Nicrone Dendallen.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_risen_sporehusk_24griffonssaddlebag1",
+    "name": "Risen Sporehusk",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 32,
+      "formula": "5d8 + 10"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 3,
+        "mod": -4
+      },
+      "wis": {
+        "score": 6,
+        "mod": -2
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "str": 15,
+    "dex": 10,
+    "con": 14,
+    "int": 3,
+    "wis": 6,
+    "cha": 5,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [
+      "fire",
+      "radiant"
+    ],
+    "conditionImmune": [
+      "charmed",
+      "poisoned"
+    ],
+    "passive": 7,
+    "senses": {
+      "passivePerception": 7,
+      "sensesString": "Blindsight 15 ft., Darkvision 60 ft."
+    },
+    "languages": [
+      "understands Common plus one other language it knew but can't speak"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_regeneration_bmk9",
+        "name": "Regeneration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sporehusk regains 5 Hit Points at the start of its turn. If the sporehusk takes Fire or Radiant damage, this trait doesn't function on the sporehusk's next turn. The sporehusk dies only if it starts its turn with 0 Hit Points and doesn't regenerate.</p>",
+        "entries": [
+          "The sporehusk regains 5 {@variantrule Hit Points|XPHB} at the start of its turn. If the sporehusk takes Fire or Radiant damage, this trait doesn't function on the sporehusk's next turn. The sporehusk dies only if it starts its turn with 0 {@variantrule Hit Points|XPHB} and doesn't regenerate."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sunlight_weakness_qbcw",
+        "name": "Sunlight Weakness",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While in sunlight, the sporehusk has Disadvantage on D20 Tests.</p>",
+        "entries": [
+          "While in sunlight, the sporehusk has {@variantrule Disadvantage|XPHB} on {@dice D20} Tests."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_grab_ec9v",
+        "name": "Grab",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 11).</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}5 ({@damage 1d6 + 2}) Bludgeoning damage. If the target is a Large or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 11})."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 11})",
+          "save": {
+            "dc": 11,
+            "ability": null
+          },
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_bite_yqi0",
+        "name": "Bite",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. (must target a creature Grappled by the sporehusk). Hit: 6 (1d8 + 2) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. (must target a creature {@condition Grappled|XPHB} by the sporehusk). {@h}6 ({@damage 1d8 + 2}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Risen Sporehusk.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Risen Sporehusk.webp",
+    "fluff": {
+      "_monsterFluff": {
+        "name": "Sporehusk",
+        "source": "24GriffonsSaddlebag1"
+      }
+    },
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_scout_sporehusk_24griffonssaddlebag1",
+    "name": "Scout Sporehusk",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 32,
+      "formula": "5d8 + 10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 13,
+        "mod": 1
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "str": 13,
+    "dex": 12,
+    "con": 14,
+    "int": 6,
+    "wis": 11,
+    "cha": 9,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [
+      "poison"
+    ],
+    "vulnerable": [
+      "fire",
+      "radiant"
+    ],
+    "conditionImmune": [
+      "charmed",
+      "poisoned"
+    ],
+    "passive": 7,
+    "senses": {
+      "passivePerception": 7,
+      "sensesString": "Blindsight 15 ft., Darkvision 60 ft."
+    },
+    "languages": [
+      "understands Common but can't speak"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_regeneration_4goo",
+        "name": "Regeneration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sporehusk regains 5 Hit Points at the start of each of its turns. If it takes Fire or Radiant damage, this trait doesn't function on the sporehusk's next turn. The sporehusk dies only if it starts its turn with 0 Hit Points and doesn't regenerate.</p>",
+        "entries": [
+          "The sporehusk regains 5 {@variantrule Hit Points|XPHB} at the start of each of its turns. If it takes Fire or Radiant damage, this trait doesn't function on the sporehusk's next turn. The sporehusk dies only if it starts its turn with 0 {@variantrule Hit Points|XPHB} and doesn't regenerate."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_sunlight_weakness_exhm",
+        "name": "Sunlight Weakness",
+        "actionType": "trait",
+        "descriptionHtml": "<p>While in sunlight, the sporehusk has Disadvantage on D20 Tests.</p>",
+        "entries": [
+          "While in sunlight, the sporehusk has {@variantrule Disadvantage|XPHB} on {@dice D20} Tests."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_w944",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The scout makes two attacks, using Shortsword and Longbow in any combination.</p>",
+        "entries": [
+          "The scout makes two attacks, using Shortsword and Longbow in any combination."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_grab_0g4f",
+        "name": "Grab",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 11).</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}4 ({@damage 1d6 + 1}) Bludgeoning damage. If the target is a Large or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 11})."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 11})",
+          "save": {
+            "dc": 11,
+            "ability": null
+          },
+          "damages": [
+            {
+              "formula": "1d6 + 1",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortsword_icvo",
+        "name": "Shortsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}4 ({@damage 1d6 + 1}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_longbow_8urc",
+        "name": "Longbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: +3, range 150/600 ft. Hit: 5 (1d8 + 1) Piercing damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 3}, range 150/600 ft. {@h}5 ({@damage 1d8 + 1}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": null,
+          "range": "150/600 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_bite_mo5x",
+        "name": "Bite",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. (must target a creature Grappled by the sporehusk). Hit: 5 (1d8 + 1) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. (must target a creature {@condition Grappled|XPHB} by the sporehusk). {@h}5 ({@damage 1d8 + 1}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Scout Sporehusk.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Scout Sporehusk.webp",
+    "fluff": {
+      "_monsterFluff": {
+        "name": "Sporehusk",
+        "source": "24GriffonsSaddlebag1"
+      }
+    },
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_spirit_of_dendallen_24griffonssaddlebag1",
+    "name": "Spirit of Dendallen",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Huge",
+    "sizeCategory": "H",
+    "type": "Undead",
+    "subtype": "wizard",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 225,
+      "formula": "18d12 + 108"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 17,
+        "mod": 3
+      },
+      "con": {
+        "score": 23,
+        "mod": 6
+      },
+      "int": {
+        "score": 22,
+        "mod": 6
+      },
+      "wis": {
+        "score": 19,
+        "mod": 4
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "str": 19,
+    "dex": 17,
+    "con": 23,
+    "int": 22,
+    "wis": 19,
+    "cha": 17,
+    "proficiencyBonus": 7,
+    "save": {
+      "dex": "+10",
+      "int": "+13",
+      "wis": "+11",
+      "cha": "+10"
+    },
+    "saves": {
+      "dex": "+10",
+      "int": "+13",
+      "wis": "+11",
+      "cha": "+10"
+    },
+    "skill": {
+      "arcana": "+20",
+      "deception": "+17",
+      "history": "+13",
+      "insight": "+11",
+      "medicine": "+11",
+      "perception": "+11"
+    },
+    "skills": {
+      "arcana": "+20",
+      "deception": "+17",
+      "history": "+13",
+      "insight": "+11",
+      "medicine": "+11",
+      "perception": "+11"
+    },
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      "acid",
+      "bludgeoning",
+      "cold",
+      "fire",
+      "lightning",
+      "piercing",
+      "slashing",
+      "thunder"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained",
+      "stunned",
+      "unconscious"
+    ],
+    "passive": 21,
+    "initiative": {
+      "proficiency": 2
+    },
+    "senses": {
+      "passivePerception": 21,
+      "sensesString": "Darkvision 120 ft., Truesight 15 ft."
+    },
+    "languages": [
+      "Common plus three other languages; telepathy 120 ft."
+    ],
+    "cr": "21",
+    "crNumeric": 21,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_spirit_of_dendallen_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 6,
+        "casterLevel": 1,
+        "dc": 21,
+        "atkMod": 13,
+        "header": "The spirit casts one of the following spells, using Intelligence as the spellcasting ability (spell save DC 21):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_bestow_curse_xphb",
+            "name": "Bestow Curse",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Necromancy",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 21,
+            "damageList": [
+              {
+                "formula": "1d8",
+                "type": "Necrotic",
+                "label": "",
+                "stat": "none",
+                "upcastBonus": "",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_darkness_xphb",
+            "name": "Darkness",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, M (bat fur and a piece of coal)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_dispel_magic_xphb",
+            "name": "Dispel Magic",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_false_life_xphb",
+            "name": "False Life",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Necromancy",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [
+              {
+                "formula": "2d4 + 4",
+                "type": "Temp HP",
+                "stat": "none",
+                "upcastBonus": "5",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "V, S, M (a drop of alcohol)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_hold_person_xphb",
+            "name": "Hold Person",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 21,
+            "damageList": [],
+            "components": "V, S, M (a straight piece of iron)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_magic_missile_xphb",
+            "name": "Magic Missile",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [
+              {
+                "formula": "1d4 + 1",
+                "type": "Force",
+                "label": "",
+                "stat": "none",
+                "upcastBonus": "",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_blight_xphb",
+              "name": "Blight",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 21,
+              "damageList": [
+                {
+                  "formula": "8d8",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_finger_of_death_xphb",
+              "name": "Finger of Death",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 21,
+              "damageList": [
+                {
+                  "formula": "7d8 + 30",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_cloudkill_xphb",
+              "name": "Cloudkill",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 21,
+              "damageList": [
+                {
+                  "formula": "5d8",
+                  "type": "Poison",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_telekinesis_xphb",
+              "name": "Telekinesis",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 21,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_wall_of_force_xphb",
+              "name": "Wall of Force",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a shard of glass)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_circle_of_death_xphb",
+              "name": "Circle of Death",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "150 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 21,
+              "damageList": [
+                {
+                  "formula": "8d8",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "2d8",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (the powder of a crushed black pearl worth 500+ GP)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_prismatic_spray_xphb",
+              "name": "Prismatic Spray",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "Self (60 feet cone)",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 21,
+              "damageList": [
+                {
+                  "formula": "12d6",
+                  "type": "Acid",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "12d6",
+                  "type": "Cold",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "12d6",
+                  "type": "Fire",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "12d6",
+                  "type": "Lightning",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "12d6",
+                  "type": "Poison",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_weird_xphb",
+              "name": "Weird",
+              "source": "XPHB",
+              "level": 9,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 21,
+              "damageList": [
+                {
+                  "formula": "10d10",
+                  "type": "Psychic",
+                  "label": "Damage 1",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "5d10",
+                  "type": "Psychic",
+                  "label": "Damage 2",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Bestow Curse",
+          "Darkness",
+          "Dispel Magic",
+          "False Life",
+          "Hold Person",
+          "Mage Hand",
+          "Magic Missile"
+        ]
+      },
+      {
+        "id": "sc_spirit_of_dendallen_1",
+        "name": "Protective Magic",
+        "type": "slot",
+        "displayAs": "reaction",
+        "ability": "int",
+        "abilityMod": 6,
+        "casterLevel": 1,
+        "dc": 21,
+        "atkMod": 13,
+        "header": "The spirit casts Counterspell or Shield in response to the spell's trigger, using the same spellcasting ability as Spellcasting.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_counterspell_xphb",
+            "name": "Counterspell",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Abjuration",
+            "castingTime": "1 reaction (which you take when you see a creature within 60 feet of yourself casting a spell with Verbal, Somatic, or Material components)",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "constitution",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 21,
+            "damageList": [],
+            "components": "S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_shield_xphb",
+            "name": "Shield",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Abjuration",
+            "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+            "range": "self",
+            "duration": "1 round",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {},
+        "will": [
+          "Counterspell",
+          "Shield"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_attuned_thrall_fndf",
+        "name": "Attuned Thrall",
+        "actionType": "trait",
+        "descriptionHtml": "<p>cha DC 21, the creature that attuned to three Remnants of Dendallen (if the creature has Immunity to the Charmed condition or can't be possessed, it can still be affected, but it makes its saves against this effect with Advantage). {@actSaveFail} The target has the Charmed condition, becoming the host to the Spirit of Dendallen. On the spirit's turn, it can issue verbal or telepathic commands to the target (no action required). The target does its best to obey on its turn. If it completes an order and doesn't receive further direction from the spirit, it acts and moves as it likes, seemingly unaware of or unbothered by the presence of the spirit. The spirit can also command the target to take a Reaction but must take its own Reaction to do so.</p><p>The target repeats the save at the end of each of its turns, ending the effect and dismissing the spirit on a success. The DC for this save decreases when the spirit drops to certain Hit Points thresholds, reducing by 1 at 150 HP (DC 20), 100 HP (DC 19), and 50 HP (DC 18).</p>",
+        "entries": [
+          "{@actSave cha} {@dc 21}, the creature that attuned to three Remnants of Dendallen (if the creature has {@variantrule Immunity|XPHB} to the {@condition Charmed|XPHB} condition or can't be possessed, it can still be affected, but it makes its saves against this effect with {@variantrule Advantage|XPHB}). {@actSaveFail} The target has the {@condition Charmed|XPHB} condition, becoming the host to the Spirit of Dendallen. On the spirit's turn, it can issue verbal or telepathic commands to the target (no action required). The target does its best to obey on its turn. If it completes an order and doesn't receive further direction from the spirit, it acts and moves as it likes, seemingly unaware of or unbothered by the presence of the spirit. The spirit can also command the target to take a {@variantrule Reaction|XPHB} but must take its own {@variantrule Reaction|XPHB} to do so.",
+          "The target repeats the save at the end of each of its turns, ending the effect and dismissing the spirit on a success. The DC for this save decreases when the spirit drops to certain {@variantrule Hit Points|XPHB|Hit Point} thresholds, reducing by 1 at 150 HP ({@dc 20}), 100 HP ({@dc 19}), and 50 HP ({@dc 18})."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 21,
+            "ability": "CHA"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_immutable_form_qat3",
+        "name": "Immutable Form",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spirit can't shape-shift.</p>",
+        "entries": [
+          "The spirit can't shape-shift."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_incorporeal_tether_c43f",
+        "name": "Incorporeal Tether",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spirit can't move on its own. Instead, as the spirit's host moves, the spirit is moved with it (remaining centered on the host), even through other creatures and objects. The spirit can occupy another creature's space and vice versa.</p>",
+        "entries": [
+          "The spirit can't move on its own. Instead, as the spirit's host moves, the spirit is moved with it (remaining centered on the host), even through other creatures and objects. The spirit can occupy another creature's space and vice versa."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__3_day__mghp",
+        "name": "Legendary Resistance (3/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the spirit fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the spirit fails a saving throw, it can choose to succeed instead."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_b12g",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spirit has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The spirit has advantage on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_persistent_tendrils_sqbz",
+        "name": "Persistent Tendrils",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the spirit doesn't have any tendrils at the end of its turn, one Tendril of Dendallen is created, as if by the Create Tendrils action.</p>",
+        "entries": [
+          "If the spirit doesn't have any tendrils at the end of its turn, one Tendril of Dendallen is created, as if by the Create Tendrils action."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_unstable_conduit_oqxr",
+        "name": "Unstable Conduit",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the spirit's host dies, the spirit is destroyed in an explosion of necromantic energy, and the host is disintegrated into gray dust, leaving behind any Remnants of Dendallen it was wearing or carrying. The host can be revived only by a True Resurrection or a Wish spell. dex DC 16, each creature in a 30-foot Emanation [Area of Effect] originating from the host. {@actSaveFail} 33 (6d10) Necrotic damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "If the spirit's host dies, the spirit is destroyed in an explosion of necromantic energy, and the host is disintegrated into gray dust, leaving behind any Remnants of Dendallen it was wearing or carrying. The host can be revived only by a {@spell True Resurrection|XPHB} or a {@spell Wish|XPHB} spell. {@actSave dex} {@dc 16}, each creature in a 30-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the host. {@actSaveFail} 33 ({@damage 6d10}) Necrotic damage. {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "6d10",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_hli7",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The spirit makes two attacks, using Slam or Decaying Ray in any combination. It can (A) replace one attack with a use of Spellcasting to cast Magic Missile (level 2 version) or (B) replace two attacks with a use of Spellcasting to cast Blight (level 9 version).</p>",
+        "entries": [
+          "The spirit makes two attacks, using Slam or Decaying Ray in any combination. It can (A) replace one attack with a use of Spellcasting to cast {@spell Magic Missile|XPHB} (level 2 version) or (B) replace two attacks with a use of Spellcasting to cast {@spell Blight|XPHB} (level 9 version)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_slam_f5b1",
+        "name": "Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +13, reach 10 ft. Hit: 15 (2d8 + 6) Force damage plus 11 (2d10) Acid damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 13}, reach 10 ft. {@h}15 ({@damage 2d8 + 6}) Force damage plus 11 ({@damage 2d10}) Acid damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 13,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 6",
+              "type": "Force"
+            },
+            {
+              "formula": "2d10",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_decaying_ray_admu",
+        "name": "Decaying Ray",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: +13, range 120 ft. Hit: 19 (3d8 + 6) Necrotic damage. If the target is a creature, it is subjected to the following effect. con DC 21. {@actSaveFail} The target gains 1 Exhaustion level. It repeats the save at the end of each of its turns, taking 5 (1d10) Necrotic damage on a failure or losing all Exhaustion levels caused by this effect on a success. After 1 minute, it succeeds automatically.</p>",
+        "entries": [
+          "{@atkr r} {@hit 13}, range 120 ft. {@h}19 ({@damage 3d8 + 6}) Necrotic damage. If the target is a creature, it is subjected to the following effect. {@actSave con} {@dc 21}. {@actSaveFail} The target gains 1 {@condition Exhaustion|XPHB} level. It repeats the save at the end of each of its turns, taking 5 ({@damage 1d10}) Necrotic damage on a failure or losing all {@condition Exhaustion|XPHB} levels caused by this effect on a success. After 1 minute, it succeeds automatically."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 13,
+          "reach": null,
+          "range": "120 ft.",
+          "targets": "it is subjected to the following effect",
+          "save": {
+            "dc": 21,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "3d8 + 6",
+              "type": "Necrotic"
+            },
+            {
+              "formula": "1d10",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_create_tendrils__recharge_5__pqut",
+        "name": "Create Tendrils (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The spirit creates 1d4 + 2 Tendrils of Dendallen, each appearing in unoccupied spaces the spirit can see on solid surfaces within 150 feet of itself. The spirit can have no more than six tendrils at a time. The tendrils take their turns immediately after the spirit on the same Initiative count, and they obey the spirit. A tendril remains for 1 minute or until it's reduced to 0 Hit Points.</p>",
+        "entries": [
+          "The spirit creates {@dice 1d4 + 2} Tendrils of Dendallen, each appearing in unoccupied spaces the spirit can see on solid surfaces within 150 feet of itself. The spirit can have no more than six tendrils at a time. The tendrils take their turns immediately after the spirit on the same {@variantrule Initiative|XPHB} count, and they obey the spirit. A tendril remains for 1 minute or until it's reduced to 0 {@variantrule Hit Points|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_accursed_magic_f8fp",
+          "name": "Accursed Magic",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The spirit uses Spellcasting to cast Bestow Curse, False Life (level 3 version), or Hold Person (level 3 version). The spirit can't take this action again until the start of its next turn.</p>",
+          "entries": [
+            "The spirit uses Spellcasting to cast {@spell Bestow Curse|XPHB}, {@spell False Life|XPHB} (level 3 version), or {@spell Hold Person|XPHB} (level 3 version). The spirit can't take this action again until the start of its next turn."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_command_tendrils_7igz",
+          "name": "Command Tendrils",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Up to two Tendrils of Dendallen the spirit can see each either make a Grasp attack or use Teleport. The spirit can't take this action again until the start of its next turn.</p>",
+          "entries": [
+            "Up to two Tendrils of Dendallen the spirit can see each either make a Grasp attack or use {@spell Teleport|XPHB}. The spirit can't take this action again until the start of its next turn."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_sweep_hbho",
+          "name": "Sweep",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The spirit sweeps out with its massive arm. dex DC 19, each creature in a 20-foot Cone [Area of Effect]. {@actSaveFail} 23 (3d12 + 4) Force damage, and the target is pushed up to 15 feet away from the spirit and has the Prone condition. {@actSaveSuccess} Half damage only.</p>",
+          "entries": [
+            "The spirit sweeps out with its massive arm. {@actSave dex} {@dc 19}, each creature in a 20-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} 23 ({@damage 3d12 + 4}) Force damage, and the target is pushed up to 15 feet away from the spirit and has the {@condition Prone|XPHB} condition. {@actSaveSuccess} Half damage only."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 19,
+              "ability": "DEX"
+            },
+            "damages": [
+              {
+                "formula": "3d12 + 4",
+                "type": "Force"
+              }
+            ],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Spirit of Dendallen.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Spirit of Dendallen.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_swordbeak_24griffonssaddlebag1",
+    "name": "Swordbeak",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Huge",
+    "sizeCategory": "H",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 93,
+      "formula": "11d12 + 22"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 80,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 21,
+        "mod": 5
+      },
+      "dex": {
+        "score": 17,
+        "mod": 3
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 3,
+        "mod": -4
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 7,
+        "mod": -2
+      }
+    },
+    "str": 21,
+    "dex": 17,
+    "con": 15,
+    "int": 3,
+    "wis": 10,
+    "cha": 7,
+    "proficiencyBonus": 3,
+    "save": {
+      "dex": "+6"
+    },
+    "saves": {
+      "dex": "+6"
+    },
+    "skill": {
+      "perception": "+3"
+    },
+    "skills": {
+      "perception": "+3"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": ""
+    },
+    "languages": [],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_beak_j7wb",
+        "name": "Beak",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +8, reach 15 ft. Hit: 21 (3d10 + 5) Slashing damage. If the swordbeak moved 30+ feet straight toward the target immediately before the hit, the target takes an extra 10 (3d6) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 8}, reach 15 ft. {@h}21 ({@damage 3d10 + 5}) Slashing damage. If the swordbeak moved 30+ feet straight toward the target immediately before the hit, the target takes an extra 10 ({@damage 3d6}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 15,
+          "range": null,
+          "targets": "the target takes an extra 10 ({@damage 3d6}) Slashing damage",
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d10 + 5",
+              "type": "Slashing"
+            },
+            {
+              "formula": "3d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Swordbeak.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Swordbeak.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_tendril_of_dendallen_24griffonssaddlebag1",
+    "name": "Tendril of Dendallen",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 37,
+      "formula": "5d10 + 10"
+    },
+    "speed": {
+      "walk": 0,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 20,
+        "mod": 5
+      },
+      "dex": {
+        "score": 17,
+        "mod": 3
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 2,
+        "mod": -4
+      },
+      "wis": {
+        "score": 6,
+        "mod": -2
+      },
+      "cha": {
+        "score": 3,
+        "mod": -4
+      }
+    },
+    "str": 20,
+    "dex": 17,
+    "con": 15,
+    "int": 2,
+    "wis": 6,
+    "cha": 3,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "psychic",
+      "thunder"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "poisoned",
+      "restrained",
+      "unconscious"
+    ],
+    "passive": 8,
+    "initiative": {
+      "initiative": 3
+    },
+    "senses": {
+      "passivePerception": 8,
+      "sensesString": "Blindsight 120 ft."
+    },
+    "languages": [],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_immovable_yokq",
+        "name": "Immovable",
+        "actionType": "action",
+        "descriptionHtml": "<p>The tendril can't move or be moved except via teleportation or interplanar travel.</p>",
+        "entries": [
+          "The tendril can't move or be moved except via teleportation or interplanar travel."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_immutable_form_lwbi",
+        "name": "Immutable Form",
+        "actionType": "action",
+        "descriptionHtml": "<p>The tendril can't shape-shift.</p>",
+        "entries": [
+          "The tendril can't shape-shift."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_necromantic_demise_4t3b",
+        "name": "Necromantic Demise",
+        "actionType": "action",
+        "descriptionHtml": "<p>The tendril disappears if the Spirit of Dendallen is destroyed or dismissed.</p>",
+        "entries": [
+          "The tendril disappears if the Spirit of Dendallen is destroyed or dismissed."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_will_of_dendallen_ayui",
+        "name": "Will of Dendallen",
+        "actionType": "action",
+        "descriptionHtml": "<p>The tendril has a telepathic link with the spirit and the spirit's host while it's on the same plane of existence as them. The tendril doesn't provide cover to enemies against attacks and effects that pass through its space.</p>",
+        "entries": [
+          "The tendril has a telepathic link with the spirit and the spirit's host while it's on the same plane of existence as them. The tendril doesn't provide cover to enemies against attacks and effects that pass through its space."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_grasp_2a6y",
+        "name": "Grasp",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +7, reach 10 ft. Hit: 16 (2d10 + 5) Force damage plus 4 (1d8) Acid damage. If the target is a Huge or smaller creature, it has the Grappled condition (escape DC 15) and is pulled up to 5 feet toward the tendril. The tendril can have only one target Grappled in this way at a time.</p>",
+        "entries": [
+          "{@atkr m} {@hit 7}, reach 10 ft. {@h}16 ({@damage 2d10 + 5}) Force damage plus 4 ({@damage 1d8}) Acid damage. If the target is a Huge or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 15}) and is pulled up to 5 feet toward the tendril. The tendril can have only one target {@condition Grappled|XPHB} in this way at a time."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 10,
+          "range": null,
+          "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 15}) and is pulled up to 5 feet toward the tendril",
+          "save": {
+            "dc": 15,
+            "ability": null
+          },
+          "damages": [
+            {
+              "formula": "2d10 + 5",
+              "type": "Force"
+            },
+            {
+              "formula": "1d8",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fling_k90c",
+        "name": "Fling",
+        "actionType": "action",
+        "descriptionHtml": "<p>The tendril throws a Medium or smaller creature Grappled by it to a space it can see within 60 feet of itself that isn't in the air. dex DC 15, the creature thrown and each creature in the destination space. {@actSaveFail} 18 (4d8) Bludgeoning damage, and the target has the Prone condition. {@actSaveSuccess} Half damage only.</p>",
+        "entries": [
+          "The tendril throws a Medium or smaller creature {@condition Grappled|XPHB} by it to a space it can see within 60 feet of itself that isn't in the air. {@actSave dex} {@dc 15}, the creature thrown and each creature in the destination space. {@actSaveFail} 18 ({@damage 4d8}) Bludgeoning damage, and the target has the {@condition Prone|XPHB} condition. {@actSaveSuccess} Half damage only."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "4d8",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_teleport_abrv",
+        "name": "Teleport",
+        "actionType": "action",
+        "descriptionHtml": "<p>The tendril teleports up to 120 feet to an unoccupied space it can see on a solid surface.</p>",
+        "entries": [
+          "The tendril teleports up to 120 feet to an unoccupied space it can see on a solid surface."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Tendril of Dendallen.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Tendril of Dendallen.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_weremammoth_24griffonssaddlebag1",
+    "name": "Weremammoth",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Monstrosity",
+    "subtype": "lycanthrope",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 133,
+      "formula": "14d8 + 70"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 24,
+        "mod": 7
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 21,
+        "mod": 5
+      },
+      "int": {
+        "score": 11,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 1,
+        "mod": -5
+      }
+    },
+    "str": 24,
+    "dex": 10,
+    "con": 21,
+    "int": 11,
+    "wis": 12,
+    "cha": 1,
+    "proficiencyBonus": 3,
+    "save": {
+      "cha": "+0"
+    },
+    "saves": {
+      "cha": "+0"
+    },
+    "skill": {
+      "perception": "+7"
+    },
+    "skills": {
+      "perception": "+7"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 17,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "Common (can't speak in mammoth form)"
+    ],
+    "cr": "8",
+    "crNumeric": 8,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_adapted_3vzw",
+        "name": "Adapted",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The weremammoth can tolerate temperatures of 0 degrees Fahrenheit or lower without being subjected to the effects of extreme cold.</p>",
+        "entries": [
+          "The weremammoth can tolerate temperatures of 0 degrees Fahrenheit or lower without being subjected to the effects of extreme cold."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_8mdz",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The weremammoth makes three attacks, using Spear or Trample in any combination. It can replace one attack with a Gore attack.</p>",
+        "entries": [
+          "The weremammoth makes three attacks, using Spear or Trample in any combination. It can replace one attack with a Gore attack."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_gore__mammoth_or_hybrid_form_only__nt6e",
+        "name": "Gore (Mammoth or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +10, reach 5 ft. Hit: 16 (2d8 + 7) Piercing damage. If the target is a Humanoid, it is subjected to the following effect. con DC 12. {@actSaveFail} The target is cursed. If the cursed target drops to 0 Hit Points, it instead becomes a Weremammoth under the GM's control and has 10 Hit Points. {@actSaveSuccess} The target is immune to this weremammoth's curse for 24 hours.</p>",
+        "entries": [
+          "{@atkr m} {@hit 10}, reach 5 ft. {@h}16 ({@damage 2d8 + 7}) Piercing damage. If the target is a Humanoid, it is subjected to the following effect. {@actSave con} {@dc 12}. {@actSaveFail} The target is cursed. If the cursed target drops to 0 {@variantrule Hit Points|XPHB}, it instead becomes a Weremammoth under the GM's control and has 10 {@variantrule Hit Points|XPHB}. {@actSaveSuccess} The target is immune to this weremammoth's curse for 24 hours."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 10,
+          "reach": 5,
+          "range": null,
+          "targets": "it is subjected to the following effect",
+          "save": {
+            "dc": 12,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "2d8 + 7",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spear__humanoid_or_hybrid_form_only__llwe",
+        "name": "Spear (Humanoid or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 20/60 ft. Hit: 17 (3d6 + 7) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 10}, reach 5 ft. or range 20/60 ft. {@h}17 ({@damage 3d6 + 7}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 10,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d6 + 7",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_trample__mammoth_or_hybrid_form_only__96ra",
+        "name": "Trample (Mammoth or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +10, reach 5 ft. Hit: 18 (2d10 + 7) Bludgeoning damage. If the target is a Large or smaller creature and the weremammoth moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition.</p>",
+        "entries": [
+          "{@atkr m} {@hit 10}, reach 5 ft. {@h}18 ({@damage 2d10 + 7}) Bludgeoning damage. If the target is a Large or smaller creature and the weremammoth moved 20+ feet straight toward it immediately before the hit, the target has the {@condition Prone|XPHB} condition."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 10,
+          "reach": 5,
+          "range": null,
+          "targets": "the target has the {@condition Prone|XPHB} condition",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10 + 7",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_shape_shift_y15a",
+        "name": "Shape-Shift",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The werewolf shape-shifts into a Large mammoth-humanoid hybrid or a Huge mammoth, or it returns to its true humanoid form. Its game statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed.</p>",
+        "entries": [
+          "The werewolf shape-shifts into a Large mammoth-humanoid hybrid or a Huge mammoth, or it returns to its true humanoid form. Its game statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Weremammoth.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Weremammoth.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_white_wraith_24griffonssaddlebag1",
+    "name": "White Wraith",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 6,
+        "mod": -2
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 9,
+        "mod": -1
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "str": 6,
+    "dex": 16,
+    "con": 17,
+    "int": 9,
+    "wis": 16,
+    "cha": 15,
+    "proficiencyBonus": 3,
+    "save": {
+      "con": "+5"
+    },
+    "saves": {
+      "con": "+5"
+    },
+    "skill": {
+      "perception": "+6",
+      "stealth": "+6"
+    },
+    "skills": {
+      "perception": "+6",
+      "stealth": "+6"
+    },
+    "immune": [
+      "cold",
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      "bludgeoning",
+      "fire",
+      "lightning",
+      "piercing",
+      "slashing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained",
+      "unconscious"
+    ],
+    "passive": 16,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "Common plus two other languages"
+    ],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_blizzard_stalker_k1md",
+        "name": "Blizzard Stalker",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Inclement weather (such as fog, snow or wind) doesn't impede the wraith's vision, and it has Advantage on Dexterity (Stealth) checks it makes in such conditions.</p>",
+        "entries": [
+          "Inclement weather (such as fog, snow or wind) doesn't impede the wraith's vision, and it has {@variantrule Advantage|XPHB} on Dexterity ({@skill Stealth|XPHB}) checks it makes in such conditions."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_incorporeal_movement_zr54",
+        "name": "Incorporeal Movement",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The wraith can move through other creatures and objects as if they were Difficult Terrain. It takes 5 (1d10) Force damage if it ends its turn inside an object.</p>",
+        "entries": [
+          "The wraith can move through other creatures and objects as if they were {@variantrule Difficult Terrain|XPHB}. It takes 5 ({@damage 1d10}) Force damage if it ends its turn inside an object."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_life_drain_fz4e",
+        "name": "Life Drain",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +6 (with Advantage during the first round of each combat), reach 5 ft. Hit: 16 (3d8 + 3) Necrotic damage plus 16 (3d10) Cold damage. If the target is a creature, its Hit Points maximum decreases by an amount equal to the Necrotic damage taken.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6} (with {@variantrule Advantage|XPHB} during the first round of each combat), reach 5 ft. {@h}16 ({@damage 3d8 + 3}) Necrotic damage plus 16 ({@damage 3d10}) Cold damage. If the target is a creature, its {@variantrule Hit Points|XPHB|Hit Point} maximum decreases by an amount equal to the Necrotic damage taken."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "its {@variantrule Hit Points|XPHB|Hit Point} maximum decreases by an amount equal to the Necrotic damage taken",
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d8 + 3",
+              "type": "Necrotic"
+            },
+            {
+              "formula": "3d10",
+              "type": "Cold"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_freezing_gale__recharge_5__7cl7",
+        "name": "Freezing Gale (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>con DC 14, each creature in a 30-foot Cone [Area of Effect]. {@actSaveFail} 28 (8d6) Cold damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave con} {@dc 14}, each creature in a 30-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} 28 ({@damage 8d6}) Cold damage. {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "8d6",
+              "type": "Cold"
+            }
+          ],
+          "recharge": "5"
+        }
+      },
+      {
+        "id": "act_create_walker__2_day__zo7r",
+        "name": "Create Walker (2/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The wraith targets a Humanoid corpse within 10 feet of itself that died from either Cold damage or exposure to extreme cold. The target's remains animate as either a Skeleton or a Zombie (depending on the state of the corpse, as determined by the GM) that has Immunity to Cold and Necrotic damage and shares the wraith's Blizzard Stalker trait. The animated creature is under the wraith's control. The wraith can have no more than ten animated creatures under its control at a time.</p>",
+        "entries": [
+          "The wraith targets a Humanoid corpse within 10 feet of itself that died from either Cold damage or exposure to extreme cold. The target's remains animate as either a Skeleton or a Zombie (depending on the state of the corpse, as determined by the GM) that has {@variantrule Immunity|XPHB} to Cold and Necrotic damage and shares the wraith's Blizzard Stalker trait. The animated creature is under the wraith's control. The wraith can have no more than ten animated creatures under its control at a time."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/White Wraith.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/White Wraith.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_winged_wretch_24griffonssaddlebag1",
+    "name": "Winged Wretch",
+    "source": "24GriffonsSaddlebag1",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 27,
+      "formula": "5d8 + 5"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 50,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 13,
+        "mod": 1
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 7,
+        "mod": -2
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 7,
+        "mod": -2
+      }
+    },
+    "str": 13,
+    "dex": 16,
+    "con": 12,
+    "int": 7,
+    "wis": 12,
+    "cha": 7,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+3"
+    },
+    "skills": {
+      "perception": "+3"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": "Blindsight 60 ft."
+    },
+    "languages": [
+      "Undercommon"
+    ],
+    "cr": "1/2",
+    "crNumeric": 0.5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_22dt",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The winged wretch makes two Rend attacks.</p>",
+        "entries": [
+          "The winged wretch makes two Rend attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rend_up5r",
+        "name": "Rend",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 5 (1d8 + 1) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}5 ({@damage 1d8 + 1}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 1",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/24GriffonsSaddlebag1/Winged Wretch.webp",
+    "tokenImg": "img/bestiary/tokens/24GriffonsSaddlebag1/Winged Wretch.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

@@ -92,10 +92,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_vulnerability_qrss",
+        "id": "act_sunlight_vulnerability_y6s4",
         "name": "Sunlight Vulnerability",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the snake has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight. When the snake begins its turn in sunlight, it immediately suffers 10 radiant damage.</p>",
+        "entries": [
+          "While in sunlight, the snake has disadvantage on attack rolls and on Wisdom ({@skill Perception}) checks that rely on sight. When the snake begins its turn in sunlight, it immediately suffers 10 radiant damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -109,10 +112,13 @@
         }
       },
       {
-        "id": "act_undead_fortitude_1i07",
+        "id": "act_undead_fortitude_l27f",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the snake to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the snake drops to 1 hit point instead.</p>",
+        "entries": [
+          "If damage reduces the snake to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the snake drops to 1 hit point instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -128,10 +134,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_41qa",
+        "id": "act_multiattack_ce4x",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The snake makes two attacks: one with its bite and one with a constrict attack.</p>",
+        "entries": [
+          "The snake makes two attacks: one with its bite and one with a constrict attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -145,10 +154,13 @@
         }
       },
       {
-        "id": "act_bite_55xe",
+        "id": "act_bite_28nv",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 10 ft., one target. {@h}17 (3d8 + 4) piercing damage, and the target must make a DC 15 Constitution saving throw, taking 17 (5d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 17 (3d8 + 4) piercing damage, and the target must make a DC 15 Constitution saving throw, taking 17 (5d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 10 ft., one target. {@h}17 ({@damage 3d8 + 4}) piercing damage, and the target must make a {@dc 15} Constitution saving throw, taking 17 ({@damage 5d6}) poison damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -174,10 +186,13 @@
         }
       },
       {
-        "id": "act_constrict_gotg",
+        "id": "act_constrict_pswc",
         "name": "Constrict",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}17 (3d8 + 4) bludgeoning damage, and the target is grappled (escape DC 16). Until this grapple ends, the creature is restrained and the snake cannot constrict another target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 17 (3d8 + 4) bludgeoning damage, and the target is grappled (escape DC 16). Until this grapple ends, the creature is restrained and the snake cannot constrict another target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}17 ({@damage 3d8 + 4}) bludgeoning damage, and the target is {@condition grappled} (escape {@dc 16}). Until this grapple ends, the creature is {@condition restrained} and the snake cannot constrict another target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -187,7 +202,7 @@
           "targets": "one target",
           "save": {
             "dc": 16,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -206,11 +221,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AitFR-DN/Giant Zombie Constrictor Snake.webp",
     "tokenImg": "img/bestiary/tokens/AitFR-DN/Giant Zombie Constrictor Snake.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_hamish_hewland_aitfr-dn",
@@ -318,10 +345,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_lywu",
+        "id": "act_multiattack_qq7s",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Hamish makes two attacks with his axe or throws two rocks.</p>",
+        "entries": [
+          "Hamish makes two attacks with his axe or throws two rocks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -335,10 +365,13 @@
         }
       },
       {
-        "id": "act_axe_5496",
+        "id": "act_axe_p3vu",
         "name": "Axe",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}17 (2d10 + 6) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 17 (2d10 + 6) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 5 ft., one target. {@h}17 ({@damage 2d10 + 6}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -357,10 +390,13 @@
         }
       },
       {
-        "id": "act_rock_q0dq",
+        "id": "act_rock_r89a",
         "name": "Rock",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +9 to hit, range 60/240 ft., one target. {@h}17 (2d10 + 6) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +9 to hit, range 60/240 ft., one target. Hit: 17 (2d10 + 6) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 9} to hit, range 60/240 ft., one target. {@h}17 ({@damage 2d10 + 6}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -382,10 +418,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_5rbm",
+        "id": "act_parry_whlq",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Hamish adds 2 to his AC against one melee attack that would hit him. To do so, he must see the attacker and be wielding a melee weapon or a shield.</p>",
+        "entries": [
+          "Hamish adds 2 to his AC against one melee attack that would hit him. To do so, he must see the attacker and be wielding a melee weapon or a shield."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -404,11 +443,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AitFR-DN/Hamish Hewland.webp",
     "tokenImg": "img/bestiary/tokens/AitFR-DN/Hamish Hewland.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_kyrilla__accursed_gorgon_aitfr-dn",
@@ -529,10 +580,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_feed_on_pain__2_day__0snn",
+        "id": "act_feed_on_pain__2_day__63sx",
         "name": "Feed on Pain (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The first time she hits with a weapon attack on her turn, Kyrilla can deal an extra 16 (3d10) poison damage to the target and regains a number of hit points equal to half the damage dealt.</p>",
+        "entries": [
+          "The first time she hits with a weapon attack on her turn, Kyrilla can deal an extra 16 ({@damage 3d10}) poison damage to the target and regains a number of hit points equal to half the damage dealt."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -551,10 +605,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__2_day__ap2v",
+        "id": "act_legendary_resistance__2_day__s843",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If she fails a saving throw, Kyrilla can choose to succeed instead.</p>",
+        "entries": [
+          "If she fails a saving throw, Kyrilla can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -568,10 +625,15 @@
         }
       },
       {
-        "id": "act_petrifying_gaze_jkyw",
+        "id": "act_petrifying_gaze_qoz9",
         "name": "Petrifying Gaze",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature that can see Kyrilla's eyes starts its turn within 30 feet of her, Kyrilla can force it to make a DC 14 Constitution saving throw if Kyrilla isn't incapacitated and can see the creature. If the saving throw fails by 5 or more, the creature is instantly petrified. Otherwise, a creature that fails the save begins to turn to stone and is restrained. The restrained creature must repeat the saving throw at the end of its next turn, becoming petrified on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the greater restoration spell or other magic.</p><p>Unless surprised, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see Kyrilla until the start of its next turn, when it can avert its eyes again. If the creature looks at Kyrilla in the meantime, it must immediately make the save.</p><p>Kyrilla's accursed gaze does not affect undead or constructs. If Kyrilla sees herself reflected on a polished surface within 30 feet of her and in an area of bright light, she is, due to her curse, affected by her own gaze.</p>",
+        "entries": [
+          "When a creature that can see Kyrilla's eyes starts its turn within 30 feet of her, Kyrilla can force it to make a {@dc 14} Constitution saving throw if Kyrilla isn't {@condition incapacitated} and can see the creature. If the saving throw fails by 5 or more, the creature is instantly {@condition petrified}. Otherwise, a creature that fails the save begins to turn to stone and is {@condition restrained}. The {@condition restrained} creature must repeat the saving throw at the end of its next turn, becoming {@condition petrified} on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the {@spell greater restoration} spell or other magic.",
+          "Unless {@status surprised}, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see Kyrilla until the start of its next turn, when it can avert its eyes again. If the creature looks at Kyrilla in the meantime, it must immediately make the save.",
+          "Kyrilla's accursed gaze does not affect undead or constructs. If Kyrilla sees herself reflected on a polished surface within 30 feet of her and in an area of bright light, she is, due to her curse, affected by her own gaze."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -588,10 +650,13 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_h53x",
+        "id": "act_sunlight_sensitivity_k61a",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Kyrilla has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight.</p>",
+        "entries": [
+          "While in sunlight, Kyrilla has disadvantage on attack rolls and on Wisdom ({@skill Perception}) checks that rely on sight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -607,10 +672,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_iagi",
+        "id": "act_multiattack_xw2v",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Kyrilla makes one attack to constrict and two attacks with her claws, or she makes three attacks with her longbow.</p>",
+        "entries": [
+          "Kyrilla makes one attack to constrict and two attacks with her claws, or she makes three attacks with her longbow."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -624,10 +692,13 @@
         }
       },
       {
-        "id": "act_claw_i0gi",
+        "id": "act_claw_w4fc",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}13 (3d6 + 3) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (3d6 + 3) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}13 ({@damage 3d6 + 3}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -646,10 +717,13 @@
         }
       },
       {
-        "id": "act_constrict_k068",
+        "id": "act_constrict_rta5",
         "name": "Constrict",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 10 ft., one target. {@h}10 (3d6) bludgeoning damage, and the target is grappled (escape DC 13) if it is a Large or smaller creature. Until this grapple ends, the target is restrained, and Kyrilla can't constrict another target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 10 (3d6) bludgeoning damage, and the target is grappled (escape DC 13) if it is a Large or smaller creature. Until this grapple ends, the target is restrained, and Kyrilla can't constrict another target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 10 ft., one target. {@h}10 ({@damage 3d6}) bludgeoning damage, and the target is {@condition grappled} (escape {@dc 13}) if it is a Large or smaller creature. Until this grapple ends, the target is {@condition restrained}, and Kyrilla can't constrict another target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -659,7 +733,7 @@
           "targets": "one target",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -671,10 +745,13 @@
         }
       },
       {
-        "id": "act_longbow_kayy",
+        "id": "act_longbow_nbbj",
         "name": "Longbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +7 to hit, range 150/600 ft., one target. {@h}16 (3d8 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +7 to hit, range 150/600 ft., one target. Hit: 16 (3d8 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 7} to hit, range 150/600 ft., one target. {@h}16 ({@damage 3d8 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -693,10 +770,14 @@
         }
       },
       {
-        "id": "act_summon_swarm_of_poisonous_snakes__recharge_5__ra39",
+        "id": "act_summon_swarm_of_poisonous_snakes__recharge_5__hukl",
         "name": "Summon Swarm of Poisonous Snakes (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Kyrilla conjures a swarm of poisonous snakes into an empty space within 10 feet of her. The swarm is under Kyrilla's control and acts on her turn, immediately after her in the initiative order.</p><p>It remains in existence for up to 1 hour. She can summon no more than three swarms per day. Kyrilla can banish any or all of her summoned swarms with a bonus action.</p>",
+        "entries": [
+          "Kyrilla conjures a swarm of poisonous snakes into an empty space within 10 feet of her. The swarm is under Kyrilla's control and acts on her turn, immediately after her in the initiative order.",
+          "It remains in existence for up to 1 hour. She can summon no more than three swarms per day. Kyrilla can banish any or all of her summoned swarms with a bonus action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -717,10 +798,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_claw_a2e4",
+          "id": "act_claw_elm9",
           "name": "Claw",
           "actionType": "legendary",
           "descriptionHtml": "<p>Kyrilla or a swarm of poisonous snakes makes a weapon attack.</p>",
+          "entries": [
+            "Kyrilla or a swarm of poisonous snakes makes a weapon attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -734,10 +818,13 @@
           }
         },
         {
-          "id": "act_detect_zzea",
+          "id": "act_detect_nkzi",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>Kyrilla makes a Wisdom (Perception) check.</p>",
+          "entries": [
+            "Kyrilla makes a Wisdom ({@skill Perception}) check."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -751,10 +838,13 @@
           }
         },
         {
-          "id": "act_slither_n2vk",
+          "id": "act_slither_id69",
           "name": "Slither",
           "actionType": "legendary",
           "descriptionHtml": "<p>Kyrilla moves up to her speed without provoking opportunity attacks.</p>",
+          "entries": [
+            "Kyrilla moves up to her speed without provoking opportunity attacks."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -769,12 +859,16 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_lair_action_40l6",
-        "name": "Lair Action",
+        "id": "act_cast_moonbeam_5698",
+        "name": "Cast Moonbeam",
         "actionType": "lair",
         "descriptionHtml": "<p>Kyrilla casts moonbeam (no components required). While maintaining concentration on this effect, she can't take other lair actions.</p>",
+        "entries": [
+          "Kyrilla casts {@spell moonbeam} (no components required). While maintaining {@status concentration} on this effect, she can't take other lair actions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -788,10 +882,13 @@
         }
       },
       {
-        "id": "act_lair_action_fsqa",
-        "name": "Lair Action",
+        "id": "act_cast_cloud_of_daggers_ozyb",
+        "name": "Cast Cloud Of Daggers",
         "actionType": "lair",
         "descriptionHtml": "<p>Kyrilla casts cloud of daggers (no components required), except the daggers are flying snakes and the spell deals piercing damage. While maintaining concentration on this effect, she can't take other lair actions.</p>",
+        "entries": [
+          "Kyrilla casts {@spell cloud of daggers} (no components required), except the daggers are flying snakes and the spell deals piercing damage. While maintaining {@status concentration} on this effect, she can't take other lair actions."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -805,10 +902,13 @@
         }
       },
       {
-        "id": "act_lair_action_zhpm",
-        "name": "Lair Action",
+        "id": "act_pools_of_liquid_e7vm",
+        "name": "Pools Of Liquid",
         "actionType": "lair",
         "descriptionHtml": "<p>Pools of liquid within 60 feet of Kyrilla surge and froth, splashing and soaking any creature on the ground within 5 feet of such pools. Creatures that succeed on a DC 14 Dexterity saving throw avoid getting liquid in their eyes and mouths. Kyrilla can't use this lair action again until she has used a different one.</p>",
+        "entries": [
+          "Pools of liquid within 60 feet of Kyrilla surge and froth, splashing and soaking any creature on the ground within 5 feet of such pools. Creatures that succeed on a {@dc 14} Dexterity saving throw avoid getting liquid in their eyes and mouths. Kyrilla can't use this lair action again until she has used a different one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -825,10 +925,88 @@
         }
       }
     ],
+    "lairHeader": "When fighting inside her lair, Kyrilla can invoke the ambient magic there to take lair actions. On initiative count 20 (losing initiative ties), she takes a lair action to cause one of the following effects:",
+    "lairActionsDesc": "When fighting inside her lair, Kyrilla can invoke the ambient magic there to take lair actions. On initiative count 20 (losing initiative ties), she takes a lair action to cause one of the following effects:",
+    "regionalEffects": [
+      {
+        "id": "act_regional_effect_jgww",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Water sources within the lair are supernaturally fouled and poisonous. Creatures that drink these waters must make a DC 14 Constitution saving throw or be poisoned for 1 minute. Afflicted creatures can make a new saving throw at the end of each of their turns, ending the condition on a success.</p>",
+        "entries": [
+          "Water sources within the lair are supernaturally fouled and poisonous. Creatures that drink these waters must make a {@dc 14} Constitution saving throw or be {@condition poisoned} for 1 minute. Afflicted creatures can make a new saving throw at the end of each of their turns, ending the condition on a success."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "CON"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_cei0",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Plants within 1 mile of the lair suffer from a calcifying mold that dries and hardens leaves, killing many otherwise hearty thistles and heather.</p>",
+        "entries": [
+          "Plants within 1 mile of the lair suffer from a calcifying mold that dries and hardens leaves, killing many otherwise hearty thistles and heather."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_239t",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Fog lightly obscures the land within 3 miles of the lair.</p>",
+        "entries": [
+          "Fog lightly obscures the land within 3 miles of the lair."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "regionalEffectsHtml": "<p>The region containing Kyrilla's lair is warped by her accursed nature and the meteoric stone around her, which together create the following effects:</p><ul><li>Water sources within the lair are supernaturally fouled and poisonous. Creatures that drink these waters must make a DC 14 Constitution saving throw or be poisoned for 1 minute. Afflicted creatures can make a new saving throw at the end of each of their turns, ending the condition on a success.</li><li>Plants within 1 mile of the lair suffer from a calcifying mold that dries and hardens leaves, killing many otherwise hearty thistles and heather.</li><li>Fog lightly obscures the land within 3 miles of the lair.</li></ul>",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AitFR-DN/Kyrilla, Accursed Gorgon.webp",
     "tokenImg": "img/bestiary/tokens/AitFR-DN/Kyrilla, Accursed Gorgon.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": {
+      "name": "Kyrilla, Accursed Gorgon",
+      "source": "AitFR-DN"
+    }
   },
   {
     "id": "creature_skeletal_horror_aitfr-dn",
@@ -927,10 +1105,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_uv36",
+        "id": "act_multiattack_jh5w",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The horror makes two attacks with its claws.</p>",
+        "entries": [
+          "The horror makes two attacks with its claws."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -944,10 +1125,13 @@
         }
       },
       {
-        "id": "act_claw_xoei",
+        "id": "act_claw_c1bp",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}19 (3d10 + 3) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 19 (3d10 + 3) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}19 ({@damage 3d10 + 3}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -966,10 +1150,13 @@
         }
       },
       {
-        "id": "act_wave_of_bones__recharge_5__o9ul",
+        "id": "act_wave_of_bones__recharge_5__vb7d",
         "name": "Wave of Bones (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The horror crashes into foes like a wave before quickly reforming. Each creature within 10 feet of the horror must make a DC 15 Dexterity saving throw, taking 18 (4d8) bludgeoning damage on a failed save, or half as much damage on a successful one. A creature that fails this saving throw is also knocked prone.</p>",
+        "entries": [
+          "The horror crashes into foes like a wave before quickly reforming. Each creature within 10 feet of the horror must make a {@dc 15} Dexterity saving throw, taking 18 ({@damage 4d8}) bludgeoning damage on a failed save, or half as much damage on a successful one. A creature that fails this saving throw is also knocked {@condition prone}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -998,10 +1185,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AitFR-DN/Skeletal Horror.webp",
     "tokenImg": "img/bestiary/tokens/AitFR-DN/Skeletal Horror.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

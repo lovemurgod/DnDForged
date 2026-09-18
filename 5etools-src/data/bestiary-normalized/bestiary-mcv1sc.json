@@ -96,10 +96,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_vgyi",
+        "id": "act_false_appearance_on36",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>If the spider is motionless, has its eyes and mouth closed, and has its legs wrapped around its body at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the spider move or act, that creature must succeed on a DC 18 Intelligence (Investigation) check to discern that the spider is anything other than an asteroid.</p>",
+        "entries": [
+          "If the spider is motionless, has its eyes and mouth closed, and has its legs wrapped around its body at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the spider move or act, that creature must succeed on a {@dc 18} Intelligence ({@skill Investigation}) check to discern that the spider is anything other than an asteroid."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -109,17 +112,20 @@
           "targets": null,
           "save": {
             "dc": 18,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__v9dq",
+        "id": "act_legendary_resistance__3_day__6xtu",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the spider fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the spider fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -133,10 +139,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_pzxl",
+        "id": "act_unusual_nature_5z7e",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The spider doesn't require air.</p>",
+        "entries": [
+          "The spider doesn't require air."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -152,10 +161,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0527",
+        "id": "act_multiattack_hfab",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spider makes two Web Strand attacks, uses Reel, and makes two Bite attacks.</p>",
+        "entries": [
+          "The spider makes two Web Strand attacks, uses Reel, and makes two Bite attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -169,10 +181,13 @@
         }
       },
       {
-        "id": "act_bite_ew5y",
+        "id": "act_bite_f6up",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +13 to hit, reach 10 ft., one target. {@h}21 (3d8 + 8) piercing damage plus 10 (3d6) acid damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 10 ft., one target. Hit: 21 (3d8 + 8) piercing damage plus 10 (3d6) acid damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 13} to hit, reach 10 ft., one target. {@h}21 ({@damage 3d8 + 8}) piercing damage plus 10 ({@damage 3d6}) acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -195,10 +210,13 @@
         }
       },
       {
-        "id": "act_web_strand_hubh",
+        "id": "act_web_strand_63zk",
         "name": "Web Strand",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +13 to hit, reach 120 ft., one creature. {@h}The target is grappled (escape DC 18). The web strand can be attacked and destroyed (AC 12; 20 hit points; vulnerability to fire damage; immunity to bludgeoning, poison, and psychic damage). The spider can grapple up to six creatures at a time using its web strands.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +13 to hit, reach 120 ft., one creature. Hit: The target is grappled (escape DC 18). The web strand can be attacked and destroyed (AC 12; 20 hit points; vulnerability to fire damage; immunity to bludgeoning, poison, and psychic damage). The spider can grapple up to six creatures at a time using its web strands.</p>",
+        "entries": [
+          "{@atk rw} {@hit 13} to hit, reach 120 ft., one creature. {@h}The target is {@condition grappled} (escape {@dc 18}). The web strand can be attacked and destroyed (AC 12; 20 hit points; vulnerability to fire damage; immunity to bludgeoning, poison, and psychic damage). The spider can grapple up to six creatures at a time using its web strands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -208,17 +226,20 @@
           "targets": "one creature",
           "save": {
             "dc": 18,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_reel_xqyn",
+        "id": "act_reel_07vz",
         "name": "Reel",
         "actionType": "action",
         "descriptionHtml": "<p>The spider pulls each creature grappled by it up to 60 feet straight toward itself.</p>",
+        "entries": [
+          "The spider pulls each creature {@condition grappled} by it up to 60 feet straight toward itself."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -234,10 +255,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_snare_ship__1_day__xzir",
+        "id": "act_snare_ship__1_day__2a5h",
         "name": "Snare Ship (1/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The spider weaves a magical web around a spelljamming ship it can see within 120 feet of itself. The web lasts for 1 minute and suppresses the magic of any spelljamming helm aboard the ship. Decks and other surfaces of the ship that aren't enclosed become difficult terrain until the effect ends. The web is impervious to damage but is destroyed by a successful casting of dispel magic (DC 18).</p>",
+        "entries": [
+          "The spider weaves a magical web around a spelljamming ship it can see within 120 feet of itself. The web lasts for 1 minute and suppresses the magic of any spelljamming helm aboard the ship. Decks and other surfaces of the ship that aren't enclosed become difficult terrain until the effect ends. The web is impervious to damage but is destroyed by a successful casting of {@spell dispel magic} ({@dc 18})."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -247,7 +271,7 @@
           "targets": null,
           "save": {
             "dc": 18,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
@@ -260,11 +284,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Asteroid Spider.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Asteroid Spider.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_clockwork_horror_mcv1sc",
@@ -376,10 +412,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shutdown_l0cr",
+        "id": "act_shutdown_4o5b",
         "name": "Shutdown",
         "actionType": "trait",
         "descriptionHtml": "<p>If targeted by dispel magic, the horror must succeed on a Constitution saving throw against the caster's spell save DC or fall unconscious for 1 minute or until it takes any damage.</p>",
+        "entries": [
+          "If targeted by {@spell dispel magic}, the horror must succeed on a Constitution saving throw against the caster's spell save DC or fall {@condition unconscious} for 1 minute or until it takes any damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -393,10 +432,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_07mq",
+        "id": "act_unusual_nature_pjqj",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The horror doesn't require air, food, drink, or sleep.</p>",
+        "entries": [
+          "The horror doesn't require air, food, drink, or sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -412,10 +454,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rtr2",
+        "id": "act_multiattack_3b89",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The horror makes one Bite attack and two Rotating Saw attacks, or it makes two Lightning Jolt attacks.</p>",
+        "entries": [
+          "The horror makes one Bite attack and two Rotating Saw attacks, or it makes two Lightning Jolt attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -429,10 +474,13 @@
         }
       },
       {
-        "id": "act_bite_bfev",
+        "id": "act_bite_w51k",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d8 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -451,10 +499,13 @@
         }
       },
       {
-        "id": "act_rotating_saw_0gbl",
+        "id": "act_rotating_saw_547w",
         "name": "Rotating Saw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -473,10 +524,13 @@
         }
       },
       {
-        "id": "act_lightning_jolt_f5iw",
+        "id": "act_lightning_jolt_o0sw",
         "name": "Lightning Jolt",
         "actionType": "action",
-        "descriptionHtml": "<p>rs +4 to hit, range 120 ft., one target. {@h}7 (1d10 + 2) lightning damage.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: +4 to hit, range 120 ft., one target. Hit: 7 (1d10 + 2) lightning damage.</p>",
+        "entries": [
+          "{@atk rs} {@hit 4} to hit, range 120 ft., one target. {@h}7 ({@damage 1d10 + 2}) lightning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -495,10 +549,13 @@
         }
       },
       {
-        "id": "act_spelljamming_helm_interface_nbdw",
+        "id": "act_spelljamming_helm_interface_w88l",
         "name": "Spelljamming Helm Interface",
         "actionType": "action",
         "descriptionHtml": "<p>The horror attaches to a spelljamming helm it can see within 5 feet of itself and attunes to the helm instantly. If another creature is already attuned to the helm, that creature's attunement to the helm ends when the horror's attunement begins. The horror can operate the helm even though it isn't a spellcaster. The horror can detach from the helm as a bonus action, which ends its attunement to the helm.</p>",
+        "entries": [
+          "The horror attaches to a spelljamming helm it can see within 5 feet of itself and attunes to the helm instantly. If another creature is already attuned to the helm, that creature's attunement to the helm ends when the horror's attunement begins. The horror can operate the helm even though it isn't a spellcaster. The horror can detach from the helm as a bonus action, which ends its attunement to the helm."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -519,11 +576,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Clockwork Horror.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Clockwork Horror.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_eldritch_lich_mcv1sc",
@@ -636,7 +705,7 @@
       {
         "id": "sc_eldritch_lich_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 4,
@@ -751,12 +820,16 @@
                 {
                   "formula": "2d6",
                   "type": "Acid",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "2d6",
                   "type": "Cold",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a pickled tentacle)",
@@ -785,7 +858,9 @@
                   "formula": "8d6",
                   "type": "Lightning",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a bit of fur and a crystal rod)",
@@ -838,7 +913,9 @@
                   "formula": "4d6",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -880,10 +957,13 @@
     ],
     "traits": [
       {
-        "id": "act_far_realm_parasite_ny9s",
+        "id": "act_far_realm_parasite_xy8u",
         "name": "Far Realm Parasite",
         "actionType": "trait",
         "descriptionHtml": "<p>Inside the lich's torso dwells a wormlike parasite that contains the lich's soul. When the lich dies, it implodes into the parasite, which then vanishes into the Far Realm. In 2d4 days, the parasite causes the lich to reappear within 1d4 miles of where it died. If the lich died inside a magic circle cast to contain Undead, the lich instead reappears as an otyugh with all the lich's memories.</p>",
+        "entries": [
+          "Inside the lich's torso dwells a wormlike parasite that contains the lich's soul. When the lich dies, it implodes into the parasite, which then vanishes into the Far Realm. In {@dice 2d4} days, the parasite causes the lich to reappear within {@dice 1d4} miles of where it died. If the lich died inside a magic circle cast to contain Undead, the lich instead reappears as an {@creature otyugh} with all the lich's memories."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -897,10 +977,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__2oxr",
+        "id": "act_legendary_resistance__4_day__npi2",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the lich fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the lich fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -914,10 +997,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_78xe",
+        "id": "act_unusual_nature_xwdk",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The lich doesn't need air, food, drink, or sleep.</p>",
+        "entries": [
+          "The lich doesn't need air, food, drink, or sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -933,10 +1019,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_q7mq",
+        "id": "act_multiattack_ngz3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The lich makes one Parasitic Tentacle attack or uses Spellcasting. The lich also uses Psychic Whisper twice.</p>",
+        "entries": [
+          "The lich makes one Parasitic Tentacle attack or uses Spellcasting. The lich also uses Psychic Whisper twice."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -950,10 +1039,13 @@
         }
       },
       {
-        "id": "act_parasitic_tentacle_20ne",
+        "id": "act_parasitic_tentacle_ri9l",
         "name": "Parasitic Tentacle",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 10 ft., one creature. {@h}25 (6d6 + 4) piercing damage plus 25 (6d6 + 4) necrotic damage. The target must succeed on a DC 17 Constitution saving throw or be poisoned. The poisoned target can repeat the save at the end of each of its turns, ending the effect on itself on a success. The third time the target fails the save, the target dies and dissolves into a gibbering mouther that obeys the lich and uses the target's initiative.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 10 ft., one creature. Hit: 25 (6d6 + 4) piercing damage plus 25 (6d6 + 4) necrotic damage. The target must succeed on a DC 17 Constitution saving throw or be poisoned. The poisoned target can repeat the save at the end of each of its turns, ending the effect on itself on a success. The third time the target fails the save, the target dies and dissolves into a gibbering mouther that obeys the lich and uses the target's initiative.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 10 ft., one creature. {@h}25 ({@damage 6d6 + 4}) piercing damage plus 25 ({@damage 6d6 + 4}) necrotic damage. The target must succeed on a {@dc 17} Constitution saving throw or be {@condition poisoned}. The {@condition poisoned} target can repeat the save at the end of each of its turns, ending the effect on itself on a success. The third time the target fails the save, the target dies and dissolves into a {@creature gibbering mouther} that obeys the lich and uses the target's initiative."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -979,10 +1071,13 @@
         }
       },
       {
-        "id": "act_psychic_whisper_xha9",
+        "id": "act_psychic_whisper_wwn1",
         "name": "Psychic Whisper",
         "actionType": "action",
         "descriptionHtml": "<p>The lich targets one creature it can see within 120 feet of itself. The target must succeed on a DC 17 Wisdom saving throw or take 25 (6d6 + 4) psychic damage and be stunned until the end of the lich's next turn as incomprehensible whispers fill the target's mind.</p>",
+        "entries": [
+          "The lich targets one creature it can see within 120 feet of itself. The target must succeed on a {@dc 17} Wisdom saving throw or take 25 ({@damage 6d6 + 4}) psychic damage and be {@condition stunned} until the end of the lich's next turn as incomprehensible whispers fill the target's mind."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1007,10 +1102,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_far_realm_step_sv61",
+        "id": "act_far_realm_step_y4we",
         "name": "Far Realm Step",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after taking damage, the lich, along with any equipment it is wearing or carrying, magically teleports up to 60 feet to an unoccupied space it can see.</p>",
+        "entries": [
+          "Immediately after taking damage, the lich, along with any equipment it is wearing or carrying, magically teleports up to 60 feet to an unoccupied space it can see."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1029,11 +1127,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Eldritch Lich.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Eldritch Lich.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_fractine_mcv1sc",
@@ -1137,10 +1247,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_sl27",
+        "id": "act_magic_resistance_md1q",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The fractine has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The fractine has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1154,10 +1267,13 @@
         }
       },
       {
-        "id": "act_scrying_focus_abfm",
+        "id": "act_scrying_focus_xk6l",
         "name": "Scrying Focus",
         "actionType": "trait",
         "descriptionHtml": "<p>A spellcaster can use the fractine as a substitute focus when casting the scrying spell or similar magic, provided the spellcaster and the fractine are within 5 feet of each other.</p>",
+        "entries": [
+          "A spellcaster can use the fractine as a substitute focus when casting the {@spell scrying} spell or similar magic, provided the spellcaster and the fractine are within 5 feet of each other."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1171,10 +1287,13 @@
         }
       },
       {
-        "id": "act_two_dimensionality_rh7y",
+        "id": "act_two_dimensionality_ievx",
         "name": "Two-Dimensionality",
         "actionType": "trait",
         "descriptionHtml": "<p>The fractine can occupy another creature's space and vice versa. It can move through other creatures and objects as if they were difficult terrain, but it takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
+        "entries": [
+          "The fractine can occupy another creature's space and vice versa. It can move through other creatures and objects as if they were difficult terrain, but it takes 5 ({@damage 1d10}) force damage if it ends its turn inside an object."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1193,10 +1312,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_frin",
+        "id": "act_unusual_nature_yy9a",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The fractine doesn't require air, drink, or sleep.</p>",
+        "entries": [
+          "The fractine doesn't require air, drink, or sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1212,10 +1334,13 @@
     ],
     "actions": [
       {
-        "id": "act_extradimensional_touch_2enm",
+        "id": "act_extradimensional_touch_y2a4",
         "name": "Extradimensional Touch",
         "actionType": "action",
-        "descriptionHtml": "<p>ms +5 to hit, reach 5 ft., one target. {@h}24 (8d6) force damage.</p>",
+        "descriptionHtml": "<p>Melee Spell Attack: +5 to hit, reach 5 ft., one target. Hit: 24 (8d6) force damage.</p>",
+        "entries": [
+          "{@atk ms} {@hit 5} to hit, reach 5 ft., one target. {@h}24 ({@damage 8d6}) force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1236,10 +1361,15 @@
     ],
     "bonusActions": [
       {
-        "id": "act_imprison_d0ej",
+        "id": "act_imprison_d1d0",
         "name": "Imprison",
         "actionType": "bonus",
         "descriptionHtml": "<p>The fractine targets one creature of its size or smaller in its space. The target must succeed on a DC 16 Dexterity saving throw or be imprisoned in a demiplane. While the creature is imprisoned, a distorted image of it can be seen on the fractine's two-dimensional surface.</p><p>The demiplane moves with the fractine, has indestructible and opaque walls, and is only as big as it needs to be to contain the target, which doesn't suffer from hunger or thirst while imprisoned. No other creature can enter the demiplane, and the fractine can't be harmed from within the demiplane.</p><p>The fractine can imprison only one creature at a time and can release that creature as a bonus action. If the fractine is reduced to 0 hit points, any creature in the fractine's demiplane is released instantly. A released creature reappears in an unoccupied space as close to the fractine (or where it died) as possible. A creature can leave the demiplane on its own by using magic that enables planar travel, such as the plane shift spell.</p>",
+        "entries": [
+          "The fractine targets one creature of its size or smaller in its space. The target must succeed on a {@dc 16} Dexterity saving throw or be imprisoned in a demiplane. While the creature is imprisoned, a distorted image of it can be seen on the fractine's two-dimensional surface.",
+          "The demiplane moves with the fractine, has indestructible and opaque walls, and is only as big as it needs to be to contain the target, which doesn't suffer from hunger or thirst while imprisoned. No other creature can enter the demiplane, and the fractine can't be harmed from within the demiplane.",
+          "The fractine can imprison only one creature at a time and can release that creature as a bonus action. If the fractine is reduced to 0 hit points, any creature in the fractine's demiplane is released instantly. A released creature reappears in an unoccupied space as close to the fractine (or where it died) as possible. A creature can leave the demiplane on its own by using magic that enables planar travel, such as the {@spell plane shift} spell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1258,10 +1388,13 @@
     ],
     "reactions": [
       {
-        "id": "act_mirrored_damage_jnil",
+        "id": "act_mirrored_damage_pzn4",
         "name": "Mirrored Damage",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being damaged by a creature it can see within 120 feet of itself, the fractine forces that creature to make a DC 16 Constitution saving throw. On a failed save, the creature takes 24 (8d6) force damage. On a successful save, the creature takes half as much damage.</p>",
+        "entries": [
+          "In response to being damaged by a creature it can see within 120 feet of itself, the fractine forces that creature to make a {@dc 16} Constitution saving throw. On a failed save, the creature takes 24 ({@damage 8d6}) force damage. On a successful save, the creature takes half as much damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1283,10 +1416,13 @@
         }
       },
       {
-        "id": "act_split_fxsf",
+        "id": "act_split_z6au",
         "name": "Split",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a Large fractine that has at least 10 hit points remaining takes bludgeoning, piercing, slashing, or thunder damage from any source, it splits into two Medium fractines. The new fractines occupy the space formerly occupied by the original fractine, and each new fractine has hit points equal to half the original's, rounded down. If the original fractine had a creature trapped in its demiplane, that creature is released when the fractine splits, reappearing in an unoccupied space as close to the new fractines as possible.</p>",
+        "entries": [
+          "When a Large fractine that has at least 10 hit points remaining takes bludgeoning, piercing, slashing, or thunder damage from any source, it splits into two Medium fractines. The new fractines occupy the space formerly occupied by the original fractine, and each new fractine has hit points equal to half the original's, rounded down. If the original fractine had a creature trapped in its demiplane, that creature is released when the fractine splits, reappearing in an unoccupied space as close to the new fractines as possible."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1305,11 +1441,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Fractine.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Fractine.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_gadabout_mcv1sc",
@@ -1406,10 +1554,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_air_envelope_8jvv",
+        "id": "act_air_envelope_hek6",
         "name": "Air Envelope",
         "actionType": "trait",
         "descriptionHtml": "<p>If it has at least 1 hit point, the gadabout can generate an air envelope around itself when in a vacuum. This air envelope can sustain the gadabout and one other creature in its space indefinitely.</p>",
+        "entries": [
+          "If it has at least 1 hit point, the gadabout can generate an air envelope around itself when in a vacuum. This air envelope can sustain the gadabout and one other creature in its space indefinitely."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1423,10 +1574,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_pn2b",
+        "id": "act_unusual_nature_sul8",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The gadabout doesn't require food or sleep.</p>",
+        "entries": [
+          "The gadabout doesn't require food or sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1442,10 +1596,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_h8i4",
+        "id": "act_multiattack_qp88",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The gadabout makes two Branch attacks.</p>",
+        "entries": [
+          "The gadabout makes two Branch attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1459,10 +1616,13 @@
         }
       },
       {
-        "id": "act_branch_x75g",
+        "id": "act_branch_b3z8",
         "name": "Branch",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1481,10 +1641,13 @@
         }
       },
       {
-        "id": "act_wrap_7y8m",
+        "id": "act_wrap_sob7",
         "name": "Wrap",
         "actionType": "action",
         "descriptionHtml": "<p>The gadabout enters the space of a willing Medium or Small creature within 5 feet of itself and gently wraps its branches around the target. The target is grappled (escape DC 0). Any attempt by the target to escape the grapple causes the gadabout to use its reaction to move into the nearest unoccupied space. While grappled by the gadabout, the target determines where the gadabout moves on the gadabout's turns and accompanies the gadabout wherever it goes.</p>",
+        "entries": [
+          "The gadabout enters the space of a willing Medium or Small creature within 5 feet of itself and gently wraps its branches around the target. The target is {@condition grappled} (escape {@dc 0}). Any attempt by the target to escape the grapple causes the gadabout to use its reaction to move into the nearest unoccupied space. While {@condition grappled} by the gadabout, the target determines where the gadabout moves on the gadabout's turns and accompanies the gadabout wherever it goes."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1492,10 +1655,7 @@
           "reach": null,
           "range": null,
           "targets": null,
-          "save": {
-            "dc": 0,
-            "ability": "Save"
-          },
+          "save": null,
           "damages": [],
           "recharge": null
         }
@@ -1508,11 +1668,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Gadabout.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Gadabout.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_goon_balloon_mcv1sc",
@@ -1613,10 +1785,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_burst_98cl",
+        "id": "act_burst_299v",
         "name": "Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>The goon balloon bursts when it drops to 0 hit points, releasing noxious gas in a 10-foot-radius sphere centered on itself. Creatures in that area must succeed on a DC 12 Constitution saving throw or be poisoned for 1 minute. A poisoned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "entries": [
+          "The goon balloon bursts when it drops to 0 hit points, releasing noxious gas in a 10-foot-radius sphere centered on itself. Creatures in that area must succeed on a {@dc 12} Constitution saving throw or be {@condition poisoned} for 1 minute. A {@condition poisoned} creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1633,10 +1808,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_9aa5",
+        "id": "act_unusual_nature_68fv",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The goon balloon doesn't require air, food, or drink.</p>",
+        "entries": [
+          "The goon balloon doesn't require air, food, or drink."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1652,10 +1830,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ctxy",
+        "id": "act_multiattack_g15k",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The goon balloon makes two Claw attacks.</p>",
+        "entries": [
+          "The goon balloon makes two Claw attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1669,10 +1850,13 @@
         }
       },
       {
-        "id": "act_claw_3xrm",
+        "id": "act_claw_dshs",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d6) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d6) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1691,10 +1875,13 @@
         }
       },
       {
-        "id": "act_scintillating_eye_tes8",
+        "id": "act_scintillating_eye_5o6a",
         "name": "Scintillating Eye",
         "actionType": "action",
         "descriptionHtml": "<p>Magical, kaleidoscopic light emanates from one of the goon balloon's eyes as the goon balloon targets one creature it can see within 30 feet of itself. The target must make a DC 12 Wisdom saving throw, taking 6 (1d12) psychic damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Magical, kaleidoscopic light emanates from one of the goon balloon's eyes as the goon balloon targets one creature it can see within 30 feet of itself. The target must make a {@dc 12} Wisdom saving throw, taking 6 ({@damage 1d12}) psychic damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1718,10 +1905,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_float_yl65",
+        "id": "act_float_i3h2",
         "name": "Float",
         "actionType": "bonus",
         "descriptionHtml": "<p>The goon balloon moves up to 20 feet vertically in one direction without provoking opportunity attacks. If it ends this movement suspended in the air, it hovers in place. It can't be knocked prone while airborne.</p>",
+        "entries": [
+          "The goon balloon moves up to 20 feet vertically in one direction without provoking opportunity attacks. If it ends this movement suspended in the air, it hovers in place. It can't be knocked {@condition prone} while airborne."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1741,11 +1931,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Goon Balloon.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Goon Balloon.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_nightmare_beast_mcv1sc",
@@ -1834,10 +2036,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__2_day__lmmt",
+        "id": "act_legendary_resistance__2_day__flqo",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the beast fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the beast fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1851,10 +2056,13 @@
         }
       },
       {
-        "id": "act_siege_monster_3dip",
+        "id": "act_siege_monster_y1xx",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast deals double damage to objects and structures.</p>",
+        "entries": [
+          "The beast deals double damage to objects and structures."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1870,10 +2078,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4f1k",
+        "id": "act_multiattack_4xk0",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The beast makes two Claw attacks and one Tusk attack.</p>",
+        "entries": [
+          "The beast makes two Claw attacks and one Tusk attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1887,10 +2098,13 @@
         }
       },
       {
-        "id": "act_claw_q0da",
+        "id": "act_claw_e8x5",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +13 to hit, reach 15 ft., one target. {@h}14 (1d12 + 8) slashing damage, and if the target is a creature, it must succeed on a DC 21 Strength saving throw or be knocked prone.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 15 ft., one target. Hit: 14 (1d12 + 8) slashing damage, and if the target is a creature, it must succeed on a DC 21 Strength saving throw or be knocked prone.</p>",
+        "entries": [
+          "{@atk mw} {@hit 13} to hit, reach 15 ft., one target. {@h}14 ({@damage 1d12 + 8}) slashing damage, and if the target is a creature, it must succeed on a {@dc 21} Strength saving throw or be knocked {@condition prone}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1912,10 +2126,13 @@
         }
       },
       {
-        "id": "act_tusk_rbvf",
+        "id": "act_tusk_f58n",
         "name": "Tusk",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +13 to hit, reach 15 ft., one target. {@h}17 (2d8 + 8) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 15 ft., one target. Hit: 17 (2d8 + 8) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 13} to hit, reach 15 ft., one target. {@h}17 ({@damage 2d8 + 8}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1934,10 +2151,13 @@
         }
       },
       {
-        "id": "act_disintegration_gaze__recharge_5__uieq",
+        "id": "act_disintegration_gaze__recharge_5__bx2v",
         "name": "Disintegration Gaze (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The beast targets one creature it can see within 60 feet of itself. The target must make a DC 18 Constitution saving throw, taking 70 (10d6 + 40) force damage on a failed save, or half as much damage on a successful one. If this magical effect reduces the target to 0 hit points, the target is disintegrated and leaves nothing behind, except a pile of ashes plus whatever equipment it was wearing or carrying.</p>",
+        "entries": [
+          "The beast targets one creature it can see within 60 feet of itself. The target must make a {@dc 18} Constitution saving throw, taking 70 ({@damage 10d6 + 40}) force damage on a failed save, or half as much damage on a successful one. If this magical effect reduces the target to 0 hit points, the target is disintegrated and leaves nothing behind, except a pile of ashes plus whatever equipment it was wearing or carrying."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1961,10 +2181,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_teleport__2_day__7zqd",
+        "id": "act_teleport__2_day__o04t",
         "name": "Teleport (2/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The beast magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
+        "entries": [
+          "The beast magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1984,10 +2207,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_tusk_attack_483o",
+          "id": "act_tusk_attack_xivm",
           "name": "Tusk Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The beast makes one Tusk attack.</p>",
+          "entries": [
+            "The beast makes one Tusk attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -2001,10 +2227,13 @@
           }
         },
         {
-          "id": "act_charge__costs_2_actions__wgkk",
+          "id": "act_charge__costs_2_actions__jz7f",
           "name": "Charge (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The beast moves up to its speed without provoking opportunity attacks, then makes two Tusk attacks.</p>",
+          "entries": [
+            "The beast moves up to its speed without provoking opportunity attacks, then makes two Tusk attacks."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -2018,10 +2247,13 @@
           }
         },
         {
-          "id": "act_frightful_howl__costs_2_actions__wy56",
+          "id": "act_frightful_howl__costs_2_actions__tnu5",
           "name": "Frightful Howl (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The beast howls as it exhales a cloud of magical fear gas in a 120-foot cone. Any creature in that area must succeed on a DC 18 Wisdom saving throw or be frightened of the beast for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+          "entries": [
+            "The beast howls as it exhales a cloud of magical fear gas in a 120-foot cone. Any creature in that area must succeed on a {@dc 18} Wisdom saving throw or be {@condition frightened} of the beast for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -2039,11 +2271,23 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Nightmare Beast.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Nightmare Beast.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_puppeteer_parasite_mcv1sc",
@@ -2154,10 +2398,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unusual_nature_tnkf",
+        "id": "act_unusual_nature_9iha",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The parasite doesn't require air or sleep.</p>",
+        "entries": [
+          "The parasite doesn't require air or sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2173,10 +2420,13 @@
     ],
     "actions": [
       {
-        "id": "act_cling_itvs",
+        "id": "act_cling_shrg",
         "name": "Cling",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature. {@h}12 (3d6 + 2) necrotic damage, and the parasite attaches to the target. While attached, the parasite can't make Cling attacks. The parasite can detach itself by spending 5 feet of its movement. As an action, a creature within reach of the parasite can try to detach it, doing so with a successful DC 14 Strength check.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 12 (3d6 + 2) necrotic damage, and the parasite attaches to the target. While attached, the parasite can't make Cling attacks. The parasite can detach itself by spending 5 feet of its movement. As an action, a creature within reach of the parasite can try to detach it, doing so with a successful DC 14 Strength check.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one creature. {@h}12 ({@damage 3d6 + 2}) necrotic damage, and the parasite attaches to the target. While attached, the parasite can't make Cling attacks. The parasite can detach itself by spending 5 feet of its movement. As an action, a creature within reach of the parasite can try to detach it, doing so with a successful {@dc 14} Strength check."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2186,7 +2436,7 @@
           "targets": "one creature",
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -2198,10 +2448,13 @@
         }
       },
       {
-        "id": "act_consume_life_42k0",
+        "id": "act_consume_life_l029",
         "name": "Consume Life",
         "actionType": "action",
         "descriptionHtml": "<p>The parasite deals 12 (3d6 + 2) necrotic damage to one creature it is physically attached to, provided that creature isn't a Construct or an Undead. The parasite regains hit points equal to the damage taken.</p>",
+        "entries": [
+          "The parasite deals 12 ({@damage 3d6 + 2}) necrotic damage to one creature it is physically attached to, provided that creature isn't a Construct or an Undead. The parasite regains hit points equal to the damage taken."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2222,10 +2475,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_suggestion__psionics__1_day__ptyf",
+        "id": "act_suggestion__psionics__1_day__f7c0",
         "name": "Suggestion (Psionics; 1/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The parasite casts the suggestion spell, requiring no spell components and using Intelligence as the spellcasting ability (spell save DC 13).</p>",
+        "entries": [
+          "The parasite casts the {@spell suggestion} spell, requiring no spell components and using Intelligence as the spellcasting ability (spell save {@dc 13})."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2235,7 +2491,7 @@
           "targets": null,
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
@@ -2248,11 +2504,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Puppeteer Parasite.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Puppeteer Parasite.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_star_lancer_mcv1sc",
@@ -2356,10 +2624,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_ns7q",
+        "id": "act_flyby_hrek",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The star lancer doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
+        "entries": [
+          "The star lancer doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2375,10 +2646,13 @@
     ],
     "actions": [
       {
-        "id": "act_horn_7dba",
+        "id": "act_horn_9pmo",
         "name": "Horn",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) piercing damage. If the star lancer moved at least 20 feet straight toward the target immediately before the hit, the target takes an extra 10 (3d6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage. If the star lancer moved at least 20 feet straight toward the target immediately before the hit, the target takes an extra 10 (3d6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) piercing damage. If the star lancer moved at least 20 feet straight toward the target immediately before the hit, the target takes an extra 10 ({@damage 3d6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2401,10 +2675,13 @@
         }
       },
       {
-        "id": "act_invisibility_cloak__3_day__ln05",
+        "id": "act_invisibility_cloak__3_day__zg4u",
         "name": "Invisibility Cloak (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The star lancer and one creature riding it (chosen by the star lancer) magically turn invisible. This effect lasts until the star lancer or a creature riding it attacks or casts a spell, or until the star lancer's concentration ends (as if concentration on a spell). Any equipment worn or carried by the invisible creatures is also invisible for the duration of the Invisibility Cloak.</p>",
+        "entries": [
+          "The star lancer and one creature riding it (chosen by the star lancer) magically turn {@condition invisible}. This effect lasts until the star lancer or a creature riding it attacks or casts a spell, or until the star lancer's {@status concentration} ends (as if {@status concentration||concentrating} on a spell). Any equipment worn or carried by the {@condition invisible} creatures is also {@condition invisible} for the duration of the Invisibility Cloak."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2425,11 +2702,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Star Lancer.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Star Lancer.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_yggdrasti_mcv1sc",
@@ -2527,10 +2816,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cavities_6m8a",
+        "id": "act_cavities_b4tt",
         "name": "Cavities",
         "actionType": "trait",
         "descriptionHtml": "<p>The yggdrasti has 1d4 + 2 cavities in its trunk. Each cavity is big enough to hold one Medium creature, two Small creatures, or eight Tiny creatures. A creature inside a cavity has Cover against attacks and other effects that originate outside the cavity. The yggdrasti's cavities aren't connected to one another.</p>",
+        "entries": [
+          "The yggdrasti has {@dice 1d4 + 2} cavities in its trunk. Each cavity is big enough to hold one Medium creature, two Small creatures, or eight Tiny creatures. A creature inside a cavity has {@quickref Cover||3||three-quarters cover} against attacks and other effects that originate outside the cavity. The yggdrasti's cavities aren't connected to one another."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2544,10 +2836,13 @@
         }
       },
       {
-        "id": "act_false_appearance_wr02",
+        "id": "act_false_appearance_nmzq",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>If the yggdrasti is motionless and rooted in the ground at the start of combat, it looks just like a dead tree and has advantage on its initiative roll. Moreover, if a creature hasn't observed the rooted yggdrasti move or act, that creature must succeed on a DC 18 Intelligence (Investigation) check to discern that the yggdrasti is animate.</p>",
+        "entries": [
+          "If the yggdrasti is motionless and rooted in the ground at the start of combat, it looks just like a dead tree and has advantage on its initiative roll. Moreover, if a creature hasn't observed the rooted yggdrasti move or act, that creature must succeed on a {@dc 18} Intelligence ({@skill Investigation}) check to discern that the yggdrasti is animate."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2557,17 +2852,20 @@
           "targets": null,
           "save": {
             "dc": 18,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_lightning_conduit_pwgl",
+        "id": "act_lightning_conduit_zyv1",
         "name": "Lightning Conduit",
         "actionType": "trait",
         "descriptionHtml": "<p>If the yggdrasti is subjected to lightning damage, it is unhurt, and the lightning damage is instead divided evenly among all creatures it is grappling. In addition, the yggdrasti regains one use of Lightning Discharge.</p>",
+        "entries": [
+          "If the yggdrasti is subjected to lightning damage, it is unhurt, and the lightning damage is instead divided evenly among all creatures it is grappling. In addition, the yggdrasti regains one use of Lightning Discharge."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2581,10 +2879,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_8aje",
+        "id": "act_unusual_nature_zuo2",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The yggdrasti doesn't require air or sleep.</p>",
+        "entries": [
+          "The yggdrasti doesn't require air or sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2600,10 +2901,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ib62",
+        "id": "act_multiattack_3jyi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The yggdrasti makes two Root attacks and uses Lightning Discharge (if available).</p>",
+        "entries": [
+          "The yggdrasti makes two Root attacks and uses Lightning Discharge (if available)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2617,10 +2921,13 @@
         }
       },
       {
-        "id": "act_root_2qfz",
+        "id": "act_root_7r0p",
         "name": "Root",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 20 ft., one target. {@h}12 (2d6 + 5) bludgeoning damage, and if the target is a creature, it is grappled (escape DC 15). The yggdrasti has four roots, each of which can grapple one target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 20 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage, and if the target is a creature, it is grappled (escape DC 15). The yggdrasti has four roots, each of which can grapple one target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 20 ft., one target. {@h}12 ({@damage 2d6 + 5}) bludgeoning damage, and if the target is a creature, it is {@condition grappled} (escape {@dc 15}). The yggdrasti has four roots, each of which can grapple one target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2630,7 +2937,7 @@
           "targets": "one target",
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -2642,10 +2949,13 @@
         }
       },
       {
-        "id": "act_lightning_discharge__3_day__hhjr",
+        "id": "act_lightning_discharge__3_day__j543",
         "name": "Lightning Discharge (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The yggdrasti shoots lightning at one creature within 120 feet of itself. The target must make a DC 13 Dexterity saving throw, taking 31 (7d8) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The yggdrasti shoots lightning at one creature within 120 feet of itself. The target must make a {@dc 13} Dexterity saving throw, taking 31 ({@damage 7d8}) lightning damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2674,10 +2984,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/MCV1SC/Yggdrasti.webp",
     "tokenImg": "img/bestiary/tokens/MCV1SC/Yggdrasti.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

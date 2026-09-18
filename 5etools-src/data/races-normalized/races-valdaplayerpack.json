@@ -1,0 +1,205 @@
+[
+  {
+    "id": "race_geppettin_valdaplayerpack",
+    "name": "Geppettin",
+    "source": "ValdaPlayerPack",
+    "page": 0,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<p>As a Geppettin, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Construct Nature.</strong> <p>You don't need food, drink, or air. You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in a motionless state, during which you retain consciousness.</p></div>\n<div class=\"compendium-subentry\"><strong>Handcrafted Quality.</strong> <p>Your design might be unnerving, articulated, or friendly. You have proficiency in the Intimidation, Performance, or Persuasion skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Geppettin Construction.</strong> <p>For simplicity, geppettin are classified by their materials: bisque are porcelain, marionettes are wood, and plushies are made of fabric. Choose one of the following constructions.</p>\n<div class=\"compendium-subentry\"><strong>Bisque.</strong> <p>You are indistinguishable from a porcelain doll until the moment you strike. Whenever you deal damage to a creature with a weapon attack roll on your first turn in combat, the creature takes extra damage equal to your Proficiency|XPHB|Proficiency Bonus. The damage is the same type dealt by the weapon.</p></div>\n<div class=\"compendium-subentry\"><strong>Marionette.</strong> <p>Loose strings hang from your jointed limbs. During your turn, your reach is 5 feet greater with any Melee weapon that lacks the R|XPHB|Reach, 2H|XPHB|Two-Handed, and V|XPHB|Versatile properties.</p></div>\n<div class=\"compendium-subentry\"><strong>Plushie.</strong> <p>You are stuffed with fluff. When you take Bludgeoning damage, you can take a Reaction|XPHB to gain Resistance|XPHB to the triggering damage. You are also knocked 5 feet away from the source of the damage. You can't take this Reaction|XPHB if you can't be knocked away from the source of the damage.</p></div></div>",
+    "traits": [
+      {
+        "id": "trait_geppettin_darkvision_valdaplayerpack",
+        "name": "Darkvision",
+        "source": "ValdaPlayerPack",
+        "raceName": "Geppettin",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_geppettin_construct_nature_valdaplayerpack",
+        "name": "Construct Nature",
+        "source": "ValdaPlayerPack",
+        "raceName": "Geppettin",
+        "actionType": "passive",
+        "description": "You don't need food, drink, or air. You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in a motionless state, during which you retain consciousness.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't need food, drink, or air. You don't need to sleep, and magic can't put you to sleep. You can finish a {@variantrule Long Rest|XPHB} in 4 hours if you spend those hours in a motionless state, during which you retain consciousness."
+        ]
+      },
+      {
+        "id": "trait_geppettin_handcrafted_quality_valdaplayerpack",
+        "name": "Handcrafted Quality",
+        "source": "ValdaPlayerPack",
+        "raceName": "Geppettin",
+        "actionType": "passive",
+        "description": "Your design might be unnerving, articulated, or friendly. You have proficiency in the Intimidation, Performance, or Persuasion skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your design might be unnerving, articulated, or friendly. You have proficiency in the {@skill Intimidation|XPHB}, {@skill Performance|XPHB}, or {@skill Persuasion|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_geppettin_geppettin_construction_valdaplayerpack",
+        "name": "Geppettin Construction",
+        "source": "ValdaPlayerPack",
+        "raceName": "Geppettin",
+        "actionType": "passive",
+        "description": "For simplicity, geppettin are classified by their materials: bisque are porcelain, marionettes are wood, and plushies are made of fabric. Choose one of the following constructions.\n\n**Bisque**\n\nYou are indistinguishable from a porcelain doll until the moment you strike. Whenever you deal damage to a creature with a weapon attack roll on your first turn in combat, the creature takes extra damage equal to your Proficiency|XPHB|Proficiency Bonus. The damage is the same type dealt by the weapon.\n\n**Marionette**\n\nLoose strings hang from your jointed limbs. During your turn, your reach is 5 feet greater with any Melee weapon that lacks the R|XPHB|Reach, 2H|XPHB|Two-Handed, and V|XPHB|Versatile properties.\n\n**Plushie**\n\nYou are stuffed with fluff. When you take Bludgeoning damage, you can take a Reaction|XPHB to gain Resistance|XPHB to the triggering damage. You are also knocked 5 feet away from the source of the damage. You can't take this Reaction|XPHB if you can't be knocked away from the source of the damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "For simplicity, geppettin are classified by their materials: bisque are porcelain, marionettes are wood, and plushies are made of fabric. Choose one of the following constructions.",
+          {
+            "type": "entries",
+            "name": "Bisque",
+            "entries": [
+              "You are indistinguishable from a porcelain doll until the moment you strike. Whenever you deal damage to a creature with a weapon attack roll on your first turn in combat, the creature takes extra damage equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}. The damage is the same type dealt by the weapon."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Marionette",
+            "entries": [
+              "Loose strings hang from your jointed limbs. During your turn, your reach is 5 feet greater with any Melee weapon that lacks the {@itemProperty R|XPHB|Reach}, {@itemProperty 2H|XPHB|Two-Handed}, and {@itemProperty V|XPHB|Versatile} properties."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Plushie",
+            "entries": [
+              "You are stuffed with fluff. When you take Bludgeoning damage, you can take a {@variantrule Reaction|XPHB} to gain {@variantrule Resistance|XPHB} to the triggering damage. You are also knocked 5 feet away from the source of the damage. You can't take this {@variantrule Reaction|XPHB} if you can't be knocked away from the source of the damage."
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "As a Geppettin, you have these special traits."
+  },
+  {
+    "id": "race_mandrake_valdaplayerpack",
+    "name": "Mandrake",
+    "source": "ValdaPlayerPack",
+    "page": 0,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<p>As a Mandrake, you have these special traits.</p>\n<div class=\"compendium-subentry\"><strong>Plant Nature.</strong> <p>As long as you are in direct sunlight for at least 4 hours a day, you don't need to eat. Additionally, you can breathe through your leaves and you can absorb water and nutrients through your feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Connection.</strong> <p>You have proficiency in the Nature or Survival skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Root Magic.</strong> <p>You know the Shillelagh cantrip and can target yourself with the spell, treating one of your limbs as a Club for the duration of the spell.</p>\n<p>When you reach character level 3, you always have Goodberry prepared, and when you reach character level 5, you always have Barkskin prepared. You can cast each of these spells without a spell slot. Once you cast either spell in this way, you can't cast that spell in this way again until you finish a Long Rest|XPHB. You can also cast these spells using spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Entangling Vines.</strong> <p>You can take a Bonus Action|XPHB to cause grasping weeds and vines to sprout up from the ground around a Large or smaller creature you can see within 30 feet of yourself. Until the end of the creature's next turn, its Speed|XPHB is 0 and can't increase. This effect ends early if the creature replaces one of its attacks with with freeing itself. You can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus and you regain all expended uses when you finish a Long Rest|XPHB.</p>\n<p>When you reach character level 3, your Entangling Vines gain an additional effect based on the season in which you were harvested (choose when you select this species):</p>\n<div class=\"compendium-subentry\"><strong>Spring.</strong> <p>Your Entangling Vines can target an airborne creature within 30 feet of the ground, which is pulled safely to the ground when you use this trait.</p></div>\n<div class=\"compendium-subentry\"><strong>Summer.</strong> <p>Your Entangling Vines can move the target up to 10 feet to an unoccupied space on the ground or floor.</p></div>\n<div class=\"compendium-subentry\"><strong>Autumn.</strong> <p>Your Entangling Vines can affect a second creature within 5 feet of the first target.</p></div>\n<div class=\"compendium-subentry\"><strong>Winter.</strong> <p>The target takes Cold damage equal to your Proficiency|XPHB|Proficiency Bonus.</p></div></div>",
+    "traits": [
+      {
+        "id": "trait_mandrake_plant_nature_valdaplayerpack",
+        "name": "Plant Nature",
+        "source": "ValdaPlayerPack",
+        "raceName": "Mandrake",
+        "actionType": "passive",
+        "description": "As long as you are in direct sunlight for at least 4 hours a day, you don't need to eat. Additionally, you can breathe through your leaves and you can absorb water and nutrients through your feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As long as you are in direct sunlight for at least 4 hours a day, you don't need to eat. Additionally, you can breathe through your leaves and you can absorb water and nutrients through your feet."
+        ]
+      },
+      {
+        "id": "trait_mandrake_natural_connection_valdaplayerpack",
+        "name": "Natural Connection",
+        "source": "ValdaPlayerPack",
+        "raceName": "Mandrake",
+        "actionType": "passive",
+        "description": "You have proficiency in the Nature or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Nature|XPHB} or {@skill Survival|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_mandrake_root_magic_valdaplayerpack",
+        "name": "Root Magic",
+        "source": "ValdaPlayerPack",
+        "raceName": "Mandrake",
+        "actionType": "passive",
+        "description": "You know the Shillelagh cantrip and can target yourself with the spell, treating one of your limbs as a Club for the duration of the spell.\n\nWhen you reach character level 3, you always have Goodberry prepared, and when you reach character level 5, you always have Barkskin prepared. You can cast each of these spells without a spell slot. Once you cast either spell in this way, you can't cast that spell in this way again until you finish a Long Rest|XPHB. You can also cast these spells using spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Shillelagh} cantrip and can target yourself with the spell, treating one of your limbs as a {@item Club|XPHB} for the duration of the spell.",
+          "When you reach character level 3, you always have {@spell Goodberry} prepared, and when you reach character level 5, you always have {@spell Barkskin} prepared. You can cast each of these spells without a spell slot. Once you cast either spell in this way, you can't cast that spell in this way again until you finish a {@variantrule Long Rest|XPHB}. You can also cast these spells using spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_mandrake_entangling_vines_valdaplayerpack",
+        "name": "Entangling Vines",
+        "source": "ValdaPlayerPack",
+        "raceName": "Mandrake",
+        "actionType": "passive",
+        "description": "You can take a Bonus Action|XPHB to cause grasping weeds and vines to sprout up from the ground around a Large or smaller creature you can see within 30 feet of yourself. Until the end of the creature's next turn, its Speed|XPHB is 0 and can't increase. This effect ends early if the creature replaces one of its attacks with with freeing itself. You can use this Bonus Action|XPHB a number of times equal to your Proficiency|XPHB|Proficiency Bonus and you regain all expended uses when you finish a Long Rest|XPHB.\n\nWhen you reach character level 3, your Entangling Vines gain an additional effect based on the season in which you were harvested (choose when you select this species):\n\n**Spring**\n\nYour Entangling Vines can target an airborne creature within 30 feet of the ground, which is pulled safely to the ground when you use this trait.\n\n**Summer**\n\nYour Entangling Vines can move the target up to 10 feet to an unoccupied space on the ground or floor.\n\n**Autumn**\n\nYour Entangling Vines can affect a second creature within 5 feet of the first target.\n\n**Winter**\n\nThe target takes Cold damage equal to your Proficiency|XPHB|Proficiency Bonus.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can take a {@variantrule Bonus Action|XPHB} to cause grasping weeds and vines to sprout up from the ground around a Large or smaller creature you can see within 30 feet of yourself. Until the end of the creature's next turn, its {@variantrule Speed|XPHB} is 0 and can't increase. This effect ends early if the creature replaces one of its attacks with with freeing itself. You can use this {@variantrule Bonus Action|XPHB} a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus} and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}.",
+          "When you reach character level 3, your Entangling Vines gain an additional effect based on the season in which you were harvested (choose when you select this species):",
+          {
+            "type": "entries",
+            "name": "Spring",
+            "entries": [
+              "Your Entangling Vines can target an airborne creature within 30 feet of the ground, which is pulled safely to the ground when you use this trait."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Summer",
+            "entries": [
+              "Your Entangling Vines can move the target up to 10 feet to an unoccupied space on the ground or floor."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Autumn",
+            "entries": [
+              "Your Entangling Vines can affect a second creature within 5 feet of the first target."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Winter",
+            "entries": [
+              "The target takes Cold damage equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}."
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "As a Mandrake, you have these special traits."
+  }
+]

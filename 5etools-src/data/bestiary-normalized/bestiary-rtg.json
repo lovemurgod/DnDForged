@@ -119,7 +119,7 @@
       {
         "id": "sc_dirt_under_nails_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 4,
@@ -150,7 +150,9 @@
                 "formula": "1d6",
                 "type": "Bludgeoning",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "upcastBonus": "",
+                "upcastScaleStep": 1
               }
             ],
             "components": "V, S",
@@ -176,7 +178,9 @@
               {
                 "formula": "2d4 + 4",
                 "type": "Temp HP",
-                "stat": "none"
+                "stat": "none",
+                "upcastBonus": "5",
+                "upcastScaleStep": 1
               }
             ],
             "components": "V, S, M (a drop of alcohol)",
@@ -266,7 +270,9 @@
                   "formula": "4d6",
                   "type": "Psychic",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a handful of clay, crystal, glass, or mineral spheres)",
@@ -295,7 +301,9 @@
                   "formula": "7d8 + 30",
                   "type": "Necrotic",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -339,7 +347,7 @@
       {
         "id": "sc_dirt_under_nails_1",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "pact",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 4,
@@ -372,7 +380,8 @@
                     "formula": "1d10",
                     "type": "Necrotic",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -398,7 +407,8 @@
                     "formula": "1d10",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": false
                   }
                 ],
                 "components": "V, S",
@@ -500,7 +510,8 @@
                     "formula": "1d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -569,7 +580,9 @@
                     "formula": "3d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -595,7 +608,9 @@
                     "formula": "5d8",
                     "type": "Poison",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -620,12 +635,16 @@
                   {
                     "formula": "5d6",
                     "type": "Fire",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "5d6",
                     "type": "Radiant",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a pinch of sulfur)",
@@ -670,7 +689,9 @@
                     "formula": "2d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -743,10 +764,13 @@
     ],
     "traits": [
       {
-        "id": "act_dark_one_s_own_luck__recharges_after_a_short_or_long_rest__410x",
+        "id": "act_dark_one_s_own_luck__recharges_after_a_short_or_long_rest__ovih",
         "name": "Dark One's Own Luck (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>When the warlock makes an ability check or saving throw, it can add a d10 to the roll. It can do this after the roll is made but before any of the roll's effects occur.</p>",
+        "entries": [
+          "When the warlock makes an ability check or saving throw, it can add a {@dice d10} to the roll. It can do this after the roll is made but before any of the roll's effects occur."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -760,10 +784,13 @@
         }
       },
       {
-        "id": "act_regeneration_djnx",
+        "id": "act_regeneration_0hlq",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>Dirt-Under-Nails regains 10 hit points at the start of his turn if he is in contact with the ground. If Dirt-Under-Nails takes fire damage, this trait doesn't function at the start of his next turn. Dirt-Under-Nails dies only if he starts his turn with 0 hit points and doesn't regenerate.</p>",
+        "entries": [
+          "Dirt-Under-Nails regains 10 hit points at the start of his turn if he is in contact with the ground. If Dirt-Under-Nails takes fire damage, this trait doesn't function at the start of his next turn. Dirt-Under-Nails dies only if he starts his turn with 0 hit points and doesn't regenerate."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -777,10 +804,13 @@
         }
       },
       {
-        "id": "act_shared_senses_1kwr",
+        "id": "act_shared_senses_odil",
         "name": "Shared Senses",
         "actionType": "trait",
         "descriptionHtml": "<p>Dirt-Under-Nails can see and hear what any plant within 120 ft can see and hear. In addition, Dirt-Under- Nails can communicate telepathically with any plant within this range.</p>",
+        "entries": [
+          "Dirt-Under-Nails can see and hear what any plant within 120 ft can see and hear. In addition, Dirt-Under- Nails can communicate telepathically with any plant within this range."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -794,10 +824,13 @@
         }
       },
       {
-        "id": "act_special_equipment___2_rod_of_the_pact_keeper__079f",
+        "id": "act_special_equipment___2_rod_of_the_pact_keeper__al46",
         "name": "Special Equipment (+2 Rod of the Pact Keeper)",
         "actionType": "trait",
         "descriptionHtml": "<p>While holding this +2 Rod of the Pact Keeper, Dirt-Under-Nails gains a +2 bonus to spell attack rolls and to the saving throw DCs of his warlock spells (included in modifications, below). In addition, he can regain 1 warlock spell slot as an action while holding the rod. He can't use this property again until he finishes a long rest.</p>",
+        "entries": [
+          "While holding this {@item +2 Rod of the Pact Keeper||rod}, Dirt-Under-Nails gains a +2 bonus to spell attack rolls and to the saving throw DCs of his warlock spells (included in modifications, below). In addition, he can regain 1 warlock spell slot as an action while holding the rod. He can't use this property again until he finishes a long rest."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -811,10 +844,13 @@
         }
       },
       {
-        "id": "act_tree_stride_fc89",
+        "id": "act_tree_stride_uuc3",
         "name": "Tree Stride",
         "actionType": "trait",
         "descriptionHtml": "<p>Once on each of its turns, Dirt-Under-Nails can use 10 feet of his movement to step magically into one copse of mushrooms within 5 feet of him and emerge from a second copse of mushrooms within 60 feet of it, appearing in an unoccupied space within 5 feet of the second copse. Both copses of mushrooms must be Large or bigger. Dirt-Under-Nails doesn't need to be able to see the second copse to use this ability.</p>",
+        "entries": [
+          "Once on each of its turns, Dirt-Under-Nails can use 10 feet of his movement to step magically into one copse of mushrooms within 5 feet of him and emerge from a second copse of mushrooms within 60 feet of it, appearing in an unoccupied space within 5 feet of the second copse. Both copses of mushrooms must be Large or bigger. Dirt-Under-Nails doesn't need to be able to see the second copse to use this ability."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -830,10 +866,13 @@
     ],
     "actions": [
       {
-        "id": "act_mace_silk",
+        "id": "act_mace_vvxx",
         "name": "Mace",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage plus 10 (3d6) fire damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage plus 10 (3d6) fire damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) bludgeoning damage plus 10 ({@damage 3d6}) fire damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -863,11 +902,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RtG/Dirt-Under-Nails.webp",
     "tokenImg": "img/bestiary/tokens/RtG/Dirt-Under-Nails.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_rotter_rtg",
@@ -975,10 +1026,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_club_cpjb",
+        "id": "act_magic_club_j8wp",
         "name": "Magic Club",
         "actionType": "trait",
         "descriptionHtml": "<p>In the rotter's hand, its club is magical and deals 7 (3d4) extra damage (included in its attacks).</p>",
+        "entries": [
+          "In the rotter's hand, its club is magical and deals 7 ({@damage 3d4}) extra damage (included in its attacks)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -997,10 +1051,13 @@
         }
       },
       {
-        "id": "act_plant_camouflage_xgyd",
+        "id": "act_plant_camouflage_ndz8",
         "name": "Plant Camouflage",
         "actionType": "trait",
         "descriptionHtml": "<p>The rotter has advantage on Dexterity (Stealth) checks it makes in terrain with ample obscuring plant life.</p>",
+        "entries": [
+          "The rotter has advantage on Dexterity ({@skill Stealth}) checks it makes in terrain with ample obscuring plant life."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1014,10 +1071,13 @@
         }
       },
       {
-        "id": "act_regeneration_bhpl",
+        "id": "act_regeneration_oins",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The rotter regains 10 hit points at the start of its turn if it is in contact with the ground. If the rotter takes fire damage, this trait doesn't function at the start of the rotter's next turn. The rotter dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
+        "entries": [
+          "The rotter regains 10 hit points at the start of its turn if it is in contact with the ground. If the rotter takes fire damage, this trait doesn't function at the start of the rotter's next turn. The rotter dies only if it starts its turn with 0 hit points and doesn't regenerate."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1031,10 +1091,13 @@
         }
       },
       {
-        "id": "act_shared_senses_s5mm",
+        "id": "act_shared_senses_ow7t",
         "name": "Shared Senses",
         "actionType": "trait",
         "descriptionHtml": "<p>The rotter can see and hear what any plant within 120 ft can see and hear. In addition, the rotter can communicate telepathically with any plant within this range.</p>",
+        "entries": [
+          "The rotter can see and hear what any plant within 120 ft can see and hear. In addition, the rotter can communicate telepathically with any plant within this range."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1048,10 +1111,13 @@
         }
       },
       {
-        "id": "act_tree_stride_7aqv",
+        "id": "act_tree_stride_8xlu",
         "name": "Tree Stride",
         "actionType": "trait",
         "descriptionHtml": "<p>Once on each of its turns, the rotter can use 10 feet of its movement to step magically into one copse of mushrooms within 5 feet of it and emerge from a second copse of mushrooms within 60 feet of it, appearing in an unoccupied space within 5 feet of the second copse. Both copses of mushrooms must be Large or bigger. The rotter doesn't need to be able to see the second copse to use this ability.</p>",
+        "entries": [
+          "Once on each of its turns, the rotter can use 10 feet of its movement to step magically into one copse of mushrooms within 5 feet of it and emerge from a second copse of mushrooms within 60 feet of it, appearing in an unoccupied space within 5 feet of the second copse. Both copses of mushrooms must be Large or bigger. The rotter doesn't need to be able to see the second copse to use this ability."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1067,10 +1133,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bk8n",
+        "id": "act_multiattack_kfds",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The rotter makes two attacks with its club.</p>",
+        "entries": [
+          "The rotter makes two attacks with its club."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1084,10 +1153,13 @@
         }
       },
       {
-        "id": "act_club_g2hm",
+        "id": "act_club_ick1",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}14 (4d4 + 4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 14 (4d4 + 4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}14 ({@damage 4d4 + 4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1113,10 +1185,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RtG/Rotter.webp",
     "tokenImg": "img/bestiary/tokens/RtG/Rotter.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

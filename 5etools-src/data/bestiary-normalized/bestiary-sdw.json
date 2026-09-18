@@ -103,10 +103,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_helpful_uoqt",
+        "id": "act_helpful_g9hh",
         "name": "Helpful",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert can take the Help action as a bonus action, and the creature who receives the help gains a 1d6 bonus to the d20 roll. If that roll is an attack roll, the creature can forgo adding the bonus to it, and then if the attack hits, the creature can add the bonus to the attack's damage roll against one target.</p>",
+        "entries": [
+          "The expert can take the Help action as a bonus action, and the creature who receives the help gains a {@dice 1d6} bonus to the {@dice d20} roll. If that roll is an attack roll, the creature can forgo adding the bonus to it, and then if the attack hits, the creature can add the bonus to the attack's damage roll against one target."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -120,10 +123,13 @@
         }
       },
       {
-        "id": "act_evasion_me0i",
+        "id": "act_evasion_ykuc",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>When the expert is not incapacitated and subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it failed.</p>",
+        "entries": [
+          "When the expert is not {@condition incapacitated} and subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it failed."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -137,10 +143,13 @@
         }
       },
       {
-        "id": "act_tools_mggw",
+        "id": "act_tools_hk02",
         "name": "Tools",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert has thieves' tools and a musical instrument.</p>",
+        "entries": [
+          "The expert has thieves' tools and a musical instrument."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -156,10 +165,13 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_4lw7",
+        "id": "act_extra_attack_1seq",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The expert can attack twice, instead of once, whenever it takes the attack action on its turn.</p>",
+        "entries": [
+          "The expert can attack twice, instead of once, whenever it takes the attack action on its turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -173,10 +185,13 @@
         }
       },
       {
-        "id": "act_shortsword_9v7y",
+        "id": "act_shortsword_0a9r",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -195,10 +210,13 @@
         }
       },
       {
-        "id": "act_dagger_shsa",
+        "id": "act_dagger_g1m2",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +8 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}6 (1d4 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +8 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 6 (1d4 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 8} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}6 ({@damage 1d4 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -217,10 +235,13 @@
         }
       },
       {
-        "id": "act_shortbow_6lr5",
+        "id": "act_shortbow_3aj0",
         "name": "Shortbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +8 to hit, range 80/320 ft., one target. {@h}7 (1d6 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +8 to hit, range 80/320 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 8} to hit, range 80/320 ft., one target. {@h}7 ({@damage 1d6 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -246,11 +267,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SDW/Expert.webp",
     "tokenImg": "img/bestiary/tokens/SDW/Expert.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_giant_shark_skeleton_sdw",
@@ -348,10 +381,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blood_frenzy_xhwg",
+        "id": "act_blood_frenzy_c2j1",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The giant shark skeleton has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
+        "entries": [
+          "The giant shark skeleton has advantage on melee attack rolls against any creature that doesn't have all its hit points."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -367,10 +403,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_cmms",
+        "id": "act_bite_boqs",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}22 (3d10 + 6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 22 (3d10 + 6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 5 ft., one target. {@h}22 ({@damage 3d10 + 6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -396,11 +435,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SDW/Giant Shark Skeleton.webp",
     "tokenImg": "img/bestiary/tokens/SDW/Giant Shark Skeleton.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_lhammaruntosz_sdw",
@@ -511,7 +562,7 @@
       {
         "id": "sc_lhammaruntosz_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 4,
@@ -619,7 +670,7 @@
       {
         "id": "sc_lhammaruntosz_1",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 4,
@@ -900,7 +951,9 @@
                     "formula": "4d6",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -935,10 +988,13 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_cl4r",
+        "id": "act_amphibious_4xok",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Lhammaruntosz can breathe air and water.</p>",
+        "entries": [
+          "Lhammaruntosz can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -952,10 +1008,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__byf1",
+        "id": "act_legendary_resistance__3_day__6ov2",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Lhammaruntosz fails a saving throw, she can choose to succeed instead.</p>",
+        "entries": [
+          "If Lhammaruntosz fails a saving throw, she can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -969,10 +1028,13 @@
         }
       },
       {
-        "id": "act_regeneration_60a4",
+        "id": "act_regeneration_wy45",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>Lhammaruntosz regains 5 hit points at the start of her turn.</p>",
+        "entries": [
+          "Lhammaruntosz regains 5 hit points at the start of her turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -988,10 +1050,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dak9",
+        "id": "act_multiattack_l0nn",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Lhammaruntosz can use her Frightful Presence. She then makes three attacks: one with her bite and two with her claws.</p>",
+        "entries": [
+          "Lhammaruntosz can use her Frightful Presence. She then makes three attacks: one with her bite and two with her claws."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1005,10 +1070,13 @@
         }
       },
       {
-        "id": "act_bite_hc7v",
+        "id": "act_bite_es37",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 10 ft., one target. {@h}18 (2d10 + 7) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 10 ft., one target. Hit: 18 (2d10 + 7) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 10 ft., one target. {@h}18 ({@damage 2d10 + 7}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1027,10 +1095,13 @@
         }
       },
       {
-        "id": "act_claw_reh8",
+        "id": "act_claw_8st5",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}14 (2d6 + 7) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 14 (2d6 + 7) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 5 ft., one target. {@h}14 ({@damage 2d6 + 7}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1049,10 +1120,13 @@
         }
       },
       {
-        "id": "act_tail_ccsc",
+        "id": "act_tail_v48c",
         "name": "Tail",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 15 ft., one target. {@h}16 (2d8 + 7) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 15 ft., one target. Hit: 16 (2d8 + 7) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 15 ft., one target. {@h}16 ({@damage 2d8 + 7}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1071,10 +1145,13 @@
         }
       },
       {
-        "id": "act_frightful_presence_peoy",
+        "id": "act_frightful_presence_rxx1",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of Lhammaruntosz's choice that is within 120 feet of her and aware of her must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to Lhammaruntosz's Frightful Presence for the next 24 hours.</p>",
+        "entries": [
+          "Each creature of Lhammaruntosz's choice that is within 120 feet of her and aware of her must succeed on a {@dc 17} Wisdom saving throw or become {@condition frightened} for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to Lhammaruntosz's Frightful Presence for the next 24 hours."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1091,10 +1168,13 @@
         }
       },
       {
-        "id": "act_breath_weapons__recharge_5__db2a",
+        "id": "act_breath_weapons__recharge_5__uxxw",
         "name": "Breath Weapons (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Lhammaruntosz uses one of the following breath weapons.</p>",
+        "entries": [
+          "Lhammaruntosz uses one of the following breath weapons."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1108,10 +1188,13 @@
         }
       },
       {
-        "id": "act_lightning_breath_jtaz",
+        "id": "act_lightning_breath_yf69",
         "name": "Lightning Breath",
         "actionType": "action",
         "descriptionHtml": "<p>Lhammaruntosz exhales lightning in a 90-foot line that is 5 feet wide. Each creature in that line must make a DC 19 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Lhammaruntosz exhales lightning in a 90-foot line that is 5 feet wide. Each creature in that line must make a {@dc 19} Dexterity saving throw, taking 66 ({@damage 12d10}) lightning damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1133,10 +1216,13 @@
         }
       },
       {
-        "id": "act_repulsion_breath_u6fo",
+        "id": "act_repulsion_breath_2867",
         "name": "Repulsion Breath",
         "actionType": "action",
         "descriptionHtml": "<p>Lhammaruntosz exhales repulsion energy in a 30-foot cone. Each creature in that area must succeed on a DC 19 Strength saving throw. On a failed save, the creature is pushed 60 feet away from the dragon.</p>",
+        "entries": [
+          "Lhammaruntosz exhales repulsion energy in a 30-foot cone. Each creature in that area must succeed on a {@dc 19} Strength saving throw. On a failed save, the creature is pushed 60 feet away from the dragon."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1153,10 +1239,14 @@
         }
       },
       {
-        "id": "act_change_shape_9bz4",
+        "id": "act_change_shape_86aq",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>Lhammaruntosz magically polymorphs into a humanoid or beast that has a challenge rating no higher than her own, or back into her true form. She reverts to her true form if she dies. Any equipment she is wearing or carrying is absorbed or borne by the new form (Lhammaruntosz's choice).</p><p>In a new form, Lhammaruntosz retains her alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Her statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form.</p>",
+        "entries": [
+          "Lhammaruntosz magically polymorphs into a humanoid or beast that has a challenge rating no higher than her own, or back into her true form. She reverts to her true form if she dies. Any equipment she is wearing or carrying is absorbed or borne by the new form (Lhammaruntosz's choice).",
+          "In a new form, Lhammaruntosz retains her alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Her statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1177,10 +1267,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_23ps",
+          "id": "act_detect_ml9k",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>Lhammaruntosz makes a Wisdom (Perception) check.</p>",
+          "entries": [
+            "Lhammaruntosz makes a Wisdom ({@skill Perception}) check."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1194,10 +1287,13 @@
           }
         },
         {
-          "id": "act_tail_attack_p99b",
+          "id": "act_tail_attack_mwux",
           "name": "Tail Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>Lhammaruntosz makes a tail attack.</p>",
+          "entries": [
+            "Lhammaruntosz makes a tail attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1211,10 +1307,13 @@
           }
         },
         {
-          "id": "act_wing_attack__costs_2_actions__my00",
+          "id": "act_wing_attack__costs_2_actions__72da",
           "name": "Wing Attack (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Lhammaruntosz beats its wings. Each creature within 10 feet of Lhammaruntosz must succeed on a DC 20 Dexterity saving throw or take 14 (2d6 + 7) bludgeoning damage and be knocked prone. Lhammaruntosz can then fly up to half her flying speed.</p>",
+          "entries": [
+            "Lhammaruntosz beats its wings. Each creature within 10 feet of Lhammaruntosz must succeed on a {@dc 20} Dexterity saving throw or take 14 ({@damage 2d6 + 7}) bludgeoning damage and be knocked {@condition prone}. Lhammaruntosz can then fly up to half her flying speed."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1237,12 +1336,16 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_lair_action_f2nd",
-        "name": "Lair Action",
+        "id": "act_dragon_creates_fog_btqk",
+        "name": "Dragon Creates Fog",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon creates fog as though it had cast the fog cloud spell. The fog lasts until initiative count 20 on the next round.</p>",
+        "entries": [
+          "The dragon creates fog as though it had cast the {@spell fog cloud} spell. The fog lasts until initiative count 20 on the next round."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1256,10 +1359,13 @@
         }
       },
       {
-        "id": "act_lair_action_s6ca",
-        "name": "Lair Action",
+        "id": "act_thunderclap_originates_n64z",
+        "name": "Thunderclap Originates",
         "actionType": "lair",
         "descriptionHtml": "<p>A thunderclap originates at a point the dragon can see within 120 feet of it. Each creature within a 20-foot radius centered on that point must make a DC 15 Constitution saving throw or take 5 (1d10) thunder damage and be deafened until the end of its next turn.</p>",
+        "entries": [
+          "A thunderclap originates at a point the dragon can see within 120 feet of it. Each creature within a 20-foot radius centered on that point must make a {@dc 15} Constitution saving throw or take 5 ({@damage 1d10}) thunder damage and be {@condition deafened} until the end of its next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1281,10 +1387,177 @@
         }
       },
       {
-        "id": "act_additional_lair_actions_heas",
-        "name": "Additional Lair Actions",
+        "id": "act_ocean_s_call_6k3r",
+        "name": "Ocean's Call",
         "actionType": "lair",
-        "descriptionHtml": "<p>At your discretion, a legendary (Adult Bronze Dragon or Ancient Bronze Dragon) bronze dragon can use one or more of the following additional lair actions while in its lair:</p><ul><li><strong><em>Ocean's Call.</em></strong> <p>The dragon conjures a swarm of spectral dolphins. Each creature in the water within 120 feet of the dragon must succeed on a DC 15 Dexterity saving throw or take 5 (1d10) slashing damage; then the swarm vanishes.</p></li><li><strong><em>Salt Burst.</em></strong> <p>The dragon chooses a point it can see in the lair. The air in a 20-foot-radius sphere centered on that point bursts with abrasive salt crystals. Each creature in that area must succeed on a DC 15 Dexterity saving throw or take 10 (3d6) slashing damage.</p></li><li><strong><em>Whelming Water.</em></strong> <p>The dragon causes a strong current to course through the water in its lair. The dragon chooses any number of creatures it can see that are standing or swimming in water within 120 feet of it. Each chosen creature must succeed on a DC 15 Strength saving throw or be knocked prone.</p></li></ul>",
+        "descriptionHtml": "<p>The dragon conjures a swarm of spectral dolphins. Each creature in the water within 120 feet of the dragon must succeed on a DC 15 Dexterity saving throw or take 5 (1d10) slashing damage; then the swarm vanishes.</p>",
+        "entries": [
+          "The dragon conjures a swarm of spectral dolphins. Each creature in the water within 120 feet of the dragon must succeed on a {@dc 15} Dexterity saving throw or take 5 ({@damage 1d10}) slashing damage; then the swarm vanishes."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_salt_burst_tx9e",
+        "name": "Salt Burst",
+        "actionType": "lair",
+        "descriptionHtml": "<p>The dragon chooses a point it can see in the lair. The air in a 20-foot-radius sphere centered on that point bursts with abrasive salt crystals. Each creature in that area must succeed on a DC 15 Dexterity saving throw or take 10 (3d6) slashing damage.</p>",
+        "entries": [
+          "The dragon chooses a point it can see in the lair. The air in a 20-foot-radius sphere centered on that point bursts with abrasive salt crystals. Each creature in that area must succeed on a {@dc 15} Dexterity saving throw or take 10 ({@damage 3d6}) slashing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_whelming_water_yzqo",
+        "name": "Whelming Water",
+        "actionType": "lair",
+        "descriptionHtml": "<p>The dragon causes a strong current to course through the water in its lair. The dragon chooses any number of creatures it can see that are standing or swimming in water within 120 feet of it. Each chosen creature must succeed on a DC 15 Strength saving throw or be knocked prone.</p>",
+        "entries": [
+          "The dragon causes a strong current to course through the water in its lair. The dragon chooses any number of creatures it can see that are standing or swimming in water within 120 feet of it. Each chosen creature must succeed on a {@dc 15} Strength saving throw or be knocked {@condition prone}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "STR"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "lairHeader": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects:",
+    "lairActionsDesc": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects:",
+    "regionalEffects": [
+      {
+        "id": "act_regional_effect_4332",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Once per day, the dragon can alter the weather in a 6-mile radius centered on its lair. The dragon doesn't need to be outdoors; otherwise the effect is identical to the control weather spell.</p>",
+        "entries": [
+          "Once per day, the dragon can alter the weather in a 6-mile radius centered on its lair. The dragon doesn't need to be outdoors; otherwise the effect is identical to the {@spell control weather} spell."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_och2",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Underwater plants within 6 miles of the dragon's lair take on dazzlingly brilliant hues.</p>",
+        "entries": [
+          "Underwater plants within 6 miles of the dragon's lair take on dazzlingly brilliant hues."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_chyp",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Within its lair, the dragon can set illusory sounds, such as soft music and strange echoes, so that they can be heard in various parts of the lair.</p>",
+        "entries": [
+          "Within its lair, the dragon can set illusory sounds, such as soft music and strange echoes, so that they can be heard in various parts of the lair."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_additional_regional_effects_ksvu",
+        "name": "Additional Regional Effects",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Any of these effects might appear in the area around a bronze dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Phantom Escort.</em></strong> <p>Ghostly naval ships from an ancient armada appear, escorting well-meaning creatures in need of the dragon's help toward the dragon's lair.</p></li><li><strong><em>Underwater Pursuit.</em></strong> <p>Sailors glimpse the shadowy, illusory form of a dragon in the depths below them, keeping pace with their vessel.</p></li><li><strong><em>Unfailing Faithfulness.</em></strong> <p>Sapient creatures that spend a year within 10 miles of the dragon's lair find it nearly impossible to break a promise.</p></li></ul>",
+        "entries": [
+          "Any of these effects might appear in the area around a bronze dragon's lair, in addition to or instead of the effects described in the {@i Monster Manual}:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Phantom Escort",
+                "entry": "Ghostly naval ships from an ancient armada appear, escorting well-meaning creatures in need of the dragon's help toward the dragon's lair."
+              },
+              {
+                "type": "item",
+                "name": "Underwater Pursuit",
+                "entry": "Sailors glimpse the shadowy, illusory form of a dragon in the depths below them, keeping pace with their vessel."
+              },
+              {
+                "type": "item",
+                "name": "Unfailing Faithfulness",
+                "entry": "Sapient creatures that spend a year within 10 miles of the dragon's lair find it nearly impossible to break a promise."
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1298,10 +1571,21 @@
         }
       }
     ],
+    "regionalEffectsHtml": "<p>The region containing a legendary bronze dragon's lair is warped by the dragon's magic.</p><ul><li>Once per day, the dragon can alter the weather in a 6-mile radius centered on its lair. The dragon doesn't need to be outdoors; otherwise the effect is identical to the control weather spell.</li><li>Underwater plants within 6 miles of the dragon's lair take on dazzlingly brilliant hues.</li><li>Within its lair, the dragon can set illusory sounds, such as soft music and strange echoes, so that they can be heard in various parts of the lair.</li></ul><p>If the dragon dies, changed weather reverts to normal, as described in the spell, and the other effects fade in 1d10 days.</p><div><strong><em>Additional Regional Effects.</em></strong> <p>Any of these effects might appear in the area around a bronze dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Phantom Escort.</em></strong> <p>Ghostly naval ships from an ancient armada appear, escorting well-meaning creatures in need of the dragon's help toward the dragon's lair.</p></li><li><strong><em>Underwater Pursuit.</em></strong> <p>Sailors glimpse the shadowy, illusory form of a dragon in the depths below them, keeping pace with their vessel.</p></li><li><strong><em>Unfailing Faithfulness.</em></strong> <p>Sapient creatures that spend a year within 10 miles of the dragon's lair find it nearly impossible to break a promise.</p></li></ul></div>",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SDW/Lhammaruntosz.webp",
     "tokenImg": "img/bestiary/tokens/SDW/Lhammaruntosz.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": {
+      "name": "Bronze Dragon",
+      "source": "MM"
+    }
   },
   {
     "id": "creature_spellcaster__healer__sdw",
@@ -1404,7 +1688,7 @@
       {
         "id": "sc_spellcaster__healer__0",
         "name": "Spellcasting (Healer)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 4,
@@ -1494,7 +1778,8 @@
                     "formula": "1d8",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -1543,7 +1828,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1731,10 +2018,13 @@
     ],
     "traits": [
       {
-        "id": "act_potent_cantrip_b1pl",
+        "id": "act_potent_cantrip_enfe",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
+        "entries": [
+          "The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1750,10 +2040,13 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_zyga",
+        "id": "act_quarterstaff_0qhn",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) bludgeoning damage, or 4 ({@damage 1d8}) bludgeoning damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1783,11 +2076,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SDW/Spellcaster (Healer).webp",
     "tokenImg": "img/bestiary/tokens/SDW/Spellcaster (Healer).webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_spellcaster__mage__sdw",
@@ -1890,7 +2195,7 @@
       {
         "id": "sc_spellcaster__mage__0",
         "name": "Spellcasting (Mage)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 4,
@@ -1923,7 +2228,8 @@
                     "formula": "1d10",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -2011,7 +2317,9 @@
                     "formula": "3d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -2080,7 +2388,9 @@
                     "formula": "2d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of wax)",
@@ -2130,7 +2440,9 @@
                     "formula": "8d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -2199,13 +2511,17 @@
                     "formula": "5d8",
                     "type": "Fire",
                     "label": "Damage 1",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "5d8",
                     "type": "Fire",
                     "label": "Damage 2",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a piece of charcoal)",
@@ -2236,7 +2552,9 @@
                     "formula": "8d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a small crystal or glass cone)",
@@ -2252,10 +2570,13 @@
     ],
     "traits": [
       {
-        "id": "act_potent_cantrip_ht8t",
+        "id": "act_potent_cantrip_heni",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
+        "entries": [
+          "The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2271,10 +2592,13 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_lffr",
+        "id": "act_quarterstaff_aj6b",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) bludgeoning damage, or 4 ({@damage 1d8}) bludgeoning damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2304,11 +2628,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SDW/Spellcaster (Mage).webp",
     "tokenImg": "img/bestiary/tokens/SDW/Spellcaster (Mage).webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_warrior_sdw",
@@ -2413,10 +2749,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_battle_readiness_pnsf",
+        "id": "act_battle_readiness_qe2i",
         "name": "Battle Readiness",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has advantage on initiative rolls.</p>",
+        "entries": [
+          "The warrior has advantage on initiative rolls."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2430,10 +2769,13 @@
         }
       },
       {
-        "id": "act_improved_critical_226y",
+        "id": "act_improved_critical_xs54",
         "name": "Improved Critical",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior's attack rolls score a critical hit on a roll of 19 or 20 on the d20.</p>",
+        "entries": [
+          "The warrior's attack rolls score a critical hit on a roll of 19 or 20 on the {@dice d20}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2447,10 +2789,13 @@
         }
       },
       {
-        "id": "act_indomitable__1_day__5z1s",
+        "id": "act_indomitable__1_day__yvkj",
         "name": "Indomitable (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior can reroll a saving throw that it fails, but it must use the new result.</p>",
+        "entries": [
+          "The warrior can reroll a saving throw that it fails, but it must use the new result."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2464,10 +2809,33 @@
         }
       },
       {
-        "id": "act_martial_role_8al7",
+        "id": "act_martial_role_lk79",
         "name": "Martial Role",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has one of the following traits of your choice:</p><ul><li><strong><em>Attacker.</em></strong> <p>The warrior gains a +2 bonus to attack rolls.</p></li><li><strong><em>Defender.</em></strong> <p>The warrior gains the Protection reaction below.</p></li></ul>",
+        "entries": [
+          "The warrior has one of the following traits of your choice:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "name": "Attacker",
+                "type": "item",
+                "entries": [
+                  "The warrior gains a +2 bonus to attack rolls."
+                ]
+              },
+              {
+                "name": "Defender",
+                "type": "item",
+                "entries": [
+                  "The warrior gains the Protection reaction below."
+                ]
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2481,10 +2849,13 @@
         }
       },
       {
-        "id": "act_second_wind__recharges_after_a_short_or_long_rest__8hkg",
+        "id": "act_second_wind__recharges_after_a_short_or_long_rest__12c1",
         "name": "Second Wind (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior can use a bonus action on its turn to regain hit points equal to 1d10 + its level.</p>",
+        "entries": [
+          "The warrior can use a bonus action on its turn to regain hit points equal to {@dice 1d10} + its level."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2500,10 +2871,13 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_l1wj",
+        "id": "act_extra_attack_vh4t",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The warrior can attack twice, instead of once, whenever it takes the attack action on its turn.</p>",
+        "entries": [
+          "The warrior can attack twice, instead of once, whenever it takes the attack action on its turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2517,10 +2891,13 @@
         }
       },
       {
-        "id": "act_longsword_colv",
+        "id": "act_longsword_y0pv",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d8 + 4}) slashing damage, or 9 ({@damage 1d10 + 4}) slashing damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2543,10 +2920,13 @@
         }
       },
       {
-        "id": "act_longbow_7juf",
+        "id": "act_longbow_ikar",
         "name": "Longbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +6 to hit, range 150/600 ft., one target. {@h}6 (1d8 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 6} to hit, range 150/600 ft., one target. {@h}6 ({@damage 1d8 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2568,10 +2948,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_protection__defender_only__2248",
+        "id": "act_protection__defender_only__1cva",
         "name": "Protection (Defender Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature the warrior can see attacks a target other than the warrior that is within 5 feet of the warrior, the warrior can use their reaction to impose disadvantage on the attack roll. The warrior must be wielding a shield.</p>",
+        "entries": [
+          "When a creature the warrior can see attacks a target other than the warrior that is within 5 feet of the warrior, the warrior can use their reaction to impose disadvantage on the attack roll. The warrior must be wielding a shield."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2590,10 +2973,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SDW/Warrior.webp",
     "tokenImg": "img/bestiary/tokens/SDW/Warrior.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

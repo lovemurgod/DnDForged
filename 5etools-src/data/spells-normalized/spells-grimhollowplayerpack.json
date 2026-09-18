@@ -1,0 +1,470 @@
+[
+  {
+    "id": "sp_bloodletter_grimhollowplayerpack",
+    "name": "Bloodletter",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 2,
+    "school": "Necromancy",
+    "castingTime": "1 bonus action",
+    "range": "touch",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You touch a nonmagical weapon. Until the spell ends, the next creature hit by the weapon must succeed on a Constitution saving throw or receive a festering wound. A creature with a festering wound takes 2d6 necrotic damage at the beginning of its turn for the remainder of the spell's duration. A creature can only have one festering wound at a time.</p><p>Receiving at least 1 point of magical healing closes a festering wound, ending the recurring damage and the spell.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 3rd level or higher, you can increase the damage dealt by a festering wound by 1d6 for each slot level above 2nd.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 3rd level or higher, you can increase the damage dealt by a festering wound by 1d6 for each slot level above 2nd.</p></div>",
+    "classes": [
+      "Cleric",
+      "Paladin",
+      "Ranger"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing"
+    ]
+  },
+  {
+    "id": "sp_creeping_touch_grimhollowplayerpack",
+    "name": "Creeping Touch",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 1,
+    "school": "Transmutation",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You detach your hand at the wrist, transforming it into a spider. While the spider is within 100 feet of you, you can communicate with it telepathically. Additionally, as an action, you can see through its eyes and hear what it hears until the start of your next turn. During this time, you have the deafened and blinded condition with regard to your own senses.</p><p>If the spider is killed or prevented from returning to you, your hand is restored, but you take 1d6 points of psychic damage. If you command the spider to return, it crawls back to your wrist, and the spell ends.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Psychic",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Blinded",
+      "Deafened"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_crown_of_radiance_grimhollowplayerpack",
+    "name": "Crown of Radiance",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 6,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (20 feet sphere)",
+    "components": "V, S",
+    "duration": "10 minutes",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>A flaming crown of holy light adorns your head until the spell ends. Any fiend, fey, or undead that moves within 20 feet of you or begins their turn within 20 feet of you takes 2d8 radiant damage.</p><p>The crown of radiance sheds bright light in a 30-foot radius and dim light for an additional 30 feet.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Cleric",
+      "Druid"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d8",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "LGT"
+    ]
+  },
+  {
+    "id": "sp_flense_grimhollowplayerpack",
+    "name": "Flense",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 8,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S, M (a scalpel)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You target a creature you can see within range, using necromantic force to slice the skin from its body. Make a ranged spell attack against that creature. The target must succeed on a Constitution saving throw, taking 8d6 necrotic damage on a failure or half as much damage on a success. On each of your turns for the duration, you can use your action to force the same target to make another Constitution saving throw and repeat the damage. The spell also ends if the target is ever outside the spell's range, if the target is reduced to 0 hit points, or if it has total cover from you.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Cleric",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "8d6",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_holy_word_grimhollowplayerpack",
+    "name": "Holy Word",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You mutter a word of the divine under your breath, being careful not to speak it any louder, for such celestial power is not for the tainted and unworthy. Make a ranged spell attack against the target. On a hit, the target takes 1d8 radiant damage. If you hit an undead, fiend, or fey, then its speed is reduced by 10 feet and it cannot take reactions until the end of its next turn.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>This spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>This spell's damage increases by 1d8 when you reach 5th level (2d8), 11th level (3d8), and 17th level (4d8).</p></div>",
+    "classes": [
+      "Cleric"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d8",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "1d8",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "radiant damage",
+      "scaling": {
+        "1": "1d8",
+        "5": "2d8",
+        "11": "3d8",
+        "17": "4d8"
+      }
+    },
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Scaling Damage"
+    ]
+  },
+  {
+    "id": "sp_life_tether_grimhollowplayerpack",
+    "name": "Life Tether",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 2,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>The target must make a Wisdom saving throw. On a failure, a sickly green ethereal tether forms between you and your target. Whenever you take damage, each tethered target takes half that amount as necrotic damage. Damage dealt this way is distributed after any damage resistances or immunities are applied. If a target with a tether drops to 0 Hit Points, they are no longer affected by the tether. As a bonus action, you can move the tether from one fallen foe to another target. The new target must succeed on a Wisdom saving throw or also be subject to the effects of this spell. A target may only have one tether attached to them from any instance of this spell at a given time.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 4th level or higher, the number of tethers created is increased by one for every two slot levels above the 2nd.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 4th level or higher, the number of tethers created is increased by one for every two slot levels above the 2nd.</p></div>",
+    "classes": [
+      "Cleric",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_phoenix_flames_grimhollowplayerpack",
+    "name": "Phoenix Flames",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 9,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (20 feet sphere)",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You immolate yourself, consuming your body in a searing cloud of holy flames. All creatures within 20 feet of you must make a Constitution saving throw or take 30d6 radiant damage and gain one level of exhaustion. On a successful save, a creature takes half damage and is not exhausted. If a target is killed by this damage, its body is incinerated.</p><p>After 10 minutes, you rise from the ashes where you originally cast the spell. You are returned fully to life as if you were affected by a true resurrection spell.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Cleric",
+      "Druid",
+      "Sorcerer"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "30d6",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Exhaustion"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_ride_the_lightning_grimhollowplayerpack",
+    "name": "Ride the Lightning",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 4,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "Self (60 feet line)",
+    "components": "V, S, M (a length of copper wire)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You transform yourself into a bolt of lightning and teleport up to 60 feet to an unoccupied space you can see. Each creature within 5 feet of the line created between your starting point and final destination takes 4d6 lightning damage unless they succeed on a Dexterity saving throw to halve the damage.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d6 for each slot level above 4th. In addition, you can teleport yourself an additional 10 feet further for each slot level above 4th.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 5th level or higher, the damage increases by 1d6 for each slot level above 4th. In addition, you can teleport yourself an additional 10 feet further for each slot level above 4th.</p></div>",
+    "classes": [
+      "Druid",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d6",
+        "type": "Lightning",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_spirit_swarm_grimhollowplayerpack",
+    "name": "Spirit Swarm",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 5,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You invite spirits to take their revenge upon a target. A creature that you can see within range must make a Charisma saving throw. A creature with a Charisma score of 2 or lower can't be affected by this spell. A target takes 8d8 psychic damage on a failed save and is frightened of you until the spell ends. On a successful save, a target takes half damage and is not frightened.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Cleric",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "8d8",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "charisma",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Frightened"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_supernal_smite_grimhollowplayerpack",
+    "name": "Supernal Smite",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "level": 4,
+    "school": "Evocation",
+    "castingTime": "1 bonus action",
+    "range": "self",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>The next time you hit a creature with a melee weapon attack during this spell's duration, your weapon shatters the ambient magic surrounding the creature, and the attack deals an extra 4d6 force damage. If the creature is concentration on a spell, that concentration is broken.</p><p>In addition, any spell of 3rd level or lower on the target ends. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability. The DC equals 10 + the spells' level. On a successful check, the spell ends.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d6",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD"
+    ]
+  }
+]

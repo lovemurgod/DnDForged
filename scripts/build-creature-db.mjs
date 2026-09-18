@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getBrewEntities } from './brew-data-loader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -75,9 +76,71 @@ function cleanTags(str) {
         .replace(/\{@scaledice [^|]+\|[^|]+\|([^}]+)\}/g, '$1')
         .replace(/\{@filter ([^}|]+)[^}]*\}/g, '$1')
         .replace(/\{@link ([^}|]+)[^}]*\}/g, '$1')
+        .replace(/\{@atk\s+([^}]+)\}/gi, (m, t) => {
+            const low = t.toLowerCase().trim();
+            if (low === 'mw') return 'Melee Weapon Attack:';
+            if (low === 'rw') return 'Ranged Weapon Attack:';
+            if (low === 'mw,rw' || low === 'rw,mw') return 'Melee or Ranged Weapon Attack:';
+            if (low === 'ms') return 'Melee Spell Attack:';
+            if (low === 'rs') return 'Ranged Spell Attack:';
+            return 'Attack:';
+        })
+        .replace(/\{@atkr\s+([^}]+)\}/gi, (m, t) => {
+            const low = t.toLowerCase().trim();
+            if (low === 'm') return 'Melee Attack:';
+            if (low === 'r') return 'Ranged Attack:';
+            if (low === 'm,r' || low === 'r,m') return 'Melee or Ranged Attack:';
+            return 'Attack:';
+        })
+        .replace(/\{@h\}/gi, 'Hit: ')
+        .replace(/\{@m\}/gi, 'Miss: ')
+        .replace(/\{@hom\}/gi, 'Hit or Miss: ')
+        .replace(/\b(mw|rw|ms|rs)\b(?:\s*[,:])?(?=[\s]+(?:reach|range|\+|-|\d|to hit))/gi, (match, type) => {
+            const low = type.toLowerCase();
+            if (low === 'mw') return 'Melee Weapon Attack:';
+            if (low === 'rw') return 'Ranged Weapon Attack:';
+            if (low === 'ms') return 'Melee Spell Attack:';
+            if (low === 'rs') return 'Ranged Spell Attack:';
+            return match;
+        })
         .replace(/\{@chance ([^}|]+)[^}]*\}/g, '$1%')
         .replace(/\{@recharge ([^}|]+)[^}]*\}/g, '(Recharge $1)')
         .replace(/\{@\w+ ([^}|]+)[^}]*\}/g, '$1');
+}
+
+function cleanTagsPlain(str) {
+    if (typeof str !== 'string') return '';
+    return cleanTags(str)
+        .replace(/<[^>]+>/g, '')
+        .replace(/[*_~`]/g, '')
+        .trim();
+}
+
+function extractLairActionName(text, fallbackIndex = 1) {
+    if (!text || typeof text !== 'string') return `Lair Action ${fallbackIndex}`;
+    const boldMatch = text.match(/^\{@b\s+([^}]+)\}\.?\s*(.*)/i) || text.match(/^\*\*([^*]+)\*\*\.?\s*(.*)/i);
+    if (boldMatch) return cleanTagsPlain(boldMatch[1]).replace(/\.$/, '').trim();
+
+    const spellMatch = text.match(/(?:casts?|uses?)\s+\{@spell\s+([^}|]+)/i);
+    if (spellMatch) {
+        const spellName = spellMatch[1].split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        return `Cast ${spellName}`;
+    }
+
+    const firstClause = text.split(/[.,;]/)[0].trim().replace(/^\{@[^}]+\}\s*/, '');
+    let words = firstClause.split(/\s+/).filter(Boolean);
+    if (words.length > 0) {
+        if (/^(a|an|the)$/i.test(words[0])) words.shift();
+        const stopWords = new Set(['from', 'in', 'of', 'at', 'on', 'to', 'within', 'with', 'by', 'around', 'into', 'for', 'a', 'an', 'the']);
+        words = words.slice(0, 3);
+        while (words.length > 1 && stopWords.has(words[words.length - 1].toLowerCase())) {
+            words.pop();
+        }
+        const shortName = words.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+        if (shortName.length >= 3) return shortName;
+    }
+
+    return `Lair Action ${fallbackIndex}`;
 }
 
 function renderEntriesToHtml(entries) {
@@ -92,17 +155,27 @@ function renderEntriesToHtml(entries) {
         } else if (typeof entry === 'object' && entry !== null) {
             if (entry.type === 'entries') {
                 const nameStr = entry.name ? `<strong><em>${cleanTags(entry.name)}.</em></strong> ` : '';
-                html += `<div>${nameStr}${renderEntriesToHtml(entry.entries)}</div>`;
+                html += `<div>${nameStr}${renderEntriesToHtml(entry.entries || entry.entry)}</div>`;
+            } else if (entry.type === 'inset') {
+                const nameStr = entry.name ? `<h4 style="margin:4px 0;">${cleanTags(entry.name)}</h4>` : '';
+                html += `<div class="cs-inset" style="padding:6px 10px; margin:6px 0; border-left:3px solid var(--color-gold-base); background:rgba(255,255,255,0.03); border-radius:4px;">${nameStr}${renderEntriesToHtml(entry.entries || entry.entry)}</div>`;
             } else if (entry.type === 'list') {
                 const items = (entry.items || []).map(item => {
                     if (typeof item === 'string') return `<li>${cleanTags(item)}</li>`;
-                    if (item.type === 'item') {
+                    if (item && typeof item === 'object') {
                         const nameStr = item.name ? `<strong><em>${cleanTags(item.name)}.</em></strong> ` : '';
-                        return `<li>${nameStr}${renderEntriesToHtml(item.entry || item.entries)}</li>`;
+                        const content = item.entry !== undefined ? item.entry : (item.entries !== undefined ? item.entries : '');
+                        if (content !== '') {
+                            return `<li>${nameStr}${renderEntriesToHtml(content)}</li>`;
+                        }
                     }
                     return `<li>${renderEntriesToHtml(item)}</li>`;
                 }).join('');
                 html += `<ul>${items}</ul>`;
+            } else if (entry.type === 'item' || entry.type === 'itemSub' || entry.type === 'itemSpell') {
+                const nameStr = entry.name ? `<strong><em>${cleanTags(entry.name)}.</em></strong> ` : '';
+                const content = entry.entry !== undefined ? entry.entry : (entry.entries !== undefined ? entry.entries : '');
+                html += `<div>${nameStr}${renderEntriesToHtml(content)}</div>`;
             } else if (entry.type === 'table') {
                 let caption = entry.caption ? `<caption>${cleanTags(entry.caption)}</caption>` : '';
                 let headers = (entry.colLabels || []).map(l => `<th>${cleanTags(l)}</th>`).join('');
@@ -111,6 +184,9 @@ function renderEntriesToHtml(entries) {
                     return `<tr>${cells}</tr>`;
                 }).join('');
                 html += `<table style="width:100%; border-collapse:collapse; margin:8px 0;">${caption}<thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table>`;
+            } else if (entry.entry || entry.entries) {
+                const nameStr = entry.name ? `<strong><em>${cleanTags(entry.name)}.</em></strong> ` : '';
+                html += `<div>${nameStr}${renderEntriesToHtml(entry.entry || entry.entries)}</div>`;
             }
         }
     });
@@ -128,6 +204,7 @@ function flattenEntriesToText(entries) {
         let text = '';
         if (entries.name) text += entries.name + ': ';
         if (entries.entries) text += flattenEntriesToText(entries.entries);
+        else if (entries.entry) text += flattenEntriesToText(entries.entry);
         if (entries.items) text += entries.items.map(i => flattenEntriesToText(i)).join('; ');
         return text;
     }
@@ -259,16 +336,54 @@ function parseActionMacroData(entryName, rawEntries, charName) {
         if (targetM) macro.targets = targetM[1].trim();
     }
 
-    // Save DC detection
-    const saveMatch = rawString.match(/\{@dc (\d+)\}/i) || rawString.match(/(?:save\s+DC|DC)\s*(\d+)(?:\s*(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma))?/i);
-    if (saveMatch) {
-        const dc = parseInt(saveMatch[1], 10);
-        let ability = saveMatch[2] ? saveMatch[2].substring(0, 3).toUpperCase() : null;
-        if (!ability) {
-            const abM = rawString.match(/(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)\s+saving\s+throw/i);
-            if (abM) ability = abM[1].substring(0, 3).toUpperCase();
+    // Save DC detection (2024: "Con DC 14", "{@actSave con} {@dc 17}", 2014: "DC 14 Constitution", "{@dc 14}")
+    let saveAbility = null;
+    const actSaveM = rawString.match(/\{@actSave\s+([a-zA-Z]+)\}/i);
+    if (actSaveM) {
+        saveAbility = actSaveM[1].substring(0, 3).toUpperCase();
+    }
+
+    let saveDc = null;
+    const dcTagM = rawString.match(/\{@dc\s+(\d+)\}/i);
+    if (dcTagM) {
+        saveDc = parseInt(dcTagM[1], 10);
+    }
+
+    // Pattern A: "Con DC 14", "Constitution DC 14", "Con save DC 14", "Constitution saving throw DC 14"
+    const preDcM = rawString.match(/\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b(?:\s+(?:saving\s+throw|save))?\s*(?:\{@dc\s+(\d+)\}|DC\s*(\d+))/i);
+    if (preDcM) {
+        if (!saveAbility) saveAbility = preDcM[1].substring(0, 3).toUpperCase();
+        if (!saveDc) saveDc = parseInt(preDcM[2] || preDcM[3], 10);
+    }
+
+    // Pattern B: "DC 14 Constitution", "DC 14 Con", "save DC 14 Constitution"
+    const postDcM = rawString.match(/(?:save\s+DC|DC)\s*(\d+)(?:\s+or\s+higher)?\s+(?:\{@actSave\s+([a-zA-Z]+)\}|(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha))/i);
+    if (postDcM) {
+        if (!saveDc) saveDc = parseInt(postDcM[1], 10);
+        if (!saveAbility) saveAbility = (postDcM[2] || postDcM[3]).substring(0, 3).toUpperCase();
+    }
+
+    // Pattern C: fallback generic DC if still not found
+    if (!saveDc) {
+        const genDcM = rawString.match(/(?:save\s+DC|DC)\s*(\d+)/i);
+        if (genDcM) {
+            saveDc = parseInt(genDcM[1], 10);
         }
-        macro.save = { dc, ability: ability || 'Save' };
+    }
+
+    // If we found a DC but still no ability, look anywhere in the rawString for saving throw mention
+    if (saveDc && !saveAbility) {
+        const abM = rawString.match(/\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b\s+saving\s+throw/i) ||
+                    rawString.match(/saving\s+throw\s+against\s+(?:the\s+)?\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b/i);
+        if (abM) {
+            saveAbility = abM[1].substring(0, 3).toUpperCase();
+        }
+    }
+
+    if (saveDc) {
+        const validAbilities = new Set(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
+        const normalizedAbility = (saveAbility && validAbilities.has(saveAbility)) ? saveAbility : null;
+        macro.save = { dc: saveDc, ability: normalizedAbility };
     }
 
     // Damage formulas
@@ -303,8 +418,8 @@ function normalizeAbilityEntry(entry, actionType, charName) {
     if (typeof entry === 'string') {
         entry = { name: actionType === 'lair' ? 'Lair Action' : 'Ability', entries: [entry] };
     }
-    const name = entry.name ? cleanTags(entry.name).replace(/\.$/, '').trim() : (actionType === 'lair' ? 'Lair Action' : 'Ability');
-    const entries = entry.entries || (entry.items ? entry.items : []);
+    const name = entry.name ? cleanTagsPlain(entry.name).replace(/\.$/, '').trim() : (actionType === 'lair' ? 'Lair Action' : 'Ability');
+    const entries = entry.entries || (entry.items ? entry.items : (entry.entry ? [entry.entry] : []));
     const descriptionHtml = renderEntriesToHtml(entries);
     const macro = parseActionMacroData(name, entries, charName);
 
@@ -313,6 +428,7 @@ function normalizeAbilityEntry(entry, actionType, charName) {
         name,
         actionType, // 'action', 'bonus', 'reaction', 'trait', 'legendary', 'mythic', 'lair'
         descriptionHtml,
+        entries,
         macro
     };
 }
@@ -351,9 +467,10 @@ function normalizeSpellcasting(monster, spellsLookup) {
 
     rawBlocks.forEach((raw, blockIdx) => {
         const blockName = raw.name || 'Spellcasting';
-        const isBlockInnate = raw.type === 'innate' || /innate/i.test(blockName);
         const headerText = flattenEntriesToText(raw.headerEntries || raw.entries || []);
         const footerText = flattenEntriesToText(raw.footerEntries || []);
+        const isBlockInnate = raw.type === 'innate' || /innate|psionic/i.test(blockName) || /innate\s+spellcasting/i.test(headerText);
+        const isBlockPact = raw.type === 'pact' || /pact\s+magic/i.test(blockName) || (/warlock/i.test(headerText) && /short\s+or\s+long\s+rest/i.test(headerText));
 
         // 1. Ability determination
         let ability = raw.ability ? String(raw.ability).toLowerCase() : null;
@@ -525,10 +642,21 @@ function normalizeSpellcasting(monster, spellsLookup) {
             });
         }
 
+        let resolvedType = 'slot';
+        if (raw.type === 'innate' || isBlockInnate) {
+            resolvedType = 'innate';
+        } else if (raw.type === 'pact' || isBlockPact) {
+            resolvedType = 'pact';
+        } else if (raw.type === 'custom') {
+            resolvedType = 'custom';
+        } else {
+            resolvedType = 'slot';
+        }
+
         spellcastingBlocks.push({
             id: `sc_${monster.name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${blockIdx}`,
             name: blockName,
-            type: raw.type || (isBlockInnate ? 'innate' : 'slot'),
+            type: resolvedType,
             displayAs: raw.displayAs || 'action',
             ability,
             abilityMod: abMod,
@@ -547,20 +675,200 @@ function normalizeSpellcasting(monster, spellsLookup) {
     return spellcastingBlocks;
 }
 
+// Recursively replace regex in all nested string fields
+function deepReplaceString(obj, regex, replacement) {
+    if (!obj) return;
+    if (typeof obj === 'string') return;
+    if (Array.isArray(obj)) {
+        for (let i = 0; i < obj.length; i++) {
+            if (typeof obj[i] === 'string') {
+                obj[i] = obj[i].replace(regex, replacement);
+            } else if (typeof obj[i] === 'object' && obj[i] !== null) {
+                deepReplaceString(obj[i], regex, replacement);
+            }
+        }
+    } else if (typeof obj === 'object') {
+        for (const k of Object.keys(obj)) {
+            if (typeof obj[k] === 'string') {
+                obj[k] = obj[k].replace(regex, replacement);
+            } else if (typeof obj[k] === 'object' && obj[k] !== null) {
+                deepReplaceString(obj[k], regex, replacement);
+            }
+        }
+    }
+}
+
+// Apply 5etools _copy._mod directives (replaceArr, appendArr, replaceTxt, etc.)
+function applyCopyMod(target, mod) {
+    if (!mod || typeof mod !== 'object') return;
+    for (const propKey of Object.keys(mod)) {
+        const modDirectives = Array.isArray(mod[propKey]) ? mod[propKey] : [mod[propKey]];
+        if (propKey === '*') {
+            for (const d of modDirectives) {
+                if (d && d.mode === 'replaceTxt' && d.replace && d.with !== undefined) {
+                    const regex = new RegExp(d.replace, d.flags || 'g');
+                    deepReplaceString(target, regex, d.with);
+                }
+            }
+            continue;
+        }
+        for (const d of modDirectives) {
+            if (!d) continue;
+            const mode = d.mode;
+            const items = d.items ? (Array.isArray(d.items) ? d.items : [d.items]) : [];
+
+            if (mode === 'replaceArr') {
+                if (!Array.isArray(target[propKey])) target[propKey] = [];
+                const arr = target[propKey];
+                let idx = -1;
+                if (d.replace) {
+                    if (typeof d.replace === 'object' && d.replace.regex) {
+                        const re = new RegExp(d.replace.regex, d.replace.flags || '');
+                        idx = arr.findIndex(it => (it?.name ? re.test(it.name) : (typeof it === 'string' ? re.test(it) : false)));
+                    } else if (typeof d.replace === 'object' && d.replace.index != null) {
+                        idx = d.replace.index;
+                    } else {
+                        const matchName = typeof d.replace === 'string' ? d.replace.toLowerCase() : '';
+                        idx = arr.findIndex(it => (it?.name && it.name.toLowerCase() === matchName) || it === d.replace);
+                    }
+                }
+                if (idx !== -1) arr.splice(idx, 1, ...items);
+                else arr.push(...items);
+            } else if (mode === 'appendArr' || mode === 'appendIfNotExistsArr') {
+                if (!Array.isArray(target[propKey])) target[propKey] = [];
+                if (mode === 'appendIfNotExistsArr') {
+                    items.forEach(it => {
+                        const exists = target[propKey].some(x => (x?.name && it?.name ? x.name.toLowerCase() === it.name.toLowerCase() : JSON.stringify(x) === JSON.stringify(it)));
+                        if (!exists) target[propKey].push(it);
+                    });
+                } else {
+                    target[propKey].push(...items);
+                }
+            } else if (mode === 'prependArr') {
+                if (!Array.isArray(target[propKey])) target[propKey] = [];
+                target[propKey].unshift(...items);
+            } else if (mode === 'insertArr') {
+                if (!Array.isArray(target[propKey])) target[propKey] = [];
+                const insIdx = (d.index !== undefined && d.index >= 0) ? d.index : target[propKey].length;
+                target[propKey].splice(insIdx, 0, ...items);
+            } else if (mode === 'removeArr') {
+                if (Array.isArray(target[propKey])) {
+                    if (d.names) {
+                        const names = Array.isArray(d.names) ? d.names.map(n => String(n).toLowerCase()) : [String(d.names).toLowerCase()];
+                        target[propKey] = target[propKey].filter(it => !it?.name || !names.includes(it.name.toLowerCase()));
+                    } else if (d.items) {
+                        const remItems = Array.isArray(d.items) ? d.items : [d.items];
+                        target[propKey] = target[propKey].filter(it => !remItems.includes(it));
+                    }
+                }
+            } else if (mode === 'replaceOrAppendArr') {
+                if (!Array.isArray(target[propKey])) target[propKey] = [];
+                const arr = target[propKey];
+                let idx = -1;
+                if (d.replace) {
+                    const matchName = typeof d.replace === 'string' ? d.replace.toLowerCase() : '';
+                    idx = arr.findIndex(it => (it?.name && it.name.toLowerCase() === matchName) || it === d.replace);
+                }
+                if (idx !== -1) arr.splice(idx, 1, ...items);
+                else arr.push(...items);
+            } else if (mode === 'replaceTxt') {
+                if (target[propKey] && d.replace && d.with !== undefined) {
+                    const regex = new RegExp(d.replace, d.flags || 'g');
+                    deepReplaceString(target[propKey], regex, d.with);
+                }
+            } else if (mode === 'replaceName') {
+                if (Array.isArray(target[propKey]) && d.replace && d.with) {
+                    const it = target[propKey].find(x => x?.name === d.replace);
+                    if (it) it.name = d.with;
+                }
+            } else if (mode === 'setProp') {
+                if (d.value !== undefined) {
+                    target[propKey] = d.value;
+                }
+            } else if (mode === 'addSkills' || mode === 'addAllSkills') {
+                if (!target.skill) target.skill = {};
+                if (d.skills) Object.assign(target.skill, d.skills);
+            } else if (mode === 'addSaves' || mode === 'addAllSaves') {
+                if (!target.save) target.save = {};
+                if (d.saves) Object.assign(target.save, d.saves);
+            }
+        }
+    }
+}
+
+// Resolve _copy on a legendaryGroup entry
+function resolveLegendaryGroupCopy(lg, lgMap, depth = 0) {
+    if (!lg || !lg._copy || depth > 10) return lg;
+    const parentName = (lg._copy.name || '').toLowerCase();
+    const parentSource = (lg._copy.source || 'MM').toLowerCase();
+    const parentKey = `${parentName}|${parentSource}`;
+    let parent = lgMap.get(parentKey);
+
+    if (!parent) {
+        for (const [k, v] of lgMap.entries()) {
+            if (k.startsWith(`${parentName}|`)) {
+                parent = v;
+                break;
+            }
+        }
+    }
+
+    if (parent) {
+        if (parent._copy) resolveLegendaryGroupCopy(parent, lgMap, depth + 1);
+        const merged = JSON.parse(JSON.stringify(parent));
+        if (lg._copy && lg._copy._mod) {
+            applyCopyMod(merged, lg._copy._mod);
+        }
+        if (lg._mod) {
+            applyCopyMod(merged, lg._mod);
+        }
+        for (const prop in lg) {
+            if (prop !== '_copy' && prop !== '_mod') {
+                merged[prop] = lg[prop];
+            }
+        }
+        delete merged._copy;
+        delete merged._mod;
+        return merged;
+    }
+
+    delete lg._copy;
+    return lg;
+}
+
 // Main compiler
 function buildCreatureDatabase() {
     console.log('🚀 Starting Creature Database Compiler...');
     const spellsLookup = loadSpellsLookup();
 
     const legendaryGroupsMap = new Map();
+    const rawLegGroupsList = [];
     if (fs.existsSync(legGroupsPath)) {
         try {
             const legData = JSON.parse(fs.readFileSync(legGroupsPath, 'utf8'));
             (legData.legendaryGroup || []).forEach(lg => {
                 const key = `${(lg.name || '').toLowerCase()}|${(lg.source || 'MM').toLowerCase()}`;
                 legendaryGroupsMap.set(key, lg);
+                rawLegGroupsList.push(lg);
             });
-            console.log(`🏰 Loaded ${legendaryGroupsMap.size} legendary groups.`);
+            const brewLegGroups = getBrewEntities('legendaryGroup');
+            brewLegGroups.forEach(lg => {
+                const key = `${(lg.name || '').toLowerCase()}|${(lg.source || 'MM').toLowerCase()}`;
+                legendaryGroupsMap.set(key, lg);
+                rawLegGroupsList.push(lg);
+            });
+
+            // Resolve _copy on legendary groups
+            let resolvedLgCopies = 0;
+            rawLegGroupsList.forEach(lg => {
+                if (lg._copy) {
+                    const resolved = resolveLegendaryGroupCopy(lg, legendaryGroupsMap);
+                    const key = `${(resolved.name || '').toLowerCase()}|${(resolved.source || 'MM').toLowerCase()}`;
+                    legendaryGroupsMap.set(key, resolved);
+                    resolvedLgCopies++;
+                }
+            });
+            console.log(`🏰 Loaded ${legendaryGroupsMap.size} legendary groups (resolved ${resolvedLgCopies} _copy inheritances).`);
         } catch (e) {
             console.warn('⚠️ Could not load legendarygroups.json:', e.message);
         }
@@ -596,6 +904,13 @@ function buildCreatureDatabase() {
         });
     }
 
+    const brewMonsters = getBrewEntities('monster');
+    brewMonsters.forEach(m => {
+        m.__prop = "monster";
+        m.source = m.source || 'Partnered';
+        allMonstersRaw.push(m);
+    });
+
     console.log(`📊 Loaded ${allMonstersRaw.length} raw monster entries.`);
 
     // Build raw monster lookup map for _copy resolution
@@ -630,6 +945,13 @@ function buildCreatureDatabase() {
             if (parent._copy) resolveCopy(parent, depth + 1);
             // Deep clone parent
             const merged = JSON.parse(JSON.stringify(parent));
+            // Apply _copy._mod if present
+            if (m._copy && m._copy._mod) {
+                applyCopyMod(merged, m._copy._mod);
+            }
+            if (m._mod) {
+                applyCopyMod(merged, m._mod);
+            }
             // Overwrite with child properties
             for (const prop in m) {
                 if (prop !== '_copy' && prop !== '_mod') {
@@ -809,34 +1131,157 @@ function buildCreatureDatabase() {
         };
 
         let rawLair = m.lairActions;
-        if (!rawLair && m.legendaryGroup) {
-            const lgKey = `${(m.legendaryGroup.name || '').toLowerCase()}|${(m.legendaryGroup.source || m.source || 'MM').toLowerCase()}`;
-            const lg = legendaryGroupsMap.get(lgKey);
-            if (lg && lg.lairActions) {
-                rawLair = lg.lairActions;
+        let rawRegional = m.regionalEffects;
+        let lairHeader = m.lairActionsDesc || '';
+
+        // Find associated legendary group
+        let lg = null;
+        if (m.legendaryGroup) {
+            const lgName = (m.legendaryGroup.name || '').toLowerCase();
+            const lgSource = (m.legendaryGroup.source || m.source || 'MM').toLowerCase();
+            lg = legendaryGroupsMap.get(`${lgName}|${lgSource}`);
+            
+            // Check without parentheses, e.g. "Shadow Dragon (Bronze Dragon)" -> "Shadow Dragon"
+            if (!lg && lgName.includes('(')) {
+                const cleanName = lgName.replace(/\s*\([^)]*\)/g, '').trim();
+                lg = legendaryGroupsMap.get(`${cleanName}|${lgSource}`) ||
+                     legendaryGroupsMap.get(`${cleanName}|mm`);
+                if (!lg) {
+                    for (const [k, v] of legendaryGroupsMap.entries()) {
+                        if (k.startsWith(`${cleanName}|`)) {
+                            lg = v;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!lg && edition !== '2024') lg = legendaryGroupsMap.get(`${lgName}|mm`);
+            if (!lg && edition === '2024') lg = legendaryGroupsMap.get(`${lgName}|xmm`);
+            if (!lg) {
+                for (const [k, v] of legendaryGroupsMap.entries()) {
+                    if (k.startsWith(`${lgName}|`)) {
+                        lg = v;
+                        break;
+                    }
+                }
+            }
+        } else if ((m.legendary || m.legendaryActions || m.isLegendary) && edition !== '2024') {
+            // Fallback by creature name if m.legendaryGroup was omitted in source data (e.g. Baalzebul in MaBJoV, Kraken in PSZ)
+            const mNameLower = name.toLowerCase();
+            const mSrcLower = source.toLowerCase();
+            lg = legendaryGroupsMap.get(`${mNameLower}|${mSrcLower}`) ||
+                 legendaryGroupsMap.get(`${mNameLower}|mm`);
+            if (!lg) {
+                for (const [k, v] of legendaryGroupsMap.entries()) {
+                    if (k.startsWith(`${mNameLower}|`)) {
+                        lg = v;
+                        break;
+                    }
+                }
             }
         }
 
+        if (lg) {
+            if (!rawLair && lg.lairActions) rawLair = lg.lairActions;
+            if (!rawRegional && lg.regionalEffects) rawRegional = lg.regionalEffects;
+        }
+
         let lairActions = [];
-        if (Array.isArray(rawLair)) {
-            rawLair.forEach(item => {
+        if (rawLair) {
+            const flattenedItems = [];
+
+            function unpackLairItem(item) {
                 if (!item) return;
                 if (typeof item === 'string') {
-                    if (/when fighting inside its lair/i.test(item) || /on initiative count 20/i.test(item)) {
+                    if (/on initiative count 20|when fighting inside its lair|can take (?:a|one) lair action|takes (?:a|one) lair action/i.test(item)) {
+                        if (!lairHeader) lairHeader = cleanTags(item);
                         return;
                     }
-                    lairActions.push(normalizeAbilityEntry({ name: 'Lair Action', entries: [item] }, 'lair', name));
+                    const boldMatch = item.match(/^\{@b\s+([^}]+)\}\.?\s*(.*)/i) || item.match(/^\*\*([^*]+)\*\*\.?\s*(.*)/i);
+                    const itemName = boldMatch 
+                        ? cleanTagsPlain(boldMatch[1]).replace(/\.$/, '').trim() 
+                        : extractLairActionName(item, flattenedItems.length + 1);
+                    const entryText = boldMatch && boldMatch[2] ? boldMatch[2].trim() : item;
+                    flattenedItems.push({ name: itemName, entries: [entryText] });
                 } else if (item.type === 'list' && Array.isArray(item.items)) {
-                    item.items.forEach(li => {
-                        const str = typeof li === 'string' ? li : (li.entries ? li.entries.join('\n') : JSON.stringify(li));
-                        lairActions.push(normalizeAbilityEntry({ name: 'Lair Action', entries: [str] }, 'lair', name));
-                    });
+                    item.items.forEach(li => unpackLairItem(li));
+                } else if (item.type === 'item' || (item.name && (item.entries || item.entry))) {
+                    const rawName = item.name ? cleanTagsPlain(item.name).replace(/\.$/, '').trim() : '';
+                    const entries = item.entries || (item.entry ? [item.entry] : []);
+                    
+                    // Check if this entries block contains a nested list of named items (e.g. Additional Lair Actions)
+                    const hasNestedNamedItems = entries.some(e => e && e.type === 'list' && Array.isArray(e.items) && e.items.some(it => it && typeof it === 'object' && it.name));
+                    if (hasNestedNamedItems) {
+                        entries.forEach(sub => {
+                            if (typeof sub !== 'string') unpackLairItem(sub);
+                        });
+                    } else {
+                        const actionName = rawName || extractLairActionName(entries[0], flattenedItems.length + 1);
+                        flattenedItems.push({ name: actionName, entries });
+                    }
+                } else if (item.type === 'entries' && Array.isArray(item.entries)) {
+                    item.entries.forEach(sub => unpackLairItem(sub));
                 } else if (typeof item === 'object') {
-                    lairActions.push(normalizeAbilityEntry(item, 'lair', name));
+                    flattenedItems.push(item);
+                }
+            }
+
+            (Array.isArray(rawLair) ? rawLair : [rawLair]).forEach(it => unpackLairItem(it));
+
+            lairActions = flattenedItems.map(item => {
+                return normalizeAbilityEntry(item, 'lair', name);
+            }).filter(Boolean);
+        }
+
+        // Regional Effects
+        let regionalEffects = [];
+        let regionalEffectsHtml = '';
+        if (rawRegional) {
+            regionalEffectsHtml = renderEntriesToHtml(rawRegional);
+            const regList = Array.isArray(rawRegional) ? rawRegional : [rawRegional];
+            regList.forEach(item => {
+                if (!item) return;
+                if (item.type === 'list' && Array.isArray(item.items)) {
+                    item.items.forEach(li => {
+                        if (typeof li === 'string') {
+                            const boldMatch = li.match(/^\{@b\s+([^}]+)\}\.?\s*(.*)/i) || li.match(/^\*\*([^*]+)\*\*\.?\s*(.*)/i);
+                            const liName = boldMatch ? cleanTagsPlain(boldMatch[1]).replace(/\.$/, '').trim() : 'Regional Effect';
+                            const entryText = boldMatch && boldMatch[2] ? boldMatch[2].trim() : li;
+                            regionalEffects.push(normalizeAbilityEntry({ name: liName, entries: [entryText] }, 'regional', name));
+                        } else if (li && typeof li === 'object') {
+                            const liName = li.name ? cleanTags(li.name).replace(/\.$/, '') : 'Regional Effect';
+                            const liEntries = li.entries || (li.entry ? [li.entry] : []);
+                            regionalEffects.push(normalizeAbilityEntry({ name: liName, entries: liEntries }, 'regional', name));
+                        }
+                    });
+                } else if (typeof item === 'object' && item.name) {
+                    regionalEffects.push(normalizeAbilityEntry(item, 'regional', name));
                 }
             });
-            lairActions = lairActions.filter(Boolean);
+            regionalEffects = regionalEffects.filter(Boolean);
         }
+
+        // Variant Traits
+        const variants = (m.variant || []).map(v => {
+            if (!v) return null;
+            const vName = v.name ? cleanTags(v.name).trim() : 'Variant';
+            const vEntries = v.entries || (v.entry ? [v.entry] : []);
+            const descriptionHtml = renderEntriesToHtml(vEntries);
+            return {
+                name: vName,
+                descriptionHtml,
+                entries: vEntries
+            };
+        }).filter(Boolean);
+
+        // Mythic Actions
+        const mythicActions = {
+            count: m.mythic ? (m.legendaryActions || 3) : 0,
+            description: m.mythicHeader ? cleanTags(flattenEntriesToText(m.mythicHeader)) : '',
+            entries: (m.mythic || []).map(l => normalizeAbilityEntry(l, 'mythic', name)).filter(Boolean)
+        };
+
+        const legendaryActionsLair = m.legendaryActionsLair || null;
 
         // Full normalized creature payload
         const normalizedCreature = {
@@ -888,12 +1333,93 @@ function buildCreatureDatabase() {
             bonusActions,
             reactions,
             legendaryActions,
+            legendaryActionsLair,
             lairActions,
+            lairHeader,
+            lairActionsDesc: lairHeader,
+            regionalEffects,
+            regionalEffectsHtml,
+            mythicActions,
+            variants,
             hasToken: true,
             tokenUrl: tokenImg,
             tokenImg,
-            fluff: m.fluff || null
+            fluff: m.fluff || null,
+            legendaryGroup: m.legendaryGroup || (lg ? { name: lg.name, source: lg.source } : null)
         };
+
+        // Extract flat lists for catalog filtering
+        const flattenDefenses = (arr) => {
+            let res = [];
+            if (!Array.isArray(arr)) return res;
+            arr.forEach(a => {
+                if (typeof a === 'string') res.push(a);
+                else if (a.resist) res.push(...flattenDefenses(a.resist));
+                else if (a.immune) res.push(...flattenDefenses(a.immune));
+                else if (a.vulnerable) res.push(...flattenDefenses(a.vulnerable));
+                else if (a.conditionImmune) res.push(...flattenDefenses(a.conditionImmune));
+            });
+            return res;
+        };
+
+        const flatResist = Array.isArray(m.resist) ? flattenDefenses(m.resist) : [];
+        const flatImmune = Array.isArray(m.immune) ? flattenDefenses(m.immune) : [];
+        const flatCondImmune = Array.isArray(m.conditionImmune) ? flattenDefenses(m.conditionImmune) : [];
+        const flatVuln = Array.isArray(m.vulnerable) ? flattenDefenses(m.vulnerable) : [];
+        const envList = Array.isArray(m.environment) ? m.environment : (m.environment ? [m.environment] : []);
+        const moveTypes = Object.keys(speedObj).filter(k => speedObj[k] && typeof speedObj[k] === 'number' || speedObj[k]?.number);
+
+        const dmgTypes = new Set();
+        const saveTypes = new Set();
+        const allAbilities = [...(actions || []), ...(traits || []), ...(bonusActions || []), ...(reactions || []), ...(legendaryActions?.entries || [])];
+        allAbilities.forEach(a => {
+            if (a.macro) {
+                if (a.macro.damages) a.macro.damages.forEach(d => { 
+                    if (d.type) {
+                        const cleanType = d.type.split('|')[0].trim().toLowerCase();
+                        if (cleanType && cleanType !== 'null' && cleanType !== 'undefined') dmgTypes.add(cleanType);
+                    }
+                });
+                if (a.macro.save && a.macro.save.ability) {
+                    const saveAbil = String(a.macro.save.ability).trim().toUpperCase();
+                    if (saveAbil) saveTypes.add(saveAbil);
+                }
+            }
+        });
+
+        // Recognized standard senses
+        const standardSenses = ['darkvision', 'blindsight', 'tremorsense', 'truesight'];
+        const flatSenses = new Set();
+        if (m.senses) {
+            const rawSenses = Array.isArray(m.senses) ? m.senses : [m.senses];
+            rawSenses.forEach(s => {
+                if (typeof s === 'string') {
+                    const clean = s.toLowerCase();
+                    standardSenses.forEach(ss => {
+                        if (clean.includes(ss)) flatSenses.add(ss);
+                    });
+                }
+            });
+        }
+
+        // Recognized standard languages
+        const standardLangs = [
+            'common', 'undercommon', 'elvish', 'dwarvish', 'draconic', 'giant',
+            'goblin', 'abyssal', 'infernal', 'celestial', 'sylvan', 'primordial',
+            'aquan', 'auran', 'ignan', 'terran', 'deep speech', 'telepathy'
+        ];
+        const flatLangs = new Set();
+        if (m.languages) {
+            const rawLangs = Array.isArray(m.languages) ? m.languages : [m.languages];
+            rawLangs.forEach(l => {
+                if (typeof l === 'string') {
+                    const clean = l.toLowerCase();
+                    standardLangs.forEach(sl => {
+                        if (clean.includes(sl)) flatLangs.add(sl);
+                    });
+                }
+            });
+        }
 
         // Catalog entry (compact summary)
         catalog.push({
@@ -931,7 +1457,17 @@ function buildCreatureDatabase() {
             casterLevel: mainSc ? mainSc.casterLevel : 0,
             spellAbility: mainSc ? mainSc.ability : null,
             spellSaveDc: mainSc ? mainSc.dc : null,
-            spellAttackMod: mainSc ? mainSc.atkMod : null
+            spellAttackMod: mainSc ? mainSc.atkMod : null,
+            legendaryGroup: m.legendaryGroup || (lg ? { name: lg.name, source: lg.source } : null),
+            resistances: flatResist,
+            immunities: [...new Set([...flatImmune, ...flatCondImmune])],
+            vulnerabilities: flatVuln,
+            environment: envList,
+            senses: Array.from(flatSenses),
+            languages: Array.from(flatLangs),
+            damageTypes: Array.from(dmgTypes),
+            saveTypes: Array.from(saveTypes),
+            movementTypes: moveTypes
         });
 
         // Group into per-source partition

@@ -31,9 +31,19 @@ export function toSpellTitleCase(str) {
     if (!str || typeof str !== 'string') return '';
     const cleanStr = str.replace(/\{@spell ([^|}]+).*?\}/gi, '$1').trim();
     if (!cleanStr) return '';
+
+    // If str ends with a bracketed tag like [PHB] or [XPHB], extract and preserve it
+    const tagMatch = cleanStr.match(/\s*(\[[a-zA-Z0-9_\s-]+\])$/);
+    let tag = '';
+    let mainStr = cleanStr;
+    if (tagMatch) {
+        tag = ' ' + tagMatch[1].toUpperCase();
+        mainStr = cleanStr.slice(0, tagMatch.index).trim();
+    }
+
     const minorWords = new Set(['of', 'the', 'in', 'on', 'at', 'to', 'for', 'with', 'and', 'or', 'from', 'by', 'a', 'an']);
-    const words = cleanStr.toLowerCase().split(/\s+/);
-    return words.map((word, idx) => {
+    const words = mainStr.toLowerCase().split(/\s+/);
+    const title = words.map((word, idx) => {
         if (word.includes('-')) {
             return word.split('-').map((part, pIdx) => {
                 if (pIdx > 0 && minorWords.has(part)) return part;
@@ -45,7 +55,22 @@ export function toSpellTitleCase(str) {
         }
         return word.charAt(0).toUpperCase() + word.slice(1);
     }).join(' ');
+    return title + tag;
 }
+
+export function getDisambiguatedSpellName(sp, cache) {
+    if (!sp || !sp.name) return '';
+    const rawName = toSpellTitleCase(sp.name.replace(/\s*\[.*?\]$/, ''));
+    const nameLower = rawName.toLowerCase().trim();
+    const effectiveCache = cache || sharedSpellCache || (typeof window !== 'undefined' && window.VTTSpellManager?.getSpellCache?.());
+    const hasDuplicate = effectiveCache && effectiveCache.some(s => s.id !== sp.id && (s.name || '').toLowerCase().replace(/\s*\[.*?\]$/, '').trim() === nameLower && (s.source || '').toUpperCase() !== (sp.source || '').toUpperCase());
+    if (hasDuplicate && sp.source) {
+        const srcTag = (sp.source || '').toUpperCase();
+        return `${rawName} [${srcTag}]`;
+    }
+    return rawName;
+}
+
 
 export function scaleUpcastFormula(upcastFormula, extra) {
     if (!upcastFormula || extra <= 0) return '';
@@ -81,14 +106,17 @@ export function scaleUpcastFormula(upcastFormula, extra) {
 
 if (typeof window !== 'undefined') {
     window.toSpellTitleCase = toSpellTitleCase;
+    window.getDisambiguatedSpellName = getDisambiguatedSpellName;
     window.scaleUpcastFormula = scaleUpcastFormula;
     window.VTTSpellManager = window.VTTSpellManager || {
         toSpellTitleCase: toSpellTitleCase,
+        getDisambiguatedSpellName: getDisambiguatedSpellName,
         scaleUpcastFormula: scaleUpcastFormula,
         loadSpells: () => loadSpells(),
         cleanSpellBodyHtml: (html) => cleanSpellBodyHtml(html),
         getSpellCache: () => sharedSpellCache,
         setSpellCache: (cache) => { sharedSpellCache = cache; },
+        invalidateSpellCache: () => invalidateSpellCache(),
         getSpellMetaStrings: (sp, slKey) => getSpellMetaStrings(sp, slKey),
         renderAndInjectSpell: (spellName, containerEl, fallbackDesc, sp, slKey) => renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey),
         renderSpellRowHtml: (sp, slKey, idx, options) => renderSpellRowHtml(sp, slKey, idx, options),
@@ -101,6 +129,11 @@ if (typeof window !== 'undefined') {
 
 export function setSpellCache(cache) { 
     sharedSpellCache = cache; 
+}
+
+export function invalidateSpellCache() {
+    sharedSpellCache = null;
+    pSpellPromise = null;
 }
 
 export async function loadSpells() {
@@ -272,7 +305,17 @@ export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, s
     let rawBody = sp?.description || fallbackDesc || '';
     if ((sharedSpellCache || spellCache) && spellName) {
         const cache = sharedSpellCache || spellCache;
-        const found = cache.find(s => s.name && s.name.toLowerCase().trim() === spellName.toLowerCase().trim());
+        const rawName = String(spellName).replace(/\s*\[.*?\]$/, '').toLowerCase().trim();
+        const spSrc = (sp?.source || '').toLowerCase().trim() || (String(spellName).match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
+        let found = cache.find(s => {
+            const sName = (s.name || '').toLowerCase().trim();
+            if (sName !== rawName) return false;
+            if (spSrc && (s.source || '').toLowerCase().trim() !== spSrc) return false;
+            return true;
+        });
+        if (!found) {
+            found = cache.find(s => s.name && s.name.toLowerCase().trim() === rawName);
+        }
         if (found) {
             if (!rawBody) {
                 rawBody = found.descriptionHtml || found.description || '';
@@ -421,7 +464,17 @@ export async function ensureSpellIsParsed(sp) {
     
     const spells = await loadSpells();
     if (spells && sp.name) {
-        let spData = spells.find(s => s.name && s.name.toLowerCase().trim() === sp.name.toLowerCase().trim());
+        const rawName = String(sp.name).replace(/\s*\[.*?\]$/, '').toLowerCase().trim();
+        const spSrc = (sp.source || '').toLowerCase().trim() || (String(sp.name).match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
+        let spData = spells.find(s => {
+            const sName = (s.name || '').toLowerCase().trim();
+            if (sName !== rawName) return false;
+            if (spSrc && (s.source || '').toLowerCase().trim() !== spSrc) return false;
+            return true;
+        });
+        if (!spData) {
+            spData = spells.find(s => s.name && s.name.toLowerCase().trim() === rawName);
+        }
         if (spData) {
             if (!spData.descriptionHtml && spData.source && spData.id) {
                 try {
@@ -494,36 +547,90 @@ export function postSpellToChat(sp, slKey, creatureName = 'Creature', visibility
     }
 }
 
-export function promptUpcastLevel(baseLvl, callback) {
+export function promptUpcastLevel(baseLvl, callback, options = {}) {
     if (typeof ensureSpellModalsExist === 'function') ensureSpellModalsExist();
     const modal = document.getElementById('modal-spell-upcast-prompt');
     const select = document.getElementById('upcast-prompt-level');
     if (!modal || !select) {
-        if (callback) callback(baseLvl);
+        if (callback) callback(baseLvl, { expend: true });
         return;
     }
     select.innerHTML = '';
+    const caster = options.caster;
+    const spell = options.spell;
+
+    // Display available slot counts when caster data is present
     for (let i = baseLvl; i <= 9; i++) {
-        select.innerHTML += `<option value="${i}">${i}${i===1?'st':i===2?'nd':i===3?'rd':'th'} Level${i === baseLvl ? ' (Base)' : ''}</option>`;
+        let slotInfo = '';
+        if (caster) {
+            const slotsObj = caster.spellSlots || caster.slots || {};
+            const sl = slotsObj['level' + i];
+            if (sl !== undefined) {
+                const cur = typeof sl === 'object' && sl.current !== undefined ? sl.current : (typeof sl === 'number' ? sl : 0);
+                const max = typeof sl === 'object' && sl.max !== undefined ? sl.max : cur;
+                slotInfo = ` (${cur}/${max} slots)`;
+            }
+        }
+        select.innerHTML += `<option value="${i}">${i}${i===1?'st':i===2?'nd':i===3?'rd':'th'} Level${i === baseLvl ? ' (Base)' : ''}${slotInfo}</option>`;
     }
+
+    // Ensure expend slot / usage checkbox is present
+    let expendWrap = document.getElementById('upcast-prompt-expend-wrap');
+    if (!expendWrap) {
+        expendWrap = document.createElement('div');
+        expendWrap.id = 'upcast-prompt-expend-wrap';
+        expendWrap.style.cssText = 'margin-bottom:14px; display:flex; align-items:center; gap:8px;';
+        expendWrap.innerHTML = `
+            <input type="checkbox" id="upcast-prompt-expend" checked style="margin:0; cursor:pointer;">
+            <label for="upcast-prompt-expend" style="margin:0; cursor:pointer; font-size:0.85rem; color:var(--color-text-secondary); user-select:none;">Expend Spell Slot / Daily Use</label>
+        `;
+        const formGroup = modal.querySelector('.form-group');
+        if (formGroup && formGroup.parentNode) {
+            formGroup.parentNode.insertBefore(expendWrap, formGroup.nextSibling);
+        }
+    }
+    const expendCheckbox = document.getElementById('upcast-prompt-expend');
+    if (expendCheckbox) expendCheckbox.checked = true;
+
+    const overlay = document.getElementById('pc-spell-overlay');
+    const mainSpellModal = document.getElementById('pc-spell-modal');
+
     modal.classList.remove('vtt-hidden');
+    if (overlay) overlay.classList.remove('vtt-hidden');
     
     const handleCast = () => {
+        const lvl = parseInt(select.value) || baseLvl;
+        const expend = expendCheckbox ? expendCheckbox.checked : true;
         cleanup();
-        if (callback) callback(parseInt(select.value) || baseLvl);
+        if (callback) callback(lvl, { expend });
     };
     const handleCancel = () => {
         cleanup();
         if (callback) callback(null);
     };
+    const handleOverlayClick = (e) => {
+        if (e.target === overlay) handleCancel();
+    };
+    const handleEsc = (e) => {
+        if (e.key === 'Escape' || e.keyCode === 27) {
+            handleCancel();
+        }
+    };
     const cleanup = () => {
         modal.classList.add('vtt-hidden');
+        if (overlay && (!mainSpellModal || mainSpellModal.classList.contains('vtt-hidden'))) {
+            overlay.classList.add('vtt-hidden');
+        }
         document.getElementById('upcast-prompt-cast')?.removeEventListener('click', handleCast);
         document.getElementById('upcast-prompt-cancel')?.removeEventListener('click', handleCancel);
+        overlay?.removeEventListener('click', handleOverlayClick);
+        window.removeEventListener('keydown', handleEsc);
     };
     
     document.getElementById('upcast-prompt-cast')?.addEventListener('click', handleCast);
     document.getElementById('upcast-prompt-cancel')?.addEventListener('click', handleCancel);
+    overlay?.addEventListener('click', handleOverlayClick);
+    window.addEventListener('keydown', handleEsc);
 }
 
 export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
@@ -853,6 +960,7 @@ export function initVttSpellManager(vtt) {
     let spellCache = null;
     let activeSpellEditContext = { char: null, onSave: null };
     let spellBulkSelection = new Set();
+    let activeSpellEditionFilter = 'all';
     let classSet = new Set();
     let subclassSet = new Set();
     let modalSpellDamageRows = [];
@@ -883,12 +991,27 @@ export function initVttSpellManager(vtt) {
 
         if (spData.ritual !== undefined) newSpell.ritual = !!spData.ritual;
         const isCantrip = spData.level === 0 || newSpell.level === 0 || newSpell.cantripScale;
+        const isMultiAttackCantrip = /eldritch blast/i.test(newSpell.name || spData.name || '');
         if (isCantrip) {
-            newSpell.cantripScale = true;
+            newSpell.cantripScale = isMultiAttackCantrip ? false : (spData.cantripScale !== undefined ? !!spData.cantripScale : true);
         }
 
         if (spData.damageList && Array.isArray(spData.damageList) && spData.damageList.length > 0) {
             newSpell.damageList = JSON.parse(JSON.stringify(spData.damageList));
+            newSpell.damageList.forEach((d, rIdx) => {
+                if (isCantrip) {
+                    if (d.cantripScale === undefined) {
+                        d.cantripScale = isMultiAttackCantrip ? false : (rIdx === 0 ? (spData.cantripScale !== undefined ? !!spData.cantripScale : true) : false);
+                    }
+                } else {
+                    if (d.upcastBonus === undefined) {
+                        d.upcastBonus = rIdx === 0 ? (spData.upcastBonus || '') : '';
+                    }
+                    if (d.upcastScaleStep === undefined) {
+                        d.upcastScaleStep = rIdx === 0 ? (spData.upcastScaleStep || 1) : 1;
+                    }
+                }
+            });
         }
 
         if (spData.saveAbility) {
@@ -1074,10 +1197,10 @@ export function initVttSpellManager(vtt) {
         const container = document.createElement('div');
         container.innerHTML = `
             <!-- Spell Modal Overlay -->
-            <div id="pc-spell-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
+            <div id="pc-spell-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
             
             <!-- Main Add Spell Modal -->
-            <div id="pc-spell-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:920px; max-width:95vw; height:85vh; display:flex; flex-direction:column; box-shadow:0 6px 20px rgba(0,0,0,0.7);">
+            <div id="pc-spell-modal" class="vtt-sheet-submodal vtt-hidden" style="width:920px; height:85vh;">
                 <div style="padding:14px 18px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3);">
                     <h3 style="margin:0; color:var(--color-gold-base); font-size:1.1rem; display:flex; align-items:center; gap:8px;" id="pc-spell-modal-title"><i class="fa-solid fa-book-bookmark"></i> Add Spell</h3>
                     <button id="modal-spell-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -1095,10 +1218,17 @@ export function initVttSpellManager(vtt) {
                 <div id="pc-spell-tab-search" style="padding:14px; overflow:hidden; flex:1; display:flex; gap:16px;">
                     <!-- Left Column: Search & Selection -->
                     <div style="flex:1; display:flex; flex-direction:column; gap:10px; min-width:320px; overflow:hidden;">
-                        <!-- Row 1: Full-Width Search Bar -->
-                        <div style="position:relative; width:100%;">
-                            <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--color-text-muted); font-size:0.85rem;"></i>
-                            <input type="text" id="modal-spell-search-input" placeholder="Search 930+ spells by name..." style="width:100%; padding-left:30px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary); height:34px; font-size:0.85rem;">
+                        <!-- Row 1: Search Bar & Edition Filter Buttons -->
+                        <div style="display:flex; gap:8px; align-items:center; width:100%;">
+                            <div style="position:relative; flex:1;">
+                                <i class="fa-solid fa-magnifying-glass" style="position:absolute; left:10px; top:50%; transform:translateY(-50%); color:var(--color-text-muted); font-size:0.85rem;"></i>
+                                <input type="text" id="modal-spell-search-input" placeholder="Search spells by name..." style="width:100%; padding-left:30px; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); border-radius:4px; color:var(--color-text-primary); height:34px; font-size:0.85rem;">
+                            </div>
+                            <div class="btn-group" id="modal-spell-edition-filter-group" style="display:inline-flex; border-radius:4px; overflow:hidden; border:1px solid var(--color-border-subtle); flex-shrink:0; height:34px;">
+                                <button type="button" class="btn btn-xs modal-spell-filter-edition active" data-edition="all" style="padding:4px 10px; font-size:0.75rem; background:var(--color-gold-base); color:#000; font-weight:bold; border:none; cursor:pointer;">All</button>
+                                <button type="button" class="btn btn-xs modal-spell-filter-edition" data-edition="phb" style="padding:4px 10px; font-size:0.75rem; background:#2a2a2a; color:var(--color-text-secondary); border:none; cursor:pointer;">PHB</button>
+                                <button type="button" class="btn btn-xs modal-spell-filter-edition" data-edition="xphb" style="padding:4px 10px; font-size:0.75rem; background:#2a2a2a; color:var(--color-text-secondary); border:none; cursor:pointer;">XPHB</button>
+                            </div>
                         </div>
 
                         <!-- Row 2: Sort & Filter Buttons -->
@@ -1363,7 +1493,7 @@ export function initVttSpellManager(vtt) {
             </div>
 
             <!-- Filter Modal -->
-            <div id="pc-spell-filter-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1001; width:400px; max-width:90vw; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="pc-spell-filter-modal" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="width:400px;">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:var(--color-gold-base);">Filter Spells</h3>
                     <button id="modal-spell-filter-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -1419,7 +1549,7 @@ export function initVttSpellManager(vtt) {
             </div>
             
             <!-- Spell Settings Modal -->
-            <div id="pc-spell-settings-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:500px; max-width:90vw; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="pc-spell-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:500px;">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:var(--color-gold-base);">Spell Settings & Toggles</h3>
                     <button id="modal-spell-settings-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -1458,8 +1588,8 @@ export function initVttSpellManager(vtt) {
                         <div id="modal-toggle-form" class="vtt-hidden" style="background:rgba(0,0,0,0.3); padding:8px; border:1px solid var(--color-border-subtle); border-radius:4px; margin-bottom:8px;">
                             <input type="hidden" id="modal-toggle-idx" value="-1">
                             <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
-                                <input type="text" id="modal-toggle-name" placeholder="Name (e.g. Bless)" style="flex:1; min-width:120px;">
-                                <input type="text" id="modal-toggle-formula" placeholder="Formula (e.g. +1d4)" style="flex:1; min-width:100px;">
+                                <input type="text" id="modal-toggle-name" placeholder="Name (e.g. Empowered Evocation)" style="flex:1; min-width:120px;">
+                                <input type="text" id="modal-toggle-formula" placeholder="Formula (e.g. +4)" style="flex:1; min-width:100px;">
                                 <select id="modal-toggle-target" style="flex:1; min-width:120px;">
                                     <option value="both">Both</option>
                                     <option value="atk">Attack</option>
@@ -1498,10 +1628,9 @@ export function initVttSpellManager(vtt) {
                     <button id="modal-settings-save" class="btn btn-primary">Save Changes</button>
                 </div>
             </div>
-            </div>
             
             <!-- Attack Settings Modal -->
-            <div id="pc-attack-settings-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:500px; max-width:90vw; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="pc-attack-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:500px;">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:var(--color-gold-base);">Attack Settings & Toggles</h3>
                     <button id="modal-attack-settings-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -1571,7 +1700,7 @@ export function initVttSpellManager(vtt) {
             </div>
 
             <!-- Upcast Prompt Modal -->
-            <div id="modal-spell-upcast-prompt" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:300px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="modal-spell-upcast-prompt" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="width:300px; padding:16px;">
                 <h4 style="margin:0 0 12px 0; color:var(--color-gold-base);">Cast Spell</h4>
                 <div class="form-group" style="margin-bottom:16px;">
                     <label>Cast at what level?</label>
@@ -1584,7 +1713,7 @@ export function initVttSpellManager(vtt) {
             </div>
             
             <!-- Delete Prompt Modal -->
-            <div id="modal-spell-delete-prompt" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1002; width:300px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="modal-spell-delete-prompt" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="width:300px; padding:16px;">
                 <h4 style="margin:0 0 12px 0; color:var(--color-gold-base);">Delete Spell</h4>
                 <div class="form-group" style="margin-bottom:16px;">
                     <label style="color:var(--color-text-primary);">Are you sure you want to delete this spell?</label>
@@ -1634,12 +1763,13 @@ export function initVttSpellManager(vtt) {
         const is2024 = spSource === 'XPHB' || spSource === 'XDMG' || spSource === 'XMM';
         const badgeBg = is2024 ? '#059669' : (spSource === 'PHB' ? '#2563eb' : '#475569');
         const badgeText = is2024 ? `${spSource} • 2024` : (spSource === 'PHB' ? `${spSource} • 2014` : spSource);
+        const displayTitle = getDisambiguatedSpellName(sp, spellCache);
 
         contentEl.innerHTML = `
             <div style="display:flex; flex-direction:column; gap:12px;">
                 <div style="border-bottom:1px solid var(--color-border-subtle); padding-bottom:8px;">
                     <div style="display:flex; justify-content:space-between; align-items:baseline;">
-                        <h3 style="margin:0; color:var(--color-gold-base); font-size:1.15rem;">${sp.name}</h3>
+                        <h3 style="margin:0; color:var(--color-gold-base); font-size:1.15rem;">${displayTitle}</h3>
                         <span style="font-size:0.7rem; color:#fff; background:${badgeBg}; padding:2px 6px; border-radius:4px; font-weight:600;">${badgeText}</span>
                     </div>
                     <div style="font-size:0.8rem; color:var(--color-text-muted); margin-top:2px;">
@@ -1753,7 +1883,16 @@ export function initVttSpellManager(vtt) {
         const sortBy = document.getElementById('modal-spell-sort')?.value || 'name_asc';
 
         const filtered = spellCache.filter(sp => {
-            if (searchStr && !(sp.name || '').toLowerCase().includes(searchStr)) return false;
+            if (activeSpellEditionFilter && activeSpellEditionFilter !== 'all') {
+                const spSrc = (sp.source || '').toLowerCase();
+                if (activeSpellEditionFilter === 'phb' && spSrc !== 'phb') return false;
+                if (activeSpellEditionFilter === 'xphb' && spSrc !== 'xphb') return false;
+            }
+            if (searchStr) {
+                const rawMatch = (sp.name || '').toLowerCase().includes(searchStr);
+                const taggedMatch = `${sp.name || ''} [${sp.source || ''}]`.toLowerCase().includes(searchStr);
+                if (!rawMatch && !taggedMatch) return false;
+            }
             if (quickLvl !== '' && String(sp.level) !== String(quickLvl)) return false;
             if (quickSch !== '' && sp.school !== quickSch) return false;
             if (quickConc && !sp.concentration) return false;
@@ -1793,17 +1932,18 @@ export function initVttSpellManager(vtt) {
 
         let html = '';
         displaySpells.forEach(sp => {
-            const isSelected = spellBulkSelection.has(sp.name);
+            const isSelected = spellBulkSelection.has(sp.id) || spellBulkSelection.has(sp.name);
             const isPreviewActive = activePreviewSpell && activePreviewSpell.id === sp.id;
             const spSrc = (sp.source || '').toUpperCase();
             const is2024 = spSrc === 'XPHB' || spSrc === 'XDMG' || spSrc === 'XMM';
             const badgeBg = is2024 ? '#059669' : (spSrc === 'PHB' ? '#2563eb' : '#475569');
+            const displayTitle = getDisambiguatedSpellName(sp, spellCache);
             html += `
                 <div class="spell-result-row ${isPreviewActive ? 'active-preview' : ''}" data-id="${sp.id}" style="display:flex; align-items:center; gap:8px; padding:6px 8px; border-bottom:1px solid rgba(255,255,255,0.05); cursor:pointer; background:${isPreviewActive ? 'rgba(212,175,55,0.15)' : 'transparent'}; border-left:${isPreviewActive ? '3px solid var(--color-gold-base)' : '3px solid transparent'}; font-size:0.8rem;">
-                    <input type="checkbox" class="spell-bulk-cb" data-name="${sp.name.replace(/"/g, '&quot;')}" ${isSelected ? 'checked' : ''} style="cursor:pointer; flex-shrink:0; width:16px; height:16px; margin:0 4px 0 0;">
+                    <input type="checkbox" class="spell-bulk-cb" data-id="${sp.id}" data-name="${displayTitle.replace(/"/g, '&quot;')}" ${isSelected ? 'checked' : ''} style="cursor:pointer; flex-shrink:0; width:16px; height:16px; margin:0 4px 0 0;">
                     <div class="spell-row-info" style="display:flex; flex-direction:column; flex:1; min-width:0;">
                         <div style="display:flex; align-items:center; gap:6px;">
-                            <span style="font-weight:600; font-size:0.85rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${sp.name}</span>
+                            <span style="font-weight:600; font-size:0.85rem; color:var(--color-text-primary); text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${displayTitle}</span>
                             <span style="background:${badgeBg}; color:#fff; border-radius:3px; padding:1px 4px; font-size:0.55rem; font-weight:700; text-transform:uppercase;">${sp.source}</span>
                         </div>
                         <span style="font-size:0.7rem; color:var(--color-text-muted);">${sp.level === 0 ? 'Cantrip' : 'Lvl ' + sp.level} • ${sp.school}</span>
@@ -1835,11 +1975,11 @@ export function initVttSpellManager(vtt) {
         });
 
         container.querySelectorAll('.spell-bulk-cb').forEach(cb => cb.addEventListener('change', (e) => {
-            const name = e.currentTarget.dataset.name;
+            const spKey = e.currentTarget.dataset.id || e.currentTarget.dataset.name;
             if (e.currentTarget.checked) {
-                spellBulkSelection.add(name);
+                spellBulkSelection.add(spKey);
             } else {
-                spellBulkSelection.delete(name);
+                spellBulkSelection.delete(spKey);
             }
             updateBulkAddButton();
         }));
@@ -1875,7 +2015,17 @@ export function initVttSpellManager(vtt) {
             sp = char.spells[level][idx];
         }
         if (sp) {
-            const spData = spellCache ? spellCache.find(s => (s.name || '').toLowerCase().trim() === (sp.name || '').toLowerCase().trim()) : null;
+            const rawSpName = (sp.name || '').replace(/\s*\[.*?\]$/, '').toLowerCase().trim();
+            const spSrc = (sp.source || '').toLowerCase().trim() || ((sp.name || '').match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
+            let spData = spellCache ? spellCache.find(s => {
+                const sName = (s.name || '').toLowerCase().trim();
+                if (sName !== rawSpName) return false;
+                if (spSrc && (s.source || '').toLowerCase().trim() !== spSrc) return false;
+                return true;
+            }) : null;
+            if (!spData && spellCache) {
+                spData = spellCache.find(s => (s.name || '').toLowerCase().trim() === rawSpName);
+            }
 
             document.getElementById('pc-spell-modal-title').textContent = "Edit Spell";
             document.getElementById('modal-spell-name').value = toSpellTitleCase(sp.name || '');
@@ -1934,10 +2084,11 @@ export function initVttSpellManager(vtt) {
             }
             modalSpellDamageRows = JSON.parse(JSON.stringify(dmgList || []));
             const isCantripLevel = level === 'cantrip' || sp.level === 0 || (spData && spData.level === 0);
+            const isMultiAttackCantrip = /eldritch blast/i.test(sp.name || (spData && spData.name) || '');
             modalSpellDamageRows.forEach((d, rIdx) => {
                 if (isCantripLevel) {
                     if (d.cantripScale === undefined) {
-                        d.cantripScale = rIdx === 0 ? (sp.cantripScale !== undefined ? !!sp.cantripScale : true) : false;
+                        d.cantripScale = rIdx === 0 ? (sp.cantripScale !== undefined ? !!sp.cantripScale : (isMultiAttackCantrip ? false : true)) : false;
                     }
                 } else {
                     if (d.upcastBonus === undefined) {
@@ -1964,6 +2115,14 @@ export function initVttSpellManager(vtt) {
             if (saveBtn) saveBtn.textContent = "Save Changes";
         } else {
             spellBulkSelection.clear();
+            activeSpellEditionFilter = 'all';
+            document.querySelectorAll('.modal-spell-filter-edition').forEach(b => {
+                const isAll = b.dataset.edition === 'all';
+                b.classList.toggle('active', isAll);
+                b.style.background = isAll ? 'var(--color-gold-base)' : '#2a2a2a';
+                b.style.color = isAll ? '#000' : 'var(--color-text-secondary)';
+                b.style.fontWeight = isAll ? 'bold' : 'normal';
+            });
             const titleEl = document.getElementById('pc-spell-modal-title');
             if (titleEl) titleEl.textContent = "Add Spell";
             const nameInput = document.getElementById('modal-spell-name');
@@ -2235,9 +2394,56 @@ export function initVttSpellManager(vtt) {
     }
 
     function setupSpellModalListeners() {
-        document.getElementById('pc-spell-overlay')?.addEventListener('click', closeSpellModal);
+        document.getElementById('pc-spell-overlay')?.addEventListener('click', () => {
+            closeSpellModal();
+            document.getElementById('pc-spell-filter-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-spell-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-attack-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('modal-spell-upcast-prompt')?.classList.add('vtt-hidden');
+            document.getElementById('modal-spell-delete-prompt')?.classList.add('vtt-hidden');
+            document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
+        });
         document.getElementById('modal-spell-close')?.addEventListener('click', closeSpellModal);
         document.getElementById('modal-spell-cancel')?.addEventListener('click', closeSpellModal);
+        document.getElementById('modal-spell-filter-close')?.addEventListener('click', () => {
+            document.getElementById('pc-spell-filter-modal')?.classList.add('vtt-hidden');
+        });
+        document.getElementById('modal-spell-settings-close')?.addEventListener('click', () => {
+            document.getElementById('pc-spell-settings-modal')?.classList.add('vtt-hidden');
+            if (document.getElementById('pc-spell-modal')?.classList.contains('vtt-hidden')) {
+                document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
+            }
+        });
+        document.getElementById('modal-attack-settings-close')?.addEventListener('click', () => {
+            document.getElementById('pc-attack-settings-modal')?.classList.add('vtt-hidden');
+            if (document.getElementById('pc-spell-modal')?.classList.contains('vtt-hidden')) {
+                document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
+            }
+        });
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            const spellModals = [
+                'modal-spell-delete-prompt',
+                'modal-spell-upcast-prompt',
+                'pc-spell-filter-modal',
+                'pc-spell-settings-modal',
+                'pc-attack-settings-modal',
+                'pc-spell-modal'
+            ];
+            for (const id of spellModals) {
+                const el = document.getElementById(id);
+                if (el && !el.classList.contains('vtt-hidden')) {
+                    el.classList.add('vtt-hidden');
+                    const anyOther = spellModals.some(mId => mId !== id && !document.getElementById(mId)?.classList.contains('vtt-hidden'));
+                    if (!anyOther) {
+                        document.getElementById('pc-spell-overlay')?.classList.add('vtt-hidden');
+                    }
+                    e.stopPropagation();
+                    break;
+                }
+            }
+        });
 
         document.querySelectorAll('.pc-spell-modal-tab').forEach(btn => btn.addEventListener('click', (e) => {
             const tab = e.currentTarget.dataset.tab;
@@ -2289,6 +2495,25 @@ export function initVttSpellManager(vtt) {
             renderSpellSearchList();
         });
 
+        // Edition filter buttons in Spell Search modal
+        document.querySelectorAll('.modal-spell-filter-edition').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.modal-spell-filter-edition').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.background = '#2a2a2a';
+                    b.style.color = 'var(--color-text-secondary)';
+                    b.style.fontWeight = 'normal';
+                });
+                const t = e.currentTarget;
+                t.classList.add('active');
+                t.style.background = 'var(--color-gold-base)';
+                t.style.color = '#000';
+                t.style.fontWeight = 'bold';
+                activeSpellEditionFilter = t.dataset.edition || 'all';
+                renderSpellSearchList();
+            });
+        });
+
         // Quick, Sort & Advanced Filter listeners
         ['modal-spell-quick-level', 'modal-spell-quick-school', 'modal-spell-quick-conc', 'modal-spell-quick-rit', 'modal-spell-search-input', 'modal-spell-sort', 'modal-spell-filter-class', 'modal-spell-filter-subclass', 'modal-spell-filter-race', 'modal-spell-filter-condition', 'modal-spell-filter-area'].forEach(id => {
             document.getElementById(id)?.addEventListener('input', renderSpellSearchList);
@@ -2316,6 +2541,14 @@ export function initVttSpellManager(vtt) {
                 pillToggle.style.borderColor = "var(--color-border-subtle)";
                 if (pillLabel) pillLabel.textContent = "All Classes";
             }
+            document.querySelectorAll('.modal-spell-filter-edition').forEach(b => {
+                const isAll = b.dataset.edition === 'all';
+                b.classList.toggle('active', isAll);
+                b.style.background = isAll ? 'var(--color-gold-base)' : '#2a2a2a';
+                b.style.color = isAll ? '#000' : 'var(--color-text-secondary)';
+                b.style.fontWeight = isAll ? 'bold' : 'normal';
+            });
+            activeSpellEditionFilter = 'all';
             renderSpellSearchList();
         });
 
@@ -2331,7 +2564,9 @@ export function initVttSpellManager(vtt) {
             if (!char.spells) char.spells = {};
             if (!char.spells[levelKey]) char.spells[levelKey] = [];
 
-            if (!char.spells[levelKey].find(s => s.name === activePreviewSpell.name)) {
+            const finalSpellName = getDisambiguatedSpellName(activePreviewSpell, spellCache);
+
+            if (!char.spells[levelKey].find(s => (s.name || '').toLowerCase() === finalSpellName.toLowerCase())) {
                 if (!activePreviewSpell.descriptionHtml && activePreviewSpell.source && activePreviewSpell.id) {
                     try {
                         const res = await fetch(`/api/spell/${encodeURIComponent(activePreviewSpell.source)}/${encodeURIComponent(activePreviewSpell.id)}`);
@@ -2341,9 +2576,9 @@ export function initVttSpellManager(vtt) {
                         }
                     } catch(err) {}
                 }
-                const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: toSpellTitleCase(activePreviewSpell.name), description: '', prepared: false, macroPopulated: true, level: activePreviewSpell.level, source: activePreviewSpell.source };
+                const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: finalSpellName, description: '', prepared: false, macroPopulated: true, level: activePreviewSpell.level, source: activePreviewSpell.source };
                 parseSpellToMacro(activePreviewSpell, newSpell);
-                newSpell.name = toSpellTitleCase(newSpell.name);
+                newSpell.name = finalSpellName;
                 char.spells[levelKey].push(newSpell);
 
                 // If adding to a specific monster spellcasting block and innate/slot section
@@ -2407,7 +2642,7 @@ export function initVttSpellManager(vtt) {
                     btn.classList.add('btn-primary');
                 }, 1800);
             } else {
-                alert(`${activePreviewSpell.name} is already added to this character!`);
+                alert(`${finalSpellName} is already added to this character!`);
             }
         });
 
@@ -2418,6 +2653,7 @@ export function initVttSpellManager(vtt) {
                 const promptModal = document.getElementById('modal-spell-delete-prompt');
                 if (promptModal) {
                     promptModal.classList.remove('vtt-hidden');
+                    document.getElementById('pc-spell-overlay')?.classList.remove('vtt-hidden');
                     const confirmBtn = document.getElementById('delete-prompt-confirm');
                     if (confirmBtn) {
                         confirmBtn.dataset.level = level;
@@ -2595,8 +2831,8 @@ export function initVttSpellManager(vtt) {
                 const lvlMapInverse = { 0: 'cantrip', 1: 'level1', 2: 'level2', 3: 'level3', 4: 'level4', 5: 'level5', 6: 'level6', 7: 'level7', 8: 'level8', 9: 'level9' };
 
                 const selectedSpells = Array.from(spellBulkSelection);
-                for (const spellName of selectedSpells) {
-                    const spData = spellCache.find(s => s.name === spellName);
+                for (const spKey of selectedSpells) {
+                    const spData = spellCache.find(s => s.id === spKey || s.name === spKey);
                     if (spData) {
                         if (!spData.descriptionHtml && spData.source && spData.id) {
                             try {
@@ -2610,10 +2846,11 @@ export function initVttSpellManager(vtt) {
                         const levelKey = lvlMapInverse[spData.level] || targetLevel;
                         if (!char.spells) char.spells = {};
                         if (!char.spells[levelKey]) char.spells[levelKey] = [];
-                        if (!char.spells[levelKey].find(s => s.name === spellName)) {
-                            const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: toSpellTitleCase(spellName), description: '', prepared: false, macroPopulated: true, level: spData.level, source: spData.source };
+                        const finalSpellName = getDisambiguatedSpellName(spData, spellCache);
+                        if (!char.spells[levelKey].find(s => (s.name || '').toLowerCase() === finalSpellName.toLowerCase())) {
+                            const newSpell = { id: 'sp_' + Date.now() + Math.random(), name: finalSpellName, description: '', prepared: false, macroPopulated: true, level: spData.level, source: spData.source };
                             parseSpellToMacro(spData, newSpell);
-                            newSpell.name = toSpellTitleCase(newSpell.name);
+                            newSpell.name = finalSpellName;
                             char.spells[levelKey].push(newSpell);
 
                             if (activeSpellEditContext && activeSpellEditContext.blockId && char.spellcasting) {

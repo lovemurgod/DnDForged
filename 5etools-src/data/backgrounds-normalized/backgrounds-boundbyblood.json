@@ -1,0 +1,426 @@
+[
+  {
+    "id": "bg_ghoul_boundbyblood",
+    "name": "Ghoul",
+    "source": "BoundByBlood",
+    "page": 0,
+    "skills": "Perception, Survival",
+    "tools": "Choose 1 from Artisan's Tools of your choice",
+    "skillsData": {
+      "fixed": [
+        "Perception",
+        "Survival"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Artisan's Tools of your choice"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Artisan's Tools (same as above), dagger, Kindred Vitae, hooded lantern, shortbow, 20x Arrow, traveler's clothes + 10 gp",
+              "items": [
+                {
+                  "name": "Artisan's Tools (same as above)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "dagger",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Kindred Vitae",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "hooded lantern",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "shortbow",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Arrow",
+                  "quantity": 20,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 10
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Nocturnal",
+        "description": "This background grants the Nocturnal feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Dexterity, Charisma\n- **Feat:** Nocturnal\n- **Skill Proficiencies:** Perception and Survival\n- **Tool Proficiency:** Choose one kind of Artisan's Tools\n- **Equipment:** Choose A or B: (A) Artisan's Tools (same as above), Dagger, Kindred Vitae, Hooded Lantern, Shortbow, 20 Arrow, Traveler's Clothes, 10 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_ritualist_boundbyblood",
+    "name": "Ritualist",
+    "source": "BoundByBlood",
+    "page": 0,
+    "skills": "Arcana, History",
+    "tools": "Alchemist's Supplies",
+    "skillsData": {
+      "fixed": [
+        "Arcana",
+        "History"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Alchemist's Supplies"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "alchemist's supplies, Book (rituals), dagger, ink, traveler's clothes + 9 gp",
+              "items": [
+                {
+                  "name": "alchemist's supplies",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Book (rituals)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "dagger",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "ink",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 9
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Magic Initiate - Wizard",
+        "description": "This background grants the Magic Initiate - Wizard feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Intelligence, Wisdom, Charisma\n- **Feat:** Magic Initiate (Wizard)\n- **Skill Proficiencies:** Arcana and History\n- **Tool Proficiency:** Alchemist's Supplies\n- **Equipment:** Choose A or B: (A) Alchemist's Supplies, Book (rituals), Dagger, Ink, Traveler's Clothes, 9 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_scholar_of_the_hunt_boundbyblood",
+    "name": "Scholar of the Hunt",
+    "source": "BoundByBlood",
+    "page": 0,
+    "skills": "Arcana, Investigation",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Arcana",
+        "Investigation"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Gaming Set (same as above), manacles, mirror, traveler's clothes + 15 gp",
+              "items": [
+                {
+                  "name": "Gaming Set (same as above)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "manacles",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "mirror",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 15
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Well-read",
+        "description": "This background grants the Well-read feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Intelligence, Wisdom\n- **Feat:** Well-Read\n- **Skill Proficiencies:** Arcana and Investigation\n- **Tool Proficiency:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Gaming Set (same as above), Manacles, Mirror, Traveler's Clothes, 15 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_thrall_boundbyblood",
+    "name": "Thrall",
+    "source": "BoundByBlood",
+    "page": 0,
+    "skills": "Athletics, Medicine",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Athletics",
+        "Medicine"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Special Item, Special Item, healer's kit, bullseye lantern, traveler's clothes + 32 gp",
+              "items": [
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "healer's kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "bullseye lantern",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 32
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Healthy",
+        "description": "This background grants the Healthy feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Wisdom, Charisma\n- **Feat:** Healthy\n- **Skill Proficiencies:** Athletics and Medicine\n- **Tool Proficiency:** Choose one kind of Gaming Set or Musical Instrument\n- **Equipment:** Choose A or B: (A) Gaming Set or Musical Instrument (same as above), Healer's Kit, Bullseye Lantern, Traveler's Clothes, 32 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "bg_touchstone_boundbyblood",
+    "name": "Touchstone",
+    "source": "BoundByBlood",
+    "page": 0,
+    "skills": "Persuasion, Survival",
+    "tools": "Choose 1 from Artisan's Tools of your choice",
+    "skillsData": {
+      "fixed": [
+        "Persuasion",
+        "Survival"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Artisan's Tools of your choice"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Artisan's Tools (same as above), traveler's clothes + 16 gp",
+              "items": [
+                {
+                  "name": "Artisan's Tools (same as above)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 16
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Protected",
+        "description": "This background grants the Protected feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Intelligence, Charisma\n- **Feat:** Protected\n- **Skill Proficiencies:** Persuasion and Survival\n- **Tool Proficiency:** Choose one kind of Artisan's Tools\n- **Equipment:** Choose A or B: (A) Artisan's Tools (same as above), Traveler's Clothes, 16 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  }
+]

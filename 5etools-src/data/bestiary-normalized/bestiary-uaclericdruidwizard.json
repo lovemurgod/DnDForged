@@ -1,0 +1,201 @@
+[
+  {
+    "id": "creature_wildfire_spirit_uaclericdruidwizard",
+    "name": "Wildfire Spirit",
+    "source": "UAClericDruidWizard",
+    "edition": "2014",
+    "page": 3,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "C G NY E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "str": 10,
+    "dex": 14,
+    "con": 14,
+    "int": 13,
+    "wis": 15,
+    "cha": 11,
+    "proficiencyBonus": 2,
+    "save": {
+      "dex": "+4",
+      "con": "+4",
+      "wis": "+4"
+    },
+    "saves": {
+      "dex": "+4",
+      "con": "+4",
+      "wis": "+4"
+    },
+    "skill": {
+      "nature": "+4"
+    },
+    "skills": {
+      "nature": "+4"
+    },
+    "immune": [
+      "fire"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "grappled",
+      "prone",
+      "restrained"
+    ],
+    "passive": 12,
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands the languages you speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_soul_bond_7l63",
+        "name": "Soul Bond",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The following numbers increase by 1 when your proficiency bonus increases by 1: the spirit's skill and saving throw bonuses above, the bonuses to hit and damage of its Flame Seed, and the bonus to damage of its Fiery Teleportation.</p>",
+        "entries": [
+          "The following numbers increase by 1 when your proficiency bonus increases by 1: the spirit's skill and saving throw bonuses above, the bonuses to hit and damage of its Flame Seed, and the bonus to damage of its Fiery Teleportation."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_flame_seed_ufpx",
+        "name": "Flame Seed",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30 ft., one target you can see. Hit: 1d6 + 2 fire damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 30 ft., one target you can see. {@h}{@damage 1d6 + 2} fire damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "30 ft.",
+          "targets": "one target you can see",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fiery_teleportation__recharges_after_a_short_or_long_rest__nb2i",
+        "name": "Fiery Teleportation (Recharges after a Short or Long Rest)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The spirit and each willing creature of your choice within 5 feet of it teleport up to 30 feet to unoccupied spaces you can see. Each creature within 10 feet of the space that the spirit left must succeed on a Dexterity saving throw against your spell save DC or take 1d6 + 2 fire damage.</p>",
+        "entries": [
+          "The spirit and each willing creature of your choice within 5 feet of it teleport up to 30 feet to unoccupied spaces you can see. Each creature within 10 feet of the space that the spirit left must succeed on a Dexterity saving throw against your spell save DC or take {@dice 1d6 + 2} fire damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/UAClericDruidWizard/Wildfire Spirit.webp",
+    "tokenImg": "img/bestiary/tokens/UAClericDruidWizard/Wildfire Spirit.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

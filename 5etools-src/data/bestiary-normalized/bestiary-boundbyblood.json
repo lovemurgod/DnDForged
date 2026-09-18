@@ -1,0 +1,1468 @@
+[
+  {
+    "id": "creature_highland_wolf_boundbyblood",
+    "name": "Highland Wolf",
+    "source": "BoundByBlood",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 19,
+      "formula": "3d8 + 6"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 3,
+        "mod": -4
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "str": 16,
+    "dex": 14,
+    "con": 14,
+    "int": 3,
+    "wis": 13,
+    "cha": 6,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+5",
+      "stealth": "+4",
+      "survival": "+3"
+    },
+    "skills": {
+      "perception": "+5",
+      "stealth": "+4",
+      "survival": "+3"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [],
+    "cr": "1/2",
+    "crNumeric": 0.5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_pack_tactics_liyc",
+        "name": "Pack Tactics",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The highland wolf has Advantage on attack rolls against a creature if at least one of the highland wolf's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
+        "entries": [
+          "The highland wolf has {@variantrule Advantage|XPHB} on attack rolls against a creature if at least one of the highland wolf's allies is within 5 feet of the creature and the ally doesn't have the {@condition Incapacitated|XPHB} condition."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_fadn",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Piercing damage. If the target is a Medium or smaller creature, it has the Prone condition.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Piercing damage. If the target is a Medium or smaller creature, it has the {@condition Prone|XPHB} condition."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "it has the {@condition Prone|XPHB} condition",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/BoundByBlood/Highland Wolf.webp",
+    "tokenImg": "img/bestiary/tokens/BoundByBlood/Highland Wolf.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_lupine_boundbyblood",
+    "name": "Lupine",
+    "source": "BoundByBlood",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 104,
+      "formula": "11d10 + 44"
+    },
+    "speed": {
+      "walk": 50,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 20,
+        "mod": 5
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 14,
+        "mod": 2
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "str": 20,
+    "dex": 16,
+    "con": 18,
+    "int": 14,
+    "wis": 16,
+    "cha": 14,
+    "proficiencyBonus": 3,
+    "save": {
+      "dex": "+6",
+      "con": "+7"
+    },
+    "saves": {
+      "dex": "+6",
+      "con": "+7"
+    },
+    "skill": {
+      "athletics": "+8",
+      "perception": "+6",
+      "survival": "+6"
+    },
+    "skills": {
+      "athletics": "+8",
+      "perception": "+6",
+      "survival": "+6"
+    },
+    "immune": [],
+    "resist": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": "Darkvision 90 ft."
+    },
+    "languages": [
+      "Common (can't speak in wolf form)",
+      "Primordial"
+    ],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_rage_7rzi",
+        "name": "Rage",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The lupine can give itself Advantage on its first D20 Test each turn. If it does so and fails that D20 Test, it's overcome with rage. On each of its turns while raging, the lupine attacks the nearest creature it can see. If no creature is near enough to move to and attack, its rage ends. A lupine's ally, if within 60 feet of the raging lupine, can try to calm it by taking an action to make a DC 15 Charisma (Persuasion) check; the lupine must be able to hear its ally. If this check succeeds, the lupine ceases its rage.</p>",
+        "entries": [
+          "The lupine can give itself {@variantrule Advantage|XPHB} on its first {@dice D20} Test each turn. If it does so and fails that {@dice D20} Test, it's overcome with rage. On each of its turns while raging, the lupine attacks the nearest creature it can see. If no creature is near enough to move to and attack, its rage ends. A lupine's ally, if within 60 feet of the raging lupine, can try to calm it by taking an action to make a {@dc 15} Charisma ({@skill Persuasion|XPHB}) check; the lupine must be able to hear its ally. If this check succeeds, the lupine ceases its rage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": null
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regeneration_19wu",
+        "name": "Regeneration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The lupine regains 10 Hit Points at the start of each of its turns. If the lupine takes Fire damage or damage from silver objects, this trait doesn't function at the start of its next turn. The lupine dies only if it starts its turn with 0 Hit Points and doesn't regenerate.</p>",
+        "entries": [
+          "The lupine regains 10 {@variantrule Hit Points|XPHB} at the start of each of its turns. If the lupine takes Fire damage or damage from silver objects, this trait doesn't function at the start of its next turn. The lupine dies only if it starts its turn with 0 {@variantrule Hit Points|XPHB} and doesn't regenerate."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_k8l0",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The lupine makes two attacks, using Battleaxe, Rend, or Longbow in any combination. If it hits with a Rend attack, the lupine can make one Bite attack against the same target as a Bonus Action.</p>",
+        "entries": [
+          "The lupine makes two attacks, using Battleaxe, Rend, or Longbow in any combination. If it hits with a Rend attack, the lupine can make one Bite attack against the same target as a {@variantrule Bonus Action|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_battleaxe__humanoid_or_hybrid_form_only__87ht",
+        "name": "Battleaxe (Humanoid or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +8, reach 5 ft. Hit: 10 (1d10 + 5) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 8}, reach 5 ft. {@h}10 ({@damage 1d10 + 5}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 5",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite__wolf_or_hybrid_form_only__3jxg",
+        "name": "Bite (Wolf or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +8, reach 5 ft. Hit: 16 (2d10 + 5) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 8}, reach 5 ft. {@h}16 ({@damage 2d10 + 5}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10 + 5",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rend__wolf_or_hybrid_form_only__cxo8",
+        "name": "Rend (Wolf or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +8, reach 5 ft. Hit: 12 (2d6 + 5) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 8}, reach 5 ft. {@h}12 ({@damage 2d6 + 5}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 5",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_longbow__humanoid_or_hybrid_form_only__2idq",
+        "name": "Longbow (Humanoid or Hybrid Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: +6, range 150/600 ft. Hit: 7 (1d8 + 3) Piercing damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 6}, range 150/600 ft. {@h}7 ({@damage 1d8 + 3}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": null,
+          "range": "150/600 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_horrifying_howl___recharge__5fqo",
+        "name": "Horrifying Howl {@recharge}",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>wis DC 14, each creature within 60 feet that can hear the howl and isn't a lupine. {@actSaveFail} The target has the Frightened condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
+        "entries": [
+          "{@actSave wis} {@dc 14}, each creature within 60 feet that can hear the howl and isn't a lupine. {@actSaveFail} The target has the {@condition Frightened|XPHB} condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "WIS"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shape_shift_h4jx",
+        "name": "Shape-Shift",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The lupine shape-shifts into a Large wolf-humanoid hybrid form or a Medium wolf, or it returns to its true humanoid form. Its game statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed.</p>",
+        "entries": [
+          "The lupine shape-shifts into a Large wolf-humanoid hybrid form or a Medium wolf, or it returns to its true humanoid form. Its game statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/BoundByBlood/Lupine.webp",
+    "tokenImg": "img/bestiary/tokens/BoundByBlood/Lupine.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_monster_hunter_boundbyblood",
+    "name": "Monster Hunter",
+    "source": "BoundByBlood",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 65,
+      "formula": "10d8 + 20"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 12,
+        "mod": 1
+      }
+    },
+    "str": 15,
+    "dex": 15,
+    "con": 15,
+    "int": 15,
+    "wis": 14,
+    "cha": 12,
+    "proficiencyBonus": 2,
+    "save": {
+      "str": "+3",
+      "dex": "+5",
+      "wis": "+4"
+    },
+    "saves": {
+      "str": "+3",
+      "dex": "+5",
+      "wis": "+4"
+    },
+    "skill": {
+      "investigation": "+4",
+      "nature": "+4",
+      "survival": "+6"
+    },
+    "skills": {
+      "investigation": "+4",
+      "nature": "+4",
+      "survival": "+6"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
+    "initiative": {
+      "initiative": 3
+    },
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "3",
+    "crNumeric": 3,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_faith_nhgf",
+        "name": "Faith",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When the monster hunter rolls a 1 on the d20 of an ability check or saving throw, it can reroll the die, and it must use the new roll.</p>",
+        "entries": [
+          "When the monster hunter rolls a 1 on the {@dice d20} of an ability check or saving throw, it can reroll the die, and it must use the new roll."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_sxf1",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The monster hunter makes two attacks, using Handaxe or Silver Knife in any combination.</p>",
+        "entries": [
+          "The monster hunter makes two attacks, using Handaxe or Silver Knife in any combination."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_handaxe_a6zd",
+        "name": "Handaxe",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +5, reach 5 ft. or range 20/60 ft. Hit: 6 (1d6 + 3) Slashing damage, plus 10 (3d6) Slashing damage if the attack roll was made with Advantage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 5}, reach 5 ft. or range 20/60 ft. {@h}6 ({@damage 1d6 + 3}) Slashing damage, plus 10 ({@damage 3d6}) Slashing damage if the attack roll was made with {@variantrule Advantage|XPHB}."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": "plus 10 ({@damage 3d6}) Slashing damage if the attack roll was made with {@variantrule Advantage|XPHB}",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Slashing"
+            },
+            {
+              "formula": "3d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_silver_knife_5hlz",
+        "name": "Silver Knife",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 6 (1d6 + 3) Slashing damage, plus 10 (3d6) Slashing damage if the attack roll was made with Advantage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}6 ({@damage 1d6 + 3}) Slashing damage, plus 10 ({@damage 3d6}) Slashing damage if the attack roll was made with {@variantrule Advantage|XPHB}."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": "plus 10 ({@damage 3d6}) Slashing damage if the attack roll was made with {@variantrule Advantage|XPHB}",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Slashing"
+            },
+            {
+              "formula": "3d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_wooden_stake_de6z",
+        "name": "Wooden Stake",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 6 (1d6 + 3) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}6 ({@damage 1d6 + 3}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_aim_y7r0",
+        "name": "Aim",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The monster hunter gives itself Advantage on the next attack roll it makes during the current turn.</p>",
+        "entries": [
+          "The monster hunter gives itself {@variantrule Advantage|XPHB} on the next attack roll it makes during the current turn."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [
+      {
+        "id": "act_save_ally_ae87",
+        "name": "Save Ally",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} An ally within 5 feet has the Grappled condition. {@actResponse} The ally can immediately make an escape roll with Advantage.</p>",
+        "entries": [
+          "{@actTrigger} An ally within 5 feet has the {@condition Grappled|XPHB} condition. {@actResponse} The ally can immediately make an escape roll with {@variantrule Advantage|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/BoundByBlood/Monster Hunter.webp",
+    "tokenImg": "img/bestiary/tokens/BoundByBlood/Monster Hunter.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_trapper_boundbyblood",
+    "name": "Trapper",
+    "source": "BoundByBlood",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 39,
+      "formula": "6d8 + 12"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 17,
+        "mod": 3
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 12,
+        "mod": 1
+      },
+      "wis": {
+        "score": 16,
+        "mod": 3
+      },
+      "cha": {
+        "score": 11,
+        "mod": 0
+      }
+    },
+    "str": 17,
+    "dex": 14,
+    "con": 15,
+    "int": 12,
+    "wis": 16,
+    "cha": 11,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "nature": "+5",
+      "perception": "+5",
+      "stealth": "+4",
+      "survival": "+7"
+    },
+    "skills": {
+      "nature": "+5",
+      "perception": "+5",
+      "stealth": "+4",
+      "survival": "+7"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 15,
+    "initiative": {
+      "proficiency": 2
+    },
+    "senses": {
+      "passivePerception": 15,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_traps__3_day__tcol",
+        "name": "Traps (3/Day)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>{@actTrigger} The first time an enemy with a Passive Perception of 12 or lower comes within 30 feet of the trapper or the trapper shoves the creature 5 feet. dex DC 12. {@actSaveFail} The target takes 7 (2d6) Piercing damage and has the Restrained condition. A creature can use its action to make a DC 12 Strength (Athletics) check, freeing itself or another creature within its reach on a success. Each failed check deals 1d4 Piercing damage to the trapped creature.</p>",
+        "entries": [
+          "{@actTrigger} The first time an enemy with a {@variantrule Passive Perception|XPHB} of 12 or lower comes within 30 feet of the trapper or the trapper shoves the creature 5 feet. {@actSave dex} {@dc 12}. {@actSaveFail} The target takes 7 ({@damage 2d6}) Piercing damage and has the {@condition Restrained|XPHB} condition. A creature can use its action to make a {@dc 12} Strength ({@skill Athletics|XPHB}) check, freeing itself or another creature within its reach on a success. Each failed check deals {@damage 1d4} Piercing damage to the trapped creature."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d4",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_ggx7",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The trapper makes two attacks, using Greataxe or Short Bow in any combination.</p>",
+        "entries": [
+          "The trapper makes two attacks, using Greataxe or Short Bow in any combination."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_greataxe_jw2v",
+        "name": "Greataxe",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 9 (1d12 + 3) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}9 ({@damage 1d12 + 3}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d12 + 3",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shortbow_4pj2",
+        "name": "Shortbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: +4, range 80/320 ft. Hit: 5 (1d6 + 2) Piercing damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 4}, range 80/320 ft. {@h}5 ({@damage 1d6 + 2}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": null,
+          "range": "80/320 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 2",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_shove_2is1",
+        "name": "Shove",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>str DC 13, one Large or smaller creature within 5 feet of the trapper. {@actSaveFail} The creature is pushed 5 feet directly away from the trapper.</p>",
+        "entries": [
+          "{@actSave str} {@dc 13}, one Large or smaller creature within 5 feet of the trapper. {@actSaveFail} The creature is pushed 5 feet directly away from the trapper."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 13,
+            "ability": "STR"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/BoundByBlood/Trapper.webp",
+    "tokenImg": "img/bestiary/tokens/BoundByBlood/Trapper.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_villager_boundbyblood",
+    "name": "Villager",
+    "source": "BoundByBlood",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 11,
+      "formula": "2d8 + 2"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 11,
+        "mod": 0
+      },
+      "cha": {
+        "score": 9,
+        "mod": -1
+      }
+    },
+    "str": 12,
+    "dex": 12,
+    "con": 13,
+    "int": 10,
+    "wis": 11,
+    "cha": 9,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "survival": "+2"
+    },
+    "skills": {
+      "survival": "+2"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "1/8",
+    "crNumeric": 0.125,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_dagger_bg7b",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +3, reach 5 ft. or range 20/60 ft. Hit: 3 (1d4 + 1) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 3}, reach 5 ft. or range 20/60 ft. {@h}3 ({@damage 1d4 + 1}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_torch_huya",
+        "name": "Torch",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 3 (1d4 + 1) Fire damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}3 ({@damage 1d4 + 1}) Fire damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_wooden_pitchfork_wl2s",
+        "name": "Wooden Pitchfork",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}4 ({@damage 1d6 + 1}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 1",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/BoundByBlood/Villager.webp",
+    "tokenImg": "img/bestiary/tokens/BoundByBlood/Villager.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_villager_militia_boundbyblood",
+    "name": "Villager Militia",
+    "source": "BoundByBlood",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 32,
+      "formula": "5d8 + 10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 15,
+        "mod": 2
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": 15,
+    "dex": 12,
+    "con": 15,
+    "int": 10,
+    "wis": 12,
+    "cha": 10,
+    "proficiencyBonus": 2,
+    "save": {
+      "str": "+3"
+    },
+    "saves": {
+      "str": "+3"
+    },
+    "skill": {
+      "athletics": "+4",
+      "intimidation": "+2"
+    },
+    "skills": {
+      "athletics": "+4",
+      "intimidation": "+2"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_multiattack_xl0d",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The villager militia makes two attacks, using Dagger, Spear, or Torch in any combination.</p>",
+        "entries": [
+          "The villager militia makes two attacks, using Dagger, Spear, or Torch in any combination."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_dagger_e72x",
+        "name": "Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +3, reach 5 ft. or range 20/60 ft. Hit: 5 (1d4 + 3) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 3}, reach 5 ft. or range 20/60 ft. {@h}5 ({@damage 1d4 + 3}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_spear_l9cs",
+        "name": "Spear",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +5, reach 5 ft. or range 20/60 ft. Hit: 6 (1d6 + 3) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 5}, reach 5 ft. or range 20/60 ft. {@h}6 ({@damage 1d6 + 3}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": "20/60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_torch_o013",
+        "name": "Torch",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 5 (1d4 + 3) Fire damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}5 ({@damage 1d4 + 3}) Fire damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 3",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/BoundByBlood/Villager Militia.webp",
+    "tokenImg": "img/bestiary/tokens/BoundByBlood/Villager Militia.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

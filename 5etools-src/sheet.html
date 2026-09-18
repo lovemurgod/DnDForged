@@ -389,52 +389,46 @@
         }
 
         async function loadBestiaryMonster(name, source) {
-            try {
-                const indexRes = await fetch('data/bestiary/index.json');
-                if (!indexRes.ok) return null;
-                const indexData = await indexRes.json();
-                
-                const qName = name.toLowerCase().trim();
-                const qSource = source ? source.toLowerCase().trim() : null;
+            if (!name) return null;
+            const qName = name.toLowerCase().trim();
+            const qSource = source ? source.toLowerCase().trim() : null;
 
-                // 1. Direct source lookup if source is specified
-                if (qSource && indexData[qSource]) {
-                    try {
-                        const directRes = await fetch(`data/bestiary/${indexData[qSource]}`);
-                        if (directRes.ok) {
-                            const directData = await directRes.json();
-                            if (directData && directData.monster) {
-                                const found = directData.monster.find(m => 
-                                    m.name.toLowerCase() === qName &&
-                                    (!qSource || (m.source && m.source.toLowerCase() === qSource))
-                                );
-                                if (found) return found;
-                            }
-                        }
-                    } catch (e) {}
-                }
+            // 1. Try single-creature normalized API endpoint
+            if (qSource) {
+                try {
+                    const res = await fetch(`/api/creature/${encodeURIComponent(qSource)}/${encodeURIComponent(qName)}`);
+                    if (res.ok) {
+                        return await res.json();
+                    }
+                } catch (e) {}
 
-                // 2. Parallel search across all bestiary files
-                const fetchPromises = Object.values(indexData).map(filename =>
-                    fetch(`data/bestiary/${filename}`)
-                        .then(r => r.ok ? r.json() : null)
-                        .catch(() => null)
-                );
-                const results = await Promise.all(fetchPromises);
-                for (const d of results) {
-                    if (d && d.monster) {
-                        const found = d.monster.find(m =>
-                            m.name.toLowerCase() === qName &&
-                            (!qSource || (m.source && m.source.toLowerCase() === qSource))
-                        );
+                // 2. Fallback to normalized partition JSON
+                try {
+                    const partRes = await fetch(`data/bestiary-normalized/bestiary-${qSource}.json`);
+                    if (partRes.ok) {
+                        const list = await partRes.json();
+                        const found = list.find(m => m.name.toLowerCase() === qName || m.id?.toLowerCase() === qName);
                         if (found) return found;
                     }
-                }
-            } catch (err) {
-                console.warn("[Standalone Sheet] Failed to load from bestiary:", err);
+                } catch (e) {}
             }
+
+            // 3. Try searching catalog to find source if source was missing or unknown
+            try {
+                let catRes = await fetch('/api/bestiary/catalog');
+                if (!catRes.ok) catRes = await fetch('data/bestiary-catalog.json');
+                if (catRes.ok) {
+                    const catalog = await catRes.json();
+                    const match = catalog.find(m => m.name.toLowerCase() === qName && (!qSource || m.source.toLowerCase() === qSource));
+                    if (match && match.source) {
+                        return await loadBestiaryMonster(match.name, match.source);
+                    }
+                }
+            } catch (e) {}
+
             return null;
         }
+        window.fetchFullCreature = loadBestiaryMonster;
 
         // Dock button handler
         if (dockBtn) {

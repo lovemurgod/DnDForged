@@ -1,0 +1,372 @@
+[
+  {
+    "id": "race_ardling_xua2022clericandrevisedspecies",
+    "name": "Ardling",
+    "source": "XUA2022ClericAndRevisedSpecies",
+    "page": 8,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type:.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 4–7 feet tall) or Small (about 3–4 feet tall), chosen when you select this Race</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>200 years on average</p></div></li></ul>\n<p>As an Ardling adventurer, you have the following special traits.</p>\n<div class=\"compendium-subentry\"><strong>Animal Ancestry.</strong> <p>You are descended from a Celestial animal. Choose one of the ancestry types below, then choose one of the example animals listed for that ancestry (or a similar animal); you gain the benefits of that ancestry, and your head resembles the head of the chosen animal:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Climber (Bear, Cat, Lizard, Squirrel).</strong> <p>You have hooked claws, sharp nails, or a serpentine tail. As a result, you have a Climb Speed|XUA2022ClericAndRevisedSpecies equal to your Speed, and once per turn when you deal damage with your Unarmed Strike|XUA2022ClericAndRevisedSpecies to a target, you can increase the damage to that target by an amount equal to your Proficiency Bonus.</p></div></li><li><div class=\"compendium-subentry\"><strong>Flyer (Bat, Eagle, Owl, Raven).</strong> <p>You have vestigial wings. As a result, when you fall at least 10 feet, you can use your Reaction to safely glide downward, taking no damage from the fall. In addition, when you take the Jump Action, you can flap your wings to gain Advantage on that Action's Ability Check|XUA2022ClericAndRevisedSpecies.</p></div></li><li><div class=\"compendium-subentry\"><strong>Racer (Deer, Dog, Horse, Triceratops).</strong> <p>When you take the Dash Action, your Speed increases for that Action. The increase equals ten times your Proficiency Bonus.</p></div></li><li><div class=\"compendium-subentry\"><strong>Swimmer (Crocodile, Dolphin, Frog, Shark).</strong> <p>You can hold your breath for up to an hour at a time, and you have a Swim Speed|XUA2022ClericAndRevisedSpecies equal to your Speed. In addition, you have Resistance to Cold Damage.</p></div></li></ul></div>\n<div class=\"compendium-subentry\"><strong>Divine Magic.</strong> <p>You can innately channel minor divine magic; you know the Thaumaturgy Spell. Whenever you finish a Long Rest|XUA2022ClericAndRevisedSpecies, you can replace that Spell with a different 0-level Spell from the Divine Spell list.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for any Spell you cast with this trait (choose the ability when you select the Species).</p></div>\n<div class=\"compendium-subentry\"><strong>Keen Senses.</strong> <p>You have Proficiency in the Perception Skill.</p></div>",
+    "traits": [
+      {
+        "id": "trait_ardling_animal_ancestry_xua2022clericandrevisedspecies",
+        "name": "Animal Ancestry",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Ardling",
+        "actionType": "passive",
+        "description": "You are descended from a Celestial animal. Choose one of the ancestry types below, then choose one of the example animals listed for that ancestry (or a similar animal); you gain the benefits of that ancestry, and your head resembles the head of the chosen animal:\n\n- **Climber (Bear, Cat, Lizard, Squirrel)**\n\nYou have hooked claws, sharp nails, or a serpentine tail. As a result, you have a Climb Speed|XUA2022ClericAndRevisedSpecies equal to your Speed, and once per turn when you deal damage with your Unarmed Strike|XUA2022ClericAndRevisedSpecies to a target, you can increase the damage to that target by an amount equal to your Proficiency Bonus.\n- **Flyer (Bat, Eagle, Owl, Raven)**\n\nYou have vestigial wings. As a result, when you fall at least 10 feet, you can use your Reaction to safely glide downward, taking no damage from the fall. In addition, when you take the Jump Action, you can flap your wings to gain Advantage on that Action's Ability Check|XUA2022ClericAndRevisedSpecies.\n- **Racer (Deer, Dog, Horse, Triceratops)**\n\nWhen you take the Dash Action, your Speed increases for that Action. The increase equals ten times your Proficiency Bonus.\n- **Swimmer (Crocodile, Dolphin, Frog, Shark)**\n\nYou can hold your breath for up to an hour at a time, and you have a Swim Speed|XUA2022ClericAndRevisedSpecies equal to your Speed. In addition, you have Resistance to Cold Damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are descended from a Celestial animal. Choose one of the ancestry types below, then choose one of the example animals listed for that ancestry (or a similar animal); you gain the benefits of that ancestry, and your head resembles the head of the chosen animal:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Climber (Bear, Cat, Lizard, Squirrel)",
+                "page": 8,
+                "entries": [
+                  "You have hooked claws, sharp nails, or a serpentine tail. As a result, you have a {@variantrule Climb Speed|XUA2022ClericAndRevisedSpecies} equal to your Speed, and once per turn when you deal damage with your {@variantrule Unarmed Strike|XUA2022ClericAndRevisedSpecies} to a target, you can increase the damage to that target by an amount equal to your Proficiency Bonus."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Flyer (Bat, Eagle, Owl, Raven)",
+                "page": 8,
+                "entries": [
+                  "You have vestigial wings. As a result, when you fall at least 10 feet, you can use your Reaction to safely glide downward, taking no damage from the fall. In addition, when you take the {@action Jump|XUA2022ClericAndRevisedSpecies} Action, you can flap your wings to gain Advantage on that Action's {@variantrule Ability Check|XUA2022ClericAndRevisedSpecies}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Racer (Deer, Dog, Horse, Triceratops)",
+                "page": 8,
+                "entries": [
+                  "When you take the {@action Dash|XUA2022ClericAndRevisedSpecies} Action, your Speed increases for that Action. The increase equals ten times your Proficiency Bonus."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Swimmer (Crocodile, Dolphin, Frog, Shark)",
+                "page": 8,
+                "entries": [
+                  "You can hold your breath for up to an hour at a time, and you have a {@variantrule Swim Speed|XUA2022ClericAndRevisedSpecies} equal to your Speed. In addition, you have Resistance to Cold Damage."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_ardling_divine_magic_xua2022clericandrevisedspecies",
+        "name": "Divine Magic",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Ardling",
+        "actionType": "passive",
+        "description": "You can innately channel minor divine magic; you know the Thaumaturgy Spell. Whenever you finish a Long Rest|XUA2022ClericAndRevisedSpecies, you can replace that Spell with a different 0-level Spell from the Divine Spell list.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for any Spell you cast with this trait (choose the ability when you select the Species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can innately channel minor divine magic; you know the {@spell Thaumaturgy} Spell. Whenever you finish a {@variantrule Long Rest|XUA2022ClericAndRevisedSpecies}, you can replace that Spell with a different 0-level Spell from the Divine Spell list.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for any Spell you cast with this trait (choose the ability when you select the Species)."
+        ]
+      },
+      {
+        "id": "trait_ardling_keen_senses_xua2022clericandrevisedspecies",
+        "name": "Keen Senses",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Ardling",
+        "actionType": "passive",
+        "description": "You have Proficiency in the Perception Skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Proficiency in the {@skill Perception} Skill."
+        ]
+      }
+    ],
+    "description": "**Creature Type:**\n\nHumanoid\n\n**Size:**\n\nMedium (about 4–7 feet tall) or Small (about 3–4 feet tall), chosen when you select this Race\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n200 years on average\n\nAs an Ardling adventurer, you have the following special traits."
+  },
+  {
+    "id": "race_dragonborn_xua2022clericandrevisedspecies",
+    "name": "Dragonborn",
+    "source": "XUA2022ClericAndRevisedSpecies",
+    "page": 9,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type:.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 5-7 feet tall)</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>30 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>80 years on average</p></div></li></ul>\n<p>As a Dragonborn adventurer, you have the following special traits.</p>\n<div class=\"compendium-subentry\"><strong>Draconic Ancestry.</strong> <p>Your lineage stems from a dragon progenitor. Choose the kind of dragon from the Draconic Ancestor table. Your choice affects your Breath Weapon and Damage Resistance traits, as well as the look of your Draconic Flight. The chosen dragon also affects your appearance, with you displaying coloration and other features reminiscent of that dragon.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th></tr></thead><tbody><tr><td>Black</td><td>Acid</td></tr><tr><td>Blue</td><td>Lightning</td></tr><tr><td>Brass</td><td>Fire</td></tr><tr><td>Bronze</td><td>Lightning</td></tr><tr><td>Copper</td><td>Acid</td></tr><tr><td>Gold</td><td>Fire</td></tr><tr><td>Green</td><td>Poison</td></tr><tr><td>Red</td><td>Fire</td></tr><tr><td>Silver</td><td>Cold</td></tr><tr><td>White</td><td>Cold</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Breath Weapon.</strong> <p>When you take the Attack Action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot cone or a 30-foot line that is 5 feet wide. Each creature in that area must make a Dexterity Saving Throw against a DC equal to 8 + your Constitution modifier + your Proficiency Bonus. On a failed save, a creature takes 1d10 damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach the following character levels: 5th level (2d10), 11th level (3d10), and 17th level (4d10).</p>\n<p>You can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XUA2022ClericAndRevisedSpecies.</p></div>\n<div class=\"compendium-subentry\"><strong>Damage Resistance.</strong> <p>You have Resistance to the damage type determined by your Draconic Ancestry trait.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Flight.</strong> <p>When you reach 5th level, you learn how to channel the magical energy of your Draconic Ancestry to give yourself temporary flight. As a Bonus Action, you sprout spectral wings on your back that last for 10 minutes or until you are Incapacitated or you retract the wings as a Bonus Action. During that time, you have a Fly Speed|XUA2022ClericAndRevisedSpecies equal to your Speed. Your wings appear to be made of the energy used by your Breath Weapon. Once you use this trait, you can't use it again until you finish a Long Rest|XUA2022ClericAndRevisedSpecies.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dragonborn_draconic_ancestry_xua2022clericandrevisedspecies",
+        "name": "Draconic Ancestry",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "Your lineage stems from a dragon progenitor. Choose the kind of dragon from the Draconic Ancestor table. Your choice affects your Breath Weapon and Damage Resistance traits, as well as the look of your Draconic Flight. The chosen dragon also affects your appearance, with you displaying coloration and other features reminiscent of that dragon.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your lineage stems from a dragon progenitor. Choose the kind of dragon from the Draconic Ancestor table. Your choice affects your Breath Weapon and Damage Resistance traits, as well as the look of your Draconic Flight. The chosen dragon also affects your appearance, with you displaying coloration and other features reminiscent of that dragon.",
+          {
+            "type": "table",
+            "caption": "Draconic Ancestor",
+            "colLabels": [
+              "Dragon",
+              "Damage Type"
+            ],
+            "colStyles": [
+              "col-6",
+              "col-6"
+            ],
+            "rows": [
+              [
+                "Black",
+                "Acid"
+              ],
+              [
+                "Blue",
+                "Lightning"
+              ],
+              [
+                "Brass",
+                "Fire"
+              ],
+              [
+                "Bronze",
+                "Lightning"
+              ],
+              [
+                "Copper",
+                "Acid"
+              ],
+              [
+                "Gold",
+                "Fire"
+              ],
+              [
+                "Green",
+                "Poison"
+              ],
+              [
+                "Red",
+                "Fire"
+              ],
+              [
+                "Silver",
+                "Cold"
+              ],
+              [
+                "White",
+                "Cold"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dragonborn_breath_weapon_xua2022clericandrevisedspecies",
+        "name": "Breath Weapon",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "When you take the Attack Action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot cone or a 30-foot line that is 5 feet wide. Each creature in that area must make a Dexterity Saving Throw against a DC equal to 8 + your Constitution modifier + your Proficiency Bonus. On a failed save, a creature takes 1d10 damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage. This damage increases by 1d10 when you reach the following character levels: 5th level (2d10), 11th level (3d10), and 17th level (4d10).\n\nYou can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XUA2022ClericAndRevisedSpecies.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "1d10",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you take the {@action Attack|XUA2022ClericAndRevisedSpecies} Action on your turn, you can replace one of your attacks with an exhalation of magical energy in either a 15-foot cone or a 30-foot line that is 5 feet wide. Each creature in that area must make a Dexterity Saving Throw against a DC equal to 8 + your Constitution modifier + your Proficiency Bonus. On a failed save, a creature takes {@damage 1d10} damage of the type determined by your Draconic Ancestry trait. On a successful save, a creature takes half as much damage. This damage increases by {@dice 1d10} when you reach the following character levels: 5th level ({@dice 2d10}), 11th level ({@dice 3d10}), and 17th level ({@dice 4d10}).",
+          "You can use this Breath Weapon a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a {@variantrule Long Rest|XUA2022ClericAndRevisedSpecies}."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_damage_resistance_xua2022clericandrevisedspecies",
+        "name": "Damage Resistance",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have Resistance to the damage type determined by your Draconic Ancestry trait.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Resistance to the damage type determined by your Draconic Ancestry trait."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_darkvision_xua2022clericandrevisedspecies",
+        "name": "Darkvision",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_draconic_flight_xua2022clericandrevisedspecies",
+        "name": "Draconic Flight",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Dragonborn",
+        "actionType": "bonus",
+        "description": "When you reach 5th level, you learn how to channel the magical energy of your Draconic Ancestry to give yourself temporary flight. As a Bonus Action, you sprout spectral wings on your back that last for 10 minutes or until you are Incapacitated or you retract the wings as a Bonus Action. During that time, you have a Fly Speed|XUA2022ClericAndRevisedSpecies equal to your Speed. Your wings appear to be made of the energy used by your Breath Weapon. Once you use this trait, you can't use it again until you finish a Long Rest|XUA2022ClericAndRevisedSpecies.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you reach 5th level, you learn how to channel the magical energy of your Draconic Ancestry to give yourself temporary flight. As a Bonus Action, you sprout spectral wings on your back that last for 10 minutes or until you are {@condition Incapacitated|XUA2022ClericAndRevisedSpecies} or you retract the wings as a Bonus Action. During that time, you have a {@variantrule Fly Speed|XUA2022ClericAndRevisedSpecies} equal to your Speed. Your wings appear to be made of the energy used by your Breath Weapon. Once you use this trait, you can't use it again until you finish a {@variantrule Long Rest|XUA2022ClericAndRevisedSpecies}."
+        ]
+      }
+    ],
+    "description": "**Creature Type:**\n\nHumanoid\n\n**Size:**\n\nMedium (about 5-7 feet tall)\n\n**Speed:**\n\n30 feet\n\n**Life Span:**\n\n80 years on average\n\nAs a Dragonborn adventurer, you have the following special traits."
+  },
+  {
+    "id": "race_goliath_xua2022clericandrevisedspecies",
+    "name": "Goliath",
+    "source": "XUA2022ClericAndRevisedSpecies",
+    "page": 9,
+    "size": "M",
+    "speed": "35 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Creature Type:.</strong> <p>Humanoid</p></div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> <p>Medium (about 7-8 feet tall)</p></div></li><li><div class=\"compendium-subentry\"><strong>Speed:.</strong> <p>35 feet</p></div></li><li><div class=\"compendium-subentry\"><strong>Life Span:.</strong> <p>80 years on average</p></div></li></ul>\n<p>As a Goliath adventurer, you have the following special traits.</p>\n<div class=\"compendium-subentry\"><strong>Giant Ancestry.</strong> <p>You are descended from Giants. Choose one of the following benefits—a supernatural boon from your ancestry; you can use the chosen benefit a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XUA2022ClericAndRevisedSpecies:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Cloud's Jaunt (Cloud Giant).</strong> <p>As a Bonus Action, you magically Teleport up to 30 feet to an unoccupied space you can see.</p></div></li><li><div class=\"compendium-subentry\"><strong>Fire's Burn (Fire Giant).</strong> <p>When you hit a target with an Attack Roll|XUA2022ClericAndRevisedSpecies and deal damage to it, you can also deal 1d10 Fire Damage to that target .</p></div></li><li><div class=\"compendium-subentry\"><strong>Frost's Chill (Frost Giant).</strong> <p>When you hit a target with an Attack Roll|XUA2022ClericAndRevisedSpecies and deal damage to it, you can also deal 1d6 Cold Damage to that target and reduce its Speed by 10 feet until the start of your next turn.</p></div></li><li><div class=\"compendium-subentry\"><strong>Hill's Tumble (Hill Giant).</strong> <p>When you hit a Large or smaller creature with an Attack Roll|XUA2022ClericAndRevisedSpecies and deal damage to it, you can knock that target Prone .</p></div></li><li><div class=\"compendium-subentry\"><strong>Stone's Endurance (Stone Giant).</strong> <p>When you take damage, you can use your Reaction to roll a d12. Add your Constitution modifier to the number rolled and reduce the damage by that total.</p></div></li><li><div class=\"compendium-subentry\"><strong>Storm's Thunder (Storm Giant).</strong> <p>When you take damage from a creature within 60 feet of you, you can use your Reaction to deal 1d8 Thunder Damage to that creature</p></div></li></ul></div>\n<div class=\"compendium-subentry\"><strong>Large Form.</strong> <p>Starting at 5th level, you gain the ability to supernaturally grow. As a Bonus Action, you change your Size to Large, provided you're in a big enough space. This transformation lasts for 10 minutes or until you end it as a Bonus Action. During that duration, you have Advantage on Strength Checks, and your Speed increases by 10 feet. Once you use this trait, you can't use it again until you finish a Long Rest|XUA2022ClericAndRevisedSpecies.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Build.</strong> <p>You have Advantage on any Saving Throw you make to end the Grappled condition on yourself. You also count as one Size larger when determining your carrying capacity and the weight you can push, drag, or lift.</p></div>",
+    "traits": [
+      {
+        "id": "trait_goliath_giant_ancestry_xua2022clericandrevisedspecies",
+        "name": "Giant Ancestry",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Goliath",
+        "actionType": "bonus",
+        "description": "You are descended from Giants. Choose one of the following benefits—a supernatural boon from your ancestry; you can use the chosen benefit a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XUA2022ClericAndRevisedSpecies:\n\n- **Cloud's Jaunt (Cloud Giant)**\n\nAs a Bonus Action, you magically Teleport up to 30 feet to an unoccupied space you can see.\n- **Fire's Burn (Fire Giant)**\n\nWhen you hit a target with an Attack Roll|XUA2022ClericAndRevisedSpecies and deal damage to it, you can also deal 1d10 Fire Damage to that target .\n- **Frost's Chill (Frost Giant)**\n\nWhen you hit a target with an Attack Roll|XUA2022ClericAndRevisedSpecies and deal damage to it, you can also deal 1d6 Cold Damage to that target and reduce its Speed by 10 feet until the start of your next turn.\n- **Hill's Tumble (Hill Giant)**\n\nWhen you hit a Large or smaller creature with an Attack Roll|XUA2022ClericAndRevisedSpecies and deal damage to it, you can knock that target Prone .\n- **Stone's Endurance (Stone Giant)**\n\nWhen you take damage, you can use your Reaction to roll a d12. Add your Constitution modifier to the number rolled and reduce the damage by that total.\n- **Storm's Thunder (Storm Giant)**\n\nWhen you take damage from a creature within 60 feet of you, you can use your Reaction to deal 1d8 Thunder Damage to that creature",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "1d10",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You are descended from Giants. Choose one of the following benefits—a supernatural boon from your ancestry; you can use the chosen benefit a number of times equal to your Proficiency Bonus, and you regain all expended uses when you finish a {@variantrule Long Rest|XUA2022ClericAndRevisedSpecies}:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Cloud's Jaunt (Cloud Giant)",
+                "page": 9,
+                "entries": [
+                  "As a Bonus Action, you magically Teleport up to 30 feet to an unoccupied space you can see."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Fire's Burn (Fire Giant)",
+                "page": 9,
+                "entries": [
+                  "When you hit a target with an {@variantrule Attack Roll|XUA2022ClericAndRevisedSpecies} and deal damage to it, you can also deal {@damage 1d10} Fire Damage to that target ."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Frost's Chill (Frost Giant)",
+                "page": 9,
+                "entries": [
+                  "When you hit a target with an {@variantrule Attack Roll|XUA2022ClericAndRevisedSpecies} and deal damage to it, you can also deal {@damage 1d6} Cold Damage to that target and reduce its Speed by 10 feet until the start of your next turn."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Hill's Tumble (Hill Giant)",
+                "page": 9,
+                "entries": [
+                  "When you hit a Large or smaller creature with an {@variantrule Attack Roll|XUA2022ClericAndRevisedSpecies} and deal damage to it, you can knock that target Prone ."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Stone's Endurance (Stone Giant)",
+                "page": 9,
+                "entries": [
+                  "When you take damage, you can use your Reaction to roll a {@dice d12}. Add your Constitution modifier to the number rolled and reduce the damage by that total."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Storm's Thunder (Storm Giant)",
+                "page": 9,
+                "entries": [
+                  "When you take damage from a creature within 60 feet of you, you can use your Reaction to deal {@damage 1d8} Thunder Damage to that creature"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_goliath_large_form_xua2022clericandrevisedspecies",
+        "name": "Large Form",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Goliath",
+        "actionType": "bonus",
+        "description": "Starting at 5th level, you gain the ability to supernaturally grow. As a Bonus Action, you change your Size to Large, provided you're in a big enough space. This transformation lasts for 10 minutes or until you end it as a Bonus Action. During that duration, you have Advantage on Strength Checks, and your Speed increases by 10 feet. Once you use this trait, you can't use it again until you finish a Long Rest|XUA2022ClericAndRevisedSpecies.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Starting at 5th level, you gain the ability to supernaturally grow. As a Bonus Action, you change your Size to Large, provided you're in a big enough space. This transformation lasts for 10 minutes or until you end it as a Bonus Action. During that duration, you have Advantage on Strength Checks, and your Speed increases by 10 feet. Once you use this trait, you can't use it again until you finish a {@variantrule Long Rest|XUA2022ClericAndRevisedSpecies}."
+        ]
+      },
+      {
+        "id": "trait_goliath_powerful_build_xua2022clericandrevisedspecies",
+        "name": "Powerful Build",
+        "source": "XUA2022ClericAndRevisedSpecies",
+        "raceName": "Goliath",
+        "actionType": "passive",
+        "description": "You have Advantage on any Saving Throw you make to end the Grappled condition on yourself. You also count as one Size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have Advantage on any Saving Throw you make to end the {@condition Grappled|XUA2022ClericAndRevisedSpecies} condition on yourself. You also count as one Size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+        ]
+      }
+    ],
+    "description": "**Creature Type:**\n\nHumanoid\n\n**Size:**\n\nMedium (about 7-8 feet tall)\n\n**Speed:**\n\n35 feet\n\n**Life Span:**\n\n80 years on average\n\nAs a Goliath adventurer, you have the following special traits."
+  }
+]

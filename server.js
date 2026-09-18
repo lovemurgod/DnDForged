@@ -67,7 +67,60 @@ function loadServerConfig() {
     console.warn('[Server] Notice reading config:', err.message);
   }
 }
-loadServerConfig();
+// --- Sources & Homebrew Configuration Manager ---
+let sourcesConfig = {
+  disabledSources: { global: [], campaigns: {} },
+  customSources: []
+};
+
+function loadSourcesConfig() {
+  try {
+    const p = path.join(DATA_DIR, 'sources-config.json');
+    if (fs.existsSync(p)) {
+      sourcesConfig = JSON.parse(fs.readFileSync(p, 'utf8'));
+    }
+  } catch (e) {
+    console.error('[Server] Error loading sources-config.json:', e);
+  }
+}
+loadSourcesConfig();
+
+function getDisabledSourcesSet(campaignId = null) {
+  const set = new Set((sourcesConfig.disabledSources?.global || []).map(s => String(s).toUpperCase()));
+  if (campaignId && sourcesConfig.disabledSources?.campaigns?.[campaignId]) {
+    for (const s of sourcesConfig.disabledSources.campaigns[campaignId]) {
+      set.add(String(s).toUpperCase());
+    }
+  }
+  return set;
+}
+
+function loadCustomEntities(category) {
+  const results = [];
+  try {
+    const catDir = path.join(DATA_DIR, 'sources', category);
+    if (fs.existsSync(catDir)) {
+      const files = fs.readdirSync(catDir);
+      for (const file of files) {
+        if (!file.endsWith('.json')) continue;
+        try {
+          const raw = fs.readFileSync(path.join(catDir, file), 'utf8');
+          const data = JSON.parse(raw);
+          const srcCode = String(data.source || file.replace(/\.json$/i, '')).toUpperCase();
+          const listProp = category === 'bestiary' ? 'monsters' : category;
+          const items = Array.isArray(data) ? data : (Array.isArray(data[listProp]) ? data[listProp] : []);
+          for (const item of items) {
+            if (item && typeof item === 'object') {
+              if (!item.source) item.source = srcCode;
+              results.push(item);
+            }
+          }
+        } catch (e) {}
+      }
+    }
+  } catch (e) {}
+  return results;
+}
 
 function setDatabaseDirectory(newDir) {
   if (!newDir) return;
@@ -81,6 +134,7 @@ function setDatabaseDirectory(newDir) {
   DISCORD_CACHE_DIR = path.join(DATA_DIR, 'discord-cache');
   ensureDirectories();
   loadDatabase();
+  loadSourcesConfig();
   console.log(`[Database] Dynamically switched active DATA_DIR to: ${DATA_DIR}`);
 }
 
@@ -333,6 +387,19 @@ app.get('/api/proxy-discord', (req, res) => {
 // Pre-compressed GZIP cache for spells-catalog.json
 let gzippedSpellsCatalogBuf = null;
 let spellsCatalogEtag = null;
+let rawSpellsCatalogData = null;
+
+function getRawSpellsCatalog() {
+  if (rawSpellsCatalogData) return rawSpellsCatalogData;
+  const catPath = path.join(__dirname, '5etools-src', 'data', 'spells-catalog.json');
+  if (fs.existsSync(catPath)) {
+    try {
+      rawSpellsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      return rawSpellsCatalogData;
+    } catch (e) {}
+  }
+  return [];
+}
 
 function loadGzippedSpellsCatalog() {
   try {
@@ -349,16 +416,44 @@ function loadGzippedSpellsCatalog() {
 loadGzippedSpellsCatalog();
 
 app.get(['/api/spells/catalog', '/data/spells-catalog.json', '/5etools-src/data/spells-catalog.json'], (req, res) => {
-  loadGzippedSpellsCatalog();
-  if (!gzippedSpellsCatalogBuf) return res.status(404).send('Spells catalog not found');
+  const campId = req.query.campaignId || extractSubdomain(req.headers.host);
+  const disabledSet = getDisabledSourcesSet(campId);
+  const customSpells = loadCustomEntities('spells');
 
+  if (disabledSet.size === 0 && customSpells.length === 0) {
+    loadGzippedSpellsCatalog();
+    if (!gzippedSpellsCatalogBuf) return res.status(404).send('Spells catalog not found');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Content-Encoding', 'gzip');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('ETag', spellsCatalogEtag);
+    return res.send(gzippedSpellsCatalogBuf);
+  }
+
+  const raw = getRawSpellsCatalog();
+  const filtered = raw.filter(sp => !disabledSet.has(String(sp.source || 'PHB').toUpperCase()));
+  for (const cs of customSpells) {
+    if (!disabledSet.has(String(cs.source).toUpperCase())) {
+      filtered.push({
+        id: cs.id,
+        name: cs.name,
+        source: cs.source,
+        level: cs.level || 0,
+        school: cs.school || 'A',
+        time: cs.time || [{ number: 1, unit: 'action' }],
+        range: cs.range || { type: 'point' },
+        duration: cs.duration || [{ type: 'instant' }]
+      });
+    }
+  }
+
+  const buf = zlib.gzipSync(Buffer.from(JSON.stringify(filtered)));
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Content-Encoding', 'gzip');
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  res.setHeader('ETag', spellsCatalogEtag);
-  res.send(gzippedSpellsCatalogBuf);
+  res.send(buf);
 });
 
 // In-memory cache for normalized spell partitions
@@ -379,6 +474,18 @@ function getSpellPartition(source) {
       console.error(`Failed to load spell partition for ${srcKey}:`, err);
     }
   }
+  // Check custom partition in data dir
+  const customPartPath = path.join(DATA_DIR, 'sources', 'spells', `${srcKey}.json`);
+  if (fs.existsSync(customPartPath)) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
+      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.spells) ? parsed.spells : []);
+      spellPartitionCache.set(srcKey, list);
+      return list;
+    } catch (err) {
+      console.error(`Failed to load custom spell partition for ${srcKey}:`, err);
+    }
+  }
   return null;
 }
 
@@ -392,9 +499,9 @@ app.get('/api/spell/:source/:id', (req, res) => {
 
   const cleanId = id.toLowerCase();
   const spell = partition.find(sp =>
-    sp.id.toLowerCase() === cleanId ||
-    sp.name.toLowerCase() === cleanId ||
-    sp.id.toLowerCase() === `sp_${cleanId}_${source.toLowerCase()}`
+    sp.id?.toLowerCase() === cleanId ||
+    sp.name?.toLowerCase() === cleanId ||
+    sp.id?.toLowerCase() === `sp_${cleanId}_${source.toLowerCase()}`
   );
 
   if (!spell) {
@@ -421,6 +528,19 @@ app.get('/api/spell/partition/:source', (req, res) => {
 // Pre-compressed GZIP cache for items-catalog.json
 let gzippedItemsCatalogBuf = null;
 let itemsCatalogEtag = null;
+let rawItemsCatalogData = null;
+
+function getRawItemsCatalog() {
+  if (rawItemsCatalogData) return rawItemsCatalogData;
+  const catPath = path.join(__dirname, '5etools-src', 'data', 'items-catalog.json');
+  if (fs.existsSync(catPath)) {
+    try {
+      rawItemsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      return rawItemsCatalogData;
+    } catch (e) {}
+  }
+  return [];
+}
 
 function loadGzippedItemsCatalog() {
   try {
@@ -437,16 +557,42 @@ function loadGzippedItemsCatalog() {
 loadGzippedItemsCatalog();
 
 app.get(['/api/items/catalog', '/data/items-catalog.json', '/5etools-src/data/items-catalog.json'], (req, res) => {
-  loadGzippedItemsCatalog();
-  if (!gzippedItemsCatalogBuf) return res.status(404).send('Items catalog not found');
+  const campId = req.query.campaignId || extractSubdomain(req.headers.host);
+  const disabledSet = getDisabledSourcesSet(campId);
+  const customItems = loadCustomEntities('items');
 
+  if (disabledSet.size === 0 && customItems.length === 0) {
+    loadGzippedItemsCatalog();
+    if (!gzippedItemsCatalogBuf) return res.status(404).send('Items catalog not found');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Content-Encoding', 'gzip');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('ETag', itemsCatalogEtag);
+    return res.send(gzippedItemsCatalogBuf);
+  }
+
+  const raw = getRawItemsCatalog();
+  const filtered = raw.filter(it => !disabledSet.has(String(it.source || 'PHB').toUpperCase()));
+  for (const ci of customItems) {
+    if (!disabledSet.has(String(ci.source).toUpperCase())) {
+      filtered.push({
+        id: ci.id,
+        name: ci.name,
+        source: ci.source,
+        type: ci.type || 'G',
+        rarity: ci.rarity || 'none',
+        value: ci.value || 0
+      });
+    }
+  }
+
+  const buf = zlib.gzipSync(Buffer.from(JSON.stringify(filtered)));
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Content-Encoding', 'gzip');
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  res.setHeader('ETag', itemsCatalogEtag);
-  res.send(gzippedItemsCatalogBuf);
+  res.send(buf);
 });
 
 // In-memory cache for normalized item partitions
@@ -467,6 +613,18 @@ function getItemPartition(source) {
       console.error(`Failed to load item partition for ${srcKey}:`, err);
     }
   }
+  // Check custom items partition
+  const customPartPath = path.join(DATA_DIR, 'sources', 'items', `${srcKey}.json`);
+  if (fs.existsSync(customPartPath)) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
+      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.items) ? parsed.items : []);
+      itemPartitionCache.set(srcKey, list);
+      return list;
+    } catch (err) {
+      console.error(`Failed to load custom item partition for ${srcKey}:`, err);
+    }
+  }
   return null;
 }
 
@@ -480,9 +638,9 @@ app.get('/api/item/:source/:id', (req, res) => {
 
   const cleanId = id.toLowerCase();
   const item = partition.find(it =>
-    it.id.toLowerCase() === cleanId ||
-    it.name.toLowerCase() === cleanId ||
-    it.id.toLowerCase() === `it_${cleanId}_${source.toLowerCase()}`
+    it.id?.toLowerCase() === cleanId ||
+    it.name?.toLowerCase() === cleanId ||
+    it.id?.toLowerCase() === `it_${cleanId}_${source.toLowerCase()}`
   );
 
   if (!item) {
@@ -514,18 +672,56 @@ function getCompendiumPartition(type, source) {
       console.error(`Failed to load compendium partition ${cacheKey}:`, err);
     }
   }
+  // Check custom partition
+  const customPartPath = path.join(DATA_DIR, 'sources', cleanType, `${srcKey}.json`);
+  if (fs.existsSync(customPartPath)) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
+      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed[cleanType]) ? parsed[cleanType] : []);
+      compendiumPartitionCache.set(cacheKey, list);
+      return list;
+    } catch (err) {
+      console.error(`Failed to load custom compendium partition ${cacheKey}:`, err);
+    }
+  }
   return null;
 }
 
 app.get(['/api/compendium/:type/catalog', '/data/:type-catalog.json', '/5etools-src/data/:type-catalog.json'], (req, res) => {
   const type = req.params.type.replace(/-catalog\.json$/i, '');
+  const campId = req.query.campaignId || extractSubdomain(req.headers.host);
+  const disabledSet = getDisabledSourcesSet(campId);
+  const customEntries = loadCustomEntities(type);
+
   const catPath = path.join(__dirname, '5etools-src', 'data', `${type}-catalog.json`);
-  if (fs.existsSync(catPath)) {
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-    return res.sendFile(catPath);
+  if (!fs.existsSync(catPath) && customEntries.length === 0) {
+    return res.status(404).json({ error: `Compendium catalog '${type}' not found` });
   }
-  res.status(404).json({ error: `Compendium catalog '${type}' not found` });
+
+  let items = [];
+  if (fs.existsSync(catPath)) {
+    try {
+      items = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+    } catch (e) {}
+  }
+
+  if (disabledSet.size > 0) {
+    items = items.filter(it => !disabledSet.has(String(it.source || 'PHB').toUpperCase()));
+  }
+
+  for (const ce of customEntries) {
+    if (!disabledSet.has(String(ce.source).toUpperCase())) {
+      items.push({
+        id: ce.id,
+        name: ce.name,
+        source: ce.source
+      });
+    }
+  }
+
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.json(items);
 });
 
 app.get('/api/compendium/:type/:source/:id', (req, res) => {
@@ -537,8 +733,8 @@ app.get('/api/compendium/:type/:source/:id', (req, res) => {
 
   const cleanId = id.toLowerCase();
   const entry = partition.find(item =>
-    item.id.toLowerCase() === cleanId ||
-    item.name.toLowerCase() === cleanId
+    item.id?.toLowerCase() === cleanId ||
+    item.name?.toLowerCase() === cleanId
   );
 
   if (!entry) {
@@ -553,6 +749,19 @@ app.get('/api/compendium/:type/:source/:id', (req, res) => {
 // Pre-compressed GZIP cache for bestiary-catalog.json
 let gzippedBestiaryCatalogBuf = null;
 let bestiaryCatalogEtag = null;
+let rawBestiaryCatalogData = null;
+
+function getRawBestiaryCatalog() {
+  if (rawBestiaryCatalogData) return rawBestiaryCatalogData;
+  const catPath = path.join(__dirname, '5etools-src', 'data', 'bestiary-catalog.json');
+  if (fs.existsSync(catPath)) {
+    try {
+      rawBestiaryCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      return rawBestiaryCatalogData;
+    } catch (e) {}
+  }
+  return [];
+}
 
 function loadGzippedBestiaryCatalog() {
   try {
@@ -569,16 +778,44 @@ function loadGzippedBestiaryCatalog() {
 loadGzippedBestiaryCatalog();
 
 app.get(['/api/bestiary/catalog', '/data/bestiary-catalog.json', '/5etools-src/data/bestiary-catalog.json'], (req, res) => {
-  loadGzippedBestiaryCatalog();
-  if (!gzippedBestiaryCatalogBuf) return res.status(404).send('Bestiary catalog not found');
+  const campId = req.query.campaignId || extractSubdomain(req.headers.host);
+  const disabledSet = getDisabledSourcesSet(campId);
+  const customMonsters = loadCustomEntities('bestiary');
 
+  if (disabledSet.size === 0 && customMonsters.length === 0) {
+    loadGzippedBestiaryCatalog();
+    if (!gzippedBestiaryCatalogBuf) return res.status(404).send('Bestiary catalog not found');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Content-Encoding', 'gzip');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('ETag', bestiaryCatalogEtag);
+    return res.send(gzippedBestiaryCatalogBuf);
+  }
+
+  const raw = getRawBestiaryCatalog();
+  const filtered = raw.filter(m => !disabledSet.has(String(m.source || 'MM').toUpperCase()));
+  for (const cm of customMonsters) {
+    if (!disabledSet.has(String(cm.source).toUpperCase())) {
+      filtered.push({
+        id: cm.id,
+        name: cm.name,
+        source: cm.source,
+        type: cm.type || 'humanoid',
+        cr: cm.cr || '0',
+        crNumeric: cm.crNumeric !== undefined ? cm.crNumeric : 0,
+        hp: cm.hp?.average || 10,
+        ac: cm.ac?.[0]?.ac || 10
+      });
+    }
+  }
+
+  const buf = zlib.gzipSync(Buffer.from(JSON.stringify(filtered)));
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
   res.setHeader('Content-Encoding', 'gzip');
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-  res.setHeader('Pragma', 'no-cache');
-  res.setHeader('Expires', '0');
-  res.setHeader('ETag', bestiaryCatalogEtag);
-  res.send(gzippedBestiaryCatalogBuf);
+  res.send(buf);
 });
 
 // In-memory cache for normalized creature partitions
@@ -599,6 +836,18 @@ function getCreaturePartition(source) {
       console.error(`Failed to load bestiary partition for ${srcKey}:`, err);
     }
   }
+  // Check custom bestiary partition
+  const customPartPath = path.join(DATA_DIR, 'sources', 'bestiary', `${srcKey}.json`);
+  if (fs.existsSync(customPartPath)) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
+      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.monsters) ? parsed.monsters : []);
+      creaturePartitionCache.set(srcKey, list);
+      return list;
+    } catch (err) {
+      console.error(`Failed to load custom bestiary partition for ${srcKey}:`, err);
+    }
+  }
   return null;
 }
 
@@ -612,9 +861,9 @@ app.get('/api/creature/:source/:id', (req, res) => {
 
   const cleanId = id.toLowerCase();
   const creature = partition.find(m =>
-    m.id.toLowerCase() === cleanId ||
-    m.name.toLowerCase() === cleanId ||
-    m.id.toLowerCase() === `creature_${cleanId}_${source.toLowerCase()}`
+    m.id?.toLowerCase() === cleanId ||
+    m.name?.toLowerCase() === cleanId ||
+    m.id?.toLowerCase() === `creature_${cleanId}_${source.toLowerCase()}`
   );
 
   if (!creature) {
@@ -893,11 +1142,41 @@ app.post('/api/server/data-dir', (req, res) => {
 });
 
 app.post('/api/server/sync-config', (req, res) => {
-  const { gmCredentials } = req.body;
+  const { gmCredentials, campaignDataDir } = req.body;
   if (gmCredentials !== undefined) {
     serverConfig.gmCredentials = gmCredentials;
     console.log('[Server] Synced GM credentials from launcher:', gmCredentials?.username ? `GM user=${gmCredentials.username}` : 'Cleared');
   }
+  if (campaignDataDir && campaignDataDir !== DATA_DIR) {
+    console.log(`[Server] Switching database directory to: ${campaignDataDir}`);
+    setDatabaseDirectory(campaignDataDir);
+  }
+  res.json({ success: true, activeDataDir: DATA_DIR });
+});
+
+// Sources & Homebrew Sync Endpoint
+app.post('/api/server/sync-sources', (req, res) => {
+  loadSourcesConfig();
+  // Invalidate in-memory caches
+  rawSpellsCatalogData = null;
+  rawItemsCatalogData = null;
+  rawBestiaryCatalogData = null;
+  gzippedSpellsCatalogBuf = null;
+  gzippedItemsCatalogBuf = null;
+  gzippedBestiaryCatalogBuf = null;
+  spellPartitionCache.clear();
+  itemPartitionCache.clear();
+  creaturePartitionCache.clear();
+  compendiumPartitionCache.clear();
+  loadGzippedSpellsCatalog();
+  loadGzippedItemsCatalog();
+  loadGzippedBestiaryCatalog();
+
+  // Broadcast live refresh to connected VTT sockets
+  if (typeof io !== 'undefined' && io) {
+    io.emit('sources:updated', { timestamp: Date.now() });
+  }
+  console.log('[Sources] Hot-reloaded source filters and broadcast update to VTT.');
   res.json({ success: true });
 });
 
@@ -1737,8 +2016,8 @@ io.on('connection', (socket) => {
       saveCampaigns();
     }
 
-    // Broadcast delete to everyone
-    socket.to(campaignId).emit('character:deleted', { id: data.id });
+    // Broadcast delete to everyone (including sender)
+    io.to(campaignId).emit('character:deleted', { id: data.id });
   });
 
   // Create a new map (GM only)
@@ -1930,7 +2209,10 @@ io.on('connection', (socket) => {
       role: socket.role,
       text: msg.text,
       roll: msg.roll || null,
+      macroCard: msg.macroCard || null,
+      spellCard: msg.spellCard || null,
       abilityCard: msg.abilityCard || null,
+      itemCard: msg.itemCard || null,
       timestamp: Date.now()
     };
     // Send only to the requesting socket (GM sees it privately)

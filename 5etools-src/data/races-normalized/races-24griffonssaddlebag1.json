@@ -1,0 +1,153 @@
+[
+  {
+    "id": "race_feathren_24griffonssaddlebag1",
+    "name": "Feathren",
+    "source": "24GriffonsSaddlebag1",
+    "page": 0,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Feathren Ancestry.</strong> <p>Your unique mix of avian and feline ancestry grants you supernatural abilities. Use the Feathren Ancestry tables to determine your combination of physical features, choosing one Avian option and one Feline option.</p>\n<p>You know the cantrip corresponding to your avian ancestry and the Identify spell. At character level 3, you learn the spell corresponding to your feline ancestry. At character level 5, you learn the Enhance Ability spell. You always have these spells prepared. You can cast each spell once without a spell slot or Material component, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spells using any spell slots you have of an appropriate level.</p>\n<p>Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the ancestries).</p>\n<table class=\"compendium-table\"><thead><tr><th>Avian Ancestry</th><th>Cantrip</th></tr></thead><tbody><tr><td>Jay, Owl, or Raven</td><td>Thaumaturgy</td></tr><tr><td>Eagle, Falcon, or Hawk</td><td>Message</td></tr><tr><td>Cardinal, Mockingbird, or Parrot</td><td>Prestidigitation</td></tr></tbody></table>\n<table class=\"compendium-table\"><thead><tr><th>Feline Ancestry</th><th>Spell</th></tr></thead><tbody><tr><td>Lion, Panther, or Saber-Toothed Tiger</td><td>Detect Evil and Good</td></tr><tr><td>Cheetah, Serval, or Tiger</td><td>Detect Poison and Disease</td></tr><tr><td>Jaguar, Lynx, or Snow Leopard</td><td>Detect Magic</td></tr></tbody></table></div>\n<div class=\"compendium-subentry\"><strong>Kindred Speech.</strong> <p>You can communicate simple ideas to birds and cats that are Large or smaller, including griffons. They can understand your words, though you have no special ability to understand them in return. You have Advantage|XPHB on Wisdom (Animal Handling) checks and Charisma checks you make to influence them.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Creator.</strong> <p>You are imbued with a mote of the astral griffon's creative essence. You have proficiency with two Artisan's Tools of your choice, and you can gain proficiency with a new tool in half the normal amount of time.</p></div>\n<div class=\"compendium-subentry\"><strong>Talons.</strong> <p>When you use your Unarmed Strike|XPHB to deal damage with your talons, it deals 1d6 Piercing damage instead of the usual Bludgeoning damage.</p></div>",
+    "traits": [
+      {
+        "id": "trait_feathren_darkvision_24griffonssaddlebag1",
+        "name": "Darkvision",
+        "source": "24GriffonsSaddlebag1",
+        "raceName": "Feathren",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_feathren_feathren_ancestry_24griffonssaddlebag1",
+        "name": "Feathren Ancestry",
+        "source": "24GriffonsSaddlebag1",
+        "raceName": "Feathren",
+        "actionType": "passive",
+        "description": "Your unique mix of avian and feline ancestry grants you supernatural abilities. Use the Feathren Ancestry tables to determine your combination of physical features, choosing one Avian option and one Feline option.\n\nYou know the cantrip corresponding to your avian ancestry and the Identify spell. At character level 3, you learn the spell corresponding to your feline ancestry. At character level 5, you learn the Enhance Ability spell. You always have these spells prepared. You can cast each spell once without a spell slot or Material component, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spells using any spell slots you have of an appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the ancestries).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your unique mix of avian and feline ancestry grants you supernatural abilities. Use the Feathren Ancestry tables to determine your combination of physical features, choosing one Avian option and one Feline option.",
+          "You know the cantrip corresponding to your avian ancestry and the {@spell Identify|XPHB} spell. At character level 3, you learn the spell corresponding to your feline ancestry. At character level 5, you learn the {@spell Enhance Ability|XPHB} spell. You always have these spells prepared. You can cast each spell once without a spell slot or Material component, and you regain the ability to cast it in that way when you finish a {@variantrule Long Rest|XPHB}. You can also cast the spells using any spell slots you have of an appropriate level.",
+          "Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the ancestries).",
+          {
+            "type": "table",
+            "caption": "Avian Feathren Ancestry",
+            "colLabels": [
+              "Avian Ancestry",
+              "Cantrip"
+            ],
+            "colStyles": [
+              "col-6",
+              "col-6"
+            ],
+            "rows": [
+              [
+                "Jay, Owl, or Raven",
+                "{@spell Thaumaturgy|XPHB}"
+              ],
+              [
+                "Eagle, Falcon, or Hawk",
+                "{@spell Message|XPHB}"
+              ],
+              [
+                "Cardinal, Mockingbird, or Parrot",
+                "{@spell Prestidigitation|XPHB}"
+              ]
+            ]
+          },
+          {
+            "type": "table",
+            "caption": "Feline Feathren Ancestry",
+            "colLabels": [
+              "Feline Ancestry",
+              "Spell"
+            ],
+            "colStyles": [
+              "col-6",
+              "col-6"
+            ],
+            "rows": [
+              [
+                "Lion, Panther, or Saber-Toothed Tiger",
+                "{@spell Detect Evil and Good|XPHB}"
+              ],
+              [
+                "Cheetah, Serval, or Tiger",
+                "{@spell Detect Poison and Disease|XPHB}"
+              ],
+              [
+                "Jaguar, Lynx, or Snow Leopard",
+                "{@spell Detect Magic|XPHB}"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_feathren_kindred_speech_24griffonssaddlebag1",
+        "name": "Kindred Speech",
+        "source": "24GriffonsSaddlebag1",
+        "raceName": "Feathren",
+        "actionType": "passive",
+        "description": "You can communicate simple ideas to birds and cats that are Large or smaller, including griffons. They can understand your words, though you have no special ability to understand them in return. You have Advantage|XPHB on Wisdom (Animal Handling) checks and Charisma checks you make to influence them.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can communicate simple ideas to birds and cats that are Large or smaller, including griffons. They can understand your words, though you have no special ability to understand them in return. You have {@variantrule Advantage|XPHB} on Wisdom ({@skill Animal Handling|XPHB}) checks and Charisma checks you make to influence them."
+        ]
+      },
+      {
+        "id": "trait_feathren_natural_creator_24griffonssaddlebag1",
+        "name": "Natural Creator",
+        "source": "24GriffonsSaddlebag1",
+        "raceName": "Feathren",
+        "actionType": "passive",
+        "description": "You are imbued with a mote of the astral griffon's creative essence. You have proficiency with two Artisan's Tools of your choice, and you can gain proficiency with a new tool in half the normal amount of time.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are imbued with a mote of the astral griffon's creative essence. You have proficiency with two {@item Artisan's Tools|XPHB} of your choice, and you can gain proficiency with a new tool in half the normal amount of time."
+        ]
+      },
+      {
+        "id": "trait_feathren_talons_24griffonssaddlebag1",
+        "name": "Talons",
+        "source": "24GriffonsSaddlebag1",
+        "raceName": "Feathren",
+        "actionType": "passive",
+        "description": "When you use your Unarmed Strike|XPHB to deal damage with your talons, it deals 1d6 Piercing damage instead of the usual Bludgeoning damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you use your {@variantrule Unarmed Strike|XPHB} to deal damage with your talons, it deals {@damage 1d6} Piercing damage instead of the usual Bludgeoning damage."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Feathren Ancestry**: Your unique mix of avian and feline ancestry grants you supernatural abilities. Use the Feathren Ancestry tables to determine your combination of physical features, choosing one Avian option and one Feline option.\n\nYou know the cantrip corresponding to your avian ancestry and the Identify spell. At character level 3, you learn the spell corresponding to your feline ancestry. At character level 5, you learn the Enhance Ability spell. You always have these spells prepared. You can cast each spell once without a spell slot or Material component, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spells using any spell slots you have of an appropriate level.\n\nIntelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the ancestries).\n\n**Kindred Speech**: You can communicate simple ideas to birds and cats that are Large or smaller, including griffons. They can understand your words, though you have no special ability to understand them in return. You have Advantage|XPHB on Wisdom (Animal Handling) checks and Charisma checks you make to influence them.\n\n**Natural Creator**: You are imbued with a mote of the astral griffon's creative essence. You have proficiency with two Artisan's Tools of your choice, and you can gain proficiency with a new tool in half the normal amount of time.\n\n**Talons**: When you use your Unarmed Strike|XPHB to deal damage with your talons, it deals 1d6 Piercing damage instead of the usual Bludgeoning damage."
+  }
+]

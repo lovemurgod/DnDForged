@@ -29,6 +29,9 @@
         <button class="nav-tab" id="tab-btn-gm" data-target="view-gm">
           <span class="tab-icon">👑</span> GM Dashboard
         </button>
+        <button class="nav-tab" id="tab-btn-sources" data-target="view-sources">
+          <span class="tab-icon">📚</span> Database Sources
+        </button>
       </nav>
 
       <div class="header-status">
@@ -316,6 +319,1071 @@
       </div>
     </main>
 
+    <!-- VIEW 3: DATABASE SOURCES & HOMEBREW -->
+    <main class="dashboard-view" id="view-sources">
+      <div class="sources-view-container">
+        <!-- Top Overview & Controls Card -->
+        <section class="card sources-overview-card">
+          <div class="card-header">
+            <div>
+              <h2>📚 Database Sources & Compendium Manager</h2>
+              <p class="section-desc">
+                Enable, disable, and manage sourcebooks and custom homebrew loaded by the VTT engine.
+              </p>
+            </div>
+            <div class="sources-header-actions">
+              <button class="btn btn-sm btn-outline" id="btn-refresh-sources" title="Refresh Sources">🔄 Refresh</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="sources-toolbar">
+              <div class="sources-filter-group">
+                <label for="sources-campaign-scope">Scope:</label>
+                <select id="sources-campaign-scope" class="form-select">
+                  <option value="">Global Defaults (All Campaigns)</option>
+                  <!-- Dynamically populated campaign options -->
+                </select>
+              </div>
+
+              <!-- Presets Dropdown -->
+              <div class="sources-preset-group">
+                <label for="sources-preset-select">Preset:</label>
+                <select id="sources-preset-select" class="form-select">
+                  <option value="2024-ruleset">2024 Ruleset (Modern)</option>
+                  <option value="2014-classic">2014 Classic</option>
+                  <option value="core-only">Core Only</option>
+                  <option value="all-official">All Official Books</option>
+                  <option value="everything">Everything Enabled</option>
+                  <option value="disable-all">Disable All</option>
+                </select>
+                <button type="button" class="btn btn-sm btn-accent" id="btn-apply-preset" title="Apply Rulebook Preset">Apply</button>
+              </div>
+
+              <!-- Status Filter Dropdown -->
+              <div class="sources-status-group">
+                <label for="sources-status-filter">Filter:</label>
+                <select id="sources-status-filter" class="form-select">
+                  <option value="all">All Sources</option>
+                  <option value="active">Active Only</option>
+                  <option value="inactive">Inactive Only</option>
+                  <option value="custom">Custom Only</option>
+                </select>
+              </div>
+
+              <div class="sources-search-group">
+                <input type="text" id="sources-search-input" placeholder="🔍 Search sources by title, book code, or author..." />
+                <button type="button" class="btn-clear-search vtt-hidden" id="btn-clear-source-search">&times;</button>
+              </div>
+
+              <div class="sources-accordion-controls">
+                <button type="button" class="btn btn-xs btn-outline" id="btn-expand-all-cats" title="Expand all categories">Expand All</button>
+                <button type="button" class="btn btn-xs btn-outline" id="btn-collapse-all-cats" title="Collapse all categories">Collapse All</button>
+                <button type="button" class="btn btn-xs btn-accent" id="btn-open-bulk-import" title="Import multiple JSON or ZIP sourcebook files">
+                  📦 Bulk Import
+                </button>
+              </div>
+
+              <div class="sources-stat-pills">
+                <span class="stat-pill" title="Total Available Sources">📖 <strong id="stat-total-sources">0</strong> Sources</span>
+                <span class="stat-pill stat-pill-active" title="Enabled Active Sources">✅ <strong id="stat-enabled-sources">0</strong> Active</span>
+                <span class="stat-pill stat-pill-custom" title="Custom Homebrew Sources">✨ <strong id="stat-custom-sources">0</strong> Custom</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Global Compendium Search Bar Card -->
+        <section class="global-compendium-search-card">
+          <div class="global-search-header-row">
+            <div class="global-search-title">
+              <span>🔍</span>
+              <span>Global Compendium Search</span>
+            </div>
+            <span class="text-muted" style="font-size: 11px;">Search across active monsters, spells, items, classes, feats, & rulesets</span>
+          </div>
+          <div class="global-search-input-wrap">
+            <span class="global-search-icon">🔍</span>
+            <input type="text" id="global-compendium-search-input" placeholder="Type to search compendium (e.g. Goblin, Fireball, Vorpal, Sneak Attack, Elf)..." autocomplete="off" />
+            <button type="button" class="global-search-clear" id="btn-clear-global-search">&times;</button>
+          </div>
+          <div class="global-search-category-chips" id="global-search-category-chips">
+            <span class="cat-chip active" data-cat="">All Categories</span>
+            <span class="cat-chip" data-cat="bestiary">🐉 Bestiary</span>
+            <span class="cat-chip" data-cat="spells">✨ Spells</span>
+            <span class="cat-chip" data-cat="items">⚔️ Items</span>
+            <span class="cat-chip" data-cat="classes">🛡️ Classes</span>
+            <span class="cat-chip" data-cat="races">🧝 Races</span>
+            <span class="cat-chip" data-cat="feats">📜 Feats</span>
+            <span class="cat-chip" data-cat="backgrounds">🎭 Backgrounds</span>
+            <span class="cat-chip" data-cat="adventures">📖 Lore</span>
+          </div>
+          <div class="global-search-results-panel vtt-hidden" id="global-search-results-panel"></div>
+        </section>
+
+        <!-- Categories Accordion List -->
+        <div class="sources-categories-accordion" id="sources-categories-accordion">
+          <!-- Dynamically populated category accordions with built-in and custom sources -->
+          <div class="loading-placeholder">Loading database sources...</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Edit Database Source Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-edit-source">
+      <div class="modal-card modal-large modal-studio">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <h3 id="modal-edit-source-title">Edit Database Source</h3>
+            <span class="badge" id="modal-edit-source-badge">MM</span>
+            <span class="badge badge-accent vtt-hidden" id="modal-edit-custom-badge">Custom</span>
+            <button type="button" class="btn btn-xs btn-outline" id="btn-export-source" title="Export this sourcebook as a standalone JSON file">
+              📤 Export / Share
+            </button>
+            <button type="button" class="btn-modal-maximize" id="btn-toggle-maximize-modal" title="Toggle Fullscreen Studio">
+              ⛶ Maximize
+            </button>
+          </div>
+          <button class="modal-close" id="btn-edit-modal-close">&times;</button>
+        </div>
+
+        <!-- Modal Sub-Tabs -->
+        <div class="modal-nav-tabs">
+          <button class="modal-tab active" data-target="tab-edit-entities" id="tab-btn-edit-entities">
+            🎨 Visual Studio & Entries (<span id="source-entry-badge-count">0</span>)
+          </button>
+          <button class="modal-tab" data-target="tab-edit-meta" id="tab-btn-edit-meta">
+            📝 Sourcebook Details
+          </button>
+          <button class="modal-tab" data-target="tab-edit-json" id="tab-btn-edit-json">
+            💻 Raw Source JSON
+          </button>
+        </div>
+
+        <div class="modal-body modal-studio-body">
+          <!-- Sub-Tab 1: Visual Studio & Entries (Master-Detail) -->
+          <div class="modal-subview active" id="tab-edit-entities">
+            <div class="source-editor-layout">
+              <!-- Left Column: Entity Explorer -->
+              <div class="source-editor-sidebar">
+                <div class="sidebar-top-actions">
+                  <div class="entity-search-bar">
+                    <input type="text" id="entity-search-input" placeholder="🔍 Filter entries..." />
+                  </div>
+                  <div class="add-entry-dropdown-wrap">
+                    <button type="button" class="btn btn-sm btn-accent w-100" id="btn-add-entry-menu">
+                      ➕ Add Entry ▾
+                    </button>
+                    <div class="dropdown-menu vtt-hidden" id="menu-add-entry-options">
+                      <button type="button" class="dropdown-item" id="btn-action-create-blank">
+                        ✨ Create Blank Entry
+                      </button>
+                      <button type="button" class="dropdown-item" id="btn-action-clone-compendium">
+                        📥 Clone from Compendium...
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="entity-list-items" id="entity-list-container">
+                  <!-- Dynamically populated entry cards -->
+                  <div class="loading-placeholder">No entries yet. Click "+ Add Entry" above.</div>
+                </div>
+              </div>
+
+              <!-- Right Pane: Entity Studio -->
+              <div class="source-editor-main">
+                <div class="entity-studio-header">
+                  <div class="entity-studio-title-box">
+                    <h4 id="active-entity-display-name">Select or Create an Entry</h4>
+                    <span class="badge" id="active-entity-category-badge">Category</span>
+                  </div>
+                  <div class="entity-studio-actions">
+                    <div class="studio-mode-toggle">
+                      <button type="button" class="mode-btn active" id="btn-mode-visual">🎨 Visual Builder</button>
+                      <button type="button" class="mode-btn" id="btn-mode-json">💻 Raw JSON</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-primary" id="btn-save-active-entry">
+                      💾 Save Entry
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Visual Forms Container -->
+                <div class="entity-forms-wrap" id="entity-visual-forms-wrap">
+                  <!-- Empty State -->
+                  <div class="entity-empty-state" id="entity-empty-state">
+                    <span class="empty-icon">📖</span>
+                    <h3>Select an entry to edit</h3>
+                    <p class="text-muted">Choose an entry from the left column, or click <strong>"+ Add Entry"</strong> to build a new one.</p>
+                  </div>
+
+                  <!-- Category 1: Bestiary Form -->
+                  <div class="builder-form vtt-hidden" id="form-category-bestiary">
+                    <div class="form-section">
+                      <div class="section-title">Identity & Creature Type</div>
+                      <div class="form-grid-3">
+                        <div class="input-group">
+                          <label>Creature Name</label>
+                          <input type="text" id="bf-beast-name" placeholder="e.g. Goblin Shaman" />
+                        </div>
+                        <div class="input-group">
+                          <label>Size</label>
+                          <select id="bf-beast-size" class="form-select">
+                            <option value="Tiny">Tiny</option>
+                            <option value="Small">Small</option>
+                            <option value="Medium" selected>Medium</option>
+                            <option value="Large">Large</option>
+                            <option value="Huge">Huge</option>
+                            <option value="Gargantuan">Gargantuan</option>
+                          </select>
+                        </div>
+                        <div class="input-group">
+                          <label>Creature Type</label>
+                          <select id="bf-beast-type" class="form-select">
+                            <option value="Aberration">Aberration</option>
+                            <option value="Beast">Beast</option>
+                            <option value="Celestial">Celestial</option>
+                            <option value="Construct">Construct</option>
+                            <option value="Dragon">Dragon</option>
+                            <option value="Elemental">Elemental</option>
+                            <option value="Fey">Fey</option>
+                            <option value="Fiend">Fiend</option>
+                            <option value="Giant">Giant</option>
+                            <option value="Humanoid" selected>Humanoid</option>
+                            <option value="Monstrosity">Monstrosity</option>
+                            <option value="Ooze">Ooze</option>
+                            <option value="Plant">Plant</option>
+                            <option value="Undead">Undead</option>
+                          </select>
+                        </div>
+                        <div class="input-group">
+                          <label>Subtype / Tags</label>
+                          <input type="text" id="bf-beast-subtype" placeholder="e.g. goblinoid, shapechanger" />
+                        </div>
+                        <div class="input-group">
+                          <label>Alignment</label>
+                          <input type="text" id="bf-beast-alignment" placeholder="e.g. Neutral Evil" />
+                        </div>
+                        <div class="input-group">
+                          <label>Challenge Rating (CR)</label>
+                          <select id="bf-beast-cr" class="form-select">
+                            <option value="0">0 (10 XP)</option>
+                            <option value="1/8">1/8 (25 XP)</option>
+                            <option value="1/4" selected>1/4 (50 XP)</option>
+                            <option value="1/2">1/2 (100 XP)</option>
+                            <option value="1">1 (200 XP)</option>
+                            <option value="2">2 (450 XP)</option>
+                            <option value="3">3 (700 XP)</option>
+                            <option value="4">4 (1,100 XP)</option>
+                            <option value="5">5 (1,800 XP)</option>
+                            <option value="6">6 (2,300 XP)</option>
+                            <option value="7">7 (2,900 XP)</option>
+                            <option value="8">8 (3,900 XP)</option>
+                            <option value="9">9 (5,000 XP)</option>
+                            <option value="10">10 (5,900 XP)</option>
+                            <option value="11">11 (7,200 XP)</option>
+                            <option value="12">12 (8,400 XP)</option>
+                            <option value="13">13 (10,000 XP)</option>
+                            <option value="14">14 (11,500 XP)</option>
+                            <option value="15">15 (13,000 XP)</option>
+                            <option value="16">16 (15,000 XP)</option>
+                            <option value="17">17 (18,000 XP)</option>
+                            <option value="18">18 (20,000 XP)</option>
+                            <option value="19">19 (22,000 XP)</option>
+                            <option value="20">20 (25,000 XP)</option>
+                            <option value="21">21 (33,000 XP)</option>
+                            <option value="22">22 (41,000 XP)</option>
+                            <option value="23">23 (50,000 XP)</option>
+                            <option value="24">24 (62,000 XP)</option>
+                            <option value="25">25 (75,000 XP)</option>
+                            <option value="30">30 (155,000 XP)</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Token & Artwork -->
+                    <div class="form-section">
+                      <div class="section-title">Token & Artwork</div>
+                      <div class="token-picker-row">
+                        <div class="token-preview-avatar" id="bf-beast-token-preview">🐉</div>
+                        <div class="token-picker-inputs">
+                          <input type="text" id="bf-beast-token-url" placeholder="Token image path or URL (e.g. img/bestiary/tokens/...)" />
+                          <button type="button" class="btn btn-sm btn-outline" id="btn-browse-token">
+                            📁 Browse Image...
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Combat & Defenses -->
+                    <div class="form-section">
+                      <div class="section-title">Combat Defenses & Movement</div>
+                      <div class="form-grid-3">
+                        <div class="input-group">
+                          <label>Armor Class (AC)</label>
+                          <input type="number" id="bf-beast-ac" value="12" />
+                        </div>
+                        <div class="input-group">
+                          <label>Armor Type / Note</label>
+                          <input type="text" id="bf-beast-ac-cond" placeholder="e.g. natural armor, leather" />
+                        </div>
+                        <div class="input-group">
+                          <label>Hit Points (Average)</label>
+                          <input type="number" id="bf-beast-hp-avg" value="22" />
+                        </div>
+                        <div class="input-group">
+                          <label>Hit Dice Formula</label>
+                          <input type="text" id="bf-beast-hp-formula" placeholder="e.g. 4d8 + 4" />
+                        </div>
+                        <div class="input-group">
+                          <label>Walk Speed (ft.)</label>
+                          <input type="number" id="bf-beast-speed-walk" value="30" />
+                        </div>
+                        <div class="input-group">
+                          <label>Fly Speed (ft.)</label>
+                          <input type="number" id="bf-beast-speed-fly" value="0" />
+                        </div>
+                        <div class="input-group">
+                          <label>Swim Speed (ft.)</label>
+                          <input type="number" id="bf-beast-speed-swim" value="0" />
+                        </div>
+                        <div class="input-group">
+                          <label>Climb Speed (ft.)</label>
+                          <input type="number" id="bf-beast-speed-climb" value="0" />
+                        </div>
+                        <div class="input-group">
+                          <label>Burrow Speed (ft.)</label>
+                          <input type="number" id="bf-beast-speed-burrow" value="0" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Ability Scores Grid -->
+                    <div class="form-section">
+                      <div class="section-title">Ability Scores</div>
+                      <div class="ability-scores-grid">
+                        <div class="ability-box">
+                          <label>STR</label>
+                          <input type="number" id="bf-beast-str" value="10" />
+                          <span class="ability-mod" id="mod-beast-str">+0</span>
+                        </div>
+                        <div class="ability-box">
+                          <label>DEX</label>
+                          <input type="number" id="bf-beast-dex" value="10" />
+                          <span class="ability-mod" id="mod-beast-dex">+0</span>
+                        </div>
+                        <div class="ability-box">
+                          <label>CON</label>
+                          <input type="number" id="bf-beast-con" value="10" />
+                          <span class="ability-mod" id="mod-beast-con">+0</span>
+                        </div>
+                        <div class="ability-box">
+                          <label>INT</label>
+                          <input type="number" id="bf-beast-int" value="10" />
+                          <span class="ability-mod" id="mod-beast-int">+0</span>
+                        </div>
+                        <div class="ability-box">
+                          <label>WIS</label>
+                          <input type="number" id="bf-beast-wis" value="10" />
+                          <span class="ability-mod" id="mod-beast-wis">+0</span>
+                        </div>
+                        <div class="ability-box">
+                          <label>CHA</label>
+                          <input type="number" id="bf-beast-cha" value="10" />
+                          <span class="ability-mod" id="mod-beast-cha">+0</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Senses, Resistances, Languages -->
+                    <div class="form-section">
+                      <div class="section-title">Senses, Resistances & Languages</div>
+                      <div class="form-grid-2">
+                        <div class="input-group">
+                          <label>Senses</label>
+                          <input type="text" id="bf-beast-senses" placeholder="e.g. darkvision 60 ft., passive Perception 12" />
+                        </div>
+                        <div class="input-group">
+                          <label>Languages</label>
+                          <input type="text" id="bf-beast-languages" placeholder="e.g. Common, Goblin" />
+                        </div>
+                        <div class="input-group">
+                          <label>Damage Resistances</label>
+                          <input type="text" id="bf-beast-resist" placeholder="e.g. fire, cold" />
+                        </div>
+                        <div class="input-group">
+                          <label>Damage Immunities</label>
+                          <input type="text" id="bf-beast-immune" placeholder="e.g. poison" />
+                        </div>
+                        <div class="input-group span-2">
+                          <label>Condition Immunities</label>
+                          <input type="text" id="bf-beast-cond-immune" placeholder="e.g. poisoned, charmed" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Traits Section -->
+                    <div class="form-section">
+                      <div class="section-header-flex">
+                        <div class="section-title">Special Traits & Passives</div>
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-add-beast-trait">➕ Add Trait</button>
+                      </div>
+                      <div class="cards-list-container" id="beast-traits-container"></div>
+                    </div>
+
+                    <!-- Actions Section -->
+                    <div class="form-section">
+                      <div class="section-header-flex">
+                        <div class="section-title">Actions & Attacks</div>
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-add-beast-action">➕ Add Action</button>
+                      </div>
+                      <div class="cards-list-container" id="beast-actions-container"></div>
+                    </div>
+
+                    <!-- Reactions Section -->
+                    <div class="form-section">
+                      <div class="section-header-flex">
+                        <div class="section-title">Reactions</div>
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-add-beast-reaction">➕ Add Reaction</button>
+                      </div>
+                      <div class="cards-list-container" id="beast-reactions-container"></div>
+                    </div>
+
+                    <!-- Legendary Actions Section -->
+                    <div class="form-section">
+                      <div class="section-header-flex">
+                        <div class="section-title">Legendary Actions</div>
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-add-beast-legendary">➕ Add Legendary Action</button>
+                      </div>
+                      <div class="cards-list-container" id="beast-legendary-container"></div>
+                    </div>
+                  </div>
+
+                  <!-- Category 2: Spells Form -->
+                  <div class="builder-form vtt-hidden" id="form-category-spells">
+                    <div class="form-section">
+                      <div class="section-title">Spell Identity & Casting</div>
+                      <div class="form-grid-3">
+                        <div class="input-group">
+                          <label>Spell Name</label>
+                          <input type="text" id="bf-spell-name" placeholder="e.g. Arcane Burst" />
+                        </div>
+                        <div class="input-group">
+                          <label>Level</label>
+                          <select id="bf-spell-level" class="form-select">
+                            <option value="0">Cantrip</option>
+                            <option value="1" selected>1st Level</option>
+                            <option value="2">2nd Level</option>
+                            <option value="3">3rd Level</option>
+                            <option value="4">4th Level</option>
+                            <option value="5">5th Level</option>
+                            <option value="6">6th Level</option>
+                            <option value="7">7th Level</option>
+                            <option value="8">8th Level</option>
+                            <option value="9">9th Level</option>
+                          </select>
+                        </div>
+                        <div class="input-group">
+                          <label>School of Magic</label>
+                          <select id="bf-spell-school" class="form-select">
+                            <option value="Abjuration">Abjuration</option>
+                            <option value="Conjuration">Conjuration</option>
+                            <option value="Divination">Divination</option>
+                            <option value="Enchantment">Enchantment</option>
+                            <option value="Evocation" selected>Evocation</option>
+                            <option value="Illusion">Illusion</option>
+                            <option value="Necromancy">Necromancy</option>
+                            <option value="Transmutation">Transmutation</option>
+                          </select>
+                        </div>
+                        <div class="input-group">
+                          <label>Casting Time</label>
+                          <div class="inline-input-pair">
+                            <input type="number" id="bf-spell-time-num" value="1" style="width: 60px;" />
+                            <select id="bf-spell-time-unit" class="form-select">
+                              <option value="action" selected>Action</option>
+                              <option value="bonus">Bonus Action</option>
+                              <option value="reaction">Reaction</option>
+                              <option value="minute">Minute(s)</option>
+                              <option value="hour">Hour(s)</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="input-group">
+                          <label>Range / Area</label>
+                          <div class="inline-input-pair">
+                            <input type="number" id="bf-spell-range-dist" value="60" style="width: 70px;" />
+                            <select id="bf-spell-range-type" class="form-select">
+                              <option value="feet" selected>Feet</option>
+                              <option value="touch">Touch</option>
+                              <option value="self">Self</option>
+                              <option value="miles">Miles</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="input-group">
+                          <label>Duration</label>
+                          <div class="inline-input-pair">
+                            <select id="bf-spell-duration-unit" class="form-select">
+                              <option value="instant" selected>Instantaneous</option>
+                              <option value="minute">Minute(s)</option>
+                              <option value="hour">Hour(s)</option>
+                              <option value="day">Day(s)</option>
+                            </select>
+                            <input type="number" id="bf-spell-duration-amount" value="1" style="width: 60px;" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-grid-2 mt-8">
+                        <div class="input-group">
+                          <label>Components</label>
+                          <div class="checkbox-row">
+                            <label><input type="checkbox" id="bf-spell-comp-v" checked /> Verbal (V)</label>
+                            <label><input type="checkbox" id="bf-spell-comp-s" checked /> Somatic (S)</label>
+                            <label><input type="checkbox" id="bf-spell-comp-m" /> Material (M)</label>
+                            <label><input type="checkbox" id="bf-spell-concentration" /> Concentration</label>
+                          </div>
+                        </div>
+                        <div class="input-group">
+                          <label>Material Component Notes</label>
+                          <input type="text" id="bf-spell-materials-text" placeholder="e.g. a pinch of sulfur and bat guano" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Damage & Upcast Scaling Calculator -->
+                    <div class="form-section">
+                      <div class="section-title">Damage & Upcast Scaling Calculator</div>
+                      <div class="form-grid-3">
+                        <div class="input-group">
+                          <label>Base Damage Formula</label>
+                          <input type="text" id="bf-spell-damage" placeholder="e.g. 2d6 or 3d8" />
+                        </div>
+                        <div class="input-group">
+                          <label>Damage Type</label>
+                          <input type="text" id="bf-spell-damage-type" placeholder="e.g. Fire, Radiant" />
+                        </div>
+                        <div class="input-group">
+                          <label>Saving Throw</label>
+                          <select id="bf-spell-save" class="form-select">
+                            <option value="">None (Spell Attack / Utility)</option>
+                            <option value="DEX">Dexterity</option>
+                            <option value="CON">Constitution</option>
+                            <option value="WIS">Wisdom</option>
+                            <option value="STR">Strength</option>
+                            <option value="INT">Intelligence</option>
+                            <option value="CHA">Charisma</option>
+                          </select>
+                        </div>
+                        <div class="input-group">
+                          <label>Upcast Bonus per Slot Level</label>
+                          <input type="text" id="bf-spell-upcast" placeholder="e.g. 1d6" />
+                        </div>
+                        <div class="input-group span-2">
+                          <label>Class Spell Lists</label>
+                          <input type="text" id="bf-spell-classes" placeholder="e.g. Wizard, Sorcerer, Cleric, Warlock" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="form-section">
+                      <div class="section-title">Description & Upcast Text</div>
+                      <div class="input-group mb-12">
+                        <label>Spell Description</label>
+                        <textarea id="bf-spell-desc" rows="4" placeholder="Full spell effect description..."></textarea>
+                      </div>
+                      <div class="input-group">
+                        <label>At Higher Levels Text</label>
+                        <textarea id="bf-spell-higher-desc" rows="2" placeholder="When cast using a spell slot of X or higher..."></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Category 3: Items Form -->
+                  <div class="builder-form vtt-hidden" id="form-category-items">
+                    <div class="form-section">
+                      <div class="section-title">Item Identity & Rarity</div>
+                      <div class="form-grid-3">
+                        <div class="input-group">
+                          <label>Item Name</label>
+                          <input type="text" id="bf-item-name" placeholder="e.g. Sunblade" />
+                        </div>
+                        <div class="input-group">
+                          <label>Category</label>
+                          <select id="bf-item-type" class="form-select">
+                            <option value="Weapon">Weapon</option>
+                            <option value="Armor">Armor</option>
+                            <option value="Wondrous Item" selected>Wondrous Item</option>
+                            <option value="Ring">Ring</option>
+                            <option value="Rod">Rod</option>
+                            <option value="Scroll">Scroll</option>
+                            <option value="Staff">Staff</option>
+                            <option value="Wand">Wand</option>
+                            <option value="Potion">Potion</option>
+                            <option value="Adventuring Gear">Adventuring Gear</option>
+                          </select>
+                        </div>
+                        <div class="input-group">
+                          <label>Rarity</label>
+                          <select id="bf-item-rarity" class="form-select">
+                            <option value="mundane">Mundane / None</option>
+                            <option value="common">Common</option>
+                            <option value="uncommon" selected>Uncommon</option>
+                            <option value="rare">Rare</option>
+                            <option value="very rare">Very Rare</option>
+                            <option value="legendary">Legendary</option>
+                            <option value="artifact">Artifact</option>
+                          </select>
+                        </div>
+                        <div class="input-group">
+                          <label>Attunement</label>
+                          <div class="checkbox-row">
+                            <label><input type="checkbox" id="bf-item-req-attune" checked /> Requires Attunement</label>
+                          </div>
+                        </div>
+                        <div class="input-group span-2">
+                          <label>Attunement Requirement Detail</label>
+                          <input type="text" id="bf-item-attune-details" placeholder="e.g. by a spellcaster, by a paladin" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Combat & Armor Properties -->
+                    <div class="form-section">
+                      <div class="section-title">Combat & Armor Stats</div>
+                      <div class="form-grid-3">
+                        <div class="input-group">
+                          <label>Weapon Damage Dice</label>
+                          <input type="text" id="bf-item-damage-dice" placeholder="e.g. 1d8 or 2d6" />
+                        </div>
+                        <div class="input-group">
+                          <label>Damage Type</label>
+                          <input type="text" id="bf-item-damage-type" placeholder="e.g. Slashing, Piercing, Radiant" />
+                        </div>
+                        <div class="input-group">
+                          <label>Magic Bonus (+Hit/Dmg)</label>
+                          <input type="number" id="bf-item-bonus-hit" value="0" />
+                        </div>
+                        <div class="input-group">
+                          <label>Base Armor AC</label>
+                          <input type="number" id="bf-item-base-ac" value="0" />
+                        </div>
+                        <div class="input-group">
+                          <label>Shield/Armor AC Bonus</label>
+                          <input type="number" id="bf-item-ac-bonus" value="0" />
+                        </div>
+                        <div class="input-group">
+                          <label>Weapon Properties</label>
+                          <input type="text" id="bf-item-weapon-properties" placeholder="e.g. Finesse, Light, Versatile" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Utility & Description -->
+                    <div class="form-section">
+                      <div class="section-title">Utility, Value & Description</div>
+                      <div class="form-grid-3">
+                        <div class="input-group">
+                          <label>Value (Gold Pieces)</label>
+                          <input type="number" id="bf-item-value" value="100" />
+                        </div>
+                        <div class="input-group">
+                          <label>Weight (lbs.)</label>
+                          <input type="number" step="0.1" id="bf-item-weight" value="1" />
+                        </div>
+                        <div class="input-group">
+                          <label>Max Charges</label>
+                          <input type="number" id="bf-item-charges" value="0" />
+                        </div>
+                        <div class="input-group span-3">
+                          <label>Item Description & Magical Effects</label>
+                          <textarea id="bf-item-desc" rows="4" placeholder="Description of properties, active abilities, and lore..."></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Category 4: Classes Form -->
+                  <div class="builder-form vtt-hidden" id="form-category-classes">
+                    <div class="form-section">
+                      <div class="section-title">Class Identity & Proficiencies</div>
+                      <div class="form-grid-3">
+                        <div class="input-group">
+                          <label>Class Name</label>
+                          <input type="text" id="bf-class-name" placeholder="e.g. Warlord" />
+                        </div>
+                        <div class="input-group">
+                          <label>Hit Die</label>
+                          <select id="bf-class-hit-die" class="form-select">
+                            <option value="d6">d6</option>
+                            <option value="d8" selected>d8</option>
+                            <option value="d10">d10</option>
+                            <option value="d12">d12</option>
+                          </select>
+                        </div>
+                        <div class="input-group">
+                          <label>Saving Throw Proficiencies</label>
+                          <input type="text" id="bf-class-saves" placeholder="e.g. STR, CON" />
+                        </div>
+                        <div class="input-group">
+                          <label>Armor Proficiencies</label>
+                          <input type="text" id="bf-class-armor" placeholder="e.g. Light and medium armor, shields" />
+                        </div>
+                        <div class="input-group">
+                          <label>Weapon Proficiencies</label>
+                          <input type="text" id="bf-class-weapons" placeholder="e.g. Simple and martial weapons" />
+                        </div>
+                        <div class="input-group">
+                          <label>Subclass Level</label>
+                          <input type="number" id="bf-class-subclass-level" value="3" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Level 1-20 Progression Grid -->
+                    <div class="form-section">
+                      <div class="section-header-flex">
+                        <div class="section-title">1–20 Level Progression Grid</div>
+                        <span class="text-muted" style="font-size: 11px;">Click a level below to edit features unlocked at that level</span>
+                      </div>
+                      <div class="levels-matrix-grid" id="class-levels-matrix"></div>
+                      <div class="active-level-editor mt-12" id="class-level-editor-panel">
+                        <div class="section-header-flex">
+                          <h5 id="active-level-label">Level 1 Features</h5>
+                          <button type="button" class="btn btn-xs btn-outline" id="btn-add-level-feature">➕ Add Feature at This Level</button>
+                        </div>
+                        <div class="cards-list-container mt-8" id="class-level-features-container"></div>
+                      </div>
+                    </div>
+
+                    <!-- Subclasses Section -->
+                    <div class="form-section">
+                      <div class="section-header-flex">
+                        <div class="section-title">Subclasses & Archetypes</div>
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-add-class-subclass">➕ Add Subclass</button>
+                      </div>
+                      <div class="cards-list-container" id="class-subclasses-container"></div>
+                    </div>
+                  </div>
+
+                  <!-- Category 5: Races Form -->
+                  <div class="builder-form vtt-hidden" id="form-category-races">
+                    <div class="form-section">
+                      <div class="section-title">Race Identity & Speeds</div>
+                      <div class="form-grid-3">
+                        <div class="input-group">
+                          <label>Race / Lineage Name</label>
+                          <input type="text" id="bf-race-name" placeholder="e.g. Astral Elf" />
+                        </div>
+                        <div class="input-group">
+                          <label>Size</label>
+                          <select id="bf-race-size" class="form-select">
+                            <option value="Small">Small</option>
+                            <option value="Medium" selected>Medium</option>
+                          </select>
+                        </div>
+                        <div class="input-group">
+                          <label>Walk Speed (ft.)</label>
+                          <input type="number" id="bf-race-speed" value="30" />
+                        </div>
+                        <div class="input-group">
+                          <label>Darkvision (ft.)</label>
+                          <input type="number" id="bf-race-darkvision" value="60" />
+                        </div>
+                        <div class="input-group span-2">
+                          <label>Languages</label>
+                          <input type="text" id="bf-race-languages" placeholder="e.g. Common, Elvish" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-section">
+                      <div class="section-title">Ability Score Increases</div>
+                      <div class="ability-scores-grid">
+                        <div class="ability-box"><label>STR</label><input type="number" id="bf-race-str" value="0" /></div>
+                        <div class="ability-box"><label>DEX</label><input type="number" id="bf-race-dex" value="2" /></div>
+                        <div class="ability-box"><label>CON</label><input type="number" id="bf-race-con" value="0" /></div>
+                        <div class="ability-box"><label>INT</label><input type="number" id="bf-race-int" value="1" /></div>
+                        <div class="ability-box"><label>WIS</label><input type="number" id="bf-race-wis" value="0" /></div>
+                        <div class="ability-box"><label>CHA</label><input type="number" id="bf-race-cha" value="0" /></div>
+                      </div>
+                    </div>
+
+                    <div class="form-section">
+                      <div class="section-header-flex">
+                        <div class="section-title">Racial Traits</div>
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-add-race-trait">➕ Add Trait</button>
+                      </div>
+                      <div class="cards-list-container" id="race-traits-container"></div>
+                    </div>
+                  </div>
+
+                  <!-- Category 6: Feats Form -->
+                  <div class="builder-form vtt-hidden" id="form-category-feats">
+                    <div class="form-section">
+                      <div class="section-title">Feat Identity & Prerequisites</div>
+                      <div class="form-grid-2">
+                        <div class="input-group">
+                          <label>Feat Name</label>
+                          <input type="text" id="bf-feat-name" placeholder="e.g. War Caster" />
+                        </div>
+                        <div class="input-group">
+                          <label>Prerequisite</label>
+                          <input type="text" id="bf-feat-prereq" placeholder="e.g. The ability to cast at least one spell" />
+                        </div>
+                        <div class="input-group span-2">
+                          <label>Overview & Description</label>
+                          <textarea id="bf-feat-desc" rows="3" placeholder="General description of the feat..."></textarea>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-section">
+                      <div class="section-header-flex">
+                        <div class="section-title">Feat Benefits & Bullet Points</div>
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-add-feat-benefit">➕ Add Benefit</button>
+                      </div>
+                      <div class="cards-list-container" id="feat-benefits-container"></div>
+                    </div>
+                  </div>
+
+                  <!-- Category 7: Backgrounds Form -->
+                  <div class="builder-form vtt-hidden" id="form-category-backgrounds">
+                    <div class="form-section">
+                      <div class="section-title">Background Details & Proficiencies</div>
+                      <div class="form-grid-2">
+                        <div class="input-group">
+                          <label>Background Name</label>
+                          <input type="text" id="bf-bg-name" placeholder="e.g. City Watch" />
+                        </div>
+                        <div class="input-group">
+                          <label>Skill Proficiencies</label>
+                          <input type="text" id="bf-bg-skills" placeholder="e.g. Athletics, Insight" />
+                        </div>
+                        <div class="input-group">
+                          <label>Tool Proficiencies</label>
+                          <input type="text" id="bf-bg-tools" placeholder="e.g. Vehicles (land)" />
+                        </div>
+                        <div class="input-group">
+                          <label>Languages</label>
+                          <input type="text" id="bf-bg-languages" placeholder="e.g. Two of your choice" />
+                        </div>
+                        <div class="input-group span-2">
+                          <label>Starting Equipment</label>
+                          <input type="text" id="bf-bg-equipment" placeholder="e.g. A uniform, a horn, a set of manacles, and 10 gp" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="form-section">
+                      <div class="section-title">Background Feature</div>
+                      <div class="input-group mb-8">
+                        <label>Feature Name</label>
+                        <input type="text" id="bf-bg-feature-name" placeholder="e.g. Watcher's Eye" />
+                      </div>
+                      <div class="input-group">
+                        <label>Feature Description</label>
+                        <textarea id="bf-bg-feature-desc" rows="3" placeholder="Feature mechanics and benefits..."></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Category 8: Adventures & Lore Form -->
+                  <div class="builder-form vtt-hidden" id="form-category-adventures">
+                    <div class="form-section">
+                      <div class="section-title">Adventure & Lore Content</div>
+                      <div class="input-group mb-12">
+                        <label>Section Title</label>
+                        <input type="text" id="bf-adv-name" placeholder="e.g. Chapter 1: The Sunken Crypt" />
+                      </div>
+                      <div class="input-group">
+                        <label>Content & Story Notes</label>
+                        <textarea id="bf-adv-desc" rows="10" placeholder="Adventure outline, encounter tables, story narrative..."></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Raw JSON Editor Container for active entry -->
+                <div class="entity-raw-json-wrap vtt-hidden" id="entity-entry-json-wrap">
+                  <div class="json-editor-toolbar">
+                    <div class="json-toolbar-left">
+                      <span class="json-status-tag" id="entity-json-syntax-status">✅ Valid JSON</span>
+                    </div>
+                    <div class="json-toolbar-right">
+                      <button type="button" class="btn btn-xs btn-outline" id="btn-format-entity-json">✨ Prettify</button>
+                    </div>
+                  </div>
+                  <div class="json-editor-wrap">
+                    <textarea id="entity-entry-json-textarea" class="json-code-textarea" spellcheck="false" placeholder="Loading entity JSON..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-Tab 2: Metadata & Details -->
+          <div class="modal-subview" id="tab-edit-meta">
+            <div class="meta-form-grid">
+              <div class="input-group">
+                <label for="edit-source-code">Source Code / Identifier</label>
+                <input type="text" id="edit-source-code" readonly />
+                <small class="field-hint">Unique shorthand identifier (e.g., MM, PHB, MYBREW).</small>
+              </div>
+
+              <div class="input-group">
+                <label for="edit-source-name">Source Display Name</label>
+                <input type="text" id="edit-source-name" placeholder="e.g. Monster Manual" />
+              </div>
+
+              <div class="input-group">
+                <label for="edit-source-category">Category</label>
+                <input type="text" id="edit-source-category" readonly />
+              </div>
+
+              <div class="input-group">
+                <label for="edit-source-author">Author / Publisher</label>
+                <input type="text" id="edit-source-author" placeholder="e.g. Wizards of the Coast" />
+              </div>
+
+              <div class="input-group">
+                <label for="edit-source-version">Version / Edition</label>
+                <input type="text" id="edit-source-version" placeholder="e.g. 1.0.0" />
+              </div>
+
+              <div class="input-group span-2">
+                <label for="edit-source-desc">Description & Notes</label>
+                <textarea id="edit-source-desc" rows="3" placeholder="Brief notes or description of this source's content..."></textarea>
+              </div>
+
+              <div class="input-group span-2 file-location-group">
+                <label>Storage Location</label>
+                <div class="path-with-action">
+                  <code class="path-preview" id="edit-source-filepath">/data/path/file.json</code>
+                  <button type="button" class="btn btn-sm btn-outline" id="btn-reveal-source-file">
+                    📁 Open File in Explorer
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-Tab 3: Raw Source JSON Editor -->
+          <div class="modal-subview" id="tab-edit-json">
+            <div class="json-editor-toolbar">
+              <div class="json-toolbar-left">
+                <span class="json-status-tag" id="json-syntax-status">✅ Valid JSON</span>
+                <span class="text-muted" id="json-entry-counter">0 entries</span>
+              </div>
+              <div class="json-toolbar-right">
+                <button type="button" class="btn btn-xs btn-outline" id="btn-insert-template" title="Insert starter entity schema snippet">
+                  ➕ Insert Template
+                </button>
+                <button type="button" class="btn btn-xs btn-outline" id="btn-format-json" title="Prettify JSON syntax">
+                  ✨ Prettify JSON
+                </button>
+              </div>
+            </div>
+
+            <div class="json-editor-wrap">
+              <textarea id="edit-source-json-editor" class="json-code-textarea" spellcheck="false" placeholder="Loading source JSON..."></textarea>
+            </div>
+
+            <div class="json-error-banner vtt-hidden" id="json-error-banner">
+              <span class="icon">⚠️</span> <span id="json-error-message">Invalid syntax error</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <div class="modal-footer-left">
+            <span class="text-muted" id="edit-save-status"></span>
+          </div>
+          <div class="modal-footer-actions">
+            <button class="btn btn-secondary" id="btn-edit-modal-cancel">Close</button>
+            <button class="btn btn-primary" id="btn-edit-modal-save">💾 Save Sourcebook</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Clone from Compendium Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-clone-compendium">
+      <div class="modal-card modal-medium">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <h3>📥 Clone from 5e Compendium</h3>
+            <span class="badge badge-accent" id="clone-category-badge">Category</span>
+          </div>
+          <button class="modal-close" id="btn-close-clone-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-12">
+            <label for="clone-compendium-search">Search Compendium</label>
+            <input type="text" id="clone-compendium-search" placeholder="Type name (e.g. Goblin, Fireball, Longsword)..." autofocus />
+          </div>
+          <div class="clone-results-list" id="clone-compendium-results">
+            <div class="loading-placeholder">Type a name to search official and compendium entries...</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btn-cancel-clone">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Custom Source Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-create-custom-source">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>✨ Create Custom Database Source</h3>
+          <button class="modal-close" id="btn-create-source-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group">
+            <label for="create-src-category">Category</label>
+            <select id="create-src-category" class="form-select">
+              <option value="bestiary">🐉 Bestiary (Monsters & NPCs)</option>
+              <option value="spells">✨ Spells (Magic & Cantrips)</option>
+              <option value="items">⚔️ Items & Equipment</option>
+              <option value="classes">🛡️ Classes & Subclasses</option>
+              <option value="races">🧝 Races & Lineages</option>
+              <option value="feats">📜 Feats & Traits</option>
+              <option value="backgrounds">🎭 Backgrounds</option>
+              <option value="adventures">📖 Adventures & Lore</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label for="create-src-code">Source Code / Identifier</label>
+            <input type="text" id="create-src-code" placeholder="e.g. HOMEBREW_1" />
+            <small class="field-hint">Alphanumeric book tag (uppercase, letters, numbers, hyphens).</small>
+          </div>
+
+          <div class="input-group">
+            <label for="create-src-name">Sourcebook Display Name</label>
+            <input type="text" id="create-src-name" placeholder="e.g. Kip's Tome of Ancient Beasts" />
+          </div>
+
+          <div class="input-group">
+            <label for="create-src-author">Author / Creator Name</label>
+            <input type="text" id="create-src-author" placeholder="e.g. Kip The Game Master" />
+          </div>
+
+          <div class="input-group">
+            <label for="create-src-desc">Description / Campaign Lore</label>
+            <textarea id="create-src-desc" rows="2" placeholder="Brief overview of what this homebrew contains..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" id="btn-create-source-cancel">Cancel</button>
+          <button class="btn btn-primary" id="btn-create-source-submit">✨ Create & Start Editing</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Create Campaign Modal -->
     <div class="modal-overlay vtt-hidden" id="modal-create-campaign">
       <div class="modal-card">
@@ -340,6 +1408,145 @@
       </div>
     </div>
 
+    <!-- Slide-Out Statblock Quick-Preview Drawer -->
+    <div class="statblock-drawer-backdrop" id="statblock-drawer-backdrop"></div>
+    <div class="statblock-drawer-panel" id="drawer-statblock-preview">
+      <div class="statblock-drawer-header">
+        <div class="statblock-drawer-header-left">
+          <span class="badge badge-accent" id="sb-drawer-cat-badge">BESTIARY</span>
+          <h3 id="sb-drawer-title">Creature Statblock</h3>
+        </div>
+        <button type="button" class="modal-close" id="btn-close-sb-drawer">&times;</button>
+      </div>
+      <div class="statblock-drawer-body" id="sb-drawer-content">
+        <!-- Dynamically rendered statblock sheet -->
+      </div>
+      <div class="statblock-drawer-footer">
+        <span class="text-muted" style="font-size: 11px;" id="sb-drawer-source-text">Source: MM</span>
+        <button type="button" class="btn btn-sm btn-primary" id="btn-drawer-open-editor">
+          ✏️ Open in Source Editor
+        </button>
+      </div>
+    </div>
+
+    <!-- Bulk Sourcebook Import Wizard Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-bulk-import">
+      <div class="modal-card modal-large">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <h3>📦 Bulk Import Sourcebook</h3>
+            <span class="badge badge-accent">Multi-File / Folder / Zip</span>
+          </div>
+          <button class="modal-close" id="btn-close-bulk-import">&times;</button>
+        </div>
+        <div class="modal-body">
+          <!-- Drop Zone -->
+          <div class="bulk-drop-zone" id="bulk-drop-zone">
+            <span class="bulk-drop-icon">📥</span>
+            <div class="bulk-drop-prompt">Drag & Drop JSON files or a .ZIP archive here</div>
+            <div class="bulk-drop-subtext">or select files or a directory from your computer</div>
+            <div class="bulk-browse-buttons-row">
+              <button type="button" class="btn btn-sm btn-outline" id="btn-browse-import-files">
+                📁 Browse JSON Files...
+              </button>
+              <button type="button" class="btn btn-sm btn-outline" id="btn-browse-import-folder">
+                📂 Browse Folder...
+              </button>
+              <button type="button" class="btn btn-sm btn-outline" id="btn-browse-import-zip">
+                📦 Browse ZIP Archive...
+              </button>
+            </div>
+          </div>
+
+          <!-- Target Sourcebook Tag Override & Strategy -->
+          <div class="form-grid-2 mb-12">
+            <div class="input-group">
+              <label for="bulk-target-source-code">Unified Sourcebook Code (Optional Override)</label>
+              <input type="text" id="bulk-target-source-code" placeholder="e.g. TOME_OF_BEASTS (leave blank for auto-detect)" />
+            </div>
+            <div class="input-group">
+              <label for="bulk-conflict-default-mode">Default Conflict Strategy</label>
+              <select id="bulk-conflict-default-mode" class="form-select">
+                <option value="prompt" selected>Ask me for each duplicate</option>
+                <option value="overwrite">Always Overwrite existing files</option>
+                <option value="rename">Keep Both (auto-rename with _copy)</option>
+                <option value="skip">Skip duplicates</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Preview Table -->
+          <div class="section-title">Files Ready for Import (<span id="bulk-files-count-badge">0</span>)</div>
+          <div class="bulk-preview-table-wrap">
+            <table class="bulk-preview-table" id="bulk-preview-table">
+              <thead>
+                <tr>
+                  <th style="width: 30px;"><input type="checkbox" id="bulk-select-all-checkbox" checked /></th>
+                  <th>Filename</th>
+                  <th style="width: 130px;">Category</th>
+                  <th style="width: 110px;">Source Code</th>
+                  <th style="width: 80px;">Entries</th>
+                  <th style="width: 90px;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="bulk-preview-table-body">
+                <tr>
+                  <td colspan="6" class="text-center text-muted py-16">
+                    No files loaded yet. Drop files or use the browse buttons above.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="modal-footer-left">
+            <span class="text-muted" id="bulk-import-status-text"></span>
+          </div>
+          <div class="modal-footer-actions">
+            <button class="btn btn-secondary" id="btn-cancel-bulk-import">Cancel</button>
+            <button class="btn btn-primary" id="btn-execute-bulk-import" disabled>
+              🚀 Import All (<span id="bulk-import-btn-count">0</span> Files)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Duplicate Conflict Decision Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-import-conflict" style="z-index: 1050;">
+      <div class="modal-card modal-medium">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <h3>⚠️ Duplicate File Conflict</h3>
+          </div>
+        </div>
+        <div class="modal-body">
+          <p>A file named <strong id="conflict-filename-display">file.json</strong> already exists in the destination <strong id="conflict-category-display">bestiary</strong> category.</p>
+          <div class="conflict-choice-box">
+            <label class="conflict-radio-item">
+              <input type="radio" name="conflict-choice" value="overwrite" checked />
+              <span><strong>Overwrite</strong>: Replace existing file with the new file</span>
+            </label>
+            <label class="conflict-radio-item">
+              <input type="radio" name="conflict-choice" value="rename" />
+              <span><strong>Keep Both (Rename)</strong>: Save as <code id="conflict-rename-preview">file_copy.json</code></span>
+            </label>
+            <label class="conflict-radio-item">
+              <input type="radio" name="conflict-choice" value="skip" />
+              <span><strong>Skip</strong>: Do not import this file</span>
+            </label>
+          </div>
+          <div class="checkbox-row mt-12">
+            <label><input type="checkbox" id="conflict-apply-to-all" /> Apply this choice to all remaining conflicts in this import</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" id="btn-confirm-conflict-choice">Continue</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer Status -->
     <footer class="footer-bar">
       <span>ForgeDVTT Desktop v1.1.0</span>
@@ -347,6 +1554,6 @@
     </footer>
   </div>
 
-  <script src="dashboard.js"></script>
+  <script type="module" src="dashboard.js"></script>
 </body>
 </html>

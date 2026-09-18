@@ -86,10 +86,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_goon_grit_r9bn",
+        "id": "act_goon_grit_d9yd",
         "name": "Goon Grit",
         "actionType": "trait",
         "descriptionHtml": "<p>The goon has advantage on saving throws against being charmed, intimidated, or persuaded.</p>",
+        "entries": [
+          "The goon has advantage on saving throws against being {@condition charmed}, intimidated, or persuaded."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -105,10 +108,13 @@
     ],
     "actions": [
       {
-        "id": "act_scimitar_nhzv",
+        "id": "act_scimitar_nove",
         "name": "Scimitar",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -134,10 +140,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-ASS/Goon.webp",
     "tokenImg": "img/bestiary/tokens/NRH-ASS/Goon.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

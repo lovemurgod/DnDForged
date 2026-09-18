@@ -407,6 +407,150 @@ export function initVttChat(vtt, chatHistory) {
                    .replace(/\*(.+?)\*/g, '<em>$1</em>');
     }
 
+    function renderMacroCardHtml(mc, isHistorical = false) {
+        // Collect all dice for 3D animation
+        const allDice = [];
+        if (mc.atkRoll && mc.atkRoll.diceList) {
+            mc.atkRoll.diceList.forEach(d => allDice.push({ ...d, damageType: null, isCritSuccess: mc.atkRoll.isCritSuccess, isCritFail: mc.atkRoll.isCritFail }));
+        }
+        (mc.dmgRolls || []).forEach(dr => {
+            if (dr.roll && dr.roll.diceList) {
+                dr.roll.diceList.forEach(d => allDice.push({ ...d, damageType: dr.type || null }));
+            }
+        });
+        if (!isHistorical && allDice.length > 0) trigger3dDiceRoll(allDice);
+
+        // Damage type color map
+        const dmgColors = {
+            Fire: '#ff6b35', Cold: '#64b5f6', Lightning: '#ffd54f', Thunder: '#b39ddb',
+            Poison: '#81c784', Acid: '#aed581', Necrotic: '#9e9e9e', Radiant: '#fff176',
+            Force: '#ce93d8', Psychic: '#f48fb1', Slashing: '#ef9a9a', Piercing: '#ffcc80',
+            Bludgeoning: '#bcaaa4', Healing: '#a5d6a7', 'Temp HP': '#80cbc4', 'Temporary Hit Points': '#80cbc4'
+        };
+
+        const dmgIcons = {
+            Fire: 'fa-solid fa-fire', Cold: 'fa-regular fa-snowflake', Lightning: 'fa-solid fa-bolt', Thunder: 'fa-solid fa-ear-deaf',
+            Poison: 'fa-solid fa-skull-crossbones', Acid: 'fa-solid fa-flask', Necrotic: 'fa-solid fa-skull', Radiant: 'fa-regular fa-sun',
+            Force: 'fa-regular fa-circle-dot', Psychic: 'fa-regular fa-eye', Slashing: 'fa-solid fa-droplet-slash', Piercing: 'fa-solid fa-trowel',
+            Bludgeoning: 'fa-solid fa-gavel', Healing: 'fa-regular fa-heart', 'Temp HP': 'fa-solid fa-shield-heart', 'Temporary Hit Points': 'fa-solid fa-shield-heart'
+        };
+
+        // Description section
+        const descSection = mc.description
+            ? `<div class="macro-card-desc">${parseSimpleMarkdown(mc.description)}</div>`
+            : '';
+
+        // Attack roll row
+        let atkSection = '';
+        if (mc.atkRoll) {
+            const bd = mc.atkRoll.breakdownStr || (mc.atkRoll.diceList ? `[${mc.atkRoll.diceList.map(d => d.val).join(', ')}]` : '');
+            const formulaText = (mc.atkRoll.formula || '').toUpperCase();
+            const tooltipText = formulaText ? `${formulaText} → ${bd}` : bd;
+            let critClass = "";
+            let critLabel = "";
+            if (mc.atkRoll.isCritSuccess) {
+                critClass = "roll-crit-success";
+                critLabel = `<div style="font-size:0.9rem; color:#81c784; font-weight:bold; margin-top:2px;"><i class="fa-regular fa-star"></i> CRITICAL HIT!</div>`;
+            } else if (mc.atkRoll.isCritFail) {
+                critClass = "roll-crit-fail";
+                critLabel = `<div style="font-size:0.9rem; color:#e57373; font-weight:bold; margin-top:2px;"><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL MISS!</div>`;
+            }
+
+            atkSection = `
+                <div class="macro-card-row" style="align-items: flex-start; padding: 10px 12px;">
+                    <div class="macro-row-label" style="padding-top: 2px;"><i class="fa-solid fa-crosshairs macro-row-icon" style="color:#90caf9;"></i> Attack Roll</div>
+                    <div class="macro-row-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex:1;">
+                        <span class="macro-row-total ${critClass}" style="font-size:1.35rem; line-height:1; min-width:auto; color:var(--color-gold-light);" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${mc.atkRoll.total}</span>
+                        ${critLabel}
+                    </div>
+                </div>`;
+        }
+
+        // Save DC row
+        let saveSection = '';
+        const saveObj = mc.saveInfo || (mc.saveDc && mc.saveAbility ? { ability: mc.saveAbility, dc: mc.saveDc } : null);
+        if (saveObj) {
+            const abLabel = (saveObj.ability && saveObj.ability !== 'Save') ? `${saveObj.ability} Save DC` : 'Save DC';
+            saveSection = `
+                <div class="macro-card-row">
+                    <div class="macro-row-label"><i class="fa-solid fa-shield-halved macro-row-icon" style="color:#a5d6a7;"></i> ${abLabel}</div>
+                    <div class="macro-row-right">
+                        <span class="macro-row-total" style="color:#a5d6a7;">${saveObj.dc}</span>
+                    </div>
+                </div>`;
+        }
+
+        // Per-type damage rows
+        const dmgSections = (mc.dmgRolls || []).map(dr => {
+            const color = dmgColors[dr.type] || '#ef9a9a';
+            const icon = dmgIcons[dr.type] || 'fa-solid fa-droplet';
+            const bd = dr.roll ? (dr.roll.breakdownStr || (dr.roll.diceList ? `[${dr.roll.diceList.map(d => d.val).join(', ')}]` : '')) : '';
+            const total = dr.roll ? dr.roll.total : 0;
+            const formulaText = (dr.formula || '').toUpperCase();
+            const tooltipText = formulaText ? `${formulaText} → ${bd}` : bd;
+            const labelText = dr.label && dr.label.trim() && dr.label.trim().toLowerCase() !== (dr.type || '').trim().toLowerCase()
+                ? ` <span style="font-size:0.75rem; opacity:0.8; font-weight:normal; margin-left:4px;">(${dr.label.trim()})</span>`
+                : '';
+            return `
+                <div class="macro-card-row">
+                    <div class="macro-row-label">
+                        <i class="${icon} macro-row-icon" style="color:${color};"></i>
+                        <span>${dr.type || 'Damage'}</span>${labelText}
+                    </div>
+                    <div class="macro-row-right">
+                        <span class="macro-row-total" style="color:${color};" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${total}</span>
+                    </div>
+                </div>`;
+        }).join('');
+
+        return `
+            <div class="macro-chat-card">
+                <div class="macro-card-header">
+                    <div class="macro-card-header-left">
+                        <i class="fa-solid fa-dice-d20 macro-card-icon"></i>
+                        <div>
+                            <span class="macro-card-charname">${mc.charName}</span>
+                            <span class="macro-card-name">${mc.macroName}</span>
+                        </div>
+                    </div>
+                </div>
+                ${descSection}
+                <div class="macro-card-rows">
+                    ${atkSection}
+                    ${saveSection}
+                    ${dmgSections}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderItemCardHtml(ic) {
+        let descHtml = ic.description ? ic.description.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '<i>No description provided.</i>';
+        descHtml = descHtml.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        descHtml = descHtml.replace(/\*(.*?)\*/g, '<i>$1</i>');
+        descHtml = descHtml.replace(/---/g, '<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">');
+        descHtml = descHtml.replace(/\n/g, '<br>');
+        return `
+            <div class="macro-chat-card">
+                <div class="macro-card-header">
+                    <div class="macro-card-header-left">
+                        <i class="fa-solid fa-backpack macro-card-icon" style="color:var(--color-gold-base);"></i>
+                        <div>
+                            <span class="macro-card-charname">${ic.charName} pings an item</span>
+                            <span class="macro-card-name" style="color:var(--color-gold-light);">${ic.itemName}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="macro-card-desc" style="font-size:0.96rem; color:var(--color-text-muted); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px; margin-bottom:6px;">
+                    <strong>Weight:</strong> ${ic.weight} lb &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Quantity:</strong> ${ic.qty}
+                </div>
+                <div class="macro-card-desc" style="font-size:0.9rem; color:var(--color-text-secondary);">
+                    ${descHtml}
+                </div>
+            </div>
+        `;
+    }
+
     function appendMessageToDom(msg, isHistorical = false) {
         if (msg.hidden && vtt.role !== 'GM') return;
         if (msg.whisperToGM && vtt.role !== 'GM' && msg.username !== vtt.username) return;
@@ -515,149 +659,11 @@ export function initVttChat(vtt, chatHistory) {
         }
         // Combined macro card: attack + save + per-type damage rows
         else if (msg.macroCard) {
-            const mc = msg.macroCard;
-
-            // Collect all dice for 3D animation
-            const allDice = [];
-            if (mc.atkRoll && mc.atkRoll.diceList) {
-                mc.atkRoll.diceList.forEach(d => allDice.push({ ...d, damageType: null, isCritSuccess: mc.atkRoll.isCritSuccess, isCritFail: mc.atkRoll.isCritFail }));
-            }
-            (mc.dmgRolls || []).forEach(dr => {
-                if (dr.roll && dr.roll.diceList) {
-                    dr.roll.diceList.forEach(d => allDice.push({ ...d, damageType: dr.type || null }));
-                }
-            });
-            if (!isHistorical && allDice.length > 0) trigger3dDiceRoll(allDice);
-
-            // Damage type color map
-            const dmgColors = {
-                Fire: '#ff6b35', Cold: '#64b5f6', Lightning: '#ffd54f', Thunder: '#b39ddb',
-                Poison: '#81c784', Acid: '#aed581', Necrotic: '#9e9e9e', Radiant: '#fff176',
-                Force: '#ce93d8', Psychic: '#f48fb1', Slashing: '#ef9a9a', Piercing: '#ffcc80',
-                Bludgeoning: '#bcaaa4', Healing: '#a5d6a7', 'Temp HP': '#80cbc4', 'Temporary Hit Points': '#80cbc4'
-            };
-
-            const dmgIcons = {
-                Fire: 'fa-solid fa-fire', Cold: 'fa-regular fa-snowflake', Lightning: 'fa-solid fa-bolt', Thunder: 'fa-solid fa-ear-deaf',
-                Poison: 'fa-solid fa-skull-crossbones', Acid: 'fa-solid fa-flask', Necrotic: 'fa-solid fa-skull', Radiant: 'fa-regular fa-sun',
-                Force: 'fa-regular fa-circle-dot', Psychic: 'fa-regular fa-eye', Slashing: 'fa-solid fa-droplet-slash', Piercing: 'fa-solid fa-trowel',
-                Bludgeoning: 'fa-solid fa-gavel', Healing: 'fa-regular fa-heart', 'Temp HP': 'fa-solid fa-shield-heart', 'Temporary Hit Points': 'fa-solid fa-shield-heart'
-            };
-
-            // Description section
-            const descSection = mc.description
-                ? `<div class="macro-card-desc">${parseSimpleMarkdown(mc.description)}</div>`
-                : '';
-
-            // Attack roll row
-            let atkSection = '';
-            if (mc.atkRoll) {
-                const bd = mc.atkRoll.breakdownStr || (mc.atkRoll.diceList ? `[${mc.atkRoll.diceList.map(d => d.val).join(', ')}]` : '');
-                const formulaText = (mc.atkRoll.formula || '').toUpperCase();
-                const tooltipText = formulaText ? `${formulaText} → ${bd}` : bd;
-                let critClass = "";
-                let critLabel = "";
-                if (mc.atkRoll.isCritSuccess) {
-                    critClass = "roll-crit-success";
-                    critLabel = `<div style="font-size:0.9rem; color:#81c784; font-weight:bold; margin-top:2px;"><i class="fa-regular fa-star"></i> CRITICAL HIT!</div>`;
-                } else if (mc.atkRoll.isCritFail) {
-                    critClass = "roll-crit-fail";
-                    critLabel = `<div style="font-size:0.9rem; color:#e57373; font-weight:bold; margin-top:2px;"><i class="fa-solid fa-triangle-exclamation"></i> CRITICAL MISS!</div>`;
-                }
-
-                atkSection = `
-                    <div class="macro-card-row" style="align-items: flex-start; padding: 10px 12px;">
-                        <div class="macro-row-label" style="padding-top: 2px;"><i class="fa-solid fa-crosshairs macro-row-icon" style="color:#90caf9;"></i> Attack Roll</div>
-                        <div class="macro-row-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex:1;">
-                            <span class="macro-row-total ${critClass}" style="font-size:1.35rem; line-height:1; min-width:auto; color:var(--color-gold-light);" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${mc.atkRoll.total}</span>
-                            ${critLabel}
-                        </div>
-                    </div>`;
-            }
-
-            // Save DC row
-            let saveSection = '';
-            const saveObj = mc.saveInfo || (mc.saveDc && mc.saveAbility ? { ability: mc.saveAbility, dc: mc.saveDc } : null);
-            if (saveObj) {
-                saveSection = `
-                    <div class="macro-card-row">
-                        <div class="macro-row-label"><i class="fa-solid fa-shield-halved macro-row-icon" style="color:#a5d6a7;"></i> ${saveObj.ability} Save DC</div>
-                        <div class="macro-row-right">
-                            <span class="macro-row-total" style="color:#a5d6a7;">${saveObj.dc}</span>
-                        </div>
-                    </div>`;
-            }
-
-            // Per-type damage rows
-            const dmgSections = (mc.dmgRolls || []).map(dr => {
-                const color = dmgColors[dr.type] || '#ef9a9a';
-                const icon = dmgIcons[dr.type] || 'fa-solid fa-droplet';
-                const bd = dr.roll ? (dr.roll.breakdownStr || (dr.roll.diceList ? `[${dr.roll.diceList.map(d => d.val).join(', ')}]` : '')) : '';
-                const total = dr.roll ? dr.roll.total : 0;
-                const formulaText = (dr.formula || '').toUpperCase();
-                const tooltipText = formulaText ? `${formulaText} → ${bd}` : bd;
-                const labelText = dr.label && dr.label.trim() && dr.label.trim().toLowerCase() !== (dr.type || '').trim().toLowerCase()
-                    ? ` <span style="font-size:0.75rem; opacity:0.8; font-weight:normal; margin-left:4px;">(${dr.label.trim()})</span>`
-                    : '';
-                return `
-                    <div class="macro-card-row">
-                        <div class="macro-row-label">
-                            <i class="${icon} macro-row-icon" style="color:${color};"></i>
-                            <span>${dr.type || 'Damage'}</span>${labelText}
-                        </div>
-                        <div class="macro-row-right">
-                            <span class="macro-row-total" style="color:${color};" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${total}</span>
-                        </div>
-                    </div>`;
-            }).join('');
-
-            bodyText = `
-                <div class="macro-chat-card">
-                    <div class="macro-card-header">
-                        <div class="macro-card-header-left">
-                            <i class="fa-solid fa-dice-d20 macro-card-icon"></i>
-                            <div>
-                                <span class="macro-card-charname">${mc.charName}</span>
-                                <span class="macro-card-name">${mc.macroName}</span>
-                            </div>
-                        </div>
-                    </div>
-                    ${descSection}
-                    <div class="macro-card-rows">
-                        ${atkSection}
-                        ${saveSection}
-                        ${dmgSections}
-                    </div>
-                </div>
-            `;
+            bodyText = renderMacroCardHtml(msg.macroCard, isHistorical);
         }
         // Stylized item card for pinging inventory items
         else if (msg.itemCard) {
-            const ic = msg.itemCard;
-            let descHtml = ic.description ? ic.description.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '<i>No description provided.</i>';
-            descHtml = descHtml.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
-            descHtml = descHtml.replace(/\*(.*?)\*/g, '<i>$1</i>');
-            descHtml = descHtml.replace(/---/g, '<hr style="border:0; border-top:1px solid rgba(255,255,255,0.1); margin:8px 0;">');
-            descHtml = descHtml.replace(/\n/g, '<br>');
-            bodyText = `
-                <div class="macro-chat-card">
-                    <div class="macro-card-header">
-                        <div class="macro-card-header-left">
-                            <i class="fa-solid fa-backpack macro-card-icon" style="color:var(--color-gold-base);"></i>
-                            <div>
-                                <span class="macro-card-charname">${ic.charName} pings an item</span>
-                                <span class="macro-card-name" style="color:var(--color-gold-light);">${ic.itemName}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="macro-card-desc" style="font-size:0.96rem; color:var(--color-text-muted); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px; margin-bottom:6px;">
-                        <strong>Weight:</strong> ${ic.weight} lb &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Quantity:</strong> ${ic.qty}
-                    </div>
-                    <div class="macro-card-desc" style="font-size:0.9rem; color:var(--color-text-secondary);">
-                        ${descHtml}
-                    </div>
-                </div>
-            `;
+            bodyText = renderItemCardHtml(msg.itemCard);
         }
 
         messageDiv.innerHTML = headerText + bodyText;
@@ -1654,8 +1660,12 @@ export function initVttChat(vtt, chatHistory) {
         let headerText = `<span class="username">🔒 ${msg.username || vtt.username} <span class="whisper-badge">Private</span><span class="timestamp">${time}</span></span>`;
         let bodyText = `<span class="message-text">${msg.text}</span>`;
 
+        // Structured macro card (private)
+        if (msg.macroCard) {
+            bodyText = renderMacroCardHtml(msg.macroCard, isHistorical);
+        }
         // Structured ability card (private)
-        if (msg.abilityCard) {
+        else if (msg.abilityCard) {
             const ac = msg.abilityCard;
             const descHtml = ac.text;
             bodyText = `
@@ -1668,6 +1678,8 @@ export function initVttChat(vtt, chatHistory) {
                     <div class="ability-chat-desc">${descHtml}</div>
                 </div>
             `;
+        } else if (msg.itemCard) {
+            bodyText = renderItemCardHtml(msg.itemCard);
         } else if (msg.roll) {
             const listStr = msg.roll.diceList.map(d => d.val).join(', ');
             const modStr = msg.roll.modifier !== 0 ? ` ${msg.roll.modifier > 0 ? '+' : '-'} ${Math.abs(msg.roll.modifier)}` : '';

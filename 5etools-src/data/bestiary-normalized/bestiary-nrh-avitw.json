@@ -90,10 +90,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_chimeric_creation_2g0v",
+        "id": "act_chimeric_creation_92mu",
         "name": "Chimeric Creation",
         "actionType": "trait",
         "descriptionHtml": "<p>The fox has fur that changes color to match its surroundings, giving it advantage on Dexterity (Stealth) checks.</p>",
+        "entries": [
+          "The fox has fur that changes color to match its surroundings, giving it advantage on Dexterity ({@skill Stealth}) checks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -107,10 +110,13 @@
         }
       },
       {
-        "id": "act_keen_hearing_6qnl",
+        "id": "act_keen_hearing_7d0c",
         "name": "Keen Hearing",
         "actionType": "trait",
         "descriptionHtml": "<p>The fox has advantage on Wisdom (Perception) checks that rely on hearing.</p>",
+        "entries": [
+          "The fox has advantage on Wisdom ({@skill Perception}) checks that rely on hearing."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -126,10 +132,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_onbq",
+        "id": "act_bite_8jti",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one creature. {@h}1 piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 1 piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one creature. {@h}1 piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -150,11 +159,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-AVitW/Chimeric Fox.webp",
     "tokenImg": "img/bestiary/tokens/NRH-AVitW/Chimeric Fox.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_scarlet_sentinel_nrh-avitw",
@@ -248,10 +269,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_immutable_form_6bf0",
+        "id": "act_immutable_form_pnz1",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The Scarlet Sentinel is immune to any spell or effect that would alter its form.</p>",
+        "entries": [
+          "The Scarlet Sentinel is immune to any spell or effect that would alter its form."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -265,10 +289,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_qadd",
+        "id": "act_magic_resistance_b9jg",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Scarlet Sentinel has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The Scarlet Sentinel has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -282,10 +309,13 @@
         }
       },
       {
-        "id": "act_magic_weapons_569m",
+        "id": "act_magic_weapons_qpi3",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The Scarlet Sentinel's weapon attacks are magical.</p>",
+        "entries": [
+          "The Scarlet Sentinel's weapon attacks are magical."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -301,10 +331,13 @@
     ],
     "actions": [
       {
-        "id": "act_slam_wcix",
+        "id": "act_slam_fss3",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}11 (2d8 + 2) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 11 (2d8 + 2) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d8 + 2}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -330,10 +363,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-AVitW/Scarlet Sentinel.webp",
     "tokenImg": "img/bestiary/tokens/NRH-AVitW/Scarlet Sentinel.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

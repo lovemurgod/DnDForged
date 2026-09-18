@@ -4,135 +4,1343 @@
     "name": "Aberrant Heir",
     "source": "EFA",
     "page": 25,
-    "skills": "history, intimidation",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "History, Intimidation",
+    "tools": "Disguise Kit",
+    "skillsData": {
+      "fixed": [
+        "History",
+        "Intimidation"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Disguise Kit"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "dagger, disguise kit, costume, traveler's clothes + 16 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "disguise kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "costume",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 16
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Aberrant Dragonmark",
+        "description": "This background grants the Aberrant Dragonmark feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Constitution, Charisma\n- **Feat:** Aberrant Dragonmark\n- **Skill Proficiencies:** History and Intimidation\n- **Tool Proficiencies:** Disguise Kit\n- **Equipment:** Choose A or B: (A) Dagger, Disguise Kit, Costume, Traveler's Clothes, 16 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_archaeologist_efa",
     "name": "Archaeologist",
     "source": "EFA",
     "page": 26,
-    "skills": "history, survival",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "History, Survival",
+    "tools": "Cartographer's Tools",
+    "skillsData": {
+      "fixed": [
+        "History",
+        "Survival"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Cartographer's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "cartographer's tools, bullseye lantern, map, map or scroll case, shovel, tent, traveler's clothes + 17 gp",
+              "items": [
+                {
+                  "name": "cartographer's tools",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "bullseye lantern",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "map",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "map or scroll case",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "shovel",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "tent",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 17
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Skilled",
+        "description": "This background grants the Skilled feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Intelligence, Wisdom\n- **Feat:** Skilled\n- **Skill Proficiencies:** History and Survival\n- **Tool Proficiencies:** Cartographer's Tools\n- **Equipment:** Choose A or B: (A) Cartographer's Tools, Bullseye Lantern, Map, Map or Scroll Case, Shovel, Tent, Traveler's Clothes, 17 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_agent_efa",
     "name": "House Agent",
     "source": "EFA",
     "page": 26,
-    "skills": "investigation, persuasion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Investigation, Persuasion",
+    "tools": "Choose 1 from Artisan's Tools of your choice",
+    "skillsData": {
+      "fixed": [
+        "Investigation",
+        "Persuasion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Artisan's Tools of your choice"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Special Item, fine clothes + 20 gp",
+              "items": [
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 20
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Lucky",
+        "description": "This background grants the Lucky feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Intelligence, Charisma\n- **Feat:** Lucky\n- **Skill Proficiencies:** Investigation and Persuasion\n- **Tool Proficiencies:** Choose one kind of Artisan's Tools\n- **Equipment:** Choose A or B: (A) Artisan's Tools (same as above), Fine Clothes, 20 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_cannith_heir_efa",
     "name": "House Cannith Heir",
     "source": "EFA",
     "page": 27,
-    "skills": "investigation, sleight of hand",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Investigation, Sleight of hand",
+    "tools": "Choose 1 from Artisan's Tools of your choice",
+    "skillsData": {
+      "fixed": [
+        "Investigation",
+        "Sleight of hand"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Artisan's Tools of your choice"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Special Item, crowbar, fine clothes, 2x Pouches + 17 gp",
+              "items": [
+                {
+                  "name": "Special Item",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "crowbar",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Pouches",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 17
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Making",
+        "description": "This background grants the Mark Of Making feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Dexterity, Intelligence\n- **Feat:** Mark of Making\n- **Skill Proficiencies:** Investigation and Sleight of Hand\n- **Tool Proficiencies:** Choose one kind of Artisan's Tools\n- **Equipment:** Choose A or B: (A) Artisan's Tools (same as above), Crowbar, Fine Clothes, 2 Pouch, 17 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_deneith_heir_efa",
     "name": "House Deneith Heir",
     "source": "EFA",
     "page": 27,
-    "skills": "insight, perception",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Insight, Perception",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Perception"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "spear, shortbow, arrows (20), gaming set, fine clothes, healer's kit, quiver + 1 gp",
+              "items": [
+                {
+                  "name": "spear",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "shortbow",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "arrows (20)",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "gaming set",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "healer's kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "quiver",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 1
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Sentinel",
+        "description": "This background grants the Mark Of Sentinel feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Constitution, Wisdom\n- **Feat:** Mark of Sentinel\n- **Skill Proficiencies:** Insight and Perception\n- **Tool Proficiencies:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Spear, Shortbow, Arrow, Gaming Set (same as above), Fine Clothes, Healer's Kit, Quiver, 1 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_ghallanda_heir_efa",
     "name": "House Ghallanda Heir",
     "source": "EFA",
     "page": 28,
-    "skills": "insight, persuasion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Insight, Persuasion",
+    "tools": "Cook's Utensils",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Persuasion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Cook's Utensils"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "cook's utensils, fine clothes, iron pot, lamp, 5x oil, perfume + 26 gp",
+              "items": [
+                {
+                  "name": "cook's utensils",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "iron pot",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "lamp",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "oil",
+                  "quantity": 5,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "perfume",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 26
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Hospitality",
+        "description": "This background grants the Mark Of Hospitality feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Wisdom, Charisma\n- **Feat:** Mark of Hospitality\n- **Skill Proficiencies:** Insight and Persuasion\n- **Tool Proficiencies:** Cook's Utensils\n- **Equipment:** Choose A or B: (A) Cook's Utensils, Fine Clothes, Iron Pot, Lamp, Oil (5 flasks), Perfume, 26 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_jorasco_heir_efa",
     "name": "House Jorasco Heir",
     "source": "EFA",
     "page": 28,
-    "skills": "medicine, stealth",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Medicine, Stealth",
+    "tools": "Herbalism Kit",
+    "skillsData": {
+      "fixed": [
+        "Medicine",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Herbalism Kit"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "herbalism kit, fine clothes, healer's kit + 25 gp",
+              "items": [
+                {
+                  "name": "herbalism kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "healer's kit",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 25
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Healing",
+        "description": "This background grants the Mark Of Healing feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Constitution, Wisdom\n- **Feat:** Mark of Healing\n- **Skill Proficiencies:** Medicine and Stealth\n- **Tool Proficiencies:** Herbalism Kit\n- **Equipment:** Choose A or B: (A) Herbalism Kit, Fine Clothes, Healer's Kit, 25 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_kundarak_heir_efa",
     "name": "House Kundarak Heir",
     "source": "EFA",
     "page": 29,
-    "skills": "arcana, investigation",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Arcana, Investigation",
+    "tools": "Thieves' Tools",
+    "skillsData": {
+      "fixed": [
+        "Arcana",
+        "Investigation"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Thieves' Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "thieves' tools, fine clothes + 10 gp",
+              "items": [
+                {
+                  "name": "thieves' tools",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 10
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Warding",
+        "description": "This background grants the Mark Of Warding feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Constitution, Intelligence\n- **Feat:** Mark of Warding\n- **Skill Proficiencies:** Arcana and Investigation\n- **Tool Proficiencies:** Thieves' Tools\n- **Equipment:** Choose A or B: (A) Thieves' Tools, Fine Clothes, 10 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_lyrandar_heir_efa",
     "name": "House Lyrandar Heir",
     "source": "EFA",
     "page": 29,
-    "skills": "acrobatics, nature",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Acrobatics, Nature",
+    "tools": "Navigator's Tools",
+    "skillsData": {
+      "fixed": [
+        "Acrobatics",
+        "Nature"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Navigator's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "navigator's tools, fine clothes + 10 gp",
+              "items": [
+                {
+                  "name": "navigator's tools",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 10
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Storm",
+        "description": "This background grants the Mark Of Storm feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Dexterity, Charisma\n- **Feat:** Mark of Storm\n- **Skill Proficiencies:** Acrobatics and Nature\n- **Tool Proficiencies:** Navigator's Tools\n- **Equipment:** Choose A or B: (A) Navigator's Tools, Fine Clothes, 10 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_medani_heir_efa",
     "name": "House Medani Heir",
     "source": "EFA",
     "page": 30,
-    "skills": "insight, investigation",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Insight, Investigation",
+    "tools": "Disguise Kit",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Investigation"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Disguise Kit"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "disguise kit, fine clothes + 10 gp",
+              "items": [
+                {
+                  "name": "disguise kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 10
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Detection",
+        "description": "This background grants the Mark Of Detection feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Intelligence, Wisdom\n- **Feat:** Mark of Detection\n- **Skill Proficiencies:** Insight and Investigation\n- **Tool Proficiencies:** Disguise Kit\n- **Equipment:** Choose A or B: (A) Disguise Kit, Fine Clothes, 10 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_orien_heir_efa",
     "name": "House Orien Heir",
     "source": "EFA",
     "page": 30,
-    "skills": "acrobatics, athletics",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Acrobatics, Athletics",
+    "tools": "Cartographer's Tools",
+    "skillsData": {
+      "fixed": [
+        "Acrobatics",
+        "Athletics"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Cartographer's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "cartographer's tools, fine clothes, map, map or scroll case + 18 gp",
+              "items": [
+                {
+                  "name": "cartographer's tools",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "map",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "map or scroll case",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 18
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Passage",
+        "description": "This background grants the Mark Of Passage feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Constitution, Intelligence\n- **Feat:** Mark of Passage\n- **Skill Proficiencies:** Acrobatics and Athletics\n- **Tool Proficiencies:** Cartographer's Tools\n- **Equipment:** Choose A or B: (A) Cartographer's Tools, Fine Clothes, Map, Map or Scroll Case, 18 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_phiarlan_heir_efa",
     "name": "House Phiarlan Heir",
     "source": "EFA",
     "page": 31,
-    "skills": "deception, stealth",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Deception, Stealth",
+    "tools": "Disguise Kit",
+    "skillsData": {
+      "fixed": [
+        "Deception",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Disguise Kit"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "disguise kit, fine clothes + 10 gp",
+              "items": [
+                {
+                  "name": "disguise kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 10
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Shadow",
+        "description": "This background grants the Mark Of Shadow feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Wisdom, Charisma\n- **Feat:** Mark of Shadow\n- **Skill Proficiencies:** Deception and Stealth\n- **Tool Proficiencies:** Disguise Kit\n- **Equipment:** Choose A or B: (A) Disguise Kit, Fine Clothes, 10 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_sivis_heir_efa",
     "name": "House Sivis Heir",
     "source": "EFA",
     "page": 31,
-    "skills": "history, perception",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "History, Perception",
+    "tools": "Calligrapher's Supplies",
+    "skillsData": {
+      "fixed": [
+        "History",
+        "Perception"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Calligrapher's Supplies"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "calligrapher's supplies, fine clothes, ink, 5x ink pen, 30x paper, 9x parchment + 8 gp",
+              "items": [
+                {
+                  "name": "calligrapher's supplies",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "ink",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "ink pen",
+                  "quantity": 5,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "paper",
+                  "quantity": 30,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "parchment",
+                  "quantity": 9,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 8
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Scribing",
+        "description": "This background grants the Mark Of Scribing feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Intelligence, Wisdom, Charisma\n- **Feat:** Mark of Scribing\n- **Skill Proficiencies:** History and Perception\n- **Tool Proficiencies:** Calligrapher's Supplies\n- **Equipment:** Choose A or B: (A) Calligrapher's Supplies, Fine Clothes, Ink, 5 Ink Pen, Paper (30 sheets), Parchment (9 sheets), 8 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_tharashk_heir_efa",
     "name": "House Tharashk Heir",
     "source": "EFA",
     "page": 32,
-    "skills": "perception, survival",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Perception, Survival",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Perception",
+        "Survival"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "gaming set, climber's kit, fine clothes, hunting trap, manacles + 2 gp",
+              "items": [
+                {
+                  "name": "gaming set",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "climber's kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "hunting trap",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "manacles",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 2
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Finding",
+        "description": "This background grants the Mark Of Finding feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Intelligence, Wisdom\n- **Feat:** Mark of Finding\n- **Skill Proficiencies:** Perception and Survival\n- **Tool Proficiencies:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Gaming Set (same as above), Climber's Kit, Fine Clothes, Hunting Trap, Manacles, 2 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_thuranni_heir_efa",
     "name": "House Thuranni Heir",
     "source": "EFA",
     "page": 32,
-    "skills": "performance, stealth",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Performance, Stealth",
+    "tools": "Choose 1 from Musical Instrument of your choice",
+    "skillsData": {
+      "fixed": [
+        "Performance",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Musical Instrument of your choice"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "musical instrument, costume, fine clothes + 13 gp",
+              "items": [
+                {
+                  "name": "musical instrument",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "costume",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 13
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Shadow",
+        "description": "This background grants the Mark Of Shadow feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Intelligence, Charisma\n- **Feat:** Mark of Shadow\n- **Skill Proficiencies:** Performance and Stealth\n- **Tool Proficiencies:** Choose one kind of Musical Instrument\n- **Equipment:** Choose A or B: (A) Musical Instrument (same as above), Costume, Fine Clothes, 13 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_house_vadalis_heir_efa",
     "name": "House Vadalis Heir",
     "source": "EFA",
     "page": 33,
-    "skills": "animal handling, nature",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Animal handling, Nature",
+    "tools": "Herbalism Kit",
+    "skillsData": {
+      "fixed": [
+        "Animal handling",
+        "Nature"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Herbalism Kit"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "herbalism kit, fine clothes, net + 29 gp",
+              "items": [
+                {
+                  "name": "herbalism kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "net",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 29
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Mark Of Handling",
+        "description": "This background grants the Mark Of Handling feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Wisdom, Charisma\n- **Feat:** Mark of Handling\n- **Skill Proficiencies:** Animal Handling and Nature\n- **Tool Proficiencies:** Herbalism Kit\n- **Equipment:** Choose A or B: (A) Herbalism Kit, Fine Clothes, Net, 29 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_inquisitive_efa",
     "name": "Inquisitive",
     "source": "EFA",
     "page": 33,
-    "skills": "insight, investigation",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Insight, Investigation",
+    "tools": "Thieves' Tools",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Investigation"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Thieves' Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "thieves' tools, bullseye lantern, crowbar, 10x oil, traveler's clothes + 10 gp",
+              "items": [
+                {
+                  "name": "thieves' tools",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "bullseye lantern",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "crowbar",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "oil",
+                  "quantity": 10,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 10
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Alert",
+        "description": "This background grants the Alert feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Intelligence, Charisma\n- **Feat:** Alert\n- **Skill Proficiencies:** Insight and Investigation\n- **Tool Proficiencies:** Thieves' Tools\n- **Equipment:** Choose A or B: (A) Thieves' Tools, Bullseye Lantern, Crowbar, Oil (10 flasks), Traveler's Clothes, 10 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   }
 ]

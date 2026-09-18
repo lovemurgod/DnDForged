@@ -130,6 +130,180 @@
                     </form>
                 </div>
             </div>
+
+            <!-- MINIMUM REQUIREMENTS SECTION -->
+            <div class="glass-panel min-reqs-card" id="section-minimum-requirements">
+                <div class="min-reqs-header">
+                    <div class="min-reqs-title-wrap">
+                        <i class="fa-solid fa-microchip min-reqs-icon"></i>
+                        <h2 class="min-reqs-title">Minimum Requirements</h2>
+                    </div>
+                    <p class="min-reqs-subtitle">
+                        ForgeD VTT is engineered to be exceptionally lightweight, self-hosted, and ultra-fast. Review the minimum and recommended system specifications below for Game Masters hosting campaigns and Players connecting via web browser.
+                    </p>
+                </div>
+
+                <!-- Dual Comparative Grid -->
+                <div class="min-reqs-grid">
+                    <!-- CARD 1: HOST / GM -->
+                    <div class="req-spec-card host-card">
+                        <div class="req-card-header">
+                            <div class="req-card-badge host"><i class="fa-solid fa-server"></i> GM / Host Machine</div>
+                            <h3 class="req-card-title">Desktop Application</h3>
+                            <p class="req-card-desc">For running <span class="highlight-gold">ForgeDVTT.exe</span> with embedded local web server, database, and Cloudflare Tunnel.</p>
+                        </div>
+
+                        <div class="spec-list">
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-brands fa-windows"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Operating System</span>
+                                    <span class="spec-val">Windows 10 / 11 (64-bit)</span>
+                                    <span class="spec-sub">Native Windows x64 runtime</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-microchip"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Processor (CPU)</span>
+                                    <span class="spec-val">Dual-Core 2.4 GHz (Min)</span>
+                                    <span class="spec-sub">Quad-Core 3.0+ GHz Recommended</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-memory"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">System Memory (RAM)</span>
+                                    <span class="spec-val"><strong class="highlight-gold">4 GB RAM</strong> (Minimum)</span>
+                                    <span class="spec-sub">8 GB – 16 GB for heavy 4K maps & Discord</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-hard-drive"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Disk Storage</span>
+                                    <span class="spec-val">2.5 GB available space</span>
+                                    <span class="spec-sub">~1.2 GB App + custom maps & backups (SSD recommended)</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-display"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Graphics (GPU)</span>
+                                    <span class="spec-val">DirectX 11 / WebGL Capable</span>
+                                    <span class="spec-sub">Integrated Intel HD 520 / AMD Vega 3 or better</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-network-wired"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Network Upload Speed</span>
+                                    <span class="spec-val"><strong class="highlight-gold">5 Mbps Upload</strong> (3–4 Players)</span>
+                                    <span class="spec-sub">15–25+ Mbps for 5+ players loading large maps</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-box-open"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Dependencies</span>
+                                    <span class="spec-val">Zero Configuration</span>
+                                    <span class="spec-sub">Node.js, Chromium, and Cloudflare Tunnel fully bundled</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: PLAYERS / CLIENT -->
+                    <div class="req-spec-card player-card">
+                        <div class="req-card-header">
+                            <div class="req-card-badge player"><i class="fa-solid fa-users"></i> Players & Guests</div>
+                            <h3 class="req-card-title">Any Web Browser</h3>
+                            <p class="req-card-desc">No downloads required. Instant zero-install play on desktop, laptop, iPad/tablet, or mobile phone.</p>
+                        </div>
+
+                        <div class="spec-list">
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-compass"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Supported Browsers</span>
+                                    <span class="spec-val">Chrome, Edge, Firefox, Safari</span>
+                                    <span class="spec-sub">Chrome 90+, Edge 90+, Firefox 90+, Safari 15+</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Compatible Devices</span>
+                                    <span class="spec-val">PC, Mac, Linux, iPad, Android</span>
+                                    <span class="spec-sub">Includes touch-optimized Mobile VTT adapter</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-memory"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Client Memory (RAM)</span>
+                                    <span class="spec-val"><strong class="highlight-blue">2 GB RAM</strong> (Mobile/Tablet)</span>
+                                    <span class="spec-sub">4 GB+ RAM recommended for desktop browser</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-tv"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Display Resolution</span>
+                                    <span class="spec-val">1280 × 720 or higher</span>
+                                    <span class="spec-sub">Supports responsive mobile screens (360px+)</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-bolt"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Graphics Acceleration</span>
+                                    <span class="spec-val">WebGL / Canvas 2D Support</span>
+                                    <span class="spec-sub">Browser hardware acceleration enabled</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-wifi"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Network Download Speed</span>
+                                    <span class="spec-val"><strong class="highlight-blue">3–5 Mbps Download</strong></span>
+                                    <span class="spec-sub">10+ Mbps for faster initial map & asset caching</span>
+                                </div>
+                            </div>
+                            <div class="spec-item">
+                                <div class="spec-icon"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+                                <div class="spec-details">
+                                    <span class="spec-label">Client Installation</span>
+                                    <span class="spec-val">100% Clientless</span>
+                                    <span class="spec-sub">Instant join via campaign link without accounts or installs</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Performance Pro-Tips Callout -->
+                <div class="min-reqs-pro-tips">
+                    <div class="pro-tips-header">
+                        <i class="fa-solid fa-lightbulb"></i>
+                        <h4>Performance Optimization Tips</h4>
+                    </div>
+                    <div class="pro-tips-grid">
+                        <div class="tip-item">
+                            <strong><i class="fa-solid fa-image"></i> Recommended Map Sizes:</strong>
+                            <span>Use <strong>2048 × 2048 (2K) WebP/PNG</strong> battlemaps. They load in &lt;1s over mobile and broadband while maintaining razor-sharp token grids.</span>
+                        </div>
+                        <div class="tip-item">
+                            <strong><i class="fa-solid fa-gauge-high"></i> Hardware Acceleration:</strong>
+                            <span>Ensure <em>"Use graphics acceleration when available"</em> is enabled in player browser settings for fluid 60 FPS 3D dice physics and dynamic fog rendering.</span>
+                        </div>
+                        <div class="tip-item">
+                            <strong><i class="fa-solid fa-shield-halved"></i> Zero-Config Cloudflare Tunnel:</strong>
+                            <span>No router port-forwarding needed. Player traffic routes encrypted over Cloudflare's edge network with typical roundtrip latencies under <strong>30–60ms</strong>.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- TAB 2: MASTER INTERACTIVE GUIDE -->
@@ -255,19 +429,6 @@
                                 <div class="btn-inspector-action"><i class="fa-solid fa-circle-check"></i> Left-Click / Drag / Multi-Select</div>
                             </div>
 
-                            <!-- Lighting Tool -->
-                            <div class="btn-inspector-card" data-keywords="lighting torch lightbulb lantern radius angle darkness gm only shortcut l">
-                                <div class="btn-inspector-header">
-                                    <div class="btn-inspector-title-wrap">
-                                        <div class="btn-inspector-icon"><i class="fa-solid fa-lightbulb"></i></div>
-                                        <span class="btn-inspector-name">Add Lighting Object</span>
-                                    </div>
-                                    <span class="kbd-badge">L (GM)</span>
-                                </div>
-                                <p class="btn-inspector-desc">GM tool to place light sources on the map (Torches, Lanterns, Campfires, Magical Darkness). Click on the canvas to place a light node, then customize its bright/dim radius, color tint, and emission angle.</p>
-                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> GM Only / Dynamic Occlusion</div>
-                            </div>
-
                             <!-- Measure Tool -->
                             <div class="btn-inspector-card" data-keywords="measure ruler distance line circle radius cone box square shortcut m">
                                 <div class="btn-inspector-header">
@@ -305,6 +466,19 @@
                                 </div>
                                 <p class="btn-inspector-desc">Broadcast an animated pulsing beacon on the canvas to draw all players' and GM's attention to a specific tile, trap, secret door, or tactical encounter zone.</p>
                                 <div class="btn-inspector-action"><i class="fa-solid fa-circle-check"></i> Synchronized Animated Radar Ping</div>
+                            </div>
+
+                            <!-- Lighting Tool -->
+                            <div class="btn-inspector-card" data-keywords="lighting torch lightbulb lantern radius angle darkness gm only shortcut l">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                                        <span class="btn-inspector-name">Add Lighting Object</span>
+                                    </div>
+                                    <span class="kbd-badge">L (GM)</span>
+                                </div>
+                                <p class="btn-inspector-desc">GM tool to place light sources on the map (Torches, Lanterns, Campfires, Magical Darkness). Click on the canvas to place a light node, then customize its bright/dim radius, color tint, and emission angle.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> GM Only / Dynamic Occlusion</div>
                             </div>
 
                             <!-- Map Manager Button -->

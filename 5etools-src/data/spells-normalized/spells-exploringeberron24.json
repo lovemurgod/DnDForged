@@ -1,0 +1,176 @@
+[
+  {
+    "id": "sp_aundair_s_silent_sanctum_exploringeberron24",
+    "name": "Aundair's Silent Sanctum",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "level": 0,
+    "school": "Illusion",
+    "castingTime": "1 action",
+    "range": "Self (5 feet emanation)",
+    "components": "S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You surround yourself with an invisible bubble of energy in a 5-foot Emanation [Area of Effect]. The sphere muffles sound in both directions. Creatures outside of the Emanation [Area of Effect] have Disadvantage on Wisdom (Perception) checks made to hear any sounds from within the Emanation [Area of Effect], and creatures inside the Emanation [Area of Effect] have Disadvantage on Wisdom (Perception) checks made to hear sounds outside of the Emanation [Area of Effect].</p><p>In addition, creatures have Advantage on saving throws against effects that require them to hear a sound from the other side of the Emanation [Area of Effect], such as the Command spell.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Artificer",
+      "Bard",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_concussive_burst_exploringeberron24",
+    "name": "Concussive Burst",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "level": 1,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "1 round",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>A pulse of energy ripples through the air at a point you choose within range, dealing minor damage over a wide area. Each creature within a 20-foot-radius Sphere [Area of Effect] centered on that point makes a Constitution saving throw, taking 2d4 Force damage on a failed save and has the Deafened condition until the end of your next turn. On a successful save, a creature takes half as much damage only.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 2d4 for each spell slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 2d4 for each spell slot level above 1.</p></div>",
+    "classes": [
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d4",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Deafened"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_force_blast_exploringeberron24",
+    "name": "Force Blast",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "180 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You unleash a bolt of mystical power at a creature or an object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 Force damage.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>This damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>This damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8).</p></div>",
+    "classes": [
+      "Artificer",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d8",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "1d8",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "Force damage",
+      "scaling": {
+        "1": "1d8",
+        "5": "2d8",
+        "11": "3d8",
+        "17": "4d8"
+      }
+    },
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "OBJ",
+      "Scaling Damage"
+    ]
+  },
+  {
+    "id": "sp_magecraft_exploringeberron24",
+    "name": "Magecraft",
+    "source": "ExploringEberron24",
+    "page": 0,
+    "level": 0,
+    "school": "Divination",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S, M (a set of Artisan's Tools or a Herbalism Kit)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You channel your arcane talent through a set of tools. Choose an Artisan's Tools or Herbalism Kit. Until the spell ends, you add 1d6 to ability checks you make when you take the Utilize action with the chosen tool.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Artificer",
+      "Bard",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  }
+]

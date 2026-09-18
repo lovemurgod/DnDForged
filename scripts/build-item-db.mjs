@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getBrewEntities } from './brew-data-loader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -537,17 +538,29 @@ export function buildItemsDatabase() {
         baseItems.forEach(it => processItem(it));
     }
 
+    const brewBaseItems = getBrewEntities('baseitem');
+    brewBaseItems.forEach(it => {
+        baseItems.push(it);
+        processItem(it);
+    });
+
     if (fs.existsSync(itemsFile)) {
         const itemsData = JSON.parse(fs.readFileSync(itemsFile, 'utf8'));
         (itemsData.item || []).forEach(it => processItem(it));
         (itemsData.itemGroup || []).forEach(it => processItem(it));
     }
 
+    const brewItems = getBrewEntities('item');
+    brewItems.forEach(it => processItem(it));
+
+    const brewItemGroups = getBrewEntities('itemGroup');
+    brewItemGroups.forEach(it => processItem(it));
+
     // ─── Expand Magic Variants into standalone entries ───────────────────────
     if (fs.existsSync(magicVariantsFile) && baseItems.length > 0) {
         console.log('✨ Expanding magic item variants...');
         const variantData = JSON.parse(fs.readFileSync(magicVariantsFile, 'utf8'));
-        const variants = variantData.magicvariant || [];
+        const variants = [...(variantData.magicvariant || []), ...getBrewEntities('magicvariant')];
 
         let variantCount = 0;
         for (const variant of variants) {

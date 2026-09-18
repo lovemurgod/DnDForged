@@ -1,0 +1,1006 @@
+[
+  {
+    "id": "creature_animal_of_the_land_xua2023druidandpaladin",
+    "name": "Animal of the Land",
+    "source": "XUA2023DruidAndPaladin",
+    "edition": "2014",
+    "page": 7,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Terrestrial Animal",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": {
+      "special": "equal your Wisdom score"
+    },
+    "dex": {
+      "special": "equal your Wisdom score"
+    },
+    "con": {
+      "special": "use your scores"
+    },
+    "int": {
+      "special": "use your scores"
+    },
+    "wis": {
+      "special": "use your scores"
+    },
+    "cha": {
+      "special": "use your scores"
+    },
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_keen_senses_vmh0",
+        "name": "Keen Senses",
+        "actionType": "trait",
+        "descriptionHtml": "<p>You have Advantage on Wisdom (Perception) checks.</p>",
+        "entries": [
+          "You have Advantage on Wisdom (Perception) checks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bestial_strike_9a4w",
+        "name": "Bestial Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>Attack: your Spell Attack Modifier to hit, reach 5 ft., one target. Hit: 1d8 + your Wisdom modifier Bludgeoning, Piercing, or Slashing damage.</p>",
+        "entries": [
+          "{@atk m} your Spell Attack Modifier to hit, reach 5 ft., one target. {@h}{@damage 1d8} + your Wisdom modifier Bludgeoning, Piercing, or Slashing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_multiattack__requires_5th__level__ymhq",
+        "name": "Multiattack (Requires 5th+ Level)",
+        "actionType": "action",
+        "descriptionHtml": "<p>You make two Bestial Strike attacks.</p>",
+        "entries": [
+          "You make two Bestial Strike attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2023DruidAndPaladin/Animal of the Land.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2023DruidAndPaladin/Animal of the Land.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_animal_of_the_sea_xua2023druidandpaladin",
+    "name": "Animal of the Sea",
+    "source": "XUA2023DruidAndPaladin",
+    "edition": "2014",
+    "page": 7,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": {
+      "special": "equal your Wisdom score"
+    },
+    "dex": {
+      "special": "equal your Wisdom score"
+    },
+    "con": {
+      "special": "use your scores"
+    },
+    "int": {
+      "special": "use your scores"
+    },
+    "wis": {
+      "special": "use your scores"
+    },
+    "cha": {
+      "special": "use your scores"
+    },
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 90 ft."
+    },
+    "languages": [
+      "the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_20zw",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>You can breathe air and water.</p>",
+        "entries": [
+          "You can breathe air and water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bestial_strike_pgdx",
+        "name": "Bestial Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>Attack: your Spell Attack Modifier to hit, reach 5 ft., one target. Hit: 1d8 + your Wisdom modifier Bludgeoning, Piercing, or Slashing damage.</p>",
+        "entries": [
+          "{@atk m} your Spell Attack Modifier to hit, reach 5 ft., one target. {@h}{@damage 1d8} + your Wisdom modifier Bludgeoning, Piercing, or Slashing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_multiattack__requires_5th__level__j3r7",
+        "name": "Multiattack (Requires 5th+ Level)",
+        "actionType": "action",
+        "descriptionHtml": "<p>You make two Bestial Strike attacks.</p>",
+        "entries": [
+          "You make two Bestial Strike attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2023DruidAndPaladin/Animal of the Sea.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2023DruidAndPaladin/Animal of the Sea.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_animal_of_the_sky_xua2023druidandpaladin",
+    "name": "Animal of the Sky",
+    "source": "XUA2023DruidAndPaladin",
+    "edition": "2014",
+    "page": 7,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Winged Animal",
+    "subtype": "",
+    "alignment": "Unaligned",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": {
+      "special": "equal your Wisdom score"
+    },
+    "dex": {
+      "special": "equal your Wisdom score"
+    },
+    "con": {
+      "special": "use your scores"
+    },
+    "int": {
+      "special": "use your scores"
+    },
+    "wis": {
+      "special": "use your scores"
+    },
+    "cha": {
+      "special": "use your scores"
+    },
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 120 ft."
+    },
+    "languages": [
+      "the languages you know"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_flyby_6fkd",
+        "name": "Flyby",
+        "actionType": "trait",
+        "descriptionHtml": "<p>You don't provoke Opportunity Attacks when you fly out of an enemy's reach.</p>",
+        "entries": [
+          "You don't provoke Opportunity Attacks when you fly out of an enemy's reach."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_keen_senses_8ihl",
+        "name": "Keen Senses",
+        "actionType": "trait",
+        "descriptionHtml": "<p>You have Advantage on Wisdom (Perception) checks.</p>",
+        "entries": [
+          "You have Advantage on Wisdom (Perception) checks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bestial_strike_hmwv",
+        "name": "Bestial Strike",
+        "actionType": "action",
+        "descriptionHtml": "<p>Attack: your Spell Attack Modifier to hit, reach 5 ft., one target. Hit: 1d8 + your Wisdom modifier Bludgeoning, Piercing, or Slashing damage.</p>",
+        "entries": [
+          "{@atk m} your Spell Attack Modifier to hit, reach 5 ft., one target. {@h}{@damage 1d8} + your Wisdom modifier Bludgeoning, Piercing, or Slashing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_multiattack__requires_5th__level__nh9f",
+        "name": "Multiattack (Requires 5th+ Level)",
+        "actionType": "action",
+        "descriptionHtml": "<p>You make two Bestial Strike attacks.</p>",
+        "entries": [
+          "You make two Bestial Strike attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2023DruidAndPaladin/Animal of the Sky.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2023DruidAndPaladin/Animal of the Sky.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_otherworldly_familiar_xua2023druidandpaladin",
+    "name": "Otherworldly Familiar",
+    "source": "XUA2023DruidAndPaladin",
+    "edition": "2014",
+    "page": 19,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 3,
+        "mod": -4
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 3,
+    "dex": 14,
+    "con": 10,
+    "int": 10,
+    "wis": 14,
+    "cha": 8,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 12,
+    "senses": {
+      "passivePerception": 12,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "{@variantrule Telepathy|XUA2023DruidAndPaladin} 120 ft. (only between you and the familiar)"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious__water_only__jn0h",
+        "name": "Amphibious (Water Only)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The familiar can breathe air and water.</p>",
+        "entries": [
+          "The familiar can breathe air and water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_extradimensional_escape__recharges_after_a_long_rest__y30o",
+        "name": "Extradimensional Escape (Recharges after a Long Rest)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When the familiar would drop to 0 Hit Points, it instead drops to 1 Hit Point and vanishes into an extradimensional space, leaving behind anything it was wearing or carrying. It remains there for 1 hour or until you summon it as a Magic action, and then it reappears in your space.</p>",
+        "entries": [
+          "When the familiar would drop to 0 Hit Points, it instead drops to 1 Hit Point and vanishes into an extradimensional space, leaving behind anything it was wearing or carrying. It remains there for 1 hour or until you summon it as a {@action Magic|XUA2023DruidAndPaladin} action, and then it reappears in your space."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_otherworldly_scratch_jmlr",
+        "name": "Otherworldly Scratch",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Spell Attack: your Spell Attack Modifier to hit, reach 5 ft., one target. Hit: 1 + the spell's level of Radiant damage (Celestial), Psychic damage (Fey), or Necrotic damage (Fiend).</p>",
+        "entries": [
+          "{@atk ms} your Spell Attack Modifier to hit, reach 5 ft., one target. {@h}1 + the spell's level of Radiant damage (Celestial), Psychic damage (Fey), or Necrotic damage (Fiend)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_deliver_spell_z86f",
+        "name": "Deliver Spell",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>When you cast a spell with a range of touch, the familiar can deliver the spell with its touch.</p><p>To do so, the familiar must be within 120 feet of you.</p>",
+        "entries": [
+          "When you cast a spell with a range of touch, the familiar can deliver the spell with its touch.",
+          "To do so, the familiar must be within 120 feet of you."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2023DruidAndPaladin/Otherworldly Familiar.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2023DruidAndPaladin/Otherworldly Familiar.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_otherworldly_steed_xua2023druidandpaladin",
+    "name": "Otherworldly Steed",
+    "source": "XUA2023DruidAndPaladin",
+    "edition": "2014",
+    "page": 19,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 60,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 18,
+    "dex": 12,
+    "con": 14,
+    "int": 6,
+    "wis": 12,
+    "cha": 8,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": ""
+    },
+    "languages": [
+      "{@variantrule Telepathy|XUA2023DruidAndPaladin} 1 mile (only between you and the steed)"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_life_bond_sttf",
+        "name": "Life Bond",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When you regain Hit Points from a spell of 1st level or higher, the steed regains the same number of Hit Points if you're within 5 feet of it.</p>",
+        "entries": [
+          "When you regain Hit Points from a spell of 1st level or higher, the steed regains the same number of Hit Points if you're within 5 feet of it."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_otherworldly_maul_tand",
+        "name": "Otherworldly Maul",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Spell Attack: your Spell Attack Modifier to hit, reach 5 ft., one target. Hit: 1d8 + the spell's level of Radiant damage (Celestial), Psychic damage (Fey), or Necrotic damage (Fiend).</p>",
+        "entries": [
+          "{@atk ms} your Spell Attack Modifier to hit, reach 5 ft., one target. {@h}{@dice 1d8} + the spell's level of Radiant damage (Celestial), Psychic damage (Fey), or Necrotic damage (Fiend)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_fey_step__fey_only__recharges_after_a_long_rest__ipb1",
+        "name": "Fey Step (Fey Only; Recharges after a Long Rest)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The steed teleports, along with its rider, to an unoccupied space of your choice up to 60 feet away.</p>",
+        "entries": [
+          "The steed teleports, along with its rider, to an unoccupied space of your choice up to 60 feet away."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_fell_glare__fiend_only__recharges_after_a_long_rest__lf0c",
+        "name": "Fell Glare (Fiend Only; Recharges after a Long Rest)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The steed's eyes gleam with fiendish light as it targets one creature it can perceive up to 60 feet away. The target must succeed on a Wisdom saving throw against your Spell Save DC or have the Frightened condition until the end of your next turn.</p>",
+        "entries": [
+          "The steed's eyes gleam with fiendish light as it targets one creature it can perceive up to 60 feet away. The target must succeed on a Wisdom saving throw against your Spell Save DC or have the Frightened condition until the end of your next turn."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_healing_touch__celestial_only__recharges_after_a_long_rest__wbs1",
+        "name": "Healing Touch (Celestial Only; Recharges after a Long Rest)",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The steed touches another creature and restores a number of Hit Points to it equal to 2d8 + the spell's level.</p>",
+        "entries": [
+          "The steed touches another creature and restores a number of Hit Points to it equal to {@dice 2d8} + the spell's level."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2023DruidAndPaladin/Otherworldly Steed.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2023DruidAndPaladin/Otherworldly Steed.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

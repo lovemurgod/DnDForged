@@ -1,0 +1,163 @@
+[
+  {
+    "id": "sp_intellect_fortress_ua2020psionicoptionsrevisited",
+    "name": "Intellect Fortress",
+    "source": "UA2020PsionicOptionsRevisited",
+    "page": 7,
+    "level": 4,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "30 feet",
+    "components": "V",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>For the duration, you or one willing creature you can see within range has resistance to psychic damage, as well as advantage on Intelligence, Wisdom, and Charisma saving throws.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 5th level or higher, you can target one additional creature for each slot level above 4th. The creatures must be within 30 feet of each other when you target them.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 5th level or higher, you can target one additional creature for each slot level above 4th. The creatures must be within 30 feet of each other when you target them.</p></div>",
+    "classes": [
+      "Bard",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_mind_sliver_ua2020psionicoptionsrevisited",
+    "name": "Mind Sliver",
+    "source": "UA2020PsionicOptionsRevisited",
+    "page": 7,
+    "level": 0,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V",
+    "duration": "1 round",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You drive a disorienting spike of psychic energy into the mind of one creature you can see within range. The target must make an Intelligence saving throw. Unless the saving throw is successful, the target takes 1d6 psychic damage, and the first time it makes a saving throw before the end of your next turn, it must roll a d4 and subtract the number rolled from the save.</p><p>This spell's damage increases by 1d6 when you reach certain levels: 5th level (2d6), 11th level (3d6), and 17th level (4d6).</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Aberrant Mind",
+        "shortName": "Aberrant Mind",
+        "source": "TCE",
+        "className": "Sorcerer",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Aberrant Sorcery",
+        "shortName": "Aberrant",
+        "source": "XPHB",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "psychic damage",
+      "scaling": {
+        "1": "1d6",
+        "5": "2d6",
+        "11": "3d6",
+        "17": "4d6"
+      }
+    },
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Scaling Damage",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_mind_thrust_ua2020psionicoptionsrevisited",
+    "name": "Mind Thrust",
+    "source": "UA2020PsionicOptionsRevisited",
+    "page": 7,
+    "level": 2,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V",
+    "duration": "1 round",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You thrust a lance of psychic disruption into the mind of one creature you can see within range. The target must make an Intelligence saving throw. On a failed save, the target takes 3d6 psychic damage, and it can't take a reaction until the end of its next turn. Moreover, on its next turn, it must choose whether it gets a move, an action, or a bonus action; it gets only one of the three. On a successful save, the target takes half as much damage and suffers none of the spell's other effects.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd. The creatures must be within 30 feet of each other when you target them.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 3rd level or higher, you can target one additional creature for each slot level above 2nd. The creatures must be within 30 feet of each other when you target them.</p></div>",
+    "classes": [
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Sight Required",
+      "UBA"
+    ]
+  }
+]

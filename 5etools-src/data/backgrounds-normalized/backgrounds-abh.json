@@ -4,23 +4,308 @@
     "name": "Carouser",
     "source": "ABH",
     "page": 6,
-    "skills": "deception, persuasion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Deception, Persuasion",
+    "tools": "Gaming Set",
+    "skillsData": {
+      "fixed": [
+        "Deception",
+        "Persuasion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Gaming Set"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "dagger, Gaming Set (same as chosen proficiency), fine clothes, glass bottle, mirror, perfume, pouch, tinderbox + 19 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Gaming Set (same as chosen proficiency)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "glass bottle",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "mirror",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "perfume",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "tinderbox",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 19
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Tireless Reveler",
+        "description": "This background grants the Tireless Reveler feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Intelligence, Charisma\n- **Feat:** Tireless Reveler\n- **Skill Proficiencies:** Deception and Persuasion\n- **Tool Proficiency:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Dagger, Gaming Set (same as above), Fine Clothes, Glass Bottle, Mirror, Perfume, Pouch, Tinderbox, 19 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_vampire_devotee_abh",
     "name": "Vampire Devotee",
     "source": "ABH",
     "page": 6,
-    "skills": "persuasion, stealth",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Persuasion, Stealth",
+    "tools": "Cook's Utensils",
+    "skillsData": {
+      "fixed": [
+        "Persuasion",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Cook's Utensils"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "cook's utensils, fine clothes, 2x Glass Bottles, healer's kit, perfume, lamp, Oil (3 flasks), waterskin + 19 gp",
+              "items": [
+                {
+                  "name": "cook's utensils",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "fine clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Glass Bottles",
+                  "quantity": 2,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "healer's kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "perfume",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "lamp",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Oil (3 flasks)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "waterskin",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 19
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Vampire's Plaything",
+        "description": "This background grants the Vampire's Plaything feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Constitution, Charisma\n- **Feat:** Vampire's Plaything\n- **Skill Proficiencies:** Persuasion and Stealth\n- **Tool Proficiency:** Cook's Utensils\n- **Equipment:** Choose A or B: (A) Cook's Utensils, Fine Clothes, 2 Glass Bottle, Healer's Kit, Perfume, Lamp, Oil (3 flasks), Waterskin, 19 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_vampire_survivor_abh",
     "name": "Vampire Survivor",
     "source": "ABH",
     "page": 7,
-    "skills": "insight, religion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Insight, Religion",
+    "tools": "Woodcarver's Tools",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Religion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Woodcarver's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "woodcarver's tools, crowbar, hooded lantern, Holy Symbol (reliquary), holy water, mirror, Oil (3 flasks), tinderbox, traveler's clothes, waterskin + 4 gp",
+              "items": [
+                {
+                  "name": "woodcarver's tools",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "crowbar",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "hooded lantern",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Holy Symbol (reliquary)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "holy water",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "mirror",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Oil (3 flasks)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "tinderbox",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "waterskin",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 4
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Vampire Hunter",
+        "description": "This background grants the Vampire Hunter feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Constitution, Wisdom\n- **Feat:** Vampire Hunter\n- **Skill Proficiencies:** Insight and Religion\n- **Tool Proficiency:** Woodcarver's Tools\n- **Equipment:** Choose A or B: (A) Woodcarver's Tools, Crowbar, Hooded Lantern, Holy Symbol (reliquary), Holy Water, Mirror, Oil (3 flasks), Tinderbox, Traveler's Clothes, Waterskin, 4 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   }
 ]

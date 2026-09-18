@@ -89,10 +89,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration__slaad_only__28ua",
+        "id": "act_regeneration__slaad_only__ffds",
         "name": "Regeneration (Slaad Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The aberration regains 5 hit points at the start of its turn if it has at least 1 hit point.</p>",
+        "entries": [
+          "The aberration regains 5 hit points at the start of its turn if it has at least 1 hit point."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -106,10 +109,13 @@
         }
       },
       {
-        "id": "act_whispering_aura__star_spawn_only__k2ns",
+        "id": "act_whispering_aura__star_spawn_only__jp4u",
         "name": "Whispering Aura (Star Spawn Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of the aberration's turns, each creature within 5 feet of the aberration must succeed on a Wisdom saving throw against your spell save DC or take 2d6 psychic damage, provided that the aberration isn't incapacitated.</p>",
+        "entries": [
+          "At the start of each of the aberration's turns, each creature within 5 feet of the aberration must succeed on a Wisdom saving throw against your spell save DC or take {@damage 2d6} psychic damage, provided that the aberration isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -130,10 +136,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_52my",
+        "id": "act_multiattack_d5cm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The aberration makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The aberration makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -147,10 +156,13 @@
         }
       },
       {
-        "id": "act_eye_ray__beholderkin_only__0v9m",
+        "id": "act_eye_ray__beholderkin_only__vivw",
         "name": "Eye Ray (Beholderkin Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>rs {@hitYourSpellAttack} to hit, range 150 ft., one creature. {@h}1d8 + 3 + summonSpellLevel psychic damage.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: {@hitYourSpellAttack} to hit, range 150 ft., one creature. Hit: 1d8 + 3 + summonSpellLevel psychic damage.</p>",
+        "entries": [
+          "{@atk rs} {@hitYourSpellAttack} to hit, range 150 ft., one creature. {@h}{@damage 1d8 + 3 + summonSpellLevel} psychic damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -169,10 +181,13 @@
         }
       },
       {
-        "id": "act_claws__slaad_only__6hmk",
+        "id": "act_claws__slaad_only__p0zb",
         "name": "Claws (Slaad Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d10 + 3 + summonSpellLevel slashing damage. If the target is a creature, it can't regain hit points until the start of the aberration's next turn.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d10 + 3 + summonSpellLevel slashing damage. If the target is a creature, it can't regain hit points until the start of the aberration's next turn.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d10 + 3 + summonSpellLevel} slashing damage. If the target is a creature, it can't regain hit points until the start of the aberration's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -191,10 +206,13 @@
         }
       },
       {
-        "id": "act_psychic_slam__star_spawn_only__ocj7",
+        "id": "act_psychic_slam__star_spawn_only__z46l",
         "name": "Psychic Slam (Star Spawn Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>ms {@hitYourSpellAttack} to hit, reach 5 ft., one creature. {@h}1d8 + 3 + summonSpellLevel psychic damage.</p>",
+        "descriptionHtml": "<p>Melee Spell Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one creature. Hit: 1d8 + 3 + summonSpellLevel psychic damage.</p>",
+        "entries": [
+          "{@atk ms} {@hitYourSpellAttack} to hit, reach 5 ft., one creature. {@h}{@damage 1d8 + 3 + summonSpellLevel} psychic damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -220,11 +238,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Aberrant Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Aberrant Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_adult_red_dracolich_tce",
@@ -332,10 +362,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__90ib",
+        "id": "act_legendary_resistance__3_day__fcaw",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the dragon fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -351,10 +384,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_mfj6",
+        "id": "act_multiattack_hhdx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
+        "entries": [
+          "The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -368,10 +404,13 @@
         }
       },
       {
-        "id": "act_bite_rcem",
+        "id": "act_bite_cqgc",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +14 to hit, reach 10 ft., one target. {@h}19 (2d10 + 8) piercing damage plus 7 (2d6) fire damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 10 ft., one target. Hit: 19 (2d10 + 8) piercing damage plus 7 (2d6) fire damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 14} to hit, reach 10 ft., one target. {@h}19 ({@damage 2d10 + 8}) piercing damage plus 7 ({@damage 2d6}) fire damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -394,10 +433,13 @@
         }
       },
       {
-        "id": "act_claw_qsq9",
+        "id": "act_claw_k8au",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +14 to hit, reach 5 ft., one target. {@h}15 (2d6 + 8) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 5 ft., one target. Hit: 15 (2d6 + 8) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 14} to hit, reach 5 ft., one target. {@h}15 ({@damage 2d6 + 8}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -416,10 +458,13 @@
         }
       },
       {
-        "id": "act_tail_5d4k",
+        "id": "act_tail_lis1",
         "name": "Tail",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +14 to hit, reach 15 ft., one target. {@h}17 (2d8 + 8) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 15 ft., one target. Hit: 17 (2d8 + 8) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 14} to hit, reach 15 ft., one target. {@h}17 ({@damage 2d8 + 8}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -438,10 +483,13 @@
         }
       },
       {
-        "id": "act_frightful_presence_3llo",
+        "id": "act_frightful_presence_lrvu",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
+        "entries": [
+          "Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a {@dc 19} Wisdom saving throw or become {@condition frightened} for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -458,10 +506,13 @@
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__t1ej",
+        "id": "act_fire_breath__recharge_5__jka7",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales fire in a 60-foot cone. Each creature in that area must make a DC 21 Dexterity saving throw, taking 63 (18d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The dragon exhales fire in a 60-foot cone. Each creature in that area must make a {@dc 21} Dexterity saving throw, taking 63 ({@damage 18d6}) fire damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -490,10 +541,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_w8jn",
+          "id": "act_detect_lf7x",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a Wisdom (Perception) check.</p>",
+          "entries": [
+            "The dragon makes a Wisdom ({@skill Perception}) check."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -507,10 +561,13 @@
           }
         },
         {
-          "id": "act_tail_attack_oujn",
+          "id": "act_tail_attack_7wri",
           "name": "Tail Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a tail attack.</p>",
+          "entries": [
+            "The dragon makes a tail attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -524,10 +581,13 @@
           }
         },
         {
-          "id": "act_wing_attack__costs_2_actions__2syp",
+          "id": "act_wing_attack__costs_2_actions__2ahn",
           "name": "Wing Attack (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon beats its wings. Each creature within 10 feet of the dragon must succeed on a DC 22 Dexterity saving throw or take 15 (2d6 + 8) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed.</p>",
+          "entries": [
+            "The dragon beats its wings. Each creature within 10 feet of the dragon must succeed on a {@dc 22} Dexterity saving throw or take 15 ({@damage 2d6 + 8}) bludgeoning damage and be knocked {@condition prone}. The dragon can then fly up to half its flying speed."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -550,12 +610,16 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_lair_action_vhkb",
-        "name": "Lair Action",
+        "id": "act_magma_erupts_90x8",
+        "name": "Magma Erupts",
         "actionType": "lair",
         "descriptionHtml": "<p>Magma erupts from a point on the ground the dragon can see within 120 feet of it, creating a 20-foot-high, 5-foot-radius geyser. Each creature in the geyser's area must make a DC 15 Dexterity saving throw, taking 21 (6d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Magma erupts from a point on the ground the dragon can see within 120 feet of it, creating a 20-foot-high, 5-foot-radius geyser. Each creature in the geyser's area must make a {@dc 15} Dexterity saving throw, taking 21 ({@damage 6d6}) fire damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -577,10 +641,13 @@
         }
       },
       {
-        "id": "act_lair_action_ndx3",
-        "name": "Lair Action",
+        "id": "act_tremor_shakes_l6i0",
+        "name": "Tremor Shakes",
         "actionType": "lair",
         "descriptionHtml": "<p>A tremor shakes the lair in a 60-foot radius around the dragon. Each creature other than the dragon on the ground in that area must succeed on a DC 15 Dexterity saving throw or be knocked prone.</p>",
+        "entries": [
+          "A tremor shakes the lair in a 60-foot radius around the dragon. Each creature other than the dragon on the ground in that area must succeed on a {@dc 15} Dexterity saving throw or be knocked {@condition prone}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -597,10 +664,13 @@
         }
       },
       {
-        "id": "act_lair_action_fyug",
-        "name": "Lair Action",
+        "id": "act_volcanic_gases_form_au89",
+        "name": "Volcanic Gases Form",
         "actionType": "lair",
         "descriptionHtml": "<p>Volcanic gases form a cloud in a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is lightly obscured. It lasts until initiative count 20 on the next round. Each creature that starts its turn in the cloud must succeed on a DC 13 Constitution saving throw or be poisoned until the end of its turn. While poisoned in this way, a creature is incapacitated.</p>",
+        "entries": [
+          "Volcanic gases form a cloud in a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is lightly obscured. It lasts until initiative count 20 on the next round. Each creature that starts its turn in the cloud must succeed on a {@dc 13} Constitution saving throw or be {@condition poisoned} until the end of its turn. While {@condition poisoned} in this way, a creature is {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -617,10 +687,149 @@
         }
       },
       {
-        "id": "act_additional_lair_actions_d0ff",
-        "name": "Additional Lair Actions",
+        "id": "act_noxious_smoke_to10",
+        "name": "Noxious Smoke",
         "actionType": "lair",
-        "descriptionHtml": "<p>At your discretion, a legendary (Adult Red Dragon or Ancient Red Dragon) red dragon can use one or both of the following additional lair actions while in its lair:</p><ul><li><strong><em>Noxious Smoke.</em></strong> <p>A cloud of thick, dark smoke fills a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is Vision and Light. A creature other than the dragon that starts its turn in the cloud or enters it for the first time on its turn must succeed on a DC 15 Constitution saving throw or be poisoned until the end of its turn. The cloud lasts until initiative count 20 on the next round.</p></li><li><strong><em>Searing Heat.</em></strong> <p>Searing heat spreads out in a 15-foot-radius sphere centered on a point the dragon can see within 120 feet of it. Any creature that enters the affected area or starts its turn there must make a DC 15 Constitution saving throw, taking 10 (3d6) fire damage on a failed save, or half as much damage on a successful one. The heat lasts until initiative count 20 on the next round.</p></li></ul>",
+        "descriptionHtml": "<p>A cloud of thick, dark smoke fills a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is Vision and Light. A creature other than the dragon that starts its turn in the cloud or enters it for the first time on its turn must succeed on a DC 15 Constitution saving throw or be poisoned until the end of its turn. The cloud lasts until initiative count 20 on the next round.</p>",
+        "entries": [
+          "A cloud of thick, dark smoke fills a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is {@quickref Vision and Light|PHB|2||heavily obscured}. A creature other than the dragon that starts its turn in the cloud or enters it for the first time on its turn must succeed on a {@dc 15} Constitution saving throw or be {@condition poisoned} until the end of its turn. The cloud lasts until initiative count 20 on the next round."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "CON"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_searing_heat_tj3y",
+        "name": "Searing Heat",
+        "actionType": "lair",
+        "descriptionHtml": "<p>Searing heat spreads out in a 15-foot-radius sphere centered on a point the dragon can see within 120 feet of it. Any creature that enters the affected area or starts its turn there must make a DC 15 Constitution saving throw, taking 10 (3d6) fire damage on a failed save, or half as much damage on a successful one. The heat lasts until initiative count 20 on the next round.</p>",
+        "entries": [
+          "Searing heat spreads out in a 15-foot-radius sphere centered on a point the dragon can see within 120 feet of it. Any creature that enters the affected area or starts its turn there must make a {@dc 15} Constitution saving throw, taking 10 ({@damage 3d6}) fire damage on a failed save, or half as much damage on a successful one. The heat lasts until initiative count 20 on the next round."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Fire"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "lairHeader": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects; the dragon can't use the same effect two rounds in a row:",
+    "lairActionsDesc": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects; the dragon can't use the same effect two rounds in a row:",
+    "regionalEffects": [
+      {
+        "id": "act_regional_effect_6ol4",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Small earthquakes are common within 6 miles of the dragon's lair.</p>",
+        "entries": [
+          "Small earthquakes are common within 6 miles of the dragon's lair."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_8gnm",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Water sources within 1 mile of the lair are supernaturally warm and tainted by sulfur.</p>",
+        "entries": [
+          "Water sources within 1 mile of the lair are supernaturally warm and tainted by sulfur."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_7gq7",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Rocky fissures within 1 mile of the dragon's lair form portals to the Elemental Plane of Fire, allowing creatures of elemental fire into the world to dwell nearby.</p>",
+        "entries": [
+          "Rocky fissures within 1 mile of the dragon's lair form portals to the Elemental Plane of Fire, allowing creatures of elemental fire into the world to dwell nearby."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_additional_regional_effects_mmpx",
+        "name": "Additional Regional Effects",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Any of these effects might appear in the area around a red dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Desertification.</em></strong> <p>Precipitation is almost nonexistent within 6 miles of the dragon's lair, making the land parched and arid and most plant life withered and brown.</p></li><li><strong><em>Fiery Senses.</em></strong> <p>The dragon can hear up to 30 feet through any open flame within 1 mile of the dragon's lair.</p></li><li><strong><em>Ominous Flames.</em></strong> <p>Open flames within 6 miles of the dragon's lair are tinged dark red, hiss and crackle constantly, and throw off embers and showers of sparks.</p></li></ul>",
+        "entries": [
+          "Any of these effects might appear in the area around a red dragon's lair, in addition to or instead of the effects described in the {@i Monster Manual}:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Desertification",
+                "entry": "Precipitation is almost nonexistent within 6 miles of the dragon's lair, making the land parched and arid and most plant life withered and brown."
+              },
+              {
+                "type": "item",
+                "name": "Fiery Senses",
+                "entry": "The dragon can hear up to 30 feet through any open flame within 1 mile of the dragon's lair."
+              },
+              {
+                "type": "item",
+                "name": "Ominous Flames",
+                "entry": "Open flames within 6 miles of the dragon's lair are tinged dark red, hiss and crackle constantly, and throw off embers and showers of sparks."
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -634,10 +843,102 @@
         }
       }
     ],
+    "regionalEffectsHtml": "<p>The region containing a legendary red dragon's lair is warped by the dragon's magic, which creates one or more of the following effects:</p><ul><li>Small earthquakes are common within 6 miles of the dragon's lair.</li><li>Water sources within 1 mile of the lair are supernaturally warm and tainted by sulfur.</li><li>Rocky fissures within 1 mile of the dragon's lair form portals to the Elemental Plane of Fire, allowing creatures of elemental fire into the world to dwell nearby.</li></ul><p>If the dragon dies, these effects fade over the course of 1d10 days.</p><div><strong><em>Additional Regional Effects.</em></strong> <p>Any of these effects might appear in the area around a red dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Desertification.</em></strong> <p>Precipitation is almost nonexistent within 6 miles of the dragon's lair, making the land parched and arid and most plant life withered and brown.</p></li><li><strong><em>Fiery Senses.</em></strong> <p>The dragon can hear up to 30 feet through any open flame within 1 mile of the dragon's lair.</p></li><li><strong><em>Ominous Flames.</em></strong> <p>Open flames within 6 miles of the dragon's lair are tinged dark red, hiss and crackle constantly, and throw off embers and showers of sparks.</p></li></ul></div>",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Customizing Dragons",
+        "descriptionHtml": "<p>You can customize any dragon's stat block to reflect the dragon's unique character. Minor changes such as those below are easy to make and have no impact on a dragon's challenge rating.</p><div><strong><em>Languages.</em></strong> <p>Most dragons prefer to speak Draconic but learn Common for dealing with allies and minions. But given their high Intelligence and long life span, dragons can easily learn additional languages. You can add languages to a dragon's stat block.</p></div><div><strong><em>Skills.</em></strong> <p>Most dragons are proficient in the Perception and Stealth skills, and many dragons have additional skill proficiencies. As with languages, you can customize a dragon's skill list (even doubling their proficiency bonus with certain skills) to reflect particular interests and activities. You can also give a dragon tool proficiencies, particularly if the dragon spends time in Humanoid form.</p></div><div><strong><em>Spells.</em></strong> <p><em>See the \"Variant: Dragons as Innate Spellcasters\" inset(s), below.</em></p></div><div><strong><em>Other Traits and Actions.</em></strong> <p>You can borrow traits and actions from other monsters to add unique flavor to a dragon. Consider these examples:</p><ul><li><strong><em>Damage Absorption.</em></strong> <p>You might decide that this dragon is not only unharmed by fire damage, but actually healed by it.</p><p>Whenever the dragon is subjected to fire damage, it takes no damage and instead regains a number of hit points equal to the fire damage dealt.</p></li><li><strong><em>Flyby.</em></strong> <p>The dragon is an agile flier, quick to fly out of enemies' reach.</p><p>The dragon doesn't provoke an opportunity attack when it flies out of an enemy's reach.</p></li><li><strong><em>Mimicry.</em></strong> <p>Impersonating characters or their allies could be a fun trick for a crafty dragon.</p><p>The dragon can mimic any sounds it has heard, including voices. A creature that hears the sounds can tell they are imitations with a successful DC 13 Wisdom (Insight) check.</p></li><li><strong><em>Rejuvenation.</em></strong> <p>You might decide that dragons in your campaign, being an essential part of the Material Plane, are nearly impossible to destroy. A dragon's life essence might be preserved in the egg from which it first emerged, in its hoard, or in a cavernous hall at the center of the world, just as a lich's essence is hidden in a phylactery.</p><p>If it has an essence-preserving object, a destroyed dragon gains a new body in 1d10 days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the object.</p></li><li><strong><em>Special Senses.</em></strong> <p>Most dragons have blindsight and darkvision. You might upgrade blindsight to truesight, or you could give a dragon with a burrowing speed tremorsense.</p></li></ul></div>",
+        "entries": [
+          "You can customize any dragon's stat block to reflect the dragon's unique character. Minor changes such as those below are easy to make and have no impact on a dragon's challenge rating.",
+          {
+            "type": "entries",
+            "name": "Languages",
+            "entries": [
+              "Most dragons prefer to speak Draconic but learn Common for dealing with allies and minions. But given their high Intelligence and long life span, dragons can easily learn additional languages. You can add languages to a dragon's stat block."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Skills",
+            "entries": [
+              "Most dragons are proficient in the {@skill Perception} and {@skill Stealth} skills, and many dragons have additional skill proficiencies. As with languages, you can customize a dragon's skill list (even doubling their proficiency bonus with certain skills) to reflect particular interests and activities. You can also give a dragon tool proficiencies, particularly if the dragon spends time in Humanoid form."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Spells",
+            "entries": [
+              "{@note See the \"Variant: Dragons as Innate Spellcasters\" inset(s), below.}"
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Other Traits and Actions",
+            "entries": [
+              "You can borrow traits and actions from other monsters to add unique flavor to a dragon. Consider these examples:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Damage Absorption",
+                    "entries": [
+                      "You might decide that this dragon is not only unharmed by fire damage, but actually healed by it.",
+                      "Whenever the dragon is subjected to fire damage, it takes no damage and instead regains a number of hit points equal to the fire damage dealt."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Flyby",
+                    "entries": [
+                      "The dragon is an agile flier, quick to fly out of enemies' reach.",
+                      "The dragon doesn't provoke an opportunity attack when it flies out of an enemy's reach."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Mimicry",
+                    "entries": [
+                      "Impersonating characters or their allies could be a fun trick for a crafty dragon.",
+                      "The dragon can mimic any sounds it has heard, including voices. A creature that hears the sounds can tell they are imitations with a successful {@dc 13} Wisdom ({@skill Insight}) check."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Rejuvenation",
+                    "entries": [
+                      "You might decide that dragons in your campaign, being an essential part of the Material Plane, are nearly impossible to destroy. A dragon's life essence might be preserved in the egg from which it first emerged, in its hoard, or in a cavernous hall at the center of the world, just as a lich's essence is hidden in a phylactery.",
+                      "If it has an essence-preserving object, a destroyed dragon gains a new body in {@dice 1d10} days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the object."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Special Senses",
+                    "entries": [
+                      "Most dragons have {@sense blindsight} and {@sense darkvision}. You might upgrade {@sense blindsight} to {@sense truesight}, or you could give a dragon with a burrowing speed {@sense tremorsense|MM}."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Adult Red Dracolich.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Adult Red Dracolich.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": {
+      "name": "Red Dragon",
+      "source": "MM"
+    }
   },
   {
     "id": "creature_beast_of_the_land_tce",
@@ -726,10 +1027,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_ekuq",
+        "id": "act_charge_wgi0",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the beast moves at least 20 feet straight toward a target and then hits it with a maul attack on the same turn, the target takes an extra 1d6 slashing damage. If the target is a creature, it must succeed on a Strength saving throw against your spell save DC or be knocked prone.</p>",
+        "entries": [
+          "If the beast moves at least 20 feet straight toward a target and then hits it with a maul attack on the same turn, the target takes an extra {@damage 1d6} slashing damage. If the target is a creature, it must succeed on a Strength saving throw against your spell save DC or be knocked {@condition prone}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -748,10 +1052,13 @@
         }
       },
       {
-        "id": "act_primal_bond_los1",
+        "id": "act_primal_bond_8653",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>You can add your proficiency bonus to any ability check or saving throw that the beast makes.</p>",
+        "entries": [
+          "You can add your proficiency bonus to any ability check or saving throw that the beast makes."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -767,10 +1074,13 @@
     ],
     "actions": [
       {
-        "id": "act_maul_tou4",
+        "id": "act_maul_yer6",
         "name": "Maul",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d8 + 2 + PB slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d8 + 2 + PB slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d8 + 2 + PB} slashing damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -796,11 +1106,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Beast of the Land.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Beast of the Land.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_beast_of_the_sea_tce",
@@ -889,10 +1211,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_cnuy",
+        "id": "act_amphibious_6jut",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast can breathe both air and water.</p>",
+        "entries": [
+          "The beast can breathe both air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -906,10 +1231,13 @@
         }
       },
       {
-        "id": "act_primal_bond_p1xp",
+        "id": "act_primal_bond_faw0",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>You can add your proficiency bonus to any ability check or saving throw that the beast makes.</p>",
+        "entries": [
+          "You can add your proficiency bonus to any ability check or saving throw that the beast makes."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -925,10 +1253,13 @@
     ],
     "actions": [
       {
-        "id": "act_binding_strike_91w7",
+        "id": "act_binding_strike_5b7n",
         "name": "Binding Strike",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d6 + 2 + PB piercing damage or 1d6 + 2 + PB bludgeoning damage (your choice), and the target is grappled (escape DC equal to your spellcasting save DC). Until this grapple ends, the beast can't use this attack on another target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d6 + 2 + PB piercing damage or 1d6 + 2 + PB bludgeoning damage (your choice), and the target is grappled (escape DC equal to your spellcasting save DC). Until this grapple ends, the beast can't use this attack on another target.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d6 + 2 + PB} piercing damage or {@damage 1d6 + 2 + PB} bludgeoning damage (your choice), and the target is {@condition grappled} (escape DC equal to your spellcasting save DC). Until this grapple ends, the beast can't use this attack on another target."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -958,11 +1289,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Beast of the Sea.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Beast of the Sea.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_beast_of_the_sky_tce",
@@ -1051,10 +1394,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_2i56",
+        "id": "act_flyby_8iii",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
+        "entries": [
+          "The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1068,10 +1414,13 @@
         }
       },
       {
-        "id": "act_primal_bond_1quh",
+        "id": "act_primal_bond_7hnp",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>You can add your proficiency bonus to any ability check or saving throw that the beast makes.</p>",
+        "entries": [
+          "You can add your proficiency bonus to any ability check or saving throw that the beast makes."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1087,10 +1436,13 @@
     ],
     "actions": [
       {
-        "id": "act_shred_92db",
+        "id": "act_shred_v3hz",
         "name": "Shred",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d4 + 3 + PB slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d4 + 3 + PB slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d4 + 3 + PB} slashing damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1116,11 +1468,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Beast of the Sky.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Beast of the Sky.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_bestial_spirit_tce",
@@ -1209,10 +1573,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_water_breathing__water_only__0s49",
+        "id": "act_water_breathing__water_only__wiko",
         "name": "Water Breathing (Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast can breathe only underwater.</p>",
+        "entries": [
+          "The beast can breathe only underwater."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1226,10 +1593,13 @@
         }
       },
       {
-        "id": "act_flyby__air_only__7qco",
+        "id": "act_flyby__air_only__qv7f",
         "name": "Flyby (Air Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
+        "entries": [
+          "The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1243,10 +1613,13 @@
         }
       },
       {
-        "id": "act_pack_tactics__land_and_water_only__tuef",
+        "id": "act_pack_tactics__land_and_water_only__k4yt",
         "name": "Pack Tactics (Land and Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast has advantage on an attack roll against a creature if at least one of the beast's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "The beast has advantage on an attack roll against a creature if at least one of the beast's allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1262,10 +1635,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_74sw",
+        "id": "act_multiattack_i8hv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The beast makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The beast makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1279,10 +1655,13 @@
         }
       },
       {
-        "id": "act_maul_ixii",
+        "id": "act_maul_02ui",
         "name": "Maul",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d8 + 4 + summonSpellLevel piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d8 + 4 + summonSpellLevel piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d8 + 4 + summonSpellLevel} piercing damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1308,11 +1687,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Bestial Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Bestial Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_celestial_spirit_tce",
@@ -1408,10 +1799,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_kmgp",
+        "id": "act_multiattack_6mx1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The celestial makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The celestial makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1425,10 +1819,13 @@
         }
       },
       {
-        "id": "act_radiant_bow__avenger_only__i3bu",
+        "id": "act_radiant_bow__avenger_only__yshu",
         "name": "Radiant Bow (Avenger Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>rw {@hitYourSpellAttack} to hit, range 150/600 ft., one target. {@h}2d6 + 2 + summonSpellLevel radiant damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: {@hitYourSpellAttack} to hit, range 150/600 ft., one target. Hit: 2d6 + 2 + summonSpellLevel radiant damage.</p>",
+        "entries": [
+          "{@atk rw} {@hitYourSpellAttack} to hit, range 150/600 ft., one target. {@h}{@damage 2d6 + 2 + summonSpellLevel} radiant damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1447,10 +1844,13 @@
         }
       },
       {
-        "id": "act_radiant_mace__defender_only__5ry9",
+        "id": "act_radiant_mace__defender_only__vt6w",
         "name": "Radiant Mace (Defender Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d10 + 3 + summonSpellLevel radiant damage, and the celestial can choose itself or another creature it can see within 10 feet of the target. The chosen creature gains 1d10 temporary hit points.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d10 + 3 + summonSpellLevel radiant damage, and the celestial can choose itself or another creature it can see within 10 feet of the target. The chosen creature gains 1d10 temporary hit points.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d10 + 3 + summonSpellLevel} radiant damage, and the celestial can choose itself or another creature it can see within 10 feet of the target. The chosen creature gains {@dice 1d10} temporary hit points."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1469,10 +1869,13 @@
         }
       },
       {
-        "id": "act_healing_touch__1_day__26mu",
+        "id": "act_healing_touch__1_day__asnt",
         "name": "Healing Touch (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The celestial touches another creature. The target magically regains hit points equal to 2d8 + summonSpellLevel.</p>",
+        "entries": [
+          "The celestial touches another creature. The target magically regains hit points equal to {@dice 2d8 + summonSpellLevel}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1493,11 +1896,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Celestial Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Celestial Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_construct_spirit_tce",
@@ -1596,10 +2011,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_heated_body__metal_only__z9kn",
+        "id": "act_heated_body__metal_only__q7v4",
         "name": "Heated Body (Metal Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>A creature that touches the construct or hits it with a melee attack while within 5 feet of it takes 1d10 fire damage.</p>",
+        "entries": [
+          "A creature that touches the construct or hits it with a melee attack while within 5 feet of it takes {@damage 1d10} fire damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1618,10 +2036,13 @@
         }
       },
       {
-        "id": "act_stony_lethargy__stone_only__aikh",
+        "id": "act_stony_lethargy__stone_only__x2mi",
         "name": "Stony Lethargy (Stone Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature the construct can see starts its turn within 10 feet of the construct, the construct can force it to make a Wisdom saving throw against your spell save DC. On a failed save, the target can't use reactions and its speed is halved until the start of its next turn.</p>",
+        "entries": [
+          "When a creature the construct can see starts its turn within 10 feet of the construct, the construct can force it to make a Wisdom saving throw against your spell save DC. On a failed save, the target can't use reactions and its speed is halved until the start of its next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1637,10 +2058,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wpz8",
+        "id": "act_multiattack_eh09",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The construct makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The construct makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1654,10 +2078,13 @@
         }
       },
       {
-        "id": "act_slam_yaec",
+        "id": "act_slam_fopi",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d8 + 4 + summonSpellLevel bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d8 + 4 + summonSpellLevel bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d8 + 4 + summonSpellLevel} bludgeoning damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1679,10 +2106,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_berserk_lashing__clay_only__otbz",
+        "id": "act_berserk_lashing__clay_only__yd7d",
         "name": "Berserk Lashing (Clay Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the construct takes damage, it makes a slam attack against a random creature within 5 feet of it. If no creature is within reach, the construct moves up to half its speed toward an enemy it can see, without provoking opportunity attacks.</p>",
+        "entries": [
+          "When the construct takes damage, it makes a slam attack against a random creature within 5 feet of it. If no creature is within reach, the construct moves up to half its speed toward an enemy it can see, without provoking opportunity attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1701,11 +2131,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Construct Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Construct Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dancing_item_tce",
@@ -1802,10 +2244,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_immutable_form_zkjw",
+        "id": "act_immutable_form_fnyt",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The item is immune to any spell or effect that would alter its form.</p>",
+        "entries": [
+          "The item is immune to any spell or effect that would alter its form."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1819,10 +2264,13 @@
         }
       },
       {
-        "id": "act_irrepressible_dance_s9ht",
+        "id": "act_irrepressible_dance_jjae",
         "name": "Irrepressible Dance",
         "actionType": "trait",
         "descriptionHtml": "<p>When any creature starts its turn within 10 feet of the item, the item can increase or decrease (your choice) the walking speed of that creature by 10 feet until the end of the turn, provided the item isn't incapacitated.</p>",
+        "entries": [
+          "When any creature starts its turn within 10 feet of the item, the item can increase or decrease (your choice) the walking speed of that creature by 10 feet until the end of the turn, provided the item isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1838,10 +2286,13 @@
     ],
     "actions": [
       {
-        "id": "act_force_empowered_slam_gwx1",
+        "id": "act_force_empowered_slam_pr01",
         "name": "Force-Empowered Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target you can see. {@h}1d10 + PB force damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target you can see. Hit: 1d10 + PB force damage.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target you can see. {@h}{@damage 1d10 + PB} force damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1867,11 +2318,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Dancing Item.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Dancing Item.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_elemental_spirit_tce",
@@ -2000,10 +2463,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_form__air__fire__and_water_only__wz0b",
+        "id": "act_amorphous_form__air__fire__and_water_only__4753",
         "name": "Amorphous Form (Air, Fire, and Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental can move through a space as narrow as 1 inch wide without squeezing.</p>",
+        "entries": [
+          "The elemental can move through a space as narrow as 1 inch wide without squeezing."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2019,10 +2485,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_eb6r",
+        "id": "act_multiattack_97pd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elemental makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The elemental makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2036,10 +2505,13 @@
         }
       },
       {
-        "id": "act_slam_oa0c",
+        "id": "act_slam_7bwc",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d10 + 4 + summonSpellLevel bludgeoning damage (Air, Earth, and Water only) or fire damage (Fire only).</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d10 + 4 + summonSpellLevel bludgeoning damage (Air, Earth, and Water only) or fire damage (Fire only).</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d10 + 4 + summonSpellLevel} bludgeoning damage (Air, Earth, and Water only) or fire damage (Fire only)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2065,11 +2537,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Elemental Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Elemental Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_fey_spirit_tce",
@@ -2162,10 +2646,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_50br",
+        "id": "act_multiattack_zdw8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fey makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The fey makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2179,10 +2666,13 @@
         }
       },
       {
-        "id": "act_shortsword_wp2u",
+        "id": "act_shortsword_77dc",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d6 + 3 + summonSpellLevel piercing damage + 1d6 force damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d6 + 3 + summonSpellLevel piercing damage + 1d6 force damage.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d6 + 3 + summonSpellLevel} piercing damage {@damage + 1d6} force damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2207,10 +2697,34 @@
     ],
     "bonusActions": [
       {
-        "id": "act_fey_step_ljoy",
+        "id": "act_fey_step_69m2",
         "name": "Fey Step",
         "actionType": "bonus",
         "descriptionHtml": "<p>The fey magically teleports up to 30 feet to an unoccupied space it can see. Then one of the following effects occurs, based on the fey's chosen mood:</p><ul><li><strong><em>Fuming.</em></strong> <p>The fey has advantage on the next attack roll it makes before the end of this turn.</p></li><li><strong><em>Mirthful.</em></strong> <p>The fey can force one creature it can see within 10 feet of it to make a Wisdom saving throw against your spell save DC. Unless the save succeeds, the target is charmed by you and the fey for 1 minute or until the target takes any damage.</p></li><li><strong><em>Tricksy.</em></strong> <p>The fey can fill a 5-foot cube within 5 feet of it with magical darkness, which lasts until the end of its next turn.</p></li></ul>",
+        "entries": [
+          "The fey magically teleports up to 30 feet to an unoccupied space it can see. Then one of the following effects occurs, based on the fey's chosen mood:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Fuming",
+                "entry": "The fey has advantage on the next attack roll it makes before the end of this turn."
+              },
+              {
+                "type": "item",
+                "name": "Mirthful",
+                "entry": "The fey can force one creature it can see within 10 feet of it to make a Wisdom saving throw against your spell save DC. Unless the save succeeds, the target is {@condition charmed} by you and the fey for 1 minute or until the target takes any damage."
+              },
+              {
+                "type": "item",
+                "name": "Tricksy",
+                "entry": "The fey can fill a 5-foot cube within 5 feet of it with magical darkness, which lasts until the end of its next turn."
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2230,11 +2744,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Fey Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Fey Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_fiendish_spirit_tce",
@@ -2331,10 +2857,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_jlbk",
+        "id": "act_magic_resistance_4c4j",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The fiend has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The fiend has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2348,10 +2877,13 @@
         }
       },
       {
-        "id": "act_death_throes__demon_only__enuy",
+        "id": "act_death_throes__demon_only__f9qs",
         "name": "Death Throes (Demon Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>When the fiend drops to 0 hit points or the spell ends, the fiend explodes, and each creature within 10 feet of it must make a Dexterity saving throw against your spell save DC. A creature takes 2d10 + summonSpellLevel fire damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "When the fiend drops to 0 hit points or the spell ends, the fiend explodes, and each creature within 10 feet of it must make a Dexterity saving throw against your spell save DC. A creature takes {@damage 2d10 + summonSpellLevel} fire damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2370,10 +2902,13 @@
         }
       },
       {
-        "id": "act_devil_s_sight__devil_only__8luy",
+        "id": "act_devil_s_sight__devil_only__kg4a",
         "name": "Devil's Sight (Devil Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Magical darkness doesn't impede the fiend's darkvision.</p>",
+        "entries": [
+          "Magical darkness doesn't impede the fiend's darkvision."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2389,10 +2924,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ph3s",
+        "id": "act_multiattack_3v0j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fiend makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The fiend makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2406,10 +2944,13 @@
         }
       },
       {
-        "id": "act_bite__demon_only__b5wn",
+        "id": "act_bite__demon_only__54or",
         "name": "Bite (Demon Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d12 + 3 + summonSpellLevel necrotic damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d12 + 3 + summonSpellLevel necrotic damage.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d12 + 3 + summonSpellLevel} necrotic damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2428,10 +2969,13 @@
         }
       },
       {
-        "id": "act_claws__yugoloth_only__0o7t",
+        "id": "act_claws__yugoloth_only__n8j4",
         "name": "Claws (Yugoloth Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d8 + 3 + summonSpellLevel slashing damage. Immediately after the attack hits or misses, the fiend can magically teleport up to 30 feet to an unoccupied space it can see.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d8 + 3 + summonSpellLevel slashing damage. Immediately after the attack hits or misses, the fiend can magically teleport up to 30 feet to an unoccupied space it can see.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d8 + 3 + summonSpellLevel} slashing damage. Immediately after the attack hits or misses, the fiend can magically teleport up to 30 feet to an unoccupied space it can see."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2450,10 +2994,13 @@
         }
       },
       {
-        "id": "act_hurl_flame__devil_only__rqld",
+        "id": "act_hurl_flame__devil_only__7l31",
         "name": "Hurl Flame (Devil Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>rs {@hitYourSpellAttack} to hit, range 150 ft., one target. {@h}2d6 + 3 + summonSpellLevel fire damage. If the target is a flammable object that isn't being worn or carried, it also catches fire.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: {@hitYourSpellAttack} to hit, range 150 ft., one target. Hit: 2d6 + 3 + summonSpellLevel fire damage. If the target is a flammable object that isn't being worn or carried, it also catches fire.</p>",
+        "entries": [
+          "{@atk rs} {@hitYourSpellAttack} to hit, range 150 ft., one target. {@h}{@damage 2d6 + 3 + summonSpellLevel} fire damage. If the target is a flammable object that isn't being worn or carried, it also catches fire."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2479,11 +3026,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Fiendish Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Fiendish Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_homunculus_servant_tce",
@@ -2587,10 +3146,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_evasion_ykcq",
+        "id": "act_evasion_2vxe",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If the homunculus is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails. It can't use this trait if it's incapacitated.</p>",
+        "entries": [
+          "If the homunculus is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails. It can't use this trait if it's {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2606,10 +3168,13 @@
     ],
     "actions": [
       {
-        "id": "act_force_strike_vgce",
+        "id": "act_force_strike_tgdq",
         "name": "Force Strike",
         "actionType": "action",
-        "descriptionHtml": "<p>rw {@hitYourSpellAttack} to hit, range 30 ft., one target you can see. {@h}1d4 + PB force damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: {@hitYourSpellAttack} to hit, range 30 ft., one target you can see. Hit: 1d4 + PB force damage.</p>",
+        "entries": [
+          "{@atk rw} {@hitYourSpellAttack} to hit, range 30 ft., one target you can see. {@h}{@damage 1d4 + PB} force damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2631,10 +3196,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_channel_magic_hlo6",
+        "id": "act_channel_magic_yfkg",
         "name": "Channel Magic",
         "actionType": "reaction",
         "descriptionHtml": "<p>The homunculus delivers a spell you cast that has a range of touch. The homunculus must be within 120 feet of you.</p>",
+        "entries": [
+          "The homunculus delivers a spell you cast that has a range of touch. The homunculus must be within 120 feet of you."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2653,11 +3221,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Homunculus Servant.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Homunculus Servant.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_juvenile_mimic_tce",
@@ -2756,10 +3336,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance__object_form_only__3yet",
+        "id": "act_false_appearance__object_form_only__yu57",
         "name": "False Appearance (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>While the mimic remains motionless, it is indistinguishable from an ordinary object.</p>",
+        "entries": [
+          "While the mimic remains motionless, it is indistinguishable from an ordinary object."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2773,10 +3356,13 @@
         }
       },
       {
-        "id": "act_spider_climb_4j3m",
+        "id": "act_spider_climb_ckey",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "entries": [
+          "The mimic can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2792,10 +3378,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_dm7t",
+        "id": "act_bite_fo4g",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}1 piercing damage plus 2 (1d4) acid damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 1 piercing damage plus 2 (1d4) acid damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}1 piercing damage plus 2 ({@damage 1d4}) acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2814,10 +3403,13 @@
         }
       },
       {
-        "id": "act_shape_shift_8g4m",
+        "id": "act_shape_shift_7jaj",
         "name": "Shape-Shift",
         "actionType": "action",
         "descriptionHtml": "<p>The mimic polymorphs into an object or back into its true, amorphous form. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
+        "entries": [
+          "The mimic polymorphs into an object or back into its true, amorphous form. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2838,11 +3430,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Juvenile Mimic.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Juvenile Mimic.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_mighty_servant_of_leuk_o_tce",
@@ -2968,10 +3572,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_immutable_existence_88jj",
+        "id": "act_immutable_existence_rs9t",
         "name": "Immutable Existence",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant is immune to any spell or effect that would alter its form or send it to another plane of existence.</p>",
+        "entries": [
+          "The servant is immune to any spell or effect that would alter its form or send it to another plane of existence."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2985,10 +3592,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_583n",
+        "id": "act_magic_resistance_gahq",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant has advantage on saving throws against spells and other magical effects, and spell attacks made against it have disadvantage.</p>",
+        "entries": [
+          "The servant has advantage on saving throws against spells and other magical effects, and spell attacks made against it have disadvantage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3002,10 +3612,13 @@
         }
       },
       {
-        "id": "act_regeneration_1gqu",
+        "id": "act_regeneration_tl2n",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant regains 10 hit points at the start of its turn. If it is reduced to 0 hit points, this trait doesn't function until an attuned creature spends 24 hours repairing the artifact or until the artifact is subjected to lightning damage.</p>",
+        "entries": [
+          "The servant regains 10 hit points at the start of its turn. If it is reduced to 0 hit points, this trait doesn't function until an attuned creature spends 24 hours repairing the artifact or until the artifact is subjected to lightning damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3019,10 +3632,13 @@
         }
       },
       {
-        "id": "act_standing_leap_wowc",
+        "id": "act_standing_leap_e6hm",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant's long jump is up to 50 feet and its high jump is up to 25 feet, with or without a running start.</p>",
+        "entries": [
+          "The servant's long jump is up to 50 feet and its high jump is up to 25 feet, with or without a running start."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3036,10 +3652,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_pggp",
+        "id": "act_unusual_nature_94sf",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The servant doesn't require air, food, drink, or sleep.</p>",
+        "entries": [
+          "The servant doesn't require air, food, drink, or sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3055,10 +3674,13 @@
     ],
     "actions": [
       {
-        "id": "act_destructive_fist_hp9x",
+        "id": "act_destructive_fist_95pm",
         "name": "Destructive Fist",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +17 to hit, reach 10 ft., one target. {@h}36 (4d12 + 10) force damage. Or Ranged Weapon Attack: +17 to hit, range 120 ft., one target. {@h}36 (4d12 + 10) force damage. If the target is an object, it takes triple damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +17 to hit, reach 10 ft., one target. Hit: 36 (4d12 + 10) force damage. Or Ranged Weapon Attack: +17 to hit, range 120 ft., one target. Hit: 36 (4d12 + 10) force damage. If the target is an object, it takes triple damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 17} to hit, reach 10 ft., one target. {@h}36 ({@damage 4d12 + 10}) force damage. Or Ranged Weapon Attack: {@hit 17} to hit, range 120 ft., one target. {@h}36 ({@damage 4d12 + 10}) force damage. If the target is an object, it takes triple damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": "rw",
@@ -3081,10 +3703,13 @@
         }
       },
       {
-        "id": "act_crushing_leap_0evd",
+        "id": "act_crushing_leap_twg7",
         "name": "Crushing Leap",
         "actionType": "action",
         "descriptionHtml": "<p>If the servant jumps at least 25 feet as part of its movement, it can then use this action to land on its feet in a space that contains one or more other creatures. Each of those creatures is pushed to an unoccupied space within 5 feet of the servant and must make a DC 25 Dexterity saving throw. On a failed save, a creature takes 26 (4d12) bludgeoning damage and is knocked prone. On a successful save, a creature takes half as much damage and isn't knocked prone.</p>",
+        "entries": [
+          "If the servant jumps at least 25 feet as part of its movement, it can then use this action to land on its feet in a space that contains one or more other creatures. Each of those creatures is pushed to an unoccupied space within 5 feet of the servant and must make a {@dc 25} Dexterity saving throw. On a failed save, a creature takes 26 ({@damage 4d12}) bludgeoning damage and is knocked {@condition prone}. On a successful save, a creature takes half as much damage and isn't knocked {@condition prone}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3113,11 +3738,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Mighty Servant of Leuk-o.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Mighty Servant of Leuk-o.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_reflection_tce",
@@ -3236,10 +3873,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_ubb1",
+        "id": "act_amorphous_rmf3",
         "name": "Amorphous",
         "actionType": "trait",
-        "descriptionHtml": "<p>The shadow can move through a space as narrow as 1 inch wide without squeezing.</p>",
+        "descriptionHtml": "<p>The reflection can move through a space as narrow as 1 inch wide without squeezing.</p>",
+        "entries": [
+          "The reflection can move through a space as narrow as 1 inch wide without squeezing."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3253,10 +3893,13 @@
         }
       },
       {
-        "id": "act_shadow_stealth_ihhz",
+        "id": "act_shadow_stealth_pm2r",
         "name": "Shadow Stealth",
         "actionType": "trait",
-        "descriptionHtml": "<p>While in dim light or darkness, the shadow can take the Hide action as a bonus action. Its stealth bonus is also improved to +6.</p>",
+        "descriptionHtml": "<p>While in dim light or darkness, the reflection can take the Hide action as a bonus action. Its stealth bonus is also improved to +6.</p>",
+        "entries": [
+          "While in dim light or darkness, the reflection can take the {@action Hide} action as a bonus action. Its stealth bonus is also improved to +6."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3270,10 +3913,13 @@
         }
       },
       {
-        "id": "act_sunlight_weakness_h7s8",
+        "id": "act_sunlight_weakness_3a81",
         "name": "Sunlight Weakness",
         "actionType": "trait",
-        "descriptionHtml": "<p>While in sunlight, the shadow has disadvantage on attack rolls, ability checks, and saving throws.</p>",
+        "descriptionHtml": "<p>While in sunlight, the reflection has disadvantage on attack rolls, ability checks, and saving throws.</p>",
+        "entries": [
+          "While in sunlight, the reflection has disadvantage on attack rolls, ability checks, and saving throws."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3289,10 +3935,14 @@
     ],
     "actions": [
       {
-        "id": "act_strength_drain_sx6e",
+        "id": "act_strength_drain_t9bi",
         "name": "Strength Drain",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature. {@h}9 (2d6 + 2) necrotic damage, and the target's Strength score is reduced by 1d4. The target dies if this reduces its Strength to 0. Otherwise, the reduction lasts until the target finishes a short or long rest.</p><p>If a non-evil humanoid dies from this attack, a new shadow rises from the corpse 1d4 hours later.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 9 (2d6 + 2) necrotic damage, and the target's Strength score is reduced by 1d4. The target dies if this reduces its Strength to 0. Otherwise, the reduction lasts until the target finishes a short or long rest.</p><p>If a non-evil humanoid dies from this attack, a new reflection rises from the corpse 1d4 hours later.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one creature. {@h}9 ({@damage 2d6 + 2}) necrotic damage, and the target's Strength score is reduced by {@dice 1d4}. The target dies if this reduces its Strength to 0. Otherwise, the reduction lasts until the target finishes a short or long rest.",
+          "If a non-evil humanoid dies from this attack, a new {@creature reflection} rises from the corpse {@dice 1d4} hours later."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3318,11 +3968,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Reflection.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Reflection.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_shadow_spirit_tce",
@@ -3415,10 +4077,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_terror_frenzy__fury_only__jbwt",
+        "id": "act_terror_frenzy__fury_only__tp54",
         "name": "Terror Frenzy (Fury Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit has advantage on attack rolls against frightened creatures.</p>",
+        "entries": [
+          "The spirit has advantage on attack rolls against {@condition frightened} creatures."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3432,10 +4097,13 @@
         }
       },
       {
-        "id": "act_weight_of_sorrow__despair_only__4qw1",
+        "id": "act_weight_of_sorrow__despair_only__5y9a",
         "name": "Weight of Sorrow (Despair Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature, other than you, that starts its turn within 5 feet of the spirit has its speed reduced by 20 feet until the start of that creature's next turn.</p>",
+        "entries": [
+          "Any creature, other than you, that starts its turn within 5 feet of the spirit has its speed reduced by 20 feet until the start of that creature's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3451,10 +4119,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5l3n",
+        "id": "act_multiattack_xruq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The spirit makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3468,10 +4139,13 @@
         }
       },
       {
-        "id": "act_chilling_rend_rz6b",
+        "id": "act_chilling_rend_4a6g",
         "name": "Chilling Rend",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d12 + 3 + summonSpellLevel cold damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d12 + 3 + summonSpellLevel cold damage.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d12 + 3 + summonSpellLevel} cold damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3490,10 +4164,13 @@
         }
       },
       {
-        "id": "act_dreadful_scream__1_day__ufdf",
+        "id": "act_dreadful_scream__1_day__qnbm",
         "name": "Dreadful Scream (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit screams. Each creature within 30 feet of it must succeed on a Wisdom saving throw against your spell save DC or be frightened for 1 minute. The frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "entries": [
+          "The spirit screams. Each creature within 30 feet of it must succeed on a Wisdom saving throw against your spell save DC or be {@condition frightened} for 1 minute. The {@condition frightened} creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3509,10 +4186,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_stealth__fear_only__v983",
+        "id": "act_shadow_stealth__fear_only__a2kb",
         "name": "Shadow Stealth (Fear Only)",
         "actionType": "bonus",
         "descriptionHtml": "<p>While in dim light or darkness, the spirit takes the Hide action.</p>",
+        "entries": [
+          "While in dim light or darkness, the spirit takes the {@action Hide} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3532,11 +4212,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Shadow Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Shadow Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_steel_defender_tce",
@@ -3643,10 +4335,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_vigilant_xe0r",
+        "id": "act_vigilant_l7xl",
         "name": "Vigilant",
         "actionType": "trait",
         "descriptionHtml": "<p>The defender can't be surprised.</p>",
+        "entries": [
+          "The defender can't be {@status surprised}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3662,10 +4357,13 @@
     ],
     "actions": [
       {
-        "id": "act_force_empowered_rend_rx6b",
+        "id": "act_force_empowered_rend_sgch",
         "name": "Force-Empowered Rend",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target you can see. {@h}1d8 + PB force damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target you can see. Hit: 1d8 + PB force damage.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target you can see. {@h}{@damage 1d8 + PB} force damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3684,10 +4382,13 @@
         }
       },
       {
-        "id": "act_repair__3_day__6ijh",
+        "id": "act_repair__3_day__1jbs",
         "name": "Repair (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The magical mechanisms inside the defender restore 2d8 + PB hit points to itself or to one construct or object within 5 feet of it.</p>",
+        "entries": [
+          "The magical mechanisms inside the defender restore {@dice 2d8 + PB} hit points to itself or to one construct or object within 5 feet of it."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3704,10 +4405,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_attack_1x26",
+        "id": "act_deflect_attack_0i9c",
         "name": "Deflect Attack",
         "actionType": "reaction",
         "descriptionHtml": "<p>The defender imposes disadvantage on the attack roll of one creature it can see that is within 5 feet of it, provided the attack roll is against a creature other than the defender.</p>",
+        "entries": [
+          "The defender imposes disadvantage on the attack roll of one creature it can see that is within 5 feet of it, provided the attack roll is against a creature other than the defender."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3726,11 +4430,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Steel Defender.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Steel Defender.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_undead_spirit_tce",
@@ -3827,10 +4543,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_passage__ghostly_only__3lyu",
+        "id": "act_incorporeal_passage__ghostly_only__ixte",
         "name": "Incorporeal Passage (Ghostly Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can move through other creatures and objects as if they were difficult terrain. If it ends its turn inside an object, it is shunted to the nearest unoccupied space and takes 1d10 force damage for every 5 feet traveled.</p>",
+        "entries": [
+          "The spirit can move through other creatures and objects as if they were {@quickref difficult terrain||3}. If it ends its turn inside an object, it is shunted to the nearest unoccupied space and takes {@damage 1d10} force damage for every 5 feet traveled."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3849,10 +4568,13 @@
         }
       },
       {
-        "id": "act_festering_aura__putrid_only__hhnq",
+        "id": "act_festering_aura__putrid_only__q1pg",
         "name": "Festering Aura (Putrid Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature, other than you, that starts its turn within 5 feet of the spirit must succeed on a Constitution saving throw against your spell save DC or be poisoned until the start of its next turn.</p>",
+        "entries": [
+          "Any creature, other than you, that starts its turn within 5 feet of the spirit must succeed on a Constitution saving throw against your spell save DC or be {@condition poisoned} until the start of its next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3868,10 +4590,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_konm",
+        "id": "act_multiattack_bcjy",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (rounded down).</p>",
+        "entries": [
+          "The spirit makes a number of attacks equal to half this spell's level (rounded down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3885,10 +4610,13 @@
         }
       },
       {
-        "id": "act_deathly_touch__ghostly_only__pv6j",
+        "id": "act_deathly_touch__ghostly_only__7nc4",
         "name": "Deathly Touch (Ghostly Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one creature. {@h}1d8 + 3 + summonSpellLevel necrotic damage, and the creature must succeed on a Wisdom saving throw against your spell save DC or be frightened of the undead until the end of the target's next turn.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one creature. Hit: 1d8 + 3 + summonSpellLevel necrotic damage, and the creature must succeed on a Wisdom saving throw against your spell save DC or be frightened of the undead until the end of the target's next turn.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one creature. {@h}{@damage 1d8 + 3 + summonSpellLevel} necrotic damage, and the creature must succeed on a Wisdom saving throw against your spell save DC or be {@condition frightened} of the undead until the end of the target's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3907,10 +4635,13 @@
         }
       },
       {
-        "id": "act_grave_bolt__skeletal_only__1zog",
+        "id": "act_grave_bolt__skeletal_only__812d",
         "name": "Grave Bolt (Skeletal Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>rs {@hitYourSpellAttack} to hit, range 150 ft., one target. {@h}2d4 + 3 + summonSpellLevel necrotic damage.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: {@hitYourSpellAttack} to hit, range 150 ft., one target. Hit: 2d4 + 3 + summonSpellLevel necrotic damage.</p>",
+        "entries": [
+          "{@atk rs} {@hitYourSpellAttack} to hit, range 150 ft., one target. {@h}{@damage 2d4 + 3 + summonSpellLevel} necrotic damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3929,10 +4660,13 @@
         }
       },
       {
-        "id": "act_rotting_claw__putrid_only__1bk5",
+        "id": "act_rotting_claw__putrid_only__vjvb",
         "name": "Rotting Claw (Putrid Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}1d6 + 3 + summonSpellLevel slashing damage. If the target is poisoned, it must succeed on a Constitution saving throw against your spell save DC or be paralyzed until the end of its next turn.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d6 + 3 + summonSpellLevel slashing damage. If the target is poisoned, it must succeed on a Constitution saving throw against your spell save DC or be paralyzed until the end of its next turn.</p>",
+        "entries": [
+          "{@atk mw} {@hitYourSpellAttack} to hit, reach 5 ft., one target. {@h}{@damage 1d6 + 3 + summonSpellLevel} slashing damage. If the target is {@condition poisoned}, it must succeed on a Constitution saving throw against your spell save DC or be {@condition paralyzed} until the end of its next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3958,11 +4692,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Undead Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Undead Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_wildfire_spirit_tce",
@@ -4060,10 +4806,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_flame_seed_aikk",
+        "id": "act_flame_seed_pahy",
         "name": "Flame Seed",
         "actionType": "action",
-        "descriptionHtml": "<p>rw {@hitYourSpellAttack} to hit, range 60 ft., one target you can see. {@h}1d6 + PB fire damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: {@hitYourSpellAttack} to hit, range 60 ft., one target you can see. Hit: 1d6 + PB fire damage.</p>",
+        "entries": [
+          "{@atk rw} {@hitYourSpellAttack} to hit, range 60 ft., one target you can see. {@h}{@damage 1d6 + PB} fire damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4082,10 +4831,13 @@
         }
       },
       {
-        "id": "act_fiery_teleportation_u6ud",
+        "id": "act_fiery_teleportation_l3y7",
         "name": "Fiery Teleportation",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit and each willing creature of your choice within 5 feet of it teleport up to 15 feet to unoccupied spaces you can see. Then each creature within 5 feet of the space that the spirit left must succeed on a Dexterity saving throw against your spell save DC or take 1d6 + PB fire damage.</p>",
+        "entries": [
+          "The spirit and each willing creature of your choice within 5 feet of it teleport up to 15 feet to unoccupied spaces you can see. Then each creature within 5 feet of the space that the spirit left must succeed on a Dexterity saving throw against your spell save DC or take {@damage 1d6 + PB} fire damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4111,10 +4863,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TCE/Wildfire Spirit.webp",
     "tokenImg": "img/bestiary/tokens/TCE/Wildfire Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

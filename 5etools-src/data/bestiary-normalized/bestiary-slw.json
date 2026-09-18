@@ -103,10 +103,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_helpful_s9pj",
+        "id": "act_helpful_4icd",
         "name": "Helpful",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert can take the Help action as a bonus action, and the creature who receives the help gains a 1d6 bonus to the d20 roll. If that roll is an attack roll, the creature can forgo adding the bonus to it, and then if the attack hits, the creature can add the bonus to the attack's damage roll against one target.</p>",
+        "entries": [
+          "The expert can take the Help action as a bonus action, and the creature who receives the help gains a {@dice 1d6} bonus to the {@dice d20} roll. If that roll is an attack roll, the creature can forgo adding the bonus to it, and then if the attack hits, the creature can add the bonus to the attack's damage roll against one target."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -120,10 +123,13 @@
         }
       },
       {
-        "id": "act_tools_k5o6",
+        "id": "act_tools_fobc",
         "name": "Tools",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert has thieves' tools and a musical instrument.</p>",
+        "entries": [
+          "The expert has {@item thieves' tools|phb} and a musical instrument."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -139,10 +145,13 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_ce6w",
+        "id": "act_extra_attack_2h04",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The expert can attack twice, instead of once, whenever it takes the Attack action on its turn.</p>",
+        "entries": [
+          "The expert can attack twice, instead of once, whenever it takes the {@action Attack} action on its turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -156,10 +165,13 @@
         }
       },
       {
-        "id": "act_shortsword_6k4t",
+        "id": "act_shortsword_60gb",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -178,10 +190,13 @@
         }
       },
       {
-        "id": "act_dagger_fnuu",
+        "id": "act_dagger_2d68",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +6 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 6} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -200,10 +215,13 @@
         }
       },
       {
-        "id": "act_shortbow_theq",
+        "id": "act_shortbow_byqd",
         "name": "Shortbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +6 to hit, range 80/320 ft., one target. {@h}6 (1d6 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 80/320 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 6} to hit, range 80/320 ft., one target. {@h}6 ({@damage 1d6 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -229,11 +247,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SLW/Expert.webp",
     "tokenImg": "img/bestiary/tokens/SLW/Expert.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_skull_flier_slw",
@@ -330,10 +360,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_sting_g6yr",
+        "id": "act_sting_vc5x",
         "name": "Sting",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature. {@h}5 (1d6 + 2) piercing damage, and the target must make a DC 11 Constitution saving throw, taking 10 (3d6) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6 + 2) piercing damage, and the target must make a DC 11 Constitution saving throw, taking 10 (3d6) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one creature. {@h}5 ({@damage 1d6 + 2}) piercing damage, and the target must make a {@dc 11} Constitution saving throw, taking 10 ({@damage 3d6}) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but {@condition poisoned} for 1 hour, even after regaining hit points, and is {@condition paralyzed} while {@condition poisoned} in this way."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -366,11 +399,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SLW/Skull Flier.webp",
     "tokenImg": "img/bestiary/tokens/SLW/Skull Flier.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_spellcaster__healer__slw",
@@ -473,7 +518,7 @@
       {
         "id": "sc_spellcaster__healer__0",
         "name": "Spellcasting (Healer)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 3,
@@ -563,7 +608,8 @@
                     "formula": "1d8",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -612,7 +658,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -757,10 +805,13 @@
     ],
     "traits": [
       {
-        "id": "act_potent_cantrip_xyo3",
+        "id": "act_potent_cantrip_gz17",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
+        "entries": [
+          "The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -776,10 +827,13 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_gqld",
+        "id": "act_quarterstaff_g9lj",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) bludgeoning damage, or 4 ({@damage 1d8}) bludgeoning damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -809,11 +863,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SLW/Spellcaster (Healer).webp",
     "tokenImg": "img/bestiary/tokens/SLW/Spellcaster (Healer).webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_spellcaster__mage__slw",
@@ -916,7 +982,7 @@
       {
         "id": "sc_spellcaster__mage__0",
         "name": "Spellcasting (Mage)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -949,7 +1015,8 @@
                     "formula": "1d10",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -1037,7 +1104,9 @@
                     "formula": "3d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1106,7 +1175,9 @@
                     "formula": "2d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of wax)",
@@ -1156,7 +1227,9 @@
                     "formula": "8d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -1206,13 +1279,17 @@
                     "formula": "5d8",
                     "type": "Fire",
                     "label": "Damage 1",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "5d8",
                     "type": "Fire",
                     "label": "Damage 2",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a piece of charcoal)",
@@ -1228,10 +1305,13 @@
     ],
     "traits": [
       {
-        "id": "act_potent_cantrip_uutc",
+        "id": "act_potent_cantrip_0y19",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
+        "entries": [
+          "The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1247,10 +1327,13 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_1ysu",
+        "id": "act_quarterstaff_uwyq",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) bludgeoning damage, or 4 ({@damage 1d8}) bludgeoning damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1280,11 +1363,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SLW/Spellcaster (Mage).webp",
     "tokenImg": "img/bestiary/tokens/SLW/Spellcaster (Mage).webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_statue_of_talos_slw",
@@ -1397,10 +1492,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_ss1e",
+        "id": "act_false_appearance_xmi1",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the statue remains motionless, it is indistinguishable from an inanimate statue.</p>",
+        "entries": [
+          "While the statue remains motionless, it is indistinguishable from an inanimate statue."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1416,10 +1514,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_l6ht",
+        "id": "act_multiattack_cwdz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The statue makes five attacks: one with its headbutt and four with its lightning bolt blades.</p>",
+        "entries": [
+          "The statue makes five attacks: one with its headbutt and four with its lightning bolt blades."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1433,10 +1534,13 @@
         }
       },
       {
-        "id": "act_headbutt_kr8u",
+        "id": "act_headbutt_nvba",
         "name": "Headbutt",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1455,10 +1559,13 @@
         }
       },
       {
-        "id": "act_lightning_bolt_blades_814o",
+        "id": "act_lightning_bolt_blades_xzrx",
         "name": "Lightning Bolt Blades",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}9 (2d4 + 4) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 9 (2d4 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}9 ({@damage 2d4 + 4}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1484,11 +1591,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SLW/Statue of Talos.webp",
     "tokenImg": "img/bestiary/tokens/SLW/Statue of Talos.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_tooth_n_claw_slw",
@@ -1583,10 +1702,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_hearing_and_smell_l2cl",
+        "id": "act_keen_hearing_and_smell_zupn",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>Tooth-N-Claw has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
+        "entries": [
+          "Tooth-N-Claw has advantage on Wisdom ({@skill Perception}) checks that rely on hearing or smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1600,10 +1722,13 @@
         }
       },
       {
-        "id": "act_pack_tactics_ruba",
+        "id": "act_pack_tactics_r7pd",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>Tooth-N-Claw has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "Tooth-N-Claw has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1619,10 +1744,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_5l7g",
+        "id": "act_bite_81yw",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) piercing damage plus 7 (2d6) cold damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage plus 7 (2d6) cold damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) piercing damage plus 7 ({@damage 2d6}) cold damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1645,10 +1773,13 @@
         }
       },
       {
-        "id": "act_freezing_breath__recharge_5__ainr",
+        "id": "act_freezing_breath__recharge_5__krlt",
         "name": "Freezing Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Tooth-N-Claw exhales an icy blast in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 21 (6d6) cold damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Tooth-N-Claw exhales an icy blast in a 15-foot cone. Each creature in that area must make a {@dc 12} Dexterity saving throw, taking 21 ({@damage 6d6}) cold damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1677,11 +1808,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SLW/Tooth-N-Claw.webp",
     "tokenImg": "img/bestiary/tokens/SLW/Tooth-N-Claw.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_warrior_slw",
@@ -1786,10 +1929,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_battle_readiness_81ee",
+        "id": "act_battle_readiness_20vw",
         "name": "Battle Readiness",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has advantage on initiative rolls.</p>",
+        "entries": [
+          "The warrior has advantage on initiative rolls."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1803,10 +1949,13 @@
         }
       },
       {
-        "id": "act_improved_critical_zlar",
+        "id": "act_improved_critical_qa55",
         "name": "Improved Critical",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior's attack rolls score a critical hit on a roll of 19 or 20 on the d20.</p>",
+        "entries": [
+          "The warrior's attack rolls score a critical hit on a roll of 19 or 20 on the d20."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1820,10 +1969,29 @@
         }
       },
       {
-        "id": "act_martial_role_n98k",
+        "id": "act_martial_role_pz6f",
         "name": "Martial Role",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has one of the following traits of your choice:</p><ul><li><strong><em>Attacker.</em></strong> <p>The warrior gains a +2 bonus to attack rolls.</p></li><li><strong><em>Defender.</em></strong> <p>The warrior gains the Protection reaction below.</p></li></ul>",
+        "entries": [
+          "The warrior has one of the following traits of your choice:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Attacker",
+                "entry": "The warrior gains a +2 bonus to attack rolls."
+              },
+              {
+                "type": "item",
+                "name": "Defender",
+                "entry": "The warrior gains the Protection reaction below."
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1839,10 +2007,13 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_f6ir",
+        "id": "act_extra_attack_tabx",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The warrior can attack twice, instead of once, whenever it takes the Attack action on its turn.</p>",
+        "entries": [
+          "The warrior can attack twice, instead of once, whenever it takes the {@action Attack} action on its turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1856,10 +2027,13 @@
         }
       },
       {
-        "id": "act_longsword_xvyy",
+        "id": "act_longsword_63su",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) slashing damage, or 8 ({@damage 1d10 + 3}) slashing damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1882,10 +2056,13 @@
         }
       },
       {
-        "id": "act_longbow_pta1",
+        "id": "act_longbow_vwd1",
         "name": "Longbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +5 to hit, range 150/600 ft., one target. {@h}6 (1d8 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 5} to hit, range 150/600 ft., one target. {@h}6 ({@damage 1d8 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1907,10 +2084,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_protection__defender_only__5scf",
+        "id": "act_protection__defender_only__tqp5",
         "name": "Protection (Defender Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>The warrior imposes disadvantage on the attack roll of a creature within 5 feet of it whose target isn't the warrior. The warrior must be able to see the attacker.</p>",
+        "entries": [
+          "The warrior imposes disadvantage on the attack roll of a creature within 5 feet of it whose target isn't the warrior. The warrior must be able to see the attacker."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1929,10 +2109,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/SLW/Warrior.webp",
     "tokenImg": "img/bestiary/tokens/SLW/Warrior.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

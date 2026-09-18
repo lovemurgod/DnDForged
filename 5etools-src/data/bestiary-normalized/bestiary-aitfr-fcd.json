@@ -98,10 +98,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inspired_courage_88vq",
+        "id": "act_inspired_courage_2v2d",
         "name": "Inspired Courage",
         "actionType": "trait",
         "descriptionHtml": "<p>The mercenary has advantage on savings throws against being charmed, frightened, grappled, or restrained while within 5 feet of at least one ally.</p>",
+        "entries": [
+          "The mercenary has advantage on savings throws against being {@condition charmed}, {@condition frightened}, {@condition grappled}, or {@condition restrained} while within 5 feet of at least one ally."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -115,10 +118,13 @@
         }
       },
       {
-        "id": "act_martial_advantage_xl4i",
+        "id": "act_martial_advantage_j8jn",
         "name": "Martial Advantage",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, the mercenary can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the mercenary that isn't incapacitated.</p>",
+        "entries": [
+          "Once per turn, the mercenary can deal an extra 7 ({@damage 2d6}) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the mercenary that isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -139,10 +145,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2c3s",
+        "id": "act_multiattack_54hb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mercenary makes two longsword attacks.</p>",
+        "entries": [
+          "The mercenary makes two longsword attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -156,10 +165,13 @@
         }
       },
       {
-        "id": "act_longsword_0b1c",
+        "id": "act_longsword_st2p",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d8 + 2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -178,10 +190,14 @@
         }
       },
       {
-        "id": "act_heavy_crossbow_fn2b",
+        "id": "act_heavy_crossbow_ery6",
         "name": "Heavy Crossbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range</p><p>100/400 ft., one target. {@h}7 (1d10 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range</p><p>100/400 ft., one target. Hit: 7 (1d10 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range",
+          "100/400 ft., one target. {@h}7 ({@damage 1d10 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -207,11 +223,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AitFR-FCD/Mercenary Envoy.webp",
     "tokenImg": "img/bestiary/tokens/AitFR-FCD/Mercenary Envoy.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_tyreus__illusionist_aitfr-fcd",
@@ -335,7 +363,7 @@
       {
         "id": "sc_tyreus__illusionist_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -368,7 +396,8 @@
                     "formula": "1d10",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -451,7 +480,8 @@
                     "formula": "1d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -501,7 +531,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -546,7 +578,9 @@
                     "formula": "2d8",
                     "type": "Thunder",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -615,7 +649,9 @@
                     "formula": "2d8",
                     "type": "Psychic",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a bit of fleece)",
@@ -684,7 +720,9 @@
                     "formula": "8d6",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a bit of fur and a crystal rod)",
@@ -772,7 +810,9 @@
                     "formula": "4d10",
                     "type": "Psychic",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d10",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -822,13 +862,17 @@
                     "formula": "8d8",
                     "type": "Lightning",
                     "label": "Damage 1",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "4d8",
                     "type": "Thunder",
                     "label": "Damage 2",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -897,7 +941,9 @@
                     "formula": "10d6 + 40",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "3d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a lodestone and dust)",
@@ -961,10 +1007,13 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__hmdd",
+        "id": "act_legendary_resistance__3_day__gxmg",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Tyreus fails a saving throw, he can choose to succeed instead.</p>",
+        "entries": [
+          "If Tyreus fails a saving throw, he can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -978,10 +1027,14 @@
         }
       },
       {
-        "id": "act_illusory_reality_9fp7",
+        "id": "act_illusory_reality_0o0c",
         "name": "Illusory Reality",
         "actionType": "trait",
         "descriptionHtml": "<p>When Tyreus casts an illusion spell of 1st level or higher, he can choose one inanimate, nonmagical object that is part of the illusion and make that object real. He can do this on his turn as a bonus action while the spell is ongoing.</p><p>The object remains real for 1 minute. The object can't deal damage or otherwise directly harm anyone.</p>",
+        "entries": [
+          "When Tyreus casts an illusion spell of 1st level or higher, he can choose one inanimate, nonmagical object that is part of the illusion and make that object real. He can do this on his turn as a bonus action while the spell is ongoing.",
+          "The object remains real for 1 minute. The object can't deal damage or otherwise directly harm anyone."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -995,10 +1048,13 @@
         }
       },
       {
-        "id": "act_displacement__recharges_after_tyreus_casts_an_illusion_spell_of_1st_level_or_higher__7z67",
+        "id": "act_displacement__recharges_after_tyreus_casts_an_illusion_spell_of_1st_level_or_higher__2d4t",
         "name": "Displacement (Recharges after Tyreus Casts an Illusion Spell of 1st Level or Higher)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Tyreus projects an illusion that makes him appear to be standing a few inches from his actual location, causing any creature to have disadvantage on attack rolls against Tyreus. The effect ends if Tyreus takes damage, he is incapacitated, or his speed becomes 0.</p>",
+        "entries": [
+          "As a bonus action, Tyreus projects an illusion that makes him appear to be standing a few inches from his actual location, causing any creature to have disadvantage on attack rolls against Tyreus. The effect ends if Tyreus takes damage, he is {@condition incapacitated}, or his speed becomes 0."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1014,10 +1070,13 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_7di0",
+        "id": "act_dagger_gqvv",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +8 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +8 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 8} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1036,10 +1095,13 @@
         }
       },
       {
-        "id": "act_modify_illusion_8w63",
+        "id": "act_modify_illusion_c96t",
         "name": "Modify Illusion",
         "actionType": "action",
         "descriptionHtml": "<p>When Tyreus casts an illusion spell that has a duration of 1 minute or longer, he can use his action to change the nature of that illusion (using the spell's normal parameters for the illusion), provided that he can see the illusion.</p>",
+        "entries": [
+          "When Tyreus casts an illusion spell that has a duration of 1 minute or longer, he can use his action to change the nature of that illusion (using the spell's normal parameters for the illusion), provided that he can see the illusion."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1060,10 +1122,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_scrutinize_u1bc",
+          "id": "act_scrutinize_n5rc",
           "name": "Scrutinize",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tyreus makes an Intelligence (Investigation) or Wisdom (Perception) check.</p>",
+          "entries": [
+            "Tyreus makes an Intelligence ({@skill Investigation}) or Wisdom ({@skill Perception}) check."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1077,10 +1142,13 @@
           }
         },
         {
-          "id": "act_cast_cantrip_auy2",
+          "id": "act_cast_cantrip_8ad9",
           "name": "Cast Cantrip",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tyreus casts a cantrip from his spell list.</p>",
+          "entries": [
+            "Tyreus casts a cantrip from his spell list."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1094,10 +1162,13 @@
           }
         },
         {
-          "id": "act_cast_spell__costs_1_3_actions__sqg6",
+          "id": "act_cast_spell__costs_1_3_actions__vjl2",
           "name": "Cast Spell (Costs 1-3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tyreus uses a spell slot to cast a 1st-, 2nd-, or 3rd-level spell that he has prepared. Doing so costs 1 legendary action per level of the spell.</p>",
+          "entries": [
+            "Tyreus uses a spell slot to cast a 1st-, 2nd-, or 3rd-level spell that he has prepared. Doing so costs 1 legendary action per level of the spell."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1112,10 +1183,22 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AitFR-FCD/Tyreus, Illusionist.webp",
     "tokenImg": "img/bestiary/tokens/AitFR-FCD/Tyreus, Illusionist.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

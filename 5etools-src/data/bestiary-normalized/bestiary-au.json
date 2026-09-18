@@ -102,7 +102,7 @@
       {
         "id": "sc_abjurer_archmage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -236,7 +236,9 @@
                   "formula": "8d6",
                   "type": "Fire",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -333,7 +335,9 @@
                   "formula": "3d10",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -355,7 +359,7 @@
       {
         "id": "sc_abjurer_archmage_1",
         "name": "Magic Disruption (2/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "bonus",
         "ability": "int",
         "abilityMod": 5,
@@ -419,7 +423,7 @@
       {
         "id": "sc_abjurer_archmage_2",
         "name": "Counterspell (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 5,
@@ -461,10 +465,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_q52e",
+        "id": "act_magic_resistance_gxyg",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archmage has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The archmage has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -480,10 +487,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6seo",
+        "id": "act_multiattack_9fd8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archmage makes three Arcane Burst attacks.</p>",
+        "entries": [
+          "The archmage makes three Arcane Burst attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -497,10 +507,13 @@
         }
       },
       {
-        "id": "act_arcane_burst_8rh6",
+        "id": "act_arcane_burst_v1bd",
         "name": "Arcane Burst",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +10, reach 5 ft. or range 150 ft. {@h}27 (4d10 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 150 ft. Hit: 27 (4d10 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 10}, reach 5 ft. or range 150 ft. {@h}27 ({@damage 4d10 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -519,10 +532,13 @@
         }
       },
       {
-        "id": "act_banishing_blast___recharge__k4ho",
+        "id": "act_banishing_blast___recharge__24jh",
         "name": "Banishing Blast {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>cha DC 18, each creature in a 60-foot Cone [Area of Effect]. {@actSaveFail} 45 (10d8) Force damage, and the target has the Incapacitated condition and is transported to a harmless demiplane until the start of the archmage's next turn, at which point it reappears in the space it left or in the nearest unoccupied space if that space is occupied. {@actSaveSuccess} Half damage only.</p>",
+        "entries": [
+          "{@actSave cha} {@dc 18}, each creature in a 60-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} 45 ({@damage 10d8}) Force damage, and the target has the {@condition Incapacitated|XPHB} condition and is transported to a harmless demiplane until the start of the archmage's next turn, at which point it reappears in the space it left or in the nearest unoccupied space if that space is occupied. {@actSaveSuccess} Half damage only."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -532,7 +548,7 @@
           "targets": null,
           "save": {
             "dc": 18,
-            "ability": "Save"
+            "ability": "CHA"
           },
           "damages": [
             {
@@ -546,10 +562,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_fortify__recharge_4__1rqq",
+        "id": "act_fortify__recharge_4__5awm",
         "name": "Fortify (Recharge 4)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The archmage magically bolsters itself. The archmage gains 40 Temporary Hit Points.</p>",
+        "entries": [
+          "The archmage magically bolsters itself. The archmage gains 40 {@variantrule Temporary Hit Points|XPHB}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -569,11 +588,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Abjurer Archmage.webp",
     "tokenImg": "img/bestiary/tokens/AU/Abjurer Archmage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_baelnorn_au",
@@ -687,7 +718,7 @@
       {
         "id": "sc_baelnorn_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -798,7 +829,9 @@
                 "formula": "8d6",
                 "type": "Lightning",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "upcastBonus": "1d6",
+                "upcastScaleStep": 1
               }
             ],
             "components": "V, S, M (a bit of fur and a crystal rod)",
@@ -860,7 +893,7 @@
       {
         "id": "sc_baelnorn_1",
         "name": "Counterspell",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 5,
@@ -900,7 +933,7 @@
       {
         "id": "sc_baelnorn_2",
         "name": "Frightening Glance",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "legendary",
         "ability": "int",
         "abilityMod": 5,
@@ -917,10 +950,13 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__ff02",
+        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__mc8g",
         "name": "Legendary Resistance (3/Day, or 4/Day in Lair)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the baelnorn fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the baelnorn fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -934,10 +970,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_rlei",
+        "id": "act_magic_resistance_e8xu",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The baelnorn has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The baelnorn has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -953,10 +992,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_br8e",
+        "id": "act_multiattack_tg3l",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The baelnorn makes three attacks, using Arcane Burst or Paralyzing Touch in any combination. It can replace two attacks with a use of Spellcasting to cast Lightning Bolt (level 4 version).</p>",
+        "entries": [
+          "The baelnorn makes three attacks, using Arcane Burst or Paralyzing Touch in any combination. It can replace two attacks with a use of Spellcasting to cast {@spell Lightning Bolt|XPHB} (level 4 version)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -970,10 +1012,13 @@
         }
       },
       {
-        "id": "act_arcane_burst_2j81",
+        "id": "act_arcane_burst_eec1",
         "name": "Arcane Burst",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +11, reach 5 ft. or range 120 ft. {@h}31 (4d12 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +11, reach 5 ft. or range 120 ft. Hit: 31 (4d12 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 11}, reach 5 ft. or range 120 ft. {@h}31 ({@damage 4d12 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -992,10 +1037,13 @@
         }
       },
       {
-        "id": "act_paralyzing_touch_nn3t",
+        "id": "act_paralyzing_touch_d88u",
         "name": "Paralyzing Touch",
         "actionType": "action",
-        "descriptionHtml": "<p>m +11, reach 5 ft. {@h}10 (2d4 + 5) Cold damage, and the target has the Paralyzed condition until the start of the baelnorn's next turn.</p>",
+        "descriptionHtml": "<p>Melee Attack: +11, reach 5 ft. Hit: 10 (2d4 + 5) Cold damage, and the target has the Paralyzed condition until the start of the baelnorn's next turn.</p>",
+        "entries": [
+          "{@atkr m} {@hit 11}, reach 5 ft. {@h}10 ({@damage 2d4 + 5}) Cold damage, and the target has the {@condition Paralyzed|XPHB} condition until the start of the baelnorn's next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1021,10 +1069,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_overwhelming_radiance_3pto",
+          "id": "act_overwhelming_radiance_4fop",
           "name": "Overwhelming Radiance",
           "actionType": "legendary",
           "descriptionHtml": "<p>con DC 19, each creature in a 20-foot Emanation [Area of Effect] originating from the baelnorn; Undead have Disadvantage on this save. {@actSaveFail} 11 (2d10) Radiant damage. {@actSaveSuccess} Half damage.</p>",
+          "entries": [
+            "{@actSave con} {@dc 19}, each creature in a 20-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the baelnorn; Undead have {@variantrule Disadvantage|XPHB} on this save. {@actSaveFail} 11 ({@damage 2d10}) Radiant damage. {@actSaveSuccess} Half damage."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1034,7 +1085,7 @@
             "targets": null,
             "save": {
               "dc": 19,
-              "ability": "Save"
+              "ability": "CON"
             },
             "damages": [
               {
@@ -1046,10 +1097,13 @@
           }
         },
         {
-          "id": "act_recuperative_teleport_6hmf",
+          "id": "act_recuperative_teleport_wlxn",
           "name": "Recuperative Teleport",
           "actionType": "legendary",
           "descriptionHtml": "<p>The baelnorn teleports up to 60 feet to an unoccupied space it can see and regains 11 (2d10) Hit Points. The baelnorn can't take this action again until the start of its next turn.</p>",
+          "entries": [
+            "The baelnorn teleports up to 60 feet to an unoccupied space it can see and regains 11 ({@dice 2d10}) {@variantrule Hit Points|XPHB}. The baelnorn can't take this action again until the start of its next turn."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -1064,11 +1118,23 @@
         }
       ]
     },
+    "legendaryActionsLair": 4,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Baelnorn.webp",
     "tokenImg": "img/bestiary/tokens/AU/Baelnorn.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_battle_familiar_au",
@@ -1160,10 +1226,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby__flyer_only__6khl",
+        "id": "act_flyby__flyer_only__gab0",
         "name": "Flyby (Flyer Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The familiar doesn't provoke Opportunity Attack when it flies out of an enemy's reach.</p>",
+        "entries": [
+          "The familiar doesn't provoke {@action Opportunity Attack|XPHB|Opportunity Attacks} when it flies out of an enemy's reach."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1177,10 +1246,13 @@
         }
       },
       {
-        "id": "act_talented_uczm",
+        "id": "act_talented_kupd",
         "name": "Talented",
         "actionType": "trait",
         "descriptionHtml": "<p>Add half the spell's level (round down) to any ability check or saving throw the familiar makes.</p>",
+        "entries": [
+          "Add half the spell's level (round down) to any ability check or saving throw the familiar makes."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1196,10 +1268,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2jwq",
+        "id": "act_multiattack_2tzb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The familiar makes a number of Rend attacks equal to half this spell's level (round down). The familiar can replace one of these attacks with Prowl if available.</p>",
+        "entries": [
+          "The familiar makes a number of Rend attacks equal to half this spell's level (round down). The familiar can replace one of these attacks with Prowl if available."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1213,10 +1288,13 @@
         }
       },
       {
-        "id": "act_rend_i7ue",
+        "id": "act_rend_7hq9",
         "name": "Rend",
         "actionType": "action",
-        "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d8 + 3 + summonSpellLevel Force damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d8 + 3 + summonSpellLevel Force damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}{@damage 1d8 + 3 + summonSpellLevel} Force damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1235,10 +1313,13 @@
         }
       },
       {
-        "id": "act_prowl__stalker_only__3qqz",
+        "id": "act_prowl__stalker_only__a35n",
         "name": "Prowl (Stalker Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The familiar moves up to half its Speed without provoking Opportunity Attack. At the end of this movement, the familiar can take the Hide action.</p>",
+        "entries": [
+          "The familiar moves up to half its {@variantrule Speed|XPHB} without provoking {@action Opportunity Attack|XPHB|Opportunity Attacks}. At the end of this movement, the familiar can take the {@action Hide|XPHB} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1259,11 +1340,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Battle Familiar.webp",
     "tokenImg": "img/bestiary/tokens/AU/Battle Familiar.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_conjurer_archmage_au",
@@ -1364,7 +1457,7 @@
       {
         "id": "sc_conjurer_archmage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -1518,7 +1611,9 @@
                   "formula": "4d6",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -1549,7 +1644,9 @@
                   "formula": "10d8",
                   "type": "Fire",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -1578,7 +1675,9 @@
                   "formula": "8d6",
                   "type": "Lightning",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a bit of fur and a crystal rod)",
@@ -1629,7 +1728,9 @@
                   "formula": "3d10",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -1652,7 +1753,7 @@
       {
         "id": "sc_conjurer_archmage_1",
         "name": "Protective Magic (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 5,
@@ -1716,10 +1817,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_6cuw",
+        "id": "act_magic_resistance_du7w",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archmage has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The archmage has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1735,10 +1839,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_b8qq",
+        "id": "act_multiattack_m5xn",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archmage makes four Arcane Burst attacks.</p>",
+        "entries": [
+          "The archmage makes four Arcane Burst attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1752,10 +1859,13 @@
         }
       },
       {
-        "id": "act_arcane_burst_6jbq",
+        "id": "act_arcane_burst_oyd7",
         "name": "Arcane Burst",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +10, reach 5 ft. or range 150 ft. {@h}27 (4d10 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 150 ft. Hit: 27 (4d10 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 10}, reach 5 ft. or range 150 ft. {@h}27 ({@damage 4d10 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1776,10 +1886,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_benign_transposition__3_day__fu45",
+        "id": "act_benign_transposition__3_day__ok4x",
         "name": "Benign Transposition (3/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The archmage teleports up to 30 feet to an unoccupied space that it can see. If it instead chooses a space within range that is occupied by a willing creature, they both teleport, swapping places.</p>",
+        "entries": [
+          "The archmage teleports up to 30 feet to an unoccupied space that it can see. If it instead chooses a space within range that is occupied by a willing creature, they both teleport, swapping places."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1799,11 +1912,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Conjurer Archmage.webp",
     "tokenImg": "img/bestiary/tokens/AU/Conjurer Archmage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_darkenbeast_au",
@@ -1901,10 +2026,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_spell_imprint_rttx",
+        "id": "act_spell_imprint_77ih",
         "name": "Spell Imprint",
         "actionType": "trait",
         "descriptionHtml": "<p>As part of the darkenbeast's creation, its creator can cast one spell of level 5 or lower with a casting time of an action. The spell has no effect but is stored within the darkenbeast. While within 30 feet of the darkenbeast, the darkenbeast's creator can cast the stored spell, requiring no spell components and using the caster's spellcasting ability. When the spell is cast this way, its effects originate from the darkenbeast (as if the darkenbeast were the spellcaster), and immediately after the spell is cast, the darkenbeast dies in a flash of purple flame.</p>",
+        "entries": [
+          "As part of the darkenbeast's creation, its creator can cast one spell of level 5 or lower with a casting time of an action. The spell has no effect but is stored within the darkenbeast. While within 30 feet of the darkenbeast, the darkenbeast's creator can cast the stored spell, requiring no spell components and using the caster's spellcasting ability. When the spell is cast this way, its effects originate from the darkenbeast (as if the darkenbeast were the spellcaster), and immediately after the spell is cast, the darkenbeast dies in a flash of purple flame."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1918,10 +2046,13 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_5euh",
+        "id": "act_sunlight_sensitivity_iyk9",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the darkenbeast has Disadvantage on ability checks and attack rolls.</p>",
+        "entries": [
+          "While in sunlight, the darkenbeast has {@variantrule Disadvantage|XPHB} on ability checks and attack rolls."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1937,10 +2068,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_lgcf",
+        "id": "act_multiattack_vc9g",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The darkenbeast makes three Rend attacks.</p>",
+        "entries": [
+          "The darkenbeast makes three Rend attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1954,10 +2088,13 @@
         }
       },
       {
-        "id": "act_rend_kov8",
+        "id": "act_rend_7n7g",
         "name": "Rend",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}12 (2d8 + 3) Slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 12 (2d8 + 3) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}12 ({@damage 2d8 + 3}) Slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1978,10 +2115,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_stalker_jhrk",
+        "id": "act_shadow_stalker_942s",
         "name": "Shadow Stalker",
         "actionType": "bonus",
         "descriptionHtml": "<p>While in Dim Light or Darkness, the darkenbeast takes the Disengage or Hide action.</p>",
+        "entries": [
+          "While in {@variantrule Dim Light|XPHB} or {@variantrule Darkness|XPHB}, the darkenbeast takes the {@action Disengage|XPHB} or {@action Hide|XPHB} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2001,11 +2141,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Darkenbeast.webp",
     "tokenImg": "img/bestiary/tokens/AU/Darkenbeast.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dinosaur_spirit_au",
@@ -2094,10 +2246,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_siege_monster__ankylosaur_only__7xjv",
+        "id": "act_siege_monster__ankylosaur_only__pezk",
         "name": "Siege Monster (Ankylosaur Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit deals double damage to objects and structures.</p>",
+        "entries": [
+          "The spirit deals double damage to objects and structures."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2111,10 +2266,13 @@
         }
       },
       {
-        "id": "act_tough_hvec",
+        "id": "act_tough_w0mu",
         "name": "Tough",
         "actionType": "trait",
         "descriptionHtml": "<p>Add half the spell's level (round down) to any Strength or Constitution saving throw the spirit makes.</p>",
+        "entries": [
+          "Add half the spell's level (round down) to any Strength or Constitution saving throw the spirit makes."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2130,10 +2288,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_pybk",
+        "id": "act_multiattack_a7uh",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (round down).</p>",
+        "entries": [
+          "The spirit makes a number of attacks equal to half this spell's level (round down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2147,10 +2308,13 @@
         }
       },
       {
-        "id": "act_bite__tyrannosaur_only__pnm8",
+        "id": "act_bite__tyrannosaur_only__0mib",
         "name": "Bite (Tyrannosaur Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 10 ft. {@h}2d10 + 5 + summonSpellLevel Piercing damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC equals your spell save DC), and it has the Restrained condition until the grapple ends.</p>",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 2d10 + 5 + summonSpellLevel Piercing damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC equals your spell save DC), and it has the Restrained condition until the grapple ends.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 10 ft. {@h}{@damage 2d10 + 5 + summonSpellLevel} Piercing damage. If the target is a Large or smaller creature, it has the {@condition Grappled|XPHB} condition (escape DC equals your spell save DC), and it has the {@condition Restrained|XPHB} condition until the grapple ends."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2169,10 +2333,13 @@
         }
       },
       {
-        "id": "act_gore__triceratops_only__dfvp",
+        "id": "act_gore__triceratops_only__a3cs",
         "name": "Gore (Triceratops Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d10 + 5 + summonSpellLevel Piercing damage. If the target is a Huge or smaller creature and the spirit moved 20+ feet straight toward it immediately before the hit, the target takes an extra 1d10 Piercing damage and has the Prone condition.</p>",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d10 + 5 + summonSpellLevel Piercing damage. If the target is a Huge or smaller creature and the spirit moved 20+ feet straight toward it immediately before the hit, the target takes an extra 1d10 Piercing damage and has the Prone condition.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}{@damage 1d10 + 5 + summonSpellLevel} Piercing damage. If the target is a Huge or smaller creature and the spirit moved 20+ feet straight toward it immediately before the hit, the target takes an extra {@damage 1d10} Piercing damage and has the {@condition Prone|XPHB} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2195,10 +2362,13 @@
         }
       },
       {
-        "id": "act_slam_ghy2",
+        "id": "act_slam_5bd1",
         "name": "Slam",
         "actionType": "action",
-        "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 10 ft. {@h}1d10 + 5 + summonSpellLevel Bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d10 + 5 + summonSpellLevel Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 10 ft. {@h}{@damage 1d10 + 5 + summonSpellLevel} Bludgeoning damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2224,11 +2394,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Dinosaur Spirit.webp",
     "tokenImg": "img/bestiary/tokens/AU/Dinosaur Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_diviner_archmage_au",
@@ -2333,7 +2515,7 @@
       {
         "id": "sc_diviner_archmage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -2444,7 +2626,9 @@
                 "formula": "3d8",
                 "type": "Psychic",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "upcastBonus": "1d8",
+                "upcastScaleStep": 1
               }
             ],
             "components": "S",
@@ -2578,7 +2762,7 @@
       {
         "id": "sc_diviner_archmage_1",
         "name": "Protective Magic (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 5,
@@ -2642,10 +2826,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_47e5",
+        "id": "act_magic_resistance_gqc0",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archmage has Advantage on saving throws against spells and similar effects.</p>",
+        "entries": [
+          "The archmage has {@variantrule Advantage|XPHB} on saving throws against spells and similar effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2661,10 +2848,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_onrt",
+        "id": "act_multiattack_fq33",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archmage makes four Arcane Burst attacks. It can replace one attack with a use of Spellcasting to cast Mind Spike (level 4 version).</p>",
+        "entries": [
+          "The archmage makes four Arcane Burst attacks. It can replace one attack with a use of Spellcasting to cast {@spell Mind Spike|XPHB} (level 4 version)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2678,10 +2868,13 @@
         }
       },
       {
-        "id": "act_arcane_burst_60fw",
+        "id": "act_arcane_burst_j923",
         "name": "Arcane Burst",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +10, reach 5 ft. or range 150 ft. {@h}24 (3d12 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 150 ft. Hit: 24 (3d12 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 10}, reach 5 ft. or range 150 ft. {@h}24 ({@damage 3d12 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2707,11 +2900,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Diviner Archmage.webp",
     "tokenImg": "img/bestiary/tokens/AU/Diviner Archmage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_enchanter_archmage_au",
@@ -2814,7 +3019,7 @@
       {
         "id": "sc_enchanter_archmage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -2928,7 +3133,9 @@
                   "formula": "8d6",
                   "type": "Fire",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -2957,7 +3164,9 @@
                   "formula": "5d10",
                   "type": "Psychic",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -3000,7 +3209,7 @@
       {
         "id": "sc_enchanter_archmage_1",
         "name": "Dominate Person (1/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "bonus",
         "ability": "int",
         "abilityMod": 5,
@@ -3042,7 +3251,7 @@
       {
         "id": "sc_enchanter_archmage_2",
         "name": "Duplicitous Magic (2/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "bonus",
         "ability": "int",
         "abilityMod": 5,
@@ -3128,7 +3337,7 @@
       {
         "id": "sc_enchanter_archmage_3",
         "name": "Protective Magic (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 5,
@@ -3192,10 +3401,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_mc40",
+        "id": "act_magic_resistance_nvnk",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archmage has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The archmage has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3211,10 +3423,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ab6i",
+        "id": "act_multiattack_ar3b",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archmage makes four Arcane Burst Attacks.</p>",
+        "entries": [
+          "The archmage makes four Arcane Burst Attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3228,10 +3443,13 @@
         }
       },
       {
-        "id": "act_arcane_burst_iec2",
+        "id": "act_arcane_burst_hapo",
         "name": "Arcane Burst",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +10, reach 5 ft. or range 150 ft. {@h}21 (3d10 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 150 ft. Hit: 21 (3d10 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 10}, reach 5 ft. or range 150 ft. {@h}21 ({@damage 3d10 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3257,11 +3475,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Enchanter Archmage.webp",
     "tokenImg": "img/bestiary/tokens/AU/Enchanter Archmage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_evoker_archmage_au",
@@ -3364,7 +3594,7 @@
       {
         "id": "sc_evoker_archmage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -3475,7 +3705,9 @@
                 "formula": "3d8",
                 "type": "Thunder",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "upcastBonus": "1d8",
+                "upcastScaleStep": 1
               }
             ],
             "components": "V, S, M (a chip of mica)",
@@ -3495,7 +3727,7 @@
       {
         "id": "sc_evoker_archmage_1",
         "name": "Evocation Barrage {@recharge 5}",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -3512,7 +3744,7 @@
       {
         "id": "sc_evoker_archmage_2",
         "name": "Protective Magic (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 5,
@@ -3576,10 +3808,13 @@
     ],
     "traits": [
       {
-        "id": "act_evocation_sculptor_odbr",
+        "id": "act_evocation_sculptor_r9qe",
         "name": "Evocation Sculptor",
         "actionType": "trait",
         "descriptionHtml": "<p>When the archmage casts a spell that creates an area of effect, it can choose itself and up to five other creatures it can see, sculpting the spell's energy around them. A chosen creature automatically succeeds on its saving throw against the spell, and it takes no damage if it would normally take half damage on a successful save.</p>",
+        "entries": [
+          "When the archmage casts a spell that creates an area of effect, it can choose itself and up to five other creatures it can see, sculpting the spell's energy around them. A chosen creature automatically succeeds on its saving throw against the spell, and it takes no damage if it would normally take half damage on a successful save."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3593,10 +3828,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_f7vj",
+        "id": "act_magic_resistance_lb0y",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archmage has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The archmage has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3612,10 +3850,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_88dx",
+        "id": "act_multiattack_hu86",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archmage makes four Arcane Burst attacks. It can replace one attack with a use of Spellcasting to cast Shatter.</p>",
+        "entries": [
+          "The archmage makes four Arcane Burst attacks. It can replace one attack with a use of Spellcasting to cast {@spell Shatter|XPHB}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3629,10 +3870,13 @@
         }
       },
       {
-        "id": "act_arcane_burst_dy8s",
+        "id": "act_arcane_burst_w4r3",
         "name": "Arcane Burst",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +10, reach 5 ft. or range 150 ft. {@h}27 (4d10 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 150 ft. Hit: 27 (4d10 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 10}, reach 5 ft. or range 150 ft. {@h}27 ({@damage 4d10 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3658,11 +3902,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Evoker Archmage.webp",
     "tokenImg": "img/bestiary/tokens/AU/Evoker Archmage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_groundling_grunt_au",
@@ -3762,10 +4018,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_claw_72cg",
+        "id": "act_claw_x0du",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}7 (1d8 + 3) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13) from one of two paws.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13) from one of two paws.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}7 ({@damage 1d8 + 3}) Slashing damage. If the target is a Medium or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from one of two paws."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3775,7 +4034,7 @@
           "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from one of two paws",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -3787,10 +4046,13 @@
         }
       },
       {
-        "id": "act_sling_yy8t",
+        "id": "act_sling_bgpf",
         "name": "Sling",
         "actionType": "action",
-        "descriptionHtml": "<p>r +4, range 30/120 ft. {@h}7 (2d4 + 2) Bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +4, range 30/120 ft. Hit: 7 (2d4 + 2) Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 4}, range 30/120 ft. {@h}7 ({@damage 2d4 + 2}) Bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3812,10 +4074,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_go_to_ground_xh2o",
+        "id": "act_go_to_ground_p76n",
         "name": "Go to Ground",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The groundling is hit by an attack roll while it is on the ground. {@actResponse} The groundling halves the damage (round down) it takes from that attack.</p>",
+        "entries": [
+          "{@actTrigger} The groundling is hit by an attack roll while it is on the ground. {@actResponse} The groundling halves the damage (round down) it takes from that attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3834,11 +4099,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Groundling Grunt.webp",
     "tokenImg": "img/bestiary/tokens/AU/Groundling Grunt.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_groundling_slayer_au",
@@ -3941,10 +4218,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_u4yz",
+        "id": "act_multiattack_ksmc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The groundling makes two attacks, using Claw or Dagger in any combination.</p>",
+        "entries": [
+          "The groundling makes two attacks, using Claw or Dagger in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3958,10 +4238,13 @@
         }
       },
       {
-        "id": "act_claw_ol7l",
+        "id": "act_claw_4w40",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}12 (2d8 + 3) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13) from one of two paws.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 12 (2d8 + 3) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13) from one of two paws.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}12 ({@damage 2d8 + 3}) Slashing damage. If the target is a Medium or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from one of two paws."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3971,7 +4254,7 @@
           "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from one of two paws",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -3983,10 +4266,13 @@
         }
       },
       {
-        "id": "act_dagger_8k8n",
+        "id": "act_dagger_lbpy",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +5, reach 5 ft. or range 20/60 ft. {@h}5 (1d4 + 3) Piercing damage plus 7 (2d6) Poison damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +5, reach 5 ft. or range 20/60 ft. Hit: 5 (1d4 + 3) Piercing damage plus 7 (2d6) Poison damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 5}, reach 5 ft. or range 20/60 ft. {@h}5 ({@damage 1d4 + 3}) Piercing damage plus 7 ({@damage 2d6}) Poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4012,10 +4298,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_go_to_ground_972d",
+        "id": "act_go_to_ground_4auv",
         "name": "Go to Ground",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The groundling is hit by an attack roll while it is on the ground. {@actResponse} The groundling halves the damage (round down) it takes from that attack.</p>",
+        "entries": [
+          "{@actTrigger} The groundling is hit by an attack roll while it is on the ground. {@actResponse} The groundling halves the damage (round down) it takes from that attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4034,11 +4323,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Groundling Slayer.webp",
     "tokenImg": "img/bestiary/tokens/AU/Groundling Slayer.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_groundling_stalker_au",
@@ -4141,10 +4442,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_claw_7clw",
+        "id": "act_claw_522o",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}12 (2d8 + 3) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13) from one of two paws.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 12 (2d8 + 3) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13) from one of two paws.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}12 ({@damage 2d8 + 3}) Slashing damage. If the target is a Medium or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from one of two paws."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4154,7 +4458,7 @@
           "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 13}) from one of two paws",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -4166,10 +4470,13 @@
         }
       },
       {
-        "id": "act_heavy_crossbow_k2xa",
+        "id": "act_heavy_crossbow_gmh7",
         "name": "Heavy Crossbow",
         "actionType": "action",
-        "descriptionHtml": "<p>r +5, range 100/400 ft. {@h}14 (2d10 + 3) Piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +5, range 100/400 ft. Hit: 14 (2d10 + 3) Piercing damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 5}, range 100/400 ft. {@h}14 ({@damage 2d10 + 3}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4191,10 +4498,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_go_to_ground_0jd2",
+        "id": "act_go_to_ground_5idt",
         "name": "Go to Ground",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The groundling is hit by an attack roll while it is on the ground. {@actResponse} The groundling halves the damage (round down) it takes from that attack.</p>",
+        "entries": [
+          "{@actTrigger} The groundling is hit by an attack roll while it is on the ground. {@actResponse} The groundling halves the damage (round down) it takes from that attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4213,11 +4523,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Groundling Stalker.webp",
     "tokenImg": "img/bestiary/tokens/AU/Groundling Stalker.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_illusionist_archmage_au",
@@ -4320,7 +4642,7 @@
       {
         "id": "sc_illusionist_archmage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -4606,13 +4928,17 @@
                   "formula": "10d10",
                   "type": "Psychic",
                   "label": "Damage 1",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "5d10",
                   "type": "Psychic",
                   "label": "Damage 2",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -4636,7 +4962,7 @@
       {
         "id": "sc_illusionist_archmage_1",
         "name": "Beguiling Spells (2/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "bonus",
         "ability": "int",
         "abilityMod": 5,
@@ -4700,7 +5026,7 @@
       {
         "id": "sc_illusionist_archmage_2",
         "name": "Protective Magic (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 5,
@@ -4764,10 +5090,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_957m",
+        "id": "act_magic_resistance_f3u7",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archmage has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The archmage has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4783,10 +5112,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_g5kb",
+        "id": "act_multiattack_42h1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archmage makes four Arcane Burst attacks.</p>",
+        "entries": [
+          "The archmage makes four Arcane Burst attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4800,10 +5132,13 @@
         }
       },
       {
-        "id": "act_arcane_burst_1yoj",
+        "id": "act_arcane_burst_4za4",
         "name": "Arcane Burst",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +10, reach 5 ft. or range 150 ft. {@h}21 (3d10 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 150 ft. Hit: 21 (3d10 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 10}, reach 5 ft. or range 150 ft. {@h}21 ({@damage 3d10 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4829,11 +5164,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Illusionist Archmage.webp",
     "tokenImg": "img/bestiary/tokens/AU/Illusionist Archmage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_living_cone_of_cold_au",
@@ -4931,10 +5278,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_hrr4",
+        "id": "act_amorphous_ge48",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The living spell can move through a space as narrow as 1 inch without expending extra movement to do so.</p>",
+        "entries": [
+          "The living spell can move through a space as narrow as 1 inch without expending extra movement to do so."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4948,10 +5298,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_d297",
+        "id": "act_magic_resistance_fx6s",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The living spell has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The living spell has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4967,10 +5320,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wkt9",
+        "id": "act_multiattack_erbu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The living spell makes two Magical Strike attacks.</p>",
+        "entries": [
+          "The living spell makes two Magical Strike attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4984,10 +5340,13 @@
         }
       },
       {
-        "id": "act_magical_strike_rs9k",
+        "id": "act_magical_strike_ml86",
         "name": "Magical Strike",
         "actionType": "action",
-        "descriptionHtml": "<p>m +8, reach 10 ft. {@h}27 (5d8 + 5) Cold damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +8, reach 10 ft. Hit: 27 (5d8 + 5) Cold damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 8}, reach 10 ft. {@h}27 ({@damage 5d8 + 5}) Cold damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5006,10 +5365,13 @@
         }
       },
       {
-        "id": "act_spell_mimicry__recharge_5__bvdo",
+        "id": "act_spell_mimicry__recharge_5__hkaz",
         "name": "Spell Mimicry (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 16, each creature in a 60-foot Cone [Area of Effect]. {@actSaveFail} 36 (8d8) Cold damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave con} {@dc 16}, each creature in a 60-foot {@variantrule Cone [Area of Effect]|XPHB|Cone}. {@actSaveFail} 36 ({@damage 8d8}) Cold damage. {@actSaveSuccess} Half damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5019,7 +5381,7 @@
           "targets": null,
           "save": {
             "dc": 16,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [
             {
@@ -5038,11 +5400,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Living Cone of Cold.webp",
     "tokenImg": "img/bestiary/tokens/AU/Living Cone of Cold.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_living_thunderwave_au",
@@ -5140,10 +5514,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_wux4",
+        "id": "act_amorphous_l1ia",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The living spell can move through a space as narrow as 1 inch without expending extra movement to do so.</p>",
+        "entries": [
+          "The living spell can move through a space as narrow as 1 inch without expending extra movement to do so."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5157,10 +5534,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_063b",
+        "id": "act_magic_resistance_5dwm",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The living spell has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The living spell has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5176,10 +5556,13 @@
     ],
     "actions": [
       {
-        "id": "act_magical_strike_hp2h",
+        "id": "act_magical_strike_q7b3",
         "name": "Magical Strike",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}6 (1d6 + 3) Thunder damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 6 (1d6 + 3) Thunder damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}6 ({@damage 1d6 + 3}) Thunder damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5198,10 +5581,13 @@
         }
       },
       {
-        "id": "act_spell_mimicry__recharge_5__filn",
+        "id": "act_spell_mimicry__recharge_5__kx47",
         "name": "Spell Mimicry (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 13, each creature in a 15-foot Cube [Area of Effect] originating from the living spell. {@actSaveFail} 9 (2d8) Thunder damage, and the target is pushed 10 feet away from the living spell. {@actSaveSuccess} Half damage only. {@actSaveSuccessOrFail} A thunderous boom is audible within 300 feet.</p>",
+        "entries": [
+          "{@actSave con} {@dc 13}, each creature in a 15-foot {@variantrule Cube [Area of Effect]|XPHB|Cube} originating from the living spell. {@actSaveFail} 9 ({@damage 2d8}) Thunder damage, and the target is pushed 10 feet away from the living spell. {@actSaveSuccess} Half damage only. {@actSaveSuccessOrFail} A thunderous boom is audible within 300 feet."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5211,7 +5597,7 @@
           "targets": null,
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [
             {
@@ -5230,11 +5616,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Living Thunderwave.webp",
     "tokenImg": "img/bestiary/tokens/AU/Living Thunderwave.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_living_vitriolic_sphere_au",
@@ -5332,10 +5730,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_jx4x",
+        "id": "act_amorphous_0fwy",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The living spell can move through a space as narrow as 1 inch without expending extra movement to do so.</p>",
+        "entries": [
+          "The living spell can move through a space as narrow as 1 inch without expending extra movement to do so."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5349,10 +5750,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_g7q8",
+        "id": "act_magic_resistance_gx9s",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The living spell has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The living spell has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5368,10 +5772,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7ojk",
+        "id": "act_multiattack_jjin",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The living spell makes two Magical Strike attacks.</p>",
+        "entries": [
+          "The living spell makes two Magical Strike attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5385,10 +5792,13 @@
         }
       },
       {
-        "id": "act_magical_strike_apin",
+        "id": "act_magical_strike_f1kl",
         "name": "Magical Strike",
         "actionType": "action",
-        "descriptionHtml": "<p>m +7, reach 10 ft. {@h}21 (5d6 + 4) Acid damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +7, reach 10 ft. Hit: 21 (5d6 + 4) Acid damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 7}, reach 10 ft. {@h}21 ({@damage 5d6 + 4}) Acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5407,10 +5817,13 @@
         }
       },
       {
-        "id": "act_spell_mimicry__recharge_5__mkj2",
+        "id": "act_spell_mimicry__recharge_5__uf6b",
         "name": "Spell Mimicry (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 15, each creature in a 20-foot-radius Sphere [Area of Effect] centered on a point within 150 feet. {@actSaveFail} 25 (10d4) Acid damage, and 12 (5d4) Acid damage at the end of the target's next turn. {@actSaveSuccess} Half initial damage only.</p>",
+        "entries": [
+          "{@actSave dex} {@dc 15}, each creature in a 20-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on a point within 150 feet. {@actSaveFail} 25 ({@damage 10d4}) Acid damage, and 12 ({@damage 5d4}) Acid damage at the end of the target's next turn. {@actSaveSuccess} Half initial damage only."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5420,7 +5833,7 @@
           "targets": null,
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": "DEX"
           },
           "damages": [
             {
@@ -5443,11 +5856,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Living Vitriolic Sphere.webp",
     "tokenImg": "img/bestiary/tokens/AU/Living Vitriolic Sphere.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_necromancer_archmage_au",
@@ -5552,7 +5977,7 @@
       {
         "id": "sc_necromancer_archmage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -5583,7 +6008,9 @@
                 "formula": "8d8",
                 "type": "Necrotic",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "upcastBonus": "1d8",
+                "upcastScaleStep": 1
               }
             ],
             "components": "V, S",
@@ -5713,7 +6140,9 @@
                   "formula": "8d8",
                   "type": "Necrotic",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "2d8",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (the powder of a crushed black pearl worth 500+ GP)",
@@ -5758,7 +6187,7 @@
       {
         "id": "sc_necromancer_archmage_1",
         "name": "Protective Magic (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 5,
@@ -5822,10 +6251,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_9d4y",
+        "id": "act_magic_resistance_an9x",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archmage has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The archmage has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5839,10 +6271,13 @@
         }
       },
       {
-        "id": "act_marshal_undead_ufz0",
+        "id": "act_marshal_undead_dhn0",
         "name": "Marshal Undead",
         "actionType": "trait",
         "descriptionHtml": "<p>Undead creatures of the archmage's choice in a 60-foot Emanation [Area of Effect] originating from the archmage have Advantage on attack rolls and saving throws unless the archmage has the Incapacitated condition.</p>",
+        "entries": [
+          "Undead creatures of the archmage's choice in a 60-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the archmage have {@variantrule Advantage|XPHB} on attack rolls and saving throws unless the archmage has the {@condition Incapacitated|XPHB} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5858,10 +6293,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_t8qk",
+        "id": "act_multiattack_086t",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archmage makes four Arcane Burst attacks. It can replace one attack with a use of Spellcasting to cast Blight.</p>",
+        "entries": [
+          "The archmage makes four Arcane Burst attacks. It can replace one attack with a use of Spellcasting to cast {@spell Blight|XPHB}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5875,10 +6313,13 @@
         }
       },
       {
-        "id": "act_arcane_burst_p8a1",
+        "id": "act_arcane_burst_upxe",
         "name": "Arcane Burst",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +10, reach 5 ft. or range 150 ft. {@h}21 (3d10 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 150 ft. Hit: 21 (3d10 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 10}, reach 5 ft. or range 150 ft. {@h}21 ({@damage 3d10 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5904,11 +6345,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Necromancer Archmage.webp",
     "tokenImg": "img/bestiary/tokens/AU/Necromancer Archmage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_plant_spirit_au",
@@ -6012,10 +6465,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_siege_monster__tree_only__s660",
+        "id": "act_siege_monster__tree_only__9zh4",
         "name": "Siege Monster (Tree Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit deals double damage to objects and structures.</p>",
+        "entries": [
+          "The spirit deals double damage to objects and structures."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6031,10 +6487,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zjyk",
+        "id": "act_multiattack_bb4g",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (round down).</p>",
+        "entries": [
+          "The spirit makes a number of attacks equal to half this spell's level (round down)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6048,10 +6507,13 @@
         }
       },
       {
-        "id": "act_slam__tree_or_vine_only__3iep",
+        "id": "act_slam__tree_or_vine_only__tz81",
         "name": "Slam (Tree or Vine Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>m Bonus equals your spell attack modifier, reach 5 ft. {@h}1d10 + 3 + summonSpellLevel Bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d10 + 3 + summonSpellLevel Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}{@damage 1d10 + 3 + summonSpellLevel} Bludgeoning damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6070,10 +6532,13 @@
         }
       },
       {
-        "id": "act_spore_spray__fungus_only__nzdd",
+        "id": "act_spore_spray__fungus_only__ubdf",
         "name": "Spore Spray (Fungus Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r Bonus equals your spell attack modifier, reach 5 ft. or range 30 ft. {@h}1d4 + summonSpellLevel Poison damage, and the target has the Poisoned condition until the end of its next turn. If the target already has the Poisoned condition, it instead takes an extra 3d4 Poison damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: Bonus equals your spell attack modifier, reach 5 ft. or range 30 ft. Hit: 1d4 + summonSpellLevel Poison damage, and the target has the Poisoned condition until the end of its next turn. If the target already has the Poisoned condition, it instead takes an extra 3d4 Poison damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. or range 30 ft. {@h}{@damage 1d4 + summonSpellLevel} Poison damage, and the target has the {@condition Poisoned|XPHB} condition until the end of its next turn. If the target already has the {@condition Poisoned|XPHB} condition, it instead takes an extra {@damage 3d4} Poison damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6098,10 +6563,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_twist_away__vine_only__7lve",
+        "id": "act_twist_away__vine_only__ejp8",
         "name": "Twist Away (Vine Only)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The spirit takes the Dash or Disengage action.</p>",
+        "entries": [
+          "The spirit takes the {@action Dash|XPHB} or {@action Disengage|XPHB} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6121,11 +6589,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Plant Spirit.webp",
     "tokenImg": "img/bestiary/tokens/AU/Plant Spirit.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_spellguard_au",
@@ -6225,10 +6705,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_superior_magic_resistance_qps2",
+        "id": "act_superior_magic_resistance_6xkj",
         "name": "Superior Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellguard has Advantage on saving throws against spells and other magical effects. Spell attack rolls have Disadvantage against the spellguard.</p>",
+        "entries": [
+          "The spellguard has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects. Spell attack rolls have {@variantrule Disadvantage|XPHB} against the spellguard."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6244,10 +6727,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wrw6",
+        "id": "act_multiattack_loqc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spellguard makes two attacks, using Force Flail or Javelin in any combination.</p>",
+        "entries": [
+          "The spellguard makes two attacks, using Force Flail or Javelin in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6261,10 +6747,13 @@
         }
       },
       {
-        "id": "act_force_flail_syz5",
+        "id": "act_force_flail_gtho",
         "name": "Force Flail",
         "actionType": "action",
-        "descriptionHtml": "<p>m +7, reach 5 ft. {@h}8 (1d8 + 4) Bludgeoning damage plus 7 (2d6) Force damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +7, reach 5 ft. Hit: 8 (1d8 + 4) Bludgeoning damage plus 7 (2d6) Force damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 7}, reach 5 ft. {@h}8 ({@damage 1d8 + 4}) Bludgeoning damage plus 7 ({@damage 2d6}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6287,10 +6776,13 @@
         }
       },
       {
-        "id": "act_javelin_6d5y",
+        "id": "act_javelin_iume",
         "name": "Javelin",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +7, reach 5 ft. or range 30/120 ft. {@h}14 (3d6 + 4) Piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +7, reach 5 ft. or range 30/120 ft. Hit: 14 (3d6 + 4) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 7}, reach 5 ft. or range 30/120 ft. {@h}14 ({@damage 3d6 + 4}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6312,10 +6804,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_defensive_divination_iczk",
+        "id": "act_defensive_divination_87de",
         "name": "Defensive Divination",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} A creature the spellguard can see hits an ally within 5 feet of the spellguard with an attack roll, or an ally within 5 feet of the spellguard fails a saving throw against a spell or other magical effect. {@actResponse} The spellguard rolls 1d20 and chooses whether to use that roll in place of the d20 rolled for the attack roll or saving throw.</p>",
+        "entries": [
+          "{@actTrigger} A creature the spellguard can see hits an ally within 5 feet of the spellguard with an attack roll, or an ally within 5 feet of the spellguard fails a saving throw against a spell or other magical effect. {@actResponse} The spellguard rolls {@dice 1d20} and chooses whether to use that roll in place of the {@dice d20} rolled for the attack roll or saving throw."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6334,11 +6829,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Spellguard.webp",
     "tokenImg": "img/bestiary/tokens/AU/Spellguard.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_taisus_au",
@@ -6449,7 +6956,7 @@
       {
         "id": "sc_taisus_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 7,
@@ -6500,7 +7007,9 @@
                 "formula": "8d6",
                 "type": "Fire",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "upcastBonus": "1d6",
+                "upcastScaleStep": 1
               }
             ],
             "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -6569,12 +7078,16 @@
                 {
                   "formula": "2d10",
                   "type": "Radiant",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d10",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "2d10",
                   "type": "Thunder",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d10",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a pinch of phosphorus)",
@@ -6649,7 +7162,9 @@
                   "formula": "10d12",
                   "type": "Psychic",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a key ring with no keys)",
@@ -6678,7 +7193,9 @@
                   "formula": "10d6 + 40",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "3d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a lodestone and dust)",
@@ -6699,7 +7216,7 @@
       {
         "id": "sc_taisus_1",
         "name": "Protective Magic",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 7,
@@ -6760,10 +7277,13 @@
     ],
     "traits": [
       {
-        "id": "act_arcane_immortality_8ipf",
+        "id": "act_arcane_immortality_flx2",
         "name": "Arcane Immortality",
         "actionType": "trait",
         "descriptionHtml": "<p>If the taisus dies, its body crumbles into glittering dust. It gains a new body after 1d10 days, reviving with all its Hit Points, unless a Wish spell is cast on its remains to prevent the effects of this trait. The new body appears in an unoccupied space within 5 feet of a location designated by the taisus on its creation.</p>",
+        "entries": [
+          "If the taisus dies, its body crumbles into glittering dust. It gains a new body after {@dice 1d10} days, reviving with all its {@variantrule Hit Points|XPHB}, unless a {@spell Wish|XPHB} spell is cast on its remains to prevent the effects of this trait. The new body appears in an unoccupied space within 5 feet of a location designated by the taisus on its creation."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6777,10 +7297,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__xv3n",
+        "id": "act_legendary_resistance__4_day__rixo",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the taisus fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If the taisus fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6794,10 +7317,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_8b1r",
+        "id": "act_magic_resistance_9l79",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The taisus has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The taisus has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6813,10 +7339,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_s6hm",
+        "id": "act_multiattack_55ax",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The taisus makes two Brain Drain attacks.</p>",
+        "entries": [
+          "The taisus makes two Brain Drain attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6830,10 +7359,13 @@
         }
       },
       {
-        "id": "act_brain_drain_d7y4",
+        "id": "act_brain_drain_za0g",
         "name": "Brain Drain",
         "actionType": "action",
-        "descriptionHtml": "<p>m +13, reach 20 ft. {@h}20 (3d8 + 7) Force damage plus 16 (3d10) Psychic damage, and if the target is a creature with spell slots, it's subjected to the following effect. con DC 21. {@actSaveFail} The target's highest-level unexpended spell slot is expended.</p>",
+        "descriptionHtml": "<p>Melee Attack: +13, reach 20 ft. Hit: 20 (3d8 + 7) Force damage plus 16 (3d10) Psychic damage, and if the target is a creature with spell slots, it's subjected to the following effect. con DC 21. {@actSaveFail} The target's highest-level unexpended spell slot is expended.</p>",
+        "entries": [
+          "{@atkr m} {@hit 13}, reach 20 ft. {@h}20 ({@damage 3d8 + 7}) Force damage plus 16 ({@damage 3d10}) Psychic damage, and if the target is a creature with spell slots, it's subjected to the following effect. {@actSave con} {@dc 21}. {@actSaveFail} The target's highest-level unexpended spell slot is expended."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6843,7 +7375,7 @@
           "targets": "and if the target is a creature with spell slots, it's subjected to the following effect",
           "save": {
             "dc": 21,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [
             {
@@ -6866,10 +7398,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_deadly_drain_hn9j",
+          "id": "act_deadly_drain_q777",
           "name": "Deadly Drain",
           "actionType": "legendary",
           "descriptionHtml": "<p>The taisus makes a Brain Drain attack. The taisus can't take this action again until the start of its next turn.</p>",
+          "entries": [
+            "The taisus makes a Brain Drain attack. The taisus can't take this action again until the start of its next turn."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -6883,10 +7418,13 @@
           }
         },
         {
-          "id": "act_teleport_5qpi",
+          "id": "act_teleport_up1c",
           "name": "Teleport",
           "actionType": "legendary",
           "descriptionHtml": "<p>The taisus teleports itself or a willing creature it can see within 10 feet of itself up to 120 feet to an unoccupied space the taisus can see.</p>",
+          "entries": [
+            "The taisus teleports itself or a willing creature it can see within 10 feet of itself up to 120 feet to an unoccupied space the taisus can see."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -6901,11 +7439,23 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Taisus.webp",
     "tokenImg": "img/bestiary/tokens/AU/Taisus.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_transmuter_archmage_au",
@@ -7006,7 +7556,7 @@
       {
         "id": "sc_transmuter_archmage_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 5,
@@ -7037,7 +7587,9 @@
                 "formula": "1d6",
                 "type": "Bludgeoning",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "upcastBonus": "",
+                "upcastScaleStep": 1
               }
             ],
             "components": "V, S",
@@ -7228,7 +7780,7 @@
       {
         "id": "sc_transmuter_archmage_1",
         "name": "Slow (2/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "bonus",
         "ability": "int",
         "abilityMod": 5,
@@ -7270,7 +7822,7 @@
       {
         "id": "sc_transmuter_archmage_2",
         "name": "Protective Magic (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "int",
         "abilityMod": 5,
@@ -7334,10 +7886,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_yfiq",
+        "id": "act_magic_resistance_u4mi",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archmage has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The archmage has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7353,10 +7908,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_j6pg",
+        "id": "act_multiattack_pbza",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archmage makes four Arcane Burst attacks.</p>",
+        "entries": [
+          "The archmage makes four Arcane Burst attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7370,10 +7928,13 @@
         }
       },
       {
-        "id": "act_arcane_burst_bbyv",
+        "id": "act_arcane_burst_d6qk",
         "name": "Arcane Burst",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +10, reach 5 ft. or range 150 ft. {@h}27 (4d10 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 150 ft. Hit: 27 (4d10 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 10}, reach 5 ft. or range 150 ft. {@h}27 ({@damage 4d10 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -7399,11 +7960,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Transmuter Archmage.webp",
     "tokenImg": "img/bestiary/tokens/AU/Transmuter Archmage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_venger_au",
@@ -7515,7 +8088,7 @@
       {
         "id": "sc_venger_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 5,
@@ -7629,7 +8202,9 @@
                   "formula": "1d6",
                   "type": "Bludgeoning",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -7658,7 +8233,9 @@
                   "formula": "6d6",
                   "type": "Psychic",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -7709,7 +8286,9 @@
                   "formula": "4d6",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V",
@@ -7776,7 +8355,7 @@
       {
         "id": "sc_venger_1",
         "name": "Telekinesis (2/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "bonus",
         "ability": "cha",
         "abilityMod": 5,
@@ -7818,7 +8397,7 @@
       {
         "id": "sc_venger_2",
         "name": "Protective Magic",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "reaction",
         "ability": "cha",
         "abilityMod": 5,
@@ -7879,10 +8458,13 @@
     ],
     "traits": [
       {
-        "id": "act_fiendish_restoration_hld9",
+        "id": "act_fiendish_restoration_0olq",
         "name": "Fiendish Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If Venger dies, his body dissipates into crimson dust, and he gains a new body in 1d10 days, reviving with all his Hit Points somewhere in one of his lairs.</p>",
+        "entries": [
+          "If Venger dies, his body dissipates into crimson dust, and he gains a new body in {@dice 1d10} days, reviving with all his {@variantrule Hit Points|XPHB} somewhere in one of his lairs."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7896,10 +8478,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__a9m3",
+        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__v9bd",
         "name": "Legendary Resistance (3/Day, or 4/Day in Lair)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Venger fails a saving throw, he can choose to succeed instead.</p>",
+        "entries": [
+          "If Venger fails a saving throw, he can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7913,10 +8498,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_n42j",
+        "id": "act_magic_resistance_kuuo",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Venger has Advantage on saving throws against spells and magical effects.</p>",
+        "entries": [
+          "Venger has {@variantrule Advantage|XPHB} on saving throws against spells and magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7930,10 +8518,13 @@
         }
       },
       {
-        "id": "act_mounted_adept_ez1u",
+        "id": "act_mounted_adept_t8xa",
         "name": "Mounted Adept",
         "actionType": "trait",
         "descriptionHtml": "<p>While Venger is mounted, he and his mount have Advantage on Dexterity saving throws, and Venger can force an attack targeting his mount to target him instead. Venger can't use this trait if he has the Incapacitated condition.</p>",
+        "entries": [
+          "While Venger is mounted, he and his mount have {@variantrule Advantage|XPHB} on Dexterity saving throws, and Venger can force an attack targeting his mount to target him instead. Venger can't use this trait if he has the {@condition Incapacitated|XPHB} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7949,10 +8540,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_366d",
+        "id": "act_multiattack_c5ta",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Venger makes three attacks, using Crimson Claw or Crimson Blast in any combination.</p>",
+        "entries": [
+          "Venger makes three attacks, using Crimson Claw or Crimson Blast in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7966,10 +8560,13 @@
         }
       },
       {
-        "id": "act_crimson_claw_ooxf",
+        "id": "act_crimson_claw_86zy",
         "name": "Crimson Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>m +11, reach 5 ft. {@h}14 (2d8 + 5) Slashing damage plus 10 (3d6) Fire damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +11, reach 5 ft. Hit: 14 (2d8 + 5) Slashing damage plus 10 (3d6) Fire damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 11}, reach 5 ft. {@h}14 ({@damage 2d8 + 5}) Slashing damage plus 10 ({@damage 3d6}) Fire damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -7992,10 +8589,13 @@
         }
       },
       {
-        "id": "act_crimson_blast_0gkm",
+        "id": "act_crimson_blast_czms",
         "name": "Crimson Blast",
         "actionType": "action",
-        "descriptionHtml": "<p>r +11, range 120 ft. {@h}24 (3d12 + 5) Force damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +11, range 120 ft. Hit: 24 (3d12 + 5) Force damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 11}, range 120 ft. {@h}24 ({@damage 3d12 + 5}) Force damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -8021,10 +8621,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_booming_censure_pjvz",
+          "id": "act_booming_censure_rrfj",
           "name": "Booming Censure",
           "actionType": "legendary",
           "descriptionHtml": "<p>wis DC 19, one creature Venger can see within 60 feet. {@actSaveFail} 14 (4d6) Psychic damage, and the target has the Frightened condition until the end of its next turn. {@actSaveSuccess} Half damage only.</p>",
+          "entries": [
+            "{@actSave wis} {@dc 19}, one creature Venger can see within 60 feet. {@actSaveFail} 14 ({@damage 4d6}) Psychic damage, and the target has the {@condition Frightened|XPHB} condition until the end of its next turn. {@actSaveSuccess} Half damage only."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -8034,7 +8637,7 @@
             "targets": null,
             "save": {
               "dc": 19,
-              "ability": "Save"
+              "ability": "WIS"
             },
             "damages": [
               {
@@ -8046,10 +8649,13 @@
           }
         },
         {
-          "id": "act_crimson_strike_098r",
+          "id": "act_crimson_strike_jhid",
           "name": "Crimson Strike",
           "actionType": "legendary",
           "descriptionHtml": "<p>Venger makes one Crimson Claw or Crimson Blast attack.</p>",
+          "entries": [
+            "Venger makes one Crimson Claw or Crimson Blast attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -8063,10 +8669,13 @@
           }
         },
         {
-          "id": "act_magic_binding_chains_t366",
+          "id": "act_magic_binding_chains_yjkm",
           "name": "Magic-Binding Chains",
           "actionType": "legendary",
           "descriptionHtml": "<p>dex DC 19, one creature Venger can see within 30 feet. {@actSaveFail} The target has the Restrained condition until the end of its next turn. While Restrained, the target can't take the Magic action. {@actSaveSuccessOrFail} Venger can't take this action again until the start of his next turn.</p>",
+          "entries": [
+            "{@actSave dex} {@dc 19}, one creature Venger can see within 30 feet. {@actSaveFail} The target has the {@condition Restrained|XPHB} condition until the end of its next turn. While {@condition Restrained|XPHB}, the target can't take the {@action Magic|XPHB} action. {@actSaveSuccessOrFail} Venger can't take this action again until the start of his next turn."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -8076,7 +8685,7 @@
             "targets": null,
             "save": {
               "dc": 19,
-              "ability": "Save"
+              "ability": "DEX"
             },
             "damages": [],
             "recharge": null
@@ -8084,11 +8693,23 @@
         }
       ]
     },
+    "legendaryActionsLair": 4,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Venger.webp",
     "tokenImg": "img/bestiary/tokens/AU/Venger.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_vestige_companion_au",
@@ -8203,10 +8824,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pact_bond_kbnk",
+        "id": "act_pact_bond_09by",
         "name": "Pact Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add your Proficiency to any ability check or saving throw the vestige makes.</p>",
+        "entries": [
+          "Add your {@variantrule Proficiency|XPHB|Proficiency Bonus} to any ability check or saving throw the vestige makes."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -8222,10 +8846,13 @@
     ],
     "actions": [
       {
-        "id": "act_vestige_s_strike_x8up",
+        "id": "act_vestige_s_strike_gru5",
         "name": "Vestige's Strike",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r Bonus equals your spell attack modifier, reach 5 ft. or range 60 ft. {@h}1d6 + 3 plus your Charisma modifier Fire (Fiend), Necrotic (Undead), or Radiant (Celestial) damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: Bonus equals your spell attack modifier, reach 5 ft. or range 60 ft. Hit: 1d6 + 3 plus your Charisma modifier Fire (Fiend), Necrotic (Undead), or Radiant (Celestial) damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. or range 60 ft. {@h}{@damage 1d6 + 3} plus your Charisma modifier Fire (Fiend), Necrotic (Undead), or Radiant (Celestial) damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -8246,10 +8873,34 @@
     ],
     "bonusActions": [
       {
-        "id": "act_divine_power__1_day__p51b",
+        "id": "act_divine_power__1_day__frpm",
         "name": "Divine Power (1/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Your vestige manifests a remnant of its divine power in one of the following ways, based on its form:</p><div><strong><em>Cursed Invocation (Undead Only).</em></strong> <p>The vestige places a curse on a creature you can see within 30 feet of the vestige for 1 minute. While cursed, the target has Disadvantage on attack rolls against you and the vestige.</p></div><div><strong><em>Fiendish Swap (Fiend Only).</em></strong> <p>If you and the vestige are within 60 feet of each other, you both teleport, swapping places.</p></div><div><strong><em>Healing Touch (Celestial Only).</em></strong> <p>The vestige touches another creature. The target regains Hit Points equal to 2d8 plus your Charisma modifier and ends one condition on it: Blinded, Deafened, or Poisoned.</p></div>",
+        "entries": [
+          "Your vestige manifests a remnant of its divine power in one of the following ways, based on its form:",
+          {
+            "type": "entries",
+            "name": "Cursed Invocation (Undead Only)",
+            "entries": [
+              "The vestige places a curse on a creature you can see within 30 feet of the vestige for 1 minute. While cursed, the target has {@variantrule Disadvantage|XPHB} on attack rolls against you and the vestige."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Fiendish Swap (Fiend Only)",
+            "entries": [
+              "If you and the vestige are within 60 feet of each other, you both teleport, swapping places."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Healing Touch (Celestial Only)",
+            "entries": [
+              "The vestige touches another creature. The target regains {@variantrule Hit Points|XPHB} equal to {@dice 2d8} plus your Charisma modifier and ends one condition on it: {@condition Blinded|XPHB}, {@condition Deafened|XPHB}, or {@condition Poisoned|XPHB}."
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -8269,10 +8920,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AU/Vestige Companion.webp",
     "tokenImg": "img/bestiary/tokens/AU/Vestige Companion.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

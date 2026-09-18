@@ -19,6 +19,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You have learned how to channel magical energy through objects. See the Player's Handbook|XPHB for the rules on spellcasting. The information below details how you use those rules with Artificer spells, which appear in the Artificer spell list|spells|class=Artificer later in the class's description.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Tools Required.</strong> <p>You produce your Artificer spells through tools. You can use Thieves' Tools, Tinker's Tools, or another kind of Artisan's Tools with which you have proficiency as a Spellcasting Focus|XPHB, and you must have one of those focuses in hand when you cast an Artificer spell (meaning the spell has an <em>M</em> component when you cast it).</p></div>\n<div class=\"compendium-subentry\"><strong>Cantrips.</strong> <p>You know two Artificer cantrips|spells|level=0|class=Artificer of your choice. Acid Splash and Prestidigitation are recommended.</p>\n<p>Whenever you finish a Long Rest|XPHB, you can replace one of your cantrips from this feature with another Artificer cantrip of your choice.</p>\n<p>When you reach Artificer levels 10 and 14, you learn another Artificer cantrip of your choice, as shown in the Cantrips column of the Artificer Features table.</p></div>\n<div class=\"compendium-subentry\"><strong>Spell Slots.</strong> <p>The Artificer Features table shows how many spell slots you have to cast your level 1+ spells. You regain all expended slots when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Prepared Spells of Level 1+.</strong> <p>You prepare the list of level 1+ spells that are available for you to cast with this feature. To start, choose two level 1 Artificer spells|spells|level=1|class=Artificer. Cure Wounds and Grease are recommended.</p>\n<p>The number of spells on your list increases as you gain Artificer levels, as shown in the Prepared Spells column of the Artificer Features table. Whenever that number increases, choose additional Artificer spells|spells|class=Artificer until the number of spells on your list matches the number on the table. The chosen spells must be of a level for which you have spell slots. For example, if you're a level 5 Artificer, your list of prepared spells can include six Artificer spells of levels 1 and 2 in any combination.</p>\n<p>If another Artificer feature gives you spells that you always have prepared, those don't count against the number of spells you can prepare with this feature, but those spells otherwise count as Artificer spells for you.</p></div>\n<div class=\"compendium-subentry\"><strong>Changing Your Prepared Spells.</strong> <p>Whenever you finish a Long Rest|XPHB, you can change your list of prepared spells, replacing any of the spells there with other Artificer spells for which you have spell slots.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Ability.</strong> <p>Intelligence is your spellcasting ability for your Artificer spells.</p></div></div>",
         "rawEntries": [
           "You have learned how to channel magical energy through objects. See the {@book Player's Handbook|XPHB} for the rules on spellcasting. The information below details how you use those rules with Artificer spells, which appear in the {@filter Artificer spell list|spells|class=Artificer} later in the class's description.",
@@ -87,6 +89,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You know the Mending cantrip.</p>\n<p>As a Magic action while holding Tinker's Tools, you can create one item in an unoccupied space within 5 feet of yourself, choosing the item from the following list:</p>\n<ul><li>Ball Bearings</li><li>Basket</li><li>Bedroll</li><li>Bell</li><li>Blanket</li><li>Block and Tackle</li><li>Glass Bottle</li><li>Bucket</li><li>Caltrops</li><li>Candle</li><li>Crowbar</li><li>Flask</li><li>Grappling Hook</li><li>Hunting Trap</li><li>Jug</li><li>Lamp</li><li>Manacles</li><li>Net</li><li>Oil</li><li>Paper</li><li>Parchment</li><li>Pole</li><li>Pouch</li><li>Rope</li><li>Sack</li><li>Shovel</li><li>Iron Spikes</li><li>String</li><li>Tinderbox</li><li>Torch</li><li>Vial</li></ul>\n<p>See the rules for the item in the Player's Handbook|XPHB. The item lasts until you finish a Long Rest|XPHB, at which point it vanishes.</p>\n<p>You can use this feature a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a Long Rest|XPHB.</p>",
         "rawEntries": [
           "You know the {@spell Mending|XPHB} cantrip.",
@@ -145,6 +149,13 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
         "entriesHtml": "<p>You have learned arcane plans that you use to make magic items.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Plans Known.</strong> <p>When you gain this feature, choose four plans to learn from the Magic Item Plans (Artificer Level 2+) table (see the Dungeon Master's Guide|XDMG for the items' descriptions). Bag of Holding, Cap of Water Breathing, Sending Stones, and +1 Wand of the War Mage are recommended. Whenever you gain an Artificer level, you can replace one of the plans you know with a new plan for which you qualify.</p>\n<p>You learn another plan of your choice when you reach certain Artificer levels, as shown in the Plans Known column of the Artificer Features table. When you choose a plan to learn, you choose it from any Magic Item Plans table for which you qualify; your qualification is based on your Artificer level.</p></div>\n<div class=\"compendium-subentry\"><strong>Creating an Item.</strong> <p>When you finish a Long Rest|XPHB, you can create one or two different magic items if you have Tinker's Tools in hand. Each item is based on one of the plans you know for this feature.</p>\n<p>If a created item requires Attunement|XPHB, you can attune yourself to it the instant you create it. If you decide to attune to the item later, you must do so using the normal process for Attunement|XPHB.</p>\n<p>When you reach certain Artificer levels specified in the Magic Items column of the Artificer Features table, the number of magic items you can create at the end of a Long Rest|XPHB increases. Each item you create must be based on a different plan you know.</p>\n<p>You can't have more magic items from this feature than the number shown in the Magic Items column of the Artificer Features table for your level. If you try to exceed your maximum number of magic items for this feature, the oldest item vanishes, and then the new item appears.</p></div>\n<div class=\"compendium-subentry\"><strong>Duration.</strong> <p>A magic item created by this feature functions as the normal magic item, except its magic isn't permanent; when you die, the magic item vanishes after 1d4 days. If you replace a plan you know with a new plan, any magic item created with the replaced plan immediately vanishes.</p>\n<p>If an item that you created with this feature is a container, such as a Bag of Holding, and it vanishes, its contents harmlessly appear in and around its space.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Focus.</strong> <p>You can use any Wand or Weapon created by this feature as a Spellcasting Focus|XPHB in lieu of using a set of Artisan's Tools.</p></div>\n<div class=\"compendium-subentry\"><strong>Crafting More Magic Items.</strong> <p>The Replicate Magic Item feature isn't the only way for an Artificer to make magic items. The Dungeon Master's Guide|XDMG|6|Crafting Magic Items provides rules for characters—not just Artificers—who want to make magic items of all sorts. Though many different characters can make magic items, Artificers can do it faster than others; each Artificer subclass improves a character's speed at making items of a certain category.</p>\n<p>When an Artificer crafts a magic item using the normal rules in the Dungeon Master's Guide|XDMG|6|Crafting Magic Items, the character gains no special connection to that item. Class features that refer to items created by your Replicate Magic Item feature don't apply to items you craft by other means.</p></div>\n<table class=\"compendium-table\"><thead><tr><th>Magic Item Plan</th><th>Attunement</th></tr></thead><tbody><tr><td>Alchemy Jug</td><td>No</td></tr><tr><td>Bag of Holding</td><td>No</td></tr><tr><td>Cap of Water Breathing</td><td>No</td></tr><tr><td>Common magic item that isn't a Potion, a Scroll, or cursed|items|source=|type=!potion;!scroll|rarity=common|category=|miscellaneous=!cursed*</td><td>Varies</td></tr><tr><td>Goggles of Night</td><td>No</td></tr><tr><td>Manifold Tool</td><td>Yes</td></tr><tr><td>Repeating Shot</td><td>Yes</td></tr><tr><td>Returning Weapon</td><td>No</td></tr><tr><td>Rope of Climbing</td><td>No</td></tr><tr><td>Sending Stones</td><td>No</td></tr><tr><td>+1 Shield</td><td>No</td></tr><tr><td>Wand of Magic Detection</td><td>No</td></tr><tr><td>Wand of Secrets</td><td>No</td></tr><tr><td>+1 Wand of the War Mage</td><td>Yes</td></tr><tr><td>+1 Weapon</td><td>No</td></tr><tr><td>+1 Wraps of Unarmed Power</td><td>No</td></tr></tbody></table>\n<table class=\"compendium-table\"><thead><tr><th>Magic Item Plan</th><th>Attunement</th></tr></thead><tbody><tr><td>+1 Armor</td><td>No</td></tr><tr><td>Boots of Elvenkind</td><td>No</td></tr><tr><td>Boots of the Winding Path</td><td>Yes</td></tr><tr><td>Cloak of Elvenkind</td><td>Yes</td></tr><tr><td>Cloak of the Manta Ray</td><td>Yes</td></tr><tr><td>Dazzling Weapon</td><td>Yes</td></tr><tr><td>Eyes of Charming</td><td>Yes</td></tr><tr><td>Eyes of Minute Seeing</td><td>No</td></tr><tr><td>Gloves of Thievery</td><td>No</td></tr><tr><td>Helm of Awareness</td><td>No</td></tr><tr><td>Lantern of Revealing</td><td>No</td></tr><tr><td>Mind Sharpener</td><td>Yes</td></tr><tr><td>Necklace of Adaptation</td><td>Yes</td></tr><tr><td>Pipes of Haunting</td><td>No</td></tr><tr><td>Repulsion Shield</td><td>No</td></tr><tr><td>Ring of Swimming</td><td>No</td></tr><tr><td>Ring of Water Walking</td><td>No</td></tr><tr><td>Sentinel Shield</td><td>No</td></tr><tr><td>Spell-Refueling Ring</td><td>Yes</td></tr><tr><td>Wand of Magic Missiles</td><td>No</td></tr><tr><td>Wand of Web</td><td>Yes</td></tr><tr><td>Weapon of Warning</td><td>Yes</td></tr></tbody></table>\n<table class=\"compendium-table\"><thead><tr><th>Magic Item Plan</th><th>Attunement</th></tr></thead><tbody><tr><td>Armor of Resistance</td><td>Yes</td></tr><tr><td>Dagger of Venom</td><td>No</td></tr><tr><td>Elven Chain</td><td>No</td></tr><tr><td>Ring of Feather Falling</td><td>Yes</td></tr><tr><td>Ring of Jumping</td><td>Yes</td></tr><tr><td>Ring of Mind Shielding</td><td>Yes</td></tr><tr><td>+2 Shield</td><td>No</td></tr><tr><td>Uncommon Wondrous Item that isn't cursed|items|source=|type=wondrous item|rarity=uncommon|category=|miscellaneous=!cursed*</td><td>Varies</td></tr><tr><td>+2 Wand of the War Mage</td><td>Yes</td></tr><tr><td>+2 Weapon</td><td>No</td></tr><tr><td>+2 Wraps of Unarmed Power</td><td>No</td></tr></tbody></table>\n<table class=\"compendium-table\"><thead><tr><th>Magic Item Plan</th><th>Attunement</th></tr></thead><tbody><tr><td>+2 Armor</td><td>No</td></tr><tr><td>Arrow-Catching Shield</td><td>Yes</td></tr><tr><td>Flame Tongue</td><td>Yes</td></tr><tr><td>Rare Wondrous Item that isn't cursed|items|source=|type=wondrous item|rarity=rare|category=|miscellaneous=!cursed*</td><td>Varies</td></tr><tr><td>Ring of Free Action</td><td>Yes</td></tr><tr><td>Ring of Protection</td><td>Yes</td></tr><tr><td>Ring of the Ram</td><td>Yes</td></tr></tbody></table></div>",
         "rawEntries": [
           "You have learned arcane plans that you use to make magic items.",
@@ -497,6 +508,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain an Artificer subclass of your choice. The Alchemist|Artificer|EFA|EFA, Armorer|Artificer|EFA|EFA, Artillerist|Artificer|EFA|EFA, Battle Smith|Artificer|EFA|EFA, and Cartographer|Artificer|EFA|EFA subclasses are detailed after this class's description. A subclass is a specialization that grants you features at certain Artificer levels. For the rest of your career, you gain each of your subclass's features that are of your Artificer level or lower.</p>",
         "rawEntries": [
           "You gain an Artificer subclass of your choice. The {@subclass Alchemist|Artificer|EFA|EFA}, {@subclass Armorer|Artificer|EFA|EFA}, {@subclass Artillerist|Artificer|EFA|EFA}, {@subclass Battle Smith|Artificer|EFA|EFA}, and {@subclass Cartographer|Artificer|EFA|EFA} subclasses are detailed after this class's description. A subclass is a specialization that grants you features at certain Artificer levels. For the rest of your career, you gain each of your subclass's features that are of your Artificer level or lower."
@@ -514,6 +527,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify. You gain this feature again at Artificer levels 8, 12, and 16.</p>",
         "rawEntries": [
           "You gain the {@feat Ability Score Improvement|XPHB} feat or another feat of your choice for which you qualify. You gain this feature again at Artificer levels 8, 12, and 16."
@@ -531,6 +546,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain a feature from your Artificer Subclass.</p>",
         "rawEntries": [
           "You gain a feature from your Artificer Subclass."
@@ -548,6 +565,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>Your Replicate Magic Item|Artificer|EFA|2|EFA feature gains the following options.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Charge Magic Item.</strong> <p>As a Bonus Action|XPHB, you can touch a magic item within 5 feet of yourself that you created with Replicate Magic Item and that uses charges. You expend a level 1+ spell slot and recharge the item. The number of charges the item regains is equal to the level of spell slot expended.</p></div>\n<div class=\"compendium-subentry\"><strong>Drain Magic Item.</strong> <p>As a Bonus Action|XPHB, you can touch a magic item within 5 feet of yourself that you created with Replicate Magic Item and cause the item to vanish, converting its magical energy into a spell slot. The slot is level 1 if the item is Common or level 2 if the item is Uncommon or Rare. Once you use this feature, you can't do so again until you finish a Long Rest|XPHB. Any spell slot you create with this feature vanishes when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Transmute Magic Item.</strong> <p>As a Magic action, you can touch one magic item within 5 feet of yourself that you created with Replicate Magic Item and transform it into a different magic item. The resulting item must be based on a magic item plan you know. Once you use this feature, you can't do so again until you finish a Long Rest|XPHB.</p></div></div>",
         "rawEntries": [
           "Your {@classFeature Replicate Magic Item|Artificer|EFA|2|EFA} feature gains the following options.",
@@ -591,6 +610,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>When you or a creature you can see within 30 feet of you fails an ability check or a saving throw, you can take a Reaction|XPHB to add a bonus to the roll, potentially causing it to succeed. The bonus equals your Intelligence modifier (minimum of +1).</p>\n<p>You can take this Reaction|XPHB a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a Long Rest|XPHB.</p>",
         "rawEntries": [
           "When you or a creature you can see within 30 feet of you fails an ability check or a saving throw, you can take a {@variantrule Reaction|XPHB} to add a bonus to the roll, potentially causing it to succeed. The bonus equals your Intelligence modifier (minimum of +1).",
@@ -609,6 +630,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
         "rawEntries": [
           "You gain the {@feat Ability Score Improvement|XPHB} feat or another feat of your choice for which you qualify."
@@ -626,6 +649,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain a feature from your Artificer Subclass.</p>",
         "rawEntries": [
           "You gain a feature from your Artificer Subclass."
@@ -643,6 +668,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You can now attune to up to four magic items at once.</p>",
         "rawEntries": [
           "You can now attune to up to four magic items at once."
@@ -660,6 +687,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>Whenever you finish a Long Rest|XPHB, you can touch one Simple or Martial weapon or one item that you can use as a Spellcasting Focus|XPHB, and you store a spell in it, choosing a level 1, 2, or 3 Artificer spell that has a casting time of an action and doesn't require a Material component that is consumed by the spell (you needn't have the spell prepared).</p>\n<p>While holding the object, a creature can take a Magic action to produce the spell's effect from it, using your spellcasting ability modifier. If the spell requires Concentration|XPHB, the creature must concentrate. Once a creature has used the object to produce the spell's effect, the object can't be used this way again until the start of the creature's next turn.</p>\n<p>The spell stays in the object until it's been used a number of times equal to twice your Intelligence modifier (minimum of twice) or until you use this feature again to store a spell in an object.</p>",
         "rawEntries": [
           "Whenever you finish a {@variantrule Long Rest|XPHB}, you can touch one Simple or Martial weapon or one item that you can use as a {@variantrule Spellcasting Focus|XPHB}, and you store a spell in it, choosing a level 1, 2, or 3 Artificer spell that has a casting time of an action and doesn't require a Material component that is consumed by the spell (you needn't have the spell prepared).",
@@ -679,6 +708,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
         "rawEntries": [
           "You gain the {@feat Ability Score Improvement|XPHB} feat or another feat of your choice for which you qualify."
@@ -696,6 +727,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Magic Item Savant.</strong> <p>You can now attune to up to five magic items at once.</p></div>\n<div class=\"compendium-subentry\"><strong>Refreshed Genius.</strong> <p>When you finish a Short Rest|XPHB, you regain one expended use of your Flash of Genius|Artificer|EFA|7|EFA feature.</p></div></div>",
         "rawEntries": [
           "You gain the following benefits.",
@@ -732,6 +765,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain a feature from your Artificer Subclass.</p>",
         "rawEntries": [
           "You gain a feature from your Artificer Subclass."
@@ -749,6 +784,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
         "rawEntries": [
           "You gain the {@feat Ability Score Improvement|XPHB} feat or another feat of your choice for which you qualify."
@@ -766,6 +803,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You can now attune to up to six magic items at once.</p>",
         "rawEntries": [
           "You can now attune to up to six magic items at once."
@@ -783,6 +822,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You gain an Epic Boon feat or another feat of your choice for which you qualify. Boon of Energy Resistance is recommended.</p>",
         "rawEntries": [
           "You gain an Epic Boon feat or another feat of your choice for which you qualify. {@feat Boon of Energy Resistance|XPHB} is recommended."
@@ -800,6 +841,8 @@
         "hasCounter": false,
         "usesMax": null,
         "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
         "entriesHtml": "<p>You have developed a mystical connection to your magic items, which you can draw on for aid. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Cheat Death.</strong> <p>If you're reduced to 0 Hit Points|XPHB but not killed outright, you can disintegrate any number of Uncommon or Rare magic items created by your Replicate Magic Item feature. If you do so, your Hit Points|XPHB instead change to a number equal to 20 times the number of magic items disintegrated.</p></div>\n<div class=\"compendium-subentry\"><strong>Magical Guidance.</strong> <p>When you finish a Short Rest|XPHB, you regain all expended uses of your Flash of Genius|Artificer|EFA|7|EFA if you have Attunement|XPHB to at least one magic item.</p></div></div>",
         "rawEntries": [
           "You have developed a mystical connection to your magic items, which you can draw on for aid. You gain the following benefits.",
@@ -849,6 +892,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p><em>Craft Magic Elixirs and Potions</em></p>\n<p>An Alchemist is an expert at combining reagents to produce magical effects. Alchemists use their creations to give life and to leech it away.</p>",
             "rawEntries": [
               "{@i Craft Magic Elixirs and Potions}",
@@ -881,6 +926,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>When you reach an Artificer level specified in the Alchemist Spells table, you thereafter always have the listed spells prepared.</p>\n<table class=\"compendium-table\"><thead><tr><th>Artificer Level</th><th>Spells</th></tr></thead><tbody><tr><td>3</td><td>Healing Word, Ray of Sickness</td></tr><tr><td>5</td><td>Flaming Sphere, Melf's Acid Arrow</td></tr><tr><td>9</td><td>Gaseous Form, Mass Healing Word</td></tr><tr><td>13</td><td>Death Ward, Vitriolic Sphere</td></tr><tr><td>17</td><td>Cloudkill, Raise Dead</td></tr></tbody></table>",
             "rawEntries": [
               "When you reach an Artificer level specified in the Alchemist Spells table, you thereafter always have the listed spells prepared.",
@@ -935,6 +982,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "2d8 + @int",
+            "formulaConfig": {
+              "baseDice": "2d8",
+              "scalingMod": "INT",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>Whenever you finish a Long Rest|XPHB while holding Alchemist's Supplies, you can use that tool to magically produce two elixirs. For each elixir, roll on the Experimental Elixir table for the elixir's effect, which is triggered when someone drinks the elixir. The elixir appears in a vial, and the vial vanishes when the elixir is drunk or poured out. If any elixir remains when you finish a Long Rest|XPHB, the elixir and its vial vanish.</p>\n<div class=\"compendium-subentry\"><strong>Drinking an Elixir.</strong> <p>As a Bonus Action|XPHB, a creature can drink the elixir or administer it to another creature within 5 feet of itself.</p></div>\n<div class=\"compendium-subentry\"><strong>Creating Additional Elixirs.</strong> <p>As a Magic action while holding Alchemist's Supplies, you can expend one spell slot to create another elixir. When you do so, you choose its effect from the Experimental Elixir table rather than rolling.</p>\n<p>When you reach certain Artificer levels, you can make an additional elixir at the end of each Long Rest|XPHB: a total of three at level 5, four at level 9, and five at level 15.</p></div>\n<table class=\"compendium-table\"><thead><tr><th>1d6</th><th>Effect</th></tr></thead><tbody><tr><td>1</td><td><strong>Healing.</strong> The drinker regains a number of Hit Points|XPHB equal to 2d8 plus your Intelligence modifier. The number of Hit Points|XPHB restored increases by 1d8 when you reach Artificer levels 9 (3d8) and 15 (4d8).</td></tr><tr><td>2</td><td><strong>Swiftness.</strong> The drinker's Speed|XPHB increases by 10 feet for 1 hour. This bonus increases when you reach Artificer levels 9 (15 feet) and 15 (20 feet).</td></tr><tr><td>3</td><td><strong>Resilience.</strong> The drinker gains a +1 bonus to AC for 10 minutes. The duration increases when you reach Artificer levels 9 (1 hour) and 15 (8 hours).</td></tr><tr><td>4</td><td><strong>Boldness.</strong> The drinker can roll 1d4 and add the number rolled to every attack roll and saving throw they make for the next minute. The duration increases when you reach Artificer levels 9 (10 minutes) and 15 (1 hour).</td></tr><tr><td>5</td><td><strong>Flight.</strong> The drinker gains a Fly Speed|XPHB of 10 feet for 10 minutes. The Fly Speed|XPHB increases when you reach Artificer levels 9 (20 feet) and 15 (30 feet).</td></tr><tr><td>6</td><td>You determine the elixir's effect by choosing one of the other rows in this table.</td></tr></tbody></table>",
             "rawEntries": [
               "Whenever you finish a {@variantrule Long Rest|XPHB} while holding {@item Alchemist's Supplies|XPHB}, you can use that tool to magically produce two elixirs. For each elixir, roll on the Experimental Elixir table for the elixir's effect, which is triggered when someone drinks the elixir. The elixir appears in a vial, and the vial vanishes when the elixir is drunk or poured out. If any elixir remains when you finish a {@variantrule Long Rest|XPHB}, the elixir and its vial vanish.",
@@ -1008,6 +1062,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Tool Proficiency.</strong> <p>You gain proficiency with Alchemist's Supplies and the Herbalism Kit. If you already have one of these proficiencies, you gain proficiency with one other type of Artisan's Tools of your choice (or with two other types if you have both).</p></div>\n<div class=\"compendium-subentry\"><strong>Potion Crafting.</strong> <p>When you brew a potion using the crafting rules in the Dungeon Master's Guide|XDMG|6|Crafting Magic Items, the amount of time required to craft it is halved.</p></div>",
             "rawEntries": [
               "You gain the following benefits.",
@@ -1041,6 +1097,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>Whenever you cast a spell using your Alchemist's Supplies as the Spellcasting Focus|XPHB, you gain a bonus to one roll of the spell. That roll must restore Hit Points|XPHB or be a damage roll that deals Acid, Fire, or Poison damage. The bonus equals your Intelligence modifier (minimum bonus of +1).</p>",
             "rawEntries": [
               "Whenever you cast a spell using your {@item Alchemist's Supplies|XPHB} as the {@variantrule Spellcasting Focus|XPHB}, you gain a bonus to one roll of the spell. That roll must restore {@variantrule Hit Points|XPHB} or be a damage roll that deals Acid, Fire, or Poison damage. The bonus equals your Intelligence modifier (minimum bonus of +1)."
@@ -1060,6 +1118,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You can cast Lesser Restoration without expending a spell slot and without preparing the spell, provided you use Alchemist's Supplies as the Spellcasting Focus|XPHB. You can do so a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a Long Rest|XPHB.</p>",
             "rawEntries": [
               "You can cast {@spell Lesser Restoration|XPHB} without expending a spell slot and without preparing the spell, provided you use {@item Alchemist's Supplies|XPHB} as the {@variantrule Spellcasting Focus|XPHB}. You can do so a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
@@ -1079,6 +1139,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "2d8",
+            "formulaConfig": {
+              "baseDice": "2d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Alchemical Eruption.</strong> <p>When you cast an Artificer spell that deals Acid, Fire, or Poison damage to a target, you can also deal 2d8 Force damage to that target. You can use this benefit only once on each of your turns.</p></div>\n<div class=\"compendium-subentry\"><strong>Chemical Resistance.</strong> <p>You gain Resistance|XPHB to Acid damage and Poison damage. You also gain Immunity|XPHB to the Poisoned condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Conjured Cauldron.</strong> <p>You can cast Tasha's Bubbling Cauldron without expending a spell slot, without preparing the spell, and without Material components, provided you use Alchemist's Supplies as the Spellcasting Focus|XPHB. Once you use this feature, you can't use it again until you finish a Long Rest|XPHB.</p></div>",
             "rawEntries": [
               "You gain the following benefits.",
@@ -1130,6 +1197,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>As a Magic action while you have Smith's Tools in hand, you can turn a suit of armor you are wearing into Arcane Armor. The armor continues to be Arcane Armor until you don another suit of armor or you die.</p>\n<p>You gain the following benefits while wearing your Arcane Armor.</p>\n<div class=\"compendium-subentry\"><strong>No Strength Requirement.</strong> <p>If the armor normally has a Strength requirement, the Arcane Armor lacks this requirement for you.</p></div>\n<div class=\"compendium-subentry\"><strong>Quick Don and Doff.</strong> <p>You can don or doff the armor as a Utilize action. The armor can't be removed against your will.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Focus.</strong> <p>You can use the Arcane Armor as a Spellcasting Focus|XPHB for your Artificer spells.</p></div>",
             "rawEntries": [
               "As a {@action Magic|XPHB} action while you have {@item Smith's Tools|XPHB} in hand, you can turn a suit of armor you are wearing into Arcane Armor. The armor continues to be Arcane Armor until you don another suit of armor or you die.",
@@ -1171,6 +1240,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You can customize your Arcane Armor. When you do so, choose one of the following armor models: Dreadnaught|Artificer|EFA|Armorer|EFA|3|EFA, Guardian|Artificer|EFA|Armorer|EFA|3|EFA, or Infiltrator|Artificer|EFA|Armorer|EFA|3|EFA. The model you choose gives you special benefits while you wear it.</p>\n<p>Each model includes a special weapon. When you attack with that weapon, you can add your Intelligence modifier, instead of your Strength or Dexterity modifier, to the attack and damage rolls.</p>\n<p>You can change the armor's model whenever you finish a Short Rest|XPHB|Short or Long Rest|XPHB if you have Smith's Tools in hand.</p>",
             "rawEntries": [
               "You can customize your Arcane Armor. When you do so, choose one of the following armor models: {@subclassFeature Dreadnaught|Artificer|EFA|Armorer|EFA|3|EFA}, {@subclassFeature Guardian|Artificer|EFA|Armorer|EFA|3|EFA}, or {@subclassFeature Infiltrator|Artificer|EFA|Armorer|EFA|3|EFA}. The model you choose gives you special benefits while you wear it.",
@@ -1204,6 +1275,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p><em>Craft Magic Armor to Enhance Your Abilities</em></p>\n<p>An Armorer modifies armor to function almost like a second skin. The armor is enhanced to hone the Armorer's magic, unleash potent attacks, and generate a formidable defense.</p>",
             "rawEntries": [
               "{@i Craft Magic Armor to Enhance Your Abilities}",
@@ -1240,6 +1313,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>When you reach an Artificer level specified in the Armorer Spells table, you thereafter always have the listed spells prepared.</p>\n<table class=\"compendium-table\"><thead><tr><th>Artificer Level</th><th>Spells</th></tr></thead><tbody><tr><td>3</td><td>Magic Missile, Thunderwave</td></tr><tr><td>5</td><td>Mirror Image, Shatter</td></tr><tr><td>9</td><td>Hypnotic Pattern, Lightning Bolt</td></tr><tr><td>13</td><td>Fire Shield, Greater Invisibility</td></tr><tr><td>17</td><td>Passwall, Wall of Force</td></tr></tbody></table>",
             "rawEntries": [
               "When you reach an Artificer level specified in the Armorer Spells table, you thereafter always have the listed spells prepared.",
@@ -1294,6 +1369,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "1d10",
+            "formulaConfig": {
+              "baseDice": "1d10",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>You design your armor to become a towering juggernaut in battle. It has the following features:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Force Demolisher.</strong> <p>An arcane wrecking ball or sledgehammer projects from your armor. The demolisher counts as a Simple Melee weapon with the R|XPHB|Reach property, and it deals 1d10 Force damage on a hit. If you hit a creature that is at least one size smaller than you with the demolisher, you can push the creature up to 10 feet straight away from yourself or pull the creature up to 10 feet toward yourself.</p></div></li><li><div class=\"compendium-subentry\"><strong>Giant Stature.</strong> <p>As a Bonus Action|XPHB, you transform and enlarge your armor for 1 minute. For the duration, your reach increases by 5 feet, and if you are smaller than Large, you become Large, along with anything you are wearing. If there isn't enough room for you to increase your size, your size doesn't change. You can use this Bonus Action|XPHB a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a Long Rest|XPHB.</p></div></li></ul>",
             "rawEntries": [
               "You design your armor to become a towering juggernaut in battle. It has the following features:",
@@ -1333,6 +1415,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "1d8",
+            "formulaConfig": {
+              "baseDice": "1d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>You design your armor to be in the front line of conflict. It has the following features:</p>\n<div class=\"compendium-subentry\"><strong>Thunder Pulse.</strong> <p>You can discharge concussive blasts with strikes from your armor. The pulse counts as a Simple Melee weapon and deals 1d8 Thunder damage on a hit. A creature hit by the pulse has Disadvantage|XPHB on attack rolls against targets other than you until the start of your next turn.</p></div>\n<div class=\"compendium-subentry\"><strong>Defensive Field.</strong> <p>While Bloodied|XPHB, you can take a Bonus Action|XPHB to gain Temporary Hit Points|XPHB equal to your Artificer level. You lose these Temporary Hit Points|XPHB if you doff the armor.</p></div>",
             "rawEntries": [
               "You design your armor to be in the front line of conflict. It has the following features:",
@@ -1366,6 +1455,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "1d6",
+            "formulaConfig": {
+              "baseDice": "1d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>You customize your armor for subtler undertakings. It has the following features:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Lightning Launcher.</strong> <p>A gemlike node appears on your armor, from which you can shoot bolts of lightning. The launcher counts as a Simple Ranged weapon with a normal range of 90 feet and a long range of 300 feet, and it deals 1d6 Lightning damage on a hit. Once on each of your turns when you hit a creature with the launcher, you can deal an extra 1d6 Lightning damage to that target.</p></div></li><li><div class=\"compendium-subentry\"><strong>Powered Steps.</strong> <p>Your Speed|XPHB increases by 5 feet.</p></div></li><li><div class=\"compendium-subentry\"><strong>Dampening Field.</strong> <p>You have Advantage|XPHB on Dexterity (Stealth) checks. If the armor imposes Disadvantage|XPHB on such checks, the Advantage|XPHB and Disadvantage|XPHB cancel each other, as normal.</p></div></li></ul>",
             "rawEntries": [
               "You customize your armor for subtler undertakings. It has the following features:",
@@ -1412,6 +1508,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Armor Training.</strong> <p>You gain training with Heavy armor.</p></div>\n<div class=\"compendium-subentry\"><strong>Tool Proficiency.</strong> <p>You gain proficiency with Smith's Tools. If you already have this tool proficiency, you gain proficiency with one other type of Artisan's Tools of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Armor Crafting.</strong> <p>When you craft nonmagical or magic armor, the amount of time required to craft it is halved.</p></div>",
             "rawEntries": [
               "You gain the following benefits.",
@@ -1455,6 +1553,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You can attack twice instead of once whenever you take the Attack action on your turn.</p>",
             "rawEntries": [
               "You can attack twice instead of once whenever you take the {@action Attack|XPHB} action on your turn."
@@ -1474,6 +1574,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Armor Replication.</strong> <p>You learn an additional plan for your Replicate Magic Item feature, and it must be in the Armor category. If you replace that plan, you must replace it with another Armor plan.</p>\n<p>In addition, you can create an additional item with that feature, and the item must also be in the Armor category.</p></div>\n<div class=\"compendium-subentry\"><strong>Improved Arsenal.</strong> <p>You gain a +1 bonus to attack and damage rolls made with the special weapon of your Arcane Armor model.</p></div>",
             "rawEntries": [
               "You gain the following benefits.",
@@ -1510,6 +1612,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "2d6",
+            "formulaConfig": {
+              "baseDice": "2d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>Your Arcane Armor gains additional benefits based on its model, as detailed below.</p>\n<div class=\"compendium-subentry\"><strong>Dreadnaught.</strong> <p>The damage die of your Force Demolisher increases to 2d6 Force damage.</p>\n<p>In addition, when you use your Giant Stature, your reach increases by 10 feet, your size can increase to Large or Huge (your choice), and you have Advantage|XPHB on Strength checks and Strength saving throws for the duration.</p></div>\n<div class=\"compendium-subentry\"><strong>Guardian.</strong> <p>The damage die of your Thunder Pulse increases to 1d10 Thunder damage.</p>\n<p>In addition, when a Huge or smaller creature you can see ends its turn within 30 feet of you, you can take a Reaction|XPHB to magically force that creature to make a Strength saving throw against your spell save DC. On a failed save, you pull the creature up to 25 feet directly toward you to an unoccupied space. If you pull the target to a space within 5 feet of yourself, you can make a melee weapon attack against it as part of this Reaction|XPHB.</p>\n<p>You can take this Reaction|XPHB a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Infiltrator.</strong> <p>The damage die of your Lightning Launcher increases to 2d6 Lightning damage. Any creature that takes Lightning damage from your Lightning Launcher glimmers with magical light until the start of your next turn. The glimmering creature sheds Dim Light|XPHB in a 5-foot radius, and it has Disadvantage|XPHB on attack rolls against you, as the light jolts it if it attacks you.</p>\n<p>Additionally, as a Bonus Action|XPHB, you can gain a Fly Speed|XPHB equal to twice your Speed|XPHB until the end of the current turn. You can take this Bonus Action|XPHB a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>",
             "rawEntries": [
               "Your Arcane Armor gains additional benefits based on its model, as detailed below.",
@@ -1565,6 +1674,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p><em>Wield Destructive Power from Afar</em></p>\n<p>An Artillerist specializes in using magic to hurl energy, projectiles, and explosions on a battlefield.</p>",
             "rawEntries": [
               "{@i Wield Destructive Power from Afar}",
@@ -1597,6 +1708,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>When you reach an Artificer level specified in the Artillerist Spells table, you thereafter always have the listed spells prepared.</p>\n<table class=\"compendium-table\"><thead><tr><th>Artificer Level</th><th>Spells</th></tr></thead><tbody><tr><td>3</td><td>Shield, Thunderwave</td></tr><tr><td>5</td><td>Scorching Ray, Shatter</td></tr><tr><td>9</td><td>Fireball, Wind Wall</td></tr><tr><td>13</td><td>Ice Storm, Wall of Fire</td></tr><tr><td>17</td><td>Cone of Cold, Wall of Force</td></tr></tbody></table>",
             "rawEntries": [
               "When you reach an Artificer level specified in the Artillerist Spells table, you thereafter always have the listed spells prepared.",
@@ -1651,6 +1764,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>Using Smith's Tools or Woodcarver's Tools, you can take a Magic action to create a Small or Tiny Eldritch Cannon|EFA in an unoccupied space on a horizontal surface within 5 feet of yourself. You determine its appearance, including whether you carry it or not (and your choice of legs or wheels, for the latter). It disappears if it is reduced to 0 Hit Points|XPHB or after 1 hour. You can dismiss it early as a Magic action.</p>\n<p>Once you create a cannon, you can't do so again until you finish a Long Rest|XPHB or expend a spell slot to create one. You can have only one cannon at a time and can't create one while you already have one.</p>",
             "rawEntries": [
               "Using {@item Smith's Tools|XPHB} or {@item Woodcarver's Tools|XPHB}, you can take a {@action Magic|XPHB} action to create a Small or Tiny {@object Eldritch Cannon|EFA} in an unoccupied space on a horizontal surface within 5 feet of yourself. You determine its appearance, including whether you carry it or not (and your choice of legs or wheels, for the latter). It disappears if it is reduced to 0 {@variantrule Hit Points|XPHB} or after 1 hour. You can dismiss it early as a {@action Magic|XPHB} action.",
@@ -1671,6 +1786,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Ranged Weaponry.</strong> <p>You gain proficiency with Martial Ranged weapons|items|type=martial weapon;ranged weapon=sand.</p></div>\n<div class=\"compendium-subentry\"><strong>Tool Proficiency.</strong> <p>You gain proficiency with Woodcarver's Tools. If you already have this proficiency, you gain proficiency with one other type of Artisan's Tools of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Wand Crafting.</strong> <p>When you craft a magic Wand, the amount of time required to craft it is halved.</p></div>",
             "rawEntries": [
               "You gain the following benefits.",
@@ -1711,6 +1828,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "1d8",
+            "formulaConfig": {
+              "baseDice": "1d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>When you finish a Long Rest|XPHB, you can use Woodcarver's Tools to carve special sigils into a Rod, Staff, Wand, or Martial Ranged weapon|items|type=martial weapon;ranged weapon=sand and thereby turn it into your Arcane Firearm. The sigils disappear from the object if you later carve them on a different item. The sigils otherwise last indefinitely.</p>\n<p>You can use your Arcane Firearm as a Spellcasting Focus|XPHB for your Artificer spells. When you cast an Artificer spell through the firearm, roll 1d8, and you gain a bonus to one of the spell's damage rolls equal to the number rolled.</p>",
             "rawEntries": [
               "When you finish a {@variantrule Long Rest|XPHB}, you can use {@item Woodcarver's Tools|XPHB} to carve special sigils into a {@item Rod|XPHB}, {@item Staff|XPHB}, {@item Wand|XPHB}, or {@filter Martial Ranged weapon|items|type=martial weapon;ranged weapon=sand} and thereby turn it into your Arcane Firearm. The sigils disappear from the object if you later carve them on a different item. The sigils otherwise last indefinitely.",
@@ -1731,6 +1855,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "3d10",
+            "formulaConfig": {
+              "baseDice": "3d10",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>Every Eldritch Cannon|EFA you create is now more destructive. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Detonate.</strong> <p>When your cannon takes damage, you can take a Reaction|XPHB to command the cannon to detonate if you are within 60 feet of it. Doing so destroys the cannon and forces each creature within 20 feet of it to make a Dexterity saving throw against your spell save DC, taking 3d10 Force damage on a failed save or half as much damage on a successful one.</p></div>\n<div class=\"compendium-subentry\"><strong>Firepower.</strong> <p>The cannon's damage rolls and the number of Temporary Hit Points|XPHB granted by Protector increase by 1d8.</p></div>",
             "rawEntries": [
               "Every {@object Eldritch Cannon|EFA} you create is now more destructive. You gain the following benefits.",
@@ -1764,6 +1895,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You're a master at forming well-defended emplacements using your Eldritch Cannon|EFA. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Double Firepower.</strong> <p>You can now have two cannons at the same time, and you can create two with the same Magic action. (If you expend a spell slot to create the first cannon, you must expend another spell slot to create the second.) You can activate both of them with the same Bonus Action|XPHB, ordering them to use the same activation option or different ones. You can't create a third cannon while you have two.</p></div>\n<div class=\"compendium-subentry\"><strong>Shimmering Field Projection.</strong> <p>You and your allies have Cover|XPHB|Half Cover while within 10 feet of your Eldritch Cannon|EFA.</p></div>",
             "rawEntries": [
               "You're a master at forming well-defended emplacements using your {@object Eldritch Cannon|EFA}. You gain the following benefits.",
@@ -1808,6 +1941,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>Your combat training and your experiments with magic have paid off in two ways.</p>\n<div class=\"compendium-subentry\"><strong>Arcane Empowerment.</strong> <p>When you attack with a magic weapon, you can use your Intelligence modifier, instead of your Strength or Dexterity modifier, for the attack and damage rolls.</p></div>\n<div class=\"compendium-subentry\"><strong>Weapon Knowledge.</strong> <p>You gain proficiency with Martial weapons|items|type=martial weapon. You can use a weapon with which you have proficiency as a Spellcasting Focus|XPHB for your Artificer spells.</p></div>",
             "rawEntries": [
               "Your combat training and your experiments with magic have paid off in two ways.",
@@ -1841,6 +1976,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p><em>Command a Construct Guardian</em></p>\n<p>A Battle Smith is a combination of protector and medic, an expert at defending others and repairing both materiel and personnel. To aid in their work, Battle Smiths are accompanied by a Steel Defender, a protective companion of their own creation.</p>",
             "rawEntries": [
               "{@i Command a Construct Guardian}",
@@ -1877,6 +2014,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>When you reach an Artificer level specified in the Battle Smith Spells table, you thereafter always have the listed spells prepared.</p>\n<table class=\"compendium-table\"><thead><tr><th>Artificer Level</th><th>Spells</th></tr></thead><tbody><tr><td>3</td><td>Heroism, Shield</td></tr><tr><td>5</td><td>Shining Smite, Warding Bond</td></tr><tr><td>9</td><td>Aura of Vitality, Conjure Barrage</td></tr><tr><td>13</td><td>Aura of Purity, Fire Shield</td></tr><tr><td>17</td><td>Banishing Smite, Mass Cure Wounds</td></tr></tbody></table>",
             "rawEntries": [
               "When you reach an Artificer level specified in the Battle Smith Spells table, you thereafter always have the listed spells prepared.",
@@ -1927,10 +2066,12 @@
             "subclassShortName": "Battle Smith",
             "subclassSource": "EFA",
             "level": 3,
-            "actionType": "passive",
+            "actionType": "action",
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>Your tinkering has borne you a companion, a Steel Defender. You determine the defender's appearance and whether it has two legs or four; your choices don't affect the defender's game statistics.</p>\n<p>The Steel Defender is Friendly [Attitude]|XPHB|Friendly to you and your allies and obeys you. It vanishes if you die.</p>\n<div class=\"compendium-subentry\"><strong>The Defender in Combat.</strong> <p>In combat, the defender acts during your turn. It can move and take its Reaction|XPHB on its own, but the only action it takes is the Dodge action unless you take a Bonus Action|XPHB to command it to take an action. If you have the Incapacitated condition, the defender acts on its own and isn't limited to the Dodge action.</p></div>\n<div class=\"compendium-subentry\"><strong>Restoring or Replacing the Defender.</strong> <p>If the defender has died within the last hour, you can take a Magic action to touch it and expend a spell slot. The defender returns to life after 1 minute with all its Hit Points|XPHB restored.</p>\n<p>Whenever you finish a Long Rest|XPHB, you can create a new Steel Defender if you have Smith's Tools in hand. If you already have a defender from this feature, the first one vanishes.</p></div>",
             "rawEntries": [
               "Your tinkering has borne you a companion, a {@creature Steel Defender|EFA}. You determine the defender's appearance and whether it has two legs or four; your choices don't affect the defender's game statistics.",
@@ -1967,6 +2108,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Tool Proficiency.</strong> <p>You gain proficiency with Smith's Tools. If you already have this proficiency, you gain proficiency with one other type of Artisan's Tools of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Weapon Crafting.</strong> <p>When you craft a nonmagical or magic weapon, the amount of time required to craft it is halved.</p></div>",
             "rawEntries": [
               "You gain the following benefits.",
@@ -2000,6 +2143,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You can attack twice instead of once whenever you take the Attack action on your turn. You can forgo one of your attacks when you take the Attack action to command your Steel Defender to take the Force-Empowered Rend action.</p>",
             "rawEntries": [
               "You can attack twice instead of once whenever you take the {@action Attack|XPHB} action on your turn. You can forgo one of your attacks when you take the {@action Attack|XPHB} action to command your {@creature Steel Defender|EFA} to take the Force-Empowered Rend action."
@@ -2019,6 +2164,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "2d6",
+            "formulaConfig": {
+              "baseDice": "2d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>When either you hit a target with an attack roll using a magic weapon or your Steel Defender hits a target, you can channel magical energy through the strike to create one of the following effects:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Destructive Energy.</strong> <p>The target takes an extra 2d6 Force damage.</p></div></li><li><div class=\"compendium-subentry\"><strong>Restorative Energy.</strong> <p>Choose one creature or object you can see within 30 feet of the target. Healing energy flows into the chosen recipient, restoring 2d6 Hit Points|XPHB to it.</p></div></li></ul>\n<p>You can use this energy a number of times equal to your Intelligence modifier (minimum of once), but you can do so no more than once per turn. You regain all expended uses when you finish a Long Rest|XPHB.</p>",
             "rawEntries": [
               "When either you hit a target with an attack roll using a magic weapon or your {@creature Steel Defender|EFA} hits a target, you can channel magical energy through the strike to create one of the following effects:",
@@ -2059,6 +2211,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "1d4 + @int",
+            "formulaConfig": {
+              "baseDice": "1d4",
+              "scalingMod": "INT",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>Your Arcane Jolt|Artificer|EFA|Battle Smith|EFA|9|EFA and Steel Defender have become more powerful, granting these benefits.</p>\n<div class=\"compendium-subentry\"><strong>Improved Jolt.</strong> <p>The extra damage and healing of your Arcane Jolt both increase to 4d6.</p></div>\n<div class=\"compendium-subentry\"><strong>Improved Deflection.</strong> <p>Whenever your Steel Defender uses its Deflect Attack, the attacker takes Force damage equal to 1d4 plus your Intelligence modifier.</p></div>",
             "rawEntries": [
               "Your {@subclassFeature Arcane Jolt|Artificer|EFA|Battle Smith|EFA|9|EFA} and {@creature Steel Defender|EFA} have become more powerful, granting these benefits.",
@@ -2103,6 +2262,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "1d4",
+            "formulaConfig": {
+              "baseDice": "1d4",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>Whenever you finish a Long Rest|XPHB while holding Cartographer's Tools, you can use that tool to create a set of magical maps by touching at least two creatures (one of whom can be yourself), up to a maximum number of creatures equal to 1 plus your Intelligence modifier (minimum of two creatures). Each target receives a magical map, which constantly updates to show the relative position of all the map holders but is illegible to all others. The maps last until you die or until you use this feature again, at which point any existing maps created by this feature immediately vanish.</p>\n<p>While carrying the map, a target gains the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Awareness.</strong> <p>The target adds 1d4 to its Initiative|XPHB rolls.</p></div>\n<div class=\"compendium-subentry\"><strong>Positioning.</strong> <p>The target knows the location of all other map holders that are on the same plane of existence as itself. When casting a spell or creating another effect that requires being able to see the effect's target, a map holder can target another map holder regardless of sight or cover, so long as the other map holder is still within the effect's range.</p></div>",
             "rawEntries": [
               "Whenever you finish a {@variantrule Long Rest|XPHB} while holding {@item Cartographer's Tools|XPHB}, you can use that tool to create a set of magical maps by touching at least two creatures (one of whom can be yourself), up to a maximum number of creatures equal to 1 plus your Intelligence modifier (minimum of two creatures). Each target receives a magical map, which constantly updates to show the relative position of all the map holders but is illegible to all others. The maps last until you die or until you use this feature again, at which point any existing maps created by this feature immediately vanish.",
@@ -2137,6 +2303,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p><em>Chart Advantageous Courses through Turmoil</em></p>\n<p>Cartographers are the premier navigators and reconnaissance agents. Using their creations, Cartographers can highlight threats, safeguard allies, and carve portals to distant locations.</p>",
             "rawEntries": [
               "{@i Chart Advantageous Courses through Turmoil}",
@@ -2173,6 +2341,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>When you reach an Artificer level specified in the Cartographer Spells table, you thereafter always have the listed spells prepared.</p>\n<table class=\"compendium-table\"><thead><tr><th>Artificer Level</th><th>Spells</th></tr></thead><tbody><tr><td>3</td><td>Faerie Fire, Guiding Bolt, Healing Word</td></tr><tr><td>5</td><td>Locate Object, Mind Spike</td></tr><tr><td>9</td><td>Call Lightning, Clairvoyance</td></tr><tr><td>13</td><td>Banishment, Locate Creature</td></tr><tr><td>17</td><td>Scrying, Teleportation Circle</td></tr></tbody></table>",
             "rawEntries": [
               "When you reach an Artificer level specified in the Cartographer Spells table, you thereafter always have the listed spells prepared.",
@@ -2227,6 +2397,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Illuminated Cartography.</strong> <p>You can cast Faerie Fire without expending a spell slot, outlining the affected creatures as if in ink. You can do so a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Portal Jump.</strong> <p>On your turn, you can spend an amount of movement equal to half your Speed|XPHB (round down) to teleport to an unoccupied space you can see within 10 feet of yourself or within 5 feet of a creature that is within 30 feet of you and holding one of your Adventurer's Atlas maps. You can't use this benefit if your Speed|XPHB is 0.</p></div>",
             "rawEntries": [
               "You gain the following benefits.",
@@ -2260,6 +2432,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Tool Proficiency.</strong> <p>You gain proficiency with Calligrapher's Supplies and Cartographer's Tools. If you already have one of these proficiencies, you gain proficiency with one other type of Artisan's Tools of your choice (or with two other types if you have both).</p></div>\n<div class=\"compendium-subentry\"><strong>Scroll Crafting.</strong> <p>When you scribe a Spell Scroll using the crafting rules in the Player's Handbook|PHB, the amount of time required to craft it is halved.</p></div>",
             "rawEntries": [
               "You gain the following benefits.",
@@ -2293,6 +2467,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>Once per turn, whenever you cast a spell from your Cartographer Spells list or hit a creature affected by your Faerie Fire with an attack roll, you can add your Intelligence modifier to one damage roll of the spell or attack.</p>\n<p>In addition, taking damage can't cause you to lose Concentration|XPHB on Faerie Fire.</p>",
             "rawEntries": [
               "Once per turn, whenever you cast a spell from your Cartographer Spells list or hit a creature affected by your {@spell Faerie Fire|XPHB} with an attack roll, you can add your Intelligence modifier to one damage roll of the spell or attack.",
@@ -2313,6 +2489,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>When you use your Flash of Genius|Artificer|EFA|7|EFA, you or a willing creature of your choice that you can see within 30 feet of yourself can teleport up to 30 feet to an unoccupied space you can see as part of that same Reaction|XPHB.</p>",
             "rawEntries": [
               "When you use your {@classFeature Flash of Genius|Artificer|EFA|7|EFA}, you or a willing creature of your choice that you can see within 30 feet of yourself can teleport up to 30 feet to an unoccupied space you can see as part of that same {@variantrule Reaction|XPHB}."
@@ -2332,6 +2510,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>Your Adventurer's Atlas improves, gaining the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Safe Haven.</strong> <p>When a map holder would be reduced to 0 Hit Points|XPHB but not killed outright, that creature can destroy its map. The creature's Hit Points|XPHB instead change to a number equal to twice your Artificer level, and the creature is teleported to an unoccupied space within 5 feet of you or another map holder of its choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Unerring Path.</strong> <p>If you are one of the map holders for your Adventurer's Atlas, you can cast Find the Path without expending a spell slot, without preparing the spell, and without needing spell components. Once you use this benefit, you can't use it again until you finish a Long Rest|XPHB.</p></div>",
             "rawEntries": [
               "Your Adventurer's Atlas improves, gaining the following benefits.",
@@ -2349,6 +2529,635 @@
                   "If you are one of the map holders for your Adventurer's Atlas, you can cast {@spell Find the Path|XPHB} without expending a spell slot, without preparing the spell, and without needing spell components. Once you use this benefit, you can't use it again until you finish a {@variantrule Long Rest|XPHB}."
                 ]
               }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_artificer_forge_adept_exploringeberron24",
+        "name": "Forge Adept",
+        "shortName": "Forge Adept",
+        "source": "ExploringEberron24",
+        "page": 0,
+        "className": "Artificer",
+        "classSource": "EFA",
+        "features": [
+          {
+            "id": "scf_artificer_forge_adept_exploringeberron24_battle_ready_3",
+            "name": "Battle Ready",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Forge Adept",
+            "subclassSource": "ExploringEberron24",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your combat training and your experiments with magic have paid off in two ways:</p>\n<div class=\"compendium-subentry\"><strong>Arcane Empowerment.</strong> <p>When you attack with a magic weapon, you can use your Intelligence modifier, instead of Strength or Dexterity, for the attack and damage rolls.</p></div>\n<div class=\"compendium-subentry\"><strong>Weapon Knowledge.</strong> <p>You gain proficiency with Martial weapons. You can use a weapon with which you have proficiency as a Spellcasting Focus|XPHB for your Artificer spells.</p></div>",
+            "rawEntries": [
+              "Your combat training and your experiments with magic have paid off in two ways:",
+              {
+                "type": "entries",
+                "name": "Arcane Empowerment",
+                "entries": [
+                  "When you attack with a magic weapon, you can use your Intelligence modifier, instead of Strength or Dexterity, for the attack and damage rolls."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Weapon Knowledge",
+                "entries": [
+                  "You gain proficiency with Martial weapons. You can use a weapon with which you have proficiency as a {@variantrule Spellcasting Focus|XPHB} for your Artificer spells."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_forge_adept_exploringeberron24_forge_adept_3",
+            "name": "Forge Adept",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Forge Adept",
+            "subclassSource": "ExploringEberron24",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p><em>Craft a Mighty Weapon out of Your Soul</em></p>\n<p>The daashor artificers of the Dhakaani Empire were the finest weaponsmiths in Khorvaire's history, as discussed in Uncharted Domains. As a Forge Adept, you carry on these ancient traditions, creating mystical weapons and armor, strengthening allies on the battlefield, and bringing down enemies with weapons imbued with your own soul energy. If you're dar, you learned these techniques from the masters of your clan. Are you content to follow ancient traditions, or do you want to add your own innovations? If you're not Dhakaani, did you learn these techniques from a daashor mentor? Did you steal this knowledge? Or are you replicating these traditions on your own?</p>",
+            "rawEntries": [
+              "{@i Craft a Mighty Weapon out of Your Soul}",
+              "The daashor artificers of the Dhakaani Empire were the finest weaponsmiths in Khorvaire's history, as discussed in Uncharted Domains. As a Forge Adept, you carry on these ancient traditions, creating mystical weapons and armor, strengthening allies on the battlefield, and bringing down enemies with weapons imbued with your own soul energy. If you're dar, you learned these techniques from the masters of your clan. Are you content to follow ancient traditions, or do you want to add your own innovations? If you're not Dhakaani, did you learn these techniques from a daashor mentor? Did you steal this knowledge? Or are you replicating these traditions on your own?",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Tool Proficiency|Artificer|EFA|Forge Adept|ExploringEberron24|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Forge Adept Spells|Artificer|EFA|Forge Adept|ExploringEberron24|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Battle Ready|Artificer|EFA|Forge Adept|ExploringEberron24|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Ghaal'Shaarat|Artificer|EFA|Forge Adept|ExploringEberron24|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_forge_adept_exploringeberron24_forge_adept_spells_3",
+            "name": "Forge Adept Spells",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Forge Adept",
+            "subclassSource": "ExploringEberron24",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you reach an Artificer level specified in the Forge Adept Spells table, you thereafter always have the listed spells prepared.</p>\n<table class=\"compendium-table\"><thead><tr><th>Artificer Level</th><th>Spells</th></tr></thead><tbody><tr><td>3</td><td>Armor of Agathys, Shield of Faith</td></tr><tr><td>5</td><td>Spiritual Weapon, Warding Bond</td></tr><tr><td>9</td><td>Beacon of Hope, Remove Curse</td></tr><tr><td>13</td><td>Death Ward, Fire Shield</td></tr><tr><td>17</td><td>Banishing Smite, Wall of Force</td></tr></tbody></table>",
+            "rawEntries": [
+              "When you reach an Artificer level specified in the Forge Adept Spells table, you thereafter always have the listed spells prepared.",
+              {
+                "type": "table",
+                "caption": "Forge Adept Spells",
+                "colLabels": [
+                  "Artificer Level",
+                  "Spells"
+                ],
+                "colStyles": [
+                  "col-3 text-center",
+                  "col-9"
+                ],
+                "rows": [
+                  [
+                    "3",
+                    "{@spell Armor of Agathys|XPHB}, {@spell Shield of Faith|XPHB}"
+                  ],
+                  [
+                    "5",
+                    "{@spell Spiritual Weapon|XPHB}, {@spell Warding Bond|XPHB}"
+                  ],
+                  [
+                    "9",
+                    "{@spell Beacon of Hope|XPHB}, {@spell Remove Curse|XPHB}"
+                  ],
+                  [
+                    "13",
+                    "{@spell Death Ward|XPHB}, {@spell Fire Shield|XPHB}"
+                  ],
+                  [
+                    "17",
+                    "{@spell Banishing Smite|XPHB}, {@spell Wall of Force|XPHB}"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_forge_adept_exploringeberron24_ghaal_shaarat_3",
+            "name": "Ghaal'Shaarat",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Forge Adept",
+            "subclassSource": "ExploringEberron24",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can imbue a weapon with a fraction of your spirit, creating what the Dhakaani daashors call a ghaal'shaarat, Goblin for \"mighty blade.\" As a Magic action while you have Smith's Tools in hand, you can turn a Simple or Martial Melee weapon into a Ghaal'Shaarat. The weapon continues to be a Ghaal'Shaarat until you imbue a different weapon or you die.</p>\n<p>The weapon gains the following benefits while you wield it.</p>\n<div class=\"compendium-subentry\"><strong>Mighty Blade.</strong> <p>A nonmagical weapon becomes a magic weapon. You gain a +1 bonus to attack and damage rolls made with the weapon, unless it already had this bonus or a better one.</p></div>\n<div class=\"compendium-subentry\"><strong>Returning Weapon.</strong> <p>The weapon has the T|XPHB|Thrown property with a normal range of 30 feet and a long range of 120 feet. It returns to your hand immediately after it is used to make a ranged attack roll.</p></div>",
+            "rawEntries": [
+              "You can imbue a weapon with a fraction of your spirit, creating what the Dhakaani daashors call a ghaal'shaarat, Goblin for \"mighty blade.\" As a {@action Magic|XPHB} action while you have {@item Smith's Tools|XPHB} in hand, you can turn a Simple or Martial Melee weapon into a Ghaal'Shaarat. The weapon continues to be a Ghaal'Shaarat until you imbue a different weapon or you die.",
+              "The weapon gains the following benefits while you wield it.",
+              {
+                "type": "entries",
+                "name": "Mighty Blade",
+                "entries": [
+                  "A nonmagical weapon becomes a magic weapon. You gain a +1 bonus to attack and damage rolls made with the weapon, unless it already had this bonus or a better one."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Returning Weapon",
+                "entries": [
+                  "The weapon has the {@itemProperty T|XPHB|Thrown} property with a normal range of 30 feet and a long range of 120 feet. It returns to your hand immediately after it is used to make a ranged attack roll."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_forge_adept_exploringeberron24_tool_proficiency_3",
+            "name": "Tool Proficiency",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Forge Adept",
+            "subclassSource": "ExploringEberron24",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You gain proficiency with Smith's Tools. If you already have this proficiency, you gain proficiency with one other type of Artisan's Tools of your choice.</p>\n<p>In addition, when you craft an ordinary or magic weapon, the amount of time required to craft it is halved.</p>",
+            "rawEntries": [
+              "You gain proficiency with {@item Smith's Tools|XPHB}. If you already have this proficiency, you gain proficiency with one other type of {@item Artisan's Tools|XPHB} of your choice.",
+              "In addition, when you craft an ordinary or magic weapon, the amount of time required to craft it is halved."
+            ]
+          },
+          {
+            "id": "scf_artificer_forge_adept_exploringeberron24_extra_attack_5",
+            "name": "Extra Attack",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Forge Adept",
+            "subclassSource": "ExploringEberron24",
+            "level": 5,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can attack twice instead of once whenever you take the Attack action on your turn.</p>",
+            "rawEntries": [
+              "You can attack twice instead of once whenever you take the {@action Attack} action on your turn."
+            ]
+          },
+          {
+            "id": "scf_artificer_forge_adept_exploringeberron24_runes_of_war_9",
+            "name": "Runes of War",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Forge Adept",
+            "subclassSource": "ExploringEberron24",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d4",
+            "formulaConfig": {
+              "baseDice": "1d4",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You gain the following benefits while wielding your Ghaal'Shaarat.</p>\n<div class=\"compendium-subentry\"><strong>Improved Mighty Blade.</strong> <p>You gain a +2 bonus to attack and damage rolls made with the weapon, unless it already had this bonus or a better one.</p></div>\n<div class=\"compendium-subentry\"><strong>Aura of War.</strong> <p>As a Magic action, you begin radiating a bolstering aura in a 30-foot Emanation [Area of Effect]|XPHB|Emanation that originates from you. Choose one of the following damage types: Acid, Cold, Fire, Lightning, or Thunder. While in the aura, you and your allies each deal an extra 1d4 damage of the chosen type when hitting with a weapon attack or Unarmed Strike|XPHB. The aura lasts for 1 minute, until you use this feature again, or until you end it (no action required). You can use this feature a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a Long Rest|XPHB.</p></div>",
+            "rawEntries": [
+              "You gain the following benefits while wielding your Ghaal'Shaarat.",
+              {
+                "type": "entries",
+                "name": "Improved Mighty Blade",
+                "entries": [
+                  "You gain a +2 bonus to attack and damage rolls made with the weapon, unless it already had this bonus or a better one."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Aura of War",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you begin radiating a bolstering aura in a 30-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} that originates from you. Choose one of the following damage types: Acid, Cold, Fire, Lightning, or Thunder. While in the aura, you and your allies each deal an extra {@damage 1d4} damage of the chosen type when hitting with a weapon attack or {@variantrule Unarmed Strike|XPHB}. The aura lasts for 1 minute, until you use this feature again, or until you end it (no action required). You can use this feature a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_forge_adept_exploringeberron24_perfect_weapon_15",
+            "name": "Perfect Weapon",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Forge Adept",
+            "subclassSource": "ExploringEberron24",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d6",
+            "formulaConfig": {
+              "baseDice": "1d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>The connection of your spirit to your weapon has been perfected. You gain the following benefits while wielding your Ghaal'Shaarat.</p>\n<div class=\"compendium-subentry\"><strong>Perfect Mighty Blade.</strong> <p>You gain a +3 bonus to attack and damage rolls made with the weapon, unless it already had this bonus or a better one. Additionally, the first time you attack with your Ghaal'Shaarat on your turn, you can transfer some or all of the weapon's bonus to your Armor Class|XPHB. The bonus remains until the start of your next turn.</p></div>\n<div class=\"compendium-subentry\"><strong>Elemental Strike.</strong> <p>When you hit a creature with an attack roll using your Ghaal'Shaarat, choose one of the following damage types: Acid, Cold, Fire, Lightning, or Thunder. Your Ghaal'Shaarat deals an extra 1d6 damage of the chosen type; and you can cause the weapon to deal the chosen type of damage or its normal damage type.</p></div>\n<div class=\"compendium-subentry\"><strong>Soul Bound.</strong> <p>You have Resistance|XPHB to Psychic damage, and you have Immunity|XPHB to the Charmed and Frightened conditions.</p></div>",
+            "rawEntries": [
+              "The connection of your spirit to your weapon has been perfected. You gain the following benefits while wielding your Ghaal'Shaarat.",
+              {
+                "type": "entries",
+                "name": "Perfect Mighty Blade",
+                "entries": [
+                  "You gain a +3 bonus to attack and damage rolls made with the weapon, unless it already had this bonus or a better one. Additionally, the first time you attack with your Ghaal'Shaarat on your turn, you can transfer some or all of the weapon's bonus to your {@variantrule Armor Class|XPHB}. The bonus remains until the start of your next turn."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Elemental Strike",
+                "entries": [
+                  "When you hit a creature with an attack roll using your Ghaal'Shaarat, choose one of the following damage types: Acid, Cold, Fire, Lightning, or Thunder. Your Ghaal'Shaarat deals an extra {@damage 1d6} damage of the chosen type; and you can cause the weapon to deal the chosen type of damage or its normal damage type."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Soul Bound",
+                "entries": [
+                  "You have {@variantrule Resistance|XPHB} to Psychic damage, and you have {@variantrule Immunity|XPHB} to the {@condition Charmed|XPHB} and {@condition Frightened|XPHB} conditions."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_forge_adept_exploringeberron24_variant_capstone_weapon_of_legend_20",
+            "name": "Variant Capstone: Weapon of Legend",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Forge Adept",
+            "subclassSource": "ExploringEberron24",
+            "level": 20,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "2d6",
+            "formulaConfig": {
+              "baseDice": "2d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You are able to connect your spirit to your allies, making them living weapons. You gain the following benefits while wielding your Ghaal'Shaarat.</p>\n<div class=\"compendium-subentry\"><strong>Constant Aura.</strong> <p>Your Aura of War is always active, and you can take a Bonus Action|XPHB to change its damage type.</p></div>\n<div class=\"compendium-subentry\"><strong>Retributive Aura.</strong> <p>Whenever an enemy starts its turn in your Aura of War, that creature takes damage equal to the extra damage provided by the aura.</p></div>\n<div class=\"compendium-subentry\"><strong>Empower Aura.</strong> <p>As a Bonus Action|XPHB, you can increase the extra damage provided by your Aura of War to 2d6. This increase lasts for 1 minute. You can use this feature a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a Long Rest|XPHB.</p></div>",
+            "rawEntries": [
+              {
+                "type": "inset",
+                "entries": [
+                  "The {@classFeature Soul of Artifice|Artificer|EFA|20} feature an Artificer gains at 20th level allows them to cheat death—sacrificing their creations to regain {@variantrule Hit Points|XPHB} when they drop to 0 {@variantrule Hit Points|XPHB}—and to regain uses of {@classFeature Flash of Genius|Artificer|EFA|7} after completing a {@variantrule Short Rest|XPHB}. While these are useful, they are also passive abilities that don't capture the flavor of a particular subclass. With the DM's permission, an Artificer who reaches level 20 can choose an alternative feature associated with their subclass instead of Soul of Artifice."
+                ]
+              },
+              "You are able to connect your spirit to your allies, making them living weapons. You gain the following benefits while wielding your Ghaal'Shaarat.",
+              {
+                "type": "entries",
+                "name": "Constant Aura",
+                "entries": [
+                  "Your Aura of War is always active, and you can take a {@variantrule Bonus Action|XPHB} to change its damage type."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Retributive Aura",
+                "entries": [
+                  "Whenever an enemy starts its turn in your Aura of War, that creature takes damage equal to the extra damage provided by the aura."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Empower Aura",
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, you can increase the extra damage provided by your Aura of War to {@dice 2d6}. This increase lasts for 1 minute. You can use this feature a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_artificer_maverick_exploringeberron24",
+        "name": "Maverick",
+        "shortName": "Maverick",
+        "source": "ExploringEberron24",
+        "page": 0,
+        "className": "Artificer",
+        "classSource": "EFA",
+        "features": [
+          {
+            "id": "scf_artificer_maverick_exploringeberron24_arcane_prototype_3",
+            "name": "Arcane Prototype",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Maverick",
+            "subclassSource": "ExploringEberron24",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You're always working on new projects, crafting Arcane Prototypes. You determine a prototype's appearance, but its functionality is always similar to that of a Spell Scroll—it holds the effect of a spell that can be unleashed at a later time. Only you can use a prototype to cast a spell; they're experimental creations that no one else can truly understand.</p>\n<p>Your ability to constantly come up with new ideas is represented by Arcane Charges. You have 1 Arcane Charge, and you gain more as you reach higher levels, as shown in the Arcane Charges level of the Arcane Prototypes table. You can't have more Arcane Charges than the number shown in the table for your level. You regain all expended Arcane Charges when you finish a Long Rest|XPHB.</p>\n<p>You can use your Arcane Charges to imbue spells into your prototypes, up to the level shown in the Max Spell Level of the Arcane Prototypes table. While a prototype is in your possession, you can cast the imbued spell without expending a spell slot, without preparing the spell, and without Material components. Casting the spell in this way requires the spell's normal casting time. Once the spell is cast, the prototype crumbles to dust, unless you choose to preserve it by expending a spell slot equal to the level of the spell.</p>\n<div class=\"compendium-subentry\"><strong>Imbuing Spells into your Prototypes.</strong> <p>When you finish a Long Rest|XPHB, you can create a prototype if you have Tinker's Tools in hand. When you reach certain Artificer levels specified in the Artificer Level column of the Arcane Prototypes table, the number of prototypes you can create at the end of a Long Rest|XPHB increases.</p>\n<p>When you create a prototype, choose a spell from the Artificer, Cleric, or Wizard spell list. This expends a number of Arcane Charges equal to the level of the spell, up to the maximum spell level allowed. For example, if you're a level 9 Artificer, you can create up to 3 prototypes, each with a maximum spell level of 3, expending a total of 5 Arcane Charges to do so; you could create two level 1 prototypes and one level 3 prototype; one level 2 prototype and one level 3 prototype, or one level 1 prototype and two level 2 prototypes.</p>\n<table class=\"compendium-table\"><thead><tr><th>Artificer Level</th><th>Max Number of Prototypes</th><th>Max Spell Level</th><th>Arcane Charges</th></tr></thead><tbody><tr><td>3</td><td>1</td><td>1</td><td>1</td></tr><tr><td>5</td><td>2</td><td>2</td><td>3</td></tr><tr><td>9</td><td>3</td><td>3</td><td>5</td></tr><tr><td>13</td><td>3</td><td>4</td><td>7</td></tr><tr><td>15</td><td>4</td><td>5</td><td>9</td></tr><tr><td>17</td><td>4</td><td>6</td><td>11</td></tr><tr><td>20</td><td>5</td><td>6</td><td>13</td></tr></tbody></table></div>",
+            "rawEntries": [
+              "You're always working on new projects, crafting Arcane Prototypes. You determine a prototype's appearance, but its functionality is always similar to that of a {@item Spell Scroll|XDMG}—it holds the effect of a spell that can be unleashed at a later time. Only you can use a prototype to cast a spell; they're experimental creations that no one else can truly understand.",
+              "Your ability to constantly come up with new ideas is represented by Arcane Charges. You have 1 Arcane Charge, and you gain more as you reach higher levels, as shown in the Arcane Charges level of the Arcane Prototypes table. You can't have more Arcane Charges than the number shown in the table for your level. You regain all expended Arcane Charges when you finish a {@variantrule Long Rest|XPHB}.",
+              "You can use your Arcane Charges to imbue spells into your prototypes, up to the level shown in the Max Spell Level of the Arcane Prototypes table. While a prototype is in your possession, you can cast the imbued spell without expending a spell slot, without preparing the spell, and without Material components. Casting the spell in this way requires the spell's normal casting time. Once the spell is cast, the prototype crumbles to dust, unless you choose to preserve it by expending a spell slot equal to the level of the spell.",
+              {
+                "type": "entries",
+                "name": "Imbuing Spells into your Prototypes",
+                "entries": [
+                  "When you finish a {@variantrule Long Rest|XPHB}, you can create a prototype if you have {@item Tinker's Tools|XPHB} in hand. When you reach certain Artificer levels specified in the Artificer Level column of the Arcane Prototypes table, the number of prototypes you can create at the end of a {@variantrule Long Rest|XPHB} increases.",
+                  "When you create a prototype, choose a spell from the Artificer, Cleric, or Wizard spell list. This expends a number of Arcane Charges equal to the level of the spell, up to the maximum spell level allowed. For example, if you're a level 9 Artificer, you can create up to 3 prototypes, each with a maximum spell level of 3, expending a total of 5 Arcane Charges to do so; you could create two level 1 prototypes and one level 3 prototype; one level 2 prototype and one level 3 prototype, or one level 1 prototype and two level 2 prototypes.",
+                  {
+                    "type": "table",
+                    "caption": "Arcane Prototypes",
+                    "colLabels": [
+                      "Artificer Level",
+                      "Max Number of Prototypes",
+                      "Max Spell Level",
+                      "Arcane Charges"
+                    ],
+                    "colStyles": [
+                      "col-3 text-center",
+                      "col-3 text-center",
+                      "col-3 text-center",
+                      "col-3 text-center"
+                    ],
+                    "rows": [
+                      [
+                        "3",
+                        "1",
+                        "1",
+                        "1"
+                      ],
+                      [
+                        "5",
+                        "2",
+                        "2",
+                        "3"
+                      ],
+                      [
+                        "9",
+                        "3",
+                        "3",
+                        "5"
+                      ],
+                      [
+                        "13",
+                        "3",
+                        "4",
+                        "7"
+                      ],
+                      [
+                        "15",
+                        "4",
+                        "5",
+                        "9"
+                      ],
+                      [
+                        "17",
+                        "4",
+                        "6",
+                        "11"
+                      ],
+                      [
+                        "20",
+                        "5",
+                        "6",
+                        "13"
+                      ]
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_maverick_exploringeberron24_maverick_3",
+            "name": "Maverick",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Maverick",
+            "subclassSource": "ExploringEberron24",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p><em>Craft the Tool You Need in the Moment</em></p>\n<p>A Maverick Artificer is always tinkering, forever chasing a new idea. Where other Artificers focus on a single path of arcane science, the strength of the Maverick is flexibility. They may lack the discipline or credentials of their scholarly colleagues, but Mavericks have a talent for cobbling together exactly what's needed to solve any problem.</p>",
+            "rawEntries": [
+              "{@i Craft the Tool You Need in the Moment}",
+              "A Maverick Artificer is always tinkering, forever chasing a new idea. Where other Artificers focus on a single path of arcane science, the strength of the Maverick is flexibility. They may lack the discipline or credentials of their scholarly colleagues, but Mavericks have a talent for cobbling together exactly what's needed to solve any problem.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Tool Proficiency|Artificer|EFA|Maverick|ExploringEberron24|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Maverick Spells|Artificer|EFA|Maverick|ExploringEberron24|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Arcane Prototype|Artificer|EFA|Maverick|ExploringEberron24|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_maverick_exploringeberron24_maverick_spells_3",
+            "name": "Maverick Spells",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Maverick",
+            "subclassSource": "ExploringEberron24",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You learn one cantrip of your choice from the Artificer, Cleric, or Wizard spell list. The chosen cantrip counts as an Artificer spell for you, and Intelligence is your spellcasting ability for it.</p>\n<p>In addition, any time you prepare Artificer spells, you can prepare an additional number of spells equal to your Proficiency|XPHB|Proficiency Bonus. These additional spells can be chosen from the Artificer, Cleric, and Wizard spells lists, and the chosen spells count as Artificer spells for you.</p>",
+            "rawEntries": [
+              "You learn one cantrip of your choice from the Artificer, Cleric, or Wizard spell list. The chosen cantrip counts as an Artificer spell for you, and Intelligence is your spellcasting ability for it.",
+              "In addition, any time you prepare Artificer spells, you can prepare an additional number of spells equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}. These additional spells can be chosen from the Artificer, Cleric, and Wizard spells lists, and the chosen spells count as Artificer spells for you."
+            ]
+          },
+          {
+            "id": "scf_artificer_maverick_exploringeberron24_tool_proficiency_3",
+            "name": "Tool Proficiency",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Maverick",
+            "subclassSource": "ExploringEberron24",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You gain proficiency with Tinker's Tools. If you already have proficiency with Tinker's Tools, you gain proficiency with one other type of Artisan's Tools of your choice.</p>\n<p>In addition, when you craft a magic item, the amount of time required to craft it is halved.</p>",
+            "rawEntries": [
+              "You gain proficiency with {@item Tinker's Tools|XPHB}. If you already have proficiency with {@item Tinker's Tools|XPHB}, you gain proficiency with one other type of {@item Artisan's Tools|XPHB} of your choice.",
+              "In addition, when you craft a magic item, the amount of time required to craft it is halved."
+            ]
+          },
+          {
+            "id": "scf_artificer_maverick_exploringeberron24_fine_tuning_5",
+            "name": "Fine Tuning",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Maverick",
+            "subclassSource": "ExploringEberron24",
+            "level": 5,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Whenever you cast an Artificer spell while you have Tinker's Tools in your possession, you can add your Intelligence modifier to one damage roll of the spell.</p>",
+            "rawEntries": [
+              "Whenever you cast an Artificer spell while you have {@item Tinker's Tools|XPHB} in your possession, you can add your Intelligence modifier to one damage roll of the spell."
+            ]
+          },
+          {
+            "id": "scf_artificer_maverick_exploringeberron24_work_in_progress_9",
+            "name": "Work in Progress",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Maverick",
+            "subclassSource": "ExploringEberron24",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Whenever you finish a Short Rest|XPHB, you can replace one of your prepared spells with a new spell from the Artificer, Cleric, or Wizard spell list. This spell counts as an Artificer spell for you.</p>",
+            "rawEntries": [
+              "Whenever you finish a {@variantrule Short Rest|XPHB}, you can replace one of your prepared spells with a new spell from the Artificer, Cleric, or Wizard spell list. This spell counts as an Artificer spell for you."
+            ]
+          },
+          {
+            "id": "scf_artificer_maverick_exploringeberron24_final_breakthrough_15",
+            "name": "Final Breakthrough",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Maverick",
+            "subclassSource": "ExploringEberron24",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Whenever you finish a Short Rest|XPHB, you can swap a spell contained in your Prototype for another spell of the same level, chosen from the Artificer, Cleric, or Wizard spell list.</p>\n<p>In addition, you ignore all class, species, spell, and level requirements on attuning to or using a magic item.</p>",
+            "rawEntries": [
+              "Whenever you finish a {@variantrule Short Rest|XPHB}, you can swap a spell contained in your Prototype for another spell of the same level, chosen from the Artificer, Cleric, or Wizard spell list.",
+              "In addition, you ignore all class, species, spell, and level requirements on attuning to or using a magic item."
+            ]
+          },
+          {
+            "id": "scf_artificer_maverick_exploringeberron24_variant_capstone_improved_genius_20",
+            "name": "Variant Capstone: Improved Genius",
+            "source": "ExploringEberron24",
+            "page": 0,
+            "className": "Artificer",
+            "classSource": "EFA",
+            "subclassShortName": "Maverick",
+            "subclassSource": "ExploringEberron24",
+            "level": 20,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can take a Magic action to cast any spell of level 8 or lower. This takes the place of the usual casting time of the spell, and you don't need to meet any requirements to cast the spell, including costly components; the spell simply takes effect. Once you cast a spell with this feature, you can't do so again until you finish a Long Rest|XPHB.</p>",
+            "rawEntries": [
+              {
+                "type": "inset",
+                "entries": [
+                  "The {@classFeature Soul of Artifice|Artificer|EFA|20} feature an Artificer gains at 20th level allows them to cheat death—sacrificing their creations to regain {@variantrule Hit Points|XPHB} when they drop to 0 {@variantrule Hit Points|XPHB}—and to regain uses of {@classFeature Flash of Genius|Artificer|EFA|7} after completing a {@variantrule Short Rest|XPHB}. While these are useful, they are also passive abilities that don't capture the flavor of a particular subclass. With the DM's permission, an Artificer who reaches level 20 can choose an alternative feature associated with their subclass instead of Soul of Artifice."
+                ]
+              },
+              "You can take a {@action Magic|XPHB} action to cast any spell of level 8 or lower. This takes the place of the usual casting time of the spell, and you don't need to meet any requirements to cast the spell, including costly components; the spell simply takes effect. Once you cast a spell with this feature, you can't do so again until you finish a {@variantrule Long Rest|XPHB}."
             ]
           }
         ]
@@ -2372,10 +3181,12 @@
             "subclassShortName": "Reanimator",
             "subclassSource": "RHW",
             "level": 3,
-            "actionType": "passive",
+            "actionType": "action",
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>Using Tinker's Tools or another type of Artisan's Tools with which you have proficiency, you can take a Magic action to create a Reanimated Companion through the power of necromancy and science. The companion manifests in an unoccupied space within 5 feet of you. You determine the companion's appearance; your choices don't affect the companion's game statistics.</p>\n<p>The companion is Friendly [Attitude]|XPHB|Friendly to you and your allies and obeys you. It lasts until you finish a Long Rest|XPHB or until you take a Magic action to dismiss it early, at which point it harmlessly collapses into a pile of viscera. It immediately drops to 0 Hit Points|XPHB and dies (triggering its Death Burst trait) if you die.</p>\n<p>Once you create a companion, you can't do so again until you finish a Long Rest|XPHB or expend a spell slot to create one. You can have only one companion at a time and can't create one while your companion is present.</p>\n<div class=\"compendium-subentry\"><strong>The Companion in Combat.</strong> <p>In combat, the companion acts during your turn. It can move and take its Reaction|XPHB on its own, but the only action it takes is the Dodge action unless you take a Bonus Action|XPHB to command it to take an action. If you have the Incapacitated condition, the companion acts on its own and isn't limited to the Dodge action.</p></div>",
             "rawEntries": [
               "Using {@item Tinker's Tools|XPHB} or another type of {@item Artisan's Tools|XPHB} with which you have proficiency, you can take a {@action Magic|XPHB} action to create a {@creature Reanimated Companion|RHW} through the power of necromancy and science. The companion manifests in an unoccupied space within 5 feet of you. You determine the companion's appearance; your choices don't affect the companion's game statistics.",
@@ -2404,6 +3215,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p><em>Reassemble Corpses and Raise the Dead</em></p>\n<p>Reanimators defy the laws of nature in pursuit of gruesome experiments. These grim Artificers stitch together servants from disparate corpses, use foul magic to strengthen the living, and transform the art of necromancy into a terrifying science.</p>",
             "rawEntries": [
               "{@i Reassemble Corpses and Raise the Dead}",
@@ -2436,6 +3249,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>When you reach an Artificer level specified in the Reanimator Spells table, you thereafter always have the listed spells prepared.</p>\n<table class=\"compendium-table\"><thead><tr><th>Artificer Level</th><th>Spells</th></tr></thead><tbody><tr><td>3</td><td>False Life, Spare the Dying, Witch Bolt</td></tr><tr><td>5</td><td>Blindness/Deafness, Enhance Ability</td></tr><tr><td>9</td><td>Animate Dead, Lightning Bolt</td></tr><tr><td>13</td><td>Blight, Death Ward</td></tr><tr><td>17</td><td>Antilife Shell, Raise Dead</td></tr></tbody></table>",
             "rawEntries": [
               "When you reach an Artificer level specified in the Reanimator Spells table, you thereafter always have the listed spells prepared.",
@@ -2489,6 +3304,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "2d4",
+            "formulaConfig": {
+              "baseDice": "2d4",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Jolt to Life.</strong> <p>When you cast Spare the Dying, you can modify the spell so that it sends a jolt of electricity through the target, reviving it. The target regains a number of Hit Points|XPHB equal to your Artificer level, and each creature of your choice in a 10-foot Emanation [Area of Effect]|XPHB|Emanation originating from the target makes a Dexterity saving throw against your spell save DC, taking 2d4 Lightning damage on a failed save or half as much damage on a successful one.</p>\n<p>You can modify the spell this way a number of times equal to your Intelligence modifier, and you regain all expended uses when you finish a Long Rest|XPHB. The Lightning damage of this feature increases by 1d4 when you reach Artificer levels 11 (3d4) and 17 (4d4).</p></div>\n<div class=\"compendium-subentry\"><strong>Reanimator's Tools.</strong> <p>You gain proficiency with Alchemist's Supplies. If you already have this proficiency, you gain proficiency with one other type of Artisan's Tools of your choice.</p></div>",
             "rawEntries": [
               "You gain the following benefits.",
@@ -2523,6 +3345,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "1d6",
+            "formulaConfig": {
+              "baseDice": "1d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>Whenever you create a Reanimated Companion, it gains one of the following options of your choice; choose when you create the companion.</p>\n<div class=\"compendium-subentry\"><strong>Arcane Conduit.</strong> <p>You can cast spells as though you were in the companion's space, but you must use your own senses. Once per turn, when you cast an Artificer spell from the Evocation or Necromancy school and deal damage while your companion is within 120 feet of you, you can add your Intelligence modifier to one damage roll of that spell.</p></div>\n<div class=\"compendium-subentry\"><strong>Ferocity.</strong> <p>The damage die of the companion's Dreadful Swipe increases to 1d6.</p></div>",
             "rawEntries": [
               "Whenever you create a {@creature Reanimated Companion|RHW}, it gains one of the following options of your choice; choose when you create the companion.",
@@ -2556,6 +3385,13 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "4d4",
+            "formulaConfig": {
+              "baseDice": "4d4",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
             "entriesHtml": "<p>The damage of your Reanimated Companion Death Burst increases to 4d4. Necrotic damage dealt by your companion ignores Resistance.</p>",
             "rawEntries": [
               "The damage of your {@creature Reanimated Companion|RHW|Reanimated Companion's} Death Burst increases to {@dice 4d4}. Necrotic damage dealt by your companion ignores {@spell Resistance|XPHB}."
@@ -2575,6 +3411,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You experiment and alter your companion further. Whenever you create a Reanimated Companion, the companion now gains two options for Strange Modifications, instead of one. Additionally, when picking options for Strange Modifications, you can also choose from the following options.</p>\n<div class=\"compendium-subentry\"><strong>Bloated.</strong> <p>The companion becomes Large. Whenever it hits a Large or smaller creature with its Dreadful Swipe action, that creature is pushed up to 10 feet away from the companion. Additionally, you can add your Intelligence modifier to the damage dealt by the companion's Death Burst.</p></div>\n<div class=\"compendium-subentry\"><strong>Gaunt.</strong> <p>The companion's Speed|XPHB increases to 45 feet, and it gains a Climb Speed|XPHB equal to its Speed|XPHB. It can climb difficult surfaces, including along ceilings, without needing to make an ability check. In addition, whenever a creature of your choice starts its turn within a 10-foot Emanation [Area of Effect]|XPHB|Emanation originating from your companion, the creature must succeed on a Wisdom saving throw against your spell save DC or have the Frightened condition until the start of its next turn.</p></div>\n<div class=\"compendium-subentry\"><strong>Moist.</strong> <p>The companion gains a Swim Speed|XPHB equal to its Speed|XPHB, and it can move through a space as narrow as 1 inch without expending extra movement to do so. In addition, whenever the companion is hit by an attack roll from a creature within 10 feet of itself, the attacker takes Acid damage equal to your Intelligence modifier.</p></div>",
             "rawEntries": [
               "You experiment and alter your companion further. Whenever you create a {@creature Reanimated Companion|RHW}, the companion now gains two options for Strange Modifications, instead of one. Additionally, when picking options for Strange Modifications, you can also choose from the following options.",
@@ -2615,6 +3453,8 @@
             "hasCounter": false,
             "usesMax": null,
             "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
             "entriesHtml": "<p>You have mastered the science of revivification, granting you the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Facilitated Revival.</strong> <p>You can cast Raise Dead once without expending a spell slot and without Material components, provided you use Tinker's Tools or another type of Artisan's Tools with which you have proficiency as the Spellcasting Focus|XPHB. Once you use this feature, you can't use it again until you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Life Transfer.</strong> <p>You can siphon the animating magic of your Reanimated Companion to bolster yourself. When you or your companion takes damage, you can take a Reaction|XPHB to gain a number of Hit Points|XPHB equal to your companion's current Hit Points|XPHB. The companion then immediately drops to 0 Hit Points|XPHB and dies (triggering its Death Burst trait).</p></div>\n<div class=\"compendium-subentry\"><strong>Superior Modifications.</strong> <p>Whenever you create a Reanimated Companion, the companion now gains three options for Strange Modifications.</p></div>",
             "rawEntries": [
               "You have mastered the science of revivification, granting you the following benefits.",

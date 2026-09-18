@@ -19,7 +19,72 @@ export function initVttPlayerSheet(vtt) {
     let builderCache = null;
     let activeSpellTab = 'cantrip';
 
-        function injectDiceChips(text) {
+    function getDisplaySourceBadge(source) {
+        if (!source) return '';
+        const s = String(source).toUpperCase().trim();
+        if (s === 'PHB') return 'PHB';
+        if (s === 'XPHB') return 'XPHB';
+        if (s === 'XDMG') return 'XDMG';
+        if (s === 'XMM') return 'XMM';
+        if (s.startsWith('UA') || s.startsWith('XUA')) return 'UA';
+        if (s.includes('PUGILIST')) return 'PUG24';
+        if (s.includes('GRIMHOLLOW') || s.includes('GH')) return 'GH';
+        if (s.includes('HUMBLEWOOD') || s.includes('HW')) return 'HW';
+        if (s.includes('DRAKKENHEIM') || s.includes('DOD')) return 'DoD';
+        if (s.includes('TALDOREI')) return 'CR';
+        if (s.includes('FLEE') || s.includes('MCDM') || s.includes('ILLRIGGER')) return 'MCDM';
+        if (s.includes('KOBOLD') || s.includes('TOB')) return 'KP';
+        if (s.includes('GRIFFON')) return 'TGS';
+        if (s.includes('VALDA') || s.includes('GUNSLINGER')) return 'VSoS';
+        if (s.includes('LOTR')) return 'LotR';
+        if (s.includes('CROOKEDMOON')) return 'CM';
+        return s.length > 6 ? s.slice(0, 5) : s;
+    }
+
+    let builderPromise = null;
+    function ensureBuilderCache() {
+        if (builderCache) return Promise.resolve(builderCache);
+        if (builderPromise) return builderPromise;
+        builderPromise = Promise.all([
+            fetch('data/races-catalog.json').then(r => r.json()).catch(() => fetch('data/races.json').then(r => r.json()).catch(() => ({}))),
+            fetch('data/backgrounds-catalog.json').then(r => r.json()).catch(() => fetch('data/backgrounds.json').then(r => r.json()).catch(() => ({}))),
+            fetch('data/classes-catalog.json').then(r => r.json()).catch(() => fetch('data/class/index.json').then(res => res.json()).catch(() => ({}))),
+            fetch('data/class/index.json').then(r => r.json()).catch(() => ({}))
+        ]).then(([raceData, bgData, classCatalog, classIndex]) => {
+            builderCache = {
+                races: Array.isArray(raceData) ? raceData : (raceData.race || []),
+                bgs: Array.isArray(bgData) ? bgData : (bgData.background || []),
+                classes: Array.isArray(classCatalog) ? classCatalog : null,
+                classIndex: classIndex || {}
+            };
+            return builderCache;
+        }).catch(err => {
+            console.error('[PlayerSheet] Failed loading builderCache:', err);
+            return null;
+        });
+        return builderPromise;
+    }
+
+    function getClassHitDie(className) {
+        if (!className) return 'd8';
+        const name = className.replace(/\s*\[.*?\]$/, '').toLowerCase().trim();
+        const standardHitDice = {
+            'artificer': 'd8', 'barbarian': 'd12', 'bard': 'd8', 'cleric': 'd8', 'druid': 'd8',
+            'fighter': 'd10', 'monk': 'd8', 'paladin': 'd10', 'ranger': 'd10', 'rogue': 'd8',
+            'sorcerer': 'd6', 'warlock': 'd8', 'wizard': 'd6', 'blood hunter': 'd10',
+            'pugilist': 'd10', 'gunslinger': 'd8', 'illrigger': 'd10', 'psion': 'd6',
+            'scholar': 'd8', 'warden': 'd10', 'captain': 'd8', 'messenger': 'd8',
+            'tamer': 'd8', 'monster hunter': 'd10', 'treasure hunter': 'd8', 'mystic': 'd8'
+        };
+        if (standardHitDice[name]) return standardHitDice[name];
+        if (builderCache && Array.isArray(builderCache.classes)) {
+            const matched = builderCache.classes.find(cls => cls.name.toLowerCase() === name);
+            if (matched && matched.hitDie) return matched.hitDie;
+        }
+        return 'd8';
+    }
+
+    function injectDiceChips(text) {
         if (!text) return '';
         let result = text;
         result = result.replace(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?(?![^<]*>)/gi, (match, count, faces, sign, mod) => {
@@ -366,6 +431,13 @@ function simulateRoll(formula, critRange = 20) {
             callback(null);
         });
 
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                cleanup();
+                callback(null);
+            }
+        });
+
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') submit();
             if (e.key === 'Escape') { cleanup(); callback(null); }
@@ -377,8 +449,8 @@ function simulateRoll(formula, critRange = 20) {
 
         const container = document.createElement('div');
         container.innerHTML = `
-            <div id="pc-assign-players-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
-            <div id="pc-assign-players-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:400px; max-width:90vw; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="pc-assign-players-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
+            <div id="pc-assign-players-modal" class="vtt-sheet-submodal vtt-hidden" style="width:400px;">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:var(--color-gold-base);">Assign Players</h3>
                     <button id="modal-assign-players-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -393,6 +465,7 @@ function simulateRoll(formula, critRange = 20) {
         `;
         document.body.appendChild(container);
 
+        document.getElementById('pc-assign-players-overlay').addEventListener('click', closeAssignPlayersModal);
         document.getElementById('modal-assign-players-close').addEventListener('click', closeAssignPlayersModal);
         document.getElementById('modal-assign-players-cancel').addEventListener('click', closeAssignPlayersModal);
         document.getElementById('modal-assign-players-save').addEventListener('click', saveAssignPlayers);
@@ -461,18 +534,764 @@ function simulateRoll(formula, critRange = 20) {
 
 
 
+    function cleanId(str) {
+        return (str || '').toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+    }
+
+    function resolveCharClassLevel(char, targetClassName) {
+        if (!char || !char.classes || !Array.isArray(char.classes)) return 0;
+        const target = (targetClassName || '').replace(/\s*\[.*?\]$/, '').trim().toLowerCase();
+        const c = char.classes.find(cl => {
+            const raw = (cl.name || '').replace(/\s*\[.*?\]$/, '').trim().toLowerCase();
+            return raw === target || (cl.name || '').trim().toLowerCase() === target;
+        });
+        return c ? (parseInt(c.level) || 1) : 0;
+    }
+
+    function evaluateAbilityFormula(formula, formulaConfig, char) {
+        if (!char) return formula || '';
+        
+        if (formulaConfig && typeof formulaConfig === 'object') {
+            const base = (formulaConfig.baseDice || '').trim();
+            const sc = formulaConfig.scalingMod || 'none';
+            const extra = parseInt(formulaConfig.extraBonus) || 0;
+            let modVal = 0;
+            let hasMod = false;
+
+            if (sc === 'classLevel') {
+                const cls = formulaConfig.modClass || (char.classes?.[0]?.name) || '';
+                modVal = resolveCharClassLevel(char, cls);
+                hasMod = true;
+            } else if (sc === 'level') {
+                modVal = char.level || (char.classes || []).reduce((acc, c) => acc + (parseInt(c.level) || 0), 0) || 1;
+                hasMod = true;
+            } else if (sc === 'PB') {
+                const lvl = char.level || (char.classes || []).reduce((acc, c) => acc + (parseInt(c.level) || 0), 0) || 1;
+                modVal = Math.ceil(lvl / 4) + 1;
+                hasMod = true;
+            } else if (['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'].includes(sc)) {
+                const statKey = sc.toLowerCase();
+                modVal = (char.statMods && char.statMods[statKey] !== undefined) ? parseInt(char.statMods[statKey]) : 0;
+                hasMod = true;
+            }
+
+            let result = base;
+            if (hasMod) {
+                const sign = modVal >= 0 ? '+' : '';
+                result = result ? `${result}${sign}${modVal}` : `${modVal}`;
+            }
+            if (extra !== 0) {
+                const sign = extra >= 0 ? '+' : '';
+                result = result ? `${result}${sign}${extra}` : `${extra}`;
+            }
+            return result.replace(/\s+/g, '').replace(/\+\+/g, '+').replace(/\+-/g, '-');
+        }
+
+        if (!formula || typeof formula !== 'string') return '';
+
+        let resolved = formula;
+        resolved = resolved.replace(/@classes\.([a-zA-Z0-9_-]+)\.level/gi, (m, cName) => {
+            return String(resolveCharClassLevel(char, cName));
+        });
+        resolved = resolved.replace(/@level/gi, () => {
+            const lvl = char.level || (char.classes || []).reduce((acc, c) => acc + (parseInt(c.level) || 0), 0) || 1;
+            return String(lvl);
+        });
+        resolved = resolved.replace(/@pb/gi, () => {
+            const lvl = char.level || (char.classes || []).reduce((acc, c) => acc + (parseInt(c.level) || 0), 0) || 1;
+            return String(Math.ceil(lvl / 4) + 1);
+        });
+        resolved = resolved.replace(/@(str|dex|con|int|wis|cha)/gi, (m, statKey) => {
+            const k = statKey.toLowerCase();
+            return String((char.statMods && char.statMods[k] !== undefined) ? parseInt(char.statMods[k]) : 0);
+        });
+
+        return resolved.replace(/\s+/g, '').replace(/\+\+/g, '+').replace(/\+-/g, '-');
+    }
+
+    function evaluateAbilityMaxUses(usesMax, char) {
+        if (!usesMax) return 0;
+        if (typeof usesMax === 'number') return usesMax;
+        const s = String(usesMax).trim().toUpperCase();
+        if (s === 'PB') {
+            const lvl = char.level || (char.classes || []).reduce((acc, c) => acc + (parseInt(c.level) || 0), 0) || 1;
+            return Math.ceil(lvl / 4) + 1;
+        }
+        if (['CHA', 'WIS', 'INT', 'CON', 'DEX', 'STR'].includes(s)) {
+            const modKey = s.toLowerCase();
+            return Math.max(1, (char.statMods && char.statMods[modKey] !== undefined) ? parseInt(char.statMods[modKey]) : 1);
+        }
+        const parsed = parseInt(s);
+        return !isNaN(parsed) ? parsed : 1;
+    }
+
+    function populateScalingModDropdown(char, selectedVal) {
+        const sel = document.getElementById('modal-ability-scaling-mod');
+        if (!sel) return;
+        let opts = `
+            <option value="none">None (+0)</option>
+            <option value="level">Character Level (@level)</option>
+        `;
+        (char.classes || []).forEach(c => {
+            if (c.name) {
+                const clean = cleanId(c.name);
+                opts += `<option value="classLevel:${c.name}">${c.name} Level (@classes.${clean}.level)</option>`;
+            }
+        });
+        opts += `
+            <option value="PB">Proficiency Bonus (@pb)</option>
+            <option value="STR">STR Mod (@str)</option>
+            <option value="DEX">DEX Mod (@dex)</option>
+            <option value="CON">CON Mod (@con)</option>
+            <option value="INT">INT Mod (@int)</option>
+            <option value="WIS">WIS Mod (@wis)</option>
+            <option value="CHA">CHA Mod (@cha)</option>
+        `;
+        sel.innerHTML = opts;
+        if (selectedVal) sel.value = selectedVal;
+    }
+
+    function updateFormulaBuilderOutputs(char) {
+        const base = (document.getElementById('modal-ability-base-dice')?.value || '').trim();
+        const sc = document.getElementById('modal-ability-scaling-mod')?.value || 'none';
+        const extra = parseInt(document.getElementById('modal-ability-extra-bonus')?.value) || 0;
+        
+        let fmla = base;
+        let modClass = '';
+        let scalingMod = sc;
+
+        if (sc.startsWith('classLevel:')) {
+            modClass = sc.replace('classLevel:', '');
+            scalingMod = 'classLevel';
+            const clean = cleanId(modClass);
+            if (fmla) fmla += ` + @classes.${clean}.level`;
+            else fmla = `@classes.${clean}.level`;
+        } else if (sc === 'level') {
+            if (fmla) fmla += ` + @level`;
+            else fmla = `@level`;
+        } else if (sc === 'PB') {
+            if (fmla) fmla += ` + @pb`;
+            else fmla = `@pb`;
+        } else if (['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA'].includes(sc)) {
+            if (fmla) fmla += ` + @${sc.toLowerCase()}`;
+            else fmla = `@${sc.toLowerCase()}`;
+        }
+
+        if (extra !== 0) {
+            if (fmla) fmla += (extra > 0 ? ` + ${extra}` : ` - ${Math.abs(extra)}`);
+            else fmla = String(extra);
+        }
+
+        const formulaInput = document.getElementById('modal-ability-formula');
+        if (formulaInput) formulaInput.value = fmla;
+        
+        const cfg = { baseDice: base, scalingMod, modClass, extraBonus: extra };
+        const evalFormula = evaluateAbilityFormula(fmla, cfg, char);
+        const previewEl = document.getElementById('modal-ability-formula-preview');
+        if (previewEl) previewEl.innerText = evalFormula || 'None';
+    }
+
+    function extractTextFromEntries(entries) {
+        if (!entries) return '';
+        if (typeof entries === 'string') {
+            return entries.replace(/\{@([a-z]+)\s+([^}]+)\}/gi, (match, tag, content) => {
+                const parts = content.split('|');
+                if (tag === 'dice' || tag === 'damage') return parts[0];
+                if (parts.length >= 3 && parts[2]) return parts[2];
+                return parts[0];
+            });
+        }
+        if (Array.isArray(entries)) {
+            return entries.map(e => extractTextFromEntries(e)).filter(Boolean).join('\n\n');
+        }
+        if (typeof entries === 'object') {
+            if (entries.type === 'list') {
+                return (entries.items || []).map(i => '- ' + extractTextFromEntries(i)).join('\n');
+            }
+            if (entries.entries) {
+                let text = entries.name ? `**${entries.name}**\n` : '';
+                return text + extractTextFromEntries(entries.entries);
+            }
+            if (entries.items) {
+                return extractTextFromEntries(entries.items);
+            }
+            if (entries.type === 'table') {
+                return '[Table omitted from description]';
+            }
+        }
+        return '';
+    }
+
+    function getFeatureDescriptionText(f) {
+        if (!f) return '';
+        if (f.description) return f.description.trim();
+        let desc = extractTextFromEntries(f.rawEntries || f.entries).trim();
+        if (!desc && f.entriesHtml) {
+            desc = f.entriesHtml
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<\/p>/gi, '\n\n')
+                .replace(/<li>/gi, '- ')
+                .replace(/<\/li>/gi, '\n')
+                .replace(/<div class="compendium-subentry">(?:<div class="compendium-subentry">)?<strong>(.*?)<\/strong>/gi, '\n**$1**\n')
+                .replace(/<[^>]+>/g, '')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#39;/g, "'")
+                .replace(/\n{3,}/g, '\n\n')
+                .trim();
+        }
+        return desc;
+    }
+
+    function detectFeatureCounter(f, desc, char) {
+        let hasCounter = f.hasCounter || false;
+        let usesMax = f.usesMax || null;
+        let resetType = f.resetType || 'short';
+
+        if (!hasCounter) {
+            const plain = ((f.name || '') + ' ' + (desc || '')).toLowerCase();
+            const restMatch = plain.match(/(?:can(?:\'t|not))\s+(?:use\s+(?:it|this\s+feature)|do\s+so)\s+again\s+until\s+you\s+finish\s+a\s+(short\s+(?:or\s+long|and\s+long)|short|long)\s+rest/i);
+            if (restMatch) {
+                hasCounter = true;
+                usesMax = 1;
+                resetType = restMatch[1].includes('short') ? 'short' : 'long';
+            } else if (plain.includes('action surge') || plain.includes('second wind')) {
+                hasCounter = true; usesMax = 1; resetType = 'short';
+            } else if (plain.includes('bardic inspiration')) {
+                hasCounter = true; usesMax = 'CHA'; resetType = 'long';
+            } else if (plain.includes('rage') && (f.className === 'Barbarian' || plain.includes('barbarian'))) {
+                hasCounter = true; usesMax = 2; resetType = 'long';
+            } else if (plain.includes('moxie points') || (f.name && f.name.toLowerCase() === 'moxie')) {
+                hasCounter = true;
+                const pug = (char?.classes || []).find(c => (c.name || '').toLowerCase() === 'pugilist');
+                usesMax = pug ? (parseInt(pug.level) || 1) : (char?.level || 1);
+                resetType = 'short';
+            } else if (plain.includes('ki points') || plain.includes('focus points') || (f.name && (f.name.toLowerCase() === 'ki' || f.name.toLowerCase() === "monk's focus"))) {
+                hasCounter = true;
+                const mnk = (char?.classes || []).find(c => (c.name || '').toLowerCase() === 'monk');
+                usesMax = mnk ? (parseInt(mnk.level) || 1) : (char?.level || 1);
+                resetType = 'short';
+            } else if (plain.includes('sorcery points') || (f.name && f.name.toLowerCase() === 'font of magic')) {
+                hasCounter = true;
+                const src = (char?.classes || []).find(c => (c.name || '').toLowerCase() === 'sorcerer');
+                usesMax = src ? (parseInt(src.level) || 2) : (char?.level || 2);
+                resetType = 'long';
+            } else if (plain.includes('grit points') || (f.name && f.name.toLowerCase().includes('grit'))) {
+                hasCounter = true;
+                usesMax = 'WIS';
+                resetType = 'short';
+            } else if (plain.match(/(?:finish|complete) a (?:short or long|short) rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
+                hasCounter = true; usesMax = 1; resetType = 'short';
+            } else if (plain.match(/(?:finish|complete) a long rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
+                hasCounter = true; usesMax = 1; resetType = 'long';
+            } else if (plain.match(/proficiency bonus.*?regain/)) {
+                hasCounter = true; usesMax = 'PB'; resetType = plain.includes('short rest') ? 'short' : 'long';
+            }
+        }
+
+        return { hasCounter, usesMax, resetType };
+    }
+
+    let availableFeatures = [];
+    let currentImportData = [];
+    let currentCategory = 'class';
+    let pendingImportFeatures = [];
+    let selectedImportFeatures = new Map();
+
+    function getFeatureKey(f) {
+        if (!f) return '';
+        if (f.id) return f.id;
+        return `${currentCategory}_${f.name}_${f.source || ''}_${f.level || ''}_${f.subclassShortName || ''}`;
+    }
+
+    function switchModalTab(tabId) {
+        document.querySelectorAll('#tab-btn-manual, #tab-btn-import').forEach(b => b.classList.remove('active'));
+        document.getElementById('modal-tab-manual')?.classList.add('vtt-hidden');
+        document.getElementById('modal-tab-import')?.classList.add('vtt-hidden');
+        
+        document.getElementById(`tab-btn-${tabId}`)?.classList.add('active');
+        document.getElementById(`modal-tab-${tabId}`)?.classList.remove('vtt-hidden');
+    }
+
+    function getSuggestedCategoryName(features) {
+        if (currentCategory === 'class') {
+            const classSel = document.getElementById('import-class-sel');
+            const className = classSel ? classSel.value : '';
+            const subSel = document.getElementById('import-subclass-sel');
+            const subName = subSel && subSel.value && subSel.value !== '__base__' ? subSel.options[subSel.selectedIndex]?.text.split('[')[0].trim() : '';
+
+            if (features && features.length === 1 && features[0].subclassShortName) {
+                return `Subclass - ${subName || features[0].subclassShortName}`;
+            }
+            if (subName) {
+                return `Subclass - ${subName}`;
+            }
+            return className ? `Class - ${className}` : 'Class Features';
+        }
+        if (currentCategory === 'feat') return 'Feats';
+        if (currentCategory === 'race') {
+            return (features && features.length === 1) ? `Species - ${features[0].name}` : 'Species Traits';
+        }
+        if (currentCategory === 'background') {
+            return (features && features.length === 1) ? `Background - ${features[0].name}` : 'Background Features';
+        }
+        if (currentCategory === 'charoption') return 'Character Options';
+        if (currentCategory === 'optionalfeature') return 'Optional Features';
+        return 'Special Features';
+    }
+
+    function updateImportBatchButton() {
+        const count = selectedImportFeatures.size;
+        const countEl = document.getElementById('import-selected-count');
+        const btn = document.getElementById('btn-import-batch');
+        if (countEl) countEl.innerText = count;
+        if (btn) btn.disabled = (count === 0);
+
+        const listEl = document.getElementById('import-feature-list');
+        const selectAll = document.getElementById('import-select-all');
+        const allChks = listEl ? listEl.querySelectorAll('.import-feature-chk') : [];
+        const checkedVisible = listEl ? listEl.querySelectorAll('.import-feature-chk:checked') : [];
+        if (selectAll) {
+            selectAll.checked = (allChks.length > 0 && checkedVisible.length === allChks.length);
+        }
+    }
+
+    function promptImportDestinationCategory(features, defaultCatName) {
+        pendingImportFeatures = features || [];
+        if (pendingImportFeatures.length === 0) return;
+
+        const char = currentChar;
+        const modal = document.getElementById('pc-ability-import-cat-modal');
+        const overlay = document.getElementById('pc-ability-import-cat-overlay');
+        const sel = document.getElementById('import-cat-select');
+        const summaryEl = document.getElementById('import-cat-modal-summary');
+        const newNameInput = document.getElementById('import-cat-new-name');
+
+        if (!modal || !sel) return;
+
+        if (summaryEl) {
+            summaryEl.innerText = `Importing ${pendingImportFeatures.length} item${pendingImportFeatures.length > 1 ? 's' : ''} to character.`;
+        }
+
+        let opts = '';
+        const suggested = defaultCatName || 'Class Features';
+        opts += `<option value="__new__" selected>✨ Create New: "${suggested}"</option>`;
+        
+        if (char && char.abilityCategories && char.abilityCategories.length > 0) {
+            char.abilityCategories.forEach(cat => {
+                opts += `<option value="${cat.id}">📁 ${cat.name}</option>`;
+            });
+        }
+        opts += `<option value="__uncategorized__">Uncategorized</option>`;
+
+        sel.innerHTML = opts;
+        if (newNameInput) {
+            newNameInput.value = suggested;
+            newNameInput.style.display = 'block';
+        }
+
+        modal.classList.remove('vtt-hidden');
+        overlay.classList.remove('vtt-hidden');
+    }
+
+    async function populateManualTabWithFeature(f) {
+        const rawName = f.name || '';
+        const badge = getDisplaySourceBadge(f.source);
+        const tag = badge ? ` [${badge}]` : (f.source ? ` [${f.source}]` : '');
+        const displayName = (badge && !rawName.includes('[') && !rawName.includes(badge)) ? `${rawName}${tag}` : rawName;
+        document.getElementById('modal-ability-name').value = displayName;
+        let desc = getFeatureDescriptionText(f);
+        if (!desc && f.traits && f.traits.length > 0) {
+            desc = f.traits.map(t => `**${t.name}**: ${t.description}`).join('\n\n');
+        }
+        if (!desc && f.source && f.id) {
+            let cType = currentCategory === 'feat' ? 'feats' : (currentCategory === 'race' ? 'races' : (currentCategory === 'background' ? 'backgrounds' : ''));
+            if (cType) {
+                try {
+                    const res = await fetch(`/api/compendium/${cType}/${encodeURIComponent(f.source)}/${encodeURIComponent(f.id)}`);
+                    if (res.ok) {
+                        const full = await res.json();
+                        desc = full.descriptionHtml || full.description || extractTextFromEntries(full.rawEntries || full.entries).trim();
+                    }
+                } catch(err) {}
+            }
+        }
+        document.getElementById('modal-ability-desc').value = desc;
+
+        // Action type
+        const actSel = document.getElementById('modal-ability-action-type');
+        if (actSel) {
+            let actionType = f.actionType || 'passive';
+            if (!f.actionType) {
+                const plain = ((f.name || '') + ' ' + desc).toLowerCase();
+                if (plain.includes('bonus action')) actionType = 'bonus';
+                else if (plain.includes('reaction')) actionType = 'reaction';
+                else if (plain.includes('as an action') || plain.includes('action to')) actionType = 'action';
+            }
+            actSel.value = actionType;
+        }
+
+        // Formula & builder
+        const char = currentChar;
+        let baseDice = '';
+        let scalingMod = 'none';
+        let extraBonus = 0;
+        let formulaStr = f.formula || '';
+
+        if (f.formulaConfig) {
+            baseDice = f.formulaConfig.baseDice || '';
+            scalingMod = f.formulaConfig.modClass ? `classLevel:${f.formulaConfig.modClass}` : (f.formulaConfig.scalingMod || 'none');
+            extraBonus = f.formulaConfig.extraBonus || 0;
+        }
+
+        populateScalingModDropdown(char, scalingMod);
+        if (document.getElementById('modal-ability-base-dice')) document.getElementById('modal-ability-base-dice').value = baseDice;
+        if (document.getElementById('modal-ability-extra-bonus')) document.getElementById('modal-ability-extra-bonus').value = extraBonus;
+        if (document.getElementById('modal-ability-formula')) document.getElementById('modal-ability-formula').value = formulaStr;
+        
+        if (char) {
+            const evalFormula = evaluateAbilityFormula(formulaStr, f.formulaConfig, char);
+            const previewEl = document.getElementById('modal-ability-formula-preview');
+            if (previewEl) previewEl.innerText = evalFormula || 'None';
+        }
+
+        // Active resource counter
+        const counterInfo = detectFeatureCounter(f, desc, char);
+        let hasCounter = counterInfo.hasCounter;
+        let usesMax = counterInfo.usesMax;
+        let resetType = counterInfo.resetType;
+
+        const counterCheckbox = document.getElementById('modal-ability-has-counter');
+        const usesContainer = document.getElementById('modal-ability-uses-container');
+        const usesMaxInput = document.getElementById('modal-ability-uses-max');
+        const usesCurrentInput = document.getElementById('modal-ability-uses-current');
+        const resetSelect = document.getElementById('modal-ability-reset-type');
+
+        if (hasCounter && counterCheckbox) {
+            counterCheckbox.checked = true;
+            if (usesContainer) usesContainer.style.display = 'flex';
+            const resolvedMax = evaluateAbilityMaxUses(usesMax, char);
+            if (usesMaxInput) usesMaxInput.value = resolvedMax;
+            if (usesCurrentInput) usesCurrentInput.value = resolvedMax;
+            if (resetSelect) resetSelect.value = resetType || 'short';
+        } else if (counterCheckbox) {
+            counterCheckbox.checked = false;
+            if (usesContainer) usesContainer.style.display = 'none';
+            if (usesMaxInput) usesMaxInput.value = 0;
+            if (usesCurrentInput) usesCurrentInput.value = 0;
+        }
+
+        switchModalTab('manual');
+    }
+
+    function renderImportFeatureList() {
+        const listEl = document.getElementById('import-feature-list');
+        if (!listEl) return;
+        const search = (document.getElementById('import-search')?.value || '').toLowerCase().trim();
+        const subSel = document.getElementById('import-subclass-sel')?.value || '';
+        const activeEdition = window.activeImportEditionFilter || 'all';
+
+        if (currentImportData.length === 0 && currentCategory === 'class') {
+            listEl.innerHTML = '<div style="text-align:center; color:var(--color-text-muted); font-size:0.8rem; margin-top:20px;">Select a class to browse features</div>';
+            updateImportBatchButton();
+            return;
+        }
+
+        availableFeatures = [];
+        
+        currentImportData.forEach(f => {
+            if (currentCategory === 'class') {
+                if (subSel === '__base__') {
+                    if (f.subclassShortName) return;
+                } else if (subSel) {
+                    if (f.subclassShortName !== subSel) return;
+                }
+            }
+            if (activeEdition !== 'all') {
+                const src = (f.source || '').toUpperCase();
+                if (activeEdition === 'phb' && src !== 'PHB') return;
+                if (activeEdition === 'xphb' && !['XPHB', 'XDMG', 'XMM'].includes(src)) return;
+            }
+            availableFeatures.push(f);
+        });
+
+        let html = '';
+        availableFeatures.forEach((f, idx) => {
+            const rawName = f.name || '';
+            const badge = getDisplaySourceBadge(f.source);
+            const tag = badge ? ` [${badge}]` : (f.source ? ` [${f.source}]` : '');
+            const displayName = (badge && !rawName.includes('[') && !rawName.includes(badge)) ? `${rawName}${tag}` : rawName;
+            if (search && !displayName.toLowerCase().includes(search) && !rawName.toLowerCase().includes(search)) return;
+            
+            const fKey = getFeatureKey(f);
+            const isChecked = selectedImportFeatures.has(fKey) ? 'checked' : '';
+
+            const source = f.source ? `[${f.source}]` : '';
+            const isSubclass = f.subclassShortName ? `<span style="color:#d4af37; font-weight:600;">[${f.subclassShortName}]</span> ` : '';
+            let levelText = f.level !== undefined ? `Lvl ${f.level} • ` : '';
+
+            // Action badge
+            let actionBadge = '';
+            const act = f.actionType || '';
+            if (act === 'bonus') {
+                actionBadge = `<span style="font-size:0.65rem; background:rgba(230,126,34,0.25); color:#e67e22; border:1px solid rgba(230,126,34,0.4); padding:1px 5px; border-radius:3px;">Bonus</span>`;
+            } else if (act === 'reaction') {
+                actionBadge = `<span style="font-size:0.65rem; background:rgba(155,89,182,0.25); color:#9b59b6; border:1px solid rgba(155,89,182,0.4); padding:1px 5px; border-radius:3px;">Reaction</span>`;
+            } else if (act === 'action') {
+                actionBadge = `<span style="font-size:0.65rem; background:rgba(52,152,219,0.25); color:#3498db; border:1px solid rgba(52,152,219,0.4); padding:1px 5px; border-radius:3px;">Action</span>`;
+            }
+
+            // Formula badge
+            let formulaBadge = '';
+            if (f.formula) {
+                formulaBadge = `<span style="font-size:0.65rem; background:rgba(212,175,55,0.2); color:#d4af37; border:1px solid rgba(212,175,55,0.4); padding:1px 5px; border-radius:3px; display:inline-flex; align-items:center; gap:2px;"><i class="fa-solid fa-dice-d20" style="font-size:0.6rem;"></i> ${f.formula}</span>`;
+            }
+
+            // Counter badge
+            let counterBadge = '';
+            if (f.hasCounter) {
+                const rTxt = f.resetType === 'short' ? 'SR' : 'LR';
+                const uMax = f.usesMax || 1;
+                counterBadge = `<span style="font-size:0.65rem; background:rgba(46,204,113,0.2); color:#2ecc71; border:1px solid rgba(46,204,113,0.4); padding:1px 5px; border-radius:3px;">${uMax}/${rTxt}</span>`;
+            }
+
+            // Traits badge if species
+            let traitsBadge = '';
+            if (f.traits && f.traits.length > 0) {
+                traitsBadge = `<span style="font-size:0.65rem; background:rgba(41,128,185,0.2); color:#5dade2; border:1px solid rgba(41,128,185,0.4); padding:1px 5px; border-radius:3px;"><i class="fa-solid fa-dna" style="font-size:0.6rem;"></i> ${f.traits.length} Traits</span>`;
+            }
+
+            html += `
+                <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; gap:8px; border:1px solid rgba(255,255,255,0.04);">
+                    <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
+                        <input type="checkbox" class="import-feature-chk" data-idx="${idx}" data-key="${fKey}" ${isChecked} style="cursor:pointer; flex-shrink:0;">
+                        <div style="display:flex; flex-direction:column; overflow:hidden;">
+                            <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                                <span style="font-size:0.85rem; font-weight:bold; color:var(--color-text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${displayName}</span>
+                                ${actionBadge}
+                                ${formulaBadge}
+                                ${counterBadge}
+                                ${traitsBadge}
+                            </div>
+                            <span style="font-size:0.7rem; color:var(--color-text-muted);">${levelText}${isSubclass}${source}</span>
+                        </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
+                        <button class="btn btn-xxs btn-primary btn-import-feature-quick" data-idx="${idx}" title="Quick Import to Category" style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; padding:0;"><i class="fa-solid fa-plus"></i></button>
+                        <button class="btn btn-xxs btn-secondary btn-import-feature-exec" data-idx="${idx}" title="Edit before importing"><i class="fa-solid fa-pen-to-square" style="font-size:0.7rem;"></i></button>
+                    </div>
+                </div>
+            `;
+        });
+
+        if (!html) {
+            html = '<div style="text-align:center; color:var(--color-text-muted); font-size:0.8rem; margin-top:20px;">No features found</div>';
+        }
+
+        listEl.innerHTML = html;
+        updateImportBatchButton();
+
+        // Checkbox changes - update selectedImportFeatures Map
+        listEl.querySelectorAll('.import-feature-chk').forEach(chk => {
+            chk.addEventListener('change', (e) => {
+                const idx = parseInt(e.target.dataset.idx);
+                const f = availableFeatures[idx];
+                if (f) {
+                    const key = e.target.dataset.key || getFeatureKey(f);
+                    if (e.target.checked) {
+                        selectedImportFeatures.set(key, f);
+                    } else {
+                        selectedImportFeatures.delete(key);
+                    }
+                }
+                updateImportBatchButton();
+            });
+        });
+
+        // 1-Click quick import
+        listEl.querySelectorAll('.btn-import-feature-quick').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(e.currentTarget.dataset.idx);
+                const f = availableFeatures[idx];
+                if (!f) return;
+                if (currentCategory === 'background' || f.skillsData || f.toolsData || f.equipmentData) {
+                    promptBackgroundImportModal(f, currentChar);
+                    return;
+                }
+                const defaultCat = getSuggestedCategoryName([f]);
+                promptImportDestinationCategory([f], defaultCat);
+            });
+        });
+
+        // Edit before importing
+        listEl.querySelectorAll('.btn-import-feature-exec').forEach(btn => {
+            btn.addEventListener('click', async (e) => {
+                const idx = e.currentTarget.dataset.idx;
+                const f = availableFeatures[idx];
+                if (!f) return;
+                if (currentCategory === 'background' || f.skillsData || f.toolsData || f.equipmentData) {
+                    promptBackgroundImportModal(f, currentChar);
+                    return;
+                }
+                populateManualTabWithFeature(f);
+            });
+        });
+    }
+
+    function initializeImportTab() {
+        const classSel = document.getElementById('import-class-sel');
+        if (!classSel || classSel.options.length > 1) return;
+        if (!builderCache) {
+            ensureBuilderCache().then(() => initializeImportTab());
+            return;
+        }
+
+        let opts = '<option value="">-- Select Class --</option>';
+        if (builderCache.classes && Array.isArray(builderCache.classes)) {
+            const classMap = new Map();
+            builderCache.classes.forEach(c => {
+                const badge = getDisplaySourceBadge(c.source);
+                const tag = badge ? ` [${badge}]` : (c.source ? ` [${c.source}]` : '');
+                const fullName = `${c.name}${tag}`;
+                if (!classMap.has(fullName)) {
+                    classMap.set(fullName, { ...c, fullName, tag });
+                }
+            });
+            Array.from(classMap.values()).sort((a, b) => a.fullName.localeCompare(b.fullName)).forEach(c => {
+                opts += `<option value="${c.fullName}" data-id="${c.id}" data-name="${c.name}" data-source="${c.source}">${c.fullName}</option>`;
+            });
+        } else if (builderCache.classIndex) {
+            Object.keys(builderCache.classIndex).forEach(cKey => {
+                const name = cKey.charAt(0).toUpperCase() + cKey.slice(1);
+                opts += `<option value="${name}">${name}</option>`;
+            });
+        }
+        classSel.innerHTML = opts;
+
+        classSel.addEventListener('change', async () => {
+            const selectedOpt = classSel.options[classSel.selectedIndex];
+            const classId = selectedOpt?.dataset?.id;
+            const classSource = selectedOpt?.dataset?.source;
+            const rawClassName = selectedOpt?.dataset?.name || classSel.value.replace(/\s*\[.*?\]$/, '').trim();
+            const fullClassName = classSel.value;
+            const subSel = document.getElementById('import-subclass-sel');
+            if (!fullClassName) {
+                currentImportData = [];
+                subSel.innerHTML = '<option value="">-- All Subclasses --</option>';
+                subSel.disabled = true;
+                renderImportFeatureList();
+                return;
+            }
+
+            currentImportData = [];
+
+            if (builderCache && Array.isArray(builderCache.classes)) {
+                let matchedClass = null;
+                if (classId) {
+                    matchedClass = builderCache.classes.find(c => c.id === classId);
+                }
+                if (!matchedClass && classSource) {
+                    matchedClass = builderCache.classes.find(c => c.name.toLowerCase() === rawClassName.toLowerCase() && (c.source || '').toLowerCase() === classSource.toLowerCase());
+                }
+                if (!matchedClass) {
+                    matchedClass = builderCache.classes.find(c => c.name.toLowerCase() === rawClassName.toLowerCase());
+                }
+                if (matchedClass) {
+                    try {
+                        const res = await fetch(`/api/compendium/classes/${encodeURIComponent(matchedClass.source)}/${encodeURIComponent(matchedClass.id)}`);
+                        if (res.ok) {
+                            const full = await res.json();
+                            if (full.features) {
+                                full.features.forEach(f => {
+                                    f.className = rawClassName;
+                                    f.classFullName = fullClassName;
+                                    currentImportData.push(f);
+                                });
+                            }
+                            if (full.subclasses) {
+                                full.subclasses.forEach(sc => {
+                                    (sc.features || []).forEach(f => {
+                                        f.className = rawClassName;
+                                        f.classFullName = fullClassName;
+                                        f.subclassShortName = sc.shortName;
+                                        f.subclassName = sc.name;
+                                        f.subclassSource = sc.source;
+                                        currentImportData.push(f);
+                                    });
+                                });
+                            }
+
+                            let subOpts = '<option value="">-- All Subclasses --</option>';
+                            subOpts += '<option value="__base__">[Base Class Features Only]</option>';
+                            if (full.subclasses) {
+                                full.subclasses.forEach(sc => {
+                                    const badge = getDisplaySourceBadge(sc.source);
+                                    const tag = badge ? ` [${badge}]` : '';
+                                    subOpts += `<option value="${sc.shortName}">${sc.name}${tag}</option>`;
+                                });
+                            }
+                            subSel.innerHTML = subOpts;
+                            subSel.disabled = false;
+                            renderImportFeatureList();
+                            return;
+                        }
+                    } catch (e) {}
+                }
+            }
+
+            const file = builderCache?.classIndex ? builderCache.classIndex[rawClassName.toLowerCase()] : null;
+            if (!file) {
+                renderImportFeatureList();
+                return;
+            }
+
+            fetch(`data/class/${file}`).then(r => r.json()).then(data => {
+                currentImportData = [];
+                if (data.classFeature) {
+                    data.classFeature.forEach(f => {
+                        f.className = className;
+                        currentImportData.push(f);
+                    });
+                }
+                if (data.subclassFeature) {
+                    data.subclassFeature.forEach(f => {
+                        f.className = className;
+                        currentImportData.push(f);
+                    });
+                }
+                
+                let subOpts = '<option value="">-- All Subclasses --</option>';
+                subOpts += '<option value="__base__">[Base Class Features Only]</option>';
+                if (data.subclass) {
+                    const seen = new Set();
+                    data.subclass.forEach(sc => {
+                        if (!seen.has(sc.shortName)) {
+                            seen.add(sc.shortName);
+                            subOpts += `<option value="${sc.shortName}">${sc.name} [${sc.source}]</option>`;
+                        }
+                    });
+                }
+                subSel.innerHTML = subOpts;
+                subSel.disabled = false;
+                renderImportFeatureList();
+            }).catch(() => {});
+        });
+    }
+
     function ensureAbilityModalsExist() {
         if (document.getElementById('pc-ability-modal')) return;
 
         const container = document.createElement('div');
         container.innerHTML = `
-            <div id="pc-ability-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); z-index:999;"></div>
-            <div id="pc-ability-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); padding:16px; border-radius:8px; z-index:1000; width:450px; max-height:80vh; overflow-y:auto; box-shadow:0 4px 12px rgba(0,0,0,0.5); display:flex; flex-direction:column;">
+            <div id="pc-ability-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
+            <div id="pc-ability-modal" class="vtt-sheet-submodal vtt-hidden" style="width:480px; padding:16px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                    <h3 style="margin:0; color:var(--color-gold-base);">Ability Card</h3>
+                    <h3 style="margin:0; color:var(--color-gold-base);"><i class="fa-solid fa-address-card"></i> Ability Card</h3>
                     <div style="display:flex; gap:8px;">
                         <button class="btn btn-sm btn-secondary active" id="tab-btn-manual" style="border-radius:4px;">Manual Entry</button>
-                        <button class="btn btn-sm btn-secondary" id="tab-btn-import" style="border-radius:4px;">Import Feature</button>
+                        <button class="btn btn-sm btn-secondary" id="tab-btn-import" style="border-radius:4px;"><i class="fa-solid fa-cloud-arrow-down"></i> Import Features</button>
                     </div>
                 </div>
                 
@@ -480,23 +1299,74 @@ function simulateRoll(formula, critRange = 20) {
                 
                 <!-- MANUAL ENTRY TAB -->
                 <div id="modal-tab-manual">
-                    <div class="form-group" style="margin-bottom:8px;">
-                        <label>Name</label>
-                        <input type="text" id="modal-ability-name" style="width:100%;">
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                        <div class="form-group" style="flex:2;">
+                            <label>Name</label>
+                            <input type="text" id="modal-ability-name" style="width:100%;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Action Economy</label>
+                            <select id="modal-ability-action-type" style="width:100%; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                <option value="passive">Passive</option>
+                                <option value="action">Action</option>
+                                <option value="bonus">Bonus Action</option>
+                                <option value="reaction">Reaction</option>
+                                <option value="special">Special</option>
+                            </select>
+                        </div>
                     </div>
+
                     <div class="form-group" style="margin-bottom:8px;">
                         <label>Category</label>
                         <select id="modal-ability-category" style="width:100%; padding:4px; font-size:0.8rem;">
                             <option value="">Uncategorized</option>
                         </select>
                     </div>
+
                     <div class="form-group" style="margin-bottom:8px;">
                         <label>Description</label>
                         <textarea id="modal-ability-desc" placeholder="Details of the ability..." style="width:100%; min-height:56px; resize:vertical; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:6px 8px; font-family:var(--font-primary); font-size:0.8rem; border-radius:4px; line-height:1.4;"></textarea>
                     </div>
-                    <div class="form-group" style="margin-bottom:8px;">
-                        <label>Macro / Damage Formula <span style="font-size:0.7rem; color:var(--color-text-muted); font-weight:400;">(Optional)</span></label>
-                        <input type="text" id="modal-ability-formula" placeholder="e.g. 1d6+3" style="width:100%; padding:4px; font-size:0.8rem;">
+
+                    <!-- FORMULA BUILDER SECTION -->
+                    <div style="background:rgba(255,255,255,0.03); border:1px solid var(--color-border-subtle); border-radius:6px; padding:8px; margin-bottom:8px;">
+                        <label style="font-weight:600; color:var(--color-gold-base); font-size:0.8rem; margin-bottom:6px; display:block;">
+                            <i class="fa-solid fa-dice-d20"></i> Dice Formula Builder
+                        </label>
+                        <div style="display:flex; gap:6px; margin-bottom:6px;">
+                            <div style="flex:1;">
+                                <label style="font-size:0.7rem; color:var(--color-text-muted);">Base Dice</label>
+                                <input type="text" id="modal-ability-base-dice" placeholder="e.g. 1d10, 2d6" style="width:100%; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                            </div>
+                            <div style="flex:1.6;">
+                                <label style="font-size:0.7rem; color:var(--color-text-muted);">Scaling Modifier</label>
+                                <select id="modal-ability-scaling-mod" style="width:100%; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                    <option value="none">None (+0)</option>
+                                    <option value="level">Character Level (@level)</option>
+                                    <option value="PB">Proficiency Bonus (@pb)</option>
+                                    <option value="STR">STR Mod (@str)</option>
+                                    <option value="DEX">DEX Mod (@dex)</option>
+                                    <option value="CON">CON Mod (@con)</option>
+                                    <option value="INT">INT Mod (@int)</option>
+                                    <option value="WIS">WIS Mod (@wis)</option>
+                                    <option value="CHA">CHA Mod (@cha)</option>
+                                </select>
+                            </div>
+                            <div style="flex:0.8;">
+                                <label style="font-size:0.7rem; color:var(--color-text-muted);">Extra Bonus</label>
+                                <input type="number" id="modal-ability-extra-bonus" value="0" style="width:100%; padding:4px; font-size:0.8rem; text-align:center; background:rgba(0,0,0,0.3); color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px; align-items:flex-end;">
+                            <div style="flex:1;">
+                                <label style="font-size:0.7rem; color:var(--color-text-muted);">Formula String</label>
+                                <input type="text" id="modal-ability-formula" placeholder="e.g. 1d10 + @classes.fighter.level" style="width:100%; padding:4px; font-size:0.8rem; background:rgba(0,0,0,0.3); color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                            </div>
+                            <div style="background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.08); padding:4px 8px; border-radius:4px; min-width:110px; text-align:center;">
+                                <span style="font-size:0.65rem; color:var(--color-text-muted); display:block;">Live Evaluation</span>
+                                <span id="modal-ability-formula-preview" style="font-size:0.82rem; font-family:monospace; color:var(--color-gold-base); font-weight:bold;">None</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
@@ -535,7 +1405,7 @@ function simulateRoll(formula, critRange = 20) {
                         <button class="btn btn-danger btn-sm" id="modal-ability-delete"><i class="fa-solid fa-trash"></i> Delete Card</button>
                         <div style="display:flex; gap:8px;">
                             <button class="btn btn-secondary btn-sm" id="modal-ability-cancel">Cancel</button>
-                            <button class="btn btn-primary btn-sm" id="modal-ability-save">Save Card</button>
+                            <button class="btn btn-primary btn-sm" id="modal-ability-save"><i class="fa-solid fa-floppy-disk"></i> Save Card</button>
                         </div>
                     </div>
                 </div>
@@ -560,12 +1430,41 @@ function simulateRoll(formula, critRange = 20) {
                             <option value="">-- All Subclasses --</option>
                         </select>
                     </div>
-                    <div>
-                        <input type="text" id="import-search" placeholder="Search features..." style="width:100%; padding:4px; font-size:0.8rem; background:#2a2a2a; color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        <input type="text" id="import-search" placeholder="Search features..." style="flex:1; padding:4px; font-size:0.8rem; background:#2a2a2a; color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                        <div class="btn-group" id="import-edition-filter-group" style="display:inline-flex; border-radius:4px; overflow:hidden; border:1px solid var(--color-border-subtle); flex-shrink:0;">
+                            <button type="button" class="btn btn-xxs import-filter-edition active" data-edition="all" style="padding:4px 8px; font-size:0.75rem; background:var(--color-gold-base); color:#000; font-weight:bold;">All</button>
+                            <button type="button" class="btn btn-xxs import-filter-edition" data-edition="phb" style="padding:4px 8px; font-size:0.75rem; background:#2a2a2a; color:var(--color-text-secondary);">PHB</button>
+                            <button type="button" class="btn btn-xxs import-filter-edition" data-edition="xphb" style="padding:4px 8px; font-size:0.75rem; background:#2a2a2a; color:var(--color-text-secondary);">XPHB</button>
+                        </div>
                     </div>
-                    <div id="import-feature-list" style="flex:1; min-height:200px; max-height:300px; overflow-y:auto; background:rgba(0,0,0,0.2); border:1px solid var(--color-border-subtle); border-radius:4px; padding:8px; display:flex; flex-direction:column; gap:4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.25); padding:6px 10px; border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <input type="checkbox" id="import-select-all" style="cursor:pointer;">
+                            <label for="import-select-all" style="margin:0; font-size:0.75rem; cursor:pointer; color:var(--color-text-muted);">Select All</label>
+                        </div>
+                        <button class="btn btn-xs btn-primary" id="btn-import-batch" disabled style="display:inline-flex; align-items:center; gap:4px;"><i class="fa-solid fa-file-import"></i> Import Selected (<span id="import-selected-count">0</span>)</button>
+                    </div>
+                    <div id="import-feature-list" style="flex:1; min-height:220px; max-height:320px; overflow-y:auto; background:rgba(0,0,0,0.2); border:1px solid var(--color-border-subtle); border-radius:4px; padding:8px; display:flex; flex-direction:column; gap:4px;">
                         <div style="text-align:center; color:var(--color-text-muted); font-size:0.8rem; margin-top:20px;">Select a class to browse features</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- IMPORT DESTINATION CATEGORY PROMPT MODAL -->
+            <div id="pc-ability-import-cat-overlay" class="vtt-sheet-submodal-overlay vtt-sheet-submodal-high vtt-hidden"></div>
+            <div id="pc-ability-import-cat-modal" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="width:380px; padding:16px;">
+                <h4 style="margin:0; color:var(--color-gold-base); font-size:0.95rem; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-folder-tree"></i> Import Destination Category</h4>
+                <div style="font-size:0.8rem; color:var(--color-text-secondary);" id="import-cat-modal-summary">Importing features to character.</div>
+                <div class="form-group" style="display:flex; flex-direction:column; gap:4px;">
+                    <label style="font-size:0.75rem; color:var(--color-text-muted);">Choose Category:</label>
+                    <select id="import-cat-select" style="width:100%; padding:6px; font-size:0.82rem; background:#181818; color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                    </select>
+                    <input type="text" id="import-cat-new-name" placeholder="Enter new category name..." style="width:100%; padding:6px; font-size:0.82rem; background:#181818; color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px; display:none; margin-top:4px;">
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:4px;">
+                    <button class="btn btn-secondary btn-sm" id="btn-import-cat-cancel">Cancel</button>
+                    <button class="btn btn-primary btn-sm" id="btn-import-cat-confirm"><i class="fa-solid fa-check"></i> Import</button>
                 </div>
             </div>
         `;
@@ -589,6 +1488,25 @@ function simulateRoll(formula, critRange = 20) {
             list.appendChild(row);
         });
 
+        // Formula builder change listeners
+        ['modal-ability-base-dice', 'modal-ability-scaling-mod', 'modal-ability-extra-bonus'].forEach(id => {
+            document.getElementById(id)?.addEventListener('input', () => {
+                if (currentChar) updateFormulaBuilderOutputs(currentChar);
+            });
+            document.getElementById(id)?.addEventListener('change', () => {
+                if (currentChar) updateFormulaBuilderOutputs(currentChar);
+            });
+        });
+
+        document.getElementById('modal-ability-formula')?.addEventListener('input', () => {
+            if (currentChar) {
+                const raw = document.getElementById('modal-ability-formula').value.trim();
+                const evalFormula = evaluateAbilityFormula(raw, null, currentChar);
+                const previewEl = document.getElementById('modal-ability-formula-preview');
+                if (previewEl) previewEl.innerText = evalFormula || 'None';
+            }
+        });
+
         document.getElementById('modal-ability-has-counter')?.addEventListener('change', (e) => {
             const container = document.getElementById('modal-ability-uses-container');
             if (e.target.checked) {
@@ -604,8 +1522,27 @@ function simulateRoll(formula, critRange = 20) {
             const idx = parseInt(document.getElementById('modal-ability-idx').value);
             const name = document.getElementById('modal-ability-name').value.trim();
             if (!name) return alert("Ability Name is required.");
+            const actionType = document.getElementById('modal-ability-action-type')?.value || 'passive';
+            const categoryId = document.getElementById('modal-ability-category')?.value || null;
             const description = document.getElementById('modal-ability-desc').value.trim();
+            
+            const baseDice = (document.getElementById('modal-ability-base-dice')?.value || '').trim();
+            const sc = document.getElementById('modal-ability-scaling-mod')?.value || 'none';
+            let modClass = '';
+            let scalingMod = sc;
+            if (sc.startsWith('classLevel:')) {
+                modClass = sc.replace('classLevel:', '');
+                scalingMod = 'classLevel';
+            }
+            const extraBonus = parseInt(document.getElementById('modal-ability-extra-bonus')?.value) || 0;
             const formula = document.getElementById('modal-ability-formula').value.trim();
+            const formulaConfig = (baseDice || scalingMod !== 'none' || extraBonus !== 0) ? {
+                baseDice,
+                scalingMod,
+                modClass,
+                extraBonus
+            } : null;
+
             const hasCounter = document.getElementById('modal-ability-has-counter').checked;
             const usesCurrent = parseInt(document.getElementById('modal-ability-uses-current').value) || 0;
             const usesMax = parseInt(document.getElementById('modal-ability-uses-max').value) || 0;
@@ -618,14 +1555,17 @@ function simulateRoll(formula, critRange = 20) {
                 if (label || entry) customFields.push({ label, entry });
             });
 
-            const categoryId = document.getElementById('modal-ability-category')?.value || null;
             const ab = { 
-                id: (idx >= 0 ? char.abilityCards[idx].id : 'ab_' + Date.now()), 
-                name, categoryId, description, formula, customFields, hasCounter, usesCurrent, usesMax, resetType 
+                id: (idx >= 0 && char.abilityCards && char.abilityCards[idx] ? char.abilityCards[idx].id : 'ab_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4)), 
+                name, actionType, categoryId, description, formula, formulaConfig, customFields, hasCounter, usesCurrent, usesMax, resetType 
             };
 
-            if (idx >= 0) char.abilityCards[idx] = ab;
-            else char.abilityCards.push(ab);
+            if (idx >= 0 && char.abilityCards && char.abilityCards[idx]) {
+                char.abilityCards[idx] = ab;
+            } else {
+                if (!char.abilityCards) char.abilityCards = [];
+                char.abilityCards.push(ab);
+            }
 
             document.getElementById('pc-ability-modal').classList.add('vtt-hidden');
             document.getElementById('pc-ability-overlay').classList.add('vtt-hidden');
@@ -636,7 +1576,7 @@ function simulateRoll(formula, critRange = 20) {
             const char = currentChar;
             if (!char) return;
             const idx = parseInt(document.getElementById('modal-ability-idx').value);
-            if (idx >= 0) {
+            if (idx >= 0 && char.abilityCards && char.abilityCards[idx]) {
                 if (confirm("Are you sure you want to delete this ability card?")) {
                     char.abilityCards.splice(idx, 1);
                     document.getElementById('pc-ability-modal').classList.add('vtt-hidden');
@@ -650,13 +1590,372 @@ function simulateRoll(formula, critRange = 20) {
         });
 
         document.getElementById('modal-ability-cancel')?.addEventListener('click', () => {
+            selectedImportFeatures.clear();
+            updateImportBatchButton();
             document.getElementById('pc-ability-modal').classList.add('vtt-hidden');
             document.getElementById('pc-ability-overlay').classList.add('vtt-hidden');
         });
 
         document.getElementById('pc-ability-overlay')?.addEventListener('click', () => {
+            selectedImportFeatures.clear();
+            updateImportBatchButton();
             document.getElementById('pc-ability-modal').classList.add('vtt-hidden');
             document.getElementById('pc-ability-overlay').classList.add('vtt-hidden');
+        });
+
+        // Tab switching
+        document.getElementById('tab-btn-manual')?.addEventListener('click', () => switchModalTab('manual'));
+        document.getElementById('tab-btn-import')?.addEventListener('click', () => switchModalTab('import'));
+
+        // Import filters
+        document.getElementById('import-search')?.addEventListener('input', renderImportFeatureList);
+        document.getElementById('import-subclass-sel')?.addEventListener('change', renderImportFeatureList);
+
+        document.getElementById('import-category-sel')?.addEventListener('change', (e) => {
+            currentCategory = e.target.value;
+            selectedImportFeatures.clear();
+            updateImportBatchButton();
+            const classFilters = document.getElementById('import-class-filters');
+            currentImportData = [];
+            const searchInput = document.getElementById('import-search');
+            if (searchInput) searchInput.value = '';
+            
+            if (currentCategory === 'class') {
+                if (classFilters) classFilters.style.display = 'flex';
+                const classSel = document.getElementById('import-class-sel');
+                if (classSel) classSel.value = '';
+                const subSel = document.getElementById('import-subclass-sel');
+                if (subSel) {
+                    subSel.innerHTML = '<option value="">-- All Subclasses --</option>';
+                    subSel.disabled = true;
+                }
+                renderImportFeatureList();
+            } else {
+                if (classFilters) classFilters.style.display = 'none';
+                let file = '';
+                let key = '';
+                let fallback = '';
+                if (currentCategory === 'feat') { file = 'data/feats-catalog.json'; key = 'feat'; fallback = 'data/feats.json'; }
+                if (currentCategory === 'race') { file = 'data/races-catalog.json'; key = 'race'; fallback = 'data/races.json'; }
+                if (currentCategory === 'background') { file = 'data/backgrounds-catalog.json'; key = 'background'; fallback = 'data/backgrounds.json'; }
+                if (currentCategory === 'charoption') { file = 'data/charcreationoptions.json'; key = 'charoption'; }
+                if (currentCategory === 'optionalfeature') { file = 'data/optionalfeatures.json'; key = 'optionalfeature'; }
+                
+                const listEl = document.getElementById('import-feature-list');
+                if (listEl) listEl.innerHTML = '<div style="text-align:center; color:var(--color-text-muted); font-size:0.8rem; margin-top:20px;">Loading...</div>';
+                
+                fetch(file).then(r => {
+                    if (!r.ok) throw new Error('Not found');
+                    return r.json();
+                }).then(data => {
+                    currentImportData = Array.isArray(data) ? data : (data[key] || []);
+                    renderImportFeatureList();
+                }).catch(() => {
+                    if (fallback) {
+                        fetch(fallback).then(r => r.json()).then(data => {
+                            currentImportData = Array.isArray(data) ? data : (data[key] || []);
+                            renderImportFeatureList();
+                        }).catch(() => {
+                            if (listEl) listEl.innerHTML = '<div style="text-align:center; color:var(--color-error); font-size:0.8rem; margin-top:20px;">Failed to load data</div>';
+                        });
+                    } else {
+                        if (listEl) listEl.innerHTML = '<div style="text-align:center; color:var(--color-error); font-size:0.8rem; margin-top:20px;">Failed to load data</div>';
+                    }
+                });
+            }
+        });
+
+        // Edition filter buttons & search listener in Import tab
+        document.querySelectorAll('.import-filter-edition').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.import-filter-edition').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.background = '#2a2a2a';
+                    b.style.color = 'var(--color-text-secondary)';
+                    b.style.fontWeight = 'normal';
+                });
+                const t = e.currentTarget;
+                t.classList.add('active');
+                t.style.background = 'var(--color-gold-base)';
+                t.style.color = '#000';
+                t.style.fontWeight = 'bold';
+                window.activeImportEditionFilter = t.dataset.edition || 'all';
+                renderImportFeatureList();
+            });
+        });
+
+        document.getElementById('import-search')?.addEventListener('input', () => {
+            renderImportFeatureList();
+        });
+
+        // Batch selection
+        document.getElementById('import-select-all')?.addEventListener('change', (e) => {
+            const listEl = document.getElementById('import-feature-list');
+            if (!listEl) return;
+            const chks = listEl.querySelectorAll('.import-feature-chk');
+            chks.forEach(chk => {
+                chk.checked = e.target.checked;
+                const idx = parseInt(chk.dataset.idx);
+                const f = availableFeatures[idx];
+                if (f) {
+                    const key = chk.dataset.key || getFeatureKey(f);
+                    if (e.target.checked) {
+                        selectedImportFeatures.set(key, f);
+                    } else {
+                        selectedImportFeatures.delete(key);
+                    }
+                }
+            });
+            updateImportBatchButton();
+        });
+
+        document.getElementById('btn-import-batch')?.addEventListener('click', () => {
+            const selectedFeatures = Array.from(selectedImportFeatures.values());
+            if (selectedFeatures.length === 0) return;
+            if (selectedFeatures.length === 1 && (currentCategory === 'background' || selectedFeatures[0].skillsData || selectedFeatures[0].toolsData || selectedFeatures[0].equipmentData)) {
+                promptBackgroundImportModal(selectedFeatures[0], currentChar);
+                return;
+            }
+            const defaultCat = getSuggestedCategoryName(selectedFeatures);
+            promptImportDestinationCategory(selectedFeatures, defaultCat);
+        });
+
+        // Category modal listeners
+        document.getElementById('import-cat-select')?.addEventListener('change', (e) => {
+            const newNameInput = document.getElementById('import-cat-new-name');
+            if (newNameInput) {
+                newNameInput.style.display = (e.target.value === '__new__') ? 'block' : 'none';
+                if (e.target.value === '__new__') newNameInput.focus();
+            }
+        });
+
+        document.getElementById('btn-import-cat-cancel')?.addEventListener('click', () => {
+            selectedImportFeatures.clear();
+            updateImportBatchButton();
+            document.getElementById('pc-ability-import-cat-modal').classList.add('vtt-hidden');
+            document.getElementById('pc-ability-import-cat-overlay').classList.add('vtt-hidden');
+        });
+
+        document.getElementById('pc-ability-import-cat-overlay')?.addEventListener('click', () => {
+            selectedImportFeatures.clear();
+            updateImportBatchButton();
+            document.getElementById('pc-ability-import-cat-modal').classList.add('vtt-hidden');
+            document.getElementById('pc-ability-import-cat-overlay').classList.add('vtt-hidden');
+        });
+
+        document.getElementById('btn-import-cat-confirm')?.addEventListener('click', () => {
+            const char = currentChar;
+            if (!char || pendingImportFeatures.length === 0) return;
+
+            const sel = document.getElementById('import-cat-select');
+            const newNameInput = document.getElementById('import-cat-new-name');
+            const selVal = sel ? sel.value : '__uncategorized__';
+
+            let targetCatId = null;
+            if (selVal === '__new__') {
+                const catName = (newNameInput ? newNameInput.value.trim() : '') || 'Imported Features';
+                if (!char.abilityCategories) char.abilityCategories = [];
+                let existing = char.abilityCategories.find(c => c.name.toLowerCase() === catName.toLowerCase());
+                if (existing) {
+                    targetCatId = existing.id;
+                } else {
+                    targetCatId = 'cat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+                    char.abilityCategories.push({
+                        id: targetCatId,
+                        name: catName,
+                        collapsed: false
+                    });
+                }
+            } else if (selVal !== '__uncategorized__') {
+                targetCatId = selVal;
+            }
+
+            if (!char.abilityCards) char.abilityCards = [];
+
+            pendingImportFeatures.forEach((f, i) => {
+                // If item is a Species with pre-unpacked traits in database, unpack into separate cards
+                if (Array.isArray(f.traits) && f.traits.length > 0) {
+                    f.traits.forEach((t, ti) => {
+                        const desc = (t.description || '').trim();
+                        const actionType = t.actionType || 'passive';
+                        const hasCounter = t.hasCounter || false;
+                        const usesMax = t.usesMax || null;
+                        const resetType = t.resetType || 'short';
+                        const resolvedMax = hasCounter ? evaluateAbilityMaxUses(usesMax, char) : 0;
+                        const formula = t.formula || '';
+                        const formulaConfig = t.formulaConfig || null;
+
+                        char.abilityCards.push({
+                            id: 'ab_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4) + '_' + i + '_' + ti,
+                            name: t.name || `${f.name} Trait`,
+                            actionType,
+                            categoryId: targetCatId,
+                            description: desc,
+                            formula,
+                            formulaConfig,
+                            customFields: [],
+                            hasCounter,
+                            usesCurrent: resolvedMax,
+                            usesMax: resolvedMax,
+                            resetType
+                        });
+                    });
+                } else if (f.skillsData || f.toolsData || f.equipmentData) {
+                    // Background imported via multi-batch category prompt
+                    char.background = char.background || f.name;
+                    const appliedSkills = [];
+                    if (f.skillsData && f.skillsData.fixed) {
+                        char.skills = char.skills || {};
+                        f.skillsData.fixed.forEach(s => {
+                            const norm = normalizeSkill(s);
+                            if (norm) { char.skills[norm] = true; appliedSkills.push(norm); }
+                        });
+                    }
+                    const appliedTools = [];
+                    if (f.toolsData && f.toolsData.fixed) {
+                        char.tools = char.tools || {};
+                        f.toolsData.fixed.forEach(t => {
+                            const norm = normalizeTool(t);
+                            if (norm) {
+                                const defTool = STANDARD_TOOLS.find(st => st.name.toLowerCase() === norm.toLowerCase());
+                                const ab = defTool ? defTool.ability : 'dex';
+                                char.tools[norm] = { ability: ab, show: true, prof: true, exp: false, mod: "0", custom: !defTool };
+                                appliedTools.push(norm);
+                            }
+                        });
+                    }
+                    const appliedItems = [];
+                    let addedGold = 0;
+                    if (f.equipmentData) {
+                        char.equipment = Array.isArray(char.equipment) ? char.equipment : [];
+                        char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
+                        if (f.equipmentData.fixedGold) {
+                            addedGold = f.equipmentData.fixedGold;
+                            char.currency.gp = (char.currency.gp || 0) + addedGold;
+                        }
+                        if (Array.isArray(f.equipmentData.fixedItems)) {
+                            f.equipmentData.fixedItems.forEach(it => {
+                                const itemName = it.name ? it.name.trim() : 'Item';
+                                const itemQty = parseInt(it.quantity) || 1;
+                                char.equipment.push({
+                                    id: 'eq_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                                    name: itemName.charAt(0).toUpperCase() + itemName.slice(1),
+                                    qty: itemQty,
+                                    weight: parseFloat(it.weight) || 0,
+                                    containerId: null,
+                                    description: ''
+                                });
+                                appliedItems.push(itemQty > 1 ? `${itemQty}x ${itemName}` : itemName);
+                            });
+                        }
+                    }
+
+                    // Card 1: Feature cards
+                    const bgFeatures = (Array.isArray(f.features) && f.features.length > 0) ? f.features : [
+                        { name: `Feature: ${f.name}`, description: f.description || '' }
+                    ];
+                    bgFeatures.forEach((feat, fi) => {
+                        char.abilityCards.push({
+                            id: 'ab_bg_feat_' + Date.now() + '_' + i + '_' + fi,
+                            name: feat.name || `Feature: ${f.name}`,
+                            actionType: 'passive',
+                            categoryId: targetCatId,
+                            description: feat.description || '',
+                            formula: '',
+                            formulaConfig: null,
+                            customFields: [],
+                            hasCounter: false,
+                            usesCurrent: 0,
+                            usesMax: 0,
+                            resetType: 'none'
+                        });
+                    });
+
+                    // Card 2: Summary card
+                    let summaryDesc = `**Background:** ${f.name} [${f.source || 'PHB'}]\n\n`;
+                    summaryDesc += `**Skill Proficiencies:** ${appliedSkills.length > 0 ? appliedSkills.join(', ') : 'None'}\n`;
+                    summaryDesc += `**Tool Proficiencies:** ${appliedTools.length > 0 ? appliedTools.join(', ') : 'None'}\n`;
+                    if (f.languages) summaryDesc += `**Languages:** ${f.languages}\n`;
+                    summaryDesc += `**Starting Equipment:** ${appliedItems.length > 0 ? appliedItems.join(', ') : 'None'} (${addedGold} gp)\n\n`;
+                    if (f.description) {
+                        const cleanDesc = f.description.replace(/^#+\s+/gm, '').trim().slice(0, 500);
+                        summaryDesc += cleanDesc + (f.description.length > 500 ? '...' : '');
+                    }
+
+                    char.abilityCards.push({
+                        id: 'ab_bg_summary_' + Date.now() + '_' + i,
+                        name: `Background: ${f.name}`,
+                        actionType: 'passive',
+                        categoryId: targetCatId,
+                        description: summaryDesc,
+                        formula: '',
+                        formulaConfig: null,
+                        customFields: [],
+                        hasCounter: false,
+                        usesCurrent: 0,
+                        usesMax: 0,
+                        resetType: 'none'
+                    });
+                } else {
+                    // Regular single feature / feat / background
+                    let desc = getFeatureDescriptionText(f);
+                    
+                    const counterInfo = detectFeatureCounter(f, desc, char);
+                    let hasCounter = counterInfo.hasCounter;
+                    let usesMax = counterInfo.usesMax;
+                    let resetType = counterInfo.resetType;
+
+                    let resolvedMax = 0;
+                    let resolvedCurrent = 0;
+                    if (hasCounter) {
+                        resolvedMax = evaluateAbilityMaxUses(usesMax, char);
+                        resolvedCurrent = resolvedMax;
+                    }
+
+                    let actionType = f.actionType || 'passive';
+                    if (!f.actionType) {
+                        const plain = ((f.name || '') + ' ' + desc).toLowerCase();
+                        if (plain.includes('bonus action')) actionType = 'bonus';
+                        else if (plain.includes('reaction')) actionType = 'reaction';
+                        else if (plain.includes('as an action') || plain.includes('action to')) actionType = 'action';
+                    }
+
+                    let formula = f.formula || '';
+                    let formulaConfig = f.formulaConfig || null;
+
+                    const rawName = f.name || 'Untitled Ability';
+                    const badge = getDisplaySourceBadge(f.source);
+                    const tag = badge ? ` [${badge}]` : (f.source ? ` [${f.source}]` : '');
+                    const cardName = (badge && !rawName.includes('[') && !rawName.includes(badge)) ? `${rawName}${tag}` : rawName;
+
+                    char.abilityCards.push({
+                        id: 'ab_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4) + '_' + i,
+                        name: cardName,
+                        actionType,
+                        categoryId: targetCatId,
+                        description: desc,
+                        formula,
+                        formulaConfig,
+                        customFields: [],
+                        hasCounter,
+                        usesCurrent: resolvedCurrent,
+                        usesMax: resolvedMax,
+                        resetType
+                    });
+                }
+            });
+
+            selectedImportFeatures.clear();
+            updateImportBatchButton();
+
+            document.getElementById('pc-ability-import-cat-modal').classList.add('vtt-hidden');
+            document.getElementById('pc-ability-import-cat-overlay').classList.add('vtt-hidden');
+            document.getElementById('pc-ability-modal').classList.add('vtt-hidden');
+            document.getElementById('pc-ability-overlay').classList.add('vtt-hidden');
+
+            pendingImportFeatures = [];
+            saveAndEmit(char);
+            renderSheetData(char);
         });
     }
 
@@ -794,8 +2093,17 @@ function simulateRoll(formula, critRange = 20) {
 
             saveAndEmit(currentChar);
             renderSheetData(currentChar);
-            document.getElementById('pc-save-settings-modal').classList.add('vtt-hidden');
-            document.getElementById('pc-save-settings-overlay').classList.add('vtt-hidden');
+            document.getElementById('pc-save-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-save-settings-overlay')?.classList.add('vtt-hidden');
+        });
+
+        document.getElementById('modal-save-settings-close')?.addEventListener('click', () => {
+            document.getElementById('pc-save-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-save-settings-overlay')?.classList.add('vtt-hidden');
+        });
+        document.getElementById('pc-save-settings-overlay')?.addEventListener('click', () => {
+            document.getElementById('pc-save-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-save-settings-overlay')?.classList.add('vtt-hidden');
         });
     }
 
@@ -804,8 +2112,8 @@ function simulateRoll(formula, critRange = 20) {
 
         const container = document.createElement('div');
         container.innerHTML = `
-            <div id="pc-save-settings-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
-            <div id="pc-save-settings-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:500px; max-width:90vw; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="pc-save-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
+            <div id="pc-save-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:500px;">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:var(--color-gold-base);">Stat & Save Settings</h3>
                     <button id="modal-save-settings-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -939,6 +2247,512 @@ function simulateRoll(formula, critRange = 20) {
         { name: "Woodcarver's Tools", ability: "dex" }
     ];
 
+    const SKILL_NAMES_MASTER = [
+        'Acrobatics', 'Animal Handling', 'Arcana', 'Athletics', 'Deception',
+        'History', 'Insight', 'Intimidation', 'Investigation', 'Medicine',
+        'Nature', 'Perception', 'Performance', 'Persuasion', 'Religion',
+        'Sleight of Hand', 'Stealth', 'Survival'
+    ];
+
+    function normalizeSkill(s) {
+        if (!s) return '';
+        const found = SKILL_NAMES_MASTER.find(x => x.toLowerCase() === s.trim().toLowerCase());
+        return found || s.trim();
+    }
+
+    function normalizeTool(t) {
+        if (!t) return '';
+        const clean = t.trim();
+        if (/vehicles?\s*\(\s*water\s*\)/i.test(clean)) return 'Water Vehicles';
+        if (/vehicles?\s*\(\s*land\s*\)/i.test(clean)) return 'Land Vehicles';
+        if (/thieves'?\s*tools?/i.test(clean)) return "Thieves' Tools";
+        if (/navigator'?s?\s*tools?/i.test(clean)) return "Navigator's Tools";
+        if (/cartographer'?s?\s*tools?/i.test(clean)) return "Cartographer's Tools";
+        if (/cook'?s?\s*utensils?/i.test(clean)) return "Cook's Utensils";
+        if (/alchemist'?s?\s*supplies?/i.test(clean)) return "Alchemist's Supplies";
+        if (/brewer'?s?\s*supplies?/i.test(clean)) return "Brewer's Supplies";
+        if (/calligrapher'?s?\s*supplies?/i.test(clean)) return "Calligrapher's Supplies";
+        if (/carpenter'?s?\s*tools?/i.test(clean)) return "Carpenter's Tools";
+        if (/cobbler'?s?\s*tools?/i.test(clean)) return "Cobbler's Tools";
+        if (/glassblower'?s?\s*tools?/i.test(clean)) return "Glassblower's Tools";
+        if (/herbalism\s*kit/i.test(clean)) return "Herbalism Kit";
+        if (/jeweler'?s?\s*tools?/i.test(clean)) return "Jeweler's Tools";
+        if (/leatherworker'?s?\s*tools?/i.test(clean)) return "Leatherworker's Tools";
+        if (/mason'?s?\s*tools?/i.test(clean)) return "Mason's Tools";
+        if (/painter'?s?\s*supplies?/i.test(clean)) return "Painter's Supplies";
+        if (/poisoner'?s?\s*kit/i.test(clean)) return "Poisoner's Kit";
+        if (/potter'?s?\s*tools?/i.test(clean)) return "Potter's Tools";
+        if (/smith'?s?\s*tools?/i.test(clean)) return "Smith's Tools";
+        if (/tinker'?s?\s*tools?/i.test(clean)) return "Tinker's Tools";
+        if (/weaver'?s?\s*tools?/i.test(clean)) return "Weaver's Tools";
+        if (/woodcarver'?s?\s*tools?/i.test(clean)) return "Woodcarver's Tools";
+        if (/disguise\s*kit/i.test(clean)) return "Disguise Kit";
+        if (/forgery\s*kit/i.test(clean)) return "Forgery Kit";
+        return clean;
+    }
+
+    function expandToolOptions(fromList) {
+        const ARTISAN_TOOLS = [
+            "Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Supplies",
+            "Carpenter's Tools", "Cartographer's Tools", "Cobbler's Tools",
+            "Cook's Utensils", "Glassblower's Tools", "Jeweler's Tools",
+            "Leatherworker's Tools", "Mason's Tools", "Painter's Supplies",
+            "Potter's Tools", "Smith's Tools", "Tinker's Tools", "Weaver's Tools", "Woodcarver's Tools"
+        ];
+        const GAMING_SETS = ["Dice Set", "Dragonchess Set", "Playing Card Set", "Three-Dragon Ante Set"];
+        const MUSICAL_INSTRUMENTS = ["Bagpipes", "Drum", "Dulcimer", "Flute", "Lute", "Lyre", "Horn", "Pan Flute", "Shawm", "Viol"];
+
+        const res = [];
+        (fromList || []).forEach(f => {
+            if (/AnyArtisansTools?|Artisan's Tools/i.test(f)) {
+                res.push(...ARTISAN_TOOLS);
+            } else if (/AnyGamingSet|Gaming Set/i.test(f)) {
+                res.push(...GAMING_SETS);
+            } else if (/Musical Instrument/i.test(f)) {
+                res.push(...MUSICAL_INSTRUMENTS);
+            } else {
+                res.push(normalizeTool(f));
+            }
+        });
+        return Array.from(new Set(res));
+    }
+
+    function ensureBackgroundImportModalExists() {
+        if (document.getElementById('pc-bg-import-modal')) return;
+
+        const container = document.createElement('div');
+        container.innerHTML = `
+            <div id="pc-bg-import-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
+            <div id="pc-bg-import-modal" class="vtt-sheet-submodal vtt-hidden" style="width:580px;">
+                <div style="padding:14px 18px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.35);">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <i class="fa-solid fa-scroll text-gradient-gold" style="font-size:1.3rem;"></i>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <h3 style="margin:0; color:var(--color-gold-base); font-size:1.05rem;" id="bg-import-modal-title">
+                                Import Background
+                            </h3>
+                            <span id="bg-import-modal-source" class="badge" style="background:rgba(212,175,55,0.15); color:var(--color-gold-light); font-size:0.7rem; border:1px solid rgba(212,175,55,0.3); padding:1px 6px; border-radius:4px;">PHB</span>
+                        </div>
+                    </div>
+                    <button id="bg-import-modal-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;" title="Close"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div style="padding:16px 18px; overflow-y:auto; display:flex; flex-direction:column; gap:14px; flex:1;" class="scroll-styled" id="bg-import-modal-body">
+                </div>
+
+                <div style="padding:12px 18px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.35);">
+                    <button id="bg-import-modal-cancel" class="btn btn-secondary btn-sm">Cancel</button>
+                    <button id="bg-import-modal-apply" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:6px;"><i class="fa-solid fa-check"></i> Apply to Character</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(container);
+    }
+
+    function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
+        if (!bgData || !char) return;
+        ensureBackgroundImportModalExists();
+
+        const modal = document.getElementById('pc-bg-import-modal');
+        const overlay = document.getElementById('pc-bg-import-overlay');
+        const titleEl = document.getElementById('bg-import-modal-title');
+        const sourceEl = document.getElementById('bg-import-modal-source');
+        const bodyEl = document.getElementById('bg-import-modal-body');
+
+        if (!modal || !overlay || !bodyEl) return;
+
+        titleEl.innerText = bgData.name || 'Background';
+        if (sourceEl) sourceEl.innerText = bgData.source || 'PHB';
+
+        const skillsData = bgData.skillsData || { fixed: [], choose: null };
+        const toolsData = bgData.toolsData || { fixed: [], choose: null };
+        const equipData = bgData.equipmentData || { fixedItems: [], fixedGold: 0, choiceSets: [] };
+        const features = bgData.features || [];
+
+        // 1. Overview description snippet
+        let descSnippet = '';
+        if (bgData.description) {
+            const clean = bgData.description.replace(/^#+\s+/gm, '').trim();
+            const firstPara = clean.split('\n\n')[0] || '';
+            if (firstPara) {
+                descSnippet = `<div style="font-size:0.8rem; color:var(--color-text-secondary); line-height:1.4; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:8px 12px; border-radius:6px;">${firstPara.slice(0, 300)}${firstPara.length > 300 ? '...' : ''}</div>`;
+            }
+        }
+
+        // 2. Skill Proficiencies HTML
+        const fixedSkills = (skillsData.fixed || []).map(normalizeSkill);
+        const skillBadges = fixedSkills.map(s => `
+            <span style="background:rgba(46,204,113,0.15); border:1px solid rgba(46,204,113,0.4); color:#2ecc71; padding:3px 8px; border-radius:4px; font-size:0.8rem; display:inline-flex; align-items:center; gap:5px;">
+                <i class="fa-solid fa-check"></i> ${s}
+            </span>
+        `).join('');
+
+        let chooseSkillHtml = '';
+        if (skillsData.choose && Array.isArray(skillsData.choose.from)) {
+            const count = skillsData.choose.count || 1;
+            const fromSkills = skillsData.choose.from.map(normalizeSkill);
+            chooseSkillHtml = `
+                <div style="margin-top:6px;">
+                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:4px;">
+                        Choose <strong style="color:var(--color-gold-base);">${count}</strong> skill${count > 1 ? 's' : ''}:
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;" class="bg-skill-choice-group" data-count="${count}">
+                        ${fromSkills.map((s, idx) => `
+                            <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:4px 8px; border-radius:4px; margin:0;">
+                                <input type="checkbox" class="bg-skill-choice-chk" value="${s}" ${idx < count ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
+                                <span>${s}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        const skillsHtml = `
+            <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px;">
+                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-graduation-cap"></i> Skill Proficiencies
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    ${skillBadges || (skillsData.choose ? '' : '<span style="font-size:0.8rem; color:var(--color-text-muted);">None</span>')}
+                </div>
+                ${chooseSkillHtml}
+            </div>
+        `;
+
+        // 3. Tool Proficiencies HTML
+        const fixedTools = (toolsData.fixed || []).map(normalizeTool);
+        const toolBadges = fixedTools.map(t => `
+            <span style="background:rgba(52,152,219,0.15); border:1px solid rgba(52,152,219,0.4); color:#3498db; padding:3px 8px; border-radius:4px; font-size:0.8rem; display:inline-flex; align-items:center; gap:5px;">
+                <i class="fa-solid fa-wrench"></i> ${t}
+            </span>
+        `).join('');
+
+        let chooseToolHtml = '';
+        if (toolsData.choose && Array.isArray(toolsData.choose.from)) {
+            const count = toolsData.choose.count || 1;
+            const expandedTools = expandToolOptions(toolsData.choose.from);
+            chooseToolHtml = `
+                <div style="margin-top:6px;">
+                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:4px;">
+                        Choose <strong style="color:var(--color-gold-base);">${count}</strong> tool${count > 1 ? 's' : ''}:
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:6px;">
+                        ${Array.from({ length: count }).map((_, idx) => `
+                            <select class="bg-tool-choice-sel" style="width:100%; padding:5px 8px; font-size:0.8rem; background:#222; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
+                                ${expandedTools.map(t => `<option value="${t}">${t}</option>`).join('')}
+                            </select>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        const toolsHtml = `
+            <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px;">
+                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-toolbox"></i> Tool Proficiencies
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    ${toolBadges || (toolsData.choose ? '' : '<span style="font-size:0.8rem; color:var(--color-text-muted);">None</span>')}
+                </div>
+                ${chooseToolHtml}
+            </div>
+        `;
+
+        // 4. Starting Equipment & Gold HTML
+        const fixedItems = equipData.fixedItems || [];
+        const fixedGold = equipData.fixedGold || 0;
+        const choiceSets = equipData.choiceSets || [];
+
+        let fixedEquipSummary = [];
+        fixedItems.forEach(it => {
+            fixedEquipSummary.push((it.quantity > 1 ? `${it.quantity}x ` : '') + (it.name || 'item'));
+        });
+        if (fixedGold > 0) fixedEquipSummary.push(`${fixedGold} gp`);
+
+        let choiceSetsHtml = '';
+        if (choiceSets.length > 0) {
+            choiceSetsHtml = choiceSets.map((set, si) => `
+                <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
+                    <div style="font-size:0.75rem; color:var(--color-text-muted);">Equipment Package:</div>
+                    ${set.options.map((opt, oi) => {
+                        const optLabel = opt.label || (opt.items.map(it => (it.quantity > 1 ? `${it.quantity}x ` : '') + it.name).join(', ') + (opt.gold ? ` + ${opt.gold} gp` : ''));
+                        return `
+                            <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.8rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:6px 10px; border-radius:4px; margin:0;">
+                                <input type="radio" name="bg-equip-set-${si}" value="${oi}" ${oi === 0 ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base); margin-top:2px;">
+                                <div style="flex:1;">
+                                    <strong style="color:var(--color-gold-light);">Option ${opt.key || String.fromCharCode(65 + oi)}:</strong>
+                                    <span style="color:var(--color-text-primary); margin-left:4px;">${optLabel}</span>
+                                </div>
+                            </label>
+                        `;
+                    }).join('')}
+                </div>
+            `).join('');
+        }
+
+        const equipHtml = `
+            <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px;">
+                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-sack-dollar"></i> Starting Equipment & Gold
+                </div>
+                ${fixedEquipSummary.length > 0 ? `
+                    <div style="font-size:0.8rem; color:var(--color-text-secondary); margin-bottom:6px;">
+                        <strong>Standard Gear:</strong> ${fixedEquipSummary.join(', ')}
+                    </div>
+                ` : ''}
+                ${choiceSetsHtml}
+
+                <div style="margin-top:10px; padding:8px 10px; background:rgba(0,0,0,0.35); border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
+                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:4px; font-weight:600;">Inventory Handling:</div>
+                    <div style="display:flex; flex-direction:column; gap:4px;">
+                        <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; margin:0;">
+                            <input type="radio" name="bg-inv-handling" value="append" checked style="cursor:pointer; accent-color:var(--color-gold-base);">
+                            <span><strong>Append to Inventory</strong> (Keep existing items & add background equipment)</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; margin:0;">
+                            <input type="radio" name="bg-inv-handling" value="replace" style="cursor:pointer; accent-color:var(--color-gold-base);">
+                            <span><strong>Replace Inventory</strong> (Clear current items & replace with background equipment)</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // 5. Ability Cards & Feature HTML
+        const featureNames = features.map(f => f.name).join(', ') || 'Background Feature';
+        const cardsHtml = `
+            <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px;">
+                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-address-card"></i> Ability Cards
+                </div>
+                <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; margin:0;">
+                    <input type="checkbox" id="bg-import-create-cards" checked style="cursor:pointer; accent-color:var(--color-gold-base);">
+                    <span>Create Ability Cards in <strong>"Background Features"</strong> category</span>
+                </label>
+                <div style="font-size:0.72rem; color:var(--color-text-muted); margin-left:20px; margin-top:3px; line-height:1.3;">
+                    Creates rules card for <em>${featureNames}</em> plus a complete Background Summary card.
+                </div>
+            </div>
+        `;
+
+        bodyEl.innerHTML = descSnippet + skillsHtml + toolsHtml + equipHtml + cardsHtml;
+
+        // Interactive limit on skill choice checkboxes
+        bodyEl.querySelectorAll('.bg-skill-choice-group').forEach(group => {
+            const count = parseInt(group.dataset.count) || 1;
+            const chks = group.querySelectorAll('.bg-skill-choice-chk');
+            const updateSkillLimit = () => {
+                const checked = Array.from(chks).filter(c => c.checked);
+                if (checked.length >= count) {
+                    chks.forEach(c => { if (!c.checked) c.disabled = true; });
+                } else {
+                    chks.forEach(c => { c.disabled = false; });
+                }
+            };
+            chks.forEach(c => c.addEventListener('change', updateSkillLimit));
+            updateSkillLimit();
+        });
+
+        // Close / Cancel wiring
+        const closeModal = () => {
+            modal.classList.add('vtt-hidden');
+            overlay.classList.add('vtt-hidden');
+        };
+
+        const cancelBtn = document.getElementById('bg-import-modal-cancel');
+        const closeBtn = document.getElementById('bg-import-modal-close');
+        const applyBtn = document.getElementById('bg-import-modal-apply');
+
+        const onCancelHandler = () => {
+            closeModal();
+            if (onCancel) onCancel();
+        };
+
+        cancelBtn.onclick = onCancelHandler;
+        closeBtn.onclick = onCancelHandler;
+        overlay.onclick = onCancelHandler;
+
+        // Apply wiring
+        applyBtn.onclick = () => {
+            const selectedSkills = [...fixedSkills];
+            bodyEl.querySelectorAll('.bg-skill-choice-chk:checked').forEach(c => {
+                selectedSkills.push(c.value);
+            });
+
+            const selectedTools = [...fixedTools];
+            bodyEl.querySelectorAll('.bg-tool-choice-sel').forEach(s => {
+                if (s.value) selectedTools.push(s.value);
+            });
+
+            const selectedItems = [...fixedItems];
+            let totalGold = fixedGold;
+
+            choiceSets.forEach((set, si) => {
+                const checkedRadio = bodyEl.querySelector(`input[name="bg-equip-set-${si}"]:checked`);
+                const optIdx = checkedRadio ? parseInt(checkedRadio.value) : 0;
+                const opt = set.options[optIdx];
+                if (opt) {
+                    if (Array.isArray(opt.items)) selectedItems.push(...opt.items);
+                    if (opt.gold) totalGold += opt.gold;
+                }
+            });
+
+            const invHandling = bodyEl.querySelector('input[name="bg-inv-handling"]:checked')?.value || 'append';
+            const createCards = !!document.getElementById('bg-import-create-cards')?.checked;
+
+            applyBackgroundToCharacter(char, bgData, {
+                skills: selectedSkills,
+                tools: selectedTools,
+                items: selectedItems,
+                gold: totalGold,
+                invHandling,
+                createCards
+            });
+
+            closeModal();
+            if (onApplied) onApplied();
+        };
+
+        modal.classList.remove('vtt-hidden');
+        overlay.classList.remove('vtt-hidden');
+    }
+
+    function applyBackgroundToCharacter(char, bgData, choices) {
+        if (!char || !bgData) return;
+
+        const badge = getDisplaySourceBadge(bgData.source);
+        const srcTag = badge ? ` [${badge}]` : (bgData.source ? ` [${bgData.source}]` : '');
+        char.background = `${bgData.name}${srcTag}`;
+
+        // 1. Skills
+        char.skills = char.skills || {};
+        const appliedSkills = [];
+        (choices.skills || []).forEach(s => {
+            const norm = normalizeSkill(s);
+            if (norm) {
+                char.skills[norm] = true;
+                appliedSkills.push(norm);
+            }
+        });
+
+        // 2. Tools
+        char.tools = char.tools || {};
+        const appliedTools = [];
+        (choices.tools || []).forEach(t => {
+            const norm = normalizeTool(t);
+            if (norm) {
+                const defTool = STANDARD_TOOLS.find(st => st.name.toLowerCase() === norm.toLowerCase());
+                const ab = defTool ? defTool.ability : 'dex';
+                char.tools[norm] = {
+                    ability: ab,
+                    show: true,
+                    prof: true,
+                    exp: false,
+                    mod: "0",
+                    custom: !defTool
+                };
+                appliedTools.push(norm);
+            }
+        });
+
+        // 3. Equipment & Currency
+        char.equipment = Array.isArray(char.equipment) ? char.equipment : [];
+        char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
+
+        const addedGold = parseInt(choices.gold) || 0;
+        if (choices.invHandling === 'replace') {
+            char.equipment = [];
+            char.currency.gp = addedGold;
+        } else {
+            char.currency.gp = (char.currency.gp || 0) + addedGold;
+        }
+
+        const appliedItems = [];
+        (choices.items || []).forEach(it => {
+            const itemName = it.name ? it.name.trim() : 'Item';
+            const itemQty = parseInt(it.quantity) || 1;
+            const itemWeight = parseFloat(it.weight) || 0;
+            char.equipment.push({
+                id: 'eq_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+                name: itemName.charAt(0).toUpperCase() + itemName.slice(1),
+                qty: itemQty,
+                weight: itemWeight,
+                containerId: null,
+                description: ''
+            });
+            appliedItems.push(itemQty > 1 ? `${itemQty}x ${itemName}` : itemName);
+        });
+
+        // 4. Ability Cards
+        if (choices.createCards) {
+            char.abilityCategories = char.abilityCategories || [];
+            char.abilityCards = char.abilityCards || [];
+
+            let bgCat = char.abilityCategories.find(c => c.name.toLowerCase() === 'background features' || c.name.toLowerCase() === 'background');
+            if (!bgCat) {
+                bgCat = {
+                    id: 'cat_bg_' + Date.now(),
+                    name: 'Background Features',
+                    collapsed: false
+                };
+                char.abilityCategories.push(bgCat);
+            }
+
+            // Card 1: Background Feature(s)
+            const features = (Array.isArray(bgData.features) && bgData.features.length > 0) ? bgData.features : [
+                { name: `Feature: ${bgData.name}`, description: bgData.description || '' }
+            ];
+
+            features.forEach((feat, fi) => {
+                char.abilityCards.push({
+                    id: 'ab_bg_feat_' + Date.now() + '_' + fi,
+                    name: feat.name || `Feature: ${bgData.name}`,
+                    actionType: 'passive',
+                    categoryId: bgCat.id,
+                    description: feat.description || '',
+                    formula: '',
+                    formulaConfig: null,
+                    customFields: [],
+                    hasCounter: false,
+                    usesCurrent: 0,
+                    usesMax: 0,
+                    resetType: 'none'
+                });
+            });
+
+            // Card 2: Background Details & Proficiencies Summary
+            let summaryDesc = `**Background:** ${bgData.name} [${bgData.source || 'PHB'}]\n\n`;
+            summaryDesc += `**Skill Proficiencies:** ${appliedSkills.length > 0 ? appliedSkills.join(', ') : 'None'}\n`;
+            summaryDesc += `**Tool Proficiencies:** ${appliedTools.length > 0 ? appliedTools.join(', ') : 'None'}\n`;
+            if (bgData.languages) summaryDesc += `**Languages:** ${bgData.languages}\n`;
+            summaryDesc += `**Starting Equipment:** ${appliedItems.length > 0 ? appliedItems.join(', ') : 'None'} (${addedGold} gp)\n\n`;
+            if (bgData.description) {
+                const cleanDesc = bgData.description.replace(/^#+\s+/gm, '').trim().slice(0, 500);
+                summaryDesc += cleanDesc + (bgData.description.length > 500 ? '...' : '');
+            }
+
+            char.abilityCards.push({
+                id: 'ab_bg_summary_' + Date.now(),
+                name: `Background: ${bgData.name}`,
+                actionType: 'passive',
+                categoryId: bgCat.id,
+                description: summaryDesc,
+                formula: '',
+                formulaConfig: null,
+                customFields: [],
+                hasCounter: false,
+                usesCurrent: 0,
+                usesMax: 0,
+                resetType: 'none'
+            });
+        }
+
+        saveAndEmit(char);
+        renderSheetData(char);
+    }
+
     function renderSkillTogglesList() {
         const list = document.getElementById('modal-skill-toggles-list');
         if (!list) return;
@@ -1042,8 +2856,17 @@ function simulateRoll(formula, critRange = 20) {
 
             saveAndEmit(currentChar);
             renderSheetData(currentChar);
-            document.getElementById('pc-skill-settings-modal').classList.add('vtt-hidden');
-            document.getElementById('pc-skill-settings-overlay').classList.add('vtt-hidden');
+            document.getElementById('pc-skill-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-skill-settings-overlay')?.classList.add('vtt-hidden');
+        });
+
+        document.getElementById('modal-skill-settings-close')?.addEventListener('click', () => {
+            document.getElementById('pc-skill-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-skill-settings-overlay')?.classList.add('vtt-hidden');
+        });
+        document.getElementById('pc-skill-settings-overlay')?.addEventListener('click', () => {
+            document.getElementById('pc-skill-settings-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-skill-settings-overlay')?.classList.add('vtt-hidden');
         });
     }
 
@@ -1052,8 +2875,8 @@ function simulateRoll(formula, critRange = 20) {
 
         const container = document.createElement('div');
         container.innerHTML = `
-            <div id="pc-skill-settings-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
-            <div id="pc-skill-settings-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:600px; max-width:90vw; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="pc-skill-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
+            <div id="pc-skill-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:600px;">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:var(--color-gold-base);">Skill Settings & Toggles</h3>
                     <button id="modal-skill-settings-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -1125,8 +2948,8 @@ function simulateRoll(formula, critRange = 20) {
 
         const container = document.createElement('div');
         container.innerHTML = `
-            <div id="pc-tool-settings-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
-            <div id="pc-tool-settings-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:650px; max-width:90vw; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="pc-tool-settings-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
+            <div id="pc-tool-settings-modal" class="vtt-sheet-submodal vtt-hidden" style="width:650px;">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:var(--color-gold-base);">Tool Settings</h3>
                     <button id="modal-tool-settings-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -1536,9 +3359,13 @@ function simulateRoll(formula, critRange = 20) {
     }
 
     function setupPlayerTokenEditListeners() {
-        document.getElementById('modal-pc-token-edit-close').addEventListener('click', () => {
-            document.getElementById('modal-pc-token-edit').classList.add('vtt-hidden');
-            document.getElementById('modal-pc-token-edit-overlay').classList.add('vtt-hidden');
+        document.getElementById('modal-pc-token-edit-close')?.addEventListener('click', () => {
+            document.getElementById('modal-pc-token-edit')?.classList.add('vtt-hidden');
+            document.getElementById('modal-pc-token-edit-overlay')?.classList.add('vtt-hidden');
+        });
+        document.getElementById('modal-pc-token-edit-overlay')?.addEventListener('click', () => {
+            document.getElementById('modal-pc-token-edit')?.classList.add('vtt-hidden');
+            document.getElementById('modal-pc-token-edit-overlay')?.classList.add('vtt-hidden');
         });
 
         // Add URL
@@ -1748,8 +3575,8 @@ function simulateRoll(formula, critRange = 20) {
 
         const container = document.createElement('div');
         container.innerHTML = `
-            <div id="modal-pc-token-edit-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
-            <div id="modal-pc-token-edit" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:500px; max-width:90vw; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="modal-pc-token-edit-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
+            <div id="modal-pc-token-edit" class="vtt-sheet-submodal vtt-hidden" style="width:500px;">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:var(--color-gold-base);">Player Token Settings</h3>
                     <button id="modal-pc-token-edit-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -1908,9 +3735,9 @@ function simulateRoll(formula, critRange = 20) {
 
         const container = document.createElement('div');
         container.innerHTML = `
-            <div id="pc-item-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
+            <div id="pc-item-overlay" class="vtt-sheet-submodal-overlay vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000;"></div>
 
-            <div id="pc-item-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:600px; max-width:90vw; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="pc-item-modal" class="vtt-sheet-submodal vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:3010; width:600px; max-width:90vw; max-height:85vh; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="margin:0; color:var(--color-gold-base);"><i class="fa-solid fa-backpack"></i> Add Item</h3>
                     <div style="display:flex; gap:12px; align-items:center; flex:1; max-width:400px; margin:0 24px;">
@@ -1928,7 +3755,7 @@ function simulateRoll(formula, critRange = 20) {
             </div>
 
             <!-- Custom Item Modal -->
-            <div id="pc-custom-item-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1001; width:400px; max-width:90vw; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="pc-custom-item-modal" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:3025; width:400px; max-width:90vw; display:flex; flex-direction:column; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
                 <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
                     <h3 id="pc-custom-item-modal-title" style="margin:0; color:var(--color-gold-base);">Custom Item</h3>
                     <button class="btn btn-icon" id="pc-custom-item-modal-close" style="color:var(--color-text-muted);"><i class="fa-solid fa-times"></i></button>
@@ -1960,8 +3787,8 @@ function simulateRoll(formula, critRange = 20) {
             </div>
 
             <!-- Item Automation Wizard Modal -->
-            <div id="pc-item-automation-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); backdrop-filter:blur(3px); z-index:1004;"></div>
-            <div id="pc-item-automation-modal" class="vtt-hidden glassmorphism" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#18181b; border:1px solid var(--color-gold-base); border-radius:10px; z-index:1005; width:480px; max-width:92vw; display:flex; flex-direction:column; box-shadow:0 8px 32px rgba(0,0,0,0.7); overflow:hidden; font-family:var(--font-primary, sans-serif);">
+            <div id="pc-item-automation-overlay" class="vtt-sheet-submodal-overlay vtt-sheet-submodal-high vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.65); backdrop-filter:blur(3px); z-index:3020;"></div>
+            <div id="pc-item-automation-modal" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden glassmorphism" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#18181b; border:1px solid var(--color-gold-base); border-radius:10px; z-index:3025; width:480px; max-width:92vw; display:flex; flex-direction:column; box-shadow:0 8px 32px rgba(0,0,0,0.7); overflow:hidden; font-family:var(--font-primary, sans-serif);">
                 <div style="padding:14px 18px; border-bottom:1px solid rgba(255,255,255,0.08); background:rgba(0,0,0,0.35); display:flex; justify-content:space-between; align-items:center;">
                     <div style="display:flex; align-items:center; gap:10px;">
                         <i id="pc-automation-icon" class="fa-solid fa-wand-magic-sparkles text-gradient-gold" style="font-size:1.15rem;"></i>
@@ -1982,6 +3809,26 @@ function simulateRoll(formula, critRange = 20) {
         document.getElementById('pc-item-modal-close').addEventListener('click', () => {
             document.getElementById('pc-item-modal').classList.add('vtt-hidden');
             document.getElementById('pc-item-overlay').classList.add('vtt-hidden');
+        });
+
+        // Backdrop tap-to-dismiss for items overlay
+        document.getElementById('pc-item-overlay').addEventListener('click', () => {
+            const customModal = document.getElementById('pc-custom-item-modal');
+            const itemModal = document.getElementById('pc-item-modal');
+            if (customModal && !customModal.classList.contains('vtt-hidden')) {
+                customModal.classList.add('vtt-hidden');
+                if (itemModal && itemModal.classList.contains('vtt-hidden')) {
+                    document.getElementById('pc-item-overlay').classList.add('vtt-hidden');
+                }
+            } else if (itemModal && !itemModal.classList.contains('vtt-hidden')) {
+                itemModal.classList.add('vtt-hidden');
+                document.getElementById('pc-item-overlay').classList.add('vtt-hidden');
+            }
+        });
+
+        document.getElementById('pc-item-automation-overlay').addEventListener('click', () => {
+            document.getElementById('pc-item-automation-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-item-automation-overlay')?.classList.add('vtt-hidden');
         });
 
         document.getElementById('pc-custom-item-modal-close').addEventListener('click', () => {
@@ -2048,42 +3895,21 @@ function simulateRoll(formula, critRange = 20) {
             }
         });
 
+        let itemSearchDebounce = null;
         document.getElementById('pc-item-search').addEventListener('input', (e) => {
-            const q = e.target.value.toLowerCase();
-            document.querySelectorAll('.pc-item-row').forEach(row => {
-                const name = row.dataset.name.toLowerCase();
-                row.style.display = name.includes(q) ? 'flex' : 'none';
-            });
+            const q = e.target.value;
+            clearTimeout(itemSearchDebounce);
+            itemSearchDebounce = setTimeout(() => {
+                renderItemSearchList(q);
+            }, 100);
         });
 
         document.getElementById('pc-item-modal-add').addEventListener('click', async () => {
             if (!currentChar) return;
-            const checkboxes = Array.from(document.querySelectorAll('.pc-item-select:checked'));
-            if (!checkboxes.length) return;
+            const selectedList = window._vttSelectedItemMap ? Array.from(window._vttSelectedItemMap.values()) : [];
+            if (!selectedList.length) return;
 
-            const selectedList = [];
-            for (const cb of checkboxes) {
-                const idx = parseInt(cb.dataset.idx);
-                let catItem = (window._vttCurrentSortedItems && !isNaN(idx)) ? window._vttCurrentSortedItems[idx] : null;
-                if (!catItem && itemCache && itemCache.items) {
-                    catItem = itemCache.items.find(it => (cb.dataset.id && it.id === cb.dataset.id) || it.name.toLowerCase() === (cb.dataset.name || '').toLowerCase());
-                }
-                const name = cb.dataset.name;
-                const weight = cb.dataset.weight || '0';
-                let desc = cb.dataset.desc ? decodeURIComponent(cb.dataset.desc) : '';
-                const source = cb.dataset.source || '';
-                const itemId = cb.dataset.id || '';
-
-                selectedList.push({
-                    name,
-                    weight,
-                    desc,
-                    source,
-                    itemId,
-                    catItem: catItem || { name, weight, source, id: itemId }
-                });
-                cb.checked = false;
-            }
+            window._vttSelectedItemMap.clear();
             updateItemSelectedCount();
             document.getElementById('pc-item-modal').classList.add('vtt-hidden');
             document.getElementById('pc-item-overlay').classList.add('vtt-hidden');
@@ -2224,8 +4050,9 @@ function simulateRoll(formula, critRange = 20) {
     }
 
     function updateItemSelectedCount() {
-        const count = document.querySelectorAll('.pc-item-select:checked').length;
-        document.getElementById('pc-item-selected-count').textContent = count + ' item(s) selected';
+        const count = window._vttSelectedItemMap ? window._vttSelectedItemMap.size : document.querySelectorAll('.pc-item-select:checked').length;
+        const countEl = document.getElementById('pc-item-selected-count');
+        if (countEl) countEl.textContent = `${count} item${count !== 1 ? 's' : ''} selected`;
     }
 
     async function runItemAutomationWizard(queue) {
@@ -2633,6 +4460,8 @@ function simulateRoll(formula, critRange = 20) {
     window.openItemModal = function () {
         if (!currentChar) return;
         ensureItemModalsExist();
+        window._vttSelectedItemMap = new Map();
+        updateItemSelectedCount();
         document.getElementById('pc-item-modal').classList.remove('vtt-hidden');
         document.getElementById('pc-item-overlay').classList.remove('vtt-hidden');
         document.getElementById('pc-item-search').value = '';
@@ -2749,13 +4578,31 @@ function simulateRoll(formula, critRange = 20) {
     }
 };
 
-    function renderItemSearchList() {
+    function renderItemSearchList(query = '') {
         if (!itemCache) return;
         const listEl = document.getElementById('pc-item-list');
+        if (!listEl) return;
         listEl.innerHTML = '';
 
         const { items, fluffDict, ruleDict } = itemCache;
-        const sortedItems = [...items].filter(i => i.type !== "GV" && !String(i.type).startsWith("GV|")).sort((a, b) => a.name.localeCompare(b.name));
+        if (!window._vttCurrentSortedItems) {
+            window._vttCurrentSortedItems = [...items].filter(i => i.type !== "GV" && !String(i.type).startsWith("GV|")).sort((a, b) => a.name.localeCompare(b.name));
+        }
+        const sortedItems = window._vttCurrentSortedItems;
+
+        const q = (query || '').trim().toLowerCase();
+        const filteredItems = q
+            ? sortedItems.filter(it => {
+                const name = (it.name || '').toLowerCase();
+                if (name.includes(q)) return true;
+                const type = (it.type || it.weaponCategory || '').toLowerCase();
+                if (type.includes(q)) return true;
+                return false;
+            })
+            : sortedItems;
+
+        const maxDisplay = 60;
+        const displayItems = filteredItems.slice(0, maxDisplay);
 
         function parseEntry(e, itemObj) {
             if (typeof e === 'string') {
@@ -2787,62 +4634,63 @@ function simulateRoll(formula, critRange = 20) {
             return '';
         }
 
-        window._vttCurrentSortedItems = sortedItems;
+        function buildMechanicalText(item) {
+            let lines = [];
+            const typeMap = {
+                "M": "Melee Weapon", "R": "Ranged Weapon",
+                "LA": "Light Armor", "MA": "Medium Armor", "HA": "Heavy Armor", "S": "Shield",
+                "W": "Wondrous Item", "P": "Potion", "RG": "Ring", "RD": "Rod", "ST": "Staff", "WD": "Wand", "SC": "Scroll"
+            };
+            const propMap = {
+                "V": "Versatile", "F": "Finesse", "L": "Light", "H": "Heavy", "2H": "Two-Handed", "T": "Thrown", "A": "Ammunition", "R": "Reach", "S": "Special", "LD": "Loading"
+            };
+            const dmgTypeMap = {
+                "S": "slashing", "P": "piercing", "B": "bludgeoning", "C": "cold", "F": "fire", "L": "lightning",
+                "O": "force", "N": "necrotic", "R": "radiant", "T": "thunder", "Y": "psychic", "A": "acid", "I": "poison"
+            };
+
+            const typeName = typeMap[item.type] || item.type || item.weaponCategory || "Item";
+            const rarity = item.rarity ? `, ${item.rarity}` : "";
+            const attune = item.reqAttune ? ` (requires attunement)` : "";
+            lines.push(`*${typeName}${rarity}${attune}*`);
+
+            if (item.ac) {
+                let acStr = String(item.ac);
+                if (item.type === 'LA') acStr += ' + Dex modifier';
+                if (item.type === 'MA') acStr += ' + Dex modifier (max 2)';
+                lines.push(`**Armor Class:** ${acStr}`);
+            }
+            if (item.dmg1) {
+                const dt = dmgTypeMap[item.dmgType] || item.dmgType || '';
+                let dmg = `**Damage:** ${item.dmg1} ${dt}`;
+                if (item.dmg2) dmg += ` (or ${item.dmg2} ${dt} versatile)`;
+                lines.push(dmg);
+            }
+            if (item.property && item.property.length > 0) {
+                const props = item.property.map(p => {
+                    const propStr = typeof p === 'string' ? p : (p.uid || p.name || '');
+                    const baseProp = propStr.split('|')[0];
+                    const mapped = propMap[baseProp] || propMap[propStr] || baseProp;
+                    if (typeof p === 'object' && p.note) return `${mapped} (${p.note})`;
+                    return mapped;
+                }).filter(Boolean).join(', ');
+                if (props) lines.push(`**Properties:** ${props}`);
+            }
+            if (item.resist) lines.push(`**Resistance:** ${Array.isArray(item.resist) ? item.resist.join(', ') : item.resist}`);
+            if (item.immune) lines.push(`**Immunity:** ${Array.isArray(item.immune) ? item.immune.join(', ') : item.immune}`);
+            if (item.conditionImmune) lines.push(`**Condition Immunity:** ${Array.isArray(item.conditionImmune) ? item.conditionImmune.join(', ') : item.conditionImmune}`);
+
+            return lines.length ? lines.join('\n') + '\n---\n' : '';
+        }
+
         let html = '';
-        for (let i = 0; i < sortedItems.length; i++) {
-            const item = sortedItems[i];
+        for (let i = 0; i < displayItems.length; i++) {
+            const item = displayItems[i];
             const weight = item.weight || 0;
             const source = item.source || '';
             const val = item.value ? (item.value / 100) + ' gp' : '';
-
-            function buildMechanicalText(item) {
-                let lines = [];
-                const typeMap = {
-                    "M": "Melee Weapon", "R": "Ranged Weapon",
-                    "LA": "Light Armor", "MA": "Medium Armor", "HA": "Heavy Armor", "S": "Shield",
-                    "W": "Wondrous Item", "P": "Potion", "RG": "Ring", "RD": "Rod", "ST": "Staff", "WD": "Wand", "SC": "Scroll"
-                };
-                const propMap = {
-                    "V": "Versatile", "F": "Finesse", "L": "Light", "H": "Heavy", "2H": "Two-Handed", "T": "Thrown", "A": "Ammunition", "R": "Reach", "S": "Special", "LD": "Loading"
-                };
-                const dmgTypeMap = {
-                    "S": "slashing", "P": "piercing", "B": "bludgeoning", "C": "cold", "F": "fire", "L": "lightning",
-                    "O": "force", "N": "necrotic", "R": "radiant", "T": "thunder", "Y": "psychic", "A": "acid", "I": "poison"
-                };
-
-                const typeName = typeMap[item.type] || item.type || item.weaponCategory || "Item";
-                const rarity = item.rarity ? `, ${item.rarity}` : "";
-                const attune = item.reqAttune ? ` (requires attunement)` : "";
-                lines.push(`*${typeName}${rarity}${attune}*`);
-
-                if (item.ac) {
-                    let acStr = String(item.ac);
-                    if (item.type === 'LA') acStr += ' + Dex modifier';
-                    if (item.type === 'MA') acStr += ' + Dex modifier (max 2)';
-                    lines.push(`**Armor Class:** ${acStr}`);
-                }
-                if (item.dmg1) {
-                    const dt = dmgTypeMap[item.dmgType] || item.dmgType || '';
-                    let dmg = `**Damage:** ${item.dmg1} ${dt}`;
-                    if (item.dmg2) dmg += ` (or ${item.dmg2} ${dt} versatile)`;
-                    lines.push(dmg);
-                }
-                if (item.property && item.property.length > 0) {
-                    const props = item.property.map(p => {
-                        const propStr = typeof p === 'string' ? p : (p.uid || p.name || '');
-                        const baseProp = propStr.split('|')[0];
-                        const mapped = propMap[baseProp] || propMap[propStr] || baseProp;
-                        if (typeof p === 'object' && p.note) return `${mapped} (${p.note})`;
-                        return mapped;
-                    }).filter(Boolean).join(', ');
-                    if (props) lines.push(`**Properties:** ${props}`);
-                }
-                if (item.resist) lines.push(`**Resistance:** ${Array.isArray(item.resist) ? item.resist.join(', ') : item.resist}`);
-                if (item.immune) lines.push(`**Immunity:** ${Array.isArray(item.immune) ? item.immune.join(', ') : item.immune}`);
-                if (item.conditionImmune) lines.push(`**Condition Immunity:** ${Array.isArray(item.conditionImmune) ? item.conditionImmune.join(', ') : item.conditionImmune}`);
-
-                return lines.length ? lines.join('\n') + '\n---\n' : '';
-            }
+            const itemKey = (item.id || (item.name + '::' + source)).toLowerCase();
+            const isChecked = window._vttSelectedItemMap ? window._vttSelectedItemMap.has(itemKey) : false;
 
             let mechText = buildMechanicalText(item);
             let parts = [];
@@ -2851,7 +4699,7 @@ function simulateRoll(formula, critRange = 20) {
             if (item._isVariant && item.baseName) {
                 const baseKey = (item.baseName + source).toLowerCase();
                 let baseEntries = null;
-                const baseItem = items.find(i => i.name === item.baseName);
+                const baseItem = items.find(it => it.name === item.baseName);
                 if (baseItem && baseItem.entries && baseItem.entries.length) {
                     baseEntries = baseItem.entries;
                 } else if (fluffDict && fluffDict[baseKey]) {
@@ -2898,14 +4746,13 @@ function simulateRoll(formula, critRange = 20) {
             }
 
             let descText = item.descriptionMarkdown || (mechText + parts.filter(Boolean).join('\n\n'));
-
             const is2024 = (source || '').toUpperCase() === 'XPHB' || (source || '').toUpperCase() === 'XDMG';
             const badgeBg = is2024 ? '#059669' : ((source || '').toUpperCase() === 'PHB' ? '#2563eb' : '#475569');
 
             html += `
                 <label class="pc-item-row glassmorphism" data-name="${item.name.replace(/"/g, '&quot;')}" style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; cursor:pointer;">
                     <div style="display:flex; align-items:center; gap:12px;">
-                        <input type="checkbox" class="pc-item-select" data-idx="${i}" data-name="${item.name.replace(/"/g, '&quot;')}" data-weight="${weight}" data-desc="${encodeURIComponent(descText)}" data-source="${item.source || ''}" data-id="${item.id || ''}" style="cursor:pointer; width:16px; height:16px;">
+                        <input type="checkbox" class="pc-item-select" data-key="${itemKey}" data-idx="${sortedItems.indexOf(item)}" data-name="${item.name.replace(/"/g, '&quot;')}" data-weight="${weight}" data-desc="${encodeURIComponent(descText)}" data-source="${source}" data-id="${item.id || ''}" ${isChecked ? 'checked' : ''} style="cursor:pointer; width:16px; height:16px;">
                         <div style="display:flex; flex-direction:column;">
                             <div style="display:flex; align-items:center; gap:6px;">
                                 <span style="font-weight:bold; color:var(--color-gold-light);">${item.name}</span>
@@ -2920,10 +4767,38 @@ function simulateRoll(formula, critRange = 20) {
                 </label>
             `;
         }
+
+        if (filteredItems.length > maxDisplay) {
+            html += `<div style="text-align:center; padding:10px 12px; font-size:0.75rem; color:var(--color-text-muted); font-style:italic;">Showing top ${maxDisplay} of ${filteredItems.length} matching items. Type to refine search.</div>`;
+        } else if (filteredItems.length === 0) {
+            html = `<div style="text-align:center; padding:20px; color:var(--color-text-muted);">No items found matching "${query}".</div>`;
+        }
+
         listEl.innerHTML = html;
-        document.querySelectorAll('.pc-item-select').forEach(cb => {
-            cb.addEventListener('change', updateItemSelectedCount);
+
+        listEl.querySelectorAll('.pc-item-select').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const key = cb.dataset.key;
+                if (!window._vttSelectedItemMap) window._vttSelectedItemMap = new Map();
+                if (cb.checked) {
+                    const idx = parseInt(cb.dataset.idx);
+                    const item = (!isNaN(idx) && sortedItems[idx]) ? sortedItems[idx] : null;
+                    const desc = cb.dataset.desc ? decodeURIComponent(cb.dataset.desc) : '';
+                    window._vttSelectedItemMap.set(key, {
+                        name: cb.dataset.name,
+                        weight: cb.dataset.weight || '0',
+                        desc: desc,
+                        source: cb.dataset.source || '',
+                        itemId: cb.dataset.id || '',
+                        catItem: item || { name: cb.dataset.name, weight: cb.dataset.weight || '0', source: cb.dataset.source || '', id: cb.dataset.id || '' }
+                    });
+                } else {
+                    window._vttSelectedItemMap.delete(key);
+                }
+                updateItemSelectedCount();
+            });
         });
+
         updateItemSelectedCount();
     }
     // ─── Panel open / minimize / expand ──────────────────────────────────────
@@ -2939,6 +4814,9 @@ function simulateRoll(formula, critRange = 20) {
         isMinimized = false;
         minimizeBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
         minimizeBtn.title = 'Minimize Player Sheet';
+        if (window.VTT?.mobileAdapter?.syncPlayerSheetTopbar) {
+            window.VTT.mobileAdapter.syncPlayerSheetTopbar();
+        }
     }
 
     function minimizePanel() {
@@ -3008,7 +4886,10 @@ function simulateRoll(formula, critRange = 20) {
                 <div class="init-row char-row" data-id="${c.id}" draggable="true" style="cursor:pointer; display:flex; flex-direction:column; align-items:flex-start; padding:12px; gap:6px;">
                     <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
                         <span class="init-name" style="font-size:1.05rem;">${c.name}</span>
-                        <button class="btn btn-xxs btn-danger btn-char-delete" data-id="${c.id}" title="Delete Character"><i class="fa-solid fa-trash"></i></button>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <button class="btn-mobile-spawn-token btn-char-spawn" data-id="${c.id}" title="Spawn on Map"><i class="fa-solid fa-plus pointer-events-none"></i></button>
+                            <button class="btn btn-xxs btn-danger btn-char-delete" data-id="${c.id}" title="Delete Character"><i class="fa-solid fa-trash pointer-events-none"></i></button>
+                        </div>
                     </div>
                     <div style="font-size:0.75rem; color:var(--color-text-secondary);">${c.class || 'Unknown Class'} ${c.level ? `Lv${c.level}` : ''} | ${c.race || 'Unknown Species'}</div>
                     <div style="display:flex; gap:12px; font-size:0.75rem; margin-top:4px; font-family:var(--font-code);">
@@ -3047,7 +4928,10 @@ function simulateRoll(formula, critRange = 20) {
                 <div class="init-row char-row" data-id="${c.id}" data-is-companion="true" draggable="true" style="cursor:pointer; display:flex; flex-direction:column; align-items:flex-start; padding:12px; gap:6px; border-left:3px solid var(--color-gold-base);">
                     <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
                         <span class="init-name" style="font-size:1.05rem;"><i class="fa-solid fa-paw" style="margin-right:4px; font-size:0.8rem;"></i> ${c.name}</span>
-                        <button class="btn btn-xxs btn-danger btn-char-delete" data-id="${c.id}" title="Delete Companion"><i class="fa-solid fa-trash"></i></button>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <button class="btn-mobile-spawn-token btn-char-spawn" data-id="${c.id}" title="Spawn on Map"><i class="fa-solid fa-plus pointer-events-none"></i></button>
+                            <button class="btn btn-xxs btn-danger btn-char-delete" data-id="${c.id}" title="Delete Companion"><i class="fa-solid fa-trash pointer-events-none"></i></button>
+                        </div>
                     </div>
                     <div style="font-size:0.75rem; color:var(--color-text-secondary);">Owned by: ${c.assignedPlayers && c.assignedPlayers.length > 0 ? (c.assignedPlayers.includes('*') ? 'All Players' : c.assignedPlayers.join(', ')) : 'None'}</div>
                     <div style="display:flex; gap:12px; font-size:0.75rem; margin-top:4px; font-family:var(--font-code);">
@@ -3111,9 +4995,19 @@ function simulateRoll(formula, critRange = 20) {
             });
 
             row.addEventListener('click', (e) => {
-                if (e.target.closest('.btn-char-delete')) return;
+                if (e.target.closest('.btn-char-delete') || e.target.closest('.btn-char-spawn')) return;
                 const id = row.dataset.id;
                 openSheet(id);
+            });
+        });
+
+        charListEl.querySelectorAll('.btn-char-spawn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.dataset.id;
+                if (window.VTT?.spawnCharacterAtCenter) {
+                    window.VTT.spawnCharacterAtCenter(id);
+                }
             });
         });
 
@@ -3121,10 +5015,28 @@ function simulateRoll(formula, critRange = 20) {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const id = btn.dataset.id;
-                if (confirm("Delete this character forever?")) {
-                    vtt.socket.emit('character:delete', { id });
+                const char = vtt.campaignState?.characters?.[id];
+                const entityName = char?.name ? `"${char.name}"` : (char?.isCompanion ? 'this companion' : 'this character');
+                if (confirm(`Delete ${entityName} forever?`)) {
+                    // Optimistically delete from local state and update UI immediately
+                    if (vtt.campaignState?.characters && vtt.campaignState.characters[id]) {
+                        delete vtt.campaignState.characters[id];
+                        renderCharacterList();
+                    }
                     if (currentChar && currentChar.id === id) {
                         closeSheet();
+                    }
+                    if (vtt.creatureSheet && typeof vtt.creatureSheet.getLinkedCharacterId === 'function') {
+                        if (vtt.creatureSheet.getLinkedCharacterId() === id) {
+                            if (typeof vtt.creatureSheet.resetSheet === 'function') {
+                                vtt.creatureSheet.resetSheet();
+                            } else if (typeof vtt.creatureSheet.minimizePanel === 'function') {
+                                vtt.creatureSheet.minimizePanel();
+                            }
+                        }
+                    }
+                    if (vtt.socket) {
+                        vtt.socket.emit('character:delete', { id });
                     }
                 }
             });
@@ -3144,11 +5056,12 @@ function simulateRoll(formula, critRange = 20) {
                 
                 // create a temporary modal
                 const modalOverlay = document.createElement('div');
-                modalOverlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;';
+                modalOverlay.className = 'vtt-sheet-submodal-overlay';
+                modalOverlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000;';
                 
                 const modal = document.createElement('div');
-                modal.className = 'glassmorphism';
-                modal.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000; width:500px; max-height:80vh; display:flex; flex-direction:column; padding:16px; border-radius:8px; border:1px solid var(--color-border-subtle);';
+                modal.className = 'vtt-sheet-submodal glassmorphism';
+                modal.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:3010; width:min(500px, 92vw); max-height:80vh; display:flex; flex-direction:column; padding:16px; border-radius:8px; border:1px solid var(--color-border-subtle);';
                 
                 modal.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -3198,6 +5111,7 @@ function simulateRoll(formula, critRange = 20) {
                 };
                 
                 modal.querySelector('#comp-modal-close').addEventListener('click', closeModal);
+                modalOverlay.addEventListener('click', closeModal);
                 searchInput.addEventListener('input', (e) => renderList(e.target.value));
                 renderList('');
                 
@@ -3207,10 +5121,11 @@ function simulateRoll(formula, critRange = 20) {
                     const allPotentialPlayers = [...new Set([...knownPlayers, ...allowedUsers])];
                     
                     const ownerOverlay = document.createElement('div');
-                    ownerOverlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;';
+                    ownerOverlay.className = 'vtt-sheet-submodal-overlay vtt-sheet-submodal-high';
+                    ownerOverlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3020;';
                     const ownerModal = document.createElement('div');
-                    ownerModal.className = 'glassmorphism';
-                    ownerModal.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:1000; width:400px; padding:16px; border-radius:8px; border:1px solid var(--color-border-subtle);';
+                    ownerModal.className = 'vtt-sheet-submodal vtt-sheet-submodal-high glassmorphism';
+                    ownerModal.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:3025; width:min(400px, 92vw); padding:16px; border-radius:8px; border:1px solid var(--color-border-subtle);';
                     
                     let optionsHtml = '<option value="*">All Players</option>';
                     optionsHtml += allPotentialPlayers.map(p => `<option value="${p}">${p}</option>`).join('');
@@ -3240,6 +5155,7 @@ function simulateRoll(formula, critRange = 20) {
                     };
                     
                     ownerModal.querySelector('#comp-owner-cancel').addEventListener('click', closeOwnerModal);
+                    ownerOverlay.addEventListener('click', closeOwnerModal);
                     ownerModal.querySelector('#comp-owner-save').addEventListener('click', async () => {
                         const owner = ownerModal.querySelector('#comp-owner-sel').value;
                         const nickname = ownerModal.querySelector('#comp-nickname').value.trim() || monster.name;
@@ -3257,6 +5173,16 @@ function simulateRoll(formula, critRange = 20) {
                                 const r = await fetch(`/api/creature/${encodeURIComponent(monster.source)}/${encodeURIComponent(monster.id || monster.name)}`);
                                 if (r.ok) fullMonster = await r.json();
                             } catch (err) {}
+                            if (!fullMonster) {
+                                try {
+                                    const partRes = await fetch(`/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`);
+                                    if (partRes.ok) {
+                                        const partition = await partRes.json();
+                                        const clean = (monster.id || monster.name).toLowerCase();
+                                        fullMonster = partition.find(m => m.id?.toLowerCase() === clean || m.name?.toLowerCase() === clean);
+                                    }
+                                } catch (err) {}
+                            }
                         }
                         const finalMonsterData = fullMonster || monster;
 
@@ -3390,6 +5316,8 @@ function simulateRoll(formula, critRange = 20) {
         placeholderEl.classList.add('vtt-hidden');
         activeSheetEl.classList.remove('vtt-hidden');
 
+        ensureBuilderCache();
+
         renderSheetData(char);
         openPanel();
     }
@@ -3414,13 +5342,17 @@ function simulateRoll(formula, critRange = 20) {
         currentChar = char;
 
         if (window.VTTSpellManager) {
-            window.VTTSpellManager.init({
-                currentChar: currentChar,
-                saveAndEmit: saveAndEmit,
-                renderSheetData: renderSheetData,
-                spellCache: spellCache
-            });
-            window.VTTSpellManager.ensureSpellModalsExist();
+            if (typeof window.VTTSpellManager.init === 'function') {
+                window.VTTSpellManager.init({
+                    currentChar: currentChar,
+                    saveAndEmit: saveAndEmit,
+                    renderSheetData: renderSheetData,
+                    spellCache: spellCache
+                });
+            }
+            if (typeof window.VTTSpellManager.ensureSpellModalsExist === 'function') {
+                window.VTTSpellManager.ensureSpellModalsExist();
+            }
         }
         ensureAbilityModalsExist();
         ensureItemModalsExist();
@@ -3553,17 +5485,10 @@ function simulateRoll(formula, critRange = 20) {
             ? char.tokenImages[char.activeTokenIndex].url
             : 'favicon.svg';
 
-        const standardHitDice = {
-            'artificer': 'd8', 'barbarian': 'd12', 'bard': 'd8', 'cleric': 'd8', 'druid': 'd8',
-            'fighter': 'd10', 'monk': 'd8', 'paladin': 'd10', 'ranger': 'd10', 'rogue': 'd8',
-            'sorcerer': 'd6', 'warlock': 'd8', 'wizard': 'd6', 'blood hunter': 'd10'
-        };
-
         const hdMax = {};
         if (char.classes && char.classes.length > 0) {
             char.classes.forEach(c => {
-                const name = c.name.toLowerCase();
-                const hd = standardHitDice[name] || 'd8';
+                const hd = getClassHitDie(c.name);
                 hdMax[hd] = (hdMax[hd] || 0) + (parseInt(c.level) || 1);
             });
         } else {
@@ -4039,18 +5964,11 @@ function simulateRoll(formula, critRange = 20) {
             }
 
             // 4. Hit Dice recovery (half total HD rounded down, min 1 if spent > 0)
-            const standardHitDice = {
-                'barbarian': 'd12', 'bard': 'd8', 'cleric': 'd8', 'druid': 'd8',
-                'fighter': 'd10', 'monk': 'd8', 'paladin': 'd10', 'ranger': 'd10', 'rogue': 'd8',
-                'sorcerer': 'd6', 'warlock': 'd8', 'wizard': 'd6', 'blood hunter': 'd10'
-            };
-
             const hdMax = {};
             let totalHitDice = 0;
             if (char.classes && char.classes.length > 0) {
                 char.classes.forEach(c => {
-                    const name = c.name.toLowerCase();
-                    const hd = standardHitDice[name] || 'd8';
+                    const hd = getClassHitDie(c.name);
                     const count = (parseInt(c.level) || 1);
                     hdMax[hd] = (hdMax[hd] || 0) + count;
                     totalHitDice += count;
@@ -4218,11 +6136,11 @@ function simulateRoll(formula, critRange = 20) {
             </div>
             <div class="form-group" style="margin-bottom:12px;">
                 <label>Backstory</label>
-                <textarea id="pc-bio-backstory" style="height:120px; resize:vertical;">${char.bio.backstory}</textarea>
+                <textarea id="pc-bio-backstory" class="scroll-styled" style="height:120px; resize:vertical; background:rgba(0,0,0,0.35); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:10px 14px; border-radius:6px; font-family:var(--font-primary); font-size:0.9rem; line-height:1.5;">${char.bio.backstory}</textarea>
             </div>
             <div class="form-group">
                 <label>Other Notes</label>
-                <textarea id="pc-bio-notes" style="height:120px; resize:vertical;">${char.bio.notes}</textarea>
+                <textarea id="pc-bio-notes" class="scroll-styled" style="height:120px; resize:vertical; background:rgba(0,0,0,0.35); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:10px 14px; border-radius:6px; font-family:var(--font-primary); font-size:0.9rem; line-height:1.5;">${char.bio.notes}</textarea>
             </div>
             <button id="pc-save-build" class="btn btn-primary btn-block mb-4 mt-2">Save Build & Info</button>
         `;
@@ -4233,63 +6151,141 @@ function simulateRoll(formula, critRange = 20) {
                 selectEl.innerHTML = '<option value="">None</option>';
                 return;
             }
-            const key = className.toLowerCase();
-            const file = builderCache.classIndex[key];
-            if (!file) return;
-            
             const currentSubclass = selectEl.dataset.val;
+            const rawClassName = className.replace(/\s*\[.*?\]$/, '').trim().toLowerCase();
+
+            if (builderCache && Array.isArray(builderCache.classes)) {
+                const matchedClasses = builderCache.classes.filter(c => c.name.toLowerCase() === rawClassName);
+                if (matchedClasses.length > 0) {
+                    let opts = '<option value="">None</option>';
+                    const allSubclasses = [];
+                    const seen = new Set();
+                    matchedClasses.forEach(cls => {
+                        (cls.subclasses || []).forEach(sc => {
+                            const badge = getDisplaySourceBadge(sc.source);
+                            const tag = badge ? ` [${badge}]` : (sc.source ? ` [${sc.source}]` : '');
+                            const fullSubName = `${sc.name}${tag}`;
+                            const subKey = `${sc.name.toLowerCase()}|${(sc.source || '').toLowerCase()}`;
+                            if (!seen.has(subKey)) {
+                                seen.add(subKey);
+                                allSubclasses.push({
+                                    ...sc,
+                                    fullSubName,
+                                    badge,
+                                    tag
+                                });
+                            }
+                        });
+                    });
+                    allSubclasses.sort((a, b) => a.fullSubName.localeCompare(b.fullSubName));
+                    allSubclasses.forEach(sc => {
+                        const isSel = (sc.fullSubName === currentSubclass || sc.name === currentSubclass);
+                        opts += `<option value="${sc.fullSubName}" data-name="${sc.name}" data-source="${sc.source}" ${isSel ? 'selected' : ''}>${sc.fullSubName}</option>`;
+                    });
+                    selectEl.innerHTML = opts;
+                    return;
+                }
+            }
+
+            const file = builderCache?.classIndex ? builderCache.classIndex[rawClassName] : null;
+            if (!file) {
+                selectEl.innerHTML = '<option value="">None</option>';
+                return;
+            }
+
             fetch(`data/class/${file}`).then(r => r.json()).then(data => {
                 if (data && data.subclass) {
                     let opts = '<option value="">None</option>';
                     const seen = new Set();
+                    const list = [];
                     data.subclass.forEach(sc => {
-                        if (!seen.has(sc.name)) {
-                            seen.add(sc.name);
-                            opts += `<option value="${sc.name}" ${sc.name === currentSubclass ? 'selected' : ''}>${sc.name}</option>`;
+                        const badge = getDisplaySourceBadge(sc.source);
+                        const tag = badge ? ` [${badge}]` : (sc.source ? ` [${sc.source}]` : '');
+                        const fullSubName = `${sc.name}${tag}`;
+                        const subKey = `${sc.name.toLowerCase()}|${(sc.source || '').toLowerCase()}`;
+                        if (!seen.has(subKey)) {
+                            seen.add(subKey);
+                            list.push({ ...sc, fullSubName });
                         }
+                    });
+                    list.sort((a, b) => a.fullSubName.localeCompare(b.fullSubName));
+                    list.forEach(sc => {
+                        const isSel = (sc.fullSubName === currentSubclass || sc.name === currentSubclass);
+                        opts += `<option value="${sc.fullSubName}" ${isSel ? 'selected' : ''}>${sc.fullSubName}</option>`;
                     });
                     selectEl.innerHTML = opts;
                 }
             }).catch(() => {});
         }
-        
+
         function populateBuildDropdowns() {
             if (!builderCache) return;
-            
+
             const raceSel = document.getElementById('pc-race');
             if (raceSel) {
                 const currentRace = raceSel.dataset.val;
                 let opts = '<option value="">Select Species</option>';
+                const seenRaces = new Set();
                 builderCache.races.forEach(r => {
-                    const srcTag = r.source ? ` [${r.source}]` : '';
-                    opts += `<option value="${r.name}" ${r.name === currentRace ? 'selected' : ''}>${r.name}${srcTag}</option>`;
+                    const badge = getDisplaySourceBadge(r.source);
+                    const srcTag = badge ? ` [${badge}]` : (r.source ? ` [${r.source}]` : '');
+                    const fullVal = `${r.name}${srcTag}`;
+                    if (seenRaces.has(fullVal)) return;
+                    seenRaces.add(fullVal);
+                    const isSel = (fullVal === currentRace || r.name === currentRace || (r.id && r.id === currentRace));
+                    opts += `<option value="${fullVal}" data-id="${r.id || ''}" data-name="${r.name}" data-source="${r.source || ''}" ${isSel ? 'selected' : ''}>${fullVal}</option>`;
                 });
                 raceSel.innerHTML = opts;
             }
-            
+
             const bgSel = document.getElementById('pc-background');
             if (bgSel) {
                 const currentBg = bgSel.dataset.val;
                 let opts = '<option value="">Select Background</option>';
+                const seenBgs = new Set();
                 builderCache.bgs.forEach(b => {
-                    const srcTag = b.source ? ` [${b.source}]` : '';
-                    opts += `<option value="${b.name}" ${b.name === currentBg ? 'selected' : ''}>${b.name}${srcTag}</option>`;
+                    const badge = getDisplaySourceBadge(b.source);
+                    const srcTag = badge ? ` [${badge}]` : (b.source ? ` [${b.source}]` : '');
+                    const fullVal = `${b.name}${srcTag}`;
+                    if (seenBgs.has(fullVal)) return;
+                    seenBgs.add(fullVal);
+                    const isSel = (fullVal === currentBg || b.name === currentBg || (b.id && b.id === currentBg));
+                    opts += `<option value="${fullVal}" data-id="${b.id || ''}" data-name="${b.name}" data-source="${b.source || ''}" ${isSel ? 'selected' : ''}>${fullVal}</option>`;
                 });
                 bgSel.innerHTML = opts;
             }
-            
+
             const currentClassNames = char.classes.map(c => c.name);
             document.querySelectorAll('.pc-class-sel').forEach(sel => {
                 const currentCls = sel.dataset.val;
                 let opts = '<option value="">Select Class</option>';
-                Object.keys(builderCache.classIndex).forEach(cKey => {
-                    const name = cKey.charAt(0).toUpperCase() + cKey.slice(1);
-                    const disabled = currentClassNames.includes(name) && name !== currentCls ? 'disabled' : '';
-                    opts += `<option value="${name}" ${name === currentCls ? 'selected' : ''} ${disabled}>${name}</option>`;
-                });
+                if (builderCache.classes && Array.isArray(builderCache.classes)) {
+                    const classMap = new Map();
+                    builderCache.classes.forEach(c => {
+                        const badge = getDisplaySourceBadge(c.source);
+                        const tag = badge ? ` [${badge}]` : (c.source ? ` [${c.source}]` : '');
+                        const fullName = `${c.name}${tag}`;
+                        if (!classMap.has(fullName)) {
+                            classMap.set(fullName, { ...c, fullName });
+                        }
+                    });
+                    const sortedClasses = Array.from(classMap.values()).sort((a, b) => a.fullName.localeCompare(b.fullName));
+                    sortedClasses.forEach(c => {
+                        const fullName = c.fullName;
+                        const isSel = (fullName === currentCls || c.name === currentCls || (currentCls && currentCls.startsWith(c.name) && currentCls.includes(c.source)));
+                        const disabled = currentClassNames.includes(fullName) && fullName !== currentCls ? 'disabled' : '';
+                        opts += `<option value="${fullName}" data-name="${c.name}" data-source="${c.source}" data-id="${c.id}" ${isSel ? 'selected' : ''} ${disabled}>${fullName}</option>`;
+                    });
+                } else if (builderCache.classIndex) {
+                    Object.keys(builderCache.classIndex).forEach(cKey => {
+                        const name = cKey.charAt(0).toUpperCase() + cKey.slice(1);
+                        const disabled = currentClassNames.includes(name) && name !== currentCls ? 'disabled' : '';
+                        opts += `<option value="${name}" ${name === currentCls ? 'selected' : ''} ${disabled}>${name}</option>`;
+                    });
+                }
                 sel.innerHTML = opts;
             });
-            
+
             document.querySelectorAll('.pc-subclass-sel').forEach(sel => {
                 const idx = sel.dataset.idx;
                 const clsInput = document.querySelector(`.pc-class-sel[data-idx="${idx}"]`);
@@ -4299,23 +6295,10 @@ function simulateRoll(formula, critRange = 20) {
                 }
             });
         }
-        
-        if (!builderCache) {
-            Promise.all([
-                fetch('data/races-catalog.json').then(r => r.json()).catch(() => fetch('data/races.json').then(r => r.json()).catch(() => ({}))),
-                fetch('data/backgrounds-catalog.json').then(r => r.json()).catch(() => fetch('data/backgrounds.json').then(r => r.json()).catch(() => ({}))),
-                fetch('data/class/index.json').then(res => res.json()).catch(() => ({}))
-            ]).then(([raceData, bgData, classIndex]) => {
-                builderCache = {
-                    races: Array.isArray(raceData) ? raceData : (raceData.race || []),
-                    bgs: Array.isArray(bgData) ? bgData : (bgData.background || []),
-                    classIndex
-                };
-                populateBuildDropdowns();
-            });
-        } else {
+
+        ensureBuilderCache().then(() => {
             populateBuildDropdowns();
-        }
+        });
 
         char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
         char.containers = char.containers || [];
@@ -4750,17 +6733,82 @@ function simulateRoll(formula, critRange = 20) {
             </div>
         `;
 
-        const renderAbilityRowHtml = (card, i) => `
+        const formatAbilityCardDescription = (card) => {
+            if (!card) return '';
+            let raw = (card.description || '').trim();
+            if (!raw && (!card.customFields || card.customFields.length === 0)) {
+                return '<i style="opacity:0.6;">No description provided.</i>';
+            }
+
+            // Escape HTML entities to prevent malformed tags
+            let safe = raw
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+
+            // Standard clean markdown formatting:
+            // Bold **text**
+            safe = safe.replace(/\*\*(.+?)\*\*/g, '<strong style="color:var(--color-gold-light); font-weight:600;">$1</strong>');
+            // Italic *text*
+            safe = safe.replace(/(^|[^*])\*(?!\*)([^*]+)\*/g, '$1<em>$2</em>');
+
+            // Handle newlines: normalize \r\n to \n
+            safe = safe.replace(/\r\n/g, '\n');
+
+            // Handle bullet items (e.g. "- Item" or "* Item" at start of line)
+            safe = safe.replace(/^[ \t]*[-*][ \t]+(.+)$/gm, '&bull; $1');
+
+            // Convert consecutive newlines to double break, single newline to single break
+            safe = safe.replace(/\n\n+/g, '<br><br>').replace(/\n/g, '<br>');
+
+            // Append custom fields matching chat-card format
+            if (Array.isArray(card.customFields) && card.customFields.length > 0) {
+                const fieldsHtml = card.customFields.map(f => {
+                    const l = (f.label || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    const e = (f.entry || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return `<strong style="color:var(--color-gold-light); font-weight:600;">${l}:</strong> ${e}`;
+                }).join('<br>');
+
+                if (safe) {
+                    safe += `<br><br>${fieldsHtml}`;
+                } else {
+                    safe = fieldsHtml;
+                }
+            }
+
+            return safe;
+        };
+
+        const renderAbilityRowHtml = (card, i) => {
+            const actionPill = (card.actionType && card.actionType !== 'passive') ? (
+                card.actionType === 'bonus' ? `<span class="badge" style="background:#d97706; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Bonus</span>` :
+                card.actionType === 'reaction' ? `<span class="badge" style="background:#2563eb; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Reaction</span>` :
+                card.actionType === 'action' ? `<span class="badge" style="background:#16a34a; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">Action</span>` :
+                `<span class="badge" style="background:#9333ea; color:#fff; font-size:0.65rem; padding:1px 5px; border-radius:3px; font-weight:600; text-transform:uppercase;">${card.actionType}</span>`
+            ) : '';
+
+            const evalFormula = evaluateAbilityFormula(card.formula, card.formulaConfig, char);
+            const rollChipHtml = evalFormula ? `
+                <button class="btn btn-xxs btn-secondary pc-ability-roll-chip" data-idx="${i}" data-formula="${evalFormula}" data-name="${card.name}" title="Click to Roll: ${evalFormula}" style="font-family:monospace; border-color:var(--color-gold-base); font-size:0.75rem; padding:2px 6px; display:inline-flex; align-items:center; gap:4px;">
+                    <i class="fa-solid fa-dice-d20 text-gradient-gold"></i> ${evalFormula}
+                </button>
+            ` : '';
+
+            return `
             <div class="ability-row glassmorphism" data-idx="${i}" data-category-id="${card.categoryId || ''}" draggable="true" style="padding:8px; display:flex; flex-direction:column; gap:4px; transition: border-color 0.15s, box-shadow 0.15s, opacity 0.15s;">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div style="display:flex; align-items:center; gap:6px;">
+                    <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                         <div class="pc-ability-drag-handle" data-idx="${i}" title="Click and drag to move/reorder ability card" style="cursor:grab; opacity:0.6; padding-right:4px; display:flex; align-items:center; user-select:none; transition:opacity 0.15s, color 0.15s;" onmouseover="this.style.opacity='1'; this.style.color='var(--color-gold-base)';" onmouseout="this.style.opacity='0.6'; this.style.color='inherit';">
                             <i class="fa-solid fa-grip-vertical" style="font-size:0.9rem;"></i>
                         </div>
                         <i class="fa-solid fa-chevron-right pc-ability-expand" data-idx="${i}" style="transition:transform 0.2s; cursor:pointer; font-size:0.7rem; color:var(--color-text-muted);"></i>
-                        <div class="pc-ability-ping" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary);"><i class="fa-solid fa-bolt text-gradient-gold"></i> ${card.name}</div>
+                        <div class="pc-ability-ping" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); display:flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-bolt text-gradient-gold"></i> ${card.name}
+                            ${actionPill}
+                        </div>
                     </div>
                     <div style="display:flex; gap:6px; align-items:center;">
+                        ${rollChipHtml}
                         ${card.hasCounter ? `
                         <div style="display:flex; align-items:center; gap:4px;">
                             <button class="btn btn-xxs btn-secondary pc-ability-uses-minus" data-idx="${i}">-</button>
@@ -4773,9 +6821,9 @@ function simulateRoll(formula, critRange = 20) {
                         <button class="btn btn-xxs btn-danger pc-ability-del" data-idx="${i}"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
-                <div class="pc-ability-details" id="pc-ability-details-${i}" style="display:none; font-size:0.8rem; margin-top:4px; border-top:1px solid rgba(255,255,255,0.1); padding-top:4px; color:var(--color-text-muted);">
-                    <div>${card.description ? card.description.replace(/\\n/g, '<br>') : ''}</div>
-                    <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:6px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.05);">
+                <div class="pc-ability-details" id="pc-ability-details-${i}" style="display:none; font-size:0.85rem; margin-top:6px; border-top:1px solid rgba(255,255,255,0.08); padding:8px 10px; background:rgba(0,0,0,0.2); border-radius:4px; line-height:1.5; color:var(--color-text-secondary); word-break:break-word;">
+                    <div class="pc-ability-desc-content" style="white-space:normal;">${formatAbilityCardDescription(card)}</div>
+                    <div style="display:flex; justify-content:flex-end; align-items:center; margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.06);">
                         <div style="display:flex; align-items:center; gap:6px;">
                             <span style="font-size:0.72rem; color:var(--color-text-muted);"><i class="fa-solid fa-folder" style="color:var(--color-gold-base);"></i> Category:</span>
                             <select class="pc-ability-cat-select" data-idx="${i}" title="Move to Category" style="background:rgba(0,0,0,0.5); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); font-size:0.75rem; border-radius:4px; padding:2px 6px; max-width:140px;">
@@ -4788,7 +6836,8 @@ function simulateRoll(formula, critRange = 20) {
                     </div>
                 </div>
             </div>
-        `;
+            `;
+        };
 
         let infoHtml = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -4859,129 +6908,16 @@ function simulateRoll(formula, critRange = 20) {
                     })()}
                 </div>
 
-                <div id="pc-macro-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); padding:16px; border-radius:8px; z-index:1000; width:400px; max-height:80vh; overflow-y:auto; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
-                    <h3 style="margin-top:0; color:var(--color-gold-base);">Edit Macro</h3>
-                    <input type="hidden" id="modal-macro-idx" value="-1">
-                    <div class="form-group" style="margin-bottom:8px;">
-                        <label>Name</label>
-                        <input type="text" id="modal-macro-name" style="width:100%;">
-                    </div>
-                    <div class="form-group" style="margin-bottom:8px;">
-                        <label>Category</label>
-                        <select id="modal-macro-category" style="width:100%; padding:4px; font-size:0.8rem;">
-                            <option value="">Uncategorized</option>
-                            ${(char.macroCategories || []).map(c => `<option value="${c.id}">📁 ${c.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div class="form-group" style="margin-bottom:8px;">
-                        <label>Description <span style="font-size:0.7rem; color:var(--color-text-muted); font-weight:400;">(Optional — shown at top of ping card)</span></label>
-                        <textarea id="modal-macro-desc" placeholder="Flavor text, weapon range, special notes..." style="width:100%; min-height:56px; resize:vertical; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:6px 8px; font-family:var(--font-primary); font-size:0.8rem; border-radius:4px; line-height:1.4;"></textarea>
-                    </div>
-                    <div style="display:flex; gap:8px; margin-bottom:8px;">
-                        <div class="form-group" style="flex:1;">
-                            <label>Range</label>
-                            <input type="text" id="modal-macro-range" placeholder="e.g. 60 ft, 5 ft, Self" style="width:100%; padding:4px; font-size:0.8rem;">
-                        </div>
-                        <div class="form-group" style="flex:1;">
-                            <label>Target</label>
-                            <input type="text" id="modal-macro-target" placeholder="e.g. 1 creature" style="width:100%; padding:4px; font-size:0.8rem;">
-                        </div>
-                    </div>
-                    <div style="border-top:1px solid var(--color-border-subtle); padding-top:10px; margin-bottom:12px;">
-                        <h4 style="margin:0 0 8px 0; color:var(--color-gold-base); font-size:0.85rem; font-family:var(--font-heading);">Attack Configuration</h4>
-                        <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
-                            <div class="form-group" style="flex:1.5;">
-                                <label style="font-size:0.7rem;">Attack Stat</label>
-                                <select id="modal-macro-atk-stat" style="width:100%; padding:4px; font-size:0.8rem;">
-                                    <option value="none">None (No Attack)</option>
-                                    <option value="str">STR</option>
-                                    <option value="dex">DEX</option>
-                                    <option value="con">CON</option>
-                                    <option value="int">INT</option>
-                                    <option value="wis">WIS</option>
-                                    <option value="cha">CHA</option>
-                                    <option value="custom">Custom</option>
-                                </select>
-                            </div>
-                            <div class="form-group" style="flex:1; display:flex; flex-direction:column; align-items:center;">
-                                <label style="font-size:0.7rem; margin-bottom:4px;">Add Prof</label>
-                                <input type="checkbox" id="modal-macro-atk-prof" style="cursor:pointer; width:16px; height:16px;">
-                            </div>
-                            <div class="form-group" style="flex:1;">
-                                <label style="font-size:0.7rem;">Extra Mod</label>
-                                <input type="number" id="modal-macro-atk-extra" value="0" style="width:100%; text-align:center; padding:4px; font-size:0.8rem;">
-                            </div>
-                            <div class="form-group" style="flex:1;">
-                                <label style="font-size:0.7rem;">Crit Range</label>
-                                <input type="number" id="modal-macro-crit-range" value="20" min="2" max="20" style="width:100%; text-align:center; padding:4px; font-size:0.8rem;">
-                            </div>
-                        </div>
-                        <div class="form-group" id="modal-macro-atk-custom-container" style="margin-bottom:8px;">
-                            <label style="font-size:0.7rem;">Custom Attack Formula / Bonus</label>
-                            <input type="text" id="modal-macro-atk" placeholder="e.g. +5 or 1d20+5" style="width:100%; padding:4px; font-size:0.8rem;">
-                        </div>
-                    </div>
 
-                    <div style="border-top:1px solid var(--color-border-subtle); padding-top:10px; margin-bottom:12px;">
-                        <h4 style="margin:0 0 8px 0; color:var(--color-gold-base); font-size:0.85rem; font-family:var(--font-heading);">Save DC Configuration</h4>
-                        <div style="display:flex; gap:8px; margin-bottom:8px;">
-                            <div class="form-group" style="flex:1.5;">
-                                <label style="font-size:0.7rem;">Target Save Stat</label>
-                                <select id="modal-macro-save-ab" style="width:100%; padding:4px; font-size:0.8rem;">
-                                    <option value="">None (No Save)</option>
-                                    <option value="STR">STR</option>
-                                    <option value="DEX">DEX</option>
-                                    <option value="CON">CON</option>
-                                    <option value="INT">INT</option>
-                                    <option value="WIS">WIS</option>
-                                    <option value="CHA">CHA</option>
-                                </select>
-                            </div>
-                            <div class="form-group" style="flex:1.5;">
-                                <label style="font-size:0.7rem;">DC Ability Stat</label>
-                                <select id="modal-macro-save-dc-stat" style="width:100%; padding:4px; font-size:0.8rem;">
-                                    <option value="none">Default (Sheet Stat)</option>
-                                    <option value="str">STR</option>
-                                    <option value="dex">DEX</option>
-                                    <option value="con">CON</option>
-                                    <option value="int">INT</option>
-                                    <option value="wis">WIS</option>
-                                    <option value="cha">CHA</option>
-                                    <option value="custom">Custom DC</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
-                            <div class="form-group" style="flex:1;" id="modal-macro-save-dc-extra-container">
-                                <label style="font-size:0.7rem;">Extra DC Mod</label>
-                                <input type="number" id="modal-macro-save-dc-extra" value="0" style="width:100%; text-align:center; padding:4px; font-size:0.8rem;">
-                            </div>
-                            <div class="form-group" style="flex:1;" id="modal-macro-save-dc-custom-container">
-                                <label style="font-size:0.7rem;">Custom DC Value</label>
-                                <input type="number" id="modal-macro-save-dc" placeholder="15" style="width:100%; text-align:center; padding:4px; font-size:0.8rem;">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom:12px;">
-                        <label style="display:flex; justify-content:space-between; align-items:center;">
-                            Damage Rolls 
-                            <button class="btn btn-xxs btn-secondary" id="modal-macro-add-dmg"><i class="fa-solid fa-plus"></i> Add Damage</button>
-                        </label>
-                        <div id="modal-macro-dmg-list" style="display:flex; flex-direction:column; gap:4px; margin-top:8px;"></div>
-                    </div>
-                    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
-                        <button class="btn btn-secondary btn-sm" id="modal-macro-cancel">Cancel</button>
-                        <button class="btn btn-primary btn-sm" id="modal-macro-save">Save Macro</button>
-                    </div>
-                </div>
-                <div id="pc-macro-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:999;"></div>
-
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                 <h4 style="margin:0; color:var(--color-gold-base); font-family:var(--font-heading);"><i class="fa-solid fa-address-card"></i> Ability Cards</h4>
                 <div style="display:flex; align-items:center; gap:8px;">
                     <button id="btn-create-ability-cat" class="btn btn-secondary btn-xs"><i class="fa-solid fa-folder-plus"></i> Category</button>
                     <button id="btn-add-ability" class="btn btn-secondary btn-xs"><i class="fa-solid fa-plus"></i> Add Card</button>
                 </div>
+            </div>
+            <div style="margin-bottom:8px; display:flex; gap:8px;">
+                <input type="text" id="pc-ability-search" placeholder="Search ability cards by name or details..." style="flex:1; padding:4px 8px; font-size:0.8rem; background:rgba(0,0,0,0.3); color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
             </div>
             <div id="pc-ability-list" style="display:flex; flex-direction:column; gap:8px;">
                 ${(function() {
@@ -5618,7 +7554,159 @@ function simulateRoll(formula, critRange = 20) {
             }));
         }
 
+        let _initialMacroSnapshot = '';
+        function getMacroModalSnapshot() {
+            const m = document.getElementById('pc-macro-modal');
+            if (!m) return '';
+            const inputs = Array.from(m.querySelectorAll('input:not([type="button"]):not([type="submit"]):not([type="reset"]), select, textarea')).map(el => {
+                if (el.type === 'checkbox') return el.checked;
+                return el.value;
+            });
+            return JSON.stringify(inputs);
+        }
+
+        function ensureMacroModalExists() {
+            if (document.getElementById('pc-macro-modal')) return;
+
+            const container = document.createElement('div');
+            container.id = 'pc-macro-modal-container';
+            container.innerHTML = `
+                <div id="pc-macro-overlay" class="vtt-sheet-submodal-overlay vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000;"></div>
+                <div id="pc-macro-modal" class="vtt-sheet-submodal vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); padding:16px; border-radius:8px; z-index:3010; width:400px; max-width:92vw; max-height:85vh; overflow-y:auto; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border-subtle); padding-bottom:10px; margin-bottom:12px;">
+                        <h3 style="margin:0; color:var(--color-gold-base); font-size:1.05rem;" id="modal-macro-title"><i class="fa-solid fa-dice-d20"></i> Edit Macro</h3>
+                        <button id="modal-macro-close-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <input type="hidden" id="modal-macro-idx" value="-1">
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <label>Name</label>
+                        <input type="text" id="modal-macro-name" style="width:100%;">
+                    </div>
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <label>Category</label>
+                        <select id="modal-macro-category" style="width:100%; padding:4px; font-size:0.8rem;">
+                            <option value="">Uncategorized</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:8px;">
+                        <label>Description <span style="font-size:0.7rem; color:var(--color-text-muted); font-weight:400;">(Optional — shown at top of ping card)</span></label>
+                        <textarea id="modal-macro-desc" placeholder="Flavor text, weapon range, special notes..." style="width:100%; min-height:56px; resize:vertical; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:6px 8px; font-family:var(--font-primary); font-size:0.8rem; border-radius:4px; line-height:1.4;"></textarea>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-bottom:8px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Range</label>
+                            <input type="text" id="modal-macro-range" placeholder="e.g. 60 ft, 5 ft, Self" style="width:100%; padding:4px; font-size:0.8rem;">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>Target</label>
+                            <input type="text" id="modal-macro-target" placeholder="e.g. 1 creature" style="width:100%; padding:4px; font-size:0.8rem;">
+                        </div>
+                    </div>
+                    <div style="border-top:1px solid var(--color-border-subtle); padding-top:10px; margin-bottom:12px;">
+                        <h4 style="margin:0 0 8px 0; color:var(--color-gold-base); font-size:0.85rem; font-family:var(--font-heading);">Attack Configuration</h4>
+                        <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                            <div class="form-group" style="flex:1.5;">
+                                <label style="font-size:0.7rem;">Attack Stat</label>
+                                <select id="modal-macro-atk-stat" style="width:100%; padding:4px; font-size:0.8rem;">
+                                    <option value="none">None (No Attack)</option>
+                                    <option value="str">STR</option>
+                                    <option value="dex">DEX</option>
+                                    <option value="con">CON</option>
+                                    <option value="int">INT</option>
+                                    <option value="wis">WIS</option>
+                                    <option value="cha">CHA</option>
+                                    <option value="custom">Custom</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:1; display:flex; flex-direction:column; align-items:center;">
+                                <label style="font-size:0.7rem; margin-bottom:4px;">Add Prof</label>
+                                <input type="checkbox" id="modal-macro-atk-prof" style="cursor:pointer; width:16px; height:16px;">
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label style="font-size:0.7rem;">Extra Mod</label>
+                                <input type="number" id="modal-macro-atk-extra" value="0" style="width:100%; text-align:center; padding:4px; font-size:0.8rem;">
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label style="font-size:0.7rem;">Crit Range</label>
+                                <input type="number" id="modal-macro-crit-range" value="20" min="2" max="20" style="width:100%; text-align:center; padding:4px; font-size:0.8rem;">
+                            </div>
+                        </div>
+                        <div class="form-group" id="modal-macro-atk-custom-container" style="margin-bottom:8px;">
+                            <label style="font-size:0.7rem;">Custom Attack Formula / Bonus</label>
+                            <input type="text" id="modal-macro-atk" placeholder="e.g. +5 or 1d20+5" style="width:100%; padding:4px; font-size:0.8rem;">
+                        </div>
+                    </div>
+
+                    <div style="border-top:1px solid var(--color-border-subtle); padding-top:10px; margin-bottom:12px;">
+                        <h4 style="margin:0 0 8px 0; color:var(--color-gold-base); font-size:0.85rem; font-family:var(--font-heading);">Save DC Configuration</h4>
+                        <div style="display:flex; gap:8px; margin-bottom:8px;">
+                            <div class="form-group" style="flex:1.5;">
+                                <label style="font-size:0.7rem;">Target Save Stat</label>
+                                <select id="modal-macro-save-ab" style="width:100%; padding:4px; font-size:0.8rem;">
+                                    <option value="">None (No Save)</option>
+                                    <option value="STR">STR</option>
+                                    <option value="DEX">DEX</option>
+                                    <option value="CON">CON</option>
+                                    <option value="INT">INT</option>
+                                    <option value="WIS">WIS</option>
+                                    <option value="CHA">CHA</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:1.5;">
+                                <label style="font-size:0.7rem;">DC Ability Stat</label>
+                                <select id="modal-macro-save-dc-stat" style="width:100%; padding:4px; font-size:0.8rem;">
+                                    <option value="none">Default (Sheet Stat)</option>
+                                    <option value="str">STR</option>
+                                    <option value="dex">DEX</option>
+                                    <option value="con">CON</option>
+                                    <option value="int">INT</option>
+                                    <option value="wis">WIS</option>
+                                    <option value="cha">CHA</option>
+                                    <option value="custom">Custom DC</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
+                            <div class="form-group" style="flex:1;" id="modal-macro-save-dc-extra-container">
+                                <label style="font-size:0.7rem;">Extra DC Mod</label>
+                                <input type="number" id="modal-macro-save-dc-extra" value="0" style="width:100%; text-align:center; padding:4px; font-size:0.8rem;">
+                            </div>
+                            <div class="form-group" style="flex:1;" id="modal-macro-save-dc-custom-container">
+                                <label style="font-size:0.7rem;">Custom DC Value</label>
+                                <input type="number" id="modal-macro-save-dc" placeholder="15" style="width:100%; text-align:center; padding:4px; font-size:0.8rem;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px;">
+                        <label style="display:flex; justify-content:space-between; align-items:center;">
+                            Damage Rolls 
+                            <button class="btn btn-xxs btn-secondary" id="modal-macro-add-dmg"><i class="fa-solid fa-plus"></i> Add Damage</button>
+                        </label>
+                        <div id="modal-macro-dmg-list" style="display:flex; flex-direction:column; gap:4px; margin-top:8px;"></div>
+                    </div>
+                    <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:16px;">
+                        <button class="btn btn-secondary btn-sm" id="modal-macro-cancel">Cancel</button>
+                        <button class="btn btn-primary btn-sm" id="modal-macro-save">Save Macro</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(container);
+
+            document.getElementById('modal-macro-close-btn')?.addEventListener('click', () => closeMacroModal(false));
+            document.getElementById('modal-macro-cancel')?.addEventListener('click', () => closeMacroModal(false));
+            document.getElementById('pc-macro-overlay')?.addEventListener('click', () => closeMacroModal(false));
+
+            document.getElementById('modal-macro-atk-stat')?.addEventListener('change', updateModalVisibility);
+            document.getElementById('modal-macro-save-dc-stat')?.addEventListener('change', updateModalVisibility);
+
+            document.getElementById('modal-macro-add-dmg')?.addEventListener('click', () => {
+                modalDamageRows.push({ id: 'dmg_' + Date.now(), formula: '1d8', stat: '', type: 'Slashing' });
+                renderModalDamage();
+            });
+        }
+
         function openMacroModal(idx = -1) {
+            ensureMacroModalExists();
             document.getElementById('pc-macro-modal').classList.remove('vtt-hidden');
             document.getElementById('pc-macro-overlay').classList.remove('vtt-hidden');
             document.getElementById('modal-macro-idx').value = idx;
@@ -5687,84 +7775,85 @@ function simulateRoll(formula, critRange = 20) {
                 document.getElementById('modal-macro-save-ab').value = '';
                 document.getElementById('modal-macro-save-dc-stat').value = 'none';
                 document.getElementById('modal-macro-save-dc-extra').value = 0;
-                document.getElementById('modal-macro-save-dc-extra').value = 0;
                 document.getElementById('modal-macro-save-dc').value = '';
 
                 modalDamageRows = [];
             }
             updateModalVisibility();
             renderModalDamage();
+            _initialMacroSnapshot = getMacroModalSnapshot();
         }
 
-        function closeMacroModal() {
-            document.getElementById('pc-macro-modal').classList.add('vtt-hidden');
-            document.getElementById('pc-macro-overlay').classList.add('vtt-hidden');
+        function closeMacroModal(force = false) {
+            if (!force && _initialMacroSnapshot && getMacroModalSnapshot() !== _initialMacroSnapshot) {
+                if (!confirm('Discard unsaved changes?')) {
+                    return;
+                }
+            }
+            document.getElementById('pc-macro-modal')?.classList.add('vtt-hidden');
+            document.getElementById('pc-macro-overlay')?.classList.add('vtt-hidden');
+            _initialMacroSnapshot = '';
         }
 
         document.getElementById('btn-add-macro')?.addEventListener('click', () => openMacroModal(-1));
-        document.getElementById('modal-macro-cancel')?.addEventListener('click', closeMacroModal);
-        document.getElementById('pc-macro-overlay')?.addEventListener('click', closeMacroModal);
 
-        // Listeners for dropdown changes to toggle input visibility
-        document.getElementById('modal-macro-atk-stat')?.addEventListener('change', updateModalVisibility);
-        document.getElementById('modal-macro-save-dc-stat')?.addEventListener('change', updateModalVisibility);
+        // Re-bind save listener so it always uses latest active character
+        const saveMacroBtn = document.getElementById('modal-macro-save');
+        if (saveMacroBtn) {
+            saveMacroBtn.onclick = () => {
+                const activeChar = currentChar || char;
+                if (!activeChar) return;
+                const idx = parseInt(document.getElementById('modal-macro-idx').value);
+                const atkStat = document.getElementById('modal-macro-atk-stat').value;
+                const dcStat = document.getElementById('modal-macro-save-dc-stat').value;
 
-        document.getElementById('modal-macro-add-dmg')?.addEventListener('click', () => {
-            modalDamageRows.push({ id: 'dmg_' + Date.now(), formula: '1d8', stat: '', type: 'Slashing' });
-            renderModalDamage();
-        });
-
-        document.getElementById('modal-macro-save')?.addEventListener('click', () => {
-            const idx = parseInt(document.getElementById('modal-macro-idx').value);
-            const atkStat = document.getElementById('modal-macro-atk-stat').value;
-            const dcStat = document.getElementById('modal-macro-save-dc-stat').value;
-
-            // Synchronously harvest live DOM values for damage rows
-            const updatedDamageRows = [];
-            document.querySelectorAll('#modal-macro-dmg-list > div').forEach((rowEl, i) => {
-                const formulaInp = rowEl.querySelector('.modal-dmg-formula');
-                const statSel = rowEl.querySelector('.modal-dmg-stat');
-                const typeSel = rowEl.querySelector('.modal-dmg-type');
-                const prev = modalDamageRows[i] || {};
-                updatedDamageRows.push({
-                    id: prev.id || ('dmg_' + Date.now() + '_' + i),
-                    formula: formulaInp ? formulaInp.value.trim() : (prev.formula || prev.dice || ''),
-                    stat: statSel ? statSel.value : (prev.stat || ''),
-                    extra: prev.extra !== undefined ? prev.extra : 0,
-                    type: typeSel ? typeSel.value : (prev.type || ''),
-                    label: prev.label || ''
+                // Synchronously harvest live DOM values for damage rows
+                const updatedDamageRows = [];
+                document.querySelectorAll('#modal-macro-dmg-list > div').forEach((rowEl, i) => {
+                    const formulaInp = rowEl.querySelector('.modal-dmg-formula');
+                    const statSel = rowEl.querySelector('.modal-dmg-stat');
+                    const typeSel = rowEl.querySelector('.modal-dmg-type');
+                    const prev = modalDamageRows[i] || {};
+                    updatedDamageRows.push({
+                        id: prev.id || ('dmg_' + Date.now() + '_' + i),
+                        formula: formulaInp ? formulaInp.value.trim() : (prev.formula || prev.dice || ''),
+                        stat: statSel ? statSel.value : (prev.stat || ''),
+                        extra: prev.extra !== undefined ? prev.extra : 0,
+                        type: typeSel ? typeSel.value : (prev.type || ''),
+                        label: prev.label || ''
+                    });
                 });
-            });
 
-            const m = {
-                id: idx >= 0 ? char.macros[idx].id : 'mac_' + Date.now(),
-                name: document.getElementById('modal-macro-name').value || 'New Macro',
-                categoryId: document.getElementById('modal-macro-category')?.value || null,
-                description: document.getElementById('modal-macro-desc').value.trim(),
-                range: document.getElementById('modal-macro-range').value.trim(),
-                target: document.getElementById('modal-macro-target').value.trim(),
+                const m = {
+                    id: idx >= 0 ? activeChar.macros[idx].id : 'mac_' + Date.now(),
+                    name: document.getElementById('modal-macro-name').value || 'New Macro',
+                    categoryId: document.getElementById('modal-macro-category')?.value || null,
+                    description: document.getElementById('modal-macro-desc').value.trim(),
+                    range: document.getElementById('modal-macro-range').value.trim(),
+                    target: document.getElementById('modal-macro-target').value.trim(),
 
-                // Attack configuration
-                attackStat: atkStat,
-                attackProf: document.getElementById('modal-macro-atk-prof').checked,
-                attackExtra: parseInt(document.getElementById('modal-macro-atk-extra').value) || 0,
-                critRange: parseInt(document.getElementById('modal-macro-crit-range').value) || 20,
-                attackBonus: document.getElementById('modal-macro-atk').value,
+                    // Attack configuration
+                    attackStat: atkStat,
+                    attackProf: document.getElementById('modal-macro-atk-prof').checked,
+                    attackExtra: parseInt(document.getElementById('modal-macro-atk-extra').value) || 0,
+                    critRange: parseInt(document.getElementById('modal-macro-crit-range').value) || 20,
+                    attackBonus: document.getElementById('modal-macro-atk').value,
 
-                // Save configuration
-                saveAbility: document.getElementById('modal-macro-save-ab').value,
-                saveDcStat: dcStat,
-                saveDcExtra: parseInt(document.getElementById('modal-macro-save-dc-extra').value) || 0,
-                saveDcCustom: document.getElementById('modal-macro-save-dc').value ? parseInt(document.getElementById('modal-macro-save-dc').value) : null,
+                    // Save configuration
+                    saveAbility: document.getElementById('modal-macro-save-ab').value,
+                    saveDcStat: dcStat,
+                    saveDcExtra: parseInt(document.getElementById('modal-macro-save-dc-extra').value) || 0,
+                    saveDcCustom: document.getElementById('modal-macro-save-dc').value ? parseInt(document.getElementById('modal-macro-save-dc').value) : null,
 
-                damage: updatedDamageRows.length ? updatedDamageRows : modalDamageRows
+                    damage: updatedDamageRows.length ? updatedDamageRows : modalDamageRows
+                };
+                if (idx >= 0) activeChar.macros[idx] = m;
+                else activeChar.macros.push(m);
+                closeMacroModal(true);
+                saveAndEmit(activeChar);
+                renderSheetData(activeChar);
             };
-            if (idx >= 0) char.macros[idx] = m;
-            else char.macros.push(m);
-            closeMacroModal();
-            saveAndEmit(char);
-            renderSheetData(char);
-        });
+        }
 
         document.querySelectorAll('.pc-macro-edit').forEach(btn => btn.addEventListener('click', (e) => openMacroModal(e.currentTarget.dataset.idx)));
         document.querySelectorAll('.pc-macro-del').forEach(btn => btn.addEventListener('click', (e) => {
@@ -6082,8 +8171,8 @@ function simulateRoll(formula, critRange = 20) {
             if (document.getElementById('pc-category-modal')) return;
 
             const modalHtml = `
-                <div id="pc-category-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
-                <div id="pc-category-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:380px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+                <div id="pc-category-overlay" class="vtt-sheet-submodal-overlay vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000;"></div>
+                <div id="pc-category-modal" class="vtt-sheet-submodal vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:3010; width:380px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border-subtle); padding-bottom:10px; margin-bottom:12px;">
                         <h3 style="margin:0; color:var(--color-gold-base); font-size:1.05rem;" id="modal-cat-title"><i class="fa-solid fa-folder-plus"></i> Add Category</h3>
                         <button id="modal-cat-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -6190,8 +8279,8 @@ function simulateRoll(formula, critRange = 20) {
             if (document.getElementById('pc-category-delete-modal')) return;
 
             const modalHtml = `
-                <div id="pc-category-delete-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
-                <div id="pc-category-delete-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:380px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+                <div id="pc-category-delete-overlay" class="vtt-sheet-submodal-overlay vtt-sheet-submodal-high vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3020;"></div>
+                <div id="pc-category-delete-modal" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:3025; width:380px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border-subtle); padding-bottom:10px; margin-bottom:12px;">
                         <h3 style="margin:0; color:#f44336; font-size:1.05rem;"><i class="fa-solid fa-trash"></i> Delete Category</h3>
                         <button id="modal-cat-del-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -6262,8 +8351,8 @@ function simulateRoll(formula, critRange = 20) {
             if (document.getElementById('pc-bag-modal')) return;
 
             const modalHtml = `
-                <div id="pc-bag-overlay" class="vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999;"></div>
-                <div id="pc-bag-modal" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:420px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
+                <div id="pc-bag-overlay" class="vtt-sheet-submodal-overlay vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3000;"></div>
+                <div id="pc-bag-modal" class="vtt-sheet-submodal vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:3010; width:420px; max-width:92vw; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.6);">
                     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--color-border-subtle); padding-bottom:10px; margin-bottom:12px;">
                         <h3 style="margin:0; color:var(--color-gold-base); font-size:1.1rem;" id="modal-bag-title"><i class="fa-solid fa-sack-xmark"></i> Create Bag / Pouch</h3>
                         <button id="modal-bag-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
@@ -7510,6 +9599,37 @@ function simulateRoll(formula, critRange = 20) {
             saveAndEmit(char); renderSheetData(char);
         });
 
+        document.getElementById('pc-background')?.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (!val) return;
+            const openBgModal = (bgs) => {
+                const bg = (bgs || []).find(b => {
+                    const badge = getDisplaySourceBadge(b.source);
+                    const tag = badge ? ` [${badge}]` : (b.source ? ` [${b.source}]` : '');
+                    return `${b.name}${tag}` === val || `${b.name} [${b.source}]` === val || b.name === val || b.id === val;
+                });
+                if (bg) {
+                    promptBackgroundImportModal(bg, char, () => {
+                        const sel = document.getElementById('pc-background');
+                        if (sel) sel.value = char.background || '';
+                    });
+                }
+            };
+
+            if (builderCache && builderCache.bgs && builderCache.bgs.length > 0) {
+                openBgModal(builderCache.bgs);
+            } else {
+                fetch('data/backgrounds-catalog.json')
+                    .then(r => r.json())
+                    .then(data => openBgModal(Array.isArray(data) ? data : (data.background || [])))
+                    .catch(() => {
+                        fetch('data/backgrounds.json')
+                            .then(r => r.json())
+                            .then(data => openBgModal(Array.isArray(data) ? data : (data.background || [])));
+                    });
+            }
+        });
+
         ['pc-sense-darkvision', 'pc-sense-devilsight', 'pc-sense-blindsight', 'pc-sense-truesight'].forEach(id => {
             document.getElementById(id)?.addEventListener('change', () => {
                 harvestBuildTab();
@@ -7520,7 +9640,21 @@ function simulateRoll(formula, critRange = 20) {
         document.getElementById('pc-add-class')?.addEventListener('click', () => {
             harvestBuildTab();
             const currentClassNames = char.classes.map(c => c.name);
-            const availableClasses = builderCache ? Object.keys(builderCache.classIndex).map(k => k.charAt(0).toUpperCase() + k.slice(1)) : [];
+            let availableClasses = [];
+            if (builderCache && Array.isArray(builderCache.classes)) {
+                const seen = new Set();
+                builderCache.classes.forEach(c => {
+                    const badge = getDisplaySourceBadge(c.source);
+                    const tag = badge ? ` [${badge}]` : (c.source ? ` [${c.source}]` : '');
+                    const fullName = `${c.name}${tag}`;
+                    if (!seen.has(fullName)) {
+                        seen.add(fullName);
+                        availableClasses.push(fullName);
+                    }
+                });
+            } else if (builderCache?.classIndex) {
+                availableClasses = Object.keys(builderCache.classIndex).map(k => k.charAt(0).toUpperCase() + k.slice(1));
+            }
             const unusedClass = availableClasses.find(c => !currentClassNames.includes(c)) || '';
             char.classes.push({ name: unusedClass, subclass: '', level: 1 });
             saveAndEmit(char); renderSheetData(char);
@@ -7572,266 +9706,6 @@ function simulateRoll(formula, critRange = 20) {
             });
         }
 
-        let availableFeatures = [];
-        let currentImportData = [];
-        let currentCategory = 'class';
-
-        function extractTextFromEntries(entries) {
-            if (!entries) return '';
-            if (typeof entries === 'string') {
-                return entries.replace(/{@\w+\s+([^|}]+)\|?[^}]*}/g, '$1');
-            }
-            if (Array.isArray(entries)) {
-                return entries.map(e => extractTextFromEntries(e)).join('\n\n');
-            }
-            if (typeof entries === 'object') {
-                if (entries.type === 'list') {
-                    return (entries.items || []).map(i => '- ' + extractTextFromEntries(i)).join('\n');
-                }
-                if (entries.entries) {
-                    let text = entries.name ? `**${entries.name}**\n` : '';
-                    return text + extractTextFromEntries(entries.entries);
-                }
-                if (entries.items) {
-                    return extractTextFromEntries(entries.items);
-                }
-                if (entries.type === 'table') {
-                    return '[Table omitted from description]';
-                }
-            }
-            return '';
-        }
-
-        function switchModalTab(tabId) {
-            document.querySelectorAll('#tab-btn-manual, #tab-btn-import').forEach(b => b.classList.remove('active'));
-            document.getElementById('modal-tab-manual').classList.add('vtt-hidden');
-            document.getElementById('modal-tab-import').classList.add('vtt-hidden');
-            
-            document.getElementById(`tab-btn-${tabId}`).classList.add('active');
-            document.getElementById(`modal-tab-${tabId}`).classList.remove('vtt-hidden');
-        }
-
-        document.getElementById('tab-btn-manual')?.addEventListener('click', () => switchModalTab('manual'));
-        document.getElementById('tab-btn-import')?.addEventListener('click', () => switchModalTab('import'));
-
-        function renderImportFeatureList() {
-            const listEl = document.getElementById('import-feature-list');
-            const search = document.getElementById('import-search').value.toLowerCase();
-            const subSel = document.getElementById('import-subclass-sel').value;
-
-            if (currentImportData.length === 0 && currentCategory === 'class') {
-                listEl.innerHTML = '<div style="text-align:center; color:var(--color-text-muted); font-size:0.8rem; margin-top:20px;">Select a class to browse features</div>';
-                return;
-            }
-
-            availableFeatures = [];
-            
-            currentImportData.forEach(f => {
-                if (currentCategory === 'class') {
-                    if (f.subclassShortName && subSel && f.subclassShortName !== subSel) return;
-                }
-                availableFeatures.push(f);
-            });
-
-            let html = '';
-            availableFeatures.forEach((f, idx) => {
-                const name = f.name || '';
-                if (search && !name.toLowerCase().includes(search)) return;
-                
-                const source = f.source ? `[${f.source}]` : '';
-                const isSubclass = f.subclassShortName ? `[${f.subclassShortName}] ` : '';
-                let levelText = f.level !== undefined ? `Level ${f.level} ` : '';
-
-                html += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:4px 8px; border-radius:4px;">
-                        <div style="display:flex; flex-direction:column;">
-                            <span style="font-size:0.85rem; font-weight:bold; color:var(--color-text-primary);">${name}</span>
-                            <span style="font-size:0.7rem; color:var(--color-text-muted);">${levelText}${isSubclass}${source}</span>
-                        </div>
-                        <button class="btn btn-xxs btn-secondary btn-import-feature-exec" data-idx="${idx}">Import</button>
-                    </div>
-                `;
-            });
-
-            if (!html) {
-                html = '<div style="text-align:center; color:var(--color-text-muted); font-size:0.8rem; margin-top:20px;">No features found</div>';
-            }
-
-            listEl.innerHTML = html;
-
-            listEl.querySelectorAll('.btn-import-feature-exec').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const idx = e.currentTarget.dataset.idx;
-                    const f = availableFeatures[idx];
-                    document.getElementById('modal-ability-name').value = f.name || '';
-                    let desc = extractTextFromEntries(f.entries).trim();
-                    if (!desc && f.source && f.id) {
-                        let cType = currentCategory === 'feat' ? 'feats' : (currentCategory === 'race' ? 'races' : (currentCategory === 'background' ? 'backgrounds' : ''));
-                        if (cType) {
-                            try {
-                                const res = await fetch(`/api/compendium/${cType}/${encodeURIComponent(f.source)}/${encodeURIComponent(f.id)}`);
-                                if (res.ok) {
-                                    const full = await res.json();
-                                    desc = full.descriptionHtml || extractTextFromEntries(full.entries).trim();
-                                }
-                            } catch(err) {}
-                        }
-                    }
-                    document.getElementById('modal-ability-desc').value = desc;
-
-                    // Auto-populate active resource counter if detected or configured
-                    let hasCounter = f.hasCounter || false;
-                    let usesMax = f.usesMax || null;
-                    let resetType = f.resetType || 'short';
-
-                    if (!hasCounter) {
-                        const plain = ((f.name || '') + ' ' + desc).toLowerCase();
-                        if (plain.includes('action surge') || plain.includes('second wind')) {
-                            hasCounter = true; usesMax = 1; resetType = 'short';
-                        } else if (plain.includes('bardic inspiration')) {
-                            hasCounter = true; usesMax = 'CHA'; resetType = 'long';
-                        } else if (plain.includes('rage') && (f.className === 'Barbarian' || plain.includes('barbarian'))) {
-                            hasCounter = true; usesMax = 2; resetType = 'long';
-                        } else if (plain.match(/(?:finish|complete) a (?:short or long|short) rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
-                            hasCounter = true; usesMax = 1; resetType = 'short';
-                        } else if (plain.match(/(?:finish|complete) a long rest before you can use (?:it|this (?:feature|trait|action)) again/)) {
-                            hasCounter = true; usesMax = 1; resetType = 'long';
-                        } else if (plain.match(/proficiency bonus.*?regain/)) {
-                            hasCounter = true; usesMax = 'PB'; resetType = plain.includes('short rest') ? 'short' : 'long';
-                        }
-                    }
-
-                    const counterCheckbox = document.getElementById('modal-ability-has-counter');
-                    const usesContainer = document.getElementById('modal-ability-uses-container');
-                    const usesMaxInput = document.getElementById('modal-ability-uses-max');
-                    const usesCurrentInput = document.getElementById('modal-ability-uses-current');
-                    const resetSelect = document.getElementById('modal-ability-reset-type');
-
-                    if (hasCounter && counterCheckbox) {
-                        counterCheckbox.checked = true;
-                        if (usesContainer) usesContainer.style.display = 'flex';
-
-                        let resolvedMax = 1;
-                        if (typeof usesMax === 'number') {
-                            resolvedMax = usesMax;
-                        } else if (usesMax === 'PB') {
-                            const lvl = (char.classes || []).reduce((acc, c) => acc + (parseInt(c.level) || 0), 0) || 1;
-                            resolvedMax = Math.ceil(lvl / 4) + 1;
-                        } else if (typeof usesMax === 'string' && ['CHA', 'WIS', 'INT', 'CON', 'DEX', 'STR'].includes(usesMax)) {
-                            const modKey = usesMax.toLowerCase();
-                            resolvedMax = Math.max(1, (char.statMods && char.statMods[modKey] !== undefined) ? parseInt(char.statMods[modKey]) : 1);
-                        }
-
-                        if (usesMaxInput) usesMaxInput.value = resolvedMax;
-                        if (usesCurrentInput) usesCurrentInput.value = resolvedMax;
-                        if (resetSelect) resetSelect.value = resetType || 'short';
-                    } else if (counterCheckbox) {
-                        counterCheckbox.checked = false;
-                        if (usesContainer) usesContainer.style.display = 'none';
-                        if (usesMaxInput) usesMaxInput.value = 0;
-                        if (usesCurrentInput) usesCurrentInput.value = 0;
-                    }
-
-                    switchModalTab('manual');
-                });
-            });
-        }
-
-        document.getElementById('import-search')?.addEventListener('input', renderImportFeatureList);
-        document.getElementById('import-subclass-sel')?.addEventListener('change', renderImportFeatureList);
-        
-        document.getElementById('import-category-sel')?.addEventListener('change', (e) => {
-            currentCategory = e.target.value;
-            const classFilters = document.getElementById('import-class-filters');
-            currentImportData = [];
-            document.getElementById('import-search').value = '';
-            
-            if (currentCategory === 'class') {
-                classFilters.style.display = 'flex';
-                document.getElementById('import-class-sel').value = '';
-                document.getElementById('import-subclass-sel').innerHTML = '<option value="">-- All Subclasses --</option>';
-                document.getElementById('import-subclass-sel').disabled = true;
-                renderImportFeatureList();
-            } else {
-                classFilters.style.display = 'none';
-                let file = '';
-                let key = '';
-                let fallback = '';
-                if (currentCategory === 'feat') { file = 'data/feats-catalog.json'; key = 'feat'; fallback = 'data/feats.json'; }
-                if (currentCategory === 'race') { file = 'data/races-catalog.json'; key = 'race'; fallback = 'data/races.json'; }
-                if (currentCategory === 'background') { file = 'data/backgrounds-catalog.json'; key = 'background'; fallback = 'data/backgrounds.json'; }
-                if (currentCategory === 'charoption') { file = 'data/charcreationoptions.json'; key = 'charoption'; }
-                if (currentCategory === 'optionalfeature') { file = 'data/optionalfeatures.json'; key = 'optionalfeature'; }
-                
-                document.getElementById('import-feature-list').innerHTML = '<div style="text-align:center; color:var(--color-text-muted); font-size:0.8rem; margin-top:20px;">Loading...</div>';
-                fetch(file).then(r => {
-                    if (!r.ok) throw new Error('Not found');
-                    return r.json();
-                }).then(data => {
-                    currentImportData = Array.isArray(data) ? data : (data[key] || []);
-                    renderImportFeatureList();
-                }).catch(() => {
-                    if (fallback) {
-                        fetch(fallback).then(r => r.json()).then(data => {
-                            currentImportData = Array.isArray(data) ? data : (data[key] || []);
-                            renderImportFeatureList();
-                        }).catch(() => {
-                            document.getElementById('import-feature-list').innerHTML = '<div style="text-align:center; color:var(--color-error); font-size:0.8rem; margin-top:20px;">Failed to load data</div>';
-                        });
-                    } else {
-                        document.getElementById('import-feature-list').innerHTML = '<div style="text-align:center; color:var(--color-error); font-size:0.8rem; margin-top:20px;">Failed to load data</div>';
-                    }
-                });
-            }
-        });
-
-        function initializeImportTab() {
-            const classSel = document.getElementById('import-class-sel');
-            if (!classSel || !builderCache || classSel.options.length > 1) return;
-
-            let opts = '<option value="">-- Select Class --</option>';
-            Object.keys(builderCache.classIndex).forEach(cKey => {
-                const name = cKey.charAt(0).toUpperCase() + cKey.slice(1);
-                opts += `<option value="${name}">${name}</option>`;
-            });
-            classSel.innerHTML = opts;
-
-            classSel.addEventListener('change', () => {
-                const className = classSel.value;
-                const subSel = document.getElementById('import-subclass-sel');
-                if (!className) {
-                    currentImportData = [];
-                    subSel.innerHTML = '<option value="">-- All Subclasses --</option>';
-                    subSel.disabled = true;
-                    renderImportFeatureList();
-                    return;
-                }
-
-                const file = builderCache.classIndex[className.toLowerCase()];
-                if (!file) return;
-
-                fetch(`data/class/${file}`).then(r => r.json()).then(data => {
-                    currentImportData = [];
-                    if (data.classFeature) currentImportData.push(...data.classFeature);
-                    if (data.subclassFeature) currentImportData.push(...data.subclassFeature);
-                    
-                    let subOpts = '<option value="">-- All Subclasses --</option>';
-                    if (data.subclass) {
-                        const seen = new Set();
-                        data.subclass.forEach(sc => {
-                            if (!seen.has(sc.shortName)) {
-                                seen.add(sc.shortName);
-                                subOpts += `<option value="${sc.shortName}">${sc.name} [${sc.source}]</option>`;
-                            }
-                        });
-                    }
-                    subSel.innerHTML = subOpts;
-                    subSel.disabled = false;
-                    renderImportFeatureList();
-                });
-            });
-        }
-
         document.getElementById('btn-add-ability')?.addEventListener('click', () => {
             document.getElementById('modal-ability-idx').value = '-1';
             document.getElementById('modal-ability-name').value = '';
@@ -7840,8 +9714,17 @@ function simulateRoll(formula, critRange = 20) {
                 catSel.innerHTML = '<option value="">Uncategorized</option>' + (char.abilityCategories || []).map(c => `<option value="${c.id}">📁 ${c.name}</option>`).join('');
                 catSel.value = '';
             }
+            const actSel = document.getElementById('modal-ability-action-type');
+            if (actSel) actSel.value = 'passive';
             document.getElementById('modal-ability-desc').value = '';
-            document.getElementById('modal-ability-formula').value = '';
+
+            populateScalingModDropdown(char);
+            if (document.getElementById('modal-ability-base-dice')) document.getElementById('modal-ability-base-dice').value = '';
+            if (document.getElementById('modal-ability-scaling-mod')) document.getElementById('modal-ability-scaling-mod').value = 'none';
+            if (document.getElementById('modal-ability-extra-bonus')) document.getElementById('modal-ability-extra-bonus').value = 0;
+            if (document.getElementById('modal-ability-formula')) document.getElementById('modal-ability-formula').value = '';
+            if (document.getElementById('modal-ability-formula-preview')) document.getElementById('modal-ability-formula-preview').innerText = 'None';
+
             document.getElementById('modal-ability-has-counter').checked = false;
             document.getElementById('modal-ability-uses-container').style.display = 'none';
             document.getElementById('modal-ability-uses-current').value = 0;
@@ -7864,8 +9747,28 @@ function simulateRoll(formula, critRange = 20) {
                 catSel.innerHTML = '<option value="">Uncategorized</option>' + (char.abilityCategories || []).map(c => `<option value="${c.id}">📁 ${c.name}</option>`).join('');
                 catSel.value = ab.categoryId || '';
             }
+            const actSel = document.getElementById('modal-ability-action-type');
+            if (actSel) actSel.value = ab.actionType || 'passive';
             document.getElementById('modal-ability-desc').value = ab.description || '';
-            document.getElementById('modal-ability-formula').value = ab.formula || '';
+
+            let baseDice = '';
+            let scalingMod = 'none';
+            let extraBonus = 0;
+            if (ab.formulaConfig) {
+                baseDice = ab.formulaConfig.baseDice || '';
+                scalingMod = ab.formulaConfig.modClass ? `classLevel:${ab.formulaConfig.modClass}` : (ab.formulaConfig.scalingMod || 'none');
+                extraBonus = ab.formulaConfig.extraBonus || 0;
+            }
+            populateScalingModDropdown(char, scalingMod);
+            if (document.getElementById('modal-ability-base-dice')) document.getElementById('modal-ability-base-dice').value = baseDice;
+            if (document.getElementById('modal-ability-extra-bonus')) document.getElementById('modal-ability-extra-bonus').value = extraBonus;
+            if (document.getElementById('modal-ability-formula')) document.getElementById('modal-ability-formula').value = ab.formula || '';
+            
+            const evalFormula = evaluateAbilityFormula(ab.formula, ab.formulaConfig, char);
+            if (document.getElementById('modal-ability-formula-preview')) {
+                document.getElementById('modal-ability-formula-preview').innerText = evalFormula || 'None';
+            }
+
             document.getElementById('modal-ability-has-counter').checked = !!ab.hasCounter;
             document.getElementById('modal-ability-uses-container').style.display = ab.hasCounter ? 'flex' : 'none';
             document.getElementById('modal-ability-uses-current').value = ab.usesCurrent || 0;
@@ -7962,6 +9865,7 @@ function simulateRoll(formula, critRange = 20) {
         document.querySelectorAll('.pc-ability-ping').forEach(btn => btn.addEventListener('click', (e) => {
             const idx = e.currentTarget.dataset.idx;
             const ab = char.abilityCards[idx];
+            if (!ab) return;
             
             let descHtml = ab.description ? ab.description.replace(/\n/g, '<br>') : '';
             if (ab.customFields && ab.customFields.length > 0) {
@@ -7978,10 +9882,11 @@ function simulateRoll(formula, critRange = 20) {
             };
 
             if (ab.formula) {
+                const evalFormula = evaluateAbilityFormula(ab.formula, ab.formulaConfig, char);
                 mc.dmgRolls = [{
-                    type: 'Damage',
-                    formula: ab.formula,
-                    roll: simulateRoll(ab.formula)
+                    type: 'Roll',
+                    formula: evalFormula || ab.formula,
+                    roll: simulateRoll(evalFormula || ab.formula)
                 }];
             }
 
@@ -7989,6 +9894,45 @@ function simulateRoll(formula, critRange = 20) {
                 macroCard: mc
             });
         }));
+
+        // 1-Click Roll Chip directly on the card face
+        document.querySelectorAll('.pc-ability-roll-chip').forEach(chip => chip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const idx = e.currentTarget.dataset.idx;
+            const ab = char.abilityCards[idx];
+            if (!ab || !ab.formula) return;
+            const evalFormula = evaluateAbilityFormula(ab.formula, ab.formulaConfig, char);
+            const rollVal = simulateRoll(evalFormula || ab.formula);
+
+            const mc = {
+                charName: char.name,
+                macroName: ab.name,
+                description: ab.description ? ab.description.replace(/\n/g, '<br>') : '',
+                dmgRolls: [{
+                    type: 'Roll',
+                    formula: evalFormula || ab.formula,
+                    roll: rollVal
+                }]
+            };
+            vtt.socket.emit('chat:msg', { macroCard: mc });
+        }));
+
+        // Quick Ability Cards Search Filter
+        const abilitySearch = document.getElementById('pc-ability-search');
+        if (abilitySearch) {
+            abilitySearch.oninput = (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                document.querySelectorAll('#pc-ability-list .ability-row').forEach(row => {
+                    const txt = row.innerText.toLowerCase();
+                    row.style.display = (!query || txt.includes(query)) ? 'flex' : 'none';
+                });
+                // Also hide category containers if all items in them are hidden
+                document.querySelectorAll('#pc-ability-list .pc-ability-cat-card').forEach(card => {
+                    const visibleRows = card.querySelectorAll('.ability-row:not([style*="display: none"])');
+                    card.style.display = (visibleRows.length > 0) ? 'block' : 'none';
+                });
+            };
+        }
     }
 
 
@@ -8055,6 +9999,15 @@ function simulateRoll(formula, critRange = 20) {
             }
             if (currentChar && currentChar.id === data.id) {
                 closeSheet();
+            }
+            if (vtt.creatureSheet && typeof vtt.creatureSheet.getLinkedCharacterId === 'function') {
+                if (vtt.creatureSheet.getLinkedCharacterId() === data.id) {
+                    if (typeof vtt.creatureSheet.resetSheet === 'function') {
+                        vtt.creatureSheet.resetSheet();
+                    } else if (typeof vtt.creatureSheet.minimizePanel === 'function') {
+                        vtt.creatureSheet.minimizePanel();
+                    }
+                }
             }
         });
 
@@ -8316,6 +10269,90 @@ function simulateRoll(formula, critRange = 20) {
         }
     });
 
+    // Global Escape Key Listener for Player Sheet Sub-Modals
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' || e.keyCode === 27) {
+            // High priority / nested submodals first
+            const highModals = [
+                { modal: 'pc-custom-item-modal', overlay: 'pc-item-overlay' },
+                { modal: 'pc-item-automation-modal', overlay: 'pc-item-automation-overlay' },
+                { modal: 'pc-category-delete-modal', overlay: 'pc-category-delete-overlay' },
+                { modal: 'pc-ability-import-cat-modal', overlay: 'pc-ability-overlay' },
+                { modal: 'pc-bg-import-modal', overlay: 'pc-bg-import-overlay' },
+                { modal: 'modal-pc-token-edit', overlay: 'modal-pc-token-edit-overlay' }
+            ];
+            for (const item of highModals) {
+                const m = document.getElementById(item.modal);
+                if (m && !m.classList.contains('vtt-hidden')) {
+                    if (m._initialModalSnapshot !== undefined) {
+                        const curSnapshot = JSON.stringify(Array.from(m.querySelectorAll('input:not([type="button"]):not([type="submit"]):not([type="reset"]), select, textarea')).map(el => el.type === 'checkbox' ? el.checked : el.value));
+                        if (curSnapshot !== m._initialModalSnapshot) {
+                            if (!confirm("Discard unsaved changes?")) {
+                                e.stopPropagation();
+                                return;
+                            }
+                        }
+                    }
+                    m.classList.add('vtt-hidden');
+                    if (item.overlay) {
+                        if (item.modal === 'pc-custom-item-modal') {
+                            const parent = document.getElementById('pc-item-modal');
+                            if (!parent || parent.classList.contains('vtt-hidden')) {
+                                document.getElementById(item.overlay)?.classList.add('vtt-hidden');
+                            }
+                        } else {
+                            document.getElementById(item.overlay)?.classList.add('vtt-hidden');
+                        }
+                    }
+                    e.stopPropagation();
+                    return;
+                }
+            }
+
+            // Standard sub-modals next
+            const standardModals = [
+                { modal: 'pc-item-modal', overlay: 'pc-item-overlay' },
+                { modal: 'pc-macro-modal', overlay: 'pc-macro-overlay' },
+                { modal: 'pc-category-modal', overlay: 'pc-category-overlay' },
+                { modal: 'pc-bag-modal', overlay: 'pc-bag-overlay' },
+                { modal: 'pc-ability-modal', overlay: 'pc-ability-overlay' },
+                { modal: 'pc-save-settings-modal', overlay: 'pc-save-settings-overlay' },
+                { modal: 'pc-skill-settings-modal', overlay: 'pc-skill-settings-overlay' },
+                { modal: 'pc-tool-settings-modal', overlay: 'pc-tool-settings-overlay' },
+                { modal: 'pc-assign-players-modal', overlay: 'pc-assign-players-overlay' }
+            ];
+            for (const item of standardModals) {
+                const m = document.getElementById(item.modal);
+                if (m && !m.classList.contains('vtt-hidden')) {
+                    if (item.modal === 'pc-macro-modal') {
+                        closeMacroModal(false);
+                        if (m.classList.contains('vtt-hidden')) {
+                            e.stopPropagation();
+                            return;
+                        }
+                        e.stopPropagation();
+                        return;
+                    }
+                    if (m._initialModalSnapshot !== undefined) {
+                        const curSnapshot = JSON.stringify(Array.from(m.querySelectorAll('input:not([type="button"]):not([type="submit"]):not([type="reset"]), select, textarea')).map(el => el.type === 'checkbox' ? el.checked : el.value));
+                        if (curSnapshot !== m._initialModalSnapshot) {
+                            if (!confirm("Discard unsaved changes?")) {
+                                e.stopPropagation();
+                                return;
+                            }
+                        }
+                    }
+                    m.classList.add('vtt-hidden');
+                    if (item.overlay) {
+                        document.getElementById(item.overlay)?.classList.add('vtt-hidden');
+                    }
+                    e.stopPropagation();
+                    return;
+                }
+            }
+        }
+    });
+
     // Initial render
     renderCharacterList();
 
@@ -8324,6 +10361,7 @@ function simulateRoll(formula, critRange = 20) {
         openSheet,
         openPanel,
         minimizePanel,
-        closeSheet
+        closeSheet,
+        getCurrentChar: () => currentChar
     };
 }

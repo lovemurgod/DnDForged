@@ -1,0 +1,110 @@
+[
+  {
+    "id": "race_glitchling_ua2022wondersofthemultiverse",
+    "name": "Glitchling",
+    "source": "UA2022WondersOfTheMultiverse",
+    "page": 1,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>You are a Construct.</p></div>\n<div class=\"compendium-subentry\"><strong>Armored Plating.</strong> <p>Your metal skin is reinforced with armor plates. While you aren't wearing armor, your base Armor Class is 14 + your Dexterity modifier.</p></div>\n<div class=\"compendium-subentry\"><strong>Balance Chaos.</strong> <p>When you make an attack roll or a saving throw and roll a 9 or lower on the d20, you can balance chaos and treat the roll as a 10. You can balance chaos in this way a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Living Construct.</strong> <p>You were created to benefit from several spells that preserve life but that normally don't affect Constructs: cure wounds, healing word, mass cure wounds, mass healing word, and spare the dying.</p></div>\n<div class=\"compendium-subentry\"><strong>Ordered Mind.</strong> <p>You have advantage on Wisdom (Insight) checks and on saving throws made to avoid or end the charmed condition on yourself.</p></div>\n<div class=\"compendium-subentry\"><strong>Vestigial Wings.</strong> <p>You have vestigial wings that allow limited flight. When you move, you can engage your wings to gain a flying speed equal to your walking speed until the end of the current turn. If you are still aloft at the end of the turn with nothing else supporting you, you fall. You can use this trait a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest</p></div>",
+    "traits": [
+      {
+        "id": "trait_glitchling_creature_type_ua2022wondersofthemultiverse",
+        "name": "Creature Type",
+        "source": "UA2022WondersOfTheMultiverse",
+        "raceName": "Glitchling",
+        "actionType": "passive",
+        "description": "You are a Construct.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are a Construct."
+        ]
+      },
+      {
+        "id": "trait_glitchling_armored_plating_ua2022wondersofthemultiverse",
+        "name": "Armored Plating",
+        "source": "UA2022WondersOfTheMultiverse",
+        "raceName": "Glitchling",
+        "actionType": "passive",
+        "description": "Your metal skin is reinforced with armor plates. While you aren't wearing armor, your base Armor Class is 14 + your Dexterity modifier.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your metal skin is reinforced with armor plates. While you aren't wearing armor, your base Armor Class is 14 + your Dexterity modifier."
+        ]
+      },
+      {
+        "id": "trait_glitchling_balance_chaos_ua2022wondersofthemultiverse",
+        "name": "Balance Chaos",
+        "source": "UA2022WondersOfTheMultiverse",
+        "raceName": "Glitchling",
+        "actionType": "passive",
+        "description": "When you make an attack roll or a saving throw and roll a 9 or lower on the d20, you can balance chaos and treat the roll as a 10. You can balance chaos in this way a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you make an attack roll or a saving throw and roll a 9 or lower on the {@dice d20}, you can balance chaos and treat the roll as a 10. You can balance chaos in this way a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        ]
+      },
+      {
+        "id": "trait_glitchling_living_construct_ua2022wondersofthemultiverse",
+        "name": "Living Construct",
+        "source": "UA2022WondersOfTheMultiverse",
+        "raceName": "Glitchling",
+        "actionType": "passive",
+        "description": "You were created to benefit from several spells that preserve life but that normally don't affect Constructs: cure wounds, healing word, mass cure wounds, mass healing word, and spare the dying.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You were created to benefit from several spells that preserve life but that normally don't affect Constructs: {@spell cure wounds}, {@spell healing word}, {@spell mass cure wounds}, {@spell mass healing word}, and {@spell spare the dying}."
+        ]
+      },
+      {
+        "id": "trait_glitchling_ordered_mind_ua2022wondersofthemultiverse",
+        "name": "Ordered Mind",
+        "source": "UA2022WondersOfTheMultiverse",
+        "raceName": "Glitchling",
+        "actionType": "passive",
+        "description": "You have advantage on Wisdom (Insight) checks and on saving throws made to avoid or end the charmed condition on yourself.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on Wisdom ({@skill Insight}) checks and on saving throws made to avoid or end the {@condition charmed} condition on yourself."
+        ]
+      },
+      {
+        "id": "trait_glitchling_vestigial_wings_ua2022wondersofthemultiverse",
+        "name": "Vestigial Wings",
+        "source": "UA2022WondersOfTheMultiverse",
+        "raceName": "Glitchling",
+        "actionType": "passive",
+        "description": "You have vestigial wings that allow limited flight. When you move, you can engage your wings to gain a flying speed equal to your walking speed until the end of the current turn. If you are still aloft at the end of the turn with nothing else supporting you, you fall. You can use this trait a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have vestigial wings that allow limited flight. When you move, you can engage your wings to gain a flying speed equal to your walking speed until the end of the current turn. If you are still aloft at the end of the turn with nothing else supporting you, you fall. You can use this trait a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest"
+        ]
+      }
+    ],
+    "description": "**Creature Type**: You are a Construct.\n\n**Armored Plating**: Your metal skin is reinforced with armor plates. While you aren't wearing armor, your base Armor Class is 14 + your Dexterity modifier.\n\n**Balance Chaos**: When you make an attack roll or a saving throw and roll a 9 or lower on the d20, you can balance chaos and treat the roll as a 10. You can balance chaos in this way a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.\n\n**Living Construct**: You were created to benefit from several spells that preserve life but that normally don't affect Constructs: cure wounds, healing word, mass cure wounds, mass healing word, and spare the dying.\n\n**Ordered Mind**: You have advantage on Wisdom (Insight) checks and on saving throws made to avoid or end the charmed condition on yourself.\n\n**Vestigial Wings**: You have vestigial wings that allow limited flight. When you move, you can engage your wings to gain a flying speed equal to your walking speed until the end of the current turn. If you are still aloft at the end of the turn with nothing else supporting you, you fall. You can use this trait a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest"
+  }
+]

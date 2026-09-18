@@ -1,0 +1,1194 @@
+[
+  {
+    "id": "creature_flying_book_valdaplayerpack2",
+    "name": "Flying Book",
+    "source": "ValdaPlayerPack2",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 5,
+      "formula": "2d4"
+    },
+    "speed": {
+      "walk": 0,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 3,
+        "mod": -4
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 11,
+        "mod": 0
+      },
+      "int": {
+        "score": 1,
+        "mod": -5
+      },
+      "wis": {
+        "score": 4,
+        "mod": -3
+      },
+      "cha": {
+        "score": 1,
+        "mod": -5
+      }
+    },
+    "str": 3,
+    "dex": 15,
+    "con": 11,
+    "int": 1,
+    "wis": 4,
+    "cha": 1,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [
+      "fire"
+    ],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "frightened",
+      "paralyzed",
+      "petrified",
+      "poisoned"
+    ],
+    "passive": 7,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 7,
+      "sensesString": "Blindsight 30 ft."
+    },
+    "languages": [],
+    "cr": "1/8",
+    "crNumeric": 0.125,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_slam_2f8w",
+        "name": "Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 4 (1d4 + 2) Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}4 ({@damage 1d4 + 2}) Bludgeoning damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ValdaPlayerPack2/Flying Book.webp",
+    "tokenImg": "img/bestiary/tokens/ValdaPlayerPack2/Flying Book.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_fright_valdaplayerpack2",
+    "name": "Fright",
+    "source": "ValdaPlayerPack2",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 21,
+      "formula": "6d6"
+    },
+    "speed": {
+      "walk": 0,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 1,
+        "mod": -5
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 9,
+        "mod": -1
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "str": 1,
+    "dex": 14,
+    "con": 10,
+    "int": 10,
+    "wis": 9,
+    "cha": 15,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "acid",
+      "cold",
+      "fire",
+      "lightning",
+      "necrotic",
+      "thunder"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained",
+      "unconscious"
+    ],
+    "passive": 9,
+    "senses": {
+      "passivePerception": 9,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "Common plus one other language"
+    ],
+    "cr": "1/2",
+    "crNumeric": 0.5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_incorporeal_movement_ig61",
+        "name": "Incorporeal Movement",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The fright can move through other creatures and objects as if they were Difficult Terrain. It takes 5 (1d10) Force damage if it ends its turn inside an object.</p>",
+        "entries": [
+          "The fright can move through other creatures and objects as if they were {@variantrule Difficult Terrain|XPHB}. It takes 5 ({@damage 1d10}) Force damage if it ends its turn inside an object."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_life_drain_yuy5",
+        "name": "Life Drain",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 9 (2d8) Necrotic damage. If the target is a creature, its Hit Points maximum decreases by an amount equal to the damage taken.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}9 ({@damage 2d8}) Necrotic damage. If the target is a creature, its {@variantrule Hit Points|XPHB|Hit Point} maximum decreases by an amount equal to the damage taken."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": "its {@variantrule Hit Points|XPHB|Hit Point} maximum decreases by an amount equal to the damage taken",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ValdaPlayerPack2/Fright.webp",
+    "tokenImg": "img/bestiary/tokens/ValdaPlayerPack2/Fright.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_grep_valdaplayerpack2",
+    "name": "Grep",
+    "source": "ValdaPlayerPack2",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 21,
+      "formula": "6d4 + 6"
+    },
+    "speed": {
+      "walk": 15,
+      "fly": 50,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 3,
+        "mod": -4
+      },
+      "dex": {
+        "score": 18,
+        "mod": 4
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 15,
+        "mod": 2
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": 3,
+    "dex": 18,
+    "con": 13,
+    "int": 13,
+    "wis": 15,
+    "cha": 10,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+4",
+      "sleight of hand": "+6",
+      "stealth": "+6"
+    },
+    "skills": {
+      "perception": "+4",
+      "sleight of hand": "+6",
+      "stealth": "+6"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "understands Common but can't speak"
+    ],
+    "cr": "1/2",
+    "crNumeric": 0.5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_mimicry_xual",
+        "name": "Mimicry",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The grep can mimic simple sounds it has heard, such as a whisper or chitter. A hearer can discern the sounds are imitations with a successful DC 10 Wisdom (Insight) check.</p>",
+        "entries": [
+          "The grep can mimic simple sounds it has heard, such as a whisper or chitter. A hearer can discern the sounds are imitations with a successful {@dc 10} Wisdom ({@skill Insight|XPHB}) check."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 10,
+            "ability": null
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_claw_pjx1",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 7 (1d6 + 4) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 5 ft. {@h}7 ({@damage 1d6 + 4}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ValdaPlayerPack2/Grep.webp",
+    "tokenImg": "img/bestiary/tokens/ValdaPlayerPack2/Grep.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_mock_valdaplayerpack2",
+    "name": "Mock",
+    "source": "ValdaPlayerPack2",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 9,
+      "formula": "2d4 + 4"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 9,
+        "mod": -1
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 4,
+        "mod": -3
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 6,
+        "mod": -2
+      }
+    },
+    "str": 9,
+    "dex": 12,
+    "con": 14,
+    "int": 4,
+    "wis": 13,
+    "cha": 6,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "stealth": "+5"
+    },
+    "skills": {
+      "stealth": "+5"
+    },
+    "immune": [
+      "acid"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "prone"
+    ],
+    "passive": 11,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [],
+    "cr": "1/8",
+    "crNumeric": 0.125,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_adhesive__object_form_only__iekn",
+        "name": "Adhesive (Object Form Only)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The mock adheres to anything that touches it. The mock has Advantage on attack rolls against any creature adhered to it. The target or a creature within 5 feet of it can detach the mock as an action.</p>",
+        "entries": [
+          "The mock adheres to anything that touches it. The mock has {@variantrule Advantage|XPHB} on attack rolls against any creature adhered to it. The target or a creature within 5 feet of it can detach the mock as an action."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_26j5",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 3 (1d4 + 1) Piercing damage plus 2 (1d4) Acid damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}3 ({@damage 1d4 + 1}) Piercing damage plus 2 ({@damage 1d4}) Acid damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d4",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_shape_shift_rqhv",
+        "name": "Shape-Shift",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The mock shape-shifts to resemble a Tiny object while retaining its game statistics, or it returns to its true blob form. Any equipment it is wearing or carrying isn't transformed.</p>",
+        "entries": [
+          "The mock shape-shifts to resemble a Tiny object while retaining its game statistics, or it returns to its true blob form. Any equipment it is wearing or carrying isn't transformed."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ValdaPlayerPack2/Mock.webp",
+    "tokenImg": "img/bestiary/tokens/ValdaPlayerPack2/Mock.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_pet_rock_valdaplayerpack2",
+    "name": "Pet Rock",
+    "source": "ValdaPlayerPack2",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 5,
+      "formula": "1d4 + 3"
+    },
+    "speed": {
+      "walk": 0,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 1,
+        "mod": -5
+      },
+      "dex": {
+        "score": 1,
+        "mod": -5
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 1,
+        "mod": -5
+      },
+      "wis": {
+        "score": 5,
+        "mod": -3
+      },
+      "cha": {
+        "score": 1,
+        "mod": -5
+      }
+    },
+    "str": 1,
+    "dex": 1,
+    "con": 16,
+    "int": 1,
+    "wis": 5,
+    "cha": 1,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [
+      "bludgeoning",
+      "fire",
+      "lightning",
+      "piercing",
+      "radiant",
+      "slashing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "paralyzed",
+      "poisoned",
+      "prone",
+      "unconscious"
+    ],
+    "passive": 7,
+    "senses": {
+      "passivePerception": 7,
+      "sensesString": ""
+    },
+    "languages": [
+      "understands all but can't speak"
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_just_a_rock_ih0z",
+        "name": "Just a Rock",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The rock counts as an object. Additionally, it can't take actions and its Speed can't be increased.</p>",
+        "entries": [
+          "The rock counts as an object. Additionally, it can't take actions and its {@variantrule Speed|XPHB} can't be increased."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ValdaPlayerPack2/Pet Rock.webp",
+    "tokenImg": "img/bestiary/tokens/ValdaPlayerPack2/Pet Rock.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_winter_wolf_pup_valdaplayerpack2",
+    "name": "Winter Wolf Pup",
+    "source": "ValdaPlayerPack2",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Small",
+    "sizeCategory": "S",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "3d6"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 9,
+        "mod": -1
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 11,
+        "mod": 0
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 7,
+        "mod": -2
+      }
+    },
+    "str": 9,
+    "dex": 12,
+    "con": 11,
+    "int": 6,
+    "wis": 12,
+    "cha": 7,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+3",
+      "stealth": "+3"
+    },
+    "skills": {
+      "perception": "+3",
+      "stealth": "+3"
+    },
+    "immune": [],
+    "resist": [
+      "cold"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 13,
+    "senses": {
+      "passivePerception": 13,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Giant"
+    ],
+    "cr": "1/8",
+    "crNumeric": 0.125,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_pack_tactics_frrq",
+        "name": "Pack Tactics",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The pup has Advantage on attack rolls against a creature if at least one of the pup's Ally is within 5 feet of the creature and the Ally doesn't have the Incapacitated condition.</p>",
+        "entries": [
+          "The pup has {@variantrule Advantage|XPHB} on attack rolls against a creature if at least one of the pup's {@variantrule Ally|XPHB|Allies} is within 5 feet of the creature and the {@variantrule Ally|XPHB} doesn't have the {@condition Incapacitated|XPHB} condition."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_4gjm",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 3 (1d4 + 1) Piercing damage plus 2 (1d4) Cold damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 3}, reach 5 ft. {@h}3 ({@damage 1d4 + 1}) Piercing damage plus 2 ({@damage 1d4}) Cold damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 1",
+              "type": "Piercing"
+            },
+            {
+              "formula": "1d4",
+              "type": "Cold"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ValdaPlayerPack2/Winter Wolf Pup.webp",
+    "tokenImg": "img/bestiary/tokens/ValdaPlayerPack2/Winter Wolf Pup.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_yarn_golem_valdaplayerpack2",
+    "name": "Yarn Golem",
+    "source": "ValdaPlayerPack2",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "C N",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 21,
+      "formula": "6d4 + 6"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 8,
+        "mod": -1
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 1,
+        "mod": -5
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 8,
+    "dex": 16,
+    "con": 13,
+    "int": 1,
+    "wis": 10,
+    "cha": 8,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [
+      "piercing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 10,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "understands Common plus one other language but can't speak"
+    ],
+    "cr": "1/2",
+    "crNumeric": 0.5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_poke_48bv",
+        "name": "Poke",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 8 (2d4 + 3) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}8 ({@damage 2d4 + 3}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 5,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d4 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tangle___recharge__z95b",
+        "name": "Tangle {@recharge}",
+        "actionType": "action",
+        "descriptionHtml": "<p>dex DC 12, one creature that the golem can see within 5 feet. {@actSaveFail} If the target is Medium or smaller, it has the Grappled condition (escape DC 12). While Grappled, the target has the Restrained condition.</p>",
+        "entries": [
+          "{@actSave dex} {@dc 12}, one creature that the golem can see within 5 feet. {@actSaveFail} If the target is Medium or smaller, it has the {@condition Grappled|XPHB} condition (escape {@dc 12}). While {@condition Grappled|XPHB}, the target has the {@condition Restrained|XPHB} condition."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 12,
+            "ability": "DEX"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ValdaPlayerPack2/Yarn Golem.webp",
+    "tokenImg": "img/bestiary/tokens/ValdaPlayerPack2/Yarn Golem.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

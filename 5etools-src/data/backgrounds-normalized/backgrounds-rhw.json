@@ -4,31 +4,418 @@
     "name": "Haunted One",
     "source": "RHW",
     "page": 26,
-    "skills": "arcana, survival",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Arcana, Survival",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Arcana",
+        "Survival"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Gaming Set (same as above), crowbar, Holy Water (1 flask), mirror, Oil (2 flasks), signal whistle, tinderbox, traveler's clothes, 5x Torches, waterskin + 14 gp",
+              "items": [
+                {
+                  "name": "Gaming Set (same as above)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "crowbar",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Holy Water (1 flask)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "mirror",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Oil (2 flasks)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "signal whistle",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "tinderbox",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Torches",
+                  "quantity": 5,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "waterskin",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 14
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Survivor",
+        "description": "This background grants the Survivor feat."
+      },
+      {
+        "name": "Bonus Feat: AnyFromCategory",
+        "description": "This background grants the AnyFromCategory feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Wisdom, Charisma\n- **Feat:** Survivor or a Dark Gift feat of your choice|feats|category=DG\n- **Skill Proficiencies:** Arcana and Survival\n- **Tool Proficiencies:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Gaming Set (same as above), Crowbar, Holy Water (1 flask), Mirror, Oil(2 flask), Signal Whistle, Tinderbox, Traveler's Clothes, 5 Torch, Waterskin, and 14 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_investigator_rhw",
     "name": "Investigator",
     "source": "RHW",
     "page": 26,
-    "skills": "insight, investigation",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Insight, Investigation",
+    "tools": "Disguise Kit",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Investigation"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Disguise Kit"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "disguise kit, manacles, shovel, traveler's clothes, 3x Vials + 16 gp",
+              "items": [
+                {
+                  "name": "disguise kit",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "manacles",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "shovel",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Vials",
+                  "quantity": 3,
+                  "type": "item",
+                  "containedGp": 0
+                }
+              ],
+              "gold": 16
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Sharp Eye",
+        "description": "This background grants the Sharp Eye feat."
+      },
+      {
+        "name": "Bonus Feat: AnyFromCategory",
+        "description": "This background grants the AnyFromCategory feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Intelligence, Wisdom, Charisma\n- **Feat:** Sharp Eye or a Dark Gift feat of your choice|feats|category=DG\n- **Skill Proficiencies:** Insight and Investigation\n- **Tool Proficiencies:** Disguise Kit\n- **Equipment:** Choose A or B: (A) Disguise Kit, Manacles, Shovel, Traveler's Clothes, 3 Vial, and 16 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_mist_wanderer_rhw",
     "name": "Mist Wanderer",
     "source": "RHW",
     "page": 27,
-    "skills": "survival, stealth",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Survival, Stealth",
+    "tools": "Choose 1 from Artisan's Tools of your choice",
+    "skillsData": {
+      "fixed": [
+        "Survival",
+        "Stealth"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "Artisan's Tools of your choice"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "Artisan's Tools (same as above), lamp, Oil (5 flasks), pouch, rope, tinderbox, traveler's clothes + 30 gp",
+              "items": [
+                {
+                  "name": "Artisan's Tools (same as above)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "lamp",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Oil (5 flasks)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "pouch",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "rope",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "tinderbox",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 30
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: AnyFromCategory",
+        "description": "This background grants the AnyFromCategory feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Constitution, Wisdom\n- **Feat:** A Dark Gift feat of your choice|feats|category=DG (Mist Walker is recommended)\n- **Skill Proficiencies:** Survival and Stealth\n- **Tool Proficiencies:** Choose one kind of Artisan's Tools\n- **Equipment:** Choose A or B: (A) Artisan's Tools (same as above), Lamp, Oil (5 flasks), Pouch, Rope, Tinderbox, Traveler's Clothes, and 30 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_spirit_medium_rhw",
     "name": "Spirit Medium",
     "source": "RHW",
     "page": 27,
-    "skills": "insight, religion",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Insight, Religion",
+    "tools": "Choose 1 from AnyGamingSet",
+    "skillsData": {
+      "fixed": [
+        "Insight",
+        "Religion"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [],
+      "choose": {
+        "count": 1,
+        "from": [
+          "AnyGamingSet"
+        ]
+      }
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "dagger, Gaming Set (same as above), basket, bell, 8x Candles, ink, ink pen, Paper (5 sheets), tinderbox, traveler's clothes + 32 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Gaming Set (same as above)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "basket",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "bell",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Candles",
+                  "quantity": 8,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "ink",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "ink pen",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Paper (5 sheets)",
+                  "quantity": 1,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "tinderbox",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 32
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: AnyFromCategory",
+        "description": "This background grants the AnyFromCategory feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Constitution, Intelligence, Wisdom\n- **Feat:** A Dark Gift feat of your choice|feats|category=DG (Gathered Whispers is recommended)\n- **Skill Proficiencies:** Insight and Religion\n- **Tool Proficiencies:** Choose one kind of Gaming Set\n- **Equipment:** Choose A or B: (A) Dagger, Gaming Set (same as above), Basket, Bell, 8 Candles, Ink, Ink Pen, Paper (5 sheets), Tinderbox, Traveler's Clothes, and 32 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   }
 ]

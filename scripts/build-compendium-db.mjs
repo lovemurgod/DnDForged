@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getBrewEntities } from './brew-data-loader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,40 @@ function cleanTags(text) {
         .replace(/\{@link\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
         .replace(/\{@5etools\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
         .replace(/\{@[a-zA-Z0-9_-]+\s+([^}]+)\}/g, '$1');
+}
+
+function cleanTagsPlain(text) {
+    if (!text || typeof text !== 'string') return '';
+    return text
+        .replace(/\{@(?:spell|item|creature|condition|sense|skill|action|background|race|class|feat|table|hazard)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+        .replace(/\{@(?:dice|damage|d20)\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+        .replace(/\{@b\s+([^}]+)\}/gi, '$1')
+        .replace(/\{@i\s+([^}]+)\}/gi, '$1')
+        .replace(/\{@u\s+([^}]+)\}/gi, '$1')
+        .replace(/\{@s\s+([^}]+)\}/gi, '$1')
+        .replace(/\{@note\s+([^}]+)\}/gi, 'Note: $1')
+        .replace(/\{@link\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+        .replace(/\{@5etools\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1')
+        .replace(/\{@[a-zA-Z0-9_-]+\s+([^}]+)\}/g, '$1');
+}
+
+function renderEntriesToText(entries) {
+    if (!entries) return '';
+    if (typeof entries === 'string') return cleanTagsPlain(entries);
+    if (Array.isArray(entries)) {
+        return entries.map(e => renderEntriesToText(e)).filter(Boolean).join('\n\n');
+    }
+    if (typeof entries === 'object' && entries !== null) {
+        if (entries.type === 'list' && Array.isArray(entries.items)) {
+            return entries.items.map(it => '- ' + renderEntriesToText(it)).join('\n');
+        }
+        let txt = entries.name ? `**${cleanTagsPlain(entries.name)}**` : '';
+        if (entries.entry) txt += (txt ? ' ' : '') + renderEntriesToText(entries.entry);
+        if (entries.entries) txt += (txt ? '\n\n' : '') + renderEntriesToText(entries.entries);
+        else if (entries.items) txt += (txt ? '\n' : '') + renderEntriesToText(entries.items);
+        return txt;
+    }
+    return '';
 }
 
 function renderEntriesToHtml(entries) {
@@ -69,10 +104,121 @@ function extractPlainText(entries) {
 
 function detectActionType(text, featureName) {
     const lower = (featureName + ' ' + text).toLowerCase();
-    if (lower.includes('as a bonus action') || lower.includes('bonus action:')) return 'bonus';
-    if (lower.includes('as a reaction') || lower.includes('reaction:')) return 'reaction';
-    if (lower.includes('as an action') || lower.includes('action:')) return 'action';
+    if (lower.match(/(?:as a|using a|with your|as your|with a)\s+bonus action/i) || lower.match(/\bbonus action:/i) || lower.includes('second wind')) return 'bonus';
+    if (lower.match(/(?:as a|using a|with your|as your|with a)\s+reaction/i) || lower.match(/\breaction:/i)) return 'reaction';
+    if (lower.match(/(?:as an|take an|using an|as a magic|take the magic)\s+action/i) || lower.match(/\baction:/i) || lower.includes('present your holy symbol')) return 'action';
     return 'passive';
+}
+
+function detectFormula(entries, featureName, className, level) {
+    const text = extractPlainText(entries);
+    const raw = typeof entries === 'string' ? entries : JSON.stringify(entries || []);
+    const combined = featureName + ' ' + text + ' ' + raw;
+
+    // 1. Second Wind
+    if (featureName === 'Second Wind') {
+        const cName = className || 'Fighter';
+        return {
+            formula: `1d10 + @classes.${cleanId(cName)}.level`,
+            formulaConfig: {
+                baseDice: '1d10',
+                scalingMod: 'classLevel',
+                modClass: cName,
+                extraBonus: 0
+            }
+        };
+    }
+
+    // 2. Channel Divinity: Radiance of the Dawn
+    if (featureName.includes('Radiance of the Dawn')) {
+        const cName = className || 'Cleric';
+        return {
+            formula: `2d10 + @classes.${cleanId(cName)}.level`,
+            formulaConfig: {
+                baseDice: '2d10',
+                scalingMod: 'classLevel',
+                modClass: cName,
+                extraBonus: 0
+            }
+        };
+    }
+
+    // 3. Regex for: (dice) + (your <className> level | your level)
+    const classLvlRegex = /(?:\{@(?:dice|damage)\s+([0-9]+d[0-9]+)\}|([0-9]+d[0-9]+))\s*(?:\+|plus)\s*(?:your\s+)?([a-zA-Z]+)?\s*level/i;
+    const matchCls = combined.match(classLvlRegex);
+    if (matchCls) {
+        const dice = matchCls[1] || matchCls[2];
+        const specifiedClass = matchCls[3] ? matchCls[3].trim() : '';
+        const targetClass = (specifiedClass && specifiedClass.toLowerCase() !== 'character') 
+            ? specifiedClass.charAt(0).toUpperCase() + specifiedClass.slice(1).toLowerCase() 
+            : (className || '');
+        
+        const isTotalLevel = !specifiedClass || specifiedClass.toLowerCase() === 'character' || !targetClass;
+        const modKey = isTotalLevel ? '@level' : `@classes.${cleanId(targetClass)}.level`;
+        
+        return {
+            formula: `${dice} + ${modKey}`,
+            formulaConfig: {
+                baseDice: dice,
+                scalingMod: isTotalLevel ? 'level' : 'classLevel',
+                modClass: isTotalLevel ? '' : targetClass,
+                extraBonus: 0
+            }
+        };
+    }
+
+    // 4. Regex for: (dice) + (your <ability> modifier)
+    const abModRegex = /(?:\{@(?:dice|damage)\s+([0-9]+d[0-9]+)\}|([0-9]+d[0-9]+))\s*(?:\+|plus)\s*(?:your\s+)?(strength|dexterity|constitution|intelligence|wisdom|charisma)\s*modifier/i;
+    const matchAb = combined.match(abModRegex);
+    if (matchAb) {
+        const dice = matchAb[1] || matchAb[2];
+        const abMap = { strength: 'STR', dexterity: 'DEX', constitution: 'CON', intelligence: 'INT', wisdom: 'WIS', charisma: 'CHA' };
+        const stat = abMap[matchAb[3].toLowerCase()] || 'STR';
+        return {
+            formula: `${dice} + @${stat.toLowerCase()}`,
+            formulaConfig: {
+                baseDice: dice,
+                scalingMod: stat,
+                modClass: '',
+                extraBonus: 0
+            }
+        };
+    }
+
+    // 5. Regex for: (dice) + (your proficiency bonus | PB)
+    const pbRegex = /(?:\{@(?:dice|damage)\s+([0-9]+d[0-9]+)\}|([0-9]+d[0-9]+))\s*(?:\+|plus)\s*(?:your\s+)?proficiency\s*bonus/i;
+    const matchPb = combined.match(pbRegex);
+    if (matchPb) {
+        const dice = matchPb[1] || matchPb[2];
+        return {
+            formula: `${dice} + @pb`,
+            formulaConfig: {
+                baseDice: dice,
+                scalingMod: 'PB',
+                modClass: '',
+                extraBonus: 0
+            }
+        };
+    }
+
+    // 6. Generic {@dice XdY} or {@damage XdY} in text (if single prominent roll)
+    const genericDice = combined.match(/\{@(?:dice|damage)\s+([0-9]+d[0-9]+(?:\s*[+\-]\s*[0-9]+)?)\}/i);
+    if (genericDice) {
+        const f = genericDice[1].trim();
+        const baseDiceMatch = f.match(/^([0-9]+d[0-9]+)/i);
+        const extraMatch = f.match(/[+\-]\s*([0-9]+)/);
+        return {
+            formula: f,
+            formulaConfig: {
+                baseDice: baseDiceMatch ? baseDiceMatch[1] : f,
+                scalingMod: 'none',
+                modClass: '',
+                extraBonus: extraMatch ? parseInt(extraMatch[0].replace(/\s+/g, '')) : 0
+            }
+        };
+    }
+
+    return { formula: '', formulaConfig: null };
 }
 
 function detectCounter(text, featureName, level) {
@@ -99,7 +245,7 @@ function detectCounter(text, featureName, level) {
         else if (level >= 13) iUses = 2;
         return { hasCounter: true, usesMax: iUses, resetType: 'long' };
     }
-    if (featureName === 'Channel Divinity') {
+    if (featureName === 'Channel Divinity' || featureName.startsWith('Channel Divinity:') || lower.includes('use your channel divinity')) {
         let cdUses = 1;
         if (level >= 18) cdUses = 3;
         else if (level >= 6) cdUses = 2;
@@ -168,50 +314,276 @@ function cleanId(str) {
     return (str || '').toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
 }
 
-// ─── 1. Races / Species ────────────────────────────────────────────────────────
+// ─── 1. Races / Species Trait Unpacking ───────────────────────────────────────
+function getRaceEntries(r, allRaces, visited = new Set()) {
+    if (!r) return [];
+    const rKey = `${(r.name || '').toLowerCase()}|${(r.source || '').toLowerCase()}`;
+    if (visited.has(rKey)) return [];
+    visited.add(rKey);
+
+    if (r.entries && r.entries.length > 0) return JSON.parse(JSON.stringify(r.entries));
+    if (r._copy) {
+        const base = allRaces.find(x => x.name === r._copy.name && (!r._copy.source || x.source === r._copy.source));
+        if (base && base !== r) {
+            let entries = getRaceEntries(base, allRaces, visited);
+            if (r._copy._mod && Array.isArray(r._copy._mod.entries)) {
+                for (const mod of r._copy._mod.entries) {
+                    if (mod.mode === 'replaceArr' && mod.replace && mod.items) {
+                        const idx = entries.findIndex(e => e && e.name === mod.replace);
+                        if (idx !== -1) entries[idx] = mod.items;
+                        else entries.push(mod.items);
+                    } else if (mod.mode === 'appendArr' && mod.items) {
+                        if (Array.isArray(mod.items)) entries.push(...mod.items);
+                        else entries.push(mod.items);
+                    }
+                }
+            }
+            return entries;
+        }
+    }
+    return [];
+}
+
+function getSubraceEntries(s, allSubraces, visited = new Set()) {
+    if (!s) return [];
+    const sKey = `${(s.name || '').toLowerCase()}|${(s.raceName || '').toLowerCase()}|${(s.source || '').toLowerCase()}`;
+    if (visited.has(sKey)) return [];
+    visited.add(sKey);
+
+    if (s.entries && s.entries.length > 0) return JSON.parse(JSON.stringify(s.entries));
+    if (s._copy) {
+        const base = allSubraces.find(x => x.name === s._copy.name && (!s._copy.source || x.source === s._copy.source));
+        if (base && base !== s) {
+            let entries = getSubraceEntries(base, allSubraces, visited);
+            if (s._copy._mod && Array.isArray(s._copy._mod.entries)) {
+                for (const mod of s._copy._mod.entries) {
+                    if (mod.mode === 'replaceArr' && mod.replace && mod.items) {
+                        const idx = entries.findIndex(e => e && e.name === mod.replace);
+                        if (idx !== -1) entries[idx] = mod.items;
+                        else entries.push(mod.items);
+                    } else if (mod.mode === 'appendArr' && mod.items) {
+                        if (Array.isArray(mod.items)) entries.push(...mod.items);
+                        else entries.push(mod.items);
+                    }
+                }
+            }
+            return entries;
+        }
+    }
+    return [];
+}
+
+function unpackRaceTraits(race, allRaces) {
+    const entries = getRaceEntries(race, allRaces);
+    const traits = [];
+    const generalParts = [];
+
+    for (const entry of entries) {
+        if (typeof entry === 'string') {
+            generalParts.push(cleanTagsPlain(entry));
+            continue;
+        }
+        if (typeof entry === 'object' && entry !== null) {
+            const traitName = entry.name ? cleanTagsPlain(entry.name) : '';
+            const traitEntries = entry.entries || (entry.items ? entry.items : []);
+            const traitText = renderEntriesToText(traitEntries).trim();
+
+            if (traitName) {
+                const plain = traitName + ' ' + traitText;
+                const actionType = detectActionType(plain, traitName);
+                const cnt = detectCounter(plain, traitName, 1);
+                const fmla = detectFormula(traitEntries, traitName, '', 1);
+
+                traits.push({
+                    id: `trait_${cleanId(race.name)}_${cleanId(traitName)}_${cleanId(race.source)}`,
+                    name: traitName,
+                    source: race.source,
+                    raceName: race.name,
+                    actionType,
+                    description: traitText,
+                    hasCounter: cnt.hasCounter,
+                    usesMax: cnt.usesMax,
+                    resetType: cnt.resetType,
+                    formula: fmla.formula || '',
+                    formulaConfig: fmla.formulaConfig || null,
+                    rawEntries: traitEntries
+                });
+            } else if (traitText) {
+                generalParts.push(traitText);
+            }
+        }
+    }
+
+    const generalDesc = generalParts.join('\n\n');
+    return { traits, generalDesc };
+}
+
+function unpackSubraceTraits(subrace, allSubraces) {
+    const entries = getSubraceEntries(subrace, allSubraces);
+    const traits = [];
+    const generalParts = [];
+
+    for (const entry of entries) {
+        if (typeof entry === 'string') {
+            generalParts.push(cleanTagsPlain(entry));
+            continue;
+        }
+        if (typeof entry === 'object' && entry !== null) {
+            const traitName = entry.name ? cleanTagsPlain(entry.name) : '';
+            const traitEntries = entry.entries || (entry.items ? entry.items : []);
+            const traitText = renderEntriesToText(traitEntries).trim();
+
+            if (traitName) {
+                const plain = traitName + ' ' + traitText;
+                const actionType = detectActionType(plain, traitName);
+                const cnt = detectCounter(plain, traitName, 1);
+                const fmla = detectFormula(traitEntries, traitName, '', 1);
+
+                traits.push({
+                    id: `trait_${cleanId(subrace.raceName || '')}_${cleanId(subrace.name)}_${cleanId(traitName)}_${cleanId(subrace.source)}`,
+                    name: traitName,
+                    source: subrace.source,
+                    raceName: subrace.raceName || subrace.name,
+                    subraceName: subrace.name,
+                    actionType,
+                    description: traitText,
+                    hasCounter: cnt.hasCounter,
+                    usesMax: cnt.usesMax,
+                    resetType: cnt.resetType,
+                    formula: fmla.formula || '',
+                    formulaConfig: fmla.formulaConfig || null,
+                    rawEntries: traitEntries
+                });
+            } else if (traitText) {
+                generalParts.push(traitText);
+            }
+        }
+    }
+
+    const generalDesc = generalParts.join('\n\n');
+    return { traits, generalDesc };
+}
+
 function buildRaces() {
-    console.log('📦 Normalizing Races & Species...');
+    console.log('📦 Normalizing Races & Species with Unpacked Traits...');
     const racesFile = path.join(dataDir, 'races.json');
     if (!fs.existsSync(racesFile)) return;
 
     const data = JSON.parse(fs.readFileSync(racesFile, 'utf8'));
-    const rawList = data.race || [];
+    const rawList = [...(data.race || []), ...getBrewEntities('race')];
+    const rawSubList = [...(data.subrace || []), ...getBrewEntities('subrace')];
     const allRaces = [];
     const seen = new Set();
 
+    // 1. Unpack traits on all primary races and store back in data.race
     for (const r of rawList) {
         const name = (r.name || '').trim();
         const source = (r.source || 'PHB').trim();
         if (!name) continue;
 
-        const key = `${name.toLowerCase()}|${source.toLowerCase()}`;
-        if (seen.has(key)) continue;
-        seen.add(key);
+        const { traits, generalDesc } = unpackRaceTraits(r, rawList);
+        r.traits = traits;
+        r.description = generalDesc || traits.map(t => `**${t.name}**: ${t.description}`).join('\n\n');
 
-        const size = Array.isArray(r.size) ? r.size.join('/') : (r.size || 'Medium');
-        let speed = '30 ft';
-        if (typeof r.speed === 'number') speed = `${r.speed} ft`;
-        else if (typeof r.speed === 'object' && r.speed !== null) {
-            speed = Object.entries(r.speed).map(([k, v]) => `${k !== 'walk' ? k + ' ' : ''}${v} ft`).join(', ');
+        const key = `${name.toLowerCase()}|${source.toLowerCase()}`;
+        if (!seen.has(key)) {
+            seen.add(key);
+
+            const size = Array.isArray(r.size) ? r.size.join('/') : (r.size || 'Medium');
+            let speed = '30 ft';
+            if (typeof r.speed === 'number') speed = `${r.speed} ft`;
+            else if (typeof r.speed === 'object' && r.speed !== null) {
+                speed = Object.entries(r.speed).map(([k, v]) => `${k !== 'walk' ? k + ' ' : ''}${v} ft`).join(', ');
+            }
+
+            const traitsHtml = renderEntriesToHtml(r.entries || []);
+
+            allRaces.push({
+                id: `race_${cleanId(name)}_${cleanId(source)}`,
+                name,
+                source,
+                page: r.page || 0,
+                size,
+                speed,
+                traitsHtml,
+                traits,
+                description: r.description
+            });
+        }
+    }
+
+    // 2. Unpack traits on all subraces and combine with base race traits
+    for (const s of rawSubList) {
+        const subName = (s.name || '').trim();
+        const raceName = (s.raceName || '').trim();
+        const source = (s.source || 'PHB').trim();
+        if (!subName || !raceName) continue;
+
+        const baseRace = rawList.find(x => x.name.toLowerCase() === raceName.toLowerCase() && (!s.raceSource || x.source.toLowerCase() === s.raceSource.toLowerCase()));
+        const baseTraits = baseRace?.traits || [];
+
+        const { traits: subTraits, generalDesc: subDesc } = unpackSubraceTraits(s, rawSubList);
+        
+        // Merge base traits and subrace traits (avoid duplicate trait names)
+        const combinedTraits = [...baseTraits];
+        for (const st of subTraits) {
+            const existingIdx = combinedTraits.findIndex(t => t.name.toLowerCase() === st.name.toLowerCase());
+            if (existingIdx !== -1) {
+                combinedTraits[existingIdx] = st;
+            } else {
+                combinedTraits.push(st);
+            }
         }
 
-        const traits = renderEntriesToHtml(r.entries || []);
+        s.traits = combinedTraits;
+        s.description = subDesc || combinedTraits.map(t => `**${t.name}**: ${t.description}`).join('\n\n');
 
-        allRaces.push({
-            id: `race_${cleanId(name)}_${cleanId(source)}`,
-            name,
-            source,
-            page: r.page || 0,
-            size,
-            speed,
-            traitsHtml: traits
-        });
+        const displayName = `${raceName} (${subName})`;
+        const key = `${displayName.toLowerCase()}|${source.toLowerCase()}`;
+        if (!seen.has(key)) {
+            seen.add(key);
+
+            const size = Array.isArray(s.size) ? s.size.join('/') : (s.size || baseRace?.size || 'Medium');
+            let speed = '30 ft';
+            if (typeof s.speed === 'number') speed = `${s.speed} ft`;
+            else if (typeof s.speed === 'object' && s.speed !== null) {
+                speed = Object.entries(s.speed).map(([k, v]) => `${k !== 'walk' ? k + ' ' : ''}${v} ft`).join(', ');
+            } else if (baseRace?.speed) {
+                speed = typeof baseRace.speed === 'number' ? `${baseRace.speed} ft` : '30 ft';
+            }
+
+            allRaces.push({
+                id: `race_${cleanId(raceName)}_${cleanId(subName)}_${cleanId(source)}`,
+                name: displayName,
+                raceName,
+                subraceName: subName,
+                source,
+                page: s.page || baseRace?.page || 0,
+                size,
+                speed,
+                traitsHtml: renderEntriesToHtml(s.entries || []),
+                traits: combinedTraits,
+                description: s.description
+            });
+        }
     }
+
+    // Save enriched data back to races.json
+    fs.writeFileSync(racesFile, JSON.stringify(data, null, 2), 'utf8');
 
     allRaces.sort((a, b) => a.name.localeCompare(b.name));
 
-    // Catalog
-    const catalog = allRaces.map(r => ({ id: r.id, name: r.name, source: r.source, page: r.page, size: r.size, speed: r.speed }));
+    // Catalog with pre-unpacked traits and descriptions
+    const catalog = allRaces.map(r => ({ 
+        id: r.id, 
+        name: r.name, 
+        source: r.source, 
+        page: r.page, 
+        size: r.size, 
+        speed: r.speed,
+        traits: r.traits,
+        description: r.description
+    }));
     fs.writeFileSync(path.join(dataDir, 'races-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
 
     // Partitions
@@ -227,7 +599,7 @@ function buildRaces() {
     for (const [srcKey, list] of grouped.entries()) {
         fs.writeFileSync(path.join(partDir, `races-${srcKey}.json`), JSON.stringify(list, null, 2), 'utf8');
     }
-    console.log(`✅ Races catalog: ${catalog.length} entries across ${grouped.size} partitions.`);
+    console.log(`✅ Races catalog: ${catalog.length} entries (with ${catalog.reduce((acc, r) => acc + (r.traits?.length || 0), 0)} pre-unpacked traits) across ${grouped.size} partitions.`);
 }
 
 // ─── 2. Feats ─────────────────────────────────────────────────────────────────
@@ -237,7 +609,7 @@ function buildFeats() {
     if (!fs.existsSync(featsFile)) return;
 
     const data = JSON.parse(fs.readFileSync(featsFile, 'utf8'));
-    const rawList = data.feat || [];
+    const rawList = [...(data.feat || []), ...getBrewEntities('feat')];
     const allFeats = [];
     const seen = new Set();
 
@@ -245,6 +617,20 @@ function buildFeats() {
         const name = (f.name || '').trim();
         const source = (f.source || 'PHB').trim();
         if (!name) continue;
+
+        const desc = renderEntriesToText(f.entries || []);
+        const plain = (f.name || '') + ' ' + desc;
+        const actionType = detectActionType(plain, f.name);
+        const cnt = detectCounter(plain, f.name, 1);
+        const fmla = detectFormula(f.entries, f.name, '', 1);
+
+        f.description = desc;
+        f.actionType = actionType;
+        f.hasCounter = cnt.hasCounter;
+        f.usesMax = cnt.usesMax;
+        f.resetType = cnt.resetType;
+        f.formula = fmla.formula || '';
+        f.formulaConfig = fmla.formulaConfig || null;
 
         const key = `${name.toLowerCase()}|${source.toLowerCase()}`;
         if (seen.has(key)) continue;
@@ -271,14 +657,36 @@ function buildFeats() {
             source,
             page: f.page || 0,
             prerequisite: prereq,
-            entriesHtml
+            entriesHtml,
+            description: desc,
+            actionType,
+            hasCounter: cnt.hasCounter,
+            usesMax: cnt.usesMax,
+            resetType: cnt.resetType,
+            formula: fmla.formula || '',
+            formulaConfig: fmla.formulaConfig || null
         });
     }
 
+    fs.writeFileSync(featsFile, JSON.stringify(data, null, 2), 'utf8');
+
     allFeats.sort((a, b) => a.name.localeCompare(b.name));
 
-    // Catalog
-    const catalog = allFeats.map(f => ({ id: f.id, name: f.name, source: f.source, page: f.page, prerequisite: f.prerequisite }));
+    // Catalog with descriptions & pre-computed mechanics
+    const catalog = allFeats.map(f => ({ 
+        id: f.id, 
+        name: f.name, 
+        source: f.source, 
+        page: f.page, 
+        prerequisite: f.prerequisite,
+        description: f.description,
+        actionType: f.actionType,
+        hasCounter: f.hasCounter,
+        usesMax: f.usesMax,
+        resetType: f.resetType,
+        formula: f.formula,
+        formulaConfig: f.formulaConfig
+    }));
     fs.writeFileSync(path.join(dataDir, 'feats-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
 
     // Partitions
@@ -298,13 +706,229 @@ function buildFeats() {
 }
 
 // ─── 3. Backgrounds ───────────────────────────────────────────────────────────
+function parseBackgroundSkills(b) {
+    const fixed = [];
+    let choose = null;
+    if (Array.isArray(b.skillProficiencies)) {
+        for (const sp of b.skillProficiencies) {
+            if (typeof sp === 'string') {
+                fixed.push(sp.charAt(0).toUpperCase() + sp.slice(1).toLowerCase());
+            } else if (typeof sp === 'object' && sp !== null) {
+                if (sp.choose) {
+                    choose = {
+                        count: sp.choose.count || 1,
+                        from: (sp.choose.from || []).map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
+                    };
+                }
+                for (const [k, v] of Object.entries(sp)) {
+                    if (k !== 'choose' && v === true) {
+                        fixed.push(k.charAt(0).toUpperCase() + k.slice(1).toLowerCase());
+                    }
+                }
+            }
+        }
+    }
+    return { fixed: Array.from(new Set(fixed)), choose };
+}
+
+function formatToolName(str) {
+    if (!str) return '';
+    return str
+        .split(' ')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ')
+        .replace(/Tool(s?)\b/gi, 'Tools')
+        .replace(/Supplie(s?)\b/gi, 'Supplies')
+        .replace(/Kit(s?)\b/gi, 'Kit');
+}
+
+function parseBackgroundTools(b) {
+    const fixed = [];
+    let choose = null;
+    if (Array.isArray(b.toolProficiencies)) {
+        for (const tp of b.toolProficiencies) {
+            if (typeof tp === 'string') {
+                fixed.push(formatToolName(tp));
+            } else if (typeof tp === 'object' && tp !== null) {
+                if (tp.choose) {
+                    choose = {
+                        count: tp.choose.count || 1,
+                        from: (tp.choose.from || []).map(formatToolName)
+                    };
+                }
+                for (const [k, v] of Object.entries(tp)) {
+                    if (k !== 'choose' && v === true) {
+                        fixed.push(formatToolName(k));
+                    } else if (k.startsWith('any')) {
+                        const label = k === 'anyMusicalInstrument' ? 'Musical Instrument of your choice'
+                            : (k === 'anyArtisansTool' ? 'Artisan\'s Tools of your choice'
+                            : formatToolName(k));
+                        choose = choose || { count: v === true ? 1 : (v || 1), from: [label] };
+                    }
+                }
+            }
+        }
+    }
+    return { fixed: Array.from(new Set(fixed)), choose };
+}
+
+function cleanItemName(str) {
+    if (!str) return '';
+    return str.replace(/\|[^}]+$/g, '').replace(/\{@item\s+([^}|]+)(?:\|[^}]*)?\}/gi, '$1').trim();
+}
+
+function parseItemEntry(entry) {
+    if (typeof entry === 'string') {
+        return { name: cleanItemName(entry), quantity: 1, type: 'item' };
+    }
+    if (typeof entry === 'object' && entry !== null) {
+        if (entry.value !== undefined) {
+            const gp = Math.floor(entry.value / 100);
+            return { name: `${gp} gp`, quantity: 1, type: 'currency', gp };
+        }
+        let name = entry.displayName || cleanItemName(entry.item) || entry.special || 'Special Item';
+        let gp = 0;
+        if (entry.containsValue) {
+            gp = Math.floor(entry.containsValue / 100);
+        }
+        return {
+            name,
+            quantity: entry.quantity || 1,
+            type: entry.special ? 'special' : 'item',
+            containedGp: gp
+        };
+    }
+    return null;
+}
+
+function parseBackgroundEquipment(b) {
+    const raw = b.startingEquipment || [];
+    const fixedItems = [];
+    let fixedGold = 0;
+    const choiceSets = [];
+
+    for (const group of raw) {
+        if (Array.isArray(group)) {
+            for (const it of group) {
+                const p = parseItemEntry(it);
+                if (p) {
+                    if (p.type === 'currency') fixedGold += p.gp;
+                    else {
+                        if (p.containedGp) fixedGold += p.containedGp;
+                        fixedItems.push(p);
+                    }
+                }
+            }
+        } else if (typeof group === 'object' && group !== null) {
+            if (group._) {
+                for (const it of group._) {
+                    const p = parseItemEntry(it);
+                    if (p) {
+                        if (p.type === 'currency') fixedGold += p.gp;
+                        else {
+                            if (p.containedGp) fixedGold += p.containedGp;
+                            fixedItems.push(p);
+                        }
+                    }
+                }
+            }
+            
+            const optKeys = Object.keys(group).filter(k => k !== '_' && k.length <= 2);
+            if (optKeys.length > 0) {
+                const options = [];
+                for (const k of optKeys) {
+                    const list = Array.isArray(group[k]) ? group[k] : [group[k]];
+                    const items = [];
+                    let gold = 0;
+                    for (const it of list) {
+                        const p = parseItemEntry(it);
+                        if (p) {
+                            if (p.type === 'currency') gold += p.gp;
+                            else {
+                                if (p.containedGp) gold += p.containedGp;
+                                items.push(p);
+                            }
+                        }
+                    }
+                    const label = items.length > 0 
+                        ? items.map(i => (i.quantity > 1 ? `${i.quantity}x ` : '') + i.name).join(', ') + (gold > 0 ? ` + ${gold} gp` : '')
+                        : `${gold} gp`;
+                    options.push({ key: k.toUpperCase(), label, items, gold });
+                }
+                choiceSets.push({ options });
+            }
+        }
+    }
+
+    return { fixedItems, fixedGold, choiceSets };
+}
+
+function extractBackgroundFeatures(b) {
+    const features = [];
+    if (!b.entries || !Array.isArray(b.entries)) return features;
+
+    for (const entry of b.entries) {
+        if (typeof entry === 'object' && entry !== null && entry.name) {
+            const isFeat = (entry.data && entry.data.isFeature) ||
+                entry.name.toLowerCase().startsWith('feature:') ||
+                entry.name.toLowerCase().startsWith('feature -') ||
+                entry.name.toLowerCase().includes('specialty');
+            if (isFeat) {
+                const cleanName = cleanTagsPlain(entry.name).replace(/^Feature:\s*/i, 'Feature: ');
+                const text = renderEntriesToText(entry.entries || entry.items || []);
+                features.push({
+                    name: cleanName,
+                    description: text.trim()
+                });
+            }
+        }
+    }
+    if (features.length === 0 && Array.isArray(b.feats)) {
+        for (const fObj of b.feats) {
+            if (typeof fObj === 'object' && fObj !== null) {
+                for (const k of Object.keys(fObj)) {
+                    const featName = k.replace(/\|.*$/, '').replace(/;/g, ' -')
+                        .split(' ')
+                        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                        .join(' ');
+                    features.push({
+                        name: `Bonus Feat: ${featName}`,
+                        description: `This background grants the ${featName} feat.`
+                    });
+                }
+            }
+        }
+    }
+    if (features.length === 0) {
+        for (const entry of b.entries) {
+            if (typeof entry === 'object' && entry !== null && entry.name) {
+                const lower = entry.name.toLowerCase();
+                if (!lower.includes('suggested characteristics') && 
+                    !lower.includes('personality trait') && 
+                    !lower.includes('ideal') && 
+                    !lower.includes('bond') && 
+                    !lower.includes('flaw') && 
+                    !lower.includes('proficiency') && 
+                    !lower.includes('ability score') &&
+                    !lower.includes('equipment')) {
+                    features.push({
+                        name: cleanTagsPlain(entry.name),
+                        description: renderEntriesToText(entry.entries || []).trim()
+                    });
+                }
+            }
+        }
+    }
+    return features;
+}
+
 function buildBackgrounds() {
-    console.log('📦 Normalizing Backgrounds...');
+    console.log('📦 Normalizing Backgrounds with Skills, Tools & Equipment...');
     const bgFile = path.join(dataDir, 'backgrounds.json');
     if (!fs.existsSync(bgFile)) return;
 
     const data = JSON.parse(fs.readFileSync(bgFile, 'utf8'));
-    const rawList = data.background || [];
+    const rawList = [...(data.background || []), ...getBrewEntities('background')];
     const allBg = [];
     const seen = new Set();
 
@@ -313,20 +937,45 @@ function buildBackgrounds() {
         const source = (b.source || 'PHB').trim();
         if (!name) continue;
 
+        const desc = renderEntriesToText(b.entries || []);
+        const plain = (b.name || '') + ' ' + desc;
+        const actionType = detectActionType(plain, b.name);
+        const cnt = detectCounter(plain, b.name, 1);
+        const fmla = detectFormula(b.entries, b.name, '', 1);
+
+        const skillsData = parseBackgroundSkills(b);
+        const toolsData = parseBackgroundTools(b);
+        const equipmentData = parseBackgroundEquipment(b);
+        const features = extractBackgroundFeatures(b);
+
+        b.description = desc;
+        b.actionType = actionType;
+        b.hasCounter = cnt.hasCounter;
+        b.usesMax = cnt.usesMax;
+        b.resetType = cnt.resetType;
+        b.formula = fmla.formula || '';
+        b.formulaConfig = fmla.formulaConfig || null;
+
+        b.skillsData = skillsData;
+        b.toolsData = toolsData;
+        b.equipmentData = equipmentData;
+        b.features = features;
+
         const key = `${name.toLowerCase()}|${source.toLowerCase()}`;
         if (seen.has(key)) continue;
         seen.add(key);
 
-        let skills = 'None';
-        if (Array.isArray(b.skillProficiencies)) {
-            skills = b.skillProficiencies.map(sp => {
-                if (typeof sp === 'string') return sp;
-                const keys = Object.keys(sp).filter(k => sp[k] === true);
-                if (keys.length) return keys.join(', ');
-                if (sp.choose) return `Choose ${sp.choose.count || 1} from ${sp.choose.from.join(', ')}`;
-                return '';
-            }).filter(Boolean).join(', ') || 'None';
+        let skills = skillsData.fixed.join(', ');
+        if (skillsData.choose) {
+            skills += (skills ? '; ' : '') + `Choose ${skillsData.choose.count} from ${skillsData.choose.from.join(', ')}`;
         }
+        if (!skills) skills = 'None';
+
+        let tools = toolsData.fixed.join(', ');
+        if (toolsData.choose) {
+            tools += (tools ? '; ' : '') + `Choose ${toolsData.choose.count} from ${toolsData.choose.from.join(', ')}`;
+        }
+        if (!tools) tools = 'None';
 
         const entriesHtml = renderEntriesToHtml(b.entries || []);
 
@@ -336,14 +985,46 @@ function buildBackgrounds() {
             source,
             page: b.page || 0,
             skills,
-            entriesHtml
+            tools,
+            skillsData,
+            toolsData,
+            equipmentData,
+            features,
+            entriesHtml,
+            description: desc,
+            actionType,
+            hasCounter: cnt.hasCounter,
+            usesMax: cnt.usesMax,
+            resetType: cnt.resetType,
+            formula: fmla.formula || '',
+            formulaConfig: fmla.formulaConfig || null
         });
     }
 
+    fs.writeFileSync(bgFile, JSON.stringify(data, null, 2), 'utf8');
+
     allBg.sort((a, b) => a.name.localeCompare(b.name));
 
-    // Catalog
-    const catalog = allBg.map(b => ({ id: b.id, name: b.name, source: b.source, page: b.page, skills: b.skills }));
+    // Catalog with pre-parsed skillsData, toolsData, equipmentData, features
+    const catalog = allBg.map(b => ({ 
+        id: b.id, 
+        name: b.name, 
+        source: b.source, 
+        page: b.page, 
+        skills: b.skills,
+        tools: b.tools,
+        skillsData: b.skillsData,
+        toolsData: b.toolsData,
+        equipmentData: b.equipmentData,
+        features: b.features,
+        description: b.description,
+        actionType: b.actionType,
+        hasCounter: b.hasCounter,
+        usesMax: b.usesMax,
+        resetType: b.resetType,
+        formula: b.formula,
+        formulaConfig: b.formulaConfig
+    }));
     fs.writeFileSync(path.join(dataDir, 'backgrounds-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
 
     // Partitions
@@ -359,7 +1040,7 @@ function buildBackgrounds() {
     for (const [srcKey, list] of grouped.entries()) {
         fs.writeFileSync(path.join(partDir, `backgrounds-${srcKey}.json`), JSON.stringify(list, null, 2), 'utf8');
     }
-    console.log(`✅ Backgrounds catalog: ${catalog.length} entries across ${grouped.size} partitions.`);
+    console.log(`✅ Backgrounds catalog: ${catalog.length} entries with pre-computed skills, tools, equipment, features across ${grouped.size} partitions.`);
 }
 
 // ─── 4. Classes & Subclasses (with full feature trees & usage counters) ────────
@@ -378,22 +1059,91 @@ function buildClasses() {
         const filePath = path.join(classDir, file);
         try {
             const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+            let modified = false;
+
+            if (data.classFeature) {
+                data.classFeature.forEach(cf => {
+                    const plainText = extractPlainText(cf.entries);
+                    cf.actionType = detectActionType(plainText, cf.name);
+                    const cnt = detectCounter(plainText, cf.name, cf.level || 1);
+                    cf.hasCounter = cnt.hasCounter;
+                    cf.usesMax = cnt.usesMax;
+                    cf.resetType = cnt.resetType;
+                    const fmla = detectFormula(cf.entries, cf.name, cf.className, cf.level || 1);
+                    cf.formula = fmla.formula || '';
+                    cf.formulaConfig = fmla.formulaConfig || null;
+                });
+                modified = true;
+                rawClassFeatures.push(...data.classFeature);
+            }
+
+            if (data.subclassFeature) {
+                data.subclassFeature.forEach(sf => {
+                    const plainText = extractPlainText(sf.entries);
+                    sf.actionType = detectActionType(plainText, sf.name);
+                    const cnt = detectCounter(plainText, sf.name, sf.level || 1);
+                    sf.hasCounter = cnt.hasCounter;
+                    sf.usesMax = cnt.usesMax;
+                    sf.resetType = cnt.resetType;
+                    const fmla = detectFormula(sf.entries, sf.name, sf.className, sf.level || 1);
+                    sf.formula = fmla.formula || '';
+                    sf.formulaConfig = fmla.formulaConfig || null;
+                });
+                modified = true;
+                rawSubclassFeatures.push(...data.subclassFeature);
+            }
+
             if (data.class) rawClasses.push(...data.class);
             if (data.subclass) rawSubclasses.push(...data.subclass);
-            if (data.classFeature) rawClassFeatures.push(...data.classFeature);
-            if (data.subclassFeature) rawSubclassFeatures.push(...data.subclassFeature);
+
+            if (modified) {
+                fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+            }
         } catch (e) {
             console.error(`Error reading ${file}:`, e.message);
         }
     }
+
+    // Ingest Partnered and UA classes, subclasses, and features
+    const brewClassFeatures = getBrewEntities('classFeature');
+    brewClassFeatures.forEach(cf => {
+        const plainText = extractPlainText(cf.entries);
+        cf.actionType = detectActionType(plainText, cf.name);
+        const cnt = detectCounter(plainText, cf.name, cf.level || 1);
+        cf.hasCounter = cnt.hasCounter;
+        cf.usesMax = cnt.usesMax;
+        cf.resetType = cnt.resetType;
+        const fmla = detectFormula(cf.entries, cf.name, cf.className, cf.level || 1);
+        cf.formula = fmla.formula || '';
+        cf.formulaConfig = fmla.formulaConfig || null;
+    });
+    rawClassFeatures.push(...brewClassFeatures);
+
+    const brewSubclassFeatures = getBrewEntities('subclassFeature');
+    brewSubclassFeatures.forEach(sf => {
+        const plainText = extractPlainText(sf.entries);
+        sf.actionType = detectActionType(plainText, sf.name);
+        const cnt = detectCounter(plainText, sf.name, sf.level || 1);
+        sf.hasCounter = cnt.hasCounter;
+        sf.usesMax = cnt.usesMax;
+        sf.resetType = cnt.resetType;
+        const fmla = detectFormula(sf.entries, sf.name, sf.className, sf.level || 1);
+        sf.formula = fmla.formula || '';
+        sf.formulaConfig = fmla.formulaConfig || null;
+    });
+    rawSubclassFeatures.push(...brewSubclassFeatures);
+
+    rawClasses.push(...getBrewEntities('class'));
+    rawSubclasses.push(...getBrewEntities('subclass'));
 
     console.log(`Loaded ${rawClasses.length} classes, ${rawSubclasses.length} subclasses, ${rawClassFeatures.length} class features, ${rawSubclassFeatures.length} subclass features.`);
 
     // 1. Process Class Features
     const processedClassFeatures = rawClassFeatures.map(cf => {
         const plainText = extractPlainText(cf.entries);
-        const actionType = detectActionType(plainText, cf.name);
-        const cnt = detectCounter(plainText, cf.name, cf.level || 1);
+        const actionType = cf.actionType || detectActionType(plainText, cf.name);
+        const cnt = (cf.hasCounter !== undefined) ? { hasCounter: cf.hasCounter, usesMax: cf.usesMax, resetType: cf.resetType } : detectCounter(plainText, cf.name, cf.level || 1);
+        const fmla = cf.formulaConfig ? { formula: cf.formula, formulaConfig: cf.formulaConfig } : detectFormula(cf.entries, cf.name, cf.className, cf.level || 1);
         return {
             id: `cf_${cleanId(cf.className)}_${cleanId(cf.classSource)}_${cleanId(cf.name)}_${cf.level}`,
             name: cf.name,
@@ -406,6 +1156,8 @@ function buildClasses() {
             hasCounter: cnt.hasCounter,
             usesMax: cnt.usesMax,
             resetType: cnt.resetType,
+            formula: fmla.formula || '',
+            formulaConfig: fmla.formulaConfig || null,
             entriesHtml: renderEntriesToHtml(cf.entries || []),
             rawEntries: cf.entries || []
         };
@@ -414,8 +1166,9 @@ function buildClasses() {
     // 2. Process Subclass Features
     const processedSubclassFeatures = rawSubclassFeatures.map(sf => {
         const plainText = extractPlainText(sf.entries);
-        const actionType = detectActionType(plainText, sf.name);
-        const cnt = detectCounter(plainText, sf.name, sf.level || 1);
+        const actionType = sf.actionType || detectActionType(plainText, sf.name);
+        const cnt = (sf.hasCounter !== undefined) ? { hasCounter: sf.hasCounter, usesMax: sf.usesMax, resetType: sf.resetType } : detectCounter(plainText, sf.name, sf.level || 1);
+        const fmla = sf.formulaConfig ? { formula: sf.formula, formulaConfig: sf.formulaConfig } : detectFormula(sf.entries, sf.name, sf.className, sf.level || 1);
         return {
             id: `scf_${cleanId(sf.className)}_${cleanId(sf.subclassShortName)}_${cleanId(sf.subclassSource)}_${cleanId(sf.name)}_${sf.level}`,
             name: sf.name,
@@ -430,6 +1183,8 @@ function buildClasses() {
             hasCounter: cnt.hasCounter,
             usesMax: cnt.usesMax,
             resetType: cnt.resetType,
+            formula: fmla.formula || '',
+            formulaConfig: fmla.formulaConfig || null,
             entriesHtml: renderEntriesToHtml(sf.entries || []),
             rawEntries: sf.entries || []
         };

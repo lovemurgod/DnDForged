@@ -96,10 +96,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_6rbx",
+        "id": "act_incorporeal_movement_ve5f",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The avatar can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
+        "entries": [
+          "The avatar can move through other creatures and objects as if they were {@quickref difficult terrain||3}. It takes 5 ({@damage 1d10}) force damage if it ends its turn inside an object."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -118,10 +121,13 @@
         }
       },
       {
-        "id": "act_turn_immunity_zlzi",
+        "id": "act_turn_immunity_bovn",
         "name": "Turn Immunity",
         "actionType": "trait",
         "descriptionHtml": "<p>The avatar is immune to features that turn undead.</p>",
+        "entries": [
+          "The avatar is immune to features that turn undead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -137,10 +143,13 @@
     ],
     "actions": [
       {
-        "id": "act_reaping_scythe_oc50",
+        "id": "act_reaping_scythe_1ok0",
         "name": "Reaping Scythe",
         "actionType": "action",
         "descriptionHtml": "<p>The avatar sweeps its spectral scythe through a creature within 5 feet of it, dealing 7 (1d8 + 3) slashing damage plus 4 (1d8) necrotic damage.</p>",
+        "entries": [
+          "The avatar sweeps its spectral scythe through a creature within 5 feet of it, dealing 7 ({@damage 1d8 + 3}) slashing damage plus 4 ({@damage 1d8}) necrotic damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -170,11 +179,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DMG/Avatar of Death.webp",
     "tokenImg": "img/bestiary/tokens/DMG/Avatar of Death.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_giant_fly_dmg",
@@ -268,11 +289,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DMG/Giant Fly.webp",
     "tokenImg": "img/bestiary/tokens/DMG/Giant Fly.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_larva_dmg",
@@ -362,10 +395,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_vfyw",
+        "id": "act_bite_ynue",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}1 (1d4 - 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 1 (1d4 - 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 1} to hit, reach 5 ft., one target. {@h}1 ({@damage 1d4 - 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -391,10 +427,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DMG/Larva.webp",
     "tokenImg": "img/bestiary/tokens/DMG/Larva.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

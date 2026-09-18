@@ -4,15 +4,192 @@
     "name": "Lorwyn Expert",
     "source": "LFL",
     "page": 0,
-    "skills": "athletics, nature",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Athletics, Nature",
+    "tools": "Cartographer's Tools",
+    "skillsData": {
+      "fixed": [
+        "Athletics",
+        "Nature"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Cartographer's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "quarterstaff, cartographer's tools, backpack, basket, 4x Parchment (4 sheets), rope, traveler's clothes + 29 gp",
+              "items": [
+                {
+                  "name": "quarterstaff",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "cartographer's tools",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "backpack",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "basket",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Parchment (4 sheets)",
+                  "quantity": 4,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "rope",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 29
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Child Of The Sun",
+        "description": "This background grants the Child Of The Sun feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Strength, Constitution, Wisdom\n- **Feat:** Child of the Sun\n- **Skill Proficiencies:** Athletics and Nature\n- **Tool Proficiency:** Cartographer's Tools\n- **Equipment:** Choose A or B: (A) Quarterstaff, Cartographer's Tools, Backpack, Basket, Parchment (4 sheets), Rope, Traveler's Clothes, 29 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   },
   {
     "id": "bg_shadowmoor_expert_lfl",
     "name": "Shadowmoor Expert",
     "source": "LFL",
     "page": 0,
-    "skills": "acrobatics, deception",
-    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>"
+    "skills": "Acrobatics, Deception",
+    "tools": "Glassblower's Tools",
+    "skillsData": {
+      "fixed": [
+        "Acrobatics",
+        "Deception"
+      ],
+      "choose": null
+    },
+    "toolsData": {
+      "fixed": [
+        "Glassblower's Tools"
+      ],
+      "choose": null
+    },
+    "equipmentData": {
+      "fixedItems": [],
+      "fixedGold": 0,
+      "choiceSets": [
+        {
+          "options": [
+            {
+              "key": "A",
+              "label": "dagger, glassblower's tools, backpack, hunting trap, lamp, 3x Oil (3 flasks), traveler's clothes, waterskin + 8 gp",
+              "items": [
+                {
+                  "name": "dagger",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "glassblower's tools",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "backpack",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "hunting trap",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "lamp",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "Oil (3 flasks)",
+                  "quantity": 3,
+                  "type": "item",
+                  "containedGp": 0
+                },
+                {
+                  "name": "traveler's clothes",
+                  "quantity": 1,
+                  "type": "item"
+                },
+                {
+                  "name": "waterskin",
+                  "quantity": 1,
+                  "type": "item"
+                }
+              ],
+              "gold": 8
+            },
+            {
+              "key": "B",
+              "label": "50 gp",
+              "items": [],
+              "gold": 50
+            }
+          ]
+        }
+      ]
+    },
+    "features": [
+      {
+        "name": "Bonus Feat: Shadowmoor Hexer",
+        "description": "This background grants the Shadowmoor Hexer feat."
+      }
+    ],
+    "entriesHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Ability Scores:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Feat:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Skill Proficiencies:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Tool Proficiency:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Equipment:.</strong> </div></li></ul>",
+    "description": "- **Ability Scores:** Dexterity, Intelligence, Charisma\n- **Feat:** Shadowmoor Hexer\n- **Skill Proficiencies:** Acrobatics and Deception\n- **Tool Proficiency:** Glassblower's Tools\n- **Equipment:** Choose A or B: (A) Dagger, Glassblower's Tools, Backpack, Hunting Trap, Lamp, Oil (3 flasks), Traveler's Clothes, Waterskin, 8 GP; or (B) 50 GP",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
   }
 ]

@@ -84,10 +84,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_invisible_in_water_2imv",
+        "id": "act_invisible_in_water_5o2d",
         "name": "Invisible in Water",
         "actionType": "trait",
         "descriptionHtml": "<p>The big water slurpent is invisible while fully immersed in water.</p>",
+        "entries": [
+          "The big water slurpent is {@condition invisible} while fully immersed in water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -101,10 +104,13 @@
         }
       },
       {
-        "id": "act_water_bound_1jxw",
+        "id": "act_water_bound_fimt",
         "name": "Water Bound",
         "actionType": "trait",
         "descriptionHtml": "<p>The big water slurpent dies if it leaves the water to which it is bound or if that water is destroyed.</p>",
+        "entries": [
+          "The big water slurpent dies if it leaves the water to which it is bound or if that water is destroyed."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -120,10 +126,13 @@
     ],
     "actions": [
       {
-        "id": "act_constrict_bd00",
+        "id": "act_constrict_v9f0",
         "name": "Constrict",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, one target. {@h}13 (3d6+3) bludgeoning damage. If the target is Medium or smaller, it is grappled (escape DC 13) and pulled 5 feet toward the big water slurpent. Until this grapple ends, the target is restrained, the big water slurpent tries to drown it, and the big water slurpent can't constrict another target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, one target. Hit: 13 (3d6+3) bludgeoning damage. If the target is Medium or smaller, it is grappled (escape DC 13) and pulled 5 feet toward the big water slurpent. Until this grapple ends, the target is restrained, the big water slurpent tries to drown it, and the big water slurpent can't constrict another target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, one target. {@h}13 ({@damage 3d6+3}) bludgeoning damage. If the target is Medium or smaller, it is {@condition grappled} (escape {@dc 13}) and pulled 5 feet toward the big water slurpent. Until this {@action grapple} ends, the target is {@condition restrained}, the big water slurpent tries to drown it, and the big water slurpent can't constrict another target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -133,7 +142,7 @@
           "targets": null,
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -152,11 +161,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Big Water Slurpent.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Big Water Slurpent.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_birdsquirrel_awm",
@@ -243,10 +264,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_u5eh",
+        "id": "act_pack_tactics_ic0z",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>Birdsquirrel has advantage on an attack roll against a creature if at least one of the Birdsquirrel's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "Birdsquirrel has advantage on an attack roll against a creature if at least one of the Birdsquirrel's allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -262,10 +286,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rzls",
+        "id": "act_multiattack_bg28",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Birdsquirrel makes two attacks: one with its bite and one with its claws.</p>",
+        "entries": [
+          "Birdsquirrel makes two attacks: one with its bite and one with its claws."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -279,10 +306,13 @@
         }
       },
       {
-        "id": "act_bite_s7z4",
+        "id": "act_bite_p7cz",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6+2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6+2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -301,10 +331,13 @@
         }
       },
       {
-        "id": "act_claws_v4gv",
+        "id": "act_claws_miiy",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4+2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4+2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4+2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -330,11 +363,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Birdsquirrel.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Birdsquirrel.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_boontu_monkey_awm",
@@ -421,10 +466,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_jn60",
+        "id": "act_pack_tactics_piv9",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The Boontu monkey has advantage on an attack roll against a creature if at least one of the boontu monkey's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "The Boontu monkey has advantage on an attack roll against a creature if at least one of the boontu monkey's allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -440,10 +488,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_ht5m",
+        "id": "act_bite_pfwc",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +1 to hit, reach 5 ft., one target. {@h}1 (1d4 - 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 1 (1d4 - 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 1} to hit, reach 5 ft., one target. {@h}1 ({@damage 1d4 - 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -469,11 +520,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Boontu Monkey.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Boontu Monkey.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_crystal_cave_merfolk_awm",
@@ -560,10 +623,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_09au",
+        "id": "act_amphibious_w9xz",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merfolk can breathe air and water.</p>",
+        "entries": [
+          "The merfolk can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -577,10 +643,13 @@
         }
       },
       {
-        "id": "act_siren_song_to91",
+        "id": "act_siren_song_hk19",
         "name": "Siren Song",
         "actionType": "trait",
         "descriptionHtml": "<p>Lovely singing voices charm every humanoid or giant within 300 feet. The targets must succeed on a DC 11 Wisdom saving throw or be charmed until the song ends.</p>",
+        "entries": [
+          "Lovely singing voices charm every humanoid or giant within 300 feet. The targets must succeed on a {@dc 11} Wisdom saving throw or be {@condition charmed} until the song ends."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -599,10 +668,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_6vl1",
+        "id": "act_bite_vxmv",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, one target. {@h}3 (1d6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, one target. Hit: 3 (1d6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, one target. {@h}3 ({@damage 1d6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -628,11 +700,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Crystal Cave Merfolk.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Crystal Cave Merfolk.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dankwood_hag_awm",
@@ -720,7 +804,7 @@
       {
         "id": "sc_dankwood_hag_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 2,
@@ -791,7 +875,8 @@
                 "formula": "1d6",
                 "type": "Psychic",
                 "label": "",
-                "stat": "none"
+                "stat": "none",
+                "cantripScale": true
               }
             ],
             "components": "V",
@@ -809,10 +894,13 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_wwhs",
+        "id": "act_amphibious_b3t4",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The hag can breathe air and water.</p>",
+        "entries": [
+          "The hag can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -826,10 +914,13 @@
         }
       },
       {
-        "id": "act_mimicry__green_hag__k0ls",
+        "id": "act_mimicry__green_hag__p7ne",
         "name": "Mimicry (Green Hag)",
         "actionType": "trait",
         "descriptionHtml": "<p>The hag can mimic animal sounds and humanoid voices. A creature that hears the sounds can tell they are imitations with a successful DC 14 Wisdom (Insight) check.</p>",
+        "entries": [
+          "The hag can mimic animal sounds and humanoid voices. A creature that hears the sounds can tell they are imitations with a successful {@dc 14} Wisdom ({@skill Insight}) check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -839,7 +930,7 @@
           "targets": null,
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
@@ -848,10 +939,13 @@
     ],
     "actions": [
       {
-        "id": "act_illusory_appearance_ajhq",
+        "id": "act_illusory_appearance_qebp",
         "name": "Illusory Appearance",
         "actionType": "action",
         "descriptionHtml": "<p>The hag covers herself with a magical illusion that allows her to look like another creature of her general size and shape. The illusion ends when the hag chooses, or if she dies. A DC 20 Intelligence (Investigation) check will expose the hag's disguise.</p>",
+        "entries": [
+          "The hag covers herself with a magical illusion that allows her to look like another creature of her general size and shape. The illusion ends when the hag chooses, or if she dies. A {@dc 20} Intelligence ({@skill Investigation}) check will expose the hag's disguise."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -861,17 +955,20 @@
           "targets": null,
           "save": {
             "dc": 20,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_invisible_passage_szm8",
+        "id": "act_invisible_passage_g0k6",
         "name": "Invisible Passage",
         "actionType": "action",
         "descriptionHtml": "<p>The hag magically turns invisible until she attacks or casts a spell, or until her concentration ends. While invisible, she leaves no physical evidence of her passage, and can only be tracked by magic.</p>",
+        "entries": [
+          "The hag magically turns {@condition invisible} until she attacks or casts a spell, or until her {@status concentration} ends. While {@condition invisible}, she leaves no physical evidence of her passage, and can only be tracked by magic."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -885,10 +982,13 @@
         }
       },
       {
-        "id": "act_claws_kf1e",
+        "id": "act_claws_qgqz",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, one target. {@h}17 (2d8 + 4) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, one target. Hit: 17 (2d8 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, one target. {@h}17 ({@damage 2d8 + 4}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -914,11 +1014,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Dankwood Hag.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Dankwood Hag.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dum_dum_goblin_awm",
@@ -1005,10 +1117,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_nimble_escape_hfzc",
+        "id": "act_nimble_escape_brke",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>The goblin can take the Disengage or Hide action as a bonus action on each of its turns.</p>",
+        "entries": [
+          "The goblin can take the {@action Disengage} or {@action Hide} action as a bonus action on each of its turns."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1024,10 +1139,13 @@
     ],
     "actions": [
       {
-        "id": "act_catch_me_if_you_can__7jiu",
+        "id": "act_catch_me_if_you_can__vwy1",
         "name": "Catch me if you can!",
         "actionType": "action",
         "descriptionHtml": "<p>Dum-Dum Goblins will opt to run and hide before fighting! A DC 15 Dexterity check must be made before they can be attacked.</p>",
+        "entries": [
+          "Dum-Dum Goblins will opt to run and hide before fighting! A {@dc 15} Dexterity check must be made before they can be attacked."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1037,17 +1155,20 @@
           "targets": null,
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_scimitar_x87p",
+        "id": "act_scimitar_c657",
         "name": "Scimitar",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, one target. {@h}3 (1d6 +2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, one target. Hit: 3 (1d6 +2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, one target. {@h}3 ({@damage 1d6 +2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1066,10 +1187,13 @@
         }
       },
       {
-        "id": "act_shortbow_c6fc",
+        "id": "act_shortbow_9f38",
         "name": "Shortbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, one target. {@h}6 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, one target. Hit: 6 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, one target. {@h}6 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1095,11 +1219,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Dum-Dum Goblin.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Dum-Dum Goblin.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dwarf_awm",
@@ -1188,10 +1324,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dwarven_resilience_abd5",
+        "id": "act_dwarven_resilience_630t",
         "name": "Dwarven Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>They have advantage on saving throws against poison, and they have resistance to poison damage.</p>",
+        "entries": [
+          "They have advantage on saving throws against poison, and they have resistance to poison damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1207,10 +1346,13 @@
     ],
     "actions": [
       {
-        "id": "act_shortbow_bvtc",
+        "id": "act_shortbow_4trb",
         "name": "Shortbow",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, one target. {@h}4 (1d6 + 1) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, one target. Hit: 4 (1d6 + 1) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, one target. {@h}4 ({@damage 1d6 + 1}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1236,11 +1378,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Dwarf.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Dwarf.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_great_kroom__purple_worm_awm",
@@ -1327,10 +1481,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_tunneler_5edb",
+        "id": "act_tunneler_74d1",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The worm can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
+        "entries": [
+          "The worm can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1346,10 +1503,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_p888",
+        "id": "act_multiattack_nypc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The worm makes two attacks:</p>",
+        "entries": [
+          "The worm makes two attacks:"
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1363,10 +1523,13 @@
         }
       },
       {
-        "id": "act_bite_hwd1",
+        "id": "act_bite_0asq",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +14 to hit, one target. {@h}22 (3d8) piercing damage. Target must make a DC 19 Dexterity save, or be swallowed by the worm!</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, one target. Hit: 22 (3d8) piercing damage. Target must make a DC 19 Dexterity save, or be swallowed by the worm!</p>",
+        "entries": [
+          "{@atk mw} {@hit 14} to hit, one target. {@h}22 ({@damage 3d8}) piercing damage. Target must make a {@dc 19} Dexterity save, or be swallowed by the worm!"
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1376,7 +1539,7 @@
           "targets": null,
           "save": {
             "dc": 19,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -1388,10 +1551,13 @@
         }
       },
       {
-        "id": "act_tail_stinger_nv2t",
+        "id": "act_tail_stinger_hxzp",
         "name": "Tail Stinger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +14 to hit, one creature. {@h}19 (3d6 + 9) piercing damage Target must make a DC 19 Constitution save, or take 42 (12d6) poison damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, one creature. Hit: 19 (3d6 + 9) piercing damage Target must make a DC 19 Constitution save, or take 42 (12d6) poison damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 14} to hit, one creature. {@h}19 ({@damage 3d6 + 9}) piercing damage Target must make a {@dc 19} Constitution save, or take 42 ({@damage 12d6}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1401,7 +1567,7 @@
           "targets": null,
           "save": {
             "dc": 19,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -1424,11 +1590,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Great Kroom, Purple Worm.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Great Kroom, Purple Worm.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_hangry_otyugh_awm",
@@ -1515,10 +1693,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_limited_telepathy_29k4",
+        "id": "act_limited_telepathy_n426",
         "name": "Limited Telepathy",
         "actionType": "trait",
         "descriptionHtml": "<p>The otyugh can magically transmit simple messages and images to any creature within 120 feet of it that can understand a language. This form of telepathy doesn't allow the receiving creature to telepathically respond.</p>",
+        "entries": [
+          "The otyugh can magically transmit simple messages and images to any creature within 120 feet of it that can understand a language. This form of telepathy doesn't allow the receiving creature to telepathically respond."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1534,10 +1715,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_00ku",
+        "id": "act_multiattack_fe30",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The otyugh makes three attacks:</p>",
+        "entries": [
+          "The otyugh makes three attacks:"
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1551,10 +1735,13 @@
         }
       },
       {
-        "id": "act_bite_o6xb",
+        "id": "act_bite_72ka",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}12 (2d8 + 3) piercing damage. Target must make a DC 15 Constitution save, or take 6 (1d10) poison damage until cured.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 12 (2d8 + 3) piercing damage. Target must make a DC 15 Constitution save, or take 6 (1d10) poison damage until cured.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}12 ({@damage 2d8 + 3}) piercing damage. Target must make a {@dc 15} Constitution save, or take 6 ({@damage 1d10}) poison damage until cured."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1564,7 +1751,7 @@
           "targets": "one target",
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -1580,10 +1767,13 @@
         }
       },
       {
-        "id": "act_tentacle_fpc2",
+        "id": "act_tentacle_wnw9",
         "name": "Tentacle",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 10 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage. Target must make a DC 19 Constitution save, or take 42 (12d6) poison damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. Target must make a DC 19 Constitution save, or take 42 (12d6) poison damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 10 ft., one target. {@h}7 ({@damage 1d8 + 3}) bludgeoning damage. Target must make a {@dc 19} Constitution save, or take 42 ({@damage 12d6}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1593,7 +1783,7 @@
           "targets": "one target",
           "save": {
             "dc": 19,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -1609,10 +1799,13 @@
         }
       },
       {
-        "id": "act_slam__xx87",
+        "id": "act_slam__8ut8",
         "name": "Slam!",
         "actionType": "action",
         "descriptionHtml": "<p>Target must make a DC 14 Constitution save, or be grappled.</p>",
+        "entries": [
+          "Target must make a {@dc 14} Constitution save, or be {@condition grappled}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1622,7 +1815,7 @@
           "targets": null,
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
@@ -1636,11 +1829,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Hangry Otyugh.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Hangry Otyugh.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_hill_giant__blorbo_awm",
@@ -1728,10 +1933,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_lp8x",
+        "id": "act_multiattack_31yc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes two greatclub attacks.</p>",
+        "entries": [
+          "The giant makes two greatclub attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1745,10 +1953,13 @@
         }
       },
       {
-        "id": "act_greatclub_8chh",
+        "id": "act_greatclub_mlfc",
         "name": "Greatclub",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, one target. {@h}18 (3d8 + 5) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, one target. Hit: 18 (3d8 + 5) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, one target. {@h}18 ({@damage 3d8 + 5}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1767,10 +1978,13 @@
         }
       },
       {
-        "id": "act_rock_l6bd",
+        "id": "act_rock_ft9o",
         "name": "Rock",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +8 to hit, one target. {@h}21 (3d10 + 5) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +8 to hit, one target. Hit: 21 (3d10 + 5) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 8} to hit, one target. {@h}21 ({@damage 3d10 + 5}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1796,11 +2010,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Hill Giant, Blorbo.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Hill Giant, Blorbo.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_saleeth_the_couatl_awm",
@@ -1888,7 +2114,7 @@
       {
         "id": "sc_saleeth_the_couatl_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 4,
@@ -2025,7 +2251,9 @@
                 {
                   "formula": "2d8",
                   "type": "Healing",
-                  "stat": "spell"
+                  "stat": "spell",
+                  "upcastBonus": "2d8",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -2144,7 +2372,9 @@
                   "formula": "3d6",
                   "type": "Psychic",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a handful of sand)",
@@ -2208,10 +2438,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_weapons_zd0b",
+        "id": "act_magic_weapons_durm",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The couatl's weapon attacks are magical.</p>",
+        "entries": [
+          "The couatl's weapon attacks are magical."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2225,10 +2458,13 @@
         }
       },
       {
-        "id": "act_shielded_mind_qbta",
+        "id": "act_shielded_mind_y15w",
         "name": "Shielded Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The couatl is immune to scrying and to any effect that would sense its emotions, read its thoughts, or detect its location.</p>",
+        "entries": [
+          "The couatl is immune to {@spell scrying} and to any effect that would sense its emotions, read its thoughts, or detect its location."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2244,10 +2480,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_9lfl",
+        "id": "act_bite_csqq",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one creature. {@h}8 (1d6 + 5) piercing damage. Target must make a DC 13 Constitution save, or fall unconscious. Another creature can use an action to shake the target awake.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one creature. Hit: 8 (1d6 + 5) piercing damage. Target must make a DC 13 Constitution save, or fall unconscious. Another creature can use an action to shake the target awake.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one creature. {@h}8 ({@damage 1d6 + 5}) piercing damage. Target must make a {@dc 13} Constitution save, or fall {@condition unconscious}. Another creature can use an action to shake the target awake."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2257,7 +2496,7 @@
           "targets": "one creature",
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -2269,10 +2508,13 @@
         }
       },
       {
-        "id": "act_constrict_afcd",
+        "id": "act_constrict_0d8l",
         "name": "Constrict",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 10 ft., one Medium or smaller creature. {@h}10 (2d6 + 3) bludgeoning damage. Target is grappled (escape DC 15). The couatl can constrain only one target at a time.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one Medium or smaller creature. Hit: 10 (2d6 + 3) bludgeoning damage. Target is grappled (escape DC 15). The couatl can constrain only one target at a time.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 10 ft., one Medium or smaller creature. {@h}10 ({@damage 2d6 + 3}) bludgeoning damage. Target is {@condition grappled} (escape {@dc 15}). The couatl can constrain only one target at a time."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2282,7 +2524,7 @@
           "targets": "one Medium or smaller creature",
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -2294,10 +2536,14 @@
         }
       },
       {
-        "id": "act_change_shape_gi0t",
+        "id": "act_change_shape_jv54",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The couatl magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the couatl's choice).</p><p>In a new form, the couatl retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and other actions are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks. If the new form has a bite attack, the couatl can use its bite in that form.</p>",
+        "entries": [
+          "The couatl magically polymorphs into {@filter a humanoid or beast that has a challenge rating equal to or less than its own|bestiary|Challenge Rating=[&0;&4]|type=beast;humanoid}, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the couatl's choice).",
+          "In a new form, the couatl retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and other actions are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks. If the new form has a bite attack, the couatl can use its bite in that form."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2318,10 +2564,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/AWM/Saleeth the Couatl.webp",
     "tokenImg": "img/bestiary/tokens/AWM/Saleeth the Couatl.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

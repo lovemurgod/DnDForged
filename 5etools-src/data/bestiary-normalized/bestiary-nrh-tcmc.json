@@ -102,10 +102,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_bfr6",
+        "id": "act_shapechanger_jeue",
         "name": "Shapechanger",
         "actionType": "trait",
-        "descriptionHtml": "<p>The wererat can use its action to polymorph into a rat-humanoid hybrid or into a giant rat, or back into its true form, which is humanoid. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
+        "descriptionHtml": "<p>Mr. Honeycutt can use its action to polymorph into a rat-humanoid hybrid or into a giant rat, or back into its true form, which is humanoid. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
+        "entries": [
+          "Mr. Honeycutt can use its action to polymorph into a rat-humanoid hybrid or into a giant rat, or back into its true form, which is humanoid. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -119,10 +122,13 @@
         }
       },
       {
-        "id": "act_keen_smell_f63n",
+        "id": "act_keen_smell_t81t",
         "name": "Keen Smell",
         "actionType": "trait",
-        "descriptionHtml": "<p>The wererat has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "descriptionHtml": "<p>Mr. Honeycutt has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "entries": [
+          "Mr. Honeycutt has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -138,10 +144,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__humanoid_or_hybrid_form_only__cup1",
+        "id": "act_multiattack__humanoid_or_hybrid_form_only__frko",
         "name": "Multiattack (Humanoid or Hybrid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>The wererat makes two attacks, only one of which can be a bite.</p>",
+        "descriptionHtml": "<p>Mr. Honeycutt makes two attacks, only one of which can be a bite.</p>",
+        "entries": [
+          "Mr. Honeycutt makes two attacks, only one of which can be a bite."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -155,10 +164,13 @@
         }
       },
       {
-        "id": "act_bite__rat_or_hybrid_form_only__9q6w",
+        "id": "act_bite__rat_or_hybrid_form_only__iyls",
         "name": "Bite (Rat or Hybrid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) piercing damage. If the target is a humanoid, it must succeed on a DC 11 Constitution saving throw or be cursed with wererat Player Characters as Lycanthropes.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage. If the target is a humanoid, it must succeed on a DC 11 Constitution saving throw or be cursed with wererat Player Characters as Lycanthropes.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage. If the target is a humanoid, it must succeed on a {@dc 11} Constitution saving throw or be cursed with wererat {@variantrule Player Characters as Lycanthropes|MM|lycanthropy}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -180,10 +192,13 @@
         }
       },
       {
-        "id": "act_shortsword__humanoid_or_hybrid_form_only__j034",
+        "id": "act_shortsword__humanoid_or_hybrid_form_only__4umb",
         "name": "Shortsword (Humanoid or Hybrid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -202,10 +217,13 @@
         }
       },
       {
-        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__gumj",
+        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__dv7x",
         "name": "Hand Crossbow (Humanoid or Hybrid Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +4 to hit, range 30/120 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 4} to hit, range 30/120 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -231,11 +249,31 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Nonhuman Lycanthropes",
+        "descriptionHtml": "<p>The statistics presented in this section assume a base creature of human. However, you can also use the statistics to represent nonhuman lycanthropes, adding verisimilitude by allowing a nonhuman lycanthrope to retain one or more of its humanoid racial traits. For example, an elf werewolf might have the Fey Ancestry trait.</p>",
+        "entries": [
+          "The statistics presented in this section assume a base creature of human. However, you can also use the statistics to represent nonhuman lycanthropes, adding verisimilitude by allowing a nonhuman lycanthrope to retain one or more of its humanoid racial traits. For example, an elf werewolf might have the Fey Ancestry trait."
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-TCMC/Mr. Honeycutt.webp",
     "tokenImg": "img/bestiary/tokens/NRH-TCMC/Mr. Honeycutt.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_slurmy_nrh-tcmc",
@@ -328,10 +366,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_nimble_escape_morm",
+        "id": "act_nimble_escape_zm6j",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>Slurmy can take the Disengage or Hide action as a bonus action on each of their turns.</p>",
+        "entries": [
+          "Slurmy can take the {@action Disengage} or {@action Hide} action as a bonus action on each of their turns."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -347,10 +388,13 @@
     ],
     "actions": [
       {
-        "id": "act_claw_1s5r",
+        "id": "act_claw_yjik",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}5 (1d6 + 2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -376,10 +420,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-TCMC/Slurmy.webp",
     "tokenImg": "img/bestiary/tokens/NRH-TCMC/Slurmy.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

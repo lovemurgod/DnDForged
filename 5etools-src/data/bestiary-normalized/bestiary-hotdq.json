@@ -94,10 +94,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_vnj6",
+        "id": "act_pack_tactics_sxi9",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The drake has advantage on an attack roll against a creature if at least one of the drake's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "The drake has advantage on an attack roll against a creature if at least one of the drake's allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -111,10 +114,13 @@
         }
       },
       {
-        "id": "act_surprise_attack_52qb",
+        "id": "act_surprise_attack_7vvz",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If the drake surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
+        "entries": [
+          "If the drake surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 ({@damage 2d6}) damage from the attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -135,10 +141,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_shhg",
+        "id": "act_bite_wq1t",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d6 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -164,11 +173,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Ambush Drake.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Ambush Drake.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_azbara_jos_hotdq",
@@ -282,7 +303,7 @@
       {
         "id": "sc_azbara_jos_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -353,7 +374,8 @@
                     "formula": "1d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -379,7 +401,8 @@
                     "formula": "1d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -429,7 +452,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -474,7 +499,9 @@
                     "formula": "2d8",
                     "type": "Thunder",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -543,7 +570,9 @@
                     "formula": "2d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -612,7 +641,9 @@
                     "formula": "8d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -628,10 +659,13 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_zsec",
+        "id": "act_special_equipment_re9j",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Azbara has two spell scroll (1st level) of mage armor.</p>",
+        "entries": [
+          "Azbara has two {@item spell scroll (1st level)||scrolls} of {@spell mage armor}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -645,10 +679,13 @@
         }
       },
       {
-        "id": "act_potent_cantrips_ooc9",
+        "id": "act_potent_cantrips_xbzs",
         "name": "Potent Cantrips",
         "actionType": "trait",
         "descriptionHtml": "<p>When Azbara casts an evocation Cantrips and misses, or the target succeeds on its saving throw, the target still takes half the cantrip's damage but suffers no other effect.</p>",
+        "entries": [
+          "When Azbara casts an evocation Cantrips and misses, or the target succeeds on its saving throw, the target still takes half the cantrip's damage but suffers no other effect."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -662,10 +699,13 @@
         }
       },
       {
-        "id": "act_sculpt_spells_4ssr",
+        "id": "act_sculpt_spells_phq9",
         "name": "Sculpt Spells",
         "actionType": "trait",
         "descriptionHtml": "<p>When Azbara casts an evocation spell that affects other creatures that he can see, he can choose a number of them equal to 1+the spell's level to succeed on their saving throws against the spell. Those creatures take no damage if they would normally take half damage from the spell.</p>",
+        "entries": [
+          "When Azbara casts an evocation spell that affects other creatures that he can see, he can choose a number of them equal to 1+the spell's level to succeed on their saving throws against the spell. Those creatures take no damage if they would normally take half damage from the spell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -681,10 +721,13 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_9at9",
+        "id": "act_dagger_ihru",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or ranged 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 5} to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -710,11 +753,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Azbara Jos.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Azbara Jos.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_blagothkus_hotdq",
@@ -824,7 +879,7 @@
       {
         "id": "sc_blagothkus_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -888,7 +943,7 @@
       {
         "id": "sc_blagothkus_1",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -1021,7 +1076,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1109,7 +1166,9 @@
                     "formula": "3d8",
                     "type": "Thunder",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a chip of mica)",
@@ -1159,7 +1218,9 @@
                     "formula": "8d6",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a bit of fur and a crystal rod)",
@@ -1175,10 +1236,13 @@
     ],
     "traits": [
       {
-        "id": "act_keen_smell_dphi",
+        "id": "act_keen_smell_ghpx",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>Blagothkus has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "entries": [
+          "Blagothkus has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1194,10 +1258,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_py56",
+        "id": "act_multiattack_7wsm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Blagothkus attacks twice with his morningstar.</p>",
+        "entries": [
+          "Blagothkus attacks twice with his morningstar."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1211,10 +1278,13 @@
         }
       },
       {
-        "id": "act_morningstar_zcs1",
+        "id": "act_morningstar_8wcu",
         "name": "Morningstar",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +10 to hit, reach 10 ft., one target. {@h}21 (3d8 + 8) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 21 (3d8 + 8) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 10} to hit, reach 10 ft., one target. {@h}21 ({@damage 3d8 + 8}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1240,11 +1310,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Blagothkus.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Blagothkus.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_captain_othelstan_hotdq",
@@ -1351,10 +1433,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_action_surge__recharges_on_a_short_or_long_rest__1bkh",
+        "id": "act_action_surge__recharges_on_a_short_or_long_rest__spdh",
         "name": "Action Surge (Recharges on a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>On his turn, Othelstan can take one additional action.</p>",
+        "entries": [
+          "On his turn, Othelstan can take one additional action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1368,10 +1453,13 @@
         }
       },
       {
-        "id": "act_tiamat_s_blessing_of_retribution_7m6h",
+        "id": "act_tiamat_s_blessing_of_retribution_02zl",
         "name": "Tiamat's Blessing of Retribution",
         "actionType": "trait",
         "descriptionHtml": "<p>When Othelstan takes damage that reduces him to 0 hit points, he immediately regains 20 hit points. If he has 20 hit points or fewer at the end of his next turn, he dies.</p>",
+        "entries": [
+          "When Othelstan takes damage that reduces him to 0 hit points, he immediately regains 20 hit points. If he has 20 hit points or fewer at the end of his next turn, he dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1387,10 +1475,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4uck",
+        "id": "act_multiattack_dm8z",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Othelstan attacks twice with his flail or spear, or makes two ranged attacks with his spears.</p>",
+        "entries": [
+          "Othelstan attacks twice with his flail or spear, or makes two ranged attacks with his spears."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1404,10 +1495,13 @@
         }
       },
       {
-        "id": "act_flail_ofc5",
+        "id": "act_flail_lepe",
         "name": "Flail",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d8 + 4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1426,10 +1520,13 @@
         }
       },
       {
-        "id": "act_spear_c1g9",
+        "id": "act_spear_pz6y",
         "name": "Spear",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +7 to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}7 (1d6 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +7 to hit, reach 5 ft. or ranged 20/60 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 7} to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}7 ({@damage 1d6 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1455,11 +1552,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Captain Othelstan.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Captain Othelstan.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dragonclaw_hotdq",
@@ -1559,10 +1668,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dragon_fanatic_0ywe",
+        "id": "act_dragon_fanatic_f3cs",
         "name": "Dragon Fanatic",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragonclaw has advantage on saving throws against being charmed or frightened. While the dragonclaw can see a dragon or higher-ranking Cult of the Dragon cultist friendly to it, the dragonclaw ignores the effects of being charmed or frightened.</p>",
+        "entries": [
+          "The dragonclaw has advantage on saving throws against being {@condition charmed} or {@condition frightened}. While the dragonclaw can see a dragon or higher-ranking Cult of the Dragon cultist friendly to it, the dragonclaw ignores the effects of being {@condition charmed} or {@condition frightened}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1576,10 +1688,13 @@
         }
       },
       {
-        "id": "act_fanatic_advantage_10vo",
+        "id": "act_fanatic_advantage_6ehn",
         "name": "Fanatic Advantage",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, if the dragonclaw makes a weapon attack with advantage on the attack roll and hits, it deals an extra 7 (2d6) damage.</p>",
+        "entries": [
+          "Once per turn, if the dragonclaw makes a weapon attack with advantage on the attack roll and hits, it deals an extra 7 ({@damage 2d6}) damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1598,10 +1713,13 @@
         }
       },
       {
-        "id": "act_pack_tactics_vbdp",
+        "id": "act_pack_tactics_5o2b",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragonclaw has advantage on an attack roll against a creature if at least one of the dragonclaw's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "The dragonclaw has advantage on an attack roll against a creature if at least one of the dragonclaw's allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1617,10 +1735,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dh9p",
+        "id": "act_multiattack_vau5",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragonclaw attacks twice with its scimitar.</p>",
+        "entries": [
+          "The dragonclaw attacks twice with its scimitar."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1634,10 +1755,13 @@
         }
       },
       {
-        "id": "act_scimitar_ve0t",
+        "id": "act_scimitar_ffr1",
         "name": "Scimitar",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1663,11 +1787,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Dragonclaw.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Dragonclaw.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dragonwing_hotdq",
@@ -1778,10 +1914,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dragon_fanatic_p9fm",
+        "id": "act_dragon_fanatic_7aim",
         "name": "Dragon Fanatic",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragonwing has advantage on saving throws against being charmed or frightened. While the dragonwing can see a dragon or higher-ranking Cult of the Dragon cultist friendly to it, the dragonwing ignores the effects of being charmed or frightened.</p>",
+        "entries": [
+          "The dragonwing has advantage on saving throws against being {@condition charmed} or {@condition frightened}. While the dragonwing can see a dragon or higher-ranking Cult of the Dragon cultist friendly to it, the dragonwing ignores the effects of being {@condition charmed} or {@condition frightened}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1795,10 +1934,13 @@
         }
       },
       {
-        "id": "act_fanatic_advantage_qjbc",
+        "id": "act_fanatic_advantage_3k90",
         "name": "Fanatic Advantage",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, if the dragonwing makes a weapon attack with advantage on the attack roll and hits, the target takes an extra 7 (2d6) damage.</p>",
+        "entries": [
+          "Once per turn, if the dragonwing makes a weapon attack with advantage on the attack roll and hits, the target takes an extra 7 ({@damage 2d6}) damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1817,10 +1959,13 @@
         }
       },
       {
-        "id": "act_limited_flight_81t0",
+        "id": "act_limited_flight_54y8",
         "name": "Limited Flight",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragonwing can use a bonus action to gain a flying speed of 30 feet until the end of its turn.</p>",
+        "entries": [
+          "The dragonwing can use a bonus action to gain a flying speed of 30 feet until the end of its turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1834,10 +1979,13 @@
         }
       },
       {
-        "id": "act_pack_tactics_ooln",
+        "id": "act_pack_tactics_rfrt",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragonwing has advantage on an attack roll against a creature if at least one of the dragonwing's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "The dragonwing has advantage on an attack roll against a creature if at least one of the dragonwing's allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1853,10 +2001,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ax87",
+        "id": "act_multiattack_wv0k",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragonwing attacks twice with its scimitar.</p>",
+        "entries": [
+          "The dragonwing attacks twice with its scimitar."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1870,10 +2021,13 @@
         }
       },
       {
-        "id": "act_scimitar_bndu",
+        "id": "act_scimitar_4f5c",
         "name": "Scimitar",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) slashing damage plus 3 (1d6) damage of the type to which the cultist has resistance.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage plus 3 (1d6) damage of the type to which the cultist has resistance.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) slashing damage plus 3 ({@damage 1d6}) damage of the type to which the cultist has resistance."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1903,11 +2057,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Dragonwing.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Dragonwing.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_dralmorrer_borngray_hotdq",
@@ -2020,7 +2186,7 @@
       {
         "id": "sc_dralmorrer_borngray_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 3,
@@ -2053,7 +2219,8 @@
                     "formula": "1d10",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -2098,7 +2265,8 @@
                     "formula": "1d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -2148,7 +2316,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -2193,7 +2363,9 @@
                     "formula": "2d8",
                     "type": "Thunder",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -2252,10 +2424,13 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_z40r",
+        "id": "act_fey_ancestry_axo0",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Dralmorrer has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
+        "entries": [
+          "Dralmorrer has advantage on saving throws against being {@condition charmed}, and magic can't put him to sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2269,10 +2444,13 @@
         }
       },
       {
-        "id": "act_war_magic_98pd",
+        "id": "act_war_magic_wivt",
         "name": "War Magic",
         "actionType": "trait",
         "descriptionHtml": "<p>When Dralmorrer uses his action to cast a cantrip, he can also take a bonus action to make one weapon attack.</p>",
+        "entries": [
+          "When Dralmorrer uses his action to cast a cantrip, he can also take a bonus action to make one weapon attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2286,10 +2464,13 @@
         }
       },
       {
-        "id": "act_weapon_bond_4npz",
+        "id": "act_weapon_bond_hxxz",
         "name": "Weapon Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Provided his longsword is on the same plane Dralmorrer can take a bonus action to teleport it to his hand.</p>",
+        "entries": [
+          "Provided his longsword is on the same plane Dralmorrer can take a bonus action to teleport it to his hand."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2305,10 +2486,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5m1y",
+        "id": "act_multiattack_707f",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Dralmorrer attacks twice, either with his longsword or dagger.</p>",
+        "entries": [
+          "Dralmorrer attacks twice, either with his longsword or dagger."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2322,10 +2506,13 @@
         }
       },
       {
-        "id": "act_longsword_in12",
+        "id": "act_longsword_pfpf",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d8 + 4}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2344,10 +2531,13 @@
         }
       },
       {
-        "id": "act_dagger_k947",
+        "id": "act_dagger_lcj5",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +6 to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}6 (1d4 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or ranged 20/60 ft., one target. Hit: 6 (1d4 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 6} to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}6 ({@damage 1d4 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2373,11 +2563,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Dralmorrer Borngray.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Dralmorrer Borngray.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_four_armed_troll_hotdq",
@@ -2470,10 +2672,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_ujzh",
+        "id": "act_keen_smell_ca0l",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The troll has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "entries": [
+          "The troll has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2487,10 +2692,13 @@
         }
       },
       {
-        "id": "act_regeneration_yfeo",
+        "id": "act_regeneration_amjr",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The troll regains 10 hit points at the start of its turn. If the troll takes acid or fire damage, this trait doesn't function at the start of the troll's next turn. The troll dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
+        "entries": [
+          "The troll regains 10 hit points at the start of its turn. If the troll takes acid or fire damage, this trait doesn't function at the start of the troll's next turn. The troll dies only if it starts its turn with 0 hit points and doesn't regenerate."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2506,10 +2714,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_quhk",
+        "id": "act_multiattack_cg6u",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The troll makes three attacks: one with its bite and two with its claws.</p>",
+        "descriptionHtml": "<p>The troll attacks five times, once with its bite and four times with its claws. If two or more claws hit the same target, the troll rends the target, dealing an extra 2d6 slashing damage.</p>",
+        "entries": [
+          "The troll attacks five times, once with its bite and four times with its claws. If two or more claws hit the same target, the troll rends the target, dealing an extra {@damage 2d6} slashing damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2518,15 +2729,23 @@
           "range": null,
           "targets": null,
           "save": null,
-          "damages": [],
+          "damages": [
+            {
+              "formula": "2d6",
+              "type": "Slashing"
+            }
+          ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_07ki",
+        "id": "act_bite_ec5u",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2545,10 +2764,13 @@
         }
       },
       {
-        "id": "act_claw_7qia",
+        "id": "act_claw_ytst",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2574,11 +2796,69 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Loathsome Limbs",
+        "descriptionHtml": "<p>Some trolls have the following trait</p><div><strong><em>Loathsome Limbs.</em></strong> <p>Whenever the troll takes at least 15 slashing damage at one time, roll a d20 to determine what else happens to it:</p><ul><li><strong><em>1–10:.</em></strong> <p>Nothing else happens.</p></li><li><strong><em>11–14:.</em></strong> <p>One leg is severed from the troll if it has any legs left.</p></li><li><strong><em>15–18:.</em></strong> <p>One arm is severed from the troll if it has any arms left.</p></li><li><strong><em>19–20:.</em></strong> <p>The troll is decapitated, but the troll dies only if it can't regenerate. If it dies, so does the severed head.</p></li></ul><p>If the troll finishes a short or long rest without reattaching a severed limb or head, the part regrows. At that point, the severed part dies. Until then, a severed part acts on the troll's initiative and has its own action and movement. A severed part has AC 13, 10 hit points, and the troll's Regeneration trait.</p><p>A <strong>severed leg</strong> is unable to attack and has a speed of 5 feet.</p><p>A <strong>severed arm</strong> has a speed of 5 feet and can make one claw attack on its turn, with disadvantage on the attack roll unless the troll can see the arm and its target. Each time the troll loses an arm, it loses a claw attack.</p><p>If its head is severed, the troll loses its bite attack and its body is blinded unless the head can see it. The <strong>severed head</strong> has a speed of 0 feet and the troll's Keen Smell trait. It can make a bite attack but only against a target in its space.</p><p>The troll's speed is halved if it's missing a leg. If it loses both legs, it falls prone. If it has both arms, it can crawl. With only one arm, it can still crawl, but its speed is halved. With no arms or legs, its speed is 0, and it can't benefit from bonuses to speed.</p></div>",
+        "entries": [
+          "Some trolls have the following trait",
+          {
+            "type": "entries",
+            "name": "Loathsome Limbs",
+            "entries": [
+              "Whenever the troll takes at least 15 slashing damage at one time, roll a {@dice d20} to determine what else happens to it:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "1–10:",
+                    "entry": "Nothing else happens."
+                  },
+                  {
+                    "type": "item",
+                    "name": "11–14:",
+                    "entry": "One leg is severed from the troll if it has any legs left."
+                  },
+                  {
+                    "type": "item",
+                    "name": "15–18:",
+                    "entry": "One arm is severed from the troll if it has any arms left."
+                  },
+                  {
+                    "type": "item",
+                    "name": "19–20:",
+                    "entry": "The troll is decapitated, but the troll dies only if it can't regenerate. If it dies, so does the severed head."
+                  }
+                ]
+              },
+              "If the troll finishes a short or long rest without reattaching a severed limb or head, the part regrows. At that point, the severed part dies. Until then, a severed part acts on the troll's initiative and has its own action and movement. A severed part has AC 13, 10 hit points, and the troll's Regeneration trait.",
+              "A {@b severed leg} is unable to attack and has a speed of 5 feet.",
+              "A {@b severed arm} has a speed of 5 feet and can make one claw attack on its turn, with disadvantage on the attack roll unless the troll can see the arm and its target. Each time the troll loses an arm, it loses a claw attack.",
+              "If its head is severed, the troll loses its bite attack and its body is {@condition blinded} unless the head can see it. The {@b severed head} has a speed of 0 feet and the troll's Keen Smell trait. It can make a bite attack but only against a target in its space.",
+              "The troll's speed is halved if it's missing a leg. If it loses both legs, it falls {@condition prone}. If it has both arms, it can crawl. With only one arm, it can still crawl, but its speed is halved. With no arms or legs, its speed is 0, and it can't benefit from bonuses to speed."
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Four-Armed Troll.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Four-Armed Troll.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_frulam_mondath_hotdq",
@@ -2684,7 +2964,7 @@
       {
         "id": "sc_frulam_mondath_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 4,
@@ -2736,7 +3016,8 @@
                     "formula": "1d8",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -2804,7 +3085,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -2829,7 +3112,9 @@
                   {
                     "formula": "2d4",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d4",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -2917,7 +3202,9 @@
                     "formula": "1d8",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -2947,7 +3234,9 @@
                   {
                     "formula": "2d4",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "1d4",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -2972,12 +3261,16 @@
                   {
                     "formula": "3d8",
                     "type": "Necrotic",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "3d8",
                     "type": "Radiant",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a prayer scroll)",
@@ -2994,10 +3287,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_oafe",
+        "id": "act_multiattack_0gl2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Frulam attacks twice with her halberd.</p>",
+        "entries": [
+          "Frulam attacks twice with her halberd."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3011,10 +3307,13 @@
         }
       },
       {
-        "id": "act_halberd_5igb",
+        "id": "act_halberd_ofuc",
         "name": "Halberd",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 10 ft., one target. {@h}7 (1d10 + 2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 7 (1d10 + 2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 10 ft., one target. {@h}7 ({@damage 1d10 + 2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3040,11 +3339,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Frulam Mondath.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Frulam Mondath.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_golden_stag_hotdq",
@@ -3131,10 +3442,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_fcaf",
+        "id": "act_charge_tvqk",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elk moves at least 20 feet straight toward a target and then hits it with a ram attack on the same turn, the target takes an extra 7 (2d6) damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
+        "entries": [
+          "If the elk moves at least 20 feet straight toward a target and then hits it with a ram attack on the same turn, the target takes an extra 7 ({@damage 2d6}) damage. If the target is a creature, it must succeed on a {@dc 13} Strength saving throw or be knocked {@condition prone}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3158,10 +3472,13 @@
     ],
     "actions": [
       {
-        "id": "act_ram_vyk9",
+        "id": "act_ram_5y5h",
         "name": "Ram",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3180,10 +3497,13 @@
         }
       },
       {
-        "id": "act_hooves_ypgm",
+        "id": "act_hooves_abb4",
         "name": "Hooves",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one prone creature. {@h}8 (2d4 + 3) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one prone creature. Hit: 8 (2d4 + 3) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one {@condition prone} creature. {@h}8 ({@damage 2d4 + 3}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3209,11 +3529,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Golden Stag.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Golden Stag.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_guard_drake_hotdq",
@@ -3309,10 +3641,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_e2jh",
+        "id": "act_multiattack_ouug",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The drake attacks twice, once with its bite and once with its tail.</p>",
+        "entries": [
+          "The drake attacks twice, once with its bite and once with its tail."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3326,10 +3661,13 @@
         }
       },
       {
-        "id": "act_bite_wufb",
+        "id": "act_bite_u7f0",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3348,10 +3686,13 @@
         }
       },
       {
-        "id": "act_tail_csax",
+        "id": "act_tail_2j5d",
         "name": "Tail",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3377,11 +3718,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Guard Drake.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Guard Drake.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_jamna_gleamsilver_hotdq",
@@ -3494,7 +3847,7 @@
       {
         "id": "sc_jamna_gleamsilver_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 2,
@@ -3584,7 +3937,8 @@
                     "formula": "1d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -3681,10 +4035,13 @@
     ],
     "traits": [
       {
-        "id": "act_cunning_action_wkn4",
+        "id": "act_cunning_action_vger",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>Jamna can take a bonus action to take the Dash, Disengage, or Hide action.</p>",
+        "entries": [
+          "Jamna can take a bonus action to take the {@action Dash}, {@action Disengage}, or {@action Hide} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3698,10 +4055,13 @@
         }
       },
       {
-        "id": "act_gnome_cunning_jl3i",
+        "id": "act_gnome_cunning_zbmy",
         "name": "Gnome Cunning",
         "actionType": "trait",
         "descriptionHtml": "<p>Jamna has advantage on Intelligence, Wisdom and Charisma saving throws against magic.</p>",
+        "entries": [
+          "Jamna has advantage on Intelligence, Wisdom and Charisma saving throws against magic."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3717,10 +4077,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_k7iv",
+        "id": "act_multiattack_keyl",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Jamna attacks twice with her shortswords.</p>",
+        "entries": [
+          "Jamna attacks twice with her shortswords."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3734,10 +4097,13 @@
         }
       },
       {
-        "id": "act_shortsword_lsn2",
+        "id": "act_shortsword_kxue",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage, or 9 (1d6 + 3) plus (1d6) piercing damage if the target is Medium or larger.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage, or 9 (1d6 + 3) plus (1d6) piercing damage if the target is Medium or larger.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) piercing damage, or 9 ({@damage 1d6 + 3}) plus ({@damage 1d6}) piercing damage if the target is Medium or larger."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3767,11 +4133,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Jamna Gleamsilver.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Jamna Gleamsilver.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_langdedrosa_cyanwrath_hotdq",
@@ -3877,10 +4255,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_action_surge__recharges_on_a_short_or_long_rest__uldz",
+        "id": "act_action_surge__recharges_on_a_short_or_long_rest__dftw",
         "name": "Action Surge (Recharges on a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>On his turn, Langdedrosa can take one additional action.</p>",
+        "entries": [
+          "On his turn, Langdedrosa can take one additional action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3894,10 +4275,13 @@
         }
       },
       {
-        "id": "act_improved_critical_6wjq",
+        "id": "act_improved_critical_ldwr",
         "name": "Improved Critical",
         "actionType": "trait",
         "descriptionHtml": "<p>Langdedrosa's weapon attacks score a critical hit on a roll of 19 or 20.</p>",
+        "entries": [
+          "Langdedrosa's weapon attacks score a critical hit on a roll of 19 or 20."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3913,10 +4297,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6pas",
+        "id": "act_multiattack_0893",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Langdedrosa attacks twice, either with his greatsword or spear.</p>",
+        "entries": [
+          "Langdedrosa attacks twice, either with his greatsword or spear."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3930,10 +4317,13 @@
         }
       },
       {
-        "id": "act_greatsword_ivrs",
+        "id": "act_greatsword_mvg9",
         "name": "Greatsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3952,10 +4342,13 @@
         }
       },
       {
-        "id": "act_spear_8vw3",
+        "id": "act_spear_ug7n",
         "name": "Spear",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +6 to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}7 (1d6 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or ranged 20/60 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 6} to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}7 ({@damage 1d6 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3974,10 +4367,13 @@
         }
       },
       {
-        "id": "act_lightning_breath__recharge_5__r9b6",
+        "id": "act_lightning_breath__recharge_5__0mfe",
         "name": "Lightning Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Langdedrosa breathes lightning in a 30-foot line that is 5 feet wide. Each creature in the line must make a DC 13 Dexterity saving throw, taking 22 (4d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Langdedrosa breathes lightning in a 30-foot line that is 5 feet wide. Each creature in the line must make a {@dc 13} Dexterity saving throw, taking 22 ({@damage 4d10}) lightning damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4006,11 +4402,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Langdedrosa Cyanwrath.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Langdedrosa Cyanwrath.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_leosin_erlanthar_hotdq",
@@ -4107,10 +4515,33 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unarmored_defense_xnyx",
+        "id": "act_5etools_note_2u5j",
+        "name": "5etools Note",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Leosin Erlanthar is presented in Hoard of the Dragon Queen as a half-elf monk. The martial arts adept stat block from Volo's Guide to Monsters has been provided here for ease of use.</p>",
+        "entries": [
+          "Leosin Erlanthar is presented in {@adventure Hoard of the Dragon Queen|HotDQ} as a half-elf monk. The {@creature martial arts adept|vgm} stat block from {@book Volo's Guide to Monsters|VGM} has been provided here for ease of use."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_unarmored_defense_ava8",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While the adept is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
+        "entries": [
+          "While the adept is wearing no armor and wielding no shield, its AC includes its Wisdom modifier."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4126,10 +4557,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7gkg",
+        "id": "act_multiattack_dfqs",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The adept makes three unarmed strikes or three dart attacks.</p>",
+        "entries": [
+          "The adept makes three unarmed strikes or three dart attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4143,10 +4577,21 @@
         }
       },
       {
-        "id": "act_unarmed_strike_2ar9",
+        "id": "act_unarmed_strike_pfdj",
         "name": "Unarmed Strike",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage. If the target is a creature, the adept can choose one of the following additional effects:</p><ul><li>The target must succeed on a DC 13 Strength saving throw or drop one item it is holding (adept's choice).</li><li>The target must succeed on a DC 13 Dexterity saving throw or be knocked prone.</li><li>The target must succeed on a DC 13 Constitution saving throw or be stunned until the end of the adept's next turn.</li></ul>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. If the target is a creature, the adept can choose one of the following additional effects:</p><ul><li>The target must succeed on a DC 13 Strength saving throw or drop one item it is holding (adept's choice).</li><li>The target must succeed on a DC 13 Dexterity saving throw or be knocked prone.</li><li>The target must succeed on a DC 13 Constitution saving throw or be stunned until the end of the adept's next turn.</li></ul>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) bludgeoning damage. If the target is a creature, the adept can choose one of the following additional effects:",
+          {
+            "type": "list",
+            "items": [
+              "The target must succeed on a {@dc 13} Strength saving throw or drop one item it is holding (adept's choice).",
+              "The target must succeed on a {@dc 13} Dexterity saving throw or be knocked {@condition prone}.",
+              "The target must succeed on a {@dc 13} Constitution saving throw or be {@condition stunned} until the end of the adept's next turn."
+            ]
+          }
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4168,10 +4613,13 @@
         }
       },
       {
-        "id": "act_dart_11un",
+        "id": "act_dart_xw9c",
         "name": "Dart",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +5 to hit, range 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 5} to hit, range 20/60 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4193,10 +4641,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_missile_qat6",
+        "id": "act_deflect_missile_drdn",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, the adept deflects the missile. The damage it takes from the attack is reduced by 1d10 + 3. If the damage is reduced to 0, the adept catches the missile if it's small enough to hold in one hand and the adept has a hand free.</p>",
+        "entries": [
+          "In response to being hit by a ranged weapon attack, the adept deflects the missile. The damage it takes from the attack is reduced by {@dice 1d10 + 3}. If the damage is reduced to 0, the adept catches the missile if it's small enough to hold in one hand and the adept has a hand free."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -4215,11 +4666,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Leosin Erlanthar.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Leosin Erlanthar.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_linan_swift_hotdq",
@@ -4309,10 +4772,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_spear_z6qm",
+        "id": "act_spear_44ch",
         "name": "Spear",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}3 (1d6) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d6) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d6}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -4338,11 +4804,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Linan Swift.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Linan Swift.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_ontharr_frume_hotdq",
@@ -4444,7 +4922,7 @@
       {
         "id": "sc_ontharr_frume_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 3,
@@ -4515,7 +4993,8 @@
                     "formula": "1d8",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -4565,7 +5044,9 @@
                     "formula": "1d4",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -4591,7 +5072,9 @@
                     "formula": "4d6",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -4616,7 +5099,9 @@
                   {
                     "formula": "2d4",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d4",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -4703,7 +5188,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -4748,7 +5235,9 @@
                     "formula": "1d8",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -4798,7 +5287,9 @@
                     "formula": "1d4",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -4861,12 +5352,16 @@
                   {
                     "formula": "3d8",
                     "type": "Necrotic",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "3d8",
                     "type": "Radiant",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a prayer scroll)",
@@ -4996,12 +5491,16 @@
                   {
                     "formula": "5d6",
                     "type": "Fire",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "5d6",
                     "type": "Radiant",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a pinch of sulfur)",
@@ -5026,7 +5525,9 @@
                   {
                     "formula": "5d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -5059,13 +5560,37 @@
         "will": []
       }
     ],
-    "traits": [],
+    "traits": [
+      {
+        "id": "act_5etools_note_wxlk",
+        "name": "5etools Note",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Ontharr Frume is presented in Hoard of the Dragon Queen and The Rise of Tiamat as a lawful good, human paladin of Torm. The war priest stat block from Volo's Guide to Monsters has been provided here for ease of use.</p>",
+        "entries": [
+          "Ontharr Frume is presented in {@adventure Hoard of the Dragon Queen|HotDQ} and The {@adventure Rise of Tiamat|RoT} as a lawful good, human paladin of Torm. The {@creature war priest|vgm} stat block from {@book Volo's Guide to Monsters|VGM} has been provided here for ease of use."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
     "actions": [
       {
-        "id": "act_multiattack_2gzt",
+        "id": "act_multiattack_zb77",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The priest makes two melee attacks.</p>",
+        "entries": [
+          "The priest makes two melee attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5079,10 +5604,13 @@
         }
       },
       {
-        "id": "act_maul_ef1a",
+        "id": "act_maul_6wkh",
         "name": "Maul",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}10 ({@damage 2d6 + 3}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5104,10 +5632,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_guided_strike__recharges_after_a_short_or_long_rest__6r2v",
+        "id": "act_guided_strike__recharges_after_a_short_or_long_rest__0ckm",
         "name": "Guided Strike (Recharges after a Short or Long Rest)",
         "actionType": "reaction",
         "descriptionHtml": "<p>The priest grants a +10 bonus to an attack roll made by itself or another creature within 30 feet of it. The priest can make this choice after the roll is made but before it hits or misses.</p>",
+        "entries": [
+          "The priest grants a +10 bonus to an attack roll made by itself or another creature within 30 feet of it. The priest can make this choice after the roll is made but before it hits or misses."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5126,11 +5657,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Ontharr Frume.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Ontharr Frume.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_pharblex_spattergoo_hotdq",
@@ -5235,7 +5778,7 @@
       {
         "id": "sc_pharblex_spattergoo_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 3,
@@ -5306,7 +5849,8 @@
                     "formula": "1d12",
                     "type": "Poison",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -5336,7 +5880,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -5380,7 +5926,9 @@
                   {
                     "formula": "2d4",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d4",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -5406,7 +5954,9 @@
                     "formula": "2d8",
                     "type": "Thunder",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -5475,7 +6025,9 @@
                     "formula": "2d4",
                     "type": "Piercing",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (seven thorns)",
@@ -5534,10 +6086,13 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_prxh",
+        "id": "act_amphibious_y1zh",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Pharblex can breathe air and water.</p>",
+        "entries": [
+          "Pharblex can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5551,10 +6106,13 @@
         }
       },
       {
-        "id": "act_poison_strike__3_day__cli0",
+        "id": "act_poison_strike__3_day__5dw1",
         "name": "Poison Strike (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, when Pharblex hits with a melee attack, he can expend a use of this trait to deal an extra 9 (2d8) poison damage.</p>",
+        "entries": [
+          "Once per turn, when Pharblex hits with a melee attack, he can expend a use of this trait to deal an extra 9 ({@damage 2d8}) poison damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5573,10 +6131,13 @@
         }
       },
       {
-        "id": "act_standing_leap_7zok",
+        "id": "act_standing_leap_otji",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>As part of his movement and without a running start, Pharblex can long jump up to 20 feet and high jump up to 10 feet.</p>",
+        "entries": [
+          "As part of his movement and without a running start, Pharblex can long jump up to 20 feet and high jump up to 10 feet."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5590,10 +6151,13 @@
         }
       },
       {
-        "id": "act_swamp_camouflage_glle",
+        "id": "act_swamp_camouflage_abg4",
         "name": "Swamp Camouflage",
         "actionType": "trait",
         "descriptionHtml": "<p>Pharblex has advantage on Dexterity (Stealth) checks made to hide in swampy terrain.</p>",
+        "entries": [
+          "Pharblex has advantage on Dexterity ({@skill Stealth}) checks made to hide in swampy terrain."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5609,10 +6173,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_fcqn",
+        "id": "act_multiattack_aqwh",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Pharblex attacks twice. Once with his bite and once with his spear.</p>",
+        "entries": [
+          "Pharblex attacks twice. Once with his bite and once with his spear."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5626,10 +6193,13 @@
         }
       },
       {
-        "id": "act_bite_ikfn",
+        "id": "act_bite_392i",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5648,10 +6218,13 @@
         }
       },
       {
-        "id": "act_spear_mcc3",
+        "id": "act_spear_vvud",
         "name": "Spear",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +5 to hit. reach 5 ft. or ranged 20/60 ft., one target. {@h}5 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit. reach 5 ft. or ranged 20/60 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 5} to hit. reach 5 ft. or ranged 20/60 ft., one target. {@h}5 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5677,11 +6250,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Pharblex Spattergoo.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Pharblex Spattergoo.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_raggnar_redtooth_hotdq",
@@ -5777,10 +6362,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_sbjw",
+        "id": "act_multiattack_u0q0",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The veteran makes two longsword attacks. If it has a shortsword drawn, it can also make a shortsword attack.</p>",
+        "descriptionHtml": "<p>Raggnar makes two longsword attacks. If it has a shortsword drawn, it can also make a shortsword attack.</p>",
+        "entries": [
+          "Raggnar makes two longsword attacks. If it has a shortsword drawn, it can also make a shortsword attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -5794,10 +6382,13 @@
         }
       },
       {
-        "id": "act_longsword_3kt3",
+        "id": "act_longsword_6bt4",
         "name": "Longsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) slashing damage, or 8 ({@damage 1d10 + 3}) slashing damage if used with two hands."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5820,10 +6411,13 @@
         }
       },
       {
-        "id": "act_shortsword_9evk",
+        "id": "act_shortsword_o602",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5842,10 +6436,13 @@
         }
       },
       {
-        "id": "act_heavy_crossbow_sf6y",
+        "id": "act_heavy_crossbow_mlvb",
         "name": "Heavy Crossbow",
         "actionType": "action",
-        "descriptionHtml": "<p>rw +3 to hit, range 100/400 ft., one target. {@h}6 (1d10 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +3 to hit, range 100/400 ft., one target. Hit: 6 (1d10 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk rw} {@hit 3} to hit, range 100/400 ft., one target. {@h}6 ({@damage 1d10 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -5871,11 +6468,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Raggnar Redtooth.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Raggnar Redtooth.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_rath_modar_hotdq",
@@ -5989,7 +6598,7 @@
       {
         "id": "sc_rath_modar_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "int",
         "abilityMod": 4,
@@ -6022,7 +6631,8 @@
                     "formula": "1d10",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -6086,7 +6696,8 @@
                     "formula": "1d8",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -6117,7 +6728,9 @@
                     "formula": "3d8",
                     "type": "Acid",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a diamond worth 50+ GP)",
@@ -6181,7 +6794,9 @@
                     "formula": "1d4 + 1",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -6250,7 +6865,9 @@
                     "formula": "2d8",
                     "type": "Psychic",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a bit of fleece)",
@@ -6300,7 +6917,9 @@
                     "formula": "8d6",
                     "type": "Fire",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a ball of bat guano and sulfur)",
@@ -6445,10 +7064,13 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_kkt4",
+        "id": "act_special_equipment_we3w",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Rath has a staff of fire, and scrolls of dimension door, feather fall, and fireball.</p>",
+        "entries": [
+          "Rath has a {@item staff of fire}, and scrolls of {@spell dimension door}, {@spell feather fall}, and {@spell fireball}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6464,10 +7086,13 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_b0is",
+        "id": "act_quarterstaff_jlce",
         "name": "Quarterstaff",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d8) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d8) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d8}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6489,10 +7114,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_illusory_self__recharges_on_a_short_or_long_rest__ivk2",
+        "id": "act_illusory_self__recharges_on_a_short_or_long_rest__6eks",
         "name": "Illusory Self (Recharges on a Short or Long Rest)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature Rath can see makes an attack roll against him, he can interpose an illusory duplicate between the attacker and him. The attack automatically misses Rath, then the illusion dissipates.</p>",
+        "entries": [
+          "When a creature Rath can see makes an attack roll against him, he can interpose an illusory duplicate between the attacker and him. The attack automatically misses Rath, then the illusion dissipates."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6511,11 +7139,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Rath Modar.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Rath Modar.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_rezmir_hotdq",
@@ -6629,10 +7269,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_special_equipment_b90k",
+        "id": "act_special_equipment_n4jn",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Rezmir has the Black Dragon Mask, Hazirawn, and an insignia of claws.</p>",
+        "entries": [
+          "Rezmir has the {@item Black Dragon Mask|hotdq}, {@item Hazirawn|hotdq}, and an {@item insignia of claws|hotdq}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6646,10 +7289,13 @@
         }
       },
       {
-        "id": "act_amphibious_dk4i",
+        "id": "act_amphibious_8v5g",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Rezmir can breathe air and water.</p>",
+        "entries": [
+          "Rezmir can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6663,10 +7309,13 @@
         }
       },
       {
-        "id": "act_dark_advantage_s3b1",
+        "id": "act_dark_advantage_nb29",
         "name": "Dark Advantage",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, Rezmir can deal an extra 10 (3d6) damage when she hits with a weapon attack, provided Rezmir has advantage on the attack roll.</p>",
+        "entries": [
+          "Once per turn, Rezmir can deal an extra 10 ({@damage 3d6}) damage when she hits with a weapon attack, provided Rezmir has advantage on the attack roll."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6685,10 +7334,13 @@
         }
       },
       {
-        "id": "act_draconic_majesty_qn8s",
+        "id": "act_draconic_majesty_bqij",
         "name": "Draconic Majesty",
         "actionType": "trait",
         "descriptionHtml": "<p>While wearing no armor and wearing the Black Dragon Mask, Rezmir adds her Charisma bonus to her AC (included).</p>",
+        "entries": [
+          "While wearing no armor and wearing the Black Dragon Mask, Rezmir adds her Charisma bonus to her AC (included)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6702,10 +7354,13 @@
         }
       },
       {
-        "id": "act_immolation_s799",
+        "id": "act_immolation_pu6p",
         "name": "Immolation",
         "actionType": "trait",
         "descriptionHtml": "<p>When Rezmir is reduced to 0 hit points, her body disintegrates into a pile of ash.</p>",
+        "entries": [
+          "When Rezmir is reduced to 0 hit points, her body disintegrates into a pile of ash."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6719,10 +7374,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__1_day__5kld",
+        "id": "act_legendary_resistance__1_day__k8xd",
         "name": "Legendary Resistance (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Rezmir fails a saving throw while wearing the Black Dragon Mask, she can choose to succeed instead.</p>",
+        "entries": [
+          "If Rezmir fails a saving throw while wearing the Black Dragon Mask, she can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6738,10 +7396,13 @@
     ],
     "actions": [
       {
-        "id": "act_greatsword__hazirawn__d8qj",
+        "id": "act_greatsword__hazirawn__768w",
         "name": "Greatsword (Hazirawn)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one target. {@h}13 (2d6 + 6) slashing damage plus 7 (2d6) necrotic damage. If the target is a creature, it can't regain hit points for 1 minute. The target can make a DC 15 Constitution saving throw at the end of each of its turns, ending this effect early on a success.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 13 (2d6 + 6) slashing damage plus 7 (2d6) necrotic damage. If the target is a creature, it can't regain hit points for 1 minute. The target can make a DC 15 Constitution saving throw at the end of each of its turns, ending this effect early on a success.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 5 ft., one target. {@h}13 ({@damage 2d6 + 6}) slashing damage plus 7 ({@damage 2d6}) necrotic damage. If the target is a creature, it can't regain hit points for 1 minute. The target can make a {@dc 15} Constitution saving throw at the end of each of its turns, ending this effect early on a success."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6767,10 +7428,13 @@
         }
       },
       {
-        "id": "act_caustic_bolt_9j7d",
+        "id": "act_caustic_bolt_bf1u",
         "name": "Caustic Bolt",
         "actionType": "action",
-        "descriptionHtml": "<p>rs +8 to hit, range 90 ft., one target. {@h}18 (4d8) acid damage.</p>",
+        "descriptionHtml": "<p>Ranged Spell Attack: +8 to hit, range 90 ft., one target. Hit: 18 (4d8) acid damage.</p>",
+        "entries": [
+          "{@atk rs} {@hit 8} to hit, range 90 ft., one target. {@h}18 ({@damage 4d8}) acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -6789,10 +7453,13 @@
         }
       },
       {
-        "id": "act_acid_breath__recharge_5__650n",
+        "id": "act_acid_breath__recharge_5__0ah6",
         "name": "Acid Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Rezmir breathes acid in a 30-foot line that is 5 feet wide. Each creature in the line must make a DC 14 Dexterity saving throw, taking 22 (5d8) acid damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Rezmir breathes acid in a 30-foot line that is 5 feet wide. Each creature in the line must make a {@dc 14} Dexterity saving throw, taking 22 ({@damage 5d8}) acid damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -6821,10 +7488,13 @@
       "description": "If she is wearing the Black Dragon Mask, Rezmir can take up to two legendary actions between each of her turns, taking the actions all at once or spreading them over the round. A legendary action can be taken only at the start or end of a turn.",
       "entries": [
         {
-          "id": "act_darkness__costs_2_actions__sjnh",
+          "id": "act_darkness__costs_2_actions__hfoa",
           "name": "Darkness (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>A 15-foot radius of magical darkness extends from a point Rezmir can see within 60 feet of her and spreads around corners. The darkness lasts as long as Rezmir maintains concentration, up to 1 minute. A creature with darkvision can't see through this darkness, and no natural light can illuminate it. If any of the area overlaps with a area of light created by a spell of 2nd level or lower, the spell creating the light is dispelled.</p>",
+          "entries": [
+            "A 15-foot radius of magical darkness extends from a point Rezmir can see within 60 feet of her and spreads around corners. The darkness lasts as long as Rezmir maintains {@status concentration}, up to 1 minute. A creature with darkvision can't see through this darkness, and no natural light can illuminate it. If any of the area overlaps with a area of light created by a spell of 2nd level or lower, the spell creating the light is dispelled."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -6838,10 +7508,13 @@
           }
         },
         {
-          "id": "act_melee_attack_tt2n",
+          "id": "act_melee_attack_8i8h",
           "name": "Melee Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>Rezmir makes one melee attack.</p>",
+          "entries": [
+            "Rezmir makes one melee attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -6855,10 +7528,13 @@
           }
         },
         {
-          "id": "act_hide_x8uc",
+          "id": "act_hide_3uqa",
           "name": "Hide",
           "actionType": "legendary",
           "descriptionHtml": "<p>Rezmir takes the Hide action.</p>",
+          "entries": [
+            "Rezmir takes the {@action Hide} action."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -6873,11 +7549,23 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Rezmir.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Rezmir.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_sandesyl_morgia_hotdq",
@@ -6991,10 +7679,15 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_yl97",
+        "id": "act_shapechanger_ual4",
         "name": "Shapechanger",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the vampire isn't in sunlight or running water, it can use its action to polymorph into a Tiny bat or a Medium cloud of mist, or back into its true form.</p><p>While in bat form, the vampire can't speak, its walking speed is 5 feet, and it has a flying speed of 30 feet. Its statistics, other than its size and speed, are unchanged. Anything it is wearing transforms with it, but nothing it is carrying does. It reverts to its true form if it dies.</p><p>While in mist form, the vampire can't take any actions, speak, or manipulate objects. It is weightless, has a flying speed of 20 feet, can hover, and can enter a hostile creature's space and stop there. In addition, if air can pass through a space, the mist can do so without squeezing, and it can't pass through water. It has advantage on Strength, Dexterity, and Constitution saving throws, and it is immune to all nonmagical damage, except the damage it takes from sunlight.</p>",
+        "descriptionHtml": "<p>If Sandesyl isn't in sunlight or running water, it can use its action to polymorph into a Tiny bat or a Medium cloud of mist, or back into its true form.</p><p>While in bat form, Sandesyl can't speak, its walking speed is 5 feet, and it has a flying speed of 30 feet. Its statistics, other than its size and speed, are unchanged. Anything it is wearing transforms with it, but nothing it is carrying does. It reverts to its true form if it dies.</p><p>While in mist form, Sandesyl can't take any actions, speak, or manipulate objects. It is weightless, has a flying speed of 20 feet, can hover, and can enter a hostile creature's space and stop there. In addition, if air can pass through a space, the mist can do so without squeezing, and it can't pass through water. It has advantage on Strength, Dexterity, and Constitution saving throws, and it is immune to all nonmagical damage, except the damage it takes from sunlight.</p>",
+        "entries": [
+          "If Sandesyl isn't in sunlight or running water, it can use its action to polymorph into a Tiny bat or a Medium cloud of mist, or back into its true form.",
+          "While in bat form, Sandesyl can't speak, its walking speed is 5 feet, and it has a flying speed of 30 feet. Its statistics, other than its size and speed, are unchanged. Anything it is wearing transforms with it, but nothing it is carrying does. It reverts to its true form if it dies.",
+          "While in mist form, Sandesyl can't take any actions, speak, or manipulate objects. It is weightless, has a flying speed of 20 feet, can hover, and can enter a hostile creature's space and stop there. In addition, if air can pass through a space, the mist can do so without squeezing, and it can't pass through water. It has advantage on Strength, Dexterity, and Constitution saving throws, and it is immune to all nonmagical damage, except the damage it takes from sunlight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7008,10 +7701,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__9hwy",
+        "id": "act_legendary_resistance__3_day__lrc9",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the vampire fails a saving throw, it can choose to succeed instead.</p>",
+        "descriptionHtml": "<p>If Sandesyl fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If Sandesyl fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7025,10 +7721,14 @@
         }
       },
       {
-        "id": "act_misty_escape_plof",
+        "id": "act_misty_escape_3sol",
         "name": "Misty Escape",
         "actionType": "trait",
-        "descriptionHtml": "<p>When it drops to 0 hit points outside its resting place, the vampire transforms into a cloud of mist (as in the Shapechanger trait) instead of falling unconscious, provided that it isn't in sunlight or running water. If it can't transform, it is destroyed.</p><p>While it has 0 hit points in mist form, it can't revert to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it reverts to its vampire form. It is then paralyzed until it regains at least 1 hit point. After spending 1 hour in its resting place with 0 hit points, it regains 1 hit point.</p>",
+        "descriptionHtml": "<p>When it drops to 0 hit points outside its resting place, Sandesyl transforms into a cloud of mist (as in the Shapechanger trait) instead of falling unconscious, provided that it isn't in sunlight or running water. If it can't transform, it is destroyed.</p><p>While it has 0 hit points in mist form, it can't revert to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it reverts to its vampire form. It is then paralyzed until it regains at least 1 hit point. After spending 1 hour in its resting place with 0 hit points, it regains 1 hit point.</p>",
+        "entries": [
+          "When it drops to 0 hit points outside its resting place, Sandesyl transforms into a cloud of mist (as in the Shapechanger trait) instead of falling {@condition unconscious}, provided that it isn't in sunlight or running water. If it can't transform, it is destroyed.",
+          "While it has 0 hit points in mist form, it can't revert to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it reverts to its vampire form. It is then {@condition paralyzed} until it regains at least 1 hit point. After spending 1 hour in its resting place with 0 hit points, it regains 1 hit point."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7042,10 +7742,13 @@
         }
       },
       {
-        "id": "act_regeneration_5evb",
+        "id": "act_regeneration_qbaq",
         "name": "Regeneration",
         "actionType": "trait",
-        "descriptionHtml": "<p>The vampire regains 20 hit points at the start of its turn if it has at least 1 hit point and isn't in sunlight or running water. If the vampire takes radiant damage or damage from Holy Water (Flask), this trait doesn't function at the start of the vampire's next turn.</p>",
+        "descriptionHtml": "<p>Sandesyl regains 20 hit points at the start of its turn if it has at least 1 hit point and isn't in sunlight or running water. If the vampire takes radiant damage or damage from Holy Water (Flask), this trait doesn't function at the start of the vampire's next turn.</p>",
+        "entries": [
+          "Sandesyl regains 20 hit points at the start of its turn if it has at least 1 hit point and isn't in sunlight or running water. If the vampire takes radiant damage or damage from {@item Holy Water (Flask)|PHB|holy water}, this trait doesn't function at the start of the vampire's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7059,10 +7762,13 @@
         }
       },
       {
-        "id": "act_spider_climb_uo05",
+        "id": "act_spider_climb_5x77",
         "name": "Spider Climb",
         "actionType": "trait",
-        "descriptionHtml": "<p>The vampire can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "descriptionHtml": "<p>Sandesyl can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "entries": [
+          "Sandesyl can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7076,10 +7782,39 @@
         }
       },
       {
-        "id": "act_vampire_weaknesses_y5ff",
+        "id": "act_vampire_weaknesses_tu5d",
         "name": "Vampire Weaknesses",
         "actionType": "trait",
-        "descriptionHtml": "<p>The vampire has the following flaws:</p><ul><li></li><li></li><li></li><li></li></ul>",
+        "descriptionHtml": "<p>Sandesyl has the following flaws:</p><ul><li><strong><em>Forbiddance.</em></strong> <p>Sandesyl can't enter a residence without an invitation from one of the occupants.</p></li><li><strong><em>Harmed by Running Water.</em></strong> <p>Sandesyl takes 20 acid damage if it ends its turn in running water.</p></li><li><strong><em>Stake to the Heart.</em></strong> <p>If a piercing weapon made of wood is driven into Sandesyl's heart while the vampire is incapacitated in its resting place, the vampire is paralyzed until the stake is removed.</p></li><li><strong><em>Sunlight Hypersensitivity.</em></strong> <p>Sandesyl takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks.</p></li></ul>",
+        "entries": [
+          "Sandesyl has the following flaws:",
+          {
+            "type": "list",
+            "style": "list-hang-subtrait",
+            "items": [
+              {
+                "type": "itemSub",
+                "name": "Forbiddance",
+                "entry": "Sandesyl can't enter a residence without an invitation from one of the occupants."
+              },
+              {
+                "type": "itemSub",
+                "name": "Harmed by Running Water",
+                "entry": "Sandesyl takes 20 acid damage if it ends its turn in running water."
+              },
+              {
+                "type": "itemSub",
+                "name": "Stake to the Heart",
+                "entry": "If a piercing weapon made of wood is driven into Sandesyl's heart while the vampire is {@condition incapacitated} in its resting place, the vampire is {@condition paralyzed} until the stake is removed."
+              },
+              {
+                "type": "itemSub",
+                "name": "Sunlight Hypersensitivity",
+                "entry": "Sandesyl takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks."
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7095,10 +7830,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__vampire_form_only__d6z5",
+        "id": "act_multiattack__vampire_form_only__4v7j",
         "name": "Multiattack (Vampire Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>The vampire makes two attacks, only one of which can be a bite attack.</p>",
+        "descriptionHtml": "<p>Sandesyl makes two attacks, only one of which can be a bite attack.</p>",
+        "entries": [
+          "Sandesyl makes two attacks, only one of which can be a bite attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7112,10 +7850,13 @@
         }
       },
       {
-        "id": "act_unarmed_strike__vampire_form_only__6045",
+        "id": "act_unarmed_strike__vampire_form_only__brgm",
         "name": "Unarmed Strike (Vampire Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one creature. {@h}8 (1d8 + 4) bludgeoning damage. Instead of dealing damage, the vampire can grapple the target (escape DC 18).</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 8 (1d8 + 4) bludgeoning damage. Instead of dealing damage, Sandesyl can grapple the target (escape DC 18).</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 5 ft., one creature. {@h}8 ({@damage 1d8 + 4}) bludgeoning damage. Instead of dealing damage, Sandesyl can grapple the target (escape {@dc 18})."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -7125,7 +7866,7 @@
           "targets": "one creature",
           "save": {
             "dc": 18,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -7137,17 +7878,20 @@
         }
       },
       {
-        "id": "act_bite__bat_or_vampire_form_only__xvr3",
+        "id": "act_bite__bat_or_vampire_form_only__qxpl",
         "name": "Bite (Bat or Vampire Form Only)",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +9 to hit, reach 5 ft., one willing creature, or a creature that is grappled by the vampire, incapacitated, or restrained. {@h}7 (1d6 + 4) piercing damage plus 10 (3d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0. A humanoid slain in this way and then buried in the ground rises the following night as a vampire spawn under the vampire's control.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one willing creature, or a creature that is grappled by Sandesyl, incapacitated, or restrained. Hit: 7 (1d6 + 4) piercing damage plus 10 (3d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0. A humanoid slain in this way and then buried in the ground rises the following night as a vampire spawn under the vampire's control.</p>",
+        "entries": [
+          "{@atk mw} {@hit 9} to hit, reach 5 ft., one willing creature, or a creature that is {@condition grappled} by Sandesyl, {@condition incapacitated}, or {@condition restrained}. {@h}7 ({@damage 1d6 + 4}) piercing damage plus 10 ({@damage 3d6}) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0. A humanoid slain in this way and then buried in the ground rises the following night as a {@creature vampire spawn} under the vampire's control."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
           "attackBonus": 9,
           "reach": 5,
           "range": null,
-          "targets": "one willing creature, or a creature that is {@condition grappled} by the vampire, {@condition incapacitated}, or {@condition restrained}",
+          "targets": "one willing creature, or a creature that is {@condition grappled} by Sandesyl, {@condition incapacitated}, or {@condition restrained}",
           "save": null,
           "damages": [
             {
@@ -7163,10 +7907,14 @@
         }
       },
       {
-        "id": "act_charm_bkjg",
+        "id": "act_charm_o7ir",
         "name": "Charm",
         "actionType": "action",
-        "descriptionHtml": "<p>The vampire targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be charmed by the vampire. The charmed target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bite attack.</p><p>Each time the vampire or the vampire's companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the vampire is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect.</p>",
+        "descriptionHtml": "<p>Sandesyl targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be charmed by the vampire. The charmed target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bite attack.</p><p>Each time Sandesyl or the vampire's companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the vampire is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect.</p>",
+        "entries": [
+          "Sandesyl targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a {@dc 17} Wisdom saving throw against this magic or be {@condition charmed} by the vampire. The {@condition charmed} target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bite attack.",
+          "Each time Sandesyl or the vampire's companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the vampire is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7183,10 +7931,13 @@
         }
       },
       {
-        "id": "act_children_of_the_night__1_day__qd8i",
+        "id": "act_children_of_the_night__1_day__1oxc",
         "name": "Children of the Night (1/Day)",
         "actionType": "action",
-        "descriptionHtml": "<p>The vampire magically calls 2d4 swarms of swarm of bats or swarm of rats, provided that the sun isn't up. While outdoors, the vampire can call 3d6 wolf instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action.</p>",
+        "descriptionHtml": "<p>Sandesyl magically calls 2d4 swarms of swarm of bats or swarm of rats, provided that the sun isn't up. While outdoors, the vampire can call 3d6 wolf instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action.</p>",
+        "entries": [
+          "Sandesyl magically calls {@dice 2d4} swarms of {@creature swarm of bats||bats} or {@creature swarm of rats||rats}, provided that the sun isn't up. While outdoors, the vampire can call {@dice 3d6} {@creature wolf||wolves} instead. The called creatures arrive in {@dice 1d4} rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7207,10 +7958,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_s8a5",
+          "id": "act_move_mr38",
           "name": "Move",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The vampire moves up to its speed without provoking opportunity attacks.</p>",
+          "descriptionHtml": "<p>Sandesyl moves up to its speed without provoking opportunity attacks.</p>",
+          "entries": [
+            "Sandesyl moves up to its speed without provoking opportunity attacks."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -7224,10 +7978,13 @@
           }
         },
         {
-          "id": "act_unarmed_strike_fxq0",
+          "id": "act_unarmed_strike_vy8d",
           "name": "Unarmed Strike",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The vampire makes one unarmed strike.</p>",
+          "descriptionHtml": "<p>Sandesyl makes one unarmed strike.</p>",
+          "entries": [
+            "Sandesyl makes one unarmed strike."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -7241,10 +7998,13 @@
           }
         },
         {
-          "id": "act_bite__costs_2_actions__gfdu",
+          "id": "act_bite__costs_2_actions__6pv5",
           "name": "Bite (Costs 2 Actions)",
           "actionType": "legendary",
-          "descriptionHtml": "<p>The vampire makes one bite attack.</p>",
+          "descriptionHtml": "<p>Sandesyl makes one bite attack.</p>",
+          "entries": [
+            "Sandesyl makes one bite attack."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -7259,11 +8019,107 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [
+      {
+        "id": "act_regional_effect_09ot",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>There's a noticeable increase in the populations of bats, rats, and wolves in the region.</p>",
+        "entries": [
+          "There's a noticeable increase in the populations of bats, rats, and wolves in the region."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_z7g7",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Plants within 500 feet of the lair wither, and their stems and branches become twisted and thorny.</p>",
+        "entries": [
+          "Plants within 500 feet of the lair wither, and their stems and branches become twisted and thorny."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_7qb6",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Shadows cast within 500 feet of the lair seem abnormally gaunt and sometimes move as though alive.</p>",
+        "entries": [
+          "Shadows cast within 500 feet of the lair seem abnormally gaunt and sometimes move as though alive."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_3j4v",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>A creeping fog clings to the ground within 500 feet of the vampire's lair. The fog occasionally takes eerie forms, such as grasping claws and writhing serpents.</p>",
+        "entries": [
+          "A creeping fog clings to the ground within 500 feet of the vampire's lair. The fog occasionally takes eerie forms, such as grasping claws and writhing serpents."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "regionalEffectsHtml": "<p>The region surrounding a vampire's lair is warped by the creature's unnatural presence, creating any of the following effects:</p><ul><li>There's a noticeable increase in the populations of bats, rats, and wolves in the region.</li><li>Plants within 500 feet of the lair wither, and their stems and branches become twisted and thorny.</li><li>Shadows cast within 500 feet of the lair seem abnormally gaunt and sometimes move as though alive.</li><li>A creeping fog clings to the ground within 500 feet of the vampire's lair. The fog occasionally takes eerie forms, such as grasping claws and writhing serpents.</li></ul><p>If the vampire is destroyed, these effects end after 2d6 days.</p>",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Sandesyl Morgia.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Sandesyl Morgia.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": {
+      "name": "Vampire",
+      "source": "MM"
+    }
   },
   {
     "id": "creature_talis_the_white_hotdq",
@@ -7372,7 +8228,7 @@
       {
         "id": "sc_talis_the_white_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 3,
@@ -7485,7 +8341,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -7510,7 +8368,9 @@
                   {
                     "formula": "2d4",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d4",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -7536,7 +8396,9 @@
                     "formula": "2d10",
                     "type": "Necrotic",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d10",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -7605,7 +8467,9 @@
                     "formula": "1d8",
                     "type": "Force",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -7654,7 +8518,9 @@
                   {
                     "formula": "2d4",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "1d4",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V",
@@ -7747,7 +8613,9 @@
                     "formula": "4d10",
                     "type": "Piercing",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d10",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a locust)",
@@ -7763,10 +8631,13 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_ym4f",
+        "id": "act_special_equipment_xvol",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Talis has +1 scale mail and a wand of winter.</p>",
+        "entries": [
+          "Talis has {@item +1 scale mail} and a {@item wand of winter|hotdq}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7780,10 +8651,13 @@
         }
       },
       {
-        "id": "act_fey_ancestry_glxy",
+        "id": "act_fey_ancestry_jn3f",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Talis has advantage on saving throws against being charmed, and magic can't put her to sleep.</p>",
+        "entries": [
+          "Talis has advantage on saving throws against being {@condition charmed}, and magic can't put her to sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7797,10 +8671,13 @@
         }
       },
       {
-        "id": "act_winter_strike__3_day__kjwk",
+        "id": "act_winter_strike__3_day__8ra7",
         "name": "Winter Strike (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, when Talis hits with a melee attack, she can expend a use of this trait to deal an extra 9 (2d8) cold damage.</p>",
+        "entries": [
+          "Once per turn, when Talis hits with a melee attack, she can expend a use of this trait to deal an extra 9 ({@damage 2d8}) cold damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7821,10 +8698,13 @@
     ],
     "actions": [
       {
-        "id": "act_spear_c6cu",
+        "id": "act_spear_ignr",
         "name": "Spear",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}6 (1d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or ranged 20/60 ft., one target. Hit: 6 (1d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 5} to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}6 ({@damage 1d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -7850,11 +8730,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Talis the White.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Talis the White.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_trepsin_hotdq",
@@ -7947,10 +8839,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_1xfb",
+        "id": "act_keen_smell_69za",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The troll has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "entries": [
+          "The troll has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7964,10 +8859,13 @@
         }
       },
       {
-        "id": "act_regeneration_kves",
+        "id": "act_regeneration_aebg",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The troll regains 10 hit points at the start of its turn. If the troll takes acid or fire damage, this trait doesn't function at the start of the troll's next turn. The troll dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
+        "entries": [
+          "The troll regains 10 hit points at the start of its turn. If the troll takes acid or fire damage, this trait doesn't function at the start of the troll's next turn. The troll dies only if it starts its turn with 0 hit points and doesn't regenerate."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -7983,10 +8881,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3wyf",
+        "id": "act_multiattack_b6st",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The troll attacks five times, once with its bite and four times with its claws. If two or more claws hit the same target, the troll rends the target, dealing an extra 2d6 slashing damage.</p>",
+        "entries": [
+          "The troll attacks five times, once with its bite and four times with its claws. If two or more claws hit the same target, the troll rends the target, dealing an extra {@damage 2d6} slashing damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -8005,10 +8906,13 @@
         }
       },
       {
-        "id": "act_bite_dnq3",
+        "id": "act_bite_4pe4",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw ++7 to hit, reach 5 ft., one target. {@h}7 (1d6 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: ++7 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit +7} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -8027,10 +8931,13 @@
         }
       },
       {
-        "id": "act_claw_dbs6",
+        "id": "act_claw_srvg",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw ++7 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: ++7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit +7} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -8056,10 +8963,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/HotDQ/Trepsin.webp",
     "tokenImg": "img/bestiary/tokens/HotDQ/Trepsin.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

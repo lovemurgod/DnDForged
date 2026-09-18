@@ -40,6 +40,36 @@ export function initVttCreatureSheet(vtt) {
         }).join(' ');
     }
 
+    function resolveSpellcastingType(sc, m = null) {
+        if (!sc) return 'slot';
+        const t = (sc.type || '').toLowerCase();
+        if (t === 'slot' || t === 'pact' || t === 'innate' || t === 'custom') {
+            return t;
+        }
+        const scName = sc.name || '';
+        const headerText = Array.isArray(sc.headerEntries) ? sc.headerEntries.join(' ') : (sc.header || '');
+        const hasWillOrDaily = Boolean(
+            (sc.will && sc.will.length > 0) || 
+            (sc.daily && Object.keys(sc.daily).length > 0) || 
+            (sc.atWill && sc.atWill.length > 0) || 
+            (sc.innateObj?.will && sc.innateObj.will.length > 0) || 
+            (sc.innateObj?.daily && Object.keys(sc.innateObj.daily).length > 0)
+        );
+        const hasSlotsMatrix = Boolean(
+            sc.spellsByLevel || 
+            (sc.spells && Object.keys(sc.spells).some(k => k !== '0' && (Array.isArray(sc.spells[k]) ? sc.spells[k].length > 0 : sc.spells[k]?.slots || sc.spells[k]?.spells?.length))) ||
+            (sc.spellsObj && Object.keys(sc.spellsObj).some(k => k !== 'cantrip' && Array.isArray(sc.spellsObj[k]) && sc.spellsObj[k].length > 0))
+        );
+
+        if (t === 'innate' || /innate|psionic/i.test(scName) || /innate\s+spellcasting/i.test(headerText) || (hasWillOrDaily && !hasSlotsMatrix)) {
+            return 'innate';
+        }
+        if (t === 'pact' || /pact\s+magic/i.test(scName) || (/warlock/i.test(headerText) && /short\s+or\s+long\s+rest/i.test(headerText))) {
+            return 'pact';
+        }
+        return 'slot';
+    }
+
     function get5eSlotsForCaster(type, level) {
         const lvl = Math.max(0, Math.min(20, parseInt(level) || 0));
         if (lvl <= 0) return {};
@@ -142,7 +172,8 @@ export function initVttCreatureSheet(vtt) {
         input.select();
 
         const cleanup = () => {
-            document.body.removeChild(overlay);
+            window.removeEventListener('keydown', onEsc);
+            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
         };
 
         const submit = () => {
@@ -156,9 +187,23 @@ export function initVttCreatureSheet(vtt) {
             callback(null);
         });
 
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                cleanup();
+                callback(null);
+            }
+        });
+
+        const onEsc = (e) => {
+            if (e.key === 'Escape') {
+                cleanup();
+                callback(null);
+            }
+        };
+        window.addEventListener('keydown', onEsc);
+
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') submit();
-            if (e.key === 'Escape') { cleanup(); callback(null); }
         });
     }
 
@@ -176,6 +221,9 @@ export function initVttCreatureSheet(vtt) {
         isMinimized = false;
         minimizeBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
         minimizeBtn.title = 'Minimize Creature Sheet';
+        if (window.VTT?.mobileAdapter?.syncCreatureSheetTopbar) {
+            window.VTT.mobileAdapter.syncCreatureSheetTopbar();
+        }
         console.log('[vtt-creature-sheet] openPanel completed');
     }
 
@@ -185,6 +233,21 @@ export function initVttCreatureSheet(vtt) {
         isMinimized = true;
         minimizeBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
         minimizeBtn.title = 'Expand Creature Sheet';
+    }
+
+    function resetSheet() {
+        currentMonster = null;
+        linkedTokenId = null;
+        linkedCharacterId = null;
+        if (contentEl) {
+            contentEl.innerHTML = `
+                <div class="cs-placeholder">
+                    <i class="fa-solid fa-dragon"></i>
+                    <p>Right-click a token or click a monster in the Bestiary to open its stat block.</p>
+                </div>
+            `;
+        }
+        minimizePanel();
     }
 
     minimizeBtn.addEventListener('click', () => {
@@ -200,20 +263,54 @@ export function initVttCreatureSheet(vtt) {
         console.log('[vtt-creature-sheet] openSheet called', { monsterData, tokenId, characterId });
         if (!monsterData) return;
 
-        // Hydrate from single-creature API if monsterData is only catalog summary
-        if (monsterData.source && monsterData.id && (!monsterData.actions || (monsterData.hasSpellcasting && (!monsterData.spellcasting || monsterData.spellcasting.length === 0)))) {
+        // Hydrate from single-creature API if monsterData is only catalog summary or missing actions/lair
+        const lookupId = monsterData.id || monsterData.name;
+        const isCatalogOnly = Boolean(
+            monsterData.source && lookupId && (
+                !monsterData.actions || 
+                (monsterData.hasSpellcasting && (!monsterData.spellcasting || monsterData.spellcasting.length === 0)) ||
+                (monsterData.legendaryActions && monsterData.lairActions === undefined)
+            )
+        );
+        if (isCatalogOnly) {
             try {
-                const full = (window.fetchFullCreature ? await window.fetchFullCreature(monsterData.source, monsterData.id) : null) ||
-                    (await (await fetch(`/api/creature/${encodeURIComponent(monsterData.source)}/${encodeURIComponent(monsterData.id)}`)).json());
+                let full = null;
+                if (window.fetchFullCreature) {
+                    full = await window.fetchFullCreature(monsterData.source, lookupId);
+                }
+                if (!full) {
+                    try {
+                        const res = await fetch(`/api/creature/${encodeURIComponent(monsterData.source)}/${encodeURIComponent(lookupId)}`);
+                        if (res.ok) full = await res.json();
+                    } catch (e) {}
+                }
+                if (!full) {
+                    try {
+                        const partRes = await fetch(`/data/bestiary-normalized/bestiary-${monsterData.source.toLowerCase()}.json`);
+                        if (partRes.ok) {
+                            const partData = await partRes.json();
+                            const cleanLookup = lookupId.toLowerCase();
+                            full = partData.find(m => m.id?.toLowerCase() === cleanLookup || m.name?.toLowerCase() === cleanLookup);
+                        }
+                    } catch (e) {}
+                }
                 if (full) {
                     monsterData = Object.assign({}, full, monsterData, {
-                        spellcasting: full.spellcasting,
-                        actions: full.actions,
-                        bonusActions: full.bonusActions,
-                        reactions: full.reactions,
-                        legendaryActions: full.legendaryActions,
-                        traits: full.traits,
-                        abilities: full.abilities,
+                        spellcasting: full.spellcasting || monsterData.spellcasting,
+                        actions: full.actions || monsterData.actions,
+                        bonusActions: full.bonusActions || monsterData.bonusActions,
+                        reactions: full.reactions || monsterData.reactions,
+                        legendaryActions: full.legendaryActions || monsterData.legendaryActions,
+                        legendaryActionsLair: full.legendaryActionsLair ?? monsterData.legendaryActionsLair,
+                        legendaryGroup: full.legendaryGroup || monsterData.legendaryGroup,
+                        lairActions: (monsterData.lairActions && monsterData.lairActions.length > 0) ? monsterData.lairActions : full.lairActions,
+                        lairHeader: monsterData.lairHeader || full.lairHeader,
+                        lairActionsDesc: monsterData.lairActionsDesc || full.lairActionsDesc,
+                        regionalEffects: (monsterData.regionalEffects && monsterData.regionalEffects.length > 0) ? monsterData.regionalEffects : full.regionalEffects,
+                        regionalEffectsHtml: monsterData.regionalEffectsHtml || full.regionalEffectsHtml,
+                        mythicActions: full.mythicActions || monsterData.mythicActions,
+                        traits: full.traits || monsterData.traits,
+                        abilities: full.abilities || monsterData.abilities,
                         str: full.str ?? full.abilities?.str?.score ?? monsterData.str,
                         dex: full.dex ?? full.abilities?.dex?.score ?? monsterData.dex,
                         con: full.con ?? full.abilities?.con?.score ?? monsterData.con,
@@ -228,10 +325,10 @@ export function initVttCreatureSheet(vtt) {
                         resist: full.resist ?? monsterData.resist,
                         vulnerable: full.vulnerable ?? monsterData.vulnerable,
                         conditionImmune: full.conditionImmune ?? monsterData.conditionImmune,
-                        senses: full.senses,
-                        speed: full.speed,
-                        hp: full.hp,
-                        ac: full.ac,
+                        senses: full.senses || monsterData.senses,
+                        speed: full.speed || monsterData.speed,
+                        hp: full.hp || monsterData.hp,
+                        ac: full.ac || monsterData.ac,
                         primaryAc: full.primaryAc ?? monsterData.primaryAc
                     });
                 }
@@ -257,78 +354,6 @@ export function initVttCreatureSheet(vtt) {
         currentMonster = monsterData;
         linkedTokenId = tokenId || null;
         linkedCharacterId = characterId || null;
-
-        // Backfill lair actions from legendaryGroup if not yet populated
-        if (currentMonster.legendaryGroup && (!currentMonster.lairActions || currentMonster.lairActions.length === 0)) {
-            try {
-                const res = await fetch('data/bestiary/legendarygroups.json');
-                const data = await res.json();
-                const groupRef = typeof currentMonster.legendaryGroup === 'string' 
-                    ? { name: currentMonster.legendaryGroup, source: currentMonster.source } 
-                    : currentMonster.legendaryGroup;
-                
-                const lg = data.legendaryGroup.find(g => 
-                    g.name && groupRef.name &&
-                    g.name.toLowerCase() === groupRef.name.toLowerCase() && 
-                    (!groupRef.source || !g.source || g.source.toLowerCase() === groupRef.source.toLowerCase())
-                );
-                
-                if (lg && lg.lairActions) {
-                    let desc = '';
-                    const actions = [];
-                    lg.lairActions.forEach(la => {
-                        if (typeof la === 'string') {
-                            desc += (desc ? '\n' : '') + la;
-                        } else if (la.type === 'list' && la.items) {
-                            la.items.forEach(item => {
-                                let actionName = '';
-                                let actionEntries = [];
-                                if (typeof item === 'string') {
-                                    const match = item.match(/^{@b ([^}]+)}\.?\s*(.*)/);
-                                    if (match) {
-                                        actionName = match[1];
-                                        actionEntries = [match[2]];
-                                    } else {
-                                        actionEntries = [item];
-                                    }
-                                } else if (item && typeof item === 'object') {
-                                    actionName = item.name || '';
-                                    if (item.entries) {
-                                        actionEntries = Array.isArray(item.entries) ? item.entries : [item.entries];
-                                    } else if (item.entry) {
-                                        actionEntries = Array.isArray(item.entry) ? item.entry : [item.entry];
-                                    } else {
-                                        actionEntries = [item];
-                                    }
-                                }
-                                actions.push({ name: actionName, entries: actionEntries });
-                            });
-                        } else if (la && typeof la === 'object') {
-                            let actionName = la.name || '';
-                            let actionEntries = [];
-                            if (la.entries) {
-                                actionEntries = Array.isArray(la.entries) ? la.entries : [la.entries];
-                            } else if (la.entry) {
-                                actionEntries = Array.isArray(la.entry) ? la.entry : [la.entry];
-                            }
-                            if (actionName || actionEntries.length > 0) {
-                                actions.push({ name: actionName, entries: actionEntries });
-                            }
-                        }
-                    });
-                    currentMonster.lairActionsDesc = desc;
-                    currentMonster.lairActions = actions;
-                    
-                    if (linkedCharacterId && window.VTT?.campaignState?.characters) {
-                        const char = window.VTT.campaignState.characters[linkedCharacterId];
-                        char.monsterData = currentMonster;
-                        window.VTT.socket.emit('character:update', { character: char });
-                    }
-                }
-            } catch (err) {
-                console.error("[vtt-creature-sheet] Failed to load legendary group", err);
-            }
-        }
 
         try {
             renderStatBlock(currentMonster);
@@ -388,6 +413,7 @@ export function initVttCreatureSheet(vtt) {
         const bonus = buildAbilitySection('Bonus Actions', m.bonusActions || m.bonus);
         const reactions = buildAbilitySection('Reactions', m.reactions || m.reaction);
         const legendary = buildLegendarySection(m);
+        const variants = buildVariantSection(m);
 
         const isEditableCreature = Boolean(linkedCharacterId || m.isCustomNpc || m.isCompanion);
         ensureSpellcastingFromTraits(m);
@@ -415,12 +441,32 @@ export function initVttCreatureSheet(vtt) {
         }
 
         let editBtnHtml = '';
-        if (linkedCharacterId && window.VTT?.campaignState?.characters) {
-            const char = window.VTT.campaignState.characters[linkedCharacterId];
-            if (char && (window.VTT.role === 'GM' || (char.assignedPlayers && (char.assignedPlayers.includes(window.VTT.username) || char.assignedPlayers.includes('*'))))) {
-                editBtnHtml = `<button class="btn btn-sm btn-secondary cs-edit-btn" title="Edit Companion"><i class="fa-solid fa-pen"></i> Edit</button>`;
-            }
+        const activeCharId = linkedCharacterId || (linkedTokenId && window.VTT?.canvasEngine?.getTokens()?.[linkedTokenId]?.sourceCharacterId);
+        const char = (activeCharId && window.VTT?.campaignState?.characters) ? window.VTT.campaignState.characters[activeCharId] : null;
+        if (char && (window.VTT.role === 'GM' || (char.assignedPlayers && (char.assignedPlayers.includes(window.VTT.username) || char.assignedPlayers.includes('*'))))) {
+            editBtnHtml = `<button class="btn btn-xs btn-secondary cs-edit-btn" title="Edit ${char.isCompanion ? 'Companion' : 'NPC'}"><i class="fa-solid fa-pen"></i> <span>Edit</span></button>`;
         }
+
+        const isCustomNpc = Boolean(char?.isCustomNpc || m.isCustomNpc);
+        const isCompanion = Boolean(char?.isCompanion || m.isCompanion);
+        const showGenericNamedToggle = Boolean(isCustomNpc || isCompanion);
+        const isGeneric = char ? (char.isGeneric === true) : (m.isGeneric === true);
+
+        const genericNamedToggleHtml = showGenericNamedToggle ? `
+            <button id="cs-generic-named-toggle" class="btn btn-xs ${isGeneric ? 'btn-secondary' : 'btn-primary'}" title="Entity Type: ${isGeneric ? 'Generic (independent instanced tokens on canvas)' : 'Named (linked to central sheet)'}. Click to toggle." style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; padding:2px 6px; border-radius:4px; cursor:pointer;">
+                <i class="${isGeneric ? 'fa-solid fa-people-group' : 'fa-solid fa-street-view'}"></i>
+                <span>${isGeneric ? 'Generic' : 'Named'}</span>
+            </button>
+        ` : '';
+
+        const rollVisToggleHtml = `
+            <button id="cs-roll-vis-toggle" class="btn btn-xs ${getVisibilitySetting() === 'private' ? 'btn-danger' : 'btn-secondary'}" title="Roll Visibility: ${getVisibilitySetting() === 'private' ? 'GM Secret' : 'Public'}. Click to toggle." style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; padding:2px 6px; border-radius:4px; cursor:pointer;">
+                <i class="${getVisibilitySetting() === 'private' ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'}"></i>
+                <span>${getVisibilitySetting() === 'private' ? 'GM Secret' : 'Public'}</span>
+            </button>
+        `;
+
+        const popoutBtnHtml = !vtt.isStandaloneSheet ? `<button class="cs-popout-btn btn btn-icon btn-secondary btn-xs" id="cs-btn-popout" title="Open Sheet in New Tab"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>` : '';
 
         const tokenUrl = getMonsterImageUrl(m);
         const cleanUrl = (tokenUrl || '').split('?')[0].toLowerCase();
@@ -444,6 +490,18 @@ export function initVttCreatureSheet(vtt) {
         }
 
         contentEl.innerHTML = `
+            <!-- Top Toolbar -->
+            <div class="cs-top-toolbar">
+                <div class="cs-top-toolbar-group">
+                    ${genericNamedToggleHtml}
+                    ${rollVisToggleHtml}
+                </div>
+                <div class="cs-top-toolbar-group">
+                    ${editBtnHtml}
+                    ${popoutBtnHtml}
+                </div>
+            </div>
+
             <!-- Header -->
             <div class="cs-header">
                 <div class="cs-token-portrait">
@@ -454,13 +512,9 @@ export function initVttCreatureSheet(vtt) {
                     <p class="cs-creature-type">${typeStr}</p>
                     <div class="cs-header-meta">
                         <div class="cs-cr-badge">CR ${crStr}</div>
-                        ${editBtnHtml}
-                        ${!vtt.isStandaloneSheet ? `<button class="cs-popout-btn btn btn-icon btn-secondary btn-xs" id="cs-btn-popout" title="Open Sheet in New Tab"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>` : ''}
                     </div>
                 </div>
             </div>
-
-
 
             ${tabsHtml}
 
@@ -483,12 +537,28 @@ export function initVttCreatureSheet(vtt) {
                     </div>
                 </div>
 
-                <!-- Core Stats Pills -->
+                <!-- Dedicated Combat Stats Row (AC & Initiative) -->
+                <div class="cs-combat-stats-row">
+                    <div class="cs-combat-stat-card">
+                        <i class="fa-solid fa-shield-halved cs-combat-stat-icon"></i>
+                        <div class="cs-combat-stat-content">
+                            <span class="cs-combat-stat-label">Armor Class</span>
+                            <span class="cs-combat-stat-value">${acValue}${acFrom}</span>
+                        </div>
+                    </div>
+                    <div class="cs-combat-stat-card cs-combat-stat-btn cs-roll-initiative-btn" style="cursor: pointer;" title="Roll Initiative">
+                        <i class="fa-solid fa-dice-d20 cs-combat-stat-icon" style="color: var(--color-gold-base);"></i>
+                        <div class="cs-combat-stat-content">
+                            <span class="cs-combat-stat-label">Initiative</span>
+                            <span class="cs-combat-stat-value">${initModStr}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Core Stats Pills -->
                 <div class="cs-core-stats">
-                    <div class="cs-stat-pill"><i class="fa-solid fa-shield-halved"></i><span>AC ${acValue}${acFrom}</span></div>
                     <div class="cs-stat-pill"><i class="fa-solid fa-shoe-prints"></i><span>${speed}</span></div>
                     <div class="cs-stat-pill"><i class="fa-solid fa-star"></i><span>Prof +${profBonus}</span></div>
-                    <div class="cs-stat-pill cs-roll-initiative-btn" style="cursor: pointer;" title="Roll Initiative"><i class="fa-solid fa-dice-d20" style="color: var(--color-gold-base);"></i><span>Init ${initModStr}</span></div>
                     ${m.passive !== undefined ? `<div class="cs-stat-pill"><i class="fa-solid fa-eye"></i><span>Passive ${m.passive}</span></div>` : ''}
                 </div>
 
@@ -522,6 +592,7 @@ export function initVttCreatureSheet(vtt) {
                 ${bonus}
                 ${reactions}
                 ${legendary}
+                ${variants}
             </div>
 
             ${hasSpells ? `<div id="cs-tab-spells" class="cs-tab-content">${spellsHtml}</div>` : ''}
@@ -552,7 +623,7 @@ export function initVttCreatureSheet(vtt) {
         const editBtn = contentEl.querySelector('.cs-edit-btn');
         if (editBtn) {
             editBtn.addEventListener('click', () => {
-                openEditModal(m, linkedCharacterId);
+                openEditModal(m, activeCharId);
             });
         }
 
@@ -564,15 +635,15 @@ export function initVttCreatureSheet(vtt) {
                 e.stopPropagation();
                 if (window.SheetWindowManager) {
                     let sheetType = 'creature';
-                    if (linkedCharacterId && window.VTT?.campaignState?.characters?.[linkedCharacterId]) {
-                        const c = window.VTT.campaignState.characters[linkedCharacterId];
-                        if (c.isCompanion) sheetType = 'companion';
-                        else if (c.isCustomNpc) sheetType = 'npc';
+                    const targetChar = activeCharId && window.VTT?.campaignState?.characters?.[activeCharId];
+                    if (targetChar) {
+                        if (targetChar.isCompanion) sheetType = 'companion';
+                        else if (targetChar.isCustomNpc) sheetType = 'npc';
                     }
                     window.SheetWindowManager.openPopout({
                         type: sheetType,
                         tokenId: linkedTokenId,
-                        characterId: linkedCharacterId,
+                        characterId: linkedCharacterId || activeCharId,
                         name: currentMonster.name,
                         source: currentMonster.source,
                         monsterData: currentMonster
@@ -582,7 +653,49 @@ export function initVttCreatureSheet(vtt) {
             });
         }
 
+        // Wire Roll Visibility Quick-Toggle Pill
+        const visToggleBtn = contentEl.querySelector('#cs-roll-vis-toggle');
+        if (visToggleBtn) {
+            visToggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const currentVis = getVisibilitySetting();
+                const nextVis = currentVis === 'private' ? 'public' : 'private';
+                const el = document.getElementById('config-roll-visibility');
+                if (el) {
+                    el.value = nextVis;
+                    el.dispatchEvent(new Event('change'));
+                }
+                const isPrivate = nextVis === 'private';
+                visToggleBtn.className = `btn btn-xs ${isPrivate ? 'btn-danger' : 'btn-secondary'}`;
+                visToggleBtn.innerHTML = `<i class="${isPrivate ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'}"></i> <span>${isPrivate ? 'GM Secret' : 'Public'}</span>`;
+                visToggleBtn.title = `Roll Visibility: ${isPrivate ? 'GM Secret (only GM sees)' : 'Public (all see)'}. Click to toggle.`;
+            });
+        }
 
+        // Wire Generic / Named Instancing Toggle
+        const gnToggleBtn = contentEl.querySelector('#cs-generic-named-toggle');
+        if (gnToggleBtn) {
+            gnToggleBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const targetChar = (activeCharId && window.VTT?.campaignState?.characters) ? window.VTT.campaignState.characters[activeCharId] : null;
+                const currentIsGeneric = targetChar ? (targetChar.isGeneric === true) : (m.isGeneric === true);
+                const nextIsGeneric = !currentIsGeneric;
+
+                if (targetChar) {
+                    targetChar.isGeneric = nextIsGeneric;
+                    if (window.VTT?.socket) {
+                        window.VTT.socket.emit('character:update', { character: targetChar });
+                    }
+                }
+                m.isGeneric = nextIsGeneric;
+
+                gnToggleBtn.className = `btn btn-xs ${nextIsGeneric ? 'btn-secondary' : 'btn-primary'}`;
+                gnToggleBtn.innerHTML = `<i class="${nextIsGeneric ? 'fa-solid fa-people-group' : 'fa-solid fa-street-view'}"></i> <span>${nextIsGeneric ? 'Generic' : 'Named'}</span>`;
+                gnToggleBtn.title = `Entity Type: ${nextIsGeneric ? 'Generic (independent instanced tokens on canvas)' : 'Named (linked to central sheet)'}. Click to toggle.`;
+            });
+        }
     }
 
     function wireInitiativeRoll(m) {
@@ -763,7 +876,7 @@ export function initVttCreatureSheet(vtt) {
                         }
                     }
                     saveMonsterData(currentMonster);
-                    renderSheetData(currentMonster);
+                    saveAndRenderNpcSpells(currentMonster);
                 }
             });
         });
@@ -832,6 +945,33 @@ export function initVttCreatureSheet(vtt) {
         }
     }
 
+    function saveMonsterData(m) {
+        if (!m) m = currentMonster;
+        if (!m) return;
+        if (linkedCharacterId && window.VTT?.campaignState?.characters) {
+            const char = window.VTT.campaignState.characters[linkedCharacterId];
+            if (char) {
+                char.monsterData = m;
+                if (m.spells) char.spells = m.spells;
+                window.VTT.socket?.emit('character:update', { character: char });
+            }
+        } else if (linkedTokenId && window.VTT?.canvasEngine) {
+            const allTokens = window.VTT.canvasEngine.getTokens();
+            const token = allTokens ? allTokens[linkedTokenId] : null;
+            if (token) {
+                token.monsterData = m;
+                if (m.spells) token.spells = m.spells;
+                const curMapId = window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
+                window.VTT.socket?.emit('token:update', { mapId: curMapId, token: token });
+            }
+        } else if (window.VTT?.currentToken) {
+            window.VTT.currentToken.monsterData = m;
+            if (m.spells) window.VTT.currentToken.spells = m.spells;
+            const curMapId = window.VTT?.canvasEngine?.getCurrentMapId?.() || window.VTT?.canvasEngine?.currentMap?.id || null;
+            window.VTT.socket?.emit('token:update', { mapId: curMapId, token: window.VTT.currentToken });
+        }
+    }
+
     function wireHpControls(initial, max) {
         let current = parseInt(initial) || 0;
         const maxHp = parseInt(max) || 0;
@@ -863,10 +1003,10 @@ export function initVttCreatureSheet(vtt) {
                     }
                 }
             }
-            // Sync to linked character (Companion)
+            // Sync to linked character (Companion or Named NPC)
             if (linkedCharacterId && window.VTT && window.VTT.campaignState && window.VTT.campaignState.characters) {
                 const comp = window.VTT.campaignState.characters[linkedCharacterId];
-                if (comp) {
+                if (comp && (!linkedTokenId || comp.isGeneric !== true)) {
                     comp.hpCurrent = current;
                     if (window.VTT.socket) {
                         window.VTT.socket.emit('character:update', { character: comp });
@@ -1019,38 +1159,148 @@ export function initVttCreatureSheet(vtt) {
         `;
     }
 
+    function extractLairTitle(text) {
+        if (!text || typeof text !== 'string') return '';
+        const boldMatch = text.match(/^\{@b\s+([^}]+)\}\.?\s*(.*)/i) || text.match(/^\*\*([^*]+)\*\*\.?\s*(.*)/i);
+        if (boldMatch) return cleanTags(boldMatch[1]).replace(/\.$/, '').trim();
+        const spellMatch = text.match(/(?:casts?|uses?)\s+\{@spell\s+([^}|]+)/i);
+        if (spellMatch) return `Cast ${spellMatch[1].trim()}`;
+        const firstClause = text.split(/[.,;]/)[0].trim().replace(/^\{@[^}]+\}\s*/, '');
+        let words = firstClause.split(/\s+/).filter(Boolean);
+        if (words.length > 0) {
+            if (/^(a|an|the|until)$/i.test(words[0])) words.shift();
+            const stopWords = new Set(['from', 'in', 'of', 'at', 'on', 'to', 'within', 'with', 'by', 'around', 'into', 'for', 'a', 'an', 'the']);
+            words = words.slice(0, 3);
+            while (words.length > 1 && stopWords.has(words[words.length - 1].toLowerCase())) words.pop();
+            const shortName = words.map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+            if (shortName.length >= 3) return shortName;
+        }
+        return '';
+    }
+
     function buildLegendarySection(m) {
         let html = '';
-        const legEntries = m.legendaryActions?.entries || m.legendary || [];
+        const legEntries = Array.isArray(m.legendaryActions) 
+            ? m.legendaryActions 
+            : (Array.isArray(m.legendaryActions?.entries) ? m.legendaryActions.entries : (Array.isArray(m.legendary) ? m.legendary : []));
         if (legEntries && legEntries.length > 0) {
-            const lairDesc = m.legendaryActions?.description ? `<p class="cs-legendary-desc">${m.legendaryActions.description}</p>` : (m.legendaryActions !== undefined ? `<p class="cs-legendary-desc">${m.legendaryActions}</p>` : '');
+            const lairBadge = m.legendaryActionsLair ? ` <span class="badge" style="font-size:0.75rem; background:rgba(255,215,0,0.15); color:#ffd700; border:1px solid rgba(255,215,0,0.4); border-radius:3px; padding:1px 5px; margin-left:6px;">${m.legendaryActions?.count || 3} (${m.legendaryActionsLair} in Lair)</span>` : '';
+            const legDesc = m.legendaryActions?.description ? `<p class="cs-legendary-desc">${m.legendaryActions.description}</p>` : (m.legendaryHeader ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.legendaryHeader))}</p>` : '');
             const rows = legEntries.map(entry => buildAbilityEntryHtml(entry)).join('');
             html += `
                 <div class="cs-section cs-legendary-section">
-                    <h3 class="cs-section-title"><i class="fa-solid fa-crown"></i> <span>Legendary Actions</span> <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
+                    <h3 class="cs-section-title"><i class="fa-solid fa-crown"></i> <span>Legendary Actions</span>${lairBadge} <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
                     <div class="cs-section-content">
-                        ${lairDesc}
+                        ${legDesc}
+                        ${rows}
+                    </div>
+                </div>
+            `;
+        }
+
+        const mythicEntries = Array.isArray(m.mythicActions) 
+            ? m.mythicActions 
+            : (Array.isArray(m.mythicActions?.entries) ? m.mythicActions.entries : (Array.isArray(m.mythic) ? m.mythic : []));
+        if (mythicEntries && mythicEntries.length > 0) {
+            const mythicDesc = m.mythicActions?.description ? `<p class="cs-legendary-desc">${m.mythicActions.description}</p>` : (m.mythicHeader ? `<p class="cs-legendary-desc">${cleanTags(flattenEntriesToText(m.mythicHeader))}</p>` : '');
+            const rows = mythicEntries.map(entry => buildAbilityEntryHtml(entry)).join('');
+            html += `
+                <div class="cs-section cs-mythic-section" style="margin-top:12px;">
+                    <h3 class="cs-section-title"><i class="fa-solid fa-dragon"></i> <span>Mythic Actions</span> <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
+                    <div class="cs-section-content">
+                        ${mythicDesc}
                         ${rows}
                     </div>
                 </div>
             `;
         }
         
-        if (m.lairActions && m.lairActions.length > 0) {
-            const lairDesc = m.lairActionsDesc !== undefined ? `<p class="cs-legendary-desc">${m.lairActionsDesc}</p>` : '';
-            const rows = m.lairActions.map(entry => buildAbilityEntryHtml(entry)).join('');
+        const lairActionEntries = Array.isArray(m.lairActions) 
+            ? m.lairActions 
+            : (Array.isArray(m.lairActions?.entries) ? m.lairActions.entries : []);
+        if (lairActionEntries && lairActionEntries.length > 0) {
+            const lairDesc = m.lairHeader || m.lairActions?.header || m.lairActionsDesc || (typeof m.lairActions === 'string' ? m.lairActions : '');
+            const lairDescHtml = lairDesc ? `<p class="cs-legendary-desc">${parse5eMarkup(lairDesc)}</p>` : '';
+            const rows = lairActionEntries.map(entry => {
+                if (typeof entry === 'string') {
+                    const fallbackName = extractLairTitle(entry) || 'Lair Effect';
+                    return buildAbilityEntryHtml({
+                        name: fallbackName,
+                        entries: [entry],
+                        descriptionHtml: `<p>${entry}</p>`,
+                        actionType: 'lair'
+                    });
+                }
+                if (entry && !entry.name) {
+                    const firstText = (entry.entries && entry.entries[0]) ? (typeof entry.entries[0] === 'string' ? entry.entries[0] : JSON.stringify(entry.entries[0])) : (entry.entry ? String(entry.entry) : '');
+                    const fallbackName = extractLairTitle(firstText) || 'Lair Action';
+                    return buildAbilityEntryHtml({
+                        ...entry,
+                        name: fallbackName,
+                        actionType: 'lair'
+                    });
+                }
+                return buildAbilityEntryHtml(entry);
+            }).join('');
             html += `
-                <div class="cs-section cs-legendary-section" style="margin-top:12px;">
+                <div class="cs-section cs-lair-section" style="margin-top:12px;">
                     <h3 class="cs-section-title"><i class="fa-solid fa-dungeon"></i> <span>Lair Actions</span> <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
                     <div class="cs-section-content">
-                        ${lairDesc}
+                        ${lairDescHtml}
                         ${rows}
+                    </div>
+                </div>
+            `;
+        }
+
+        const regionalEntries = m.regionalEffects || [];
+        const regionalHtml = m.regionalEffectsHtml || '';
+        if ((regionalEntries && regionalEntries.length > 0) || regionalHtml) {
+            let content = '';
+            if (regionalEntries && regionalEntries.length > 0) {
+                content = regionalEntries.map(entry => buildAbilityEntryHtml(entry)).join('');
+            } else {
+                content = `<div class="cs-regional-text" style="font-size:0.85rem; line-height:1.4; color:var(--color-text-secondary);">${regionalHtml}</div>`;
+            }
+            html += `
+                <div class="cs-section cs-regional-section" style="margin-top:12px;">
+                    <h3 class="cs-section-title"><i class="fa-solid fa-mountain-sun"></i> <span>Regional Effects</span> <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
+                    <div class="cs-section-content">
+                        ${content}
                     </div>
                 </div>
             `;
         }
         
         return html;
+    }
+
+    function buildVariantSection(m) {
+        const variantList = m.variants || (m.variant && Array.isArray(m.variant) ? m.variant : []);
+        if (!variantList || variantList.length === 0) return '';
+
+        const rows = variantList.map(v => {
+            if (!v) return '';
+            const name = v.name || 'Variant';
+            const entries = v.entries || (v.entry ? [v.entry] : []);
+            const descriptionHtml = v.descriptionHtml || (typeof v === 'string' ? `<p>${v}</p>` : '');
+            
+            return buildAbilityEntryHtml({
+                name,
+                entries,
+                descriptionHtml,
+                actionType: 'variant'
+            });
+        }).filter(Boolean).join('');
+
+        return `
+            <div class="cs-section cs-variant-section" style="margin-top:12px;">
+                <h3 class="cs-section-title"><i class="fa-solid fa-masks-theater"></i> <span>Variant Traits</span> <i class="cs-section-chevron fa-solid fa-chevron-down"></i></h3>
+                <div class="cs-section-content">
+                    ${rows}
+                </div>
+            </div>
+        `;
     }
 
     function ensureSpellcastingFromTraits(m) {
@@ -1152,8 +1402,10 @@ export function initVttCreatureSheet(vtt) {
                 headerEntries.push(line);
             });
 
+            const isBlockInnate = /innate|psionic/i.test(trait.name) || ((will.length > 0 || Object.keys(daily).length > 0) && Object.keys(spells).length === 0);
             const scBlock = {
                 name: trait.name,
+                type: isBlockInnate ? 'innate' : 'slot',
                 ability,
                 dc,
                 atkMod,
@@ -1176,10 +1428,44 @@ export function initVttCreatureSheet(vtt) {
         };
         m.dailyUsages = m.dailyUsages || {};
 
+        function findExistingSpell(name, id) {
+            const cleanName = (name || '').toLowerCase().trim();
+            if (m.spellcasting) {
+                for (const blk of m.spellcasting) {
+                    if (blk.spellsObj) {
+                        for (let lk in blk.spellsObj) {
+                            const found = (blk.spellsObj[lk] || []).find(s => (id && s.id === id) || (s.name && s.name.toLowerCase().trim() === cleanName));
+                            if (found) return found;
+                        }
+                    }
+                    if (blk.innateObj) {
+                        if (blk.innateObj.will) {
+                            const found = (blk.innateObj.will || []).find(s => (id && s.id === id) || (s.name && s.name.toLowerCase().trim() === cleanName));
+                            if (found) return found;
+                        }
+                        if (blk.innateObj.daily) {
+                            for (let dk in blk.innateObj.daily) {
+                                const found = (blk.innateObj.daily[dk] || []).find(s => (id && s.id === id) || (s.name && s.name.toLowerCase().trim() === cleanName));
+                                if (found) return found;
+                            }
+                        }
+                    }
+                }
+            }
+            if (m.spells) {
+                for (let lk in m.spells) {
+                    const found = (m.spells[lk] || []).find(s => (id && s.id === id) || (s.name && s.name.toLowerCase().trim() === cleanName));
+                    if (found) return found;
+                }
+            }
+            return null;
+        }
+
         if (m.spellcasting && Array.isArray(m.spellcasting) && m.spellcasting.length > 0) {
             m.spellcasting.forEach((sc, scIdx) => {
                 sc.id = sc.id || ('sc_' + scIdx + '_' + Date.now());
-                const isBlockInnate = sc.type === 'innate';
+                const resolvedBlockType = resolveSpellcastingType(sc, m);
+                const isBlockInnate = resolvedBlockType === 'innate';
                 const abilityStr = (sc.ability || 'int').toLowerCase();
                 const pb = getProfBonus(m.cr ? (m.cr.cr || m.cr) : '0');
                 const abScore = m[abilityStr] || 10;
@@ -1201,17 +1487,19 @@ export function initVttCreatureSheet(vtt) {
                         let levelKey = lvl === '0' ? 'cantrip' : 'level' + lvl;
                         let rawList = sc.spellsByLevel[lvl]?.spells || [];
                         rawList.forEach((sp, spIdx) => {
-                            let spObj = Object.assign({}, sp, {
-                                id: sp.id || ('sp_' + scIdx + '_' + lvl + '_' + spIdx),
-                                spellcastingBlockId: sc.id,
-                                spellcastingBlockName: sc.name || 'Spellcasting',
-                                spellcastingType: sc.type || (isBlockInnate ? 'innate' : 'slot'),
-                                ability: abilityStr,
-                                dc: dcVal,
-                                atkMod: atkVal,
-                                casterLevel: casterLvlVal,
-                                prepared: true
-                            });
+                            let name = toSpellTitleCase(typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown'));
+                            let existing = findExistingSpell(name, typeof sp === 'object' ? sp.id : null);
+                            let spObj = existing ? Object.assign({}, existing) : (typeof sp === 'object' ? Object.assign({}, sp) : { id: 'sp_' + scIdx + '_' + lvl + '_' + spIdx, name: name, prepared: true });
+                            spObj.id = spObj.id || ('sp_' + scIdx + '_' + lvl + '_' + spIdx);
+                            spObj.name = name;
+                            spObj.spellcastingBlockId = sc.id;
+                            spObj.spellcastingBlockName = sc.name || 'Spellcasting';
+                            spObj.spellcastingType = resolvedBlockType;
+                            spObj.ability = abilityStr;
+                            spObj.dc = dcVal;
+                            spObj.atkMod = atkVal;
+                            spObj.casterLevel = casterLvlVal;
+                            spObj.prepared = spObj.prepared !== undefined ? spObj.prepared : true;
                             if (isBlockInnate) {
                                 if (levelKey === 'cantrip') {
                                     spObj.uses = 'at_will';
@@ -1236,16 +1524,18 @@ export function initVttCreatureSheet(vtt) {
                         let rawList = Array.isArray(sc.spells[lvl]) ? sc.spells[lvl] : (sc.spells[lvl]?.spells || []);
                         rawList.forEach((sp, spIdx) => {
                             let name = toSpellTitleCase(typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown'));
-                            let spObj = typeof sp === 'object' ? Object.assign({}, sp) : { id: 'sp_' + scIdx + '_' + lvl + '_' + spIdx, name: name, prepared: true };
+                            let existing = findExistingSpell(name, typeof sp === 'object' ? sp.id : null);
+                            let spObj = existing ? Object.assign({}, existing) : (typeof sp === 'object' ? Object.assign({}, sp) : { id: 'sp_' + scIdx + '_' + lvl + '_' + spIdx, name: name, prepared: true });
                             spObj.id = spObj.id || ('sp_' + scIdx + '_' + lvl + '_' + spIdx);
                             spObj.name = name;
                             spObj.spellcastingBlockId = sc.id;
                             spObj.spellcastingBlockName = sc.name || 'Spellcasting';
-                            spObj.spellcastingType = sc.type || (isBlockInnate ? 'innate' : 'slot');
+                            spObj.spellcastingType = resolvedBlockType;
                             spObj.ability = abilityStr;
                             spObj.dc = dcVal;
                             spObj.atkMod = atkVal;
                             spObj.casterLevel = casterLvlVal;
+                            spObj.prepared = spObj.prepared !== undefined ? spObj.prepared : true;
 
                             if (isBlockInnate) {
                                 if (levelKey === 'cantrip') {
@@ -1274,7 +1564,8 @@ export function initVttCreatureSheet(vtt) {
                 if (sc.atWill && Array.isArray(sc.atWill)) {
                     sc.atWill.forEach((sp, spIdx) => {
                         let name = toSpellTitleCase(typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown'));
-                        let spObj = Object.assign({}, typeof sp === 'object' ? sp : {}, {
+                        let existing = findExistingSpell(name, typeof sp === 'object' ? sp.id : null);
+                        let spObj = existing ? Object.assign({}, existing) : Object.assign({}, typeof sp === 'object' ? sp : {}, {
                             id: sp.id || ('sp_will_' + scIdx + '_' + spIdx),
                             name: name,
                             uses: 'at_will',
@@ -1282,32 +1573,45 @@ export function initVttCreatureSheet(vtt) {
                             prepared: true,
                             spellcastingBlockId: sc.id,
                             spellcastingBlockName: sc.name || (isBlockInnate ? 'Innate Spellcasting' : 'Spellcasting'),
-                            spellcastingType: sc.type || (isBlockInnate ? 'innate' : 'slot'),
+                            spellcastingType: resolvedBlockType,
                             ability: abilityStr,
                             dc: dcVal,
                             atkMod: atkVal,
                             casterLevel: casterLvlVal
                         });
+                        spObj.id = spObj.id || ('sp_will_' + scIdx + '_' + spIdx);
+                        spObj.name = name;
+                        spObj.uses = 'at_will';
+                        spObj.innate = true;
+                        spObj.spellcastingBlockId = sc.id;
+                        spObj.spellcastingBlockName = sc.name || (isBlockInnate ? 'Innate Spellcasting' : 'Spellcasting');
+                        spObj.spellcastingType = resolvedBlockType;
+                        spObj.ability = abilityStr;
+                        spObj.dc = dcVal;
+                        spObj.atkMod = atkVal;
+                        spObj.casterLevel = casterLvlVal;
                         scInnate.will.push(spObj);
-                        if (!isBlockInnate && !scSpells.cantrip.some(s => s.name === spObj.name)) scSpells.cantrip.push(spObj);
+                        if (!spells.cantrip.some(s => s.name === spObj.name)) spells.cantrip.push(spObj);
                     });
                 } else if (sc.will) {
                     sc.will.forEach((sp, spIdx) => {
                         let name = toSpellTitleCase(typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown'));
-                        let spObj = typeof sp === 'object' ? Object.assign({}, sp) : { id: 'sp_will_' + scIdx + '_' + spIdx, name: name, prepared: true, innate: true, uses: 'at_will' };
+                        let existing = findExistingSpell(name, typeof sp === 'object' ? sp.id : null);
+                        let spObj = existing ? Object.assign({}, existing) : (typeof sp === 'object' ? Object.assign({}, sp) : { id: 'sp_will_' + scIdx + '_' + spIdx, name: name, prepared: true, innate: true, uses: 'at_will' });
                         spObj.id = spObj.id || ('sp_will_' + scIdx + '_' + spIdx);
                         spObj.name = name;
                         spObj.uses = 'at_will';
+                        spObj.innate = true;
                         spObj.spellcastingBlockId = sc.id;
                         spObj.spellcastingBlockName = sc.name || (isBlockInnate ? 'Innate Spellcasting' : 'Spellcasting');
-                        spObj.spellcastingType = sc.type || (isBlockInnate ? 'innate' : 'slot');
+                        spObj.spellcastingType = resolvedBlockType;
                         spObj.ability = abilityStr;
                         spObj.dc = dcVal;
                         spObj.atkMod = atkVal;
                         spObj.casterLevel = casterLvlVal;
 
                         scInnate.will.push(spObj);
-                        if (!isBlockInnate && !scSpells.cantrip.some(s => s.name === name)) scSpells.cantrip.push(spObj);
+                        if (!spells.cantrip.some(s => s.name === name)) spells.cantrip.push(spObj);
                     });
                 }
 
@@ -1317,17 +1621,19 @@ export function initVttCreatureSheet(vtt) {
                         scInnate.daily[dailyKey] = scInnate.daily[dailyKey] || [];
                         sc.daily[dailyKey].forEach((sp, spIdx) => {
                             let name = toSpellTitleCase(typeof sp === 'string' ? sp.replace(/{@spell ([^|}]+).*?}/, '$1') : (sp.name || 'Unknown'));
-                            let spId = 'sp_daily_' + scIdx + '_' + dailyKey + '_' + spIdx;
-                            let usesRemaining = m.dailyUsages[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
-                            let spObj = typeof sp === 'object' ? Object.assign({}, sp) : { id: spId, name: name, prepared: true, innate: true, usesMax, usesRemaining, dailyKey };
+                            let existing = findExistingSpell(name, typeof sp === 'object' ? sp.id : null);
+                            let spId = (existing && existing.id) || (typeof sp === 'object' && sp.id) || ('sp_daily_' + scIdx + '_' + dailyKey + '_' + spIdx);
+                            let usesRemaining = m.dailyUsages[spId] !== undefined ? m.dailyUsages[spId] : (existing?.usesRemaining !== undefined ? existing.usesRemaining : usesMax);
+                            let spObj = existing ? Object.assign({}, existing) : (typeof sp === 'object' ? Object.assign({}, sp) : { id: spId, name: name, prepared: true, innate: true, usesMax, usesRemaining, dailyKey });
                             spObj.id = spObj.id || spId;
                             spObj.name = name;
                             spObj.usesMax = usesMax;
                             spObj.usesRemaining = usesRemaining;
                             spObj.dailyKey = dailyKey;
+                            spObj.innate = true;
                             spObj.spellcastingBlockId = sc.id;
                             spObj.spellcastingBlockName = sc.name || (isBlockInnate ? 'Innate Spellcasting' : 'Spellcasting');
-                            spObj.spellcastingType = sc.type || (isBlockInnate ? 'innate' : 'slot');
+                            spObj.spellcastingType = resolvedBlockType;
                             spObj.ability = abilityStr;
                             spObj.dc = dcVal;
                             spObj.atkMod = atkVal;
@@ -1371,13 +1677,18 @@ export function initVttCreatureSheet(vtt) {
             });
         }
 
-        // Merge any spells already in m.spells (ensures user-added custom spells are preserved)
+        // Merge any spells already in m.spells (ensures user-added custom spells and custom edits are preserved)
         if (m.spells && typeof m.spells === 'object') {
             for (let lk in m.spells) {
                 if (Array.isArray(m.spells[lk])) {
                     m.spells[lk].forEach(spObj => {
                         if (!spells[lk]) spells[lk] = [];
-                        if (!spells[lk].some(s => s.name === spObj.name || (s.id && spObj.id && s.id === spObj.id))) {
+                        const existingIdx = spells[lk].findIndex(s => (s.id && spObj.id && s.id === spObj.id) || (s.name && spObj.name && s.name.toLowerCase().trim() === spObj.name.toLowerCase().trim()));
+                        if (existingIdx >= 0) {
+                            if (spObj.macroPopulated) {
+                                spells[lk][existingIdx] = Object.assign({}, spells[lk][existingIdx], spObj);
+                            }
+                        } else {
                             spells[lk].push(spObj);
                         }
                     });
@@ -1408,18 +1719,27 @@ export function initVttCreatureSheet(vtt) {
         if (window.VTTSpellManager && window.VTTSpellManager.getSpellCache) {
             const cache = window.VTTSpellManager.getSpellCache();
             if (cache && window.vttPlayerSheetAPI?.parseSpellToMacro) {
-                for (let lk in spells) {
-                    if (Array.isArray(spells[lk])) {
-                        spells[lk].forEach(spObj => {
-                            if (!spObj.macroPopulated && spObj.name) {
-                                const spData = cache.find(s => s.name.toLowerCase().trim() === spObj.name.toLowerCase().trim());
-                                if (spData) {
-                                    window.vttPlayerSheetAPI.parseSpellToMacro(spData, spObj, true);
-                                    spObj.macroPopulated = true;
-                                }
-                            }
-                        });
+                const populateSpell = (spObj) => {
+                    if (!spObj || spObj.macroPopulated || !spObj.name) return;
+                    const spData = cache.find(s => s.name.toLowerCase().trim() === spObj.name.toLowerCase().trim());
+                    if (spData) {
+                        window.vttPlayerSheetAPI.parseSpellToMacro(spData, spObj, true);
+                        spObj.macroPopulated = true;
                     }
+                };
+
+                for (let lk in spells) {
+                    if (Array.isArray(spells[lk])) spells[lk].forEach(populateSpell);
+                }
+                if (m.spellcasting) {
+                    m.spellcasting.forEach(sc => {
+                        if (sc.innateObj?.will) sc.innateObj.will.forEach(populateSpell);
+                        if (sc.innateObj?.daily) {
+                            for (let dk in sc.innateObj.daily) {
+                                (sc.innateObj.daily[dk] || []).forEach(populateSpell);
+                            }
+                        }
+                    });
                 }
             }
         }
@@ -1466,14 +1786,16 @@ export function initVttCreatureSheet(vtt) {
             }
         }
         // Fallback: calculate standard slots from Caster Level for slot or pact blocks
-        if (sc && (sc.type === 'slot' || sc.type === 'pact') && (sc.casterLevel || m.casterLevel)) {
-            const computed = get5eSlotsForCaster(sc.type, sc.casterLevel || m.casterLevel);
+        const scResolvedType = sc ? resolveSpellcastingType(sc, m) : null;
+        if (sc && (scResolvedType === 'slot' || scResolvedType === 'pact') && (sc.casterLevel || m.casterLevel)) {
+            const computed = get5eSlotsForCaster(scResolvedType, sc.casterLevel || m.casterLevel);
             if (computed[slKey] !== undefined) return computed[slKey];
         }
         if (m.spellcasting) {
             for (let block of m.spellcasting) {
-                if ((block.type === 'slot' || block.type === 'pact') && (block.casterLevel || m.casterLevel)) {
-                    const computed = get5eSlotsForCaster(block.type, block.casterLevel || m.casterLevel);
+                const bResolvedType = resolveSpellcastingType(block, m);
+                if ((bResolvedType === 'slot' || bResolvedType === 'pact') && (block.casterLevel || m.casterLevel)) {
+                    const computed = get5eSlotsForCaster(bResolvedType, block.casterLevel || m.casterLevel);
                     if (computed[slKey] !== undefined) return computed[slKey];
                 }
             }
@@ -1504,9 +1826,9 @@ export function initVttCreatureSheet(vtt) {
         if (blockId && m.spellcasting) {
             const sc = m.spellcasting.find(b => b.id === blockId);
             if (sc) {
-                if (sc.type === 'innate' || /innate|psionic/i.test(sc.name || '')) {
-                    if (sectionKey === 'will' && sc.innateObj?.will?.[idx]) return sc.innateObj.will[idx];
-                    if (sectionKey && sc.innateObj?.daily?.[sectionKey]?.[idx]) return sc.innateObj.daily[sectionKey][idx];
+                if (sectionKey === 'will' && sc.innateObj?.will?.[idx]) return sc.innateObj.will[idx];
+                if (sectionKey && sc.innateObj?.daily?.[sectionKey]?.[idx]) return sc.innateObj.daily[sectionKey][idx];
+                if (sc.innateObj) {
                     if (level === 'cantrip' && sc.innateObj?.will?.[idx]) return sc.innateObj.will[idx];
                     if (sc.innateObj?.daily) {
                         for (const k in sc.innateObj.daily) {
@@ -1556,14 +1878,31 @@ export function initVttCreatureSheet(vtt) {
                 const dcVal = sc.dc !== undefined ? sc.dc : (8 + pb + abMod);
                 const atkVal = sc.atkMod !== undefined ? sc.atkMod : (pb + abMod);
                 const casterLvlVal = sc.casterLevel !== undefined ? sc.casterLevel : (m.casterLevel || 0);
-                const isInnate = sc.type === 'innate' || /innate|psionic/i.test(scName);
+                const resolvedBlockType = resolveSpellcastingType(sc, m);
+                const isInnateType = resolvedBlockType === 'innate';
+                const willList = sc.innateObj?.will || [];
+                const dailyObj = sc.innateObj?.daily || {};
+                const hasWill = willList.length > 0;
+                const hasDaily = Object.keys(dailyObj).some(k => dailyObj[k] && dailyObj[k].length > 0);
+                const hasWillOrDaily = hasWill || hasDaily;
+
+                const scSpellsObj = sc.spellsObj || { cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [] };
+                const hasSlotsOrLeveledSpells = Boolean(
+                    sc.spellsByLevel || 
+                    (sc.spells && Object.keys(sc.spells).some(k => k !== '0' && (Array.isArray(sc.spells[k]) ? sc.spells[k].length > 0 : sc.spells[k]?.slots || sc.spells[k]?.spells?.length))) ||
+                    spellLevels.some(sl => sl.key !== 'cantrip' && ((sc.spellsObj && sc.spellsObj[sl.key]?.length > 0) || getMaxSlotsForLevel(m, sl.key, sc) > 0))
+                );
 
                 // Distinct Casting Type Badges
                 let typeBadge = '';
                 if (/psionics/i.test(scName)) {
                     typeBadge = `<span class="badge" style="background:rgba(186,85,211,0.2); color:#dda0dd; border:1px solid rgba(186,85,211,0.3); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-brain" style="margin-right:3px;"></i>Psionics</span>`;
-                } else if (isInnate) {
+                } else if (resolvedBlockType === 'pact') {
+                    typeBadge = `<span class="badge" style="background:rgba(147,112,219,0.2); color:#ba55d3; border:1px solid rgba(147,112,219,0.35); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-hand-sparkles" style="margin-right:3px;"></i>Pact Magic</span>`;
+                } else if (isInnateType) {
                     typeBadge = `<span class="badge" style="background:rgba(30,144,255,0.15); color:#87cefa; border:1px solid rgba(30,144,255,0.25); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-sparkles" style="margin-right:3px;"></i>Innate</span>`;
+                } else if (hasWillOrDaily && !hasSlotsOrLeveledSpells) {
+                    typeBadge = `<span class="badge" style="background:rgba(30,144,255,0.15); color:#87cefa; border:1px solid rgba(30,144,255,0.25); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-sparkles" style="margin-right:3px;"></i>At-Will / Daily</span>`;
                 } else {
                     typeBadge = `<span class="badge" style="background:rgba(212,175,55,0.15); color:var(--color-gold-base); border:1px solid rgba(212,175,55,0.25); font-size:0.75rem; padding:2px 7px; border-radius:4px;"><i class="fa-solid fa-layer-group" style="margin-right:3px;"></i>Slots</span>`;
                 }
@@ -1600,70 +1939,65 @@ export function initVttCreatureSheet(vtt) {
                         ${desc ? `<div style="font-size: 0.88rem; line-height: 1.4; color: var(--color-text-secondary); margin-bottom: 8px;">${desc}</div>` : ''}
                 `;
 
-                // If Innate Spellcasting block: render At Will and Daily groups cleanly
-                if (isInnate) {
-                    const willList = sc.innateObj?.will || [];
-                    const dailyObj = sc.innateObj?.daily || {};
-                    const hasDaily = Object.keys(dailyObj).some(k => dailyObj[k] && dailyObj[k].length > 0);
+                // At Will group: render if will spells exist, or if allowEdit on an innate/at-will block
+                if (hasWill || (allowEdit && (isInnateType || !hasSlotsOrLeveledSpells))) {
+                    html += `
+                        <div class="cs-spell-page" data-block-id="${sc.id}" style="margin-bottom:8px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
+                                <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-solid fa-infinity" style="margin-right:4px;"></i> At Will</span>
+                                ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="cantrip" data-block-id="${sc.id}" data-section-key="will"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:8px;">
+                                ${willList.length > 0 ? willList.map((sp, idx) => {
+                                    const spLvl = sp.level !== undefined ? (sp.level === 0 ? 'cantrip' : 'level' + sp.level) : 'cantrip';
+                                    return renderSingleSpellRowHtml(sp, spLvl, idx, allowEdit, sc.id, sp.id, 'will');
+                                }).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No at-will spells added.</div>'}
+                            </div>
+                        </div>
+                    `;
+                }
 
-                    // At Will group
-                    if (willList.length > 0 || allowEdit) {
+                // Daily groups: render if daily spells exist, or if allowEdit on an innate/at-will block
+                if (hasDaily || (allowEdit && (isInnateType || !hasSlotsOrLeveledSpells))) {
+                    Object.keys(dailyObj).forEach(dayKey => {
+                        const list = dailyObj[dayKey] || [];
+                        const usesMax = parseInt(dayKey) || 1;
+                        const labelDay = dayKey.endsWith('e') ? `${usesMax}/Day Each` : `${usesMax}/Day`;
                         html += `
                             <div class="cs-spell-page" data-block-id="${sc.id}" style="margin-bottom:8px;">
                                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
-                                    <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-solid fa-infinity" style="margin-right:4px;"></i> At Will</span>
-                                    ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="cantrip" data-block-id="${sc.id}" data-section-key="will"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
+                                    <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-solid fa-sun" style="margin-right:4px;"></i> ${labelDay}</span>
+                                    ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="level1" data-block-id="${sc.id}" data-section-key="${dayKey}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
                                 </div>
                                 <div style="display:flex; flex-direction:column; gap:8px;">
-                                    ${willList.length > 0 ? willList.map((sp, idx) => {
-                                        const spLvl = sp.level !== undefined ? (sp.level === 0 ? 'cantrip' : 'level' + sp.level) : 'cantrip';
-                                        return renderSingleSpellRowHtml(sp, spLvl, idx, allowEdit, sc.id, sp.id, 'will');
-                                    }).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No at-will spells added.</div>'}
+                                    ${list.length > 0 ? list.map((sp, idx) => {
+                                        const spId = sp.id || ('sp_daily_' + scIdx + '_' + dayKey + '_' + idx);
+                                        const spLvl = sp.level !== undefined ? (sp.level === 0 ? 'cantrip' : 'level' + sp.level) : 'level1';
+                                        const rowHtml = renderSingleSpellRowHtml(sp, spLvl, idx, allowEdit, sc.id, spId, dayKey);
+                                        const curUsages = m.dailyUsages && m.dailyUsages[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
+                                        let boxesHtml = '';
+                                        for (let u = 0; u < usesMax; u++) {
+                                            const checked = u < curUsages;
+                                            boxesHtml += `<i class="cs-innate-use-checkbox ${checked ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}" data-spell-id="${spId}" data-uses-max="${usesMax}" data-use-idx="${u}" style="cursor:pointer; color:var(--color-gold-base); font-size:1rem; margin-right:3px;" title="Daily Use ${u+1}/${usesMax}"></i>`;
+                                        }
+                                        return `
+                                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                                <div style="display:flex; align-items:center; justify-content:flex-end; padding:0 8px;">
+                                                    <span style="font-size:0.7rem; color:var(--color-text-muted); margin-right:6px;">Uses:</span>
+                                                    ${boxesHtml}
+                                                </div>
+                                                ${rowHtml}
+                                            </div>
+                                        `;
+                                    }).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No daily spells added.</div>'}
                                 </div>
                             </div>
                         `;
-                    }
+                    });
+                }
 
-                    // Daily groups
-                    if (hasDaily || allowEdit) {
-                        Object.keys(dailyObj).forEach(dayKey => {
-                            const list = dailyObj[dayKey] || [];
-                            const usesMax = parseInt(dayKey) || 1;
-                            html += `
-                                <div class="cs-spell-page" data-block-id="${sc.id}" style="margin-bottom:8px;">
-                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px;">
-                                        <span style="font-size:0.9rem; font-weight:600; color:var(--color-gold-base);"><i class="fa-solid fa-sun" style="margin-right:4px;"></i> ${usesMax}/Day</span>
-                                        ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="level1" data-block-id="${sc.id}" data-section-key="${dayKey}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
-                                    </div>
-                                    <div style="display:flex; flex-direction:column; gap:8px;">
-                                        ${list.length > 0 ? list.map((sp, idx) => {
-                                            const spId = sp.id || ('sp_daily_' + scIdx + '_' + dayKey + '_' + idx);
-                                            const spLvl = sp.level !== undefined ? (sp.level === 0 ? 'cantrip' : 'level' + sp.level) : 'level1';
-                                            const rowHtml = renderSingleSpellRowHtml(sp, spLvl, idx, allowEdit, sc.id, spId, dayKey);
-                                            const curUsages = m.dailyUsages && m.dailyUsages[spId] !== undefined ? m.dailyUsages[spId] : usesMax;
-                                            let boxesHtml = '';
-                                            for (let u = 0; u < usesMax; u++) {
-                                                const checked = u < curUsages;
-                                                boxesHtml += `<i class="cs-innate-use-checkbox ${checked ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}" data-spell-id="${spId}" data-uses-max="${usesMax}" data-use-idx="${u}" style="cursor:pointer; color:var(--color-gold-base); font-size:1rem; margin-right:3px;" title="Daily Use ${u+1}/${usesMax}"></i>`;
-                                            }
-                                            return `
-                                                <div style="display:flex; flex-direction:column; gap:2px;">
-                                                    <div style="display:flex; align-items:center; justify-content:flex-end; padding:0 8px;">
-                                                        <span style="font-size:0.7rem; color:var(--color-text-muted); margin-right:6px;">Uses:</span>
-                                                        ${boxesHtml}
-                                                    </div>
-                                                    ${rowHtml}
-                                                </div>
-                                            `;
-                                        }).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No daily spells added.</div>'}
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                } else {
-                    // Standard / Leveled Spells block
-                    const scSpellsObj = sc.spellsObj || { cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [] };
+                // Leveled Spells block: render only if creature has slots or leveled spells, or if an editable creature is a slot caster
+                if (hasSlotsOrLeveledSpells || (allowEdit && !hasWillOrDaily)) {
                     spellLevels.forEach(sl => {
                         const list = scSpellsObj[sl.key] || [];
                         if (list.length === 0 && !allowEdit && m.spellcasting.length > 1) return;
@@ -1820,16 +2154,28 @@ export function initVttCreatureSheet(vtt) {
 
     function buildAbilityEntryHtml(entry) {
         if (!entry) return '';
-        const name = entry.name || '';
-        const rawEntries = entry.entries || [];
+        if (typeof entry === 'string') {
+            const extName = extractLairTitle(entry) || 'Effect';
+            entry = { name: extName, entries: [entry], descriptionHtml: `<p>${entry}</p>` };
+        }
+        let rawEntries = entry.entries;
+        if (!rawEntries && entry.entry) rawEntries = [entry.entry];
+        if (!rawEntries) rawEntries = [];
+
+        let name = entry.name || '';
+        if (!name && rawEntries.length > 0) {
+            const firstText = typeof rawEntries[0] === 'string' ? rawEntries[0] : JSON.stringify(rawEntries[0]);
+            name = extractLairTitle(firstText) || '';
+        }
+
         const textLines = rawEntries.map(e => formatRawEntry(e)).join(' ');
         const cleanText = parse5eMarkup(textLines);
-        const displayText = entry.descriptionHtml ? injectDiceChips(entry.descriptionHtml) : injectDiceChips(cleanText);
+        const displayText = entry.descriptionHtml ? injectDiceChips(parse5eMarkup(entry.descriptionHtml)) : injectDiceChips(cleanText);
 
         const parsedName = name ? parse5eMarkup(name) : '';
         const nameHtml = parsedName 
             ? parsedName 
-            : `<span style="color:var(--color-primary); font-size:0.85em;"><i class="fa-solid fa-tower-broadcast"></i> Ping</span>`;
+            : `<span style="color:var(--color-primary); font-size:0.85em;"><i class="fa-solid fa-tower-broadcast"></i> Action</span>`;
 
         const rawJson = encodeURIComponent(JSON.stringify(rawEntries));
         const macroJson = entry.macro ? encodeURIComponent(JSON.stringify(entry.macro)) : '';
@@ -1867,18 +2213,30 @@ export function initVttCreatureSheet(vtt) {
         let result = text;
 
         result = result.replace(/\{@atk\s+([^}]+)\}/gi, (match, type) => {
-            const t = type.toLowerCase();
+            const t = type.toLowerCase().trim();
             if (t === 'mw') return '<strong>Melee Weapon Attack:</strong>';
             if (t === 'rw') return '<strong>Ranged Weapon Attack:</strong>';
-            if (t === 'mw,rw') return '<strong>Melee or Ranged Weapon Attack:</strong>';
+            if (t === 'mw,rw' || t === 'rw,mw') return '<strong>Melee or Ranged Weapon Attack:</strong>';
+            if (t === 'ms') return '<strong>Melee Spell Attack:</strong>';
+            if (t === 'rs') return '<strong>Ranged Spell Attack:</strong>';
             return '<strong>Attack:</strong>';
         });
         result = result.replace(/\{@atkr\s+([^}]+)\}/gi, (match, type) => {
-            const t = type.toLowerCase();
+            const t = type.toLowerCase().trim();
             if (t === 'm') return '<strong>Melee Attack:</strong>';
             if (t === 'r') return '<strong>Ranged Attack:</strong>';
-            if (t === 'm,r') return '<strong>Melee or Ranged Attack:</strong>';
+            if (t === 'm,r' || t === 'r,m') return '<strong>Melee or Ranged Attack:</strong>';
             return '<strong>Attack:</strong>';
+        });
+
+        // Catch bare attack abbreviations that may have been previously stripped of tags
+        result = result.replace(/(?:^|(?<=>)|(?<=\s))\b(mw|rw|ms|rs)\b(?:\s*[,:])?(?=[\s]+(?:reach|range|\+|-|\d|to hit))/gi, (match, type) => {
+            const t = type.toLowerCase();
+            if (t === 'mw') return '<strong>Melee Weapon Attack:</strong>';
+            if (t === 'rw') return '<strong>Ranged Weapon Attack:</strong>';
+            if (t === 'ms') return '<strong>Melee Spell Attack:</strong>';
+            if (t === 'rs') return '<strong>Ranged Spell Attack:</strong>';
+            return match;
         });
 
         result = result.replace(/\{@hit\s+([+\-]?\d+)\}(?:\s+to\s+hit)?/gi, (match, bonus) => {
@@ -1887,6 +2245,8 @@ export function initVttCreatureSheet(vtt) {
         });
 
         result = result.replace(/\{@h\}/gi, '<strong>Hit:</strong> ');
+        result = result.replace(/\{@m\}/gi, '<strong>Miss:</strong> ');
+        result = result.replace(/\{@hom\}/gi, '<strong>Hit or Miss:</strong> ');
 
         result = result.replace(/\{@damage\s+([^}]+)\}/gi, (match, contents) => {
             const parts = contents.split('|');
@@ -1962,7 +2322,7 @@ export function initVttCreatureSheet(vtt) {
     function buildTypeString(m) {
         const size = m.size ? sizeCode(m.size) : '';
         const type = m.type ? (typeof m.type === 'object' ? (m.type.type || '') : m.type) : '';
-        const tags = m.type?.tags ? (Array.isArray(m.type.tags) ? m.type.tags.join(', ') : m.type.tags) : '';
+        const tags = m.type?.tags ? (Array.isArray(m.type.tags) ? m.type.tags.join(', ') : m.type.tags) : (m.subtype || '');
         const subtype = tags ? ` (${tags})` : '';
         let align = '';
         if (m.alignment) {
@@ -2850,7 +3210,7 @@ export function initVttCreatureSheet(vtt) {
 
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Lair Actions</h4>
-                    <textarea id="cs-edit-lair-desc" class="vtt-input mb-2" style="width:100%; height:60px;" placeholder="Lair action description...">${m.lairActionsDesc || ''}</textarea>
+                    <textarea id="cs-edit-lair-desc" class="vtt-input mb-2" style="width:100%; height:60px;" placeholder="Lair action description...">${m.lairHeader || m.lairActionsDesc || m.lairActions?.header || ''}</textarea>
                     <div id="cs-edit-lair-list"></div>
                     <button class="btn btn-xs btn-secondary mt-2" id="cs-edit-add-lair">+ Add Lair Action</button>
                 </div>
@@ -3149,8 +3509,8 @@ export function initVttCreatureSheet(vtt) {
         renderAbilityList('cs-edit-actions-list', m.actions || m.action);
         renderAbilityList('cs-edit-bonus-list', m.bonusActions || m.bonus);
         renderAbilityList('cs-edit-reactions-list', m.reactions || m.reaction);
-        renderAbilityList('cs-edit-legendary-list', m.legendaryActions?.entries || m.legendary);
-        renderAbilityList('cs-edit-lair-list', m.lairActions);
+        renderAbilityList('cs-edit-legendary-list', Array.isArray(m.legendaryActions) ? m.legendaryActions : (m.legendaryActions?.entries || m.legendary));
+        renderAbilityList('cs-edit-lair-list', Array.isArray(m.lairActions) ? m.lairActions : (Array.isArray(m.lairActions?.entries) ? m.lairActions.entries : []));
 
         // Render Spellcasting Blocks in Modal
         function renderModalSpellcastingBlocks() {
@@ -3162,8 +3522,8 @@ export function initVttCreatureSheet(vtt) {
                 card.className = 'cs-edit-sc-card';
                 card.style.cssText = "display:flex; flex-direction:column; gap:6px; padding:10px; background:var(--color-bg-dark); border-radius:6px; border:1px solid rgba(212,175,55,0.3); margin-bottom:8px;";
                 
-                const currentType = sc.type || 'slot';
-                const rechargeRule = sc.rechargeRule || (currentType === 'innate' ? 'long_rest' : 'long_rest');
+                const currentType = resolveSpellcastingType(sc, m);
+                const rechargeRule = sc.rechargeRule || (currentType === 'pact' ? 'short_rest' : 'long_rest');
                 const abVal = (sc.ability || 'int').toLowerCase();
                 const casterLvl = sc.casterLevel !== undefined ? sc.casterLevel : (m.casterLevel || 0);
 
@@ -3506,9 +3866,36 @@ export function initVttCreatureSheet(vtt) {
             alignCustomInput.style.display = alignSelect.value === 'custom' ? 'block' : 'none';
         });
 
-        // Wiring Save/Cancel
-        overlay.querySelector('#cs-edit-cancel-btn').onclick = () => overlay.remove();
-        overlay.querySelector('#cs-edit-save-btn').onclick = () => saveCompanionEdits(m);
+        // Wiring Save/Cancel & backdrop dismissal with dirty tracking
+        const getSnapshot = () => JSON.stringify(Array.from(content.querySelectorAll('input, select, textarea')).map(el => el.type === 'checkbox' ? el.checked : el.value));
+        const initialSnapshot = getSnapshot();
+
+        const closeEditModal = (force = false) => {
+            if (!force && getSnapshot() !== initialSnapshot) {
+                if (!confirm('Discard unsaved changes?')) return;
+            }
+            window.removeEventListener('keydown', onEsc);
+            overlay.remove();
+        };
+
+        const onEsc = (e) => {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                closeEditModal(false);
+            }
+        };
+        window.addEventListener('keydown', onEsc);
+
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                closeEditModal(false);
+            }
+        });
+
+        overlay.querySelector('#cs-edit-cancel-btn').onclick = () => closeEditModal(false);
+        overlay.querySelector('#cs-edit-save-btn').onclick = () => {
+            window.removeEventListener('keydown', onEsc);
+            saveCompanionEdits(m);
+        };
     }
 
     function saveCompanionEdits(m) {
@@ -3732,7 +4119,20 @@ export function initVttCreatureSheet(vtt) {
 
         const lairDesc = content.querySelector('#cs-edit-lair-desc').value.trim();
         const newLair = extractAbilityList('cs-edit-lair-list');
-        if (newLair) m.lairActions = newLair; else delete m.lairActions;
+        if (newLair && newLair.length > 0) {
+            m.lairActions = newLair;
+            if (lairDesc) {
+                m.lairActionsDesc = lairDesc;
+                m.lairHeader = lairDesc;
+            } else {
+                delete m.lairActionsDesc;
+                delete m.lairHeader;
+            }
+        } else {
+            delete m.lairActions;
+            delete m.lairActionsDesc;
+            delete m.lairHeader;
+        }
 
         // Save back to char
         // Extract Spellcasting Blocks
@@ -3760,29 +4160,35 @@ export function initVttCreatureSheet(vtt) {
                 headerEntries: descRaw ? descRaw.split('\n') : []
             };
 
+            const prevType = resolveSpellcastingType(existingBlock, m);
+
             // If switching from innate to slot or slot to innate, restructure internal fields
-            if (scType === 'slot' || scType === 'pact') {
-                block.spells = block.spells || {};
-                if (block.will && Array.isArray(block.will) && block.will.length > 0) {
-                    block.spells['0'] = block.spells['0'] || { spells: [] };
-                    block.will.forEach(sp => {
-                        const sList = Array.isArray(block.spells['0']) ? block.spells['0'] : block.spells['0'].spells;
-                        if (sList && !sList.includes(sp)) sList.push(sp);
-                    });
-                    delete block.will;
-                }
-                if (block.daily && typeof block.daily === 'object') {
-                    for (let dKey in block.daily) {
-                        const dList = block.daily[dKey] || [];
-                        block.spells['1'] = block.spells['1'] || { spells: [] };
-                        const sList = Array.isArray(block.spells['1']) ? block.spells['1'] : block.spells['1'].spells;
-                        dList.forEach(sp => {
+            if (scType !== prevType) {
+                if (scType === 'slot' || scType === 'pact') {
+                    block.spells = block.spells || {};
+                    if (block.will && Array.isArray(block.will) && block.will.length > 0) {
+                        block.spells['0'] = block.spells['0'] || { spells: [] };
+                        block.will.forEach(sp => {
+                            const sList = Array.isArray(block.spells['0']) ? block.spells['0'] : block.spells['0'].spells;
                             if (sList && !sList.includes(sp)) sList.push(sp);
                         });
+                        delete block.will;
                     }
-                    delete block.daily;
+                    if (block.daily && typeof block.daily === 'object') {
+                        for (let dKey in block.daily) {
+                            const dList = block.daily[dKey] || [];
+                            block.spells['1'] = block.spells['1'] || { spells: [] };
+                            const sList = Array.isArray(block.spells['1']) ? block.spells['1'] : block.spells['1'].spells;
+                            dList.forEach(sp => {
+                                if (sList && !sList.includes(sp)) sList.push(sp);
+                            });
+                        }
+                        delete block.daily;
+                    }
                 }
+            }
 
+            if (scType === 'slot' || scType === 'pact') {
                 // Automatically calculate standard spell slots from Caster Level
                 const autoSlots = get5eSlotsForCaster(scType, casterLvlVal);
                 m.slots = m.slots || {};
@@ -3795,7 +4201,7 @@ export function initVttCreatureSheet(vtt) {
                         m.slots[k] = maxVal;
                         m.spellSlots[k] = { max: maxVal, current: maxVal };
                         char.spellSlots[k] = { max: maxVal, current: maxVal };
-                    } else {
+                    } else if (casterLvlVal > 0) {
                         delete m.slots[k];
                         delete m.spellSlots[k];
                         delete char.spellSlots[k];
@@ -3821,7 +4227,7 @@ export function initVttCreatureSheet(vtt) {
                     }
                 });
 
-                if (block.spells && typeof block.spells === 'object') {
+                if (scType !== prevType && block.spells && typeof block.spells === 'object') {
                     for (let lvl in block.spells) {
                         const rawList = Array.isArray(block.spells[lvl]) ? block.spells[lvl] : (block.spells[lvl]?.spells || []);
                         if (lvl === '0') {
@@ -4028,7 +4434,8 @@ export function initVttCreatureSheet(vtt) {
         
         const container = document.createElement('div');
         container.innerHTML = `
-            <div id="modal-cs-upcast-prompt" class="vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#1e1e1e; border:1px solid var(--color-border-subtle); border-radius:8px; z-index:1000; width:300px; padding:16px; box-shadow:0 4px 12px rgba(0,0,0,0.5);">
+            <div id="modal-cs-upcast-overlay" class="vtt-sheet-submodal-overlay vtt-sheet-submodal-high vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:3020;"></div>
+            <div id="modal-cs-upcast-prompt" class="vtt-sheet-submodal vtt-sheet-submodal-high vtt-hidden" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:300px; padding:16px; z-index:3025;">
                 <h3 style="margin-top:0; color:var(--color-gold-base); font-size:1.1rem; border-bottom:1px solid var(--color-border-subtle); padding-bottom:8px;">Cast Spell</h3>
                 <div style="margin-bottom:16px;">
                     <label style="display:block; margin-bottom:4px; font-size:0.85rem; color:var(--color-text-muted);">Cast at Level</label>
@@ -4040,23 +4447,28 @@ export function initVttCreatureSheet(vtt) {
                 </div>
             </div>
         `;
-        document.body.appendChild(container.firstElementChild);
+        document.body.appendChild(container);
     }
 
     function promptCreatureUpcastLevel(baseLvl, callback) {
         ensureCreatureUpcastModal();
         const modal = document.getElementById('modal-cs-upcast-prompt');
+        const overlay = document.getElementById('modal-cs-upcast-overlay');
         const select = document.getElementById('cs-upcast-prompt-level');
         select.innerHTML = '';
         for (let i = baseLvl; i <= 9; i++) {
             select.innerHTML += `<option value="${i}">${i}${i===1?'st':i===2?'nd':i===3?'rd':'th'} Level${i === baseLvl ? ' (Base)' : ''}</option>`;
         }
         modal.classList.remove('vtt-hidden');
+        if (overlay) overlay.classList.remove('vtt-hidden');
         
         const cleanup = () => {
             modal.classList.add('vtt-hidden');
-            document.getElementById('cs-upcast-prompt-cast').removeEventListener('click', handleCast);
-            document.getElementById('cs-upcast-prompt-cancel').removeEventListener('click', handleCancel);
+            if (overlay) overlay.classList.add('vtt-hidden');
+            document.getElementById('cs-upcast-prompt-cast')?.removeEventListener('click', handleCast);
+            document.getElementById('cs-upcast-prompt-cancel')?.removeEventListener('click', handleCancel);
+            overlay?.removeEventListener('click', handleOverlayClick);
+            window.removeEventListener('keydown', handleEsc);
         };
         const handleCast = () => {
             cleanup();
@@ -4066,9 +4478,19 @@ export function initVttCreatureSheet(vtt) {
             cleanup();
             callback(null);
         };
+        const handleOverlayClick = (e) => {
+            if (e.target === overlay) handleCancel();
+        };
+        const handleEsc = (e) => {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                handleCancel();
+            }
+        };
         
-        document.getElementById('cs-upcast-prompt-cast').addEventListener('click', handleCast);
-        document.getElementById('cs-upcast-prompt-cancel').addEventListener('click', handleCancel);
+        document.getElementById('cs-upcast-prompt-cast')?.addEventListener('click', handleCast);
+        document.getElementById('cs-upcast-prompt-cancel')?.addEventListener('click', handleCancel);
+        overlay?.addEventListener('click', handleOverlayClick);
+        window.addEventListener('keydown', handleEsc);
     }
     
     function getUpcastBonus(spData) {
@@ -4240,7 +4662,7 @@ export function initVttCreatureSheet(vtt) {
             if (preParsedMacro.save && preParsedMacro.save.dc) {
                 mc.saveInfo = {
                     dc: preParsedMacro.save.dc,
-                    ability: preParsedMacro.save.ability || 'Save'
+                    ability: (preParsedMacro.save.ability && preParsedMacro.save.ability !== 'Save') ? preParsedMacro.save.ability : null
                 };
             }
 
@@ -4285,18 +4707,50 @@ export function initVttCreatureSheet(vtt) {
             isCrit = mc.atkRoll.isCritSuccess;
         }
         
-        // Parse Save DC
-        const saveMatch = rawString.match(/\{@dc (\d+)\}/i) || rawString.match(/DC (\d+) (Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma)/i);
-        if (saveMatch) {
-            const dc = parseInt(saveMatch[1]);
-            let ability = "Save";
-            if (saveMatch[2]) {
-                ability = saveMatch[2].substring(0, 3).toUpperCase();
-            } else {
-                const abilityMatch = rawString.match(/(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma) saving throw/i);
-                if (abilityMatch) ability = abilityMatch[1].substring(0, 3).toUpperCase();
+        // Parse Save DC (supports 2024 "Con DC 14", "{@actSave con} {@dc 17}", 2014 "DC 14 Constitution", etc.)
+        let saveAbility = null;
+        const actSaveM = rawString.match(/\{@actSave\s+([a-zA-Z]+)\}/i);
+        if (actSaveM) {
+            saveAbility = actSaveM[1].substring(0, 3).toUpperCase();
+        }
+
+        let saveDc = null;
+        const dcTagM = rawString.match(/\{@dc\s+(\d+)\}/i);
+        if (dcTagM) {
+            saveDc = parseInt(dcTagM[1], 10);
+        }
+
+        const preDcM = rawString.match(/\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b(?:\s+(?:saving\s+throw|save))?\s*(?:\{@dc\s+(\d+)\}|DC\s*(\d+))/i);
+        if (preDcM) {
+            if (!saveAbility) saveAbility = preDcM[1].substring(0, 3).toUpperCase();
+            if (!saveDc) saveDc = parseInt(preDcM[2] || preDcM[3], 10);
+        }
+
+        const postDcM = rawString.match(/(?:save\s+DC|DC)\s*(\d+)(?:\s+or\s+higher)?\s+(?:\{@actSave\s+([a-zA-Z]+)\}|(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha))/i);
+        if (postDcM) {
+            if (!saveDc) saveDc = parseInt(postDcM[1], 10);
+            if (!saveAbility) saveAbility = (postDcM[2] || postDcM[3]).substring(0, 3).toUpperCase();
+        }
+
+        if (!saveDc) {
+            const genDcM = rawString.match(/(?:save\s+DC|DC)\s*(\d+)/i);
+            if (genDcM) {
+                saveDc = parseInt(genDcM[1], 10);
             }
-            mc.saveInfo = { dc, ability };
+        }
+
+        if (saveDc && !saveAbility) {
+            const abM = rawString.match(/\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b\s+saving\s+throw/i) ||
+                        rawString.match(/saving\s+throw\s+against\s+(?:the\s+)?\b(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)\b/i);
+            if (abM) {
+                saveAbility = abM[1].substring(0, 3).toUpperCase();
+            }
+        }
+
+        if (saveDc) {
+            const validAbilities = new Set(['STR', 'DEX', 'CON', 'INT', 'WIS', 'CHA']);
+            const normalizedAbility = (saveAbility && validAbilities.has(saveAbility)) ? saveAbility : null;
+            mc.saveInfo = { dc: saveDc, ability: normalizedAbility };
         }
         
         // Parse Damages
@@ -4408,13 +4862,13 @@ export function initVttCreatureSheet(vtt) {
             const { level, idx, sp } = extractSpellContext(e.currentTarget);
             if (!sp) return;
             await ensureSpellIsParsed(sp);
-            const hasUpcast = sp.upcastBonus || (sp.damageList && sp.damageList.some(d => d.upcastBonus && String(d.upcastBonus).trim() !== ''));
+            const isLeveled = level !== 'cantrip' && level !== 'legacy' && (sp.level === undefined || sp.level > 0);
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || window.vttPlayerSheetAPI?.promptUpcastLevel;
-            if (level !== 'cantrip' && level !== 'legacy' && hasUpcast && upcastFn) {
-                const baseLvl = parseInt(level.replace('level', '')) || 1;
-                upcastFn(baseLvl, (lvl) => {
-                    if (lvl) rollNpcSpell(level, idx, 'roll', lvl, sp);
-                });
+            if (isLeveled && upcastFn) {
+                const baseLvl = parseInt(String(sp.level || level).replace('level', '')) || 1;
+                upcastFn(baseLvl, (lvl, opts) => {
+                    if (lvl) rollNpcSpell(level, idx, 'roll', lvl, sp, opts);
+                }, { caster: currentMonster, spell: sp, levelKey: level });
             } else {
                 rollNpcSpell(level, idx, 'roll', null, sp);
             }
@@ -4441,13 +4895,13 @@ export function initVttCreatureSheet(vtt) {
             const { level, idx, sp } = extractSpellContext(e.currentTarget);
             if (!sp) return;
             await ensureSpellIsParsed(sp);
-            const hasUpcast = sp.upcastBonus || (sp.damageList && sp.damageList.some(d => d.upcastBonus && String(d.upcastBonus).trim() !== ''));
+            const isLeveled = level !== 'cantrip' && level !== 'legacy' && (sp.level === undefined || sp.level > 0);
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || window.vttPlayerSheetAPI?.promptUpcastLevel;
-            if (level !== 'cantrip' && level !== 'legacy' && hasUpcast && upcastFn) {
-                const baseLvl = parseInt(level.replace('level', '')) || 1;
-                upcastFn(baseLvl, (lvl) => {
-                    if (lvl) rollNpcSpell(level, idx, 'damage', lvl, sp);
-                });
+            if (isLeveled && upcastFn) {
+                const baseLvl = parseInt(String(sp.level || level).replace('level', '')) || 1;
+                upcastFn(baseLvl, (lvl, opts) => {
+                    if (lvl) rollNpcSpell(level, idx, 'damage', lvl, sp, opts);
+                }, { caster: currentMonster, spell: sp, levelKey: level });
             } else {
                 rollNpcSpell(level, idx, 'damage', null, sp);
             }
@@ -4633,12 +5087,54 @@ export function initVttCreatureSheet(vtt) {
         });
     }
 
-    function rollNpcSpell(level, idx, type, customCastLvl = null, targetSpell = null) {
+    function expendNpcSpellResource(m, sp, castLvl) {
+        if (!m || !sp) return;
+        // 1. Daily usage (innate spell)
+        if (sp.dailyKey || sp.usesMax || (sp.id && m.dailyUsages && m.dailyUsages[sp.id] !== undefined)) {
+            const usesMax = sp.usesMax || 1;
+            m.dailyUsages = m.dailyUsages || {};
+            const cur = m.dailyUsages[sp.id] !== undefined ? m.dailyUsages[sp.id] : usesMax;
+            if (cur > 0) {
+                m.dailyUsages[sp.id] = cur - 1;
+                contentEl.querySelectorAll(`.cs-innate-use-checkbox[data-spell-id="${sp.id}"]`).forEach((box, bIdx) => {
+                    const checked = bIdx < m.dailyUsages[sp.id];
+                    box.className = `cs-innate-use-checkbox ${checked ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}`;
+                });
+                saveMonsterData(m);
+            }
+            return;
+        }
+
+        // 2. Leveled spell slot
+        let lvlNum = null;
+        if (typeof castLvl === 'number') lvlNum = castLvl;
+        else if (typeof castLvl === 'string' && castLvl.startsWith('level')) lvlNum = parseInt(castLvl.replace('level', ''));
+        else lvlNum = parseInt(castLvl);
+
+        if (lvlNum && lvlNum >= 1 && lvlNum <= 9) {
+            const lvlKey = 'level' + lvlNum;
+            const curInput = contentEl.querySelector(`.cs-spell-slot-input[data-type="current"][data-level="${lvlKey}"]`);
+            const maxInput = contentEl.querySelector(`.cs-spell-slot-input[data-type="max"][data-level="${lvlKey}"]`);
+            const defaultMax = maxInput ? (parseInt(maxInput.value) || 0) : 0;
+            let curVal = curInput ? (parseInt(curInput.value) || 0) : ((m.spellSlots && m.spellSlots[lvlKey]?.current) || 0);
+            if (curVal > 0) {
+                curVal -= 1;
+                if (curInput) curInput.value = curVal;
+                syncSlotsState(lvlKey, curVal, defaultMax);
+            }
+        }
+    }
+
+    function rollNpcSpell(level, idx, type, customCastLvl = null, targetSpell = null, rollOpts = {}) {
         const m = currentMonster;
         if (!m) return;
         const sp = targetSpell || getSpellFromMonster(m, level, idx);
         if (!sp) return;
         const visibility = typeof getVisibilitySetting === 'function' ? getVisibilitySetting() : 'public';
+
+        if (rollOpts && rollOpts.expend !== false && (type === 'roll' || type === 'damage')) {
+            expendNpcSpellResource(m, sp, customCastLvl || level);
+        }
 
         if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
             window.VTTSpellManager.rollSpell(sp, level, m, {
@@ -4656,7 +5152,10 @@ export function initVttCreatureSheet(vtt) {
         saveAndRenderNpcSpells,
         openPanel,
         minimizePanel,
-        openEditModal
+        openEditModal,
+        resetSheet,
+        getLinkedCharacterId: () => linkedCharacterId,
+        getCurrentMonster: () => currentMonster
     };
     window.vttCreatureSheetAPI = api;
     return api;

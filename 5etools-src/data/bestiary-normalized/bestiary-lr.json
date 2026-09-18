@@ -115,7 +115,7 @@
       {
         "id": "sc_amble_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 4,
@@ -247,7 +247,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -373,7 +375,9 @@
                     "formula": "2d10",
                     "type": "Radiant",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d10",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a moonseed leaf)",
@@ -404,7 +408,9 @@
                     "formula": "3d10",
                     "type": "Slashing",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d10",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -534,7 +540,9 @@
                   {
                     "formula": "5d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -565,7 +573,9 @@
                     "formula": "3d12",
                     "type": "Psychic",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d12",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -581,10 +591,15 @@
     ],
     "traits": [
       {
-        "id": "act_hearth_of_moonlight_and_shadow_5qbp",
+        "id": "act_hearth_of_moonlight_and_shadow_7nnl",
         "name": "Hearth of Moonlight and Shadow",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of a short or long rest, Amble can touch a point in space, and an invisible, 30-foot-radius sphere of magic appears, centered on that point. Cover blocks the sphere.</p><p>While within the sphere, Amble and their allies gain a +5 bonus to Dexterity (Stealth) and Wisdom (Perception) checks, and any light from open flames in the sphere isn't visible outside it.</p><p>The sphere vanishes at the end of the rest or when Amble leaves the sphere.</p>",
+        "entries": [
+          "At the start of a short or long rest, Amble can touch a point in space, and an {@condition invisible}, 30-foot-radius sphere of magic appears, centered on that point. {@quickref Cover||3||Total cover} blocks the sphere.",
+          "While within the sphere, Amble and their allies gain a +5 bonus to Dexterity ({@skill Stealth}) and Wisdom ({@skill Perception}) checks, and any light from open flames in the sphere isn't visible outside it.",
+          "The sphere vanishes at the end of the rest or when Amble leaves the sphere."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -598,10 +613,13 @@
         }
       },
       {
-        "id": "act_hold_breath_zhek",
+        "id": "act_hold_breath_wl22",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>Amble can hold their breath for up to 1 hour at a time.</p>",
+        "entries": [
+          "Amble can hold their breath for up to 1 hour at a time."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -615,10 +633,13 @@
         }
       },
       {
-        "id": "act_balm_of_the_summer_court__12d6__oic7",
+        "id": "act_balm_of_the_summer_court__12d6__6tr1",
         "name": "Balm of the Summer Court (12d6)",
         "actionType": "trait",
         "descriptionHtml": "<p>(As a Bonus Action) Amble can choose one creature they can see within 120 feet of them and spend up to 6d6 of their die pool. Roll the spent dice and add them together. The target regains a number of hit points equal to the total. The target also gains 1 temporary hit point per die spent. Amble regains all expended dice when they finish a long rest.</p>",
+        "entries": [
+          "(As a Bonus Action) Amble can choose one creature they can see within 120 feet of them and spend up to {@dice 6d6} of their die pool. Roll the spent dice and add them together. The target regains a number of hit points equal to the total. The target also gains 1 temporary hit point per die spent. Amble regains all expended dice when they finish a long rest."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -632,10 +653,13 @@
         }
       },
       {
-        "id": "act_hidden_paths__4_day__2d3n",
+        "id": "act_hidden_paths__4_day__vhp4",
         "name": "Hidden Paths (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>(As a Bonus Action) Amble may teleport up to 60 feet to an unoccupied space they can see.</p>",
+        "entries": [
+          "(As a Bonus Action) Amble may teleport up to 60 feet to an unoccupied space they can see."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -651,10 +675,16 @@
     ],
     "actions": [
       {
-        "id": "act_change_shape__2_day__cn67",
+        "id": "act_change_shape__2_day__2jfy",
         "name": "Change Shape (2/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Amble magically polymorphs into a beast with a challenge rating of 1 or less, and can remain in this form for up to 6 hours. Amble's equipment melds with their new form. Amble reverts to their true form if they die or fall unconscious. Amble can revert to their true form using a bonus action on their turn.</p><p>Amble's game statistics are replaced by the statistics of the beast, but they retain their alignment, personality, and Intelligence, Wisdom, and Charisma scores. Amble also retains all their skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as Amble and the bonus in its stat block is higher, use the creature's bonus instead of Amble's.</p><p>When Amble transforms, they assume the beast's hit points and Hit Dice. When Amble reverts to their normal form, they return to the number of hit points they had before they transformed. However, if Amble reverts as a result of dropping to 0 hit points, any excess damage carries over their normal form.</p><p>Amble can't cast spells, and their ability to speak or take any action that requires hands is limited to the capabilities of their beast form. Transforming doesn't break Amble's concentration on a spell they've already cast however, or prevent them from taking actions that are part of a spell.</p>",
+        "entries": [
+          "Amble magically polymorphs into a beast with a challenge rating of 1 or less, and can remain in this form for up to 6 hours. Amble's equipment melds with their new form. Amble reverts to their true form if they die or fall {@condition unconscious}. Amble can revert to their true form using a bonus action on their turn.",
+          "Amble's game statistics are replaced by the statistics of the beast, but they retain their alignment, personality, and Intelligence, Wisdom, and Charisma scores. Amble also retains all their skill and saving throw proficiencies, in addition to gaining those of the creature. If the creature has the same proficiency as Amble and the bonus in its stat block is higher, use the creature's bonus instead of Amble's.",
+          "When Amble transforms, they assume the beast's hit points and Hit Dice. When Amble reverts to their normal form, they return to the number of hit points they had before they transformed. However, if Amble reverts as a result of dropping to 0 hit points, any excess damage carries over their normal form.",
+          "Amble can't cast spells, and their ability to speak or take any action that requires hands is limited to the capabilities of their beast form. Transforming doesn't break Amble's {@status concentration} on a spell they've already cast however, or prevent them from taking actions that are part of a spell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -668,10 +698,13 @@
         }
       },
       {
-        "id": "act_claws_i29j",
+        "id": "act_claws_sv2i",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -690,10 +723,13 @@
         }
       },
       {
-        "id": "act_club_cecr",
+        "id": "act_club_7fvb",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit (+8 to hit with shillelagh), reach 5 ft., one target. {@h}5 (1d6 + 2) bludgeoning damage, or 8 (1d8 + 4) bludgeoning damage with shillelagh.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit (+8 to hit with shillelagh), reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage, or 8 (1d8 + 4) bludgeoning damage with shillelagh.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit ({@hit 8} to hit with shillelagh), reach 5 ft., one target. {@h}5 ({@damage 1d6 + 2}) bludgeoning damage, or 8 ({@damage 1d8 + 4}) bludgeoning damage with shillelagh."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -723,11 +759,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LR/Amble.webp",
     "tokenImg": "img/bestiary/tokens/LR/Amble.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_fhenimore_lr",
@@ -832,14 +880,14 @@
       {
         "id": "sc_fhenimore_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 2,
         "casterLevel": 0,
         "dc": 13,
         "atkMod": 5,
-        "header": "The priest's spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). It can innately cast the following spells, requiring no material components:",
+        "header": "Fhenimore's spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). It can innately cast the following spells, requiring no material components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -906,7 +954,9 @@
                   "formula": "2d8",
                   "type": "Bludgeoning",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a mixture of water and dust)",
@@ -1003,13 +1053,17 @@
                   "formula": "3d10",
                   "type": "Lightning",
                   "label": "Damage 1",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d10",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "1d10",
                   "type": "Lightning",
                   "label": "Damage 2",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -1038,7 +1092,9 @@
                   "formula": "3d6",
                   "type": "Bludgeoning",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a tentacle)",
@@ -1057,10 +1113,33 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_k67z",
+        "id": "act_amphibious_2j7z",
         "name": "Amphibious",
         "actionType": "trait",
-        "descriptionHtml": "<p>The priest can breathe air and water.</p>",
+        "descriptionHtml": "<p>Fhenimore can breathe air and water.</p>",
+        "entries": [
+          "Fhenimore can breathe air and water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_blood_frenzy_bzz7",
+        "name": "Blood Frenzy",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Fhenimore has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
+        "entries": [
+          "Fhenimore has advantage on melee attack rolls against any creature that doesn't have all its hit points."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1076,10 +1155,13 @@
     ],
     "actions": [
       {
-        "id": "act_thunderous_touch_5ipz",
+        "id": "act_thunderous_touch_nted",
         "name": "Thunderous Touch",
         "actionType": "action",
-        "descriptionHtml": "<p>ms +5 to hit, reach 5 ft., one creature. {@h}27 (5d10) thunder damage.</p>",
+        "descriptionHtml": "<p>Melee Spell Attack: +5 to hit, reach 5 ft., one creature. Hit: 27 (5d10) thunder damage.</p>",
+        "entries": [
+          "{@atk ms} {@hit 5} to hit, reach 5 ft., one creature. {@h}27 ({@damage 5d10}) thunder damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1098,10 +1180,13 @@
         }
       },
       {
-        "id": "act_voice_of_the_kraken__recharges_after_a_short_or_long_rest__hqq0",
-        "name": "Voice of the Kraken (Recharges after a Short or Long Rest)",
+        "id": "act_multiattack_ei27",
+        "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>A kraken speaks through the priest with a thunderous voice audible within 300 feet. Creatures of the priest's choice that can hear the kraken's words (which are spoken in Abyssal, Infernal, or Primordial) must succeed on a DC 14 Charisma saving throw or be frightened for 1 minute. A frightened target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "descriptionHtml": "<p>Fhenimore can attack once with her bite attack and once with Thunderous Touch.</p>",
+        "entries": [
+          "Fhenimore can attack once with her bite attack and once with Thunderous Touch."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1109,11 +1194,33 @@
           "reach": null,
           "range": null,
           "targets": null,
-          "save": {
-            "dc": 14,
-            "ability": "CHA"
-          },
+          "save": null,
           "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_91d4",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 8 (1d10 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d10 + 3}) piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 3",
+              "type": "Piercing"
+            }
+          ],
           "recharge": null
         }
       }
@@ -1125,11 +1232,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LR/Fhenimore.webp",
     "tokenImg": "img/bestiary/tokens/LR/Fhenimore.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_gar_shatterkeel_lr",
@@ -1230,7 +1349,7 @@
       {
         "id": "sc_gar_shatterkeel_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 5,
@@ -1263,7 +1382,8 @@
                     "formula": "1d6",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -1346,7 +1466,8 @@
                     "formula": "1d6",
                     "type": "Thunder",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "S",
@@ -1414,7 +1535,9 @@
                   {
                     "formula": "2d8",
                     "type": "Healing",
-                    "stat": "spell"
+                    "stat": "spell",
+                    "upcastBonus": "2d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1440,7 +1563,9 @@
                     "formula": "2d8",
                     "type": "Thunder",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1590,7 +1715,9 @@
                     "formula": "3d10",
                     "type": "Slashing",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d10",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1635,7 +1762,9 @@
                     "formula": "4d8",
                     "type": "Bludgeoning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a drop of water)",
@@ -1723,7 +1852,9 @@
                     "formula": "2d8",
                     "type": "Bludgeoning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a mixture of water and dust)",
@@ -1811,13 +1942,17 @@
                     "formula": "8d8",
                     "type": "Lightning",
                     "label": "Damage 1",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d8",
+                    "upcastScaleStep": 1
                   },
                   {
                     "formula": "4d8",
                     "type": "Thunder",
                     "label": "Damage 2",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1843,7 +1978,9 @@
                     "formula": "6d6",
                     "type": "Bludgeoning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (paper or leaf in the shape of a funnel)",
@@ -1911,7 +2048,9 @@
                   {
                     "formula": "70",
                     "type": "Healing",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "10",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S",
@@ -1951,10 +2090,13 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_3ksv",
+        "id": "act_amphibious_e46e",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Gar can breathe air and water.</p>",
+        "entries": [
+          "Gar can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1968,10 +2110,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__bazz",
+        "id": "act_legendary_resistance__3_day__vrc5",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Gar fails a saving throw, he can choose to succeed instead.</p>",
+        "entries": [
+          "If Gar fails a saving throw, he can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1985,10 +2130,13 @@
         }
       },
       {
-        "id": "act_water_walk_z7vi",
+        "id": "act_water_walk_rivd",
         "name": "Water Walk",
         "actionType": "trait",
         "descriptionHtml": "<p>Gar can stand and move on liquid surfaces as if they were solid ground.</p>",
+        "entries": [
+          "Gar can stand and move on liquid surfaces as if they were solid ground."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2002,10 +2150,13 @@
         }
       },
       {
-        "id": "act_watery_fall_2dnn",
+        "id": "act_watery_fall_y5u9",
         "name": "Watery Fall",
         "actionType": "trait",
         "descriptionHtml": "<p>When Gar drops to 0 hit points, his body collapses into a pool of inky water that rapidly disperses. Except for Wave and his claw, anything he was wearing or carrying is left behind.</p>",
+        "entries": [
+          "When Gar drops to 0 hit points, his body collapses into a pool of inky water that rapidly disperses. Except for {@item Wave} and his claw, anything he was wearing or carrying is left behind."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2021,10 +2172,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tndl",
+        "id": "act_multiattack_dqa6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Gar makes two melee attacks, one with his claw and one with Wave.</p>",
+        "entries": [
+          "Gar makes two melee attacks, one with his claw and one with {@item Wave}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2038,10 +2192,13 @@
         }
       },
       {
-        "id": "act_claw_ug0y",
+        "id": "act_claw_iu4y",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 5 ft., one target. {@h}10 (2d6 + 3) bludgeoning damage, and the target is grappled (escape DC 16). Until the grapple ends, Gar can't attack other creatures with his claw.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) bludgeoning damage, and the target is grappled (escape DC 16). Until the grapple ends, Gar can't attack other creatures with his claw.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}10 ({@damage 2d6 + 3}) bludgeoning damage, and the target is {@condition grappled} (escape {@dc 16}). Until the grapple ends, Gar can't attack other creatures with his claw."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2051,7 +2208,7 @@
           "targets": "one target",
           "save": {
             "dc": 16,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -2063,10 +2220,13 @@
         }
       },
       {
-        "id": "act_wave_98cy",
+        "id": "act_wave_14tc",
         "name": "Wave",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +11 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}9 (1d6 + 6) piercing damage or 10 (1d8 + 6) piercing damage when used with two hands. If Gar scores a critical hit with this weapon, the target takes extra necrotic damage equal to half its hit point maximum.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +11 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 9 (1d6 + 6) piercing damage or 10 (1d8 + 6) piercing damage when used with two hands. If Gar scores a critical hit with this weapon, the target takes extra necrotic damage equal to half its hit point maximum.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 11} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}9 ({@damage 1d6 + 6}) piercing damage or 10 ({@damage 1d8 + 6}) piercing damage when used with two hands. If Gar scores a critical hit with this weapon, the target takes extra necrotic damage equal to half its hit point maximum."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2089,10 +2249,13 @@
         }
       },
       {
-        "id": "act_umberlee_s_wake__recharge_5__3fiu",
+        "id": "act_umberlee_s_wake__recharge_5__fkdj",
         "name": "Umberlee's Wake (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Power ripples out in a 60-foot radius sphere from a point within range (150 ft.) as the will of Umberlee affects all in her watery embrace. Each creature in that area must succeed on a DC 18 Constitution saving throw. On a failed save, the creature can't use reactions, its speed is halved, and it can't make more than one attack on its turn. In addition, the creature can use either an action or a bonus action on its turn, but not both. These effects last for 1 minute. The creature can repeat the saving throw at the end of each of its turns, ending the effect on itself with a successful save. This only affects targets that are submerged or floating in water. Gar Shatterkeel and any undead serving him are immune to this effect.</p>",
+        "entries": [
+          "Power ripples out in a 60-foot radius sphere from a point within range (150 ft.) as the will of Umberlee affects all in her watery embrace. Each creature in that area must succeed on a {@dc 18} Constitution saving throw. On a failed save, the creature can't use reactions, its speed is halved, and it can't make more than one attack on its turn. In addition, the creature can use either an action or a bonus action on its turn, but not both. These effects last for 1 minute. The creature can repeat the saving throw at the end of each of its turns, ending the effect on itself with a successful save. This only affects targets that are submerged or floating in water. Gar Shatterkeel and any undead serving him are immune to this effect."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2116,10 +2279,13 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_6byg",
+          "id": "act_move_4u6d",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>Gar moves up to his speed without provoking opportunity attacks.</p>",
+          "entries": [
+            "Gar moves up to his speed without provoking opportunity attacks."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -2133,10 +2299,13 @@
           }
         },
         {
-          "id": "act_claw_0sg8",
+          "id": "act_claw_n46o",
           "name": "Claw",
           "actionType": "legendary",
           "descriptionHtml": "<p>Gar makes one attack with his claw.</p>",
+          "entries": [
+            "Gar makes one attack with his claw."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -2150,10 +2319,13 @@
           }
         },
         {
-          "id": "act_wave__costs_2_actions__34qx",
+          "id": "act_wave__costs_2_actions__s6w1",
           "name": "Wave (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Gar makes one attack with Wave with advantage.</p>",
+          "entries": [
+            "Gar makes one attack with {@item Wave} with advantage."
+          ],
           "macro": {
             "isAttack": false,
             "attackType": null,
@@ -2168,12 +2340,16 @@
         }
       ]
     },
+    "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_lair_action_kk9w",
-        "name": "Lair Action",
+        "id": "act_gar_can_employ_grom",
+        "name": "Gar Can Employ",
         "actionType": "lair",
         "descriptionHtml": "<p>Gar can employ lair actions while he's within the coral mountain.</p>",
+        "entries": [
+          "Gar can employ lair actions while he's within the coral mountain."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2187,10 +2363,13 @@
         }
       },
       {
-        "id": "act_lair_action_6q4h",
-        "name": "Lair Action",
+        "id": "act_gar_may_teleport_yf0u",
+        "name": "Gar May Teleport",
         "actionType": "lair",
         "descriptionHtml": "<p>Gar may teleport anywhere within the coral mountain, bringing up to five willing creatures with him.</p>",
+        "entries": [
+          "Gar may teleport anywhere within the coral mountain, bringing up to five willing creatures with him."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2204,10 +2383,13 @@
         }
       },
       {
-        "id": "act_lair_action_b2i0",
-        "name": "Lair Action",
+        "id": "act_coral_jpgf",
+        "name": "Coral",
         "actionType": "lair",
         "descriptionHtml": "<p>The coral in a 60-foot radius grows rapidly around creatures inside the coral mountain. Each creature must succeed on a DC 18 Strength saving throw or become restrained. Restrained creatures can take an action on their turn to make a DC 18 Strength (Athletics) or Dexterity (Acrobatics) check to free themselves. This effect lasts for 1 minute unless dispelled (it counts as a 6th level spell), and doesn't require Gar to maintain concentration. Gar Shatterkeel and any creatures he designates are immune to this effect.</p>",
+        "entries": [
+          "The coral in a 60-foot radius grows rapidly around creatures inside the coral mountain. Each creature must succeed on a {@dc 18} Strength saving throw or become {@condition restrained}. Restrained creatures can take an action on their turn to make a {@dc 18} Strength ({@skill Athletics}) or Dexterity ({@skill Acrobatics}) check to free themselves. This effect lasts for 1 minute unless dispelled (it counts as a 6th level spell), and doesn't require Gar to maintain {@status concentration}. Gar Shatterkeel and any creatures he designates are immune to this effect."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2224,10 +2406,13 @@
         }
       },
       {
-        "id": "act_lair_action_sotd",
-        "name": "Lair Action",
+        "id": "act_up_to_five_nw49",
+        "name": "Up To Five",
         "actionType": "lair",
         "descriptionHtml": "<p>Up to five corpses that Gar can see within 60 feet rise up as drowned blade and attack anyone Gar directs them to on his turn.</p>",
+        "entries": [
+          "Up to five corpses that Gar can see within 60 feet rise up as {@creature drowned blade|GoS|drowned blades} and attack anyone Gar directs them to on his turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2241,10 +2426,24 @@
         }
       }
     ],
+    "lairHeader": "On initiative count 20 (losing initiative ties), Gar Shatterkeel takes a lair action to cause one of the following effects; Gar can't use the same effect two rounds in a row.",
+    "lairActionsDesc": "On initiative count 20 (losing initiative ties), Gar Shatterkeel takes a lair action to cause one of the following effects; Gar can't use the same effect two rounds in a row.",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LR/Gar Shatterkeel.webp",
     "tokenImg": "img/bestiary/tokens/LR/Gar Shatterkeel.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": {
+      "name": "Gar Shatterkeel",
+      "source": "LR"
+    }
   },
   {
     "id": "creature_shoalar_quanderil_lr",
@@ -2353,7 +2552,7 @@
       {
         "id": "sc_shoalar_quanderil_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "con",
         "abilityMod": 3,
@@ -2418,7 +2617,7 @@
       {
         "id": "sc_shoalar_quanderil_1",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 4,
@@ -2451,7 +2650,8 @@
                     "formula": "1d6",
                     "type": "Acid",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -2477,7 +2677,8 @@
                     "formula": "1d10",
                     "type": "Necrotic",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -2541,7 +2742,8 @@
                     "formula": "1d8",
                     "type": "Cold",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "cantripScale": true
                   }
                 ],
                 "components": "V, S",
@@ -2677,7 +2879,9 @@
                     "formula": "8d6",
                     "type": "Lightning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "1d6",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a bit of fur and a crystal rod)",
@@ -2703,7 +2907,9 @@
                     "formula": "4d8",
                     "type": "Bludgeoning",
                     "label": "",
-                    "stat": "none"
+                    "stat": "none",
+                    "upcastBonus": "",
+                    "upcastScaleStep": 1
                   }
                 ],
                 "components": "V, S, M (a drop of water)",
@@ -2743,10 +2949,13 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_kv2v",
+        "id": "act_amphibious_du1k",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Shoalar can breathe air and water.</p>",
+        "entries": [
+          "Shoalar can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -2762,10 +2971,13 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_ihbz",
+        "id": "act_dagger_71o0",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or ranged 20/60 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 4} to hit, reach 5 ft. or ranged 20/60 ft., one target. {@h}3 ({@damage 1d4 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2791,11 +3003,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LR/Shoalar Quanderil.webp",
     "tokenImg": "img/bestiary/tokens/LR/Shoalar Quanderil.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_whymsee_lr",
@@ -2900,14 +3124,14 @@
       {
         "id": "sc_whymsee_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 2,
         "casterLevel": 0,
         "dc": 13,
         "atkMod": 5,
-        "header": "The priest's spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). It can innately cast the following spells, requiring no material components:",
+        "header": "Whymsee's spellcasting ability is Wisdom (spell save DC 13, +5 to hit with spell attacks). It can innately cast the following spells, requiring no material components:",
         "footer": "",
         "spellsByLevel": {},
         "atWill": [
@@ -2974,7 +3198,9 @@
                   "formula": "2d8",
                   "type": "Bludgeoning",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a mixture of water and dust)",
@@ -3071,13 +3297,17 @@
                   "formula": "3d10",
                   "type": "Lightning",
                   "label": "Damage 1",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d10",
+                  "upcastScaleStep": 1
                 },
                 {
                   "formula": "1d10",
                   "type": "Lightning",
                   "label": "Damage 2",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -3106,7 +3336,9 @@
                   "formula": "3d6",
                   "type": "Bludgeoning",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S, M (a tentacle)",
@@ -3125,10 +3357,13 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_5chk",
+        "id": "act_amphibious_aqil",
         "name": "Amphibious",
         "actionType": "trait",
-        "descriptionHtml": "<p>The priest can breathe air and water.</p>",
+        "descriptionHtml": "<p>Whymsee can breathe air and water.</p>",
+        "entries": [
+          "Whymsee can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3144,10 +3379,13 @@
     ],
     "actions": [
       {
-        "id": "act_thunderous_touch_z7vy",
+        "id": "act_thunderous_touch_ge39",
         "name": "Thunderous Touch",
         "actionType": "action",
-        "descriptionHtml": "<p>ms +5 to hit, reach 5 ft., one creature. {@h}27 (5d10) thunder damage.</p>",
+        "descriptionHtml": "<p>Melee Spell Attack: +5 to hit, reach 5 ft., one creature. Hit: 27 (5d10) thunder damage.</p>",
+        "entries": [
+          "{@atk ms} {@hit 5} to hit, reach 5 ft., one creature. {@h}27 ({@damage 5d10}) thunder damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3166,10 +3404,13 @@
         }
       },
       {
-        "id": "act_voice_of_the_kraken__recharges_after_a_short_or_long_rest__bkp9",
-        "name": "Voice of the Kraken (Recharges after a Short or Long Rest)",
+        "id": "act_ink_cloud_wvnf",
+        "name": "Ink Cloud",
         "actionType": "action",
-        "descriptionHtml": "<p>A kraken speaks through the priest with a thunderous voice audible within 300 feet. Creatures of the priest's choice that can hear the kraken's words (which are spoken in Abyssal, Infernal, or Primordial) must succeed on a DC 14 Charisma saving throw or be frightened for 1 minute. A frightened target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "descriptionHtml": "<p>While underwater, Whymsee can expel an ink cloud in a 20-foot radius. The cloud spreads around corners, and that area is Vision and Light to creatures other than kraken priests or a kraken. Each creature other than a kraken priest or a kraken that ends its turn there must succeed on a DC 14 Constitution saving throw, taking 9 (2d8) poison damage on a failed save, or half as much damage on a successful one. A strong current disperses the cloud, which otherwise disappears at the end of Whymsee's next turn.</p>",
+        "entries": [
+          "While underwater, Whymsee can expel an ink cloud in a 20-foot radius. The cloud spreads around corners, and that area is {@quickref Vision and Light||2||heavily obscured} to creatures other than kraken priests or a kraken. Each creature other than a kraken priest or a kraken that ends its turn there must succeed on a {@dc 14} Constitution saving throw, taking 9 ({@damage 2d8}) poison damage on a failed save, or half as much damage on a successful one. A strong current disperses the cloud, which otherwise disappears at the end of Whymsee's next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3179,8 +3420,33 @@
           "targets": null,
           "save": {
             "dc": 14,
-            "ability": "CHA"
+            "ability": "CON"
           },
+          "damages": [
+            {
+              "formula": "2d8",
+              "type": "Poison"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shell_defense_tz10",
+        "name": "Shell Defense",
+        "actionType": "action",
+        "descriptionHtml": "<p>Whymsee withdraws into her shell. Until she emerges, she gains a +4 bonus to AC and has advantage on Strength and Constitution saving throws. While in her shell, Whymsee is prone, her speed is 0 and can't increase, she has disadvantage on Dexterity saving throws, it can't take reactions, and the only action she can take is a bonus action to emerge.</p>",
+        "entries": [
+          "Whymsee withdraws into her shell. Until she emerges, she gains a +4 bonus to AC and has advantage on Strength and Constitution saving throws. While in her shell, Whymsee is {@condition prone}, her speed is 0 and can't increase, she has disadvantage on Dexterity saving throws, it can't take reactions, and the only action she can take is a bonus action to emerge."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
           "damages": [],
           "recharge": null
         }
@@ -3193,11 +3459,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LR/Whymsee.webp",
     "tokenImg": "img/bestiary/tokens/LR/Whymsee.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_young_kraken_lr",
@@ -3316,10 +3594,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_j3dx",
+        "id": "act_amphibious_thvn",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The kraken can breathe air and water.</p>",
+        "entries": [
+          "The kraken can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3335,10 +3616,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_blhy",
+        "id": "act_multiattack_e5yj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The kraken makes two tentacle attacks, each of which it can replace with one use of Fling.</p>",
+        "entries": [
+          "The kraken makes two tentacle attacks, each of which it can replace with one use of Fling."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3352,10 +3636,15 @@
         }
       },
       {
-        "id": "act_bite_akwi",
+        "id": "act_bite_meot",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}20 (3d8 + 7) piercing damage.</p><p>If the target is a Medium or smaller creature grappled by the kraken, that creature is swallowed and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the kraken, and it takes 21 (6d6) acid damage at the start of each of the kraken's turns. One Medium or two smaller creatures can be swallowed at the same time.</p><p>If the kraken takes 35 damage or more on a single turn from a creature inside it, the kraken must succeed on a DC 23 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in spaces within 10 feet of the kraken. If the kraken dies, a swallowed creature is no longer restrained by it and can escape from the corpse using 10 feet of movement, exiting prone.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 20 (3d8 + 7) piercing damage.</p><p>If the target is a Medium or smaller creature grappled by the kraken, that creature is swallowed and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the kraken, and it takes 21 (6d6) acid damage at the start of each of the kraken's turns. One Medium or two smaller creatures can be swallowed at the same time.</p><p>If the kraken takes 35 damage or more on a single turn from a creature inside it, the kraken must succeed on a DC 23 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in spaces within 10 feet of the kraken. If the kraken dies, a swallowed creature is no longer restrained by it and can escape from the corpse using 10 feet of movement, exiting prone.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 5 ft., one target. {@h}20 ({@damage 3d8 + 7}) piercing damage.",
+          "If the target is a Medium or smaller creature {@condition grappled} by the kraken, that creature is swallowed and the grapple ends. While swallowed, the creature is {@condition blinded} and {@condition restrained}, it has {@quickref Cover||3||total cover} against attacks and other effects outside the kraken, and it takes 21 ({@damage 6d6}) acid damage at the start of each of the kraken's turns. One Medium or two smaller creatures can be swallowed at the same time.",
+          "If the kraken takes 35 damage or more on a single turn from a creature inside it, the kraken must succeed on a {@dc 23} Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall {@condition prone} in spaces within 10 feet of the kraken. If the kraken dies, a swallowed creature is no longer {@condition restrained} by it and can escape from the corpse using 10 feet of movement, exiting {@condition prone}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3381,10 +3670,13 @@
         }
       },
       {
-        "id": "act_tentacle_qsok",
+        "id": "act_tentacle_qur7",
         "name": "Tentacle",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 20 ft., one target. {@h}17 (3d6 + 7) bludgeoning damage, and the target is grappled (escape DC 20). Until the grapple ends, the target is restrained. The kraken has ten tentacles, each of which can grapple one target.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 20 ft., one target. Hit: 17 (3d6 + 7) bludgeoning damage, and the target is grappled (escape DC 20). Until the grapple ends, the target is restrained. The kraken has ten tentacles, each of which can grapple one target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 20 ft., one target. {@h}17 ({@damage 3d6 + 7}) bludgeoning damage, and the target is {@condition grappled} (escape {@dc 20}). Until the grapple ends, the target is {@condition restrained}. The kraken has ten tentacles, each of which can grapple one target."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -3394,7 +3686,7 @@
           "targets": "one target",
           "save": {
             "dc": 20,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -3406,10 +3698,13 @@
         }
       },
       {
-        "id": "act_fling_zzpb",
+        "id": "act_fling_7iob",
         "name": "Fling",
         "actionType": "action",
         "descriptionHtml": "<p>One Medium or smaller object held or creature grappled by the kraken is thrown up to 40 feet in a random direction and knocked prone. If a thrown target strikes a solid surface, the target takes 3 (1d6) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a DC 13 Dexterity saving throw or take the same damage and be knocked prone.</p>",
+        "entries": [
+          "One Medium or smaller object held or creature {@condition grappled} by the kraken is thrown up to 40 feet in a random direction and knocked {@condition prone}. If a thrown target strikes a solid surface, the target takes 3 ({@damage 1d6}) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a {@dc 13} Dexterity saving throw or take the same damage and be knocked {@condition prone}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3431,10 +3726,13 @@
         }
       },
       {
-        "id": "act_lightning_strike_br87",
+        "id": "act_lightning_strike_7kfk",
         "name": "Lightning Strike",
         "actionType": "action",
         "descriptionHtml": "<p>The kraken magically create a bolt of lightning, which can strike a target the kraken can see within 90 feet of it. The target must make a DC 18 Dexterity saving throw, taking 22 (4d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The kraken magically create a bolt of lightning, which can strike a target the kraken can see within 90 feet of it. The target must make a {@dc 18} Dexterity saving throw, taking 22 ({@damage 4d10}) lightning damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -3463,10 +3761,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LR/Young Kraken.webp",
     "tokenImg": "img/bestiary/tokens/LR/Young Kraken.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

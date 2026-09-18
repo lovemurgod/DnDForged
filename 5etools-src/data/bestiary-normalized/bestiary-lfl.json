@@ -101,10 +101,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ephemeral_movement_rwqg",
+        "id": "act_ephemeral_movement_e2f9",
         "name": "Ephemeral Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnation can move through other creatures and objects as if they were Difficult Terrain, and its movement doesn't provoke Opportunity Attack. It takes 5 (1d10) Force damage if it ends its turn inside an object.</p>",
+        "entries": [
+          "The incarnation can move through other creatures and objects as if they were {@variantrule Difficult Terrain|XPHB}, and its movement doesn't provoke {@action Opportunity Attack|XPHB|Opportunity Attacks}. It takes 5 ({@damage 1d10}) Force damage if it ends its turn inside an object."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -123,10 +126,13 @@
         }
       },
       {
-        "id": "act_magic_resistance_uvso",
+        "id": "act_magic_resistance_xhcz",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnation has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The incarnation has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -142,10 +148,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_aohi",
+        "id": "act_multiattack_57cv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnation makes three attacks, using Bite or Miasmic Globule in any combination.</p>",
+        "entries": [
+          "The incarnation makes three attacks, using Bite or Miasmic Globule in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -159,10 +168,13 @@
         }
       },
       {
-        "id": "act_bite_7doc",
+        "id": "act_bite_5nl8",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>m +8, reach 5 ft. {@h}14 (2d8 + 5) Piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +8, reach 5 ft. Hit: 14 (2d8 + 5) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 8}, reach 5 ft. {@h}14 ({@damage 2d8 + 5}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -181,10 +193,13 @@
         }
       },
       {
-        "id": "act_miasmic_globule_ui32",
+        "id": "act_miasmic_globule_3y6h",
         "name": "Miasmic Globule",
         "actionType": "action",
-        "descriptionHtml": "<p>r +8, range 60/120 ft. {@h}15 (6d4) Acid damage, and the target's Speed is reduced by 10 feet until the end of the incarnation's next turn.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +8, range 60/120 ft. Hit: 15 (6d4) Acid damage, and the target's Speed is reduced by 10 feet until the end of the incarnation's next turn.</p>",
+        "entries": [
+          "{@atkr r} {@hit 8}, range 60/120 ft. {@h}15 ({@damage 6d4}) Acid damage, and the target's {@variantrule Speed|XPHB} is reduced by 10 feet until the end of the incarnation's next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -203,10 +218,13 @@
         }
       },
       {
-        "id": "act_spectral_stampede_yu3e",
+        "id": "act_spectral_stampede_n4wv",
         "name": "Spectral Stampede",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnation moves up to 80 feet in a straight line. Each creature whose space the incarnation enters is targeted once by the following effect. dex DC 16. {@actSaveFail} 18 (4d8) Force damage. If the target is the incarnation's size or smaller, it has the Prone condition. {@actSaveSuccess} Half damage only.</p>",
+        "entries": [
+          "The incarnation moves up to 80 feet in a straight line. Each creature whose space the incarnation enters is targeted once by the following effect. {@actSave dex} {@dc 16}. {@actSaveFail} 18 ({@damage 4d8}) Force damage. If the target is the incarnation's size or smaller, it has the {@condition Prone|XPHB} condition. {@actSaveSuccess} Half damage only."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -216,7 +234,7 @@
           "targets": null,
           "save": {
             "dc": 16,
-            "ability": "Save"
+            "ability": "DEX"
           },
           "damages": [
             {
@@ -230,10 +248,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_g0kl",
+        "id": "act_shape_shift_y0x0",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>The incarnation changes its size to Medium, Large, or Huge.</p>",
+        "entries": [
+          "The incarnation changes its size to Medium, Large, or Huge."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -253,11 +274,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LFL/Incarnation of Transience.webp",
     "tokenImg": "img/bestiary/tokens/LFL/Incarnation of Transience.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_incarnation_of_vibrance_lfl",
@@ -363,7 +396,7 @@
       {
         "id": "sc_incarnation_of_vibrance_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 5,
@@ -470,10 +503,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_zfw1",
+        "id": "act_magic_resistance_liv1",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnation has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The incarnation has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -489,10 +525,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_r81k",
+        "id": "act_multiattack_712v",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnation makes two Vine attacks and uses Radiant Blast. It can replace one vine attack with a use of Spellcasting to cast Blindness/Deafness if available.</p>",
+        "entries": [
+          "The incarnation makes two Vine attacks and uses Radiant Blast. It can replace one vine attack with a use of Spellcasting to cast {@spell Blindness/Deafness|XPHB} if available."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -506,10 +545,13 @@
         }
       },
       {
-        "id": "act_vine_at0b",
+        "id": "act_vine_7t4h",
         "name": "Vine",
         "actionType": "action",
-        "descriptionHtml": "<p>m +9, reach 20 ft. {@h}18 (3d8 + 5) Bludgeoning damage. If the target is the incarnation's size or smaller, it has the Grappled condition (escape DC 15) from one of two vines.</p>",
+        "descriptionHtml": "<p>Melee Attack: +9, reach 20 ft. Hit: 18 (3d8 + 5) Bludgeoning damage. If the target is the incarnation's size or smaller, it has the Grappled condition (escape DC 15) from one of two vines.</p>",
+        "entries": [
+          "{@atkr m} {@hit 9}, reach 20 ft. {@h}18 ({@damage 3d8 + 5}) Bludgeoning damage. If the target is the incarnation's size or smaller, it has the {@condition Grappled|XPHB} condition (escape {@dc 15}) from one of two vines."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -519,7 +561,7 @@
           "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 15}) from one of two vines",
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -531,10 +573,13 @@
         }
       },
       {
-        "id": "act_radiant_blast_0nkz",
+        "id": "act_radiant_blast_6nij",
         "name": "Radiant Blast",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 17, each creature of the incarnation's choice in a 20-foot Emanation [Area of Effect] originating from the incarnation. {@actSaveFail} The creature takes 14 (2d8 + 5) Radiant damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave con} {@dc 17}, each creature of the incarnation's choice in a 20-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the incarnation. {@actSaveFail} The creature takes 14 ({@damage 2d8 + 5}) Radiant damage. {@actSaveSuccess} Half damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -544,7 +589,7 @@
           "targets": null,
           "save": {
             "dc": 17,
-            "ability": "Save"
+            "ability": "CON"
           },
           "damages": [
             {
@@ -558,10 +603,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_h2uc",
+        "id": "act_shape_shift_tp26",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>The incarnation changes its size to Medium, Large, or Huge.</p>",
+        "entries": [
+          "The incarnation changes its size to Medium, Large, or Huge."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -575,10 +623,13 @@
         }
       },
       {
-        "id": "act_teleport_of6c",
+        "id": "act_teleport_asxp",
         "name": "Teleport",
         "actionType": "bonus",
         "descriptionHtml": "<p>The incarnation teleports up to 60 feet to an unoccupied space it can see. The incarnation can't teleport while it has a creature Grappled.</p>",
+        "entries": [
+          "The incarnation teleports up to 60 feet to an unoccupied space it can see. The incarnation can't teleport while it has a creature {@condition Grappled|XPHB}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -598,11 +649,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LFL/Incarnation of Vibrance.webp",
     "tokenImg": "img/bestiary/tokens/LFL/Incarnation of Vibrance.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_lorwyn_giant_lfl",
@@ -699,10 +762,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_x48n",
+        "id": "act_multiattack_29yw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes two attacks, using Stone Sword or Boulder in any combination.</p>",
+        "entries": [
+          "The giant makes two attacks, using Stone Sword or Boulder in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -716,10 +782,13 @@
         }
       },
       {
-        "id": "act_stone_sword_bhsm",
+        "id": "act_stone_sword_xfp0",
         "name": "Stone Sword",
         "actionType": "action",
-        "descriptionHtml": "<p>m +8, reach 15 ft. {@h}21 (3d10 + 5) Slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +8, reach 15 ft. Hit: 21 (3d10 + 5) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 8}, reach 15 ft. {@h}21 ({@damage 3d10 + 5}) Slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -738,10 +807,13 @@
         }
       },
       {
-        "id": "act_boulder_0unp",
+        "id": "act_boulder_e4cc",
         "name": "Boulder",
         "actionType": "action",
-        "descriptionHtml": "<p>r +8, range 60/240 ft. {@h}14 (2d8 + 5) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +8, range 60/240 ft. Hit: 14 (2d8 + 5) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
+        "entries": [
+          "{@atkr r} {@hit 8}, range 60/240 ft. {@h}14 ({@damage 2d8 + 5}) Bludgeoning damage. If the target is a Large or smaller creature, it has the {@condition Prone|XPHB} condition."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -762,10 +834,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_name_sleep__recharge_5__1t9k",
+        "id": "act_name_sleep__recharge_5__36sz",
         "name": "Name Sleep (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The giant falls into a deep, restorative slumber. The giant gains 20 Temporary Hit Points and has the Unconscious condition until it takes damage or the end of its next turn. The giant has Advantage on ability checks and saving throws for 1 minute.</p>",
+        "entries": [
+          "The giant falls into a deep, restorative slumber. The giant gains 20 {@variantrule Temporary Hit Points|XPHB} and has the {@condition Unconscious|XPHB} condition until it takes damage or the end of its next turn. The giant has {@variantrule Advantage|XPHB} on ability checks and saving throws for 1 minute."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -785,11 +860,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LFL/Lorwyn Giant.webp",
     "tokenImg": "img/bestiary/tokens/LFL/Lorwyn Giant.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_merrow_doublespeaker_lfl",
@@ -892,7 +979,7 @@
       {
         "id": "sc_merrow_doublespeaker_0",
         "name": "Spellcasting",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "cha",
         "abilityMod": 3,
@@ -974,10 +1061,13 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_xkv0",
+        "id": "act_amphibious_pw8z",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can breathe air and water.</p>",
+        "entries": [
+          "The merrow can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -991,10 +1081,13 @@
         }
       },
       {
-        "id": "act_mimicry_9gyd",
+        "id": "act_mimicry_av8l",
         "name": "Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can mimic voices and animal sounds. A creature that hears the mimicries can tell they are imitations with a successful DC 15 Wisdom (Insight) check.</p>",
+        "entries": [
+          "The merrow can mimic voices and animal sounds. A creature that hears the mimicries can tell they are imitations with a successful {@dc 15} Wisdom ({@skill Insight|XPHB}) check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1004,7 +1097,7 @@
           "targets": null,
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
@@ -1013,10 +1106,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5g2h",
+        "id": "act_multiattack_pf2g",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The merrow makes three Spined Tail attacks. It can replace one of these attacks with a use of Spellcasting to cast Command.</p>",
+        "entries": [
+          "The merrow makes three Spined Tail attacks. It can replace one of these attacks with a use of Spellcasting to cast {@spell Command|XPHB}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1030,10 +1126,13 @@
         }
       },
       {
-        "id": "act_spined_tail_kitx",
+        "id": "act_spined_tail_yd8i",
         "name": "Spined Tail",
         "actionType": "action",
-        "descriptionHtml": "<p>m,r +6, reach 5 ft. or range 20/60 ft. {@h}14 (3d6 + 4) Piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Attack: +6, reach 5 ft. or range 20/60 ft. Hit: 14 (3d6 + 4) Piercing damage.</p>",
+        "entries": [
+          "{@atkr m,r} {@hit 6}, reach 5 ft. or range 20/60 ft. {@h}14 ({@damage 3d6 + 4}) Piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1059,11 +1158,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LFL/Merrow Doublespeaker.webp",
     "tokenImg": "img/bestiary/tokens/LFL/Merrow Doublespeaker.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_merrow_haranguer_lfl",
@@ -1165,10 +1276,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_8me3",
+        "id": "act_amphibious_8iiy",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can breathe air and water.</p>",
+        "entries": [
+          "The merrow can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1184,10 +1298,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_md7b",
+        "id": "act_multiattack_rrnl",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The merrow makes three attacks, using Coral Scepter and Poisoned Longbow in any combination.</p>",
+        "entries": [
+          "The merrow makes three attacks, using Coral Scepter and Poisoned Longbow in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1201,10 +1318,13 @@
         }
       },
       {
-        "id": "act_coral_scepter_40xs",
+        "id": "act_coral_scepter_s9wv",
         "name": "Coral Scepter",
         "actionType": "action",
-        "descriptionHtml": "<p>m +7, reach 5 ft. {@h}14 (2d10 + 4) Bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +7, reach 5 ft. Hit: 14 (2d10 + 4) Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 7}, reach 5 ft. {@h}14 ({@damage 2d10 + 4}) Bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1223,10 +1343,13 @@
         }
       },
       {
-        "id": "act_poisoned_longbow_60au",
+        "id": "act_poisoned_longbow_8xei",
         "name": "Poisoned Longbow",
         "actionType": "action",
-        "descriptionHtml": "<p>r +7, range 150/600 ft. {@h}8 (1d8 + 4) Piercing damage plus 7 (2d6) Poison damage.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +7, range 150/600 ft. Hit: 8 (1d8 + 4) Piercing damage plus 7 (2d6) Poison damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 7}, range 150/600 ft. {@h}8 ({@damage 1d8 + 4}) Piercing damage plus 7 ({@damage 2d6}) Poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1249,10 +1372,13 @@
         }
       },
       {
-        "id": "act_invective_et60",
+        "id": "act_invective_kimu",
         "name": "Invective",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 15, up to three creatures the merrow can see within 60 feet. {@actSaveFail} 14 (4d6) Psychic damage, and the creature has Disadvantage on its next attack roll before the end of the merrow's next turn. {@actSaveSuccess} Half damage only.</p>",
+        "entries": [
+          "{@actSave wis} {@dc 15}, up to three creatures the merrow can see within 60 feet. {@actSaveFail} 14 ({@damage 4d6}) Psychic damage, and the creature has {@variantrule Disadvantage|XPHB} on its next attack roll before the end of the merrow's next turn. {@actSaveSuccess} Half damage only."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1262,7 +1388,7 @@
           "targets": null,
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": "WIS"
           },
           "damages": [
             {
@@ -1281,11 +1407,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LFL/Merrow Haranguer.webp",
     "tokenImg": "img/bestiary/tokens/LFL/Merrow Haranguer.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_noggle_ransacker_lfl",
@@ -1379,10 +1517,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_siege_monster_b1lt",
+        "id": "act_siege_monster_mtoj",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The noggle deals double damage to objects and structures.</p>",
+        "entries": [
+          "The noggle deals double damage to objects and structures."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1398,10 +1539,13 @@
     ],
     "actions": [
       {
-        "id": "act_sabotaging_swipe_djlk",
+        "id": "act_sabotaging_swipe_oo0q",
         "name": "Sabotaging Swipe",
         "actionType": "action",
-        "descriptionHtml": "<p>m +4, reach 5 ft. {@h}6 (1d8 + 2) Slashing damage. If the target is wearing armor, it is subjected to the following effect. dex DC 12. {@actSaveFail} The armor takes a -1 penalty to the AC it offers. The target can take an action to remove the penalty from its armor.</p>",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 6 (1d8 + 2) Slashing damage. If the target is wearing armor, it is subjected to the following effect. dex DC 12. {@actSaveFail} The armor takes a -1 penalty to the AC it offers. The target can take an action to remove the penalty from its armor.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}6 ({@damage 1d8 + 2}) Slashing damage. If the target is wearing armor, it is subjected to the following effect. {@actSave dex} {@dc 12}. {@actSaveFail} The armor takes a -1 penalty to the AC it offers. The target can take an action to remove the penalty from its armor."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1411,7 +1555,7 @@
           "targets": "it is subjected to the following effect",
           "save": {
             "dc": 12,
-            "ability": "Save"
+            "ability": "DEX"
           },
           "damages": [
             {
@@ -1425,10 +1569,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_rtfu",
+        "id": "act_nimble_escape_pqz5",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The noggle takes the Disengage or Hide action.</p>",
+        "entries": [
+          "The noggle takes the {@action Disengage|XPHB} or {@action Hide|XPHB} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1448,11 +1595,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LFL/Noggle Ransacker.webp",
     "tokenImg": "img/bestiary/tokens/LFL/Noggle Ransacker.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_noggle_wild_mage_lfl",
@@ -1548,10 +1707,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_bloodied_wild_magic_xt3c",
+        "id": "act_bloodied_wild_magic_h8vg",
         "name": "Bloodied Wild Magic",
         "actionType": "trait",
         "descriptionHtml": "<p>While Bloodied, the noggle has a Fly Speed of 30 feet and it can choose for any damage it deals to be Force damage.</p>",
+        "entries": [
+          "While {@status Bloodied|XPHB}, the noggle has a {@variantrule Fly Speed|XPHB} of 30 feet and it can choose for any damage it deals to be Force damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1567,10 +1729,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ni2m",
+        "id": "act_multiattack_3fa3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The noggle makes two attacks, using Noggling Stick or Befuddling Ray in any combination.</p>",
+        "entries": [
+          "The noggle makes two attacks, using Noggling Stick or Befuddling Ray in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1584,10 +1749,13 @@
         }
       },
       {
-        "id": "act_noggling_stick_r8v2",
+        "id": "act_noggling_stick_h45g",
         "name": "Noggling Stick",
         "actionType": "action",
-        "descriptionHtml": "<p>m +5, reach 5 ft. {@h}5 (1d4 + 3) Bludgeoning damage plus 2 (1d4) Psychic damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 5 (1d4 + 3) Bludgeoning damage plus 2 (1d4) Psychic damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 5}, reach 5 ft. {@h}5 ({@damage 1d4 + 3}) Bludgeoning damage plus 2 ({@damage 1d4}) Psychic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1610,10 +1778,13 @@
         }
       },
       {
-        "id": "act_befuddling_ray_y3uq",
+        "id": "act_befuddling_ray_3ff2",
         "name": "Befuddling Ray",
         "actionType": "action",
-        "descriptionHtml": "<p>r +5, range 60 ft. {@h}6 (1d6 + 3) Psychic damage, and the target subtracts 1d4 from the next saving throw it makes before the end of the noggle's next turn.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +5, range 60 ft. Hit: 6 (1d6 + 3) Psychic damage, and the target subtracts 1d4 from the next saving throw it makes before the end of the noggle's next turn.</p>",
+        "entries": [
+          "{@atkr r} {@hit 5}, range 60 ft. {@h}6 ({@damage 1d6 + 3}) Psychic damage, and the target subtracts {@dice 1d4} from the next saving throw it makes before the end of the noggle's next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1639,11 +1810,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LFL/Noggle Wild Mage.webp",
     "tokenImg": "img/bestiary/tokens/LFL/Noggle Wild Mage.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_shadowmoor_giant_lfl",
@@ -1739,10 +1922,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_rzjr",
+        "id": "act_multiattack_xrb4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes three attacks, using Tree Club or Boulder in any combination.</p>",
+        "entries": [
+          "The giant makes three attacks, using Tree Club or Boulder in any combination."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1756,10 +1942,13 @@
         }
       },
       {
-        "id": "act_tree_club_2omc",
+        "id": "act_tree_club_wznr",
         "name": "Tree Club",
         "actionType": "action",
-        "descriptionHtml": "<p>m +9, reach 15 ft. {@h}17 (2d10 + 6) Bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Attack: +9, reach 15 ft. Hit: 17 (2d10 + 6) Bludgeoning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 9}, reach 15 ft. {@h}17 ({@damage 2d10 + 6}) Bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1778,10 +1967,13 @@
         }
       },
       {
-        "id": "act_boulder_xqv2",
+        "id": "act_boulder_1grb",
         "name": "Boulder",
         "actionType": "action",
-        "descriptionHtml": "<p>r +9, range 60/240 ft. {@h}13 (2d6 + 6) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
+        "descriptionHtml": "<p>Ranged Attack: +9, range 60/240 ft. Hit: 13 (2d6 + 6) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
+        "entries": [
+          "{@atkr r} {@hit 9}, range 60/240 ft. {@h}13 ({@damage 2d6 + 6}) Bludgeoning damage. If the target is a Large or smaller creature, it has the {@condition Prone|XPHB} condition."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1800,10 +1992,13 @@
         }
       },
       {
-        "id": "act_wild_magic_cataclysm__recharge_5__3dqt",
+        "id": "act_wild_magic_cataclysm__recharge_5__5fsx",
         "name": "Wild Magic Cataclysm (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 15, each creature in a 20-foot-radius Sphere [Area of Effect] centered on a point within 120 feet. {@actSaveFail} 28 (8d6) damage (roll 1d4 to determine damage type: 1—Acid; 2—Fire; 3—Lightning; 4—Thunder). {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave dex} {@dc 15}, each creature in a 20-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on a point within 120 feet. {@actSaveFail} 28 ({@damage 8d6}) damage (roll {@dice 1d4} to determine damage type: 1—Acid; 2—Fire; 3—Lightning; 4—Thunder). {@actSaveSuccess} Half damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1813,7 +2008,7 @@
           "targets": null,
           "save": {
             "dc": 15,
-            "ability": "Save"
+            "ability": "DEX"
           },
           "damages": [
             {
@@ -1832,10 +2027,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/LFL/Shadowmoor Giant.webp",
     "tokenImg": "img/bestiary/tokens/LFL/Shadowmoor Giant.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

@@ -1,0 +1,4752 @@
+[
+  {
+    "id": "creature_du_ulora_quori_exploringeberron24",
+    "name": "Du'ulora Quori",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 168,
+      "formula": "16d10 + 80"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 20,
+        "mod": 5
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 20,
+        "mod": 5
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 19,
+        "mod": 4
+      }
+    },
+    "str": 20,
+    "dex": 13,
+    "con": 20,
+    "int": 15,
+    "wis": 18,
+    "cha": 19,
+    "proficiencyBonus": 4,
+    "save": {
+      "wis": "+8",
+      "cha": "+8"
+    },
+    "saves": {
+      "wis": "+8",
+      "cha": "+8"
+    },
+    "skill": {
+      "intimidation": "+8",
+      "perception": "+12",
+      "survival": "+8"
+    },
+    "skills": {
+      "intimidation": "+8",
+      "perception": "+12",
+      "survival": "+8"
+    },
+    "immune": [],
+    "resist": [
+      "fire",
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened",
+      "prone"
+    ],
+    "passive": 22,
+    "senses": {
+      "passivePerception": 22,
+      "sensesString": "Darkvision 120 ft."
+    },
+    "languages": [
+      "Common",
+      "Quori",
+      "Riedran; telepathy 120 ft."
+    ],
+    "cr": "11",
+    "crNumeric": 11,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_du_ulora_quori_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 16,
+        "atkMod": 8,
+        "header": "The quori casts one of the following spells, requiring no spell components and using Charisma as the spellcasting ability (spell save DC 16):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_crown_of_madness_xphb",
+              "name": "Crown of Madness",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_flaming_sphere_xphb",
+              "name": "Flaming Sphere",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [
+                {
+                  "formula": "2d6",
+                  "type": "Fire",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (a ball of wax)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_shield_xphb",
+              "name": "Shield",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 reaction (which you take when you are hit by an attack roll or targeted by the Magic Missile spell)",
+              "range": "self",
+              "duration": "1 round",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_enemies_abound_xge",
+              "name": "Enemies Abound",
+              "source": "XGE",
+              "level": 3,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "intelligence",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Mage Hand"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_all_around_vision_jjgl",
+        "name": "All-Around Vision",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The quori can't be surprised while it isn't Incapacitated.</p>",
+        "entries": [
+          "The quori can't be {@status surprised|XPHB} while it isn't {@condition Incapacitated|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_aura_of_fury_44p6",
+        "name": "Aura of Fury",
+        "actionType": "trait",
+        "descriptionHtml": "<p>wis DC 16, any creature that starts its turn in a 60-foot Emanation [Area of Effect] originating from the quori. {@actSaveFail} The target becomes enraged. While enraged, the target has Advantage on all melee attack rolls, and all attack rolls made against the target have Advantage.</p>",
+        "entries": [
+          "{@actSave wis} {@dc 16}, any creature that starts its turn in a 60-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from the quori. {@actSaveFail} The target becomes enraged. While enraged, the target has {@variantrule Advantage|XPHB} on all melee attack rolls, and all attack rolls made against the target have {@variantrule Advantage|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "WIS"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_lh6m",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The quori has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The quori has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_track_hatred_llqa",
+        "name": "Track Hatred",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When the quori deals damage to any creature, it forms a psychic link with the target for 24 hours. During that time, the quori has advantage on Wisdom (Survival) checks to track the target. The quori can attempt to track the target at any range, even if it is on another plane of existence. Abilities such as the Pass Without Trace spell or the Ranger's Nature's Veil feature do not impede the quori's ability to track its target. The quori remains alert to danger even when it is tracking while traveling.</p>",
+        "entries": [
+          "When the quori deals damage to any creature, it forms a psychic link with the target for 24 hours. During that time, the quori has advantage on Wisdom ({@skill Survival|XPHB}) checks to track the target. The quori can attempt to track the target at any range, even if it is on another plane of existence. Abilities such as the {@spell Pass Without Trace|XPHB} spell or the Ranger's Nature's Veil feature do not impede the quori's ability to track its target. The quori remains alert to danger even when it is tracking while traveling."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_lubs",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The quori makes three Tentacle attacks.</p>",
+        "entries": [
+          "The quori makes three Tentacle attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_tentacle_tidb",
+        "name": "Tentacle",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 12 (2d6 + 5) Bludgeoning damage plus 7 (2d6) Fire damage, and the target has the Grappled condition (escape DC 17) from one of three tentacles. While Grappled, the target takes 10 (3d6) Fire damage and 10 (3d6) Psychic damage at the start of each of the quori's turns.</p>",
+        "entries": [
+          "{@atkr m} {@hit 9}, reach 10 ft. {@h}12 ({@damage 2d6 + 5}) Bludgeoning damage plus 7 ({@damage 2d6}) Fire damage, and the target has the {@condition Grappled|XPHB} condition (escape {@dc 17}) from one of three tentacles. While {@condition Grappled|XPHB}, the target takes 10 ({@damage 3d6}) Fire damage and 10 ({@damage 3d6}) Psychic damage at the start of each of the quori's turns."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 10,
+          "range": null,
+          "targets": "and the target has the {@condition Grappled|XPHB} condition (escape {@dc 17}) from one of three tentacles",
+          "save": {
+            "dc": 17,
+            "ability": null
+          },
+          "damages": [
+            {
+              "formula": "2d6 + 5",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "2d6",
+              "type": "Fire"
+            },
+            {
+              "formula": "3d6",
+              "type": "Fire"
+            },
+            {
+              "formula": "3d6",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_possession___recharge__05a9",
+        "name": "Possession {@recharge}",
+        "actionType": "action",
+        "descriptionHtml": "<p>cha DC 16, one Humanoid the quori can see within 5 feet. {@actSaveFail} The target is possessed by the quori; the quori disappears and the target has the Incapacitated condition and loses control of its body. The quori now controls the body, but the target retains awareness. The quori can't be targeted by any attack, spell, or other effect, except ones that specifically target Aberrations. The quori's game statistics are the same, except it uses the possessed target's Speed, as well as the target's Strength, Dexterity, and Constitution modifiers.</p><p>The possession lasts until the body drops to 0 Hit Points or the quori leaves as a Bonus Action. When the possession ends, the quori appears in an unoccupied space within 5 feet of the target, and the target is immune to this quori's Possession for 24 hours. {@actSaveSuccess} The target is immune to this quori's Possession for 24 hours.</p>",
+        "entries": [
+          "{@actSave cha} {@dc 16}, one Humanoid the quori can see within 5 feet. {@actSaveFail} The target is possessed by the quori; the quori disappears and the target has the {@condition Incapacitated|XPHB} condition and loses control of its body. The quori now controls the body, but the target retains awareness. The quori can't be targeted by any attack, spell, or other effect, except ones that specifically target Aberrations. The quori's game statistics are the same, except it uses the possessed target's {@variantrule Speed|XPHB}, as well as the target's Strength, Dexterity, and Constitution modifiers.",
+          "The possession lasts until the body drops to 0 {@variantrule Hit Points|XPHB} or the quori leaves as a {@variantrule Bonus Action|XPHB}. When the possession ends, the quori appears in an unoccupied space within 5 feet of the target, and the target is immune to this quori's {@variantrule Possession|XPHB} for 24 hours. {@actSaveSuccess} The target is immune to this quori's {@variantrule Possession|XPHB} for 24 hours."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "CHA"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_recall_agony__recharge_5__h4je",
+        "name": "Recall Agony (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>wis DC 16, one creature the quori can see within 60 feet. {@actSaveFail} 67 (15d8) Psychic damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave wis} {@dc 16}, one creature the quori can see within 60 feet. {@actSaveFail} 67 ({@damage 15d8}) Psychic damage. {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 16,
+            "ability": "WIS"
+          },
+          "damages": [
+            {
+              "formula": "15d8",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_incite_fury_drxs",
+        "name": "Incite Fury",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} A creature under the effects of the quori's Aura of Fury targets the quori with an attack. {@actResponse} The target attacks another creature of the quori's choice within the targets range.</p>",
+        "entries": [
+          "{@actTrigger} A creature under the effects of the quori's Aura of Fury targets the quori with an attack. {@actResponse} The target attacks another creature of the quori's choice within the targets range."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/Du'ulora Quori.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/Du'ulora Quori.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_final_messenger_exploringeberron24",
+    "name": "Final Messenger",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Tiny",
+    "sizeCategory": "T",
+    "type": "Construct",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 20,
+        "condition": null
+      }
+    ],
+    "primaryAc": 20,
+    "acCondition": "",
+    "hp": {
+      "average": 6,
+      "formula": "1d6"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 60,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 10,
+        "mod": 0
+      },
+      "dex": {
+        "score": 10,
+        "mod": 0
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 10,
+        "mod": 0
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": 10,
+    "dex": 10,
+    "con": 10,
+    "int": 10,
+    "wis": 10,
+    "cha": 10,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "deafened",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "incapacitated",
+      "invisible",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained",
+      "stunned"
+    ],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_warforged_symbiote_pihy",
+        "name": "Warforged Symbiote",
+        "actionType": "trait",
+        "descriptionHtml": "<p>A messenger can only remain active for 8 hours after it detaches from a warforged body, after which time its energy dissipates and it gains the Unconscious condition. An Unconscious messenger must complete a Short Rest or Long Rest while attached to a warforged, after which it regains its energy, as well as regaining all lost Hit Points.</p>",
+        "entries": [
+          "A messenger can only remain active for 8 hours after it detaches from a warforged body, after which time its energy dissipates and it gains the {@condition Unconscious|XPHB} condition. An {@condition Unconscious|XPHB} messenger must complete a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB} while attached to a warforged, after which it regains its energy, as well as regaining all lost {@variantrule Hit Points|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_dash_afmj",
+        "name": "Dash",
+        "actionType": "action",
+        "descriptionHtml": "<p>The messenger gains extra movement equal to its Speed.</p>",
+        "entries": [
+          "The messenger gains extra movement equal to its {@variantrule Speed|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/Final Messenger.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/Final Messenger.webp",
+    "fluff": {
+      "entries": [
+        "{@note Requires Use by a {@race Warforged|EFA}}",
+        "A delicate winged creature, this homunculus was designed to facilitate communication between warforged soldiers during the Last War. A {@item Final Messenger|ExploringEberron24} is a Tiny Construct with an AC of 20, 6 {@variantrule Hit Points|XPHB}, and a {@variantrule Fly Speed|XPHB} of 60 feet. It has {@variantrule Immunity|XPHB} to Poison damage and Psychic damage, and all conditions other than {@condition Unconscious|XPHB|Unconsciousness}. If it is forced to make an ability check or a saving throw, treat all its ability scores as 10 (+0). It has {@sense Darkvision|XPHB} with a range of 60 feet. It has no limbs and the only action it can take on its turn is the {@action Dash|XPHB} action.",
+        "If you are a warforged, you can take a {@action Magic|XPHB} action to integrate a Final Messenger into your body. While it is part of your body, the messenger cannot be targeted by any attack. You can only have one messenger attached to your body at a time. A messenger can only remain active for 8 hours after it detaches from a warforged body, after which time its energy dissipates and it gains the {@condition Unconscious|XPHB} condition. An {@condition Unconscious|XPHB} messenger must complete a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB} while attached to a warforged, after which it regains its energy, as well as regaining all lost {@variantrule Hit Points|XPHB}.",
+        "A Final Messenger holds four pieces of data, accessible only to the warforged it is attached to. While the messenger is attached to you, you can take a {@action Magic|XPHB} action to review the data currently stored within the messenger, and if you choose to, change any or all of these data points.",
+        {
+          "type": "list",
+          "items": [
+            "A destination for the messenger. This can be very specific (a particular apartment in Sharn) or more general (an open marketplace).",
+            "A target individual. This could be a specific person or a category (\"Any Karrnathi warforged\").",
+            "A single image recorded through the eyes of a warforged attached to the messenger.",
+            "A message of up to 25 words."
+          ]
+        },
+        "You can release the messenger as a {@variantrule Bonus Action|XPHB}, at which point it flies to its destination by the most direct route possible. Once it reaches the destination it seeks the target individual; if no target has been set, it approaches the nearest warforged.",
+        "If you are reduced to 0 {@variantrule Hit Points|XPHB} while a Final Messenger is attached to you, it immediately detaches and seeks out its target. It retains its stored message, but replaces its stored image with the last thing you saw before dropping to 0 {@variantrule Hit Points|XPHB}."
+      ]
+    },
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_inspired_exploringeberron24",
+    "name": "Inspired",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "human",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 40,
+      "formula": "9d8"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 11,
+        "mod": 0
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 10,
+        "mod": 0
+      },
+      "int": {
+        "score": 16,
+        "mod": 3
+      },
+      "wis": {
+        "score": 10,
+        "mod": 0
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "str": 11,
+    "dex": 14,
+    "con": 10,
+    "int": 16,
+    "wis": 10,
+    "cha": 16,
+    "proficiencyBonus": 2,
+    "save": {
+      "int": "+5",
+      "wis": "+2"
+    },
+    "saves": {
+      "int": "+5",
+      "wis": "+2"
+    },
+    "skill": {
+      "deception": "+7",
+      "insight": "+2",
+      "persuasion": "+7"
+    },
+    "skills": {
+      "deception": "+7",
+      "insight": "+2",
+      "persuasion": "+7"
+    },
+    "immune": [],
+    "resist": [
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 10,
+    "senses": {
+      "passivePerception": 10,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Quori"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_inspired_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 13,
+        "atkMod": 5,
+        "header": "The inspired casts one of the following spells, requiring no spell components and using Intelligence as the spellcasting ability (spell save DC 13):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_vicious_mockery_xphb",
+            "name": "Vicious Mockery",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 13,
+            "damageList": [
+              {
+                "formula": "1d6",
+                "type": "Psychic",
+                "label": "",
+                "stat": "none",
+                "cantripScale": true
+              }
+            ],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_charm_person_xphb",
+              "name": "Charm Person",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_dissonant_whispers_xphb",
+              "name": "Dissonant Whispers",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [
+                {
+                  "formula": "3d6",
+                  "type": "Psychic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_hex_xphb",
+              "name": "Hex",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Enchantment",
+              "castingTime": "1 bonus action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "1d6",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (the petrified eye of a newt)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_hold_person_xphb",
+              "name": "Hold Person",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 13,
+              "damageList": [],
+              "components": "V, S, M (a straight piece of iron)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_mage_armor_xphb",
+              "name": "Mage Armor",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "8 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a piece of cured leather)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Mage Hand",
+          "Vicious Mockery"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_dual_mind_jqnf",
+        "name": "Dual Mind",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The inspired has Advantage on Wisdom saving throws.</p>",
+        "entries": [
+          "The inspired has {@variantrule Advantage|XPHB} on Wisdom saving throws."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_24ev",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The inspired makes two Crysteel Dagger attacks. It can replace one attack with Vicious Mockery.</p>",
+        "entries": [
+          "The inspired makes two Crysteel Dagger attacks. It can replace one attack with {@spell Vicious Mockery|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_crysteel_dagger_0h9u",
+        "name": "Crysteel Dagger",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 4 (1d4 + 2) Piercing damage plus 10 (3d6) Force damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 4}, reach 5 ft. {@h}4 ({@damage 1d4 + 2}) Piercing damage plus 10 ({@damage 3d6}) Force damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 4,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d4 + 2",
+              "type": "Piercing"
+            },
+            {
+              "formula": "3d6",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Quori Vessel",
+        "descriptionHtml": "<p>The inspired are vessels for quori spirits, allowing the quori to manifest a portion of their power while the vessel is possessed. An inspired can gain benefits depending on the type of quori possessing it. The quori also gains access to the inspired's knowledge and features.</p><div><strong><em>Du'ulora.</em></strong> <div><strong><em>All-Around Vision.</em></strong> <p>The inspired can't be surprised.</p></div><div><strong><em>Enemies Abound (1/Day).</em></strong> <p>The inspired can cast the Enemies Abound spell (spell save DC 13).</p></div></div><div><strong><em>Hashalaq.</em></strong> <div><strong><em>Suggestion (3/Day).</em></strong> <p>The inspired can cast the Suggestion spell (spell save DC 13), requiring no material components.</p></div></div><div><strong><em>Kalaraq.</em></strong> <div><strong><em>All Around Vision.</em></strong> <p>The inspired can't be surprised.</p></div><div><strong><em>Arcane Eye (3/Day).</em></strong> <p>The inspired can cast the Arcane Eye spell, requiring no material components.</p></div></div><div><strong><em>Tsucora.</em></strong> <div><strong><em>Fear (1/Day).</em></strong> <p>The Inspired can cast the Fear spell (spell save DC 13), requiring no material components.</p></div></div>",
+        "entries": [
+          "The inspired are vessels for quori spirits, allowing the quori to manifest a portion of their power while the vessel is possessed. An inspired can gain benefits depending on the type of quori possessing it. The quori also gains access to the inspired's knowledge and features.",
+          {
+            "type": "variantInner",
+            "name": "Du'ulora",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "All-Around Vision",
+                "entries": [
+                  "The inspired can't be {@status surprised|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Enemies Abound (1/Day)",
+                "entries": [
+                  "The inspired can cast the {@spell Enemies Abound|XGE} spell (spell save {@dc 13})."
+                ]
+              }
+            ]
+          },
+          {
+            "type": "variantInner",
+            "name": "Hashalaq",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Suggestion (3/Day)",
+                "entries": [
+                  "The inspired can cast the {@spell Suggestion|XPHB} spell (spell save {@dc 13}), requiring no material components."
+                ]
+              }
+            ]
+          },
+          {
+            "type": "variantInner",
+            "name": "Kalaraq",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "All Around Vision",
+                "entries": [
+                  "The inspired can't be {@status surprised|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Arcane Eye (3/Day)",
+                "entries": [
+                  "The inspired can cast the {@spell Arcane Eye|XPHB} spell, requiring no material components."
+                ]
+              }
+            ]
+          },
+          {
+            "type": "variantInner",
+            "name": "Tsucora",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Fear (1/Day)",
+                "entries": [
+                  "The Inspired can cast the {@spell Fear|XPHB} spell (spell save {@dc 13}), requiring no material components."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/Inspired.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/Inspired.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_meld_exploringeberron24",
+    "name": "Meld",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "A",
+    "ac": [
+      {
+        "value": 11,
+        "condition": null
+      }
+    ],
+    "primaryAc": 11,
+    "acCondition": "",
+    "hp": {
+      "average": 119,
+      "formula": "14d10 + 42"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 40,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 13,
+        "mod": 1
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 8,
+        "mod": -1
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 17,
+        "mod": 3
+      }
+    },
+    "str": 18,
+    "dex": 13,
+    "con": 16,
+    "int": 8,
+    "wis": 12,
+    "cha": 17,
+    "proficiencyBonus": 3,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "stealth": "+4"
+    },
+    "skills": {
+      "stealth": "+4"
+    },
+    "immune": [
+      "necrotic",
+      "poison",
+      "psychic"
+    ],
+    "resist": [
+      "acid",
+      "bludgeoning",
+      "cold",
+      "fire",
+      "lightning",
+      "piercing",
+      "slashing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "paralyzed",
+      "petrified",
+      "poisoned",
+      "prone",
+      "restrained"
+    ],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "Common plus one other language"
+    ],
+    "cr": "6",
+    "crNumeric": 6,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_meld_0",
+        "name": "Etherealness",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "The meld cast the Etherealness spell, requiring no spell components and using Charisma as the spellcasting ability. The meld is visible on the Material Plane while on the Border Ethereal and vice versa, but it can't affect or be affected by anything on the other plane.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_etherealness_xphb",
+            "name": "Etherealness",
+            "source": "XPHB",
+            "level": 7,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "8 hours",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {},
+        "will": [
+          "Etherealness"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_ethereal_sight_9cc9",
+        "name": "Ethereal Sight",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The meld can see 60 feet into the Ethereal Plane when it is on the Material Plane and vice versa.</p>",
+        "entries": [
+          "The meld can see 60 feet into the Ethereal Plane when it is on the Material Plane and vice versa."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_incorporeal_movement_lbiw",
+        "name": "Incorporeal Movement",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The meld can move through other creatures and objects as if they were Difficult Terrain. It takes 5 (1d10) Force damage if it ends its turn inside an object. The meld can also interact with any liquid surface as if it was solid ground.</p>",
+        "entries": [
+          "The meld can move through other creatures and objects as if they were {@variantrule Difficult Terrain|XPHB}. It takes 5 ({@damage 1d10}) Force damage if it ends its turn inside an object. The meld can also interact with any liquid surface as if it was solid ground."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_85vn",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The meld makes four Withering Slam attacks. It can replace two attacks with a use of Conflicted Soul.</p>",
+        "entries": [
+          "The meld makes four Withering Slam attacks. It can replace two attacks with a use of Conflicted Soul."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_withering_slam_gypx",
+        "name": "Withering Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>Attack: +7, reach 10 ft. Hit: 11 (2d6 + 4) Necrotic damage.</p>",
+        "entries": [
+          "{@atk m} +7, reach 10 ft. {@h}11 ({@damage 2d6 + 4}) Necrotic damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 4",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_conflicted_soul_0a1d",
+        "name": "Conflicted Soul",
+        "actionType": "action",
+        "descriptionHtml": "<p>cha DC 14, one creature the meld can see within 30 feet. {@actSaveFail} The target suffers the effect of the Confusion spell (no Concentration required to maintain the spell).</p>",
+        "entries": [
+          "{@actSave cha} {@dc 14}, one creature the meld can see within 30 feet. {@actSaveFail} The target suffers the effect of the {@spell Confusion|XPHB} spell (no {@status Concentration|XPHB} required to maintain the spell)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "CHA"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/Meld.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/Meld.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_merfolk_stormcaller_exploringeberron24",
+    "name": "Merfolk Stormcaller",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Elemental",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 156,
+      "formula": "24d8 + 48"
+    },
+    "speed": {
+      "walk": 10,
+      "fly": 0,
+      "swim": 40,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 11,
+        "mod": 0
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 14,
+        "mod": 2
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 17,
+        "mod": 3
+      },
+      "cha": {
+        "score": 14,
+        "mod": 2
+      }
+    },
+    "str": 11,
+    "dex": 15,
+    "con": 14,
+    "int": 13,
+    "wis": 17,
+    "cha": 14,
+    "proficiencyBonus": 3,
+    "save": {
+      "wis": "+6",
+      "cha": "+6"
+    },
+    "saves": {
+      "wis": "+6",
+      "cha": "+6"
+    },
+    "skill": {
+      "nature": "+4",
+      "perception": "+6",
+      "survival": "+6"
+    },
+    "skills": {
+      "nature": "+4",
+      "perception": "+6",
+      "survival": "+6"
+    },
+    "immune": [],
+    "resist": [
+      "cold"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 16,
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": ""
+    },
+    "languages": [
+      "Common",
+      "Druidic",
+      "Primordial (Aquan)"
+    ],
+    "cr": "8",
+    "crNumeric": 8,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_merfolk_stormcaller_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 3,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "The merfolk casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save DC 14):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_maelstrom_xge",
+              "name": "Maelstrom",
+              "source": "XGE",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [
+                {
+                  "formula": "6d6",
+                  "type": "Bludgeoning",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (paper or leaf in the shape of a funnel)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_thunderwave_xphb",
+              "name": "Thunderwave",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "Self (15 feet cube)",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Thunder",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_tidal_wave_xge",
+              "name": "Tidal Wave",
+              "source": "XGE",
+              "level": 3,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [
+                {
+                  "formula": "4d8",
+                  "type": "Bludgeoning",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (a drop of water)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_watery_sphere_xge",
+              "name": "Watery Sphere",
+              "source": "XGE",
+              "level": 4,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "strength",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [],
+              "components": "V, S, M (a droplet of water)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_chain_lightning_xphb",
+              "name": "Chain Lightning",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "150 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [
+                {
+                  "formula": "10d8",
+                  "type": "Lightning",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (three silver pins)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_amphibious_c2hv",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The merfolk can breathe air and water.</p>",
+        "entries": [
+          "The merfolk can breathe air and water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_summon_storm_ydaa",
+        "name": "Summon Storm",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Once per day, one or more merfolk stormcallers can cast Control Weather as a Ritual that takes 10 minutes to perform. For every additional stormcaller involved in performing the Ritual, the radius of the spell's effect increases by 1 mile, the duration increases by 2 hours, and they can change the weather by one additional stage every 1d4 x 10 minutes. During the casting, if the stormcallers take any action other than performing the Ritual, they must start over.</p>",
+        "entries": [
+          "Once per day, one or more merfolk stormcallers can cast {@spell Control Weather|XPHB} as a {@variantrule Ritual|XPHB} that takes 10 minutes to perform. For every additional stormcaller involved in performing the {@variantrule Ritual|XPHB}, the radius of the spell's effect increases by 1 mile, the duration increases by 2 hours, and they can change the weather by one additional stage every {@dice 1d4 x 10} minutes. During the casting, if the stormcallers take any action other than performing the {@variantrule Ritual|XPHB}, they must start over."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_wo4a",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The stormcaller makes three Lightning Lash attacks.</p>",
+        "entries": [
+          "The stormcaller makes three Lightning Lash attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_lightning_lash_spdo",
+        "name": "Lightning Lash",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 15 ft. Hit: 14 (4d6) Lightning damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 15 ft. {@h}14 ({@damage 4d6}) Lightning damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 15,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d6",
+              "type": "Lightning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_thunderous_rebuke_4xch",
+        "name": "Thunderous Rebuke",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} A creature within 60 feet of the merfolk deals damage to it. dcon DC 14, the triggering creature. {@actSaveFail} 11 (2d10) Thunder damage, and the target has the Prone condition.</p>",
+        "entries": [
+          "{@actTrigger} A creature within 60 feet of the merfolk deals damage to it. {@actResponse d}{@actSave con} {@dc 14}, the triggering creature. {@actSaveFail} 11 ({@damage 2d10}) Thunder damage, and the target has the {@condition Prone|XPHB} condition."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "2d10",
+              "type": "Thunder"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/Merfolk Stormcaller.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/Merfolk Stormcaller.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_plasmid_exploringeberron24",
+    "name": "Plasmid",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 127,
+      "formula": "15d10 + 45"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 20,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 12,
+        "mod": 1
+      },
+      "dex": {
+        "score": 17,
+        "mod": 3
+      },
+      "con": {
+        "score": 17,
+        "mod": 3
+      },
+      "int": {
+        "score": 5,
+        "mod": -3
+      },
+      "wis": {
+        "score": 13,
+        "mod": 1
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 12,
+    "dex": 17,
+    "con": 17,
+    "int": 5,
+    "wis": 13,
+    "cha": 8,
+    "proficiencyBonus": 3,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "stealth": "+6"
+    },
+    "skills": {
+      "stealth": "+6"
+    },
+    "immune": [],
+    "resist": [
+      "cold"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "prone"
+    ],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [],
+    "cr": "5",
+    "crNumeric": 5,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_8n04",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The plasmid can breathe air and water.</p>",
+        "entries": [
+          "The plasmid can breathe air and water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_receptive_telepathy_grkb",
+        "name": "Receptive Telepathy",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The plasmid is considered a shark for the purpose of being magically controlled by any sahuagin's Shark Telepathy trait.</p>",
+        "entries": [
+          "The plasmid is considered a shark for the purpose of being magically controlled by any sahuagin's Shark {@variantrule Telepathy|XPHB} trait."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_solid_state__object_form_only__6tse",
+        "name": "Solid State (Object Form Only)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>When formed into an inanimate object, the plasmid has an AC of 18 and regains 10 Hit Points at the start of each of its turns. However, the plasmid's Speed becomes 0 in this form and it cannot attack. It can be used as an item or a set of Artisan's Tools when it is in this form.</p>",
+        "entries": [
+          "When formed into an inanimate object, the plasmid has an AC of 18 and regains 10 {@variantrule Hit Points|XPHB} at the start of each of its turns. However, the plasmid's {@variantrule Speed|XPHB} becomes 0 in this form and it cannot attack. It can be used as an item or a set of {@item Artisan's Tools|XPHB} when it is in this form."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_k9zp",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The plasmid makes three Vicious Pseudopod attacks.</p>",
+        "entries": [
+          "The plasmid makes three Vicious Pseudopod attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_vicious_pseudopod_dbvd",
+        "name": "Vicious Pseudopod",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +6, reach 10 ft. Hit: 10 (2d6 + 3) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 6}, reach 10 ft. {@h}10 ({@damage 2d6 + 3}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 3",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_adaptive_shape_shift__amorphous_form_only__dyzp",
+        "name": "Adaptive Shape-Shift (Amorphous Form Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>When in its true, amorphous form, the plasmid gains one of the following benefits until it uses this action again:</p><ul><li><strong><em>Truesight.</em></strong> <p>The plasmid gains Truesight with a range of 30 feet.</p></li><li><strong><em>Blindsight.</em></strong> <p>The plasmid gains Blindsight with a range of 60 feet.</p></li><li><strong><em>Speed.</em></strong> <p>The plasmid's Speed and Swim Speed increase to 30 feet.</p></li><li><strong><em>Extra Damage.</em></strong> <p>The plasmid's Vicious Pseudopod deals an extra 1d6 Acid damage on a hit.</p></li></ul>",
+        "entries": [
+          "When in its true, amorphous form, the plasmid gains one of the following benefits until it uses this action again:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Truesight",
+                "entries": [
+                  "The plasmid gains {@sense Truesight|XPHB} with a range of 30 feet."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Blindsight",
+                "entries": [
+                  "The plasmid gains {@sense Blindsight|XPHB} with a range of 60 feet."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Speed",
+                "entries": [
+                  "The plasmid's {@variantrule Speed|XPHB} and {@variantrule Swim Speed|XPHB} increase to 30 feet."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Extra Damage",
+                "entries": [
+                  "The plasmid's Vicious Pseudopod deals an extra {@damage 1d6} Acid damage on a hit."
+                ]
+              }
+            ]
+          }
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6",
+              "type": "Acid"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_shape_shift_psg8",
+        "name": "Shape-Shift",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The plasmid shape-shifts to resemble a Medium or Small object while retaining its game statistics, or it returns to its true amorphous form. Any equipment it is wearing or carrying isn't transformed.</p>",
+        "entries": [
+          "The plasmid shape-shifts to resemble a Medium or Small object while retaining its game statistics, or it returns to its true amorphous form. Any equipment it is wearing or carrying isn't transformed."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/Plasmid.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/Plasmid.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_sahuagin_claw_of_sha_argon_exploringeberron24",
+    "name": "Sahuagin Claw of Sha'argon",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "L E",
+    "ac": [
+      {
+        "value": 18,
+        "condition": null
+      }
+    ],
+    "primaryAc": 18,
+    "acCondition": "",
+    "hp": {
+      "average": 178,
+      "formula": "17d10 + 85"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 50,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 21,
+        "mod": 5
+      },
+      "dex": {
+        "score": 14,
+        "mod": 2
+      },
+      "con": {
+        "score": 21,
+        "mod": 5
+      },
+      "int": {
+        "score": 15,
+        "mod": 2
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 15,
+        "mod": 2
+      }
+    },
+    "str": 21,
+    "dex": 14,
+    "con": 21,
+    "int": 15,
+    "wis": 18,
+    "cha": 15,
+    "proficiencyBonus": 4,
+    "save": {
+      "str": "+9",
+      "dex": "+6",
+      "con": "+9",
+      "wis": "+8"
+    },
+    "saves": {
+      "str": "+9",
+      "dex": "+6",
+      "con": "+9",
+      "wis": "+8"
+    },
+    "skill": {
+      "history": "+6",
+      "perception": "+12",
+      "religion": "+6"
+    },
+    "skills": {
+      "history": "+6",
+      "perception": "+12",
+      "religion": "+6"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 22,
+    "senses": {
+      "passivePerception": 22,
+      "sensesString": "Darkvision 120 ft."
+    },
+    "languages": [
+      "Aquan",
+      "Common",
+      "Sahuagin"
+    ],
+    "cr": "11",
+    "crNumeric": 11,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_sahuagin_claw_of_sha_argon_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 16,
+        "atkMod": 8,
+        "header": "The sahuagin casts one of the following spells, requiring no Material components and using Wisdom as the spellcasting ability (spell save DC 16):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_guidance_xphb",
+            "name": "Guidance",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mending_xphb",
+            "name": "Mending",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 minute",
+            "range": "touch",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (two lodestones)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_resistance_xphb",
+            "name": "Resistance",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_thaumaturgy_xphb",
+            "name": "Thaumaturgy",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2e": [
+            {
+              "spellId": "sp_banishment_xphb",
+              "name": "Banishment",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "charisma",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [],
+              "components": "V, S, M (a pentacle)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_command_xphb",
+              "name": "Command",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [],
+              "components": "V",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_flame_strike_xphb",
+              "name": "Flame Strike",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [
+                {
+                  "formula": "5d6",
+                  "type": "Fire",
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "5d6",
+                  "type": "Radiant",
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (a pinch of sulfur)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_hold_person_xphb",
+              "name": "Hold Person",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [],
+              "components": "V, S, M (a straight piece of iron)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_dispel_magic_xphb",
+              "name": "Dispel Magic",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_freedom_of_movement_xphb",
+              "name": "Freedom of Movement",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a leather strap)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_harm_xphb",
+              "name": "Harm",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Necromancy",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [
+                {
+                  "formula": "14d6",
+                  "type": "Necrotic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Guidance",
+          "Mending",
+          "Resistance",
+          "Thaumaturgy"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_blood_frenzy_8c4s",
+        "name": "Blood Frenzy",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sahuagin has Advantage on attack rolls against any creature that doesn't have all its Hit Points.</p>",
+        "entries": [
+          "The sahuagin has {@variantrule Advantage|XPHB} on attack rolls against any creature that doesn't have all its {@variantrule Hit Points|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_limited_amphibiousness_jkto",
+        "name": "Limited Amphibiousness",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sahuagin can breathe air and water, but it must be submerged at least once every 4 hours to avoid suffocating outside water.</p>",
+        "entries": [
+          "The sahuagin can breathe air and water, but it must be submerged at least once every 4 hours to avoid suffocating outside water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shark_telepathy_a6if",
+        "name": "Shark Telepathy",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The sahuagin can magically control sharks within 120 feet of itself, using a special telepathy.</p>",
+        "entries": [
+          "The sahuagin can magically control sharks within 120 feet of itself, using a special telepathy."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_toughened_carapace_5k7p",
+        "name": "Toughened Carapace",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Any Critical Hit against the sahuagin becomes a normal hit.</p>",
+        "entries": [
+          "Any {@variantrule Critical Hit|XPHB} against the sahuagin becomes a normal hit."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_h9x8",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The sahuagin makes three attacks, using Crushing Claw or Cutter Claw in any combination. It can replace one attack with a use of Spellcasting.</p>",
+        "entries": [
+          "The sahuagin makes three attacks, using Crushing Claw or Cutter Claw in any combination. It can replace one attack with a use of Spellcasting."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_crushing_claw_llt2",
+        "name": "Crushing Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 16 (2d10 + 5) Bludgeoning damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 15) from the Crushing Claw.</p>",
+        "entries": [
+          "{@atkr m} {@hit 9}, reach 10 ft. {@h}16 ({@damage 2d10 + 5}) Bludgeoning damage. If the target is a Medium or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 15}) from the Crushing Claw."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 10,
+          "range": null,
+          "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 15}) from the Crushing Claw",
+          "save": {
+            "dc": 15,
+            "ability": null
+          },
+          "damages": [
+            {
+              "formula": "2d10 + 5",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_cutter_claw_6vkm",
+        "name": "Cutter Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 24 (3d12 + 5) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 9}, reach 10 ft. {@h}24 ({@damage 3d12 + 5}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d12 + 5",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/Sahuagin Claw of Sha'argon.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/Sahuagin Claw of Sha'argon.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_the_forest_queen_exploringeberron24",
+    "name": "The Forest Queen",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Fey",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 20,
+        "condition": null
+      },
+      {
+        "value": 25,
+        "condition": "in the Endless Weald"
+      }
+    ],
+    "primaryAc": 20,
+    "acCondition": "",
+    "hp": {
+      "average": 266,
+      "formula": "28d10 + 112"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 14,
+        "mod": 2
+      },
+      "dex": {
+        "score": 20,
+        "mod": 5
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 20,
+        "mod": 5
+      },
+      "wis": {
+        "score": 22,
+        "mod": 6
+      },
+      "cha": {
+        "score": 26,
+        "mod": 8
+      }
+    },
+    "str": 14,
+    "dex": 20,
+    "con": 18,
+    "int": 20,
+    "wis": 22,
+    "cha": 26,
+    "proficiencyBonus": 7,
+    "save": {
+      "dex": "+12",
+      "wis": "+13",
+      "cha": "+15"
+    },
+    "saves": {
+      "dex": "+12",
+      "wis": "+13",
+      "cha": "+15"
+    },
+    "skill": {
+      "animal handling": "+13",
+      "deception": "+22",
+      "insight": "+13",
+      "nature": "+19",
+      "perception": "+13",
+      "stealth": "+12"
+    },
+    "skills": {
+      "animal handling": "+13",
+      "deception": "+22",
+      "insight": "+13",
+      "nature": "+19",
+      "perception": "+13",
+      "stealth": "+12"
+    },
+    "immune": [
+      "bludgeoning",
+      "piercing",
+      "poison",
+      "slashing"
+    ],
+    "resist": [
+      "cold",
+      "necrotic",
+      "psychic"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "grappled",
+      "poisoned",
+      "restrained"
+    ],
+    "passive": 23,
+    "initiative": {
+      "proficiency": 2
+    },
+    "senses": {
+      "passivePerception": 23,
+      "sensesString": "Truesight 120 ft."
+    },
+    "languages": [
+      "all; telepathy 120 ft."
+    ],
+    "cr": "23",
+    "crNumeric": 23,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_the_forest_queen_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 8,
+        "casterLevel": 1,
+        "dc": 23,
+        "atkMod": 15,
+        "header": "The Forest Queen casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save DC 23, +15 to hit with spell attacks):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_dominate_beast_xphb",
+            "name": "Dominate Beast",
+            "source": "XPHB",
+            "level": 4,
+            "school": "Enchantment",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "wisdom",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 23,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_druidcraft_xphb",
+            "name": "Druidcraft",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_entangle_xphb",
+            "name": "Entangle",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "90 feet",
+            "duration": "Concentration, up to 1 minute",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "strength",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 23,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_thorn_whip_xphb",
+            "name": "Thorn Whip",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "spell",
+            "atkMod": 15,
+            "dc": null,
+            "damageList": [
+              {
+                "formula": "1d6",
+                "type": "Piercing",
+                "label": "",
+                "stat": "none",
+                "cantripScale": true
+              }
+            ],
+            "components": "V, S, M (the stem of a plant with thorns)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_conjure_fey_xphb",
+              "name": "Conjure Fey",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "spell",
+              "atkMod": 15,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "3d12",
+                  "type": "Psychic",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d12",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_heat_metal_xphb",
+              "name": "Heat Metal",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 23,
+              "damageList": [
+                {
+                  "formula": "2d8",
+                  "type": "Fire",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (a piece of iron and a flame)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_polymorph_xphb",
+              "name": "Polymorph",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 23,
+              "damageList": [],
+              "components": "V, S, M (a caterpillar cocoon)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_spike_growth_xphb",
+              "name": "Spike Growth",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "150 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "2d4",
+                  "type": "Piercing",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (seven thorns)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_tree_stride_xphb",
+              "name": "Tree Stride",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_wall_of_thorns_xphb",
+              "name": "Wall of Thorns",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 23,
+              "damageList": [
+                {
+                  "formula": "7d8",
+                  "type": "Piercing",
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "7d8",
+                  "type": "Slashing",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (a handful of thorns)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_dominate_monster_xphb",
+              "name": "Dominate Monster",
+              "source": "XPHB",
+              "level": 8,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Concentration, up to 1 hour",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 23,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_mirage_arcane_xphb",
+              "name": "Mirage Arcane",
+              "source": "XPHB",
+              "level": 7,
+              "school": "Illusion",
+              "castingTime": "10 minutes",
+              "range": "sight",
+              "duration": "10 days",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Dominate Beast",
+          "Druidcraft",
+          "Entangle",
+          "Thorn Whip"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_grace_of_the_forest_queen_8qmj",
+        "name": "Grace of the Forest Queen",
+        "actionType": "trait",
+        "descriptionHtml": "<p>As long as the Forest Queen is within the Endless Weald, her AC is 25.</p>",
+        "entries": [
+          "As long as the Forest Queen is within the Endless Weald, her AC is 25."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_inscrutable_p44v",
+        "name": "Inscrutable",
+        "actionType": "trait",
+        "descriptionHtml": "<p>No magic can observe the Forest Queen remotely or detect her thoughts without her permission. Wisdom (Insight) checks made to ascertain the Forest Queen's intentions or sincerity are made with Disadvantage.</p>",
+        "entries": [
+          "No magic can observe the Forest Queen remotely or detect her thoughts without her permission. Wisdom ({@skill Insight|XPHB}) checks made to ascertain the Forest Queen's intentions or sincerity are made with {@variantrule Disadvantage|XPHB}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__4_day__or_5_day_in_the_endless_weald__gagu",
+        "name": "Legendary Resistance (4/Day, or 5/Day in the Endless Weald)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the Forest Queen fails a saving throw, she can choose to succeed instead.</p>",
+        "entries": [
+          "If the Forest Queen fails a saving throw, she can choose to succeed instead."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_2m5b",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Forest Queen has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The Forest Queen has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_speak_with_beasts_and_plants_gcnc",
+        "name": "Speak with Beasts and Plants",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Forest Queen can communicate with Beasts and Plants as if they shared a language.</p>",
+        "entries": [
+          "The Forest Queen can communicate with Beasts and Plants as if they shared a language."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_thelanian_protagonist_xh39",
+        "name": "Thelanian Protagonist",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If destroyed, the Forest Queen reforms in 1d4 days, reviving with all her Hit Points. The new body appears in an unoccupied space within the Endless Weald.</p>",
+        "entries": [
+          "If destroyed, the Forest Queen reforms in {@dice 1d4} days, reviving with all her {@variantrule Hit Points|XPHB}. The new body appears in an unoccupied space within the Endless Weald."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_woodland_camouflage_dqez",
+        "name": "Woodland Camouflage",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Forest Queen has Advantage on Dexterity (Stealth) checks made to hide in wooded terrain.</p>",
+        "entries": [
+          "The Forest Queen has {@variantrule Advantage|XPHB} on Dexterity ({@skill Stealth|XPHB}) checks made to hide in wooded terrain."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_sen6",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The Forest Queen makes two attacks, using Grasping Vine and Verdant Staff in any combination.</p>",
+        "entries": [
+          "The Forest Queen makes two attacks, using Grasping Vine and Verdant Staff in any combination."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_grasping_vine_rwmi",
+        "name": "Grasping Vine",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +15, reach 40 ft. Hit: 26 (4d8 + 8) Bludgeoning damage, and the target has the Grappled condition (escape DC 23) from a vine that sprouts from the ground.</p>",
+        "entries": [
+          "{@atkr m} {@hit 15}, reach 40 ft. {@h}26 ({@damage 4d8 + 8}) Bludgeoning damage, and the target has the {@condition Grappled|XPHB} condition (escape {@dc 23}) from a vine that sprouts from the ground."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 15,
+          "reach": 40,
+          "range": null,
+          "targets": "and the target has the {@condition Grappled|XPHB} condition (escape {@dc 23}) from a vine that sprouts from the ground",
+          "save": {
+            "dc": 23,
+            "ability": null
+          },
+          "damages": [
+            {
+              "formula": "4d8 + 8",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_verdant_staff_06kg",
+        "name": "Verdant Staff",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +15, reach 10 ft. Hit: 12 (2d6 + 5) Bludgeoning damage plus 21 (6d6) Force damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 15}, reach 10 ft. {@h}12 ({@damage 2d6 + 5}) Bludgeoning damage plus 21 ({@damage 6d6}) Force damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 15,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d6 + 5",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "6d6",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_tree_stride_rjvg",
+        "name": "Tree Stride",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>If within 5 feet of a Large or bigger tree, the Forest Queen teleports to an unoccupied space within 5 feet of a second Large or bigger tree that is within 60 feet of the previous tree.</p>",
+        "entries": [
+          "If within 5 feet of a Large or bigger tree, the Forest Queen teleports to an unoccupied space within 5 feet of a second Large or bigger tree that is within 60 feet of the previous tree."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_bludgeon_hur8",
+          "name": "Bludgeon",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The Forest Queen makes a Grasping Vine or Verdant Staff attack.</p>",
+          "entries": [
+            "The Forest Queen makes a Grasping Vine or Verdant Staff attack."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_crushing_grasp_w6as",
+          "name": "Crushing Grasp",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>One creature that is Grappled by the Forest Queen's Grasping Vine takes 27 (5d10) Bludgeoning damage.</p>",
+          "entries": [
+            "One creature that is {@condition Grappled|XPHB} by the Forest Queen's Grasping Vine takes 27 ({@damage 5d10}) Bludgeoning damage."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [
+              {
+                "formula": "5d10",
+                "type": "Bludgeoning"
+              }
+            ],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_touch_of_nature_a6m3",
+          "name": "Touch of Nature",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The Forest Queen uses Spellcasting to cast a spell of her choice.</p>",
+          "entries": [
+            "The Forest Queen uses Spellcasting to cast a spell of her choice."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "legendaryActionsLair": 4,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/The Forest Queen.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/The Forest Queen.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_the_forgotten_prince_exploringeberron24",
+    "name": "The Forgotten Prince",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Fey",
+    "subtype": "",
+    "alignment": "C N",
+    "ac": [
+      {
+        "value": 22,
+        "condition": null
+      }
+    ],
+    "primaryAc": 22,
+    "acCondition": "",
+    "hp": {
+      "average": 262,
+      "formula": "25d8 + 150"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 20,
+        "mod": 5
+      },
+      "dex": {
+        "score": 26,
+        "mod": 8
+      },
+      "con": {
+        "score": 22,
+        "mod": 6
+      },
+      "int": {
+        "score": 21,
+        "mod": 5
+      },
+      "wis": {
+        "score": 22,
+        "mod": 6
+      },
+      "cha": {
+        "score": 26,
+        "mod": 8
+      }
+    },
+    "str": 20,
+    "dex": 26,
+    "con": 22,
+    "int": 21,
+    "wis": 22,
+    "cha": 26,
+    "proficiencyBonus": 7,
+    "save": {
+      "dex": "+15",
+      "int": "+12",
+      "wis": "+13",
+      "cha": "+15"
+    },
+    "saves": {
+      "dex": "+15",
+      "int": "+12",
+      "wis": "+13",
+      "cha": "+15"
+    },
+    "skill": {
+      "acrobatics": "+15",
+      "deception": "+22",
+      "intimidation": "+15",
+      "perception": "+13",
+      "sleight of hand": "+15",
+      "stealth": "+15",
+      "survival": "+13"
+    },
+    "skills": {
+      "acrobatics": "+15",
+      "deception": "+22",
+      "intimidation": "+15",
+      "perception": "+13",
+      "sleight of hand": "+15",
+      "stealth": "+15",
+      "survival": "+13"
+    },
+    "immune": [],
+    "resist": [
+      "bludgeoning",
+      "necrotic",
+      "piercing",
+      "psychic",
+      "slashing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "petrified"
+    ],
+    "passive": 23,
+    "initiative": {
+      "initiative": 16
+    },
+    "senses": {
+      "passivePerception": 23,
+      "sensesString": "Truesight 120 ft."
+    },
+    "languages": [
+      "all"
+    ],
+    "cr": "21",
+    "crNumeric": 21,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_the_forgotten_prince_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 8,
+        "casterLevel": 1,
+        "dc": 23,
+        "atkMod": 15,
+        "header": "The Forgotten Prince casts one of the following spells, requiring no Material components and using Charisma as the spellcasting ability (spell save DC 23, +15 to hit with spell attacks):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_hex_xphb",
+            "name": "Hex",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Enchantment",
+            "castingTime": "1 bonus action",
+            "range": "90 feet",
+            "duration": "Concentration, up to 1 hour",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [
+              {
+                "formula": "1d6",
+                "type": "Necrotic",
+                "label": "",
+                "stat": "none",
+                "upcastBonus": "",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "V, S, M (the petrified eye of a newt)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_inflict_wounds_xphb",
+            "name": "Inflict Wounds",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Necromancy",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "constitution",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 23,
+            "damageList": [
+              {
+                "formula": "2d10",
+                "type": "Necrotic",
+                "label": "",
+                "stat": "none",
+                "upcastBonus": "1d10",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_mage_hand_xphb",
+            "name": "Mage Hand",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Conjuration",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_nondetection_xphb",
+            "name": "Nondetection",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "8 hours",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (a pinch of diamond dust worth 25+ GP, which the spell consumes)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_pass_without_trace_xphb",
+            "name": "Pass Without Trace",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "Self (30 feet emanation)",
+            "duration": "Concentration, up to 1 hour",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (ashes from burned mistletoe)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_glibness_xphb",
+              "name": "Glibness",
+              "source": "XPHB",
+              "level": 8,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "1 hour",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_greater_invisibility_xphb",
+              "name": "Greater Invisibility",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Illusion",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_mass_suggestion_xphb",
+              "name": "Mass Suggestion",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "24 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 23,
+              "damageList": [],
+              "components": "V, M (a snake's tongue)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_modify_memory_xphb",
+              "name": "Modify Memory",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 23,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Hex",
+          "Inflict Wounds",
+          "Mage Hand",
+          "Nondetection",
+          "Pass Without Trace"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_legendary_resistance__4_day_or_5_day_in_lair__yi0t",
+        "name": "Legendary Resistance (4/Day or 5/Day in Lair)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the Forgotten Prince fails a saving throw, he can choose to succeed instead.</p>",
+        "entries": [
+          "If the Forgotten Prince fails a saving throw, he can choose to succeed instead."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_gixz",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The Forgotten Prince has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The Forgotten Prince has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_stolen_gifts_8qzk",
+        "name": "Stolen Gifts",
+        "actionType": "trait",
+        "descriptionHtml": "<p>At the start of each of his turns, the Forgotten Prince causes one creature he can see within 60 feet to make a DC 25 Wisdom (Perception) check. On a failed check, the Forgotten Prince steals one of the following from the target until the start of the his next turn:</p><ul><li><strong><em>Weapon Skill.</em></strong> <p>For the duration, the target has Disadvantage on weapon attacks, and the Prince has Advantage on Dark Scythe attacks.</p></li><li><strong><em>Spellcasting Ability.</em></strong> <p>For the duration, the target has Disadvantage on spell attacks, and all creatures have Advantage on saving throws made to resist the target's spells. Additionally, all creatures have Disadvantage on saving throws to resist the Prince's spells.</p></li><li><strong><em>Speed.</em></strong> <p>The target's Speed is reduced by 20 feet (to a minimum of 5 feet). Additionally, the Prince's Speed is increased by 20 feet, and he can take the Disengage action as a Bonus Action.</p></li></ul>",
+        "entries": [
+          "At the start of each of his turns, the Forgotten Prince causes one creature he can see within 60 feet to make a {@dc 25} Wisdom ({@skill Perception|XPHB}) check. On a failed check, the Forgotten Prince steals one of the following from the target until the start of the his next turn:",
+          {
+            "type": "list",
+            "style": "list-decimal",
+            "items": [
+              {
+                "type": "item",
+                "name": "Weapon Skill",
+                "entries": [
+                  "For the duration, the target has {@variantrule Disadvantage|XPHB} on weapon attacks, and the Prince has {@variantrule Advantage|XPHB} on Dark Scythe attacks."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Spellcasting Ability",
+                "entries": [
+                  "For the duration, the target has {@variantrule Disadvantage|XPHB} on spell attacks, and all creatures have {@variantrule Advantage|XPHB} on saving throws made to resist the target's spells. Additionally, all creatures have {@variantrule Disadvantage|XPHB} on saving throws to resist the Prince's spells."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Speed",
+                "entries": [
+                  "The target's {@variantrule Speed|XPHB} is reduced by 20 feet (to a minimum of 5 feet). Additionally, the Prince's {@variantrule Speed|XPHB} is increased by 20 feet, and he can take the Disengage action as a {@variantrule Bonus Action|XPHB}."
+                ]
+              }
+            ]
+          }
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 25,
+            "ability": null
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_thelanian_protagonist_prbn",
+        "name": "Thelanian Protagonist",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If destroyed, the Forgotten Prince reforms in 1d4 days, reviving with all his Hit Points. The new body appears in an unoccupied space within the Castle of Forgotten Things.</p>",
+        "entries": [
+          "If destroyed, the Forgotten Prince reforms in {@dice 1d4} days, reviving with all his {@variantrule Hit Points|XPHB}. The new body appears in an unoccupied space within the Castle of Forgotten Things."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_ctuk",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The Forgotten Prince makes two Dark Scythe attacks.</p>",
+        "entries": [
+          "The Forgotten Prince makes two Dark Scythe attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_dark_scythe_edzi",
+        "name": "Dark Scythe",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +15, reach 10 ft. Hit: 29 (6d6 + 8) Necrotic damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 15}, reach 10 ft. {@h}29 ({@damage 6d6 + 8}) Necrotic damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 15,
+          "reach": 10,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "6d6 + 8",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_threads_of_memory__recharge_5__u79a",
+        "name": "Threads of Memory (Recharge 5)",
+        "actionType": "action",
+        "descriptionHtml": "<p>wis DC 23, up to three creatures the Forgotten Prince can see within 60 feet. {@actSaveFail} 28 (8d6) Psychic damage, and the target's memories are stolen. Until the memories return, the target subtracts 2 (1d4) from all D20 Tests. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
+        "entries": [
+          "{@actSave wis} {@dc 23}, up to three creatures the Forgotten Prince can see within 60 feet. {@actSaveFail} 28 ({@damage 8d6}) Psychic damage, and the target's memories are stolen. Until the memories return, the target subtracts 2 ({@dice 1d4}) from all {@dice D20} Tests. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 23,
+            "ability": "WIS"
+          },
+          "damages": [
+            {
+              "formula": "8d6",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": "5"
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_fey_step_a7lh",
+        "name": "Fey Step",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The Forgotten Prince can teleport up to 30 feet to an unoccupied space he can see.</p>",
+        "entries": [
+          "The Forgotten Prince can teleport up to 30 feet to an unoccupied space he can see."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_shadow_stealth_x2xm",
+        "name": "Shadow Stealth",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>The Forgotten Prince can take the Hide action.</p>",
+        "entries": [
+          "The Forgotten Prince can take the Hide action."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [
+      {
+        "id": "act_shadow_burst_2u5r",
+        "name": "Shadow Burst",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} The Forgotten Prince is reduced to 0 Hit Points. {@actResponse} Creatures within 15 feet take 36 (8d8) Necrotic damage.</p>",
+        "entries": [
+          "{@actTrigger} The Forgotten Prince is reduced to 0 {@variantrule Hit Points|XPHB}. {@actResponse} Creatures within 15 feet take 36 ({@damage 8d8}) Necrotic damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "8d8",
+              "type": "Necrotic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_dark_scythe_yuom",
+          "name": "Dark Scythe",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The Forgotten Prince makes one Dark Scythe attack.</p>",
+          "entries": [
+            "The Forgotten Prince makes one Dark Scythe attack."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_fey_step_hqh7",
+          "name": "Fey Step",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The Forgotten Prince uses Fey Step.</p>",
+          "entries": [
+            "The Forgotten Prince uses Fey Step."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_marked_for_vengeance_atmu",
+          "name": "Marked for Vengeance",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>The Forgotten Prince uses Spellcasting to cast Hex (level 5 version).</p>",
+          "entries": [
+            "The Forgotten Prince uses Spellcasting to cast {@spell Hex|XPHB} (level 5 version)."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "legendaryActionsLair": 4,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/The Forgotten Prince.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/The Forgotten Prince.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_valaara_exploringeberron24",
+    "name": "Valaara",
+    "source": "ExploringEberron24",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 20,
+        "condition": null
+      }
+    ],
+    "primaryAc": 20,
+    "acCondition": "",
+    "hp": {
+      "average": 275,
+      "formula": "29d8 + 145"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": true
+    },
+    "abilities": {
+      "str": {
+        "score": 21,
+        "mod": 5
+      },
+      "dex": {
+        "score": 25,
+        "mod": 7
+      },
+      "con": {
+        "score": 21,
+        "mod": 5
+      },
+      "int": {
+        "score": 24,
+        "mod": 7
+      },
+      "wis": {
+        "score": 22,
+        "mod": 6
+      },
+      "cha": {
+        "score": 25,
+        "mod": 7
+      }
+    },
+    "str": 21,
+    "dex": 25,
+    "con": 21,
+    "int": 24,
+    "wis": 22,
+    "cha": 25,
+    "proficiencyBonus": 7,
+    "save": {
+      "int": "+14",
+      "wis": "+13",
+      "cha": "+14"
+    },
+    "saves": {
+      "int": "+14",
+      "wis": "+13",
+      "cha": "+14"
+    },
+    "skill": {
+      "arcana": "+14",
+      "deception": "+14",
+      "nature": "+14",
+      "persuasion": "+13"
+    },
+    "skills": {
+      "arcana": "+14",
+      "deception": "+14",
+      "nature": "+14",
+      "persuasion": "+13"
+    },
+    "immune": [
+      "poison",
+      "psychic"
+    ],
+    "resist": [
+      "bludgeoning",
+      "piercing",
+      "slashing"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "blinded",
+      "charmed",
+      "frightened",
+      "poisoned",
+      "prone"
+    ],
+    "passive": 23,
+    "initiative": {
+      "proficiency": 2
+    },
+    "senses": {
+      "passivePerception": 23,
+      "sensesString": "Truesight 120 ft."
+    },
+    "languages": [
+      "Deep Speech; telepathy 120 ft."
+    ],
+    "cr": "23",
+    "crNumeric": 23,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_alien_mind_ns7r",
+        "name": "Alien Mind",
+        "actionType": "trait",
+        "descriptionHtml": "<p>int DC 22, any creature that tries to read Valaar's thoughts or deals Psychic damage to it. {@actSaveFail} The target has the Stunned condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
+        "entries": [
+          "{@actSave int} {@dc 22}, any creature that tries to read Valaar's thoughts or deals Psychic damage to it. {@actSaveFail} The target has the {@condition Stunned|XPHB} condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 22,
+            "ability": "INT"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_legendary_resistance__4_day__or_5_day_in_lair__edl8",
+        "name": "Legendary Resistance (4/Day, or 5/Day in Lair)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Valaara fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If Valaara fails a saving throw, it can choose to succeed instead."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_lfwz",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Valaara has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "Valaara has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regeneration_5sni",
+        "name": "Regeneration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Valaara regains 20 Hit Points at the start of each of its turns. If Valaara takes Radiant damage, this trait doesn't function on Valaara's next turn. Valaara dies only if it starts its turn with 0 Hit Points and doesn't regenerate.</p>",
+        "entries": [
+          "Valaara regains 20 {@variantrule Hit Points|XPHB} at the start of each of its turns. If Valaara takes Radiant damage, this trait doesn't function on Valaara's next turn. Valaara dies only if it starts its turn with 0 {@variantrule Hit Points|XPHB} and doesn't regenerate."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_dkci",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Valaara makes two attacks, using Chitinous Claw or Chitinous Spine in any combination. It also uses Summon Swarms.</p>",
+        "entries": [
+          "Valaara makes two attacks, using Chitinous Claw or Chitinous Spine in any combination. It also uses Summon Swarms."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_chitinous_claw_n7ko",
+        "name": "Chitinous Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +14, reach 5 ft. Hit: 18 (2d10 + 7) Slashing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 14}, reach 5 ft. {@h}18 ({@damage 2d10 + 7}) Slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 14,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10 + 7",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_chitinous_spine_gips",
+        "name": "Chitinous Spine",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: +14, range 60/180 ft. Hit: 17 (3d6 + 7) Piercing damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 14}, range 60/180 ft. {@h}17 ({@damage 3d6 + 7}) Piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 14,
+          "reach": null,
+          "range": "60/180 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "3d6 + 7",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_summon_swarms_oca9",
+        "name": "Summon Swarms",
+        "actionType": "action",
+        "descriptionHtml": "<p>Valaara summons a swarm of insects or arachnids that fills a 10-foot-radius Sphere [Area of Effect] centered on a point Valaara can see within 120 feet, afflicting all creatures in the area with one of the following effects (roll a 1d6 or choose one), to which Valaara is immune:</p><ul><li><strong><em>Stinging Wasps.</em></strong> <p>con DC 22. {@actSaveFail} 32 (5d12) Piercing damage, and the target has Disadvantage on attack rolls and ability checks until the end of its next turn. {@actSaveSuccess} Half damage and the target doesn't have Disadvantage on attack rolls.</p></li><li><strong><em>Spinning Spiders.</em></strong> <p>dex DC 22. {@actSaveFail} 27 (6d8) Bludgeoning damage. The target has the Restrained condition until the web is destroyed (AC 10; HP 5; Vulnerability to Fire damage; Immunity to Poison and Psychic damage).</p></li><li><strong><em>Venomous Centipedes.</em></strong> <p>con DC 22. {@actSaveFail} 22 (4d10) Poison damage and the target has the Poisoned condition. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p></li><li><strong><em>Infesting Grubs.</em></strong> <p>dex DC 22. {@actSaveFail} The target is infested by 4 (1d4 + 2) rot grubs, taking 3 (1d6) Piercing damage per rot grub at the start of each of its turns. If a target infested with rot grubs ends its turn with 0 Hit Points, the rot grubs burrow into its heart, killing it. Any effect that cures disease kills all rot grubs infesting the target, ending the effect. Applying fire to the bite wound before the end of the creature's next turn deals 1 Fire damage to the creature and kills the rot grubs, ending the effect. After this time, the rot grubs are too far under the skin to be burned.</p></li><li><strong><em>Discordant Cicadas.</em></strong> <p>wis DC 22. {@actSaveFail} The target has the Frightened condition. At the end of each of its turns, the target repeats the save, ending the effect on itself on a success. After 1 minute, it succeeds automatically. While Frightened, the target has the Incapacitated condition. {@actSaveSuccess} The target has Advantage on future saves against this swarm for 24 hours.</p></li></ul>",
+        "entries": [
+          "Valaara summons a swarm of insects or arachnids that fills a 10-foot-radius {@variantrule Sphere [Area of Effect]|XPHB|Sphere} centered on a point Valaara can see within 120 feet, afflicting all creatures in the area with one of the following effects (roll a {@dice 1d6} or choose one), to which Valaara is immune:",
+          {
+            "type": "list",
+            "style": "list-decimal",
+            "items": [
+              {
+                "type": "item",
+                "name": "Stinging Wasps",
+                "entries": [
+                  "{@actSave con} {@dc 22}. {@actSaveFail} 32 ({@damage 5d12}) Piercing damage, and the target has {@variantrule Disadvantage|XPHB} on attack rolls and ability checks until the end of its next turn. {@actSaveSuccess} Half damage and the target doesn't have {@variantrule Disadvantage|XPHB} on attack rolls."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Spinning Spiders",
+                "entries": [
+                  "{@actSave dex} {@dc 22}. {@actSaveFail} 27 ({@damage 6d8}) Bludgeoning damage. The target has the {@condition Restrained|XPHB} condition until the web is destroyed (AC 10; HP 5; {@variantrule Vulnerability|XPHB} to Fire damage; {@variantrule Immunity|XPHB} to Poison and Psychic damage)."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Venomous Centipedes",
+                "entries": [
+                  "{@actSave con} {@dc 22}. {@actSaveFail} 22 ({@damage 4d10}) Poison damage and the target has the {@condition Poisoned|XPHB} condition. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Infesting Grubs",
+                "entries": [
+                  "{@actSave dex} {@dc 22}. {@actSaveFail} The target is infested by 4 ({@dice 1d4 + 2}) rot grubs, taking 3 ({@damage 1d6}) Piercing damage per rot grub at the start of each of its turns. If a target infested with rot grubs ends its turn with 0 {@variantrule Hit Points|XPHB}, the rot grubs burrow into its heart, killing it. Any effect that cures disease kills all rot grubs infesting the target, ending the effect. Applying fire to the bite wound before the end of the creature's next turn deals 1 Fire damage to the creature and kills the rot grubs, ending the effect. After this time, the rot grubs are too far under the skin to be burned."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Discordant Cicadas",
+                "entries": [
+                  "{@actSave wis} {@dc 22}. {@actSaveFail} The target has the {@condition Frightened|XPHB} condition. At the end of each of its turns, the target repeats the save, ending the effect on itself on a success. After 1 minute, it succeeds automatically. While {@condition Frightened|XPHB}, the target has the {@condition Incapacitated|XPHB} condition. {@actSaveSuccess} The target has {@variantrule Advantage|XPHB} on future saves against this swarm for 24 hours."
+                ]
+              }
+            ]
+          }
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 22,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "5d12",
+              "type": "Piercing"
+            },
+            {
+              "formula": "6d8",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "4d10",
+              "type": "Poison"
+            },
+            {
+              "formula": "1d6",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_psychoactive_beetles_kex8",
+        "name": "Psychoactive Beetles",
+        "actionType": "action",
+        "descriptionHtml": "<p>int DC 22. {@actSaveFail} 33 (6d10) Psychic damage.</p>",
+        "entries": [
+          "{@actSave int} {@dc 22}. {@actSaveFail} 33 ({@damage 6d10}) Psychic damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 22,
+            "ability": "INT"
+          },
+          "damages": [
+            {
+              "formula": "6d10",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [
+      {
+        "id": "act_teleport_9im1",
+        "name": "Teleport",
+        "actionType": "bonus",
+        "descriptionHtml": "<p>Valaara teleports up to 30 feet to an unoccupied space it can see.</p>",
+        "entries": [
+          "Valaara teleports up to 30 feet to an unoccupied space it can see."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_throw_spine_q7k8",
+          "name": "Throw Spine",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Valaara makes one Chitinous Spine attack.</p>",
+          "entries": [
+            "Valaara makes one Chitinous Spine attack."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_imaginary_crawlers_vs4i",
+          "name": "Imaginary Crawlers",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>wis DC 22, one creature Valaara can see within 60 feet. {@actSaveFail} 22 (4d10) Psychic damage, and the target immediately loses Concentration on any spell it is Concentration on.</p>",
+          "entries": [
+            "{@actSave wis} {@dc 22}, one creature Valaara can see within 60 feet. {@actSaveFail} 22 ({@damage 4d10}) Psychic damage, and the target immediately loses {@status Concentration|XPHB} on any spell it is {@status Concentration|XPHB|Concentrating} on."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 22,
+              "ability": "WIS"
+            },
+            "damages": [
+              {
+                "formula": "4d10",
+                "type": "Psychic"
+              }
+            ],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_synthesize_worm_ydx3",
+          "name": "Synthesize Worm",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Valaara magically fuses the swarms under its command, forming a Carrion Crawler in an unoccupied space they can see within 90 feet of themself. The Carrion Crawler takes its turn immediately after Valaara on the same Initiative count, and it obeys Valaara.</p>",
+          "entries": [
+            "Valaara magically fuses the swarms under its command, forming a Carrion Crawler in an unoccupied space they can see within 90 feet of themself. The Carrion Crawler takes its turn immediately after Valaara on the same {@variantrule Initiative|XPHB} count, and it obeys Valaara."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "legendaryActionsLair": 4,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/ExploringEberron24/Valaara.webp",
+    "tokenImg": "img/bestiary/tokens/ExploringEberron24/Valaara.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

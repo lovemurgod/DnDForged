@@ -1,0 +1,259 @@
+[
+  {
+    "id": "creature_psionic_spirit_xua2025psion",
+    "name": "Psionic Spirit",
+    "source": "XUA2025Psion",
+    "edition": "2014",
+    "page": 11,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Aberration",
+    "subtype": "",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 10,
+        "condition": null
+      }
+    ],
+    "primaryAc": 10,
+    "acCondition": "",
+    "hp": {
+      "average": 10,
+      "formula": "10"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 11,
+        "mod": 0
+      },
+      "int": {
+        "score": 16,
+        "mod": 3
+      },
+      "wis": {
+        "score": 12,
+        "mod": 1
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": 16,
+    "dex": 12,
+    "con": 11,
+    "int": 16,
+    "wis": 12,
+    "cha": 10,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "psychic"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 11,
+    "senses": {
+      "passivePerception": 11,
+      "sensesString": "Darkvision 60 ft."
+    },
+    "languages": [
+      "Deep Speech; telepathy 60 ft."
+    ],
+    "cr": "0",
+    "crNumeric": 0,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_incorporeal_passage__ectoplasmic_entity_and_ghostly_entity_only__ajg2",
+        "name": "Incorporeal Passage (Ectoplasmic Entity and Ghostly Entity Only)",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The spirit can move through other creatures and objects as if they were Difficult Terrain. If the spirit ends its turn in such a space, it is shunted to the nearest unoccupied space and takes 1d10 Force damage for every 5 feet traveled.</p>",
+        "entries": [
+          "The spirit can move through other creatures and objects as if they were {@variantrule Difficult Terrain|XPHB}. If the spirit ends its turn in such a space, it is shunted to the nearest unoccupied space and takes {@damage 1d10} Force damage for every 5 feet traveled."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Force"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_m53b",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (round down).</p>",
+        "entries": [
+          "The spirit makes a number of attacks equal to half this spell's level (round down)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_crystal_strike__crystal_entity_only__ljzs",
+        "name": "Crystal Strike (Crystal Entity Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d10 + 3 + the spell's level Piercing damage.</p>",
+        "entries": [
+          "{@atkr m} {@hitYourSpellAttack Bonus equals your spell attack modifier}, reach 5 ft. {@h}{@damage 1d10 + 3} + the spell's level Piercing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 3",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_ectoplasmic_splash__ectoplasmic_entity_only__jyv4",
+        "name": "Ectoplasmic Splash (Ectoplasmic Entity Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: Bonus equals your spell attack modifier, range 30 feet. Hit: 1d6 + 3 + the spell's level Psychic damage. Hit or Miss: Each creature in a 5-foot Emanation [Area of Effect] originating from and including the target has its Speed reduced by 5 feet until the end of its next turn.</p>",
+        "entries": [
+          "{@atkr r} {@hitYourSpellAttack Bonus equals your spell attack modifier}, range 30 feet. {@h}{@damage 1d6 + 3} + the spell's level Psychic damage. {@hom}Each creature in a 5-foot {@variantrule Emanation [Area of Effect]|XPHB|Emanation} originating from and including the target has its {@variantrule Speed|XPHB} reduced by 5 feet until the end of its next turn."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 3",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_ephemeral_ray__ghostly_entity_only__3pii",
+        "name": "Ephemeral Ray (Ghostly Entity Only)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: Bonus equals your spell attack modifier, range 120 ft. Hit: 1d8 + 3 + the spell's level Psychic damage.</p>",
+        "entries": [
+          "{@atkr r} {@hitYourSpellAttack Bonus equals your spell attack modifier}, range 120 ft. {@h}{@damage 1d8 + 3} + the spell's level Psychic damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d8 + 3",
+              "type": "Psychic"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [
+      {
+        "id": "act_shard_swarm__crystal_entity_only__2efe",
+        "name": "Shard Swarm (Crystal Entity Only)",
+        "actionType": "reaction",
+        "descriptionHtml": "<p>{@actTrigger} The spirit is hit by a melee attack roll. {@actResponse} The spirit halves the damage (round down) it takes from that attack. The spirit can then teleport to an unoccupied space it can see within 30 feet of itself.</p>",
+        "entries": [
+          "{@actTrigger} The spirit is hit by a melee attack roll. {@actResponse} The spirit halves the damage (round down) it takes from that attack. The spirit can then teleport to an unoccupied space it can see within 30 feet of itself."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/XUA2025Psion/Psionic Spirit.webp",
+    "tokenImg": "img/bestiary/tokens/XUA2025Psion/Psionic Spirit.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

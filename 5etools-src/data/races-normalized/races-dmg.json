@@ -6,7 +6,68 @@
     "page": 282,
     "size": "M",
     "speed": "20 ft, fly 50 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Dive Attack.</strong> <p>If you are flying and dive at least 30 ft. straight toward a target and then hit it with a melee weapon attack, the attack deals an extra 1d6 damage to the target.</p></div>\n<div class=\"compendium-subentry\"><strong>Talons.</strong> <p>You are proficient with your unarmed strikes, which deal 1d4 slashing damage on a hit.</p></div>\n<div class=\"compendium-subentry\"><strong>Language.</strong> <p>You can speak, read, and write Auran.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Dive Attack.</strong> <p>If you are flying and dive at least 30 ft. straight toward a target and then hit it with a melee weapon attack, the attack deals an extra 1d6 damage to the target.</p></div>\n<div class=\"compendium-subentry\"><strong>Talons.</strong> <p>You are proficient with your unarmed strikes, which deal 1d4 slashing damage on a hit.</p></div>\n<div class=\"compendium-subentry\"><strong>Language.</strong> <p>You can speak, read, and write Auran.</p></div>",
+    "traits": [
+      {
+        "id": "trait_aarakocra_dive_attack_dmg",
+        "name": "Dive Attack",
+        "source": "DMG",
+        "raceName": "Aarakocra",
+        "actionType": "passive",
+        "description": "If you are flying and dive at least 30 ft. straight toward a target and then hit it with a melee weapon attack, the attack deals an extra 1d6 damage to the target.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "If you are flying and dive at least 30 ft. straight toward a target and then hit it with a melee weapon attack, the attack deals an extra {@damage 1d6} damage to the target."
+        ]
+      },
+      {
+        "id": "trait_aarakocra_talons_dmg",
+        "name": "Talons",
+        "source": "DMG",
+        "raceName": "Aarakocra",
+        "actionType": "passive",
+        "description": "You are proficient with your unarmed strikes, which deal 1d4 slashing damage on a hit.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You are proficient with your unarmed strikes, which deal {@damage 1d4} slashing damage on a hit."
+        ]
+      },
+      {
+        "id": "trait_aarakocra_language_dmg",
+        "name": "Language",
+        "source": "DMG",
+        "raceName": "Aarakocra",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Auran.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Auran."
+        ]
+      }
+    ],
+    "description": "**Dive Attack**: If you are flying and dive at least 30 ft. straight toward a target and then hit it with a melee weapon attack, the attack deals an extra 1d6 damage to the target.\n\n**Talons**: You are proficient with your unarmed strikes, which deal 1d4 slashing damage on a hit.\n\n**Language**: You can speak, read, and write Auran."
   },
   {
     "id": "race_aasimar_dmg",
@@ -15,7 +76,106 @@
     "page": 286,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Aasimar mature at the same rate as humans but live a few years longer.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Aasimar are built like well-proportioned humans. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Thanks to your celestial heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of grey.</p></div>\n<div class=\"compendium-subentry\"><strong>Celestial Resistance.</strong> <p>You have resistance to necrotic and radiant damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Celestial Legacy.</strong> <p>You know the light cantrip. Once you reach 3rd level, you can cast the lesser restoration spell once with this trait, and you regain the ability to do so when you finish a long rest. Once you reach 5th level, you can cast the daylight spell once with this trait, and you regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Language.</strong> <p>You can speak, read, and write Common and Celestial.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Aasimar mature at the same rate as humans but live a few years longer.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Aasimar are built like well-proportioned humans. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Thanks to your celestial heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of grey.</p></div>\n<div class=\"compendium-subentry\"><strong>Celestial Resistance.</strong> <p>You have resistance to necrotic and radiant damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Celestial Legacy.</strong> <p>You know the light cantrip. Once you reach 3rd level, you can cast the lesser restoration spell once with this trait, and you regain the ability to do so when you finish a long rest. Once you reach 5th level, you can cast the daylight spell once with this trait, and you regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Language.</strong> <p>You can speak, read, and write Common and Celestial.</p></div>",
+    "traits": [
+      {
+        "id": "trait_aasimar_age_dmg",
+        "name": "Age",
+        "source": "DMG",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar mature at the same rate as humans but live a few years longer.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar mature at the same rate as humans but live a few years longer."
+        ]
+      },
+      {
+        "id": "trait_aasimar_size_dmg",
+        "name": "Size",
+        "source": "DMG",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Aasimar are built like well-proportioned humans. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Aasimar are built like well-proportioned humans. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_aasimar_darkvision_dmg",
+        "name": "Darkvision",
+        "source": "DMG",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "Thanks to your celestial heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of grey.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Thanks to your celestial heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of grey."
+        ]
+      },
+      {
+        "id": "trait_aasimar_celestial_resistance_dmg",
+        "name": "Celestial Resistance",
+        "source": "DMG",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You have resistance to necrotic and radiant damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to necrotic and radiant damage."
+        ]
+      },
+      {
+        "id": "trait_aasimar_celestial_legacy_dmg",
+        "name": "Celestial Legacy",
+        "source": "DMG",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You know the light cantrip. Once you reach 3rd level, you can cast the lesser restoration spell once with this trait, and you regain the ability to do so when you finish a long rest. Once you reach 5th level, you can cast the daylight spell once with this trait, and you regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell light} cantrip. Once you reach 3rd level, you can cast the {@spell lesser restoration} spell once with this trait, and you regain the ability to do so when you finish a long rest. Once you reach 5th level, you can cast the {@spell daylight} spell once with this trait, and you regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_aasimar_language_dmg",
+        "name": "Language",
+        "source": "DMG",
+        "raceName": "Aasimar",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Celestial.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Celestial."
+        ]
+      }
+    ],
+    "description": "**Age**: Aasimar mature at the same rate as humans but live a few years longer.\n\n**Size**: Aasimar are built like well-proportioned humans. Your size is Medium.\n\n**Darkvision**: Thanks to your celestial heritage, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of grey.\n\n**Celestial Resistance**: You have resistance to necrotic and radiant damage.\n\n**Celestial Legacy**: You know the light cantrip. Once you reach 3rd level, you can cast the lesser restoration spell once with this trait, and you regain the ability to do so when you finish a long rest. Once you reach 5th level, you can cast the daylight spell once with this trait, and you regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for these spells.\n\n**Language**: You can speak, read, and write Common and Celestial."
   },
   {
     "id": "race_bullywug_dmg",
@@ -24,7 +184,253 @@
     "page": 282,
     "size": "M",
     "speed": "20 ft, swim 40 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Speak with Frogs and Toads.</strong> <p>You can communicate simple concepts to frogs and toads when you speak in Bullywug.</p></div>\n<div class=\"compendium-subentry\"><strong>Swamp Camouflage.</strong> <p>You have advantage on Dexterity (Stealth) checks made to hide in swampy terrain.</p></div>\n<div class=\"compendium-subentry\"><strong>Standing Leap.</strong> <p>Your long jump is up to 20 feet and your high jump is up to 10 feet, with or without a running start.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Bullywug.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Speak with Frogs and Toads.</strong> <p>You can communicate simple concepts to frogs and toads when you speak in Bullywug.</p></div>\n<div class=\"compendium-subentry\"><strong>Swamp Camouflage.</strong> <p>You have advantage on Dexterity (Stealth) checks made to hide in swampy terrain.</p></div>\n<div class=\"compendium-subentry\"><strong>Standing Leap.</strong> <p>Your long jump is up to 20 feet and your high jump is up to 10 feet, with or without a running start.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Bullywug.</p></div>",
+    "traits": [
+      {
+        "id": "trait_bullywug_amphibious_dmg",
+        "name": "Amphibious",
+        "source": "DMG",
+        "raceName": "Bullywug",
+        "actionType": "passive",
+        "description": "You can breathe air and water.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can breathe air and water."
+        ]
+      },
+      {
+        "id": "trait_bullywug_speak_with_frogs_and_toads_dmg",
+        "name": "Speak with Frogs and Toads",
+        "source": "DMG",
+        "raceName": "Bullywug",
+        "actionType": "passive",
+        "description": "You can communicate simple concepts to frogs and toads when you speak in Bullywug.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can communicate simple concepts to frogs and toads when you speak in Bullywug."
+        ]
+      },
+      {
+        "id": "trait_bullywug_swamp_camouflage_dmg",
+        "name": "Swamp Camouflage",
+        "source": "DMG",
+        "raceName": "Bullywug",
+        "actionType": "passive",
+        "description": "You have advantage on Dexterity (Stealth) checks made to hide in swampy terrain.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on Dexterity ({@skill Stealth}) checks made to hide in swampy terrain."
+        ]
+      },
+      {
+        "id": "trait_bullywug_standing_leap_dmg",
+        "name": "Standing Leap",
+        "source": "DMG",
+        "raceName": "Bullywug",
+        "actionType": "passive",
+        "description": "Your long jump is up to 20 feet and your high jump is up to 10 feet, with or without a running start.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your long jump is up to 20 feet and your high jump is up to 10 feet, with or without a running start."
+        ]
+      },
+      {
+        "id": "trait_bullywug_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Bullywug",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Bullywug.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Bullywug."
+        ]
+      }
+    ],
+    "description": "**Amphibious**: You can breathe air and water.\n\n**Speak with Frogs and Toads**: You can communicate simple concepts to frogs and toads when you speak in Bullywug.\n\n**Swamp Camouflage**: You have advantage on Dexterity (Stealth) checks made to hide in swampy terrain.\n\n**Standing Leap**: Your long jump is up to 20 feet and your high jump is up to 10 feet, with or without a running start.\n\n**Languages**: You can speak, read, and write Bullywug."
+  },
+  {
+    "id": "race_elf_eladrin_dmg",
+    "name": "Elf (Eladrin)",
+    "raceName": "Elf",
+    "subraceName": "Eladrin",
+    "source": "DMG",
+    "page": 286,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Elf Weapon Training.</strong> <p>You have proficiency with the longsword, shortsword, shortbow, and longbow.</p></div>\n<div class=\"compendium-subentry\"><strong>Fey Step.</strong> <p>You can cast the misty step spell once using this trait. You regain the ability to do so when you finish a short or long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_elf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old."
+        ]
+      },
+      {
+        "id": "trait_elf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_phb",
+        "name": "Keen Senses",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_phb",
+        "name": "Fey Ancestry",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition charmed}, and magic can't put you to sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_phb",
+        "name": "Trance",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.",
+          "{@note If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.}"
+        ]
+      },
+      {
+        "id": "trait_elf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+        ]
+      },
+      {
+        "id": "trait_elf_eladrin_elf_weapon_training_dmg",
+        "name": "Elf Weapon Training",
+        "source": "DMG",
+        "raceName": "Elf",
+        "subraceName": "Eladrin",
+        "actionType": "passive",
+        "description": "You have proficiency with the longsword, shortsword, shortbow, and longbow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency with the {@item longsword|phb}, {@item shortsword|phb}, {@item shortbow|phb}, and {@item longbow|phb}."
+        ]
+      },
+      {
+        "id": "trait_elf_eladrin_fey_step_dmg",
+        "name": "Fey Step",
+        "source": "DMG",
+        "raceName": "Elf",
+        "subraceName": "Eladrin",
+        "actionType": "passive",
+        "description": "You can cast the misty step spell once using this trait. You regain the ability to do so when you finish a short or long rest.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can cast the {@spell misty step} spell once using this trait. You regain the ability to do so when you finish a short or long rest."
+        ]
+      }
+    ],
+    "description": "**Age**: Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.\n\n**Size**: Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.\n\n**Darkvision**: Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Keen Senses**: You have proficiency in the Perception skill.\n\n**Fey Ancestry**: You have advantage on saving throws against being charmed, and magic can't put you to sleep.\n\n**Trance**: Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.\n\n**Languages**: You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.\n\n**Elf Weapon Training**: You have proficiency with the longsword, shortsword, shortbow, and longbow.\n\n**Fey Step**: You can cast the misty step spell once using this trait. You regain the ability to do so when you finish a short or long rest."
   },
   {
     "id": "race_gnoll_dmg",
@@ -33,7 +439,63 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Bite.</strong> <p>Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Rampage.</strong> <p>When you reduce a creature to 0 hit points with a melee attack on your turn, you can take a bonus action to move up to half your speed and make a bite attack.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Bite.</strong> <p>Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Rampage.</strong> <p>When you reduce a creature to 0 hit points with a melee attack on your turn, you can take a bonus action to move up to half your speed and make a bite attack.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gnoll_bite_dmg",
+        "name": "Bite",
+        "source": "DMG",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4 + @str",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to {@damage 1d4} + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike."
+        ]
+      },
+      {
+        "id": "trait_gnoll_darkvision_dmg",
+        "name": "Darkvision",
+        "source": "DMG",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_gnoll_rampage_dmg",
+        "name": "Rampage",
+        "source": "DMG",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "When you reduce a creature to 0 hit points with a melee attack on your turn, you can take a bonus action to move up to half your speed and make a bite attack.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you reduce a creature to 0 hit points with a melee attack on your turn, you can take a bonus action to move up to half your speed and make a bite attack."
+        ]
+      }
+    ],
+    "description": "**Bite**: Your fanged maw is a natural weapon, which you can use to make unarmed strikes. If you hit with it, you deal piercing damage equal to 1d4 + your Strength modifier, instead of the bludgeoning damage normal for an unarmed strike.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Rampage**: When you reduce a creature to 0 hit points with a melee attack on your turn, you can take a bonus action to move up to half your speed and make a bite attack."
   },
   {
     "id": "race_gnome_deep_dmg",
@@ -42,7 +504,107 @@
     "page": 282,
     "size": "S",
     "speed": "20 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Innate Spellcasting.</strong> <p>You have an innate ability to cast the following spells, requiring no material components:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>At will:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>1/day each:.</strong> </div></li></ul>\n<p>Intelligence is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Stone Camouflage.</strong> <p>You have advantage on Dexterity (Stealth) checks to hide in rocky terrain.</p></div>\n<div class=\"compendium-subentry\"><strong>Gnome Cunning.</strong> <p>You have advantage on Intelligence, Wisdom, and Charisma saving throws against magic.</p></div>\n<div class=\"compendium-subentry\"><strong>Superior Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Gnomish, Terran, and Undercommon.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Innate Spellcasting.</strong> <p>You have an innate ability to cast the following spells, requiring no material components:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>At will:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>1/day each:.</strong> </div></li></ul>\n<p>Intelligence is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Stone Camouflage.</strong> <p>You have advantage on Dexterity (Stealth) checks to hide in rocky terrain.</p></div>\n<div class=\"compendium-subentry\"><strong>Gnome Cunning.</strong> <p>You have advantage on Intelligence, Wisdom, and Charisma saving throws against magic.</p></div>\n<div class=\"compendium-subentry\"><strong>Superior Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Gnomish, Terran, and Undercommon.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gnome_deep_innate_spellcasting_dmg",
+        "name": "Innate Spellcasting",
+        "source": "DMG",
+        "raceName": "Gnome (Deep)",
+        "actionType": "passive",
+        "description": "You have an innate ability to cast the following spells, requiring no material components:\n\n- **At will:** nondetection (self only)\n- **1/day each:** blindness/deafness, blur, disguise self\n\nIntelligence is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have an innate ability to cast the following spells, requiring no material components:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "itemSpell",
+                "name": "At will:",
+                "entry": "{@spell nondetection} (self only)"
+              },
+              {
+                "type": "itemSpell",
+                "name": "1/day each:",
+                "entry": "{@spell blindness/deafness}, {@spell blur}, {@spell disguise self}"
+              }
+            ]
+          },
+          "Intelligence is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_gnome_deep_stone_camouflage_dmg",
+        "name": "Stone Camouflage",
+        "source": "DMG",
+        "raceName": "Gnome (Deep)",
+        "actionType": "passive",
+        "description": "You have advantage on Dexterity (Stealth) checks to hide in rocky terrain.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on Dexterity ({@skill Stealth}) checks to hide in rocky terrain."
+        ]
+      },
+      {
+        "id": "trait_gnome_deep_gnome_cunning_dmg",
+        "name": "Gnome Cunning",
+        "source": "DMG",
+        "raceName": "Gnome (Deep)",
+        "actionType": "passive",
+        "description": "You have advantage on Intelligence, Wisdom, and Charisma saving throws against magic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on Intelligence, Wisdom, and Charisma saving throws against magic."
+        ]
+      },
+      {
+        "id": "trait_gnome_deep_superior_darkvision_dmg",
+        "name": "Superior Darkvision",
+        "source": "DMG",
+        "raceName": "Gnome (Deep)",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_gnome_deep_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Gnome (Deep)",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Gnomish, Terran, and Undercommon.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Gnomish, Terran, and Undercommon."
+        ]
+      }
+    ],
+    "description": "**Innate Spellcasting**: You have an innate ability to cast the following spells, requiring no material components:\n\n- **At will:** nondetection (self only)\n- **1/day each:** blindness/deafness, blur, disguise self\n\nIntelligence is your spellcasting ability for these spells.\n\n**Stone Camouflage**: You have advantage on Dexterity (Stealth) checks to hide in rocky terrain.\n\n**Gnome Cunning**: You have advantage on Intelligence, Wisdom, and Charisma saving throws against magic.\n\n**Superior Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Languages**: You can speak, read, and write Gnomish, Terran, and Undercommon."
   },
   {
     "id": "race_goblin_dmg",
@@ -51,7 +613,58 @@
     "page": 282,
     "size": "S",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Nimble Escape.</strong> <p>You can take the Disengage or Hide action as a bonus action on each of your turns.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Nimble Escape.</strong> <p>You can take the Disengage or Hide action as a bonus action on each of your turns.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>",
+    "traits": [
+      {
+        "id": "trait_goblin_nimble_escape_dmg",
+        "name": "Nimble Escape",
+        "source": "DMG",
+        "raceName": "Goblin",
+        "actionType": "bonus",
+        "description": "You can take the Disengage or Hide action as a bonus action on each of your turns.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can take the {@action Disengage} or {@action Hide} action as a bonus action on each of your turns."
+        ]
+      },
+      {
+        "id": "trait_goblin_darkvision_dmg",
+        "name": "Darkvision",
+        "source": "DMG",
+        "raceName": "Goblin",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_goblin_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Goblin",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Goblin.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Goblin."
+        ]
+      }
+    ],
+    "description": "**Nimble Escape**: You can take the Disengage or Hide action as a bonus action on each of your turns.\n\n**Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Languages**: You can speak, read, and write Common and Goblin."
   },
   {
     "id": "race_grimlock_dmg",
@@ -60,7 +673,74 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Blindsight.</strong> <p>You have no eyes, and cannot be blinded. You can perceive your surroundings within 30 ft., or 10 ft. while deafened. You are considered blind beyond this radius.</p></div>\n<div class=\"compendium-subentry\"><strong>Keen Hearing and Smell.</strong> <p>You have advantage on Wisdom (Perception) checks that rely on hearing or smell.</p></div>\n<div class=\"compendium-subentry\"><strong>Stone Camouflage.</strong> <p>You have advantage on Dexterity (Stealth) checks made to hide in rocky terrain.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Undercommon.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Blindsight.</strong> <p>You have no eyes, and cannot be blinded. You can perceive your surroundings within 30 ft., or 10 ft. while deafened. You are considered blind beyond this radius.</p></div>\n<div class=\"compendium-subentry\"><strong>Keen Hearing and Smell.</strong> <p>You have advantage on Wisdom (Perception) checks that rely on hearing or smell.</p></div>\n<div class=\"compendium-subentry\"><strong>Stone Camouflage.</strong> <p>You have advantage on Dexterity (Stealth) checks made to hide in rocky terrain.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Undercommon.</p></div>",
+    "traits": [
+      {
+        "id": "trait_grimlock_blindsight_dmg",
+        "name": "Blindsight",
+        "source": "DMG",
+        "raceName": "Grimlock",
+        "actionType": "passive",
+        "description": "You have no eyes, and cannot be blinded. You can perceive your surroundings within 30 ft., or 10 ft. while deafened. You are considered blind beyond this radius.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have no eyes, and cannot be {@condition blinded}. You can perceive your surroundings within 30 ft., or 10 ft. while {@condition deafened}. You are considered blind beyond this radius."
+        ]
+      },
+      {
+        "id": "trait_grimlock_keen_hearing_and_smell_dmg",
+        "name": "Keen Hearing and Smell",
+        "source": "DMG",
+        "raceName": "Grimlock",
+        "actionType": "passive",
+        "description": "You have advantage on Wisdom (Perception) checks that rely on hearing or smell.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on Wisdom ({@skill Perception}) checks that rely on hearing or smell."
+        ]
+      },
+      {
+        "id": "trait_grimlock_stone_camouflage_dmg",
+        "name": "Stone Camouflage",
+        "source": "DMG",
+        "raceName": "Grimlock",
+        "actionType": "passive",
+        "description": "You have advantage on Dexterity (Stealth) checks made to hide in rocky terrain.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on Dexterity ({@skill Stealth}) checks made to hide in rocky terrain."
+        ]
+      },
+      {
+        "id": "trait_grimlock_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Grimlock",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Undercommon.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Undercommon."
+        ]
+      }
+    ],
+    "description": "**Blindsight**: You have no eyes, and cannot be blinded. You can perceive your surroundings within 30 ft., or 10 ft. while deafened. You are considered blind beyond this radius.\n\n**Keen Hearing and Smell**: You have advantage on Wisdom (Perception) checks that rely on hearing or smell.\n\n**Stone Camouflage**: You have advantage on Dexterity (Stealth) checks made to hide in rocky terrain.\n\n**Languages**: You can speak, read, and write Undercommon."
   },
   {
     "id": "race_hobgoblin_dmg",
@@ -69,7 +749,63 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Martial Advantage.</strong> <p>Once per turn, you can deal an extra 2d6 damage to a creature you hit with a weapon attack if that creature is within 5 ft. of an ally of yours that isn't incapacitated.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Martial Advantage.</strong> <p>Once per turn, you can deal an extra 2d6 damage to a creature you hit with a weapon attack if that creature is within 5 ft. of an ally of yours that isn't incapacitated.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Goblin.</p></div>",
+    "traits": [
+      {
+        "id": "trait_hobgoblin_martial_advantage_dmg",
+        "name": "Martial Advantage",
+        "source": "DMG",
+        "raceName": "Hobgoblin",
+        "actionType": "passive",
+        "description": "Once per turn, you can deal an extra 2d6 damage to a creature you hit with a weapon attack if that creature is within 5 ft. of an ally of yours that isn't incapacitated.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "2d6",
+        "formulaConfig": {
+          "baseDice": "2d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Once per turn, you can deal an extra {@damage 2d6} damage to a creature you hit with a weapon attack if that creature is within 5 ft. of an ally of yours that isn't {@condition incapacitated}."
+        ]
+      },
+      {
+        "id": "trait_hobgoblin_darkvision_dmg",
+        "name": "Darkvision",
+        "source": "DMG",
+        "raceName": "Hobgoblin",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_hobgoblin_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Hobgoblin",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Goblin.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Goblin."
+        ]
+      }
+    ],
+    "description": "**Martial Advantage**: Once per turn, you can deal an extra 2d6 damage to a creature you hit with a weapon attack if that creature is within 5 ft. of an ally of yours that isn't incapacitated.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Languages**: You can speak, read, and write Common and Goblin."
   },
   {
     "id": "race_kenku_dmg",
@@ -78,7 +814,58 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Ambusher.</strong> <p>In the first round of a combat, you have advantage on attack rolls against any creature who is surprised.</p></div>\n<div class=\"compendium-subentry\"><strong>Mimicry.</strong> <p>You can mimic any sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful 14 Wisdom (Insight) check.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can read and write Common and Auran, but you can only speak using your Mimicry trait.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Ambusher.</strong> <p>In the first round of a combat, you have advantage on attack rolls against any creature who is surprised.</p></div>\n<div class=\"compendium-subentry\"><strong>Mimicry.</strong> <p>You can mimic any sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful 14 Wisdom (Insight) check.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can read and write Common and Auran, but you can only speak using your Mimicry trait.</p></div>",
+    "traits": [
+      {
+        "id": "trait_kenku_ambusher_dmg",
+        "name": "Ambusher",
+        "source": "DMG",
+        "raceName": "Kenku",
+        "actionType": "passive",
+        "description": "In the first round of a combat, you have advantage on attack rolls against any creature who is surprised.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "In the first round of a combat, you have advantage on attack rolls against any creature who is {@status surprised}."
+        ]
+      },
+      {
+        "id": "trait_kenku_mimicry_dmg",
+        "name": "Mimicry",
+        "source": "DMG",
+        "raceName": "Kenku",
+        "actionType": "passive",
+        "description": "You can mimic any sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful 14 Wisdom (Insight) check.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can mimic any sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful {@dc 14} Wisdom ({@skill Insight}) check."
+        ]
+      },
+      {
+        "id": "trait_kenku_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Kenku",
+        "actionType": "passive",
+        "description": "You can read and write Common and Auran, but you can only speak using your Mimicry trait.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can read and write Common and Auran, but you can only speak using your Mimicry trait."
+        ]
+      }
+    ],
+    "description": "**Ambusher**: In the first round of a combat, you have advantage on attack rolls against any creature who is surprised.\n\n**Mimicry**: You can mimic any sounds you have heard, including voices. A creature that hears the sounds can tell they are imitations with a successful 14 Wisdom (Insight) check.\n\n**Languages**: You can read and write Common and Auran, but you can only speak using your Mimicry trait."
   },
   {
     "id": "race_kobold_dmg",
@@ -87,7 +874,74 @@
     "page": 282,
     "size": "S",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Pack Tactics.</strong> <p>You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Sensitivity.</strong> <p>You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Draconic.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Pack Tactics.</strong> <p>You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Sensitivity.</strong> <p>You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Draconic.</p></div>",
+    "traits": [
+      {
+        "id": "trait_kobold_pack_tactics_dmg",
+        "name": "Pack Tactics",
+        "source": "DMG",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ]
+      },
+      {
+        "id": "trait_kobold_sunlight_sensitivity_dmg",
+        "name": "Sunlight Sensitivity",
+        "source": "DMG",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have disadvantage on attack rolls and on Wisdom ({@skill Perception}) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight."
+        ]
+      },
+      {
+        "id": "trait_kobold_darkvision_dmg",
+        "name": "Darkvision",
+        "source": "DMG",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_kobold_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Kobold",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Draconic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Draconic."
+        ]
+      }
+    ],
+    "description": "**Pack Tactics**: You have advantage on an attack roll against a creature if at least one of your allies is within 5 feet of the creature and the ally isn't incapacitated.\n\n**Sunlight Sensitivity**: You have disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight when you, the target of your attack, or whatever you are trying to perceive is in direct sunlight.\n\n**Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Languages**: You can speak, read, and write Common and Draconic."
   },
   {
     "id": "race_kuo_toa_dmg",
@@ -96,7 +950,106 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft, swim 30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Otherworldly Perception.</strong> <p>You can sense the presence of any creature within 30 feet of you that is invisible or on the Ethereal Plane. You can pinpoint such a creature that is moving.</p></div>\n<div class=\"compendium-subentry\"><strong>Slippery.</strong> <p>You have advantage on ability checks and saving throws made to escape a grapple.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Sensitivity.</strong> <p>While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p></div>\n<div class=\"compendium-subentry\"><strong>Superior Darkvision.</strong> <p>You have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Undercommon.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Otherworldly Perception.</strong> <p>You can sense the presence of any creature within 30 feet of you that is invisible or on the Ethereal Plane. You can pinpoint such a creature that is moving.</p></div>\n<div class=\"compendium-subentry\"><strong>Slippery.</strong> <p>You have advantage on ability checks and saving throws made to escape a grapple.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Sensitivity.</strong> <p>While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p></div>\n<div class=\"compendium-subentry\"><strong>Superior Darkvision.</strong> <p>You have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Undercommon.</p></div>",
+    "traits": [
+      {
+        "id": "trait_kuo_toa_amphibious_dmg",
+        "name": "Amphibious",
+        "source": "DMG",
+        "raceName": "Kuo-Toa",
+        "actionType": "passive",
+        "description": "You can breathe air and water.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can breathe air and water."
+        ]
+      },
+      {
+        "id": "trait_kuo_toa_otherworldly_perception_dmg",
+        "name": "Otherworldly Perception",
+        "source": "DMG",
+        "raceName": "Kuo-Toa",
+        "actionType": "passive",
+        "description": "You can sense the presence of any creature within 30 feet of you that is invisible or on the Ethereal Plane. You can pinpoint such a creature that is moving.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can sense the presence of any creature within 30 feet of you that is {@condition invisible} or on the Ethereal Plane. You can pinpoint such a creature that is moving."
+        ]
+      },
+      {
+        "id": "trait_kuo_toa_slippery_dmg",
+        "name": "Slippery",
+        "source": "DMG",
+        "raceName": "Kuo-Toa",
+        "actionType": "passive",
+        "description": "You have advantage on ability checks and saving throws made to escape a grapple.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on ability checks and saving throws made to escape a grapple."
+        ]
+      },
+      {
+        "id": "trait_kuo_toa_sunlight_sensitivity_dmg",
+        "name": "Sunlight Sensitivity",
+        "source": "DMG",
+        "raceName": "Kuo-Toa",
+        "actionType": "passive",
+        "description": "While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom ({@skill Perception}) checks that rely on sight."
+        ]
+      },
+      {
+        "id": "trait_kuo_toa_superior_darkvision_dmg",
+        "name": "Superior Darkvision",
+        "source": "DMG",
+        "raceName": "Kuo-Toa",
+        "actionType": "passive",
+        "description": "You have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_kuo_toa_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Kuo-Toa",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Undercommon.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Undercommon."
+        ]
+      }
+    ],
+    "description": "**Amphibious**: You can breathe air and water.\n\n**Otherworldly Perception**: You can sense the presence of any creature within 30 feet of you that is invisible or on the Ethereal Plane. You can pinpoint such a creature that is moving.\n\n**Slippery**: You have advantage on ability checks and saving throws made to escape a grapple.\n\n**Sunlight Sensitivity**: While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.\n\n**Superior Darkvision**: You have superior vision in dark and dim conditions. You can see in dim light within 120 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Languages**: You can speak, read, and write Undercommon."
   },
   {
     "id": "race_lizardfolk_dmg",
@@ -105,7 +1058,58 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft, swim 30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Hold Breath.</strong> <p>You can hold your breath for up to 15 minutes at a time.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Armor.</strong> <p>Your scales function as natural armor, granting you a +3 bonus to Armor Class.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Draconic.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Hold Breath.</strong> <p>You can hold your breath for up to 15 minutes at a time.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Armor.</strong> <p>Your scales function as natural armor, granting you a +3 bonus to Armor Class.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Draconic.</p></div>",
+    "traits": [
+      {
+        "id": "trait_lizardfolk_hold_breath_dmg",
+        "name": "Hold Breath",
+        "source": "DMG",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "You can hold your breath for up to 15 minutes at a time.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can hold your breath for up to 15 minutes at a time."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_natural_armor_dmg",
+        "name": "Natural Armor",
+        "source": "DMG",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "Your scales function as natural armor, granting you a +3 bonus to Armor Class.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your scales function as natural armor, granting you a +3 bonus to Armor Class."
+        ]
+      },
+      {
+        "id": "trait_lizardfolk_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Lizardfolk",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Draconic.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Draconic."
+        ]
+      }
+    ],
+    "description": "**Hold Breath**: You can hold your breath for up to 15 minutes at a time.\n\n**Natural Armor**: Your scales function as natural armor, granting you a +3 bonus to Armor Class.\n\n**Languages**: You can speak, read, and write Draconic."
   },
   {
     "id": "race_merfolk_dmg",
@@ -114,7 +1118,42 @@
     "page": 282,
     "size": "M",
     "speed": "10 ft, swim 40 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Aquan.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Amphibious.</strong> <p>You can breathe air and water.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Aquan.</p></div>",
+    "traits": [
+      {
+        "id": "trait_merfolk_amphibious_dmg",
+        "name": "Amphibious",
+        "source": "DMG",
+        "raceName": "Merfolk",
+        "actionType": "passive",
+        "description": "You can breathe air and water.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can breathe air and water."
+        ]
+      },
+      {
+        "id": "trait_merfolk_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Merfolk",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Aquan.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Aquan."
+        ]
+      }
+    ],
+    "description": "**Amphibious**: You can breathe air and water.\n\n**Languages**: You can speak, read, and write Common and Aquan."
   },
   {
     "id": "race_orc_dmg",
@@ -123,7 +1162,58 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Aggressive.</strong> <p>As a bonus action, you can move up to your speed toward a hostile creature that you can see.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Orc.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Aggressive.</strong> <p>As a bonus action, you can move up to your speed toward a hostile creature that you can see.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Orc.</p></div>",
+    "traits": [
+      {
+        "id": "trait_orc_aggressive_dmg",
+        "name": "Aggressive",
+        "source": "DMG",
+        "raceName": "Orc",
+        "actionType": "bonus",
+        "description": "As a bonus action, you can move up to your speed toward a hostile creature that you can see.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a bonus action, you can move up to your speed toward a hostile creature that you can see."
+        ]
+      },
+      {
+        "id": "trait_orc_darkvision_dmg",
+        "name": "Darkvision",
+        "source": "DMG",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_orc_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Orc.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Orc."
+        ]
+      }
+    ],
+    "description": "**Aggressive**: As a bonus action, you can move up to your speed toward a hostile creature that you can see.\n\n**Darkvision**: Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Languages**: You can speak, read, and write Common and Orc."
   },
   {
     "id": "race_skeleton_dmg",
@@ -132,7 +1222,90 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>You are Undead.</p></div>\n<div class=\"compendium-subentry\"><strong>Brittle Bones.</strong> <p>You are vulnerable to bludgeoning damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Undead Nature.</strong> <p>You are immune to poison damage and exhaustion, and you can't be poisoned. You don't require air, food, drink, or sleep.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can't speak, but you can understand the languages you knew in life.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>You are Undead.</p></div>\n<div class=\"compendium-subentry\"><strong>Brittle Bones.</strong> <p>You are vulnerable to bludgeoning damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Undead Nature.</strong> <p>You are immune to poison damage and exhaustion, and you can't be poisoned. You don't require air, food, drink, or sleep.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can't speak, but you can understand the languages you knew in life.</p></div>",
+    "traits": [
+      {
+        "id": "trait_skeleton_creature_type_dmg",
+        "name": "Creature Type",
+        "source": "DMG",
+        "raceName": "Skeleton",
+        "actionType": "passive",
+        "description": "You are Undead.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are Undead."
+        ]
+      },
+      {
+        "id": "trait_skeleton_brittle_bones_dmg",
+        "name": "Brittle Bones",
+        "source": "DMG",
+        "raceName": "Skeleton",
+        "actionType": "passive",
+        "description": "You are vulnerable to bludgeoning damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are vulnerable to bludgeoning damage."
+        ]
+      },
+      {
+        "id": "trait_skeleton_undead_nature_dmg",
+        "name": "Undead Nature",
+        "source": "DMG",
+        "raceName": "Skeleton",
+        "actionType": "passive",
+        "description": "You are immune to poison damage and exhaustion, and you can't be poisoned. You don't require air, food, drink, or sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are immune to poison damage and {@condition exhaustion}, and you can't be {@condition poisoned}. You don't require air, food, drink, or sleep."
+        ]
+      },
+      {
+        "id": "trait_skeleton_darkvision_dmg",
+        "name": "Darkvision",
+        "source": "DMG",
+        "raceName": "Skeleton",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_skeleton_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Skeleton",
+        "actionType": "passive",
+        "description": "You can't speak, but you can understand the languages you knew in life.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can't speak, but you can understand the languages you knew in life."
+        ]
+      }
+    ],
+    "description": "**Creature Type**: You are Undead.\n\n**Brittle Bones**: You are vulnerable to bludgeoning damage.\n\n**Undead Nature**: You are immune to poison damage and exhaustion, and you can't be poisoned. You don't require air, food, drink, or sleep.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Languages**: You can't speak, but you can understand the languages you knew in life."
   },
   {
     "id": "race_troglodyte_dmg",
@@ -141,7 +1314,106 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Chameleon Skin.</strong> <p>You have advantage on Dexterity (Stealth) checks made to hide.</p></div>\n<div class=\"compendium-subentry\"><strong>Stench.</strong> <p>Any creature other than a troglodyte that starts its turn within 5 ft. of you must succeed on a 12 Constitution saving throw or be poisoned until the start of the creature's next turn. On a successful saving throw, the creature is immune to the stench of all troglodytes for 1 hour.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Sensitivity.</strong> <p>While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Armor.</strong> <p>Your thick hide grants you a +1 bonus to Armor Class.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Troglodyte.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Chameleon Skin.</strong> <p>You have advantage on Dexterity (Stealth) checks made to hide.</p></div>\n<div class=\"compendium-subentry\"><strong>Stench.</strong> <p>Any creature other than a troglodyte that starts its turn within 5 ft. of you must succeed on a 12 Constitution saving throw or be poisoned until the start of the creature's next turn. On a successful saving throw, the creature is immune to the stench of all troglodytes for 1 hour.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Sensitivity.</strong> <p>While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Armor.</strong> <p>Your thick hide grants you a +1 bonus to Armor Class.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Troglodyte.</p></div>",
+    "traits": [
+      {
+        "id": "trait_troglodyte_chameleon_skin_dmg",
+        "name": "Chameleon Skin",
+        "source": "DMG",
+        "raceName": "Troglodyte",
+        "actionType": "passive",
+        "description": "You have advantage on Dexterity (Stealth) checks made to hide.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on Dexterity ({@skill Stealth}) checks made to hide."
+        ]
+      },
+      {
+        "id": "trait_troglodyte_stench_dmg",
+        "name": "Stench",
+        "source": "DMG",
+        "raceName": "Troglodyte",
+        "actionType": "passive",
+        "description": "Any creature other than a troglodyte that starts its turn within 5 ft. of you must succeed on a 12 Constitution saving throw or be poisoned until the start of the creature's next turn. On a successful saving throw, the creature is immune to the stench of all troglodytes for 1 hour.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Any creature other than a troglodyte that starts its turn within 5 ft. of you must succeed on a {@dc 12} Constitution saving throw or be {@condition poisoned} until the start of the creature's next turn. On a successful saving throw, the creature is immune to the stench of all troglodytes for 1 hour."
+        ]
+      },
+      {
+        "id": "trait_troglodyte_sunlight_sensitivity_dmg",
+        "name": "Sunlight Sensitivity",
+        "source": "DMG",
+        "raceName": "Troglodyte",
+        "actionType": "passive",
+        "description": "While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom ({@skill Perception}) checks that rely on sight."
+        ]
+      },
+      {
+        "id": "trait_troglodyte_natural_armor_dmg",
+        "name": "Natural Armor",
+        "source": "DMG",
+        "raceName": "Troglodyte",
+        "actionType": "passive",
+        "description": "Your thick hide grants you a +1 bonus to Armor Class.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your thick hide grants you a +1 bonus to Armor Class."
+        ]
+      },
+      {
+        "id": "trait_troglodyte_darkvision_dmg",
+        "name": "Darkvision",
+        "source": "DMG",
+        "raceName": "Troglodyte",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_troglodyte_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Troglodyte",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Troglodyte.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Troglodyte."
+        ]
+      }
+    ],
+    "description": "**Chameleon Skin**: You have advantage on Dexterity (Stealth) checks made to hide.\n\n**Stench**: Any creature other than a troglodyte that starts its turn within 5 ft. of you must succeed on a 12 Constitution saving throw or be poisoned until the start of the creature's next turn. On a successful saving throw, the creature is immune to the stench of all troglodytes for 1 hour.\n\n**Sunlight Sensitivity**: While in sunlight, you have disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.\n\n**Natural Armor**: Your thick hide grants you a +1 bonus to Armor Class.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Languages**: You can speak, read, and write Troglodyte."
   },
   {
     "id": "race_zombie_dmg",
@@ -150,6 +1422,89 @@
     "page": 282,
     "size": "M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>You are Undead.</p></div>\n<div class=\"compendium-subentry\"><strong>Undead Fortitude.</strong> <p>If damage reduces you to 0 hit points, you must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, you drop to 1 hit point instead.</p></div>\n<div class=\"compendium-subentry\"><strong>Undead Nature.</strong> <p>You are immune to poison damage, and you can't be poisoned. You don't require air, food, drink, or sleep.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can't speak, but you can understand the languages you knew in life.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Creature Type.</strong> <p>You are Undead.</p></div>\n<div class=\"compendium-subentry\"><strong>Undead Fortitude.</strong> <p>If damage reduces you to 0 hit points, you must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, you drop to 1 hit point instead.</p></div>\n<div class=\"compendium-subentry\"><strong>Undead Nature.</strong> <p>You are immune to poison damage, and you can't be poisoned. You don't require air, food, drink, or sleep.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can't speak, but you can understand the languages you knew in life.</p></div>",
+    "traits": [
+      {
+        "id": "trait_zombie_creature_type_dmg",
+        "name": "Creature Type",
+        "source": "DMG",
+        "raceName": "Zombie",
+        "actionType": "passive",
+        "description": "You are Undead.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are Undead."
+        ]
+      },
+      {
+        "id": "trait_zombie_undead_fortitude_dmg",
+        "name": "Undead Fortitude",
+        "source": "DMG",
+        "raceName": "Zombie",
+        "actionType": "passive",
+        "description": "If damage reduces you to 0 hit points, you must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, you drop to 1 hit point instead.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "If damage reduces you to 0 hit points, you must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, you drop to 1 hit point instead."
+        ]
+      },
+      {
+        "id": "trait_zombie_undead_nature_dmg",
+        "name": "Undead Nature",
+        "source": "DMG",
+        "raceName": "Zombie",
+        "actionType": "passive",
+        "description": "You are immune to poison damage, and you can't be poisoned. You don't require air, food, drink, or sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are immune to poison damage, and you can't be {@condition poisoned}. You don't require air, food, drink, or sleep."
+        ]
+      },
+      {
+        "id": "trait_zombie_darkvision_dmg",
+        "name": "Darkvision",
+        "source": "DMG",
+        "raceName": "Zombie",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_zombie_languages_dmg",
+        "name": "Languages",
+        "source": "DMG",
+        "raceName": "Zombie",
+        "actionType": "passive",
+        "description": "You can't speak, but you can understand the languages you knew in life.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can't speak, but you can understand the languages you knew in life."
+        ]
+      }
+    ],
+    "description": "**Creature Type**: You are Undead.\n\n**Undead Fortitude**: If damage reduces you to 0 hit points, you must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, you drop to 1 hit point instead.\n\n**Undead Nature**: You are immune to poison damage, and you can't be poisoned. You don't require air, food, drink, or sleep.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Languages**: You can't speak, but you can understand the languages you knew in life."
   }
 ]

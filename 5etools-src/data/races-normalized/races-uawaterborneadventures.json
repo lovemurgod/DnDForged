@@ -1,0 +1,179 @@
+[
+  {
+    "id": "race_minotaur_krynn_uawaterborneadventures",
+    "name": "Minotaur (Krynn)",
+    "source": "UAWaterborneAdventures",
+    "page": 1,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<p>Your minotaur character possesses a number of traits that reflect the power and superiority of your kind.</p>\n<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Minotaurs enter adulthood at around the age of 17 and can live up to 150 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Minotaurs believe in a strict code of honor, and thus tend toward law. They are loyal to the death and make implacable enemies, even as their brutal culture and disdain for weakness push them toward evil.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Minotaurs typically stand well over 6 feet tall and weigh an average of 300 pounds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Conqueror's Virtue.</strong> <p>From a young age, you focused on one of the three virtues of strength, cunning, or intellect. Your choice of your Strength, Intelligence, or Wisdom score increases by 1.</p></div>\n<div class=\"compendium-subentry\"><strong>Horns.</strong> <p>You are never unarmed. You are proficient with your horns, which are a melee weapon that deals 1d10 piercing damage. Your horns grant you advantage on all checks made to shove a creature, but not to avoid being shoved yourself.</p></div>\n<div class=\"compendium-subentry\"><strong>Goring Rush.</strong> <p>When you use the Dash action during your turn, you can make a melee attack with your horns as a bonus action.</p></div>\n<div class=\"compendium-subentry\"><strong>Hammering Horns.</strong> <p>When you use the Attack action during your turn to make a melee attack, you can attempt to shove a creature with your horns as a bonus action. You cannot use this shove attempt to knock a creature prone.</p></div>\n<div class=\"compendium-subentry\"><strong>Labyrinthine Recall.</strong> <p>You can perfectly recall any path you have traveled.</p></div>\n<div class=\"compendium-subentry\"><strong>Sea Reaver.</strong> <p>You gain proficiency with navigator's tools and vehicles (water)|items|source=phb;dmg|miscellaneous=mundane|type=vehicle (water).</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common.</p></div>",
+    "traits": [
+      {
+        "id": "trait_minotaur_krynn_age_uawaterborneadventures",
+        "name": "Age",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "passive",
+        "description": "Minotaurs enter adulthood at around the age of 17 and can live up to 150 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Minotaurs enter adulthood at around the age of 17 and can live up to 150 years."
+        ]
+      },
+      {
+        "id": "trait_minotaur_krynn_alignment_uawaterborneadventures",
+        "name": "Alignment",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "passive",
+        "description": "Minotaurs believe in a strict code of honor, and thus tend toward law. They are loyal to the death and make implacable enemies, even as their brutal culture and disdain for weakness push them toward evil.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Minotaurs believe in a strict code of honor, and thus tend toward law. They are loyal to the death and make implacable enemies, even as their brutal culture and disdain for weakness push them toward evil."
+        ]
+      },
+      {
+        "id": "trait_minotaur_krynn_size_uawaterborneadventures",
+        "name": "Size",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "passive",
+        "description": "Minotaurs typically stand well over 6 feet tall and weigh an average of 300 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Minotaurs typically stand well over 6 feet tall and weigh an average of 300 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_minotaur_krynn_conqueror_s_virtue_uawaterborneadventures",
+        "name": "Conqueror's Virtue",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "passive",
+        "description": "From a young age, you focused on one of the three virtues of strength, cunning, or intellect. Your choice of your Strength, Intelligence, or Wisdom score increases by 1.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "From a young age, you focused on one of the three virtues of strength, cunning, or intellect. Your choice of your Strength, Intelligence, or Wisdom score increases by 1."
+        ]
+      },
+      {
+        "id": "trait_minotaur_krynn_horns_uawaterborneadventures",
+        "name": "Horns",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "passive",
+        "description": "You are never unarmed. You are proficient with your horns, which are a melee weapon that deals 1d10 piercing damage. Your horns grant you advantage on all checks made to shove a creature, but not to avoid being shoved yourself.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d10",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You are never unarmed. You are proficient with your horns, which are a melee weapon that deals {@damage 1d10} piercing damage. Your horns grant you advantage on all checks made to {@action shove} a creature, but not to avoid being shoved yourself."
+        ]
+      },
+      {
+        "id": "trait_minotaur_krynn_goring_rush_uawaterborneadventures",
+        "name": "Goring Rush",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "bonus",
+        "description": "When you use the Dash action during your turn, you can make a melee attack with your horns as a bonus action.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you use the {@action Dash} action during your turn, you can make a melee attack with your horns as a bonus action."
+        ]
+      },
+      {
+        "id": "trait_minotaur_krynn_hammering_horns_uawaterborneadventures",
+        "name": "Hammering Horns",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "bonus",
+        "description": "When you use the Attack action during your turn to make a melee attack, you can attempt to shove a creature with your horns as a bonus action. You cannot use this shove attempt to knock a creature prone.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you use the {@action Attack} action during your turn to make a melee attack, you can attempt to {@action shove} a creature with your horns as a bonus action. You cannot use this {@action shove} attempt to knock a creature {@condition prone}."
+        ]
+      },
+      {
+        "id": "trait_minotaur_krynn_labyrinthine_recall_uawaterborneadventures",
+        "name": "Labyrinthine Recall",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "passive",
+        "description": "You can perfectly recall any path you have traveled.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can perfectly recall any path you have traveled."
+        ]
+      },
+      {
+        "id": "trait_minotaur_krynn_sea_reaver_uawaterborneadventures",
+        "name": "Sea Reaver",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "passive",
+        "description": "You gain proficiency with navigator's tools and vehicles (water)|items|source=phb;dmg|miscellaneous=mundane|type=vehicle (water).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain proficiency with {@item navigator's tools|phb} and {@filter vehicles (water)|items|source=phb;dmg|miscellaneous=mundane|type=vehicle (water)}."
+        ]
+      },
+      {
+        "id": "trait_minotaur_krynn_languages_uawaterborneadventures",
+        "name": "Languages",
+        "source": "UAWaterborneAdventures",
+        "raceName": "Minotaur (Krynn)",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write {@language Common}."
+        ]
+      }
+    ],
+    "description": "Your minotaur character possesses a number of traits that reflect the power and superiority of your kind."
+  }
+]

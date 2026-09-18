@@ -1,0 +1,505 @@
+[
+  {
+    "id": "race_elf_eladrin_uaeladrinandgith",
+    "name": "Elf (Eladrin)",
+    "raceName": "Elf",
+    "subraceName": "Eladrin",
+    "source": "UAEladrinAndGith",
+    "page": 1,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Fey Step.</strong> <p>As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Shifting Seasons.</strong> <p>At the end of each short or long rest, you can align yourself with the magic of one season, regardless of the season that is dominating your personality. Doing so allows you to cast a certain cantrip, as shown in the Shifting Seasons Cantrips table. When you align yourself with a season's magic, you lose the cantrip associated with the previous season and gain the cantrip associated with the new season.</p>\n<p>Your spellcasting ability for these cantrips is Intelligence or Charisma, whichever is higher.</p>\n<table class=\"compendium-table\"><thead><tr><th>Season</th><th>Cantrip</th></tr></thead><tbody><tr><td>Autumn</td><td>Friends</td></tr><tr><td>Winter</td><td>Chill touch</td></tr><tr><td>Spring</td><td>Minor illusion</td></tr><tr><td>Summer</td><td>Fire bolt</td></tr></tbody></table></div>",
+    "traits": [
+      {
+        "id": "trait_elf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old."
+        ]
+      },
+      {
+        "id": "trait_elf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_phb",
+        "name": "Keen Senses",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_phb",
+        "name": "Fey Ancestry",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition charmed}, and magic can't put you to sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_phb",
+        "name": "Trance",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.",
+          "{@note If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.}"
+        ]
+      },
+      {
+        "id": "trait_elf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+        ]
+      },
+      {
+        "id": "trait_elf_eladrin_fey_step_uaeladrinandgith",
+        "name": "Fey Step",
+        "source": "UAEladrinAndGith",
+        "raceName": "Elf",
+        "subraceName": "Eladrin",
+        "actionType": "bonus",
+        "description": "As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a short or long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_elf_eladrin_shifting_seasons_uaeladrinandgith",
+        "name": "Shifting Seasons",
+        "source": "UAEladrinAndGith",
+        "raceName": "Elf",
+        "subraceName": "Eladrin",
+        "actionType": "passive",
+        "description": "At the end of each short or long rest, you can align yourself with the magic of one season, regardless of the season that is dominating your personality. Doing so allows you to cast a certain cantrip, as shown in the Shifting Seasons Cantrips table. When you align yourself with a season's magic, you lose the cantrip associated with the previous season and gain the cantrip associated with the new season.\n\nYour spellcasting ability for these cantrips is Intelligence or Charisma, whichever is higher.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "At the end of each short or long rest, you can align yourself with the magic of one season, regardless of the season that is dominating your personality. Doing so allows you to cast a certain cantrip, as shown in the Shifting Seasons Cantrips table. When you align yourself with a season's magic, you lose the cantrip associated with the previous season and gain the cantrip associated with the new season.",
+          "Your spellcasting ability for these cantrips is Intelligence or Charisma, whichever is higher.",
+          {
+            "type": "table",
+            "caption": "Shifting Seasons Cantrips",
+            "colLabels": [
+              "Season",
+              "Cantrip"
+            ],
+            "colStyles": [
+              "col-6 text-center",
+              "col-6 text-center"
+            ],
+            "rows": [
+              [
+                "Autumn",
+                "{@spell Friends}"
+              ],
+              [
+                "Winter",
+                "{@spell Chill touch}"
+              ],
+              [
+                "Spring",
+                "{@spell Minor illusion}"
+              ],
+              [
+                "Summer",
+                "{@spell Fire bolt}"
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Age**: Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.\n\n**Size**: Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.\n\n**Darkvision**: Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Keen Senses**: You have proficiency in the Perception skill.\n\n**Fey Ancestry**: You have advantage on saving throws against being charmed, and magic can't put you to sleep.\n\n**Trance**: Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.\n\n**Languages**: You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.\n\n**Fey Step**: As a bonus action, you can magically teleport up to 30 feet to an unoccupied space you can see. Once you use this trait, you can't do so again until you finish a short or long rest.\n\n**Shifting Seasons**: At the end of each short or long rest, you can align yourself with the magic of one season, regardless of the season that is dominating your personality. Doing so allows you to cast a certain cantrip, as shown in the Shifting Seasons Cantrips table. When you align yourself with a season's magic, you lose the cantrip associated with the previous season and gain the cantrip associated with the new season.\n\nYour spellcasting ability for these cantrips is Intelligence or Charisma, whichever is higher."
+  },
+  {
+    "id": "race_gith_uaeladrinandgith",
+    "name": "Gith",
+    "source": "UAEladrinAndGith",
+    "page": 2,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Gith reach adulthood in their late teens and live for about a century.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Gith are taller and leaner than humans, with most a slender 6 feet in height.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Gith.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gith_age_uaeladrinandgith",
+        "name": "Age",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith reach adulthood in their late teens and live for about a century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith reach adulthood in their late teens and live for about a century."
+        ]
+      },
+      {
+        "id": "trait_gith_size_uaeladrinandgith",
+        "name": "Size",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith are taller and leaner than humans, with most a slender 6 feet in height.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith are taller and leaner than humans, with most a slender 6 feet in height."
+        ]
+      },
+      {
+        "id": "trait_gith_languages_uaeladrinandgith",
+        "name": "Languages",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Gith.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Gith."
+        ]
+      }
+    ],
+    "description": "**Age**: Gith reach adulthood in their late teens and live for about a century.\n\n**Size**: Gith are taller and leaner than humans, with most a slender 6 feet in height.\n\n**Languages**: You can speak, read, and write Common and Gith."
+  },
+  {
+    "id": "race_gith_githyanki_uaeladrinandgith",
+    "name": "Gith (Githyanki)",
+    "raceName": "Gith",
+    "subraceName": "Githyanki",
+    "source": "UAEladrinAndGith",
+    "page": 2,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Githyanki tend toward lawful evil. They are self-centered, violent, and arrogant, yet they remain the faithful servants of their lich-queen, Vlaakith. Renegade githyanki tend toward chaos as they have forsaken her will.</p></div>\n<div class=\"compendium-subentry\"><strong>Decadent Mastery.</strong> <p>You learn one language of your choice, and you are proficient with one skill or tool|phb|5|tools of your choice. In the timeless city of Tu'narath, githyanki have bountiful time to master odd bits of knowledge.</p></div>\n<div class=\"compendium-subentry\"><strong>Martial Prodigy.</strong> <p>You are proficient with light and medium armor. Your people are ever ready for war.</p></div>\n<div class=\"compendium-subentry\"><strong>Githyanki Psionics.</strong> <p>You know the mage hand cantrip. When you reach 3rd level, you can cast jump once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the misty step spell once with this trait, and you regain the ability to do so when you finish a long rest.</p>\n<p>Intelligence is your spellcasting ability for these spells. You can cast all of them without components.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gith_age_uaeladrinandgith",
+        "name": "Age",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith reach adulthood in their late teens and live for about a century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith reach adulthood in their late teens and live for about a century."
+        ]
+      },
+      {
+        "id": "trait_gith_size_uaeladrinandgith",
+        "name": "Size",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith are taller and leaner than humans, with most a slender 6 feet in height.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith are taller and leaner than humans, with most a slender 6 feet in height."
+        ]
+      },
+      {
+        "id": "trait_gith_languages_uaeladrinandgith",
+        "name": "Languages",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Gith.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Gith."
+        ]
+      },
+      {
+        "id": "trait_gith_githyanki_alignment_uaeladrinandgith",
+        "name": "Alignment",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "subraceName": "Githyanki",
+        "actionType": "passive",
+        "description": "Githyanki tend toward lawful evil. They are self-centered, violent, and arrogant, yet they remain the faithful servants of their lich-queen, Vlaakith. Renegade githyanki tend toward chaos as they have forsaken her will.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Githyanki tend toward lawful evil. They are self-centered, violent, and arrogant, yet they remain the faithful servants of their lich-queen, Vlaakith. Renegade githyanki tend toward chaos as they have forsaken her will."
+        ]
+      },
+      {
+        "id": "trait_gith_githyanki_decadent_mastery_uaeladrinandgith",
+        "name": "Decadent Mastery",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "subraceName": "Githyanki",
+        "actionType": "passive",
+        "description": "You learn one language of your choice, and you are proficient with one skill or tool|phb|5|tools of your choice. In the timeless city of Tu'narath, githyanki have bountiful time to master odd bits of knowledge.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You learn one language of your choice, and you are proficient with one skill or {@book tool|phb|5|tools} of your choice. In the timeless city of Tu'narath, githyanki have bountiful time to master odd bits of knowledge."
+        ]
+      },
+      {
+        "id": "trait_gith_githyanki_martial_prodigy_uaeladrinandgith",
+        "name": "Martial Prodigy",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "subraceName": "Githyanki",
+        "actionType": "passive",
+        "description": "You are proficient with light and medium armor. Your people are ever ready for war.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are proficient with light and medium armor. Your people are ever ready for war."
+        ]
+      },
+      {
+        "id": "trait_gith_githyanki_githyanki_psionics_uaeladrinandgith",
+        "name": "Githyanki Psionics",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "subraceName": "Githyanki",
+        "actionType": "passive",
+        "description": "You know the mage hand cantrip. When you reach 3rd level, you can cast jump once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the misty step spell once with this trait, and you regain the ability to do so when you finish a long rest.\n\nIntelligence is your spellcasting ability for these spells. You can cast all of them without components.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell mage hand} cantrip. When you reach 3rd level, you can cast {@spell jump} once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell misty step} spell once with this trait, and you regain the ability to do so when you finish a long rest.",
+          "Intelligence is your spellcasting ability for these spells. You can cast all of them without components."
+        ]
+      }
+    ],
+    "description": "**Age**: Gith reach adulthood in their late teens and live for about a century.\n\n**Size**: Gith are taller and leaner than humans, with most a slender 6 feet in height.\n\n**Languages**: You can speak, read, and write Common and Gith.\n\n**Alignment**: Githyanki tend toward lawful evil. They are self-centered, violent, and arrogant, yet they remain the faithful servants of their lich-queen, Vlaakith. Renegade githyanki tend toward chaos as they have forsaken her will.\n\n**Decadent Mastery**: You learn one language of your choice, and you are proficient with one skill or tool|phb|5|tools of your choice. In the timeless city of Tu'narath, githyanki have bountiful time to master odd bits of knowledge.\n\n**Martial Prodigy**: You are proficient with light and medium armor. Your people are ever ready for war.\n\n**Githyanki Psionics**: You know the mage hand cantrip. When you reach 3rd level, you can cast jump once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the misty step spell once with this trait, and you regain the ability to do so when you finish a long rest.\n\nIntelligence is your spellcasting ability for these spells. You can cast all of them without components."
+  },
+  {
+    "id": "race_gith_githzerai_uaeladrinandgith",
+    "name": "Gith (Githzerai)",
+    "raceName": "Gith",
+    "subraceName": "Githzerai",
+    "source": "UAEladrinAndGith",
+    "page": 3,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Githzerai tend toward lawful neutral. Their rigorous training in psychic abilities requires an implacable mental discipline.</p></div>\n<div class=\"compendium-subentry\"><strong>Monastic Training.</strong> <p>You gain a +1 bonus to AC while you aren't wearing medium or heavy armor and aren't using a shield. All githzerai receive basic training from monks, and the monks among them are unmatched in their defensive abilities.</p></div>\n<div class=\"compendium-subentry\"><strong>Githzerai Psionics.</strong> <p>You know the mage hand cantrip. When you reach 3rd level, you can cast shield once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the detect thoughts spell once with this trait, and you regain the ability to do so when you finish a long rest.</p>\n<p>Wisdom is your spellcasting ability for these spells. You can cast all of them without components.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gith_age_uaeladrinandgith",
+        "name": "Age",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith reach adulthood in their late teens and live for about a century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith reach adulthood in their late teens and live for about a century."
+        ]
+      },
+      {
+        "id": "trait_gith_size_uaeladrinandgith",
+        "name": "Size",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "Gith are taller and leaner than humans, with most a slender 6 feet in height.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Gith are taller and leaner than humans, with most a slender 6 feet in height."
+        ]
+      },
+      {
+        "id": "trait_gith_languages_uaeladrinandgith",
+        "name": "Languages",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Gith.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Gith."
+        ]
+      },
+      {
+        "id": "trait_gith_githzerai_alignment_uaeladrinandgith",
+        "name": "Alignment",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "subraceName": "Githzerai",
+        "actionType": "passive",
+        "description": "Githzerai tend toward lawful neutral. Their rigorous training in psychic abilities requires an implacable mental discipline.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Githzerai tend toward lawful neutral. Their rigorous training in psychic abilities requires an implacable mental discipline."
+        ]
+      },
+      {
+        "id": "trait_gith_githzerai_monastic_training_uaeladrinandgith",
+        "name": "Monastic Training",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "subraceName": "Githzerai",
+        "actionType": "passive",
+        "description": "You gain a +1 bonus to AC while you aren't wearing medium or heavy armor and aren't using a shield. All githzerai receive basic training from monks, and the monks among them are unmatched in their defensive abilities.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You gain a +1 bonus to AC while you aren't wearing medium or heavy armor and aren't using a shield. All githzerai receive basic training from monks, and the monks among them are unmatched in their defensive abilities."
+        ]
+      },
+      {
+        "id": "trait_gith_githzerai_githzerai_psionics_uaeladrinandgith",
+        "name": "Githzerai Psionics",
+        "source": "UAEladrinAndGith",
+        "raceName": "Gith",
+        "subraceName": "Githzerai",
+        "actionType": "passive",
+        "description": "You know the mage hand cantrip. When you reach 3rd level, you can cast shield once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the detect thoughts spell once with this trait, and you regain the ability to do so when you finish a long rest.\n\nWisdom is your spellcasting ability for these spells. You can cast all of them without components.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell mage hand} cantrip. When you reach 3rd level, you can cast {@spell shield} once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell detect thoughts} spell once with this trait, and you regain the ability to do so when you finish a long rest.",
+          "Wisdom is your spellcasting ability for these spells. You can cast all of them without components."
+        ]
+      }
+    ],
+    "description": "**Age**: Gith reach adulthood in their late teens and live for about a century.\n\n**Size**: Gith are taller and leaner than humans, with most a slender 6 feet in height.\n\n**Languages**: You can speak, read, and write Common and Gith.\n\n**Alignment**: Githzerai tend toward lawful neutral. Their rigorous training in psychic abilities requires an implacable mental discipline.\n\n**Monastic Training**: You gain a +1 bonus to AC while you aren't wearing medium or heavy armor and aren't using a shield. All githzerai receive basic training from monks, and the monks among them are unmatched in their defensive abilities.\n\n**Githzerai Psionics**: You know the mage hand cantrip. When you reach 3rd level, you can cast shield once with this trait, and you regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the detect thoughts spell once with this trait, and you regain the ability to do so when you finish a long rest.\n\nWisdom is your spellcasting ability for these spells. You can cast all of them without components."
+  }
+]

@@ -92,10 +92,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_burst_m35x",
+        "id": "act_death_burst_g71e",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>When the fume drake dies, it explodes in a cloud of noxious fumes. Each creature within 5 feet of the fume drake must succeed on a DC 11 Constitution saving throw or take 4 (1d8) poison damage.</p>",
+        "entries": [
+          "When the fume drake dies, it explodes in a cloud of noxious fumes. Each creature within 5 feet of the fume drake must succeed on a {@dc 11} Constitution saving throw or take 4 ({@damage 1d8}) poison damage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -117,10 +120,13 @@
         }
       },
       {
-        "id": "act_unusual_nature_7qc1",
+        "id": "act_unusual_nature_jq3l",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The fume drake doesn't require food, drink, or sleep.</p>",
+        "entries": [
+          "The fume drake doesn't require food, drink, or sleep."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -136,10 +142,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_ffvq",
+        "id": "act_bite_rlac",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) fire damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) fire damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) fire damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -158,10 +167,13 @@
         }
       },
       {
-        "id": "act_scalding_breath___recharge__9goj",
+        "id": "act_scalding_breath___recharge__acze",
         "name": "Scalding Breath {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The fume drake exhales a 15-foot cone of scalding steam. Each creature in that area must make a DC 11 Dexterity saving throw, taking 4 (1d8) fire damage on a failed save, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The fume drake exhales a 15-foot cone of scalding steam. Each creature in that area must make a {@dc 11} Dexterity saving throw, taking 4 ({@damage 1d8}) fire damage on a failed save, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -190,11 +202,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Fume Drake.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Fume Drake.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_kobold_tinkerer_dosi",
@@ -290,10 +314,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inquiring_mind__1_day__1s2x",
+        "id": "act_inquiring_mind__1_day__0rpf",
         "name": "Inquiring Mind (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The kobold can cast detect magic, requiring no spell components and using Intelligence as the spellcasting ability.</p>",
+        "entries": [
+          "The kobold can cast {@spell detect magic}, requiring no spell components and using Intelligence as the spellcasting ability."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -307,10 +334,13 @@
         }
       },
       {
-        "id": "act_pack_tactics_29kr",
+        "id": "act_pack_tactics_n22e",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The kobold has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "The kobold has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -324,10 +354,13 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_jwaf",
+        "id": "act_sunlight_sensitivity_7ep0",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the kobold has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
+        "entries": [
+          "While in sunlight, the kobold has disadvantage on attack rolls, as well as on Wisdom ({@skill Perception}) checks that rely on sight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -343,10 +376,13 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_tp1i",
+        "id": "act_dagger_2ds8",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 4} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -365,10 +401,13 @@
         }
       },
       {
-        "id": "act_alchemical_flame___recharge__fw7z",
+        "id": "act_alchemical_flame___recharge__wbi7",
         "name": "Alchemical Flame {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The kobold unleashes fire in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 10 (3d6) fire damage on a failed saving throw, or half as much damage on a successful one.</p>",
+        "entries": [
+          "The kobold unleashes fire in a 15-foot cone. Each creature in that area must make a {@dc 12} Dexterity saving throw, taking 10 ({@damage 3d6}) fire damage on a failed saving throw, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -397,11 +436,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Kobold Tinkerer.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Kobold Tinkerer.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_merrow_extortionist_dosi",
@@ -492,10 +543,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_1sip",
+        "id": "act_amphibious_1jfu",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can breathe air and water.</p>",
+        "entries": [
+          "The merrow can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -511,10 +565,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1yd4",
+        "id": "act_multiattack_cudx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The merrow makes two Rend attacks.</p>",
+        "entries": [
+          "The merrow makes two Rend attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -528,10 +585,13 @@
         }
       },
       {
-        "id": "act_rend_53t2",
+        "id": "act_rend_ljpf",
         "name": "Rend",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 10 ft., one target. {@h}8 (2d4 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 8 (2d4 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 10 ft., one target. {@h}8 ({@damage 2d4 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -557,11 +617,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Merrow Extortionist.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Merrow Extortionist.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_myla_dosi",
@@ -657,10 +729,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inquiring_mind__1_day__q9s7",
+        "id": "act_inquiring_mind__1_day__8a00",
         "name": "Inquiring Mind (1/Day)",
         "actionType": "trait",
-        "descriptionHtml": "<p>The kobold can cast detect magic, requiring no spell components and using Intelligence as the spellcasting ability.</p>",
+        "descriptionHtml": "<p>Myla can cast detect magic, requiring no spell components and using Intelligence as the spellcasting ability.</p>",
+        "entries": [
+          "Myla can cast {@spell detect magic}, requiring no spell components and using Intelligence as the spellcasting ability."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -674,10 +749,13 @@
         }
       },
       {
-        "id": "act_pack_tactics_t864",
+        "id": "act_pack_tactics_22vz",
         "name": "Pack Tactics",
         "actionType": "trait",
-        "descriptionHtml": "<p>The kobold has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "descriptionHtml": "<p>Myla has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
+        "entries": [
+          "Myla has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't {@condition incapacitated}."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -691,10 +769,13 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_25a1",
+        "id": "act_sunlight_sensitivity_btjz",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
-        "descriptionHtml": "<p>While in sunlight, the kobold has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
+        "descriptionHtml": "<p>While in sunlight, Myla has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
+        "entries": [
+          "While in sunlight, Myla has disadvantage on attack rolls, as well as on Wisdom ({@skill Perception}) checks that rely on sight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -710,10 +791,13 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_phv2",
+        "id": "act_dagger_0l2z",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 (1d4 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 4} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}4 ({@damage 1d4 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -732,10 +816,13 @@
         }
       },
       {
-        "id": "act_alchemical_flame___recharge__em0t",
+        "id": "act_alchemical_flame___recharge__3ypn",
         "name": "Alchemical Flame {@recharge}",
         "actionType": "action",
-        "descriptionHtml": "<p>The kobold unleashes fire in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 10 (3d6) fire damage on a failed saving throw, or half as much damage on a successful one.</p>",
+        "descriptionHtml": "<p>Myla unleashes fire in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 10 (3d6) fire damage on a failed saving throw, or half as much damage on a successful one.</p>",
+        "entries": [
+          "Myla unleashes fire in a 15-foot cone. Each creature in that area must make a {@dc 12} Dexterity saving throw, taking 10 ({@damage 3d6}) fire damage on a failed saving throw, or half as much damage on a successful one."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -764,11 +851,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Myla.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Myla.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_runara_dosi",
@@ -878,10 +977,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_tv3k",
+        "id": "act_amphibious_087z",
         "name": "Amphibious",
         "actionType": "trait",
-        "descriptionHtml": "<p>The dragon can breathe air and water.</p>",
+        "descriptionHtml": "<p>Runara can breathe air and water.</p>",
+        "entries": [
+          "Runara can breathe air and water."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -895,10 +997,13 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__go2b",
+        "id": "act_legendary_resistance__3_day__6bq2",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
+        "descriptionHtml": "<p>If Runara fails a saving throw, it can choose to succeed instead.</p>",
+        "entries": [
+          "If Runara fails a saving throw, it can choose to succeed instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -914,10 +1019,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7zbk",
+        "id": "act_multiattack_24g2",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
+        "descriptionHtml": "<p>Runara can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
+        "entries": [
+          "Runara can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -931,10 +1039,13 @@
         }
       },
       {
-        "id": "act_bite_vn89",
+        "id": "act_bite_n58y",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 10 ft., one target. {@h}18 (2d10 + 7) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 10 ft., one target. Hit: 18 (2d10 + 7) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 10 ft., one target. {@h}18 ({@damage 2d10 + 7}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -953,10 +1064,13 @@
         }
       },
       {
-        "id": "act_claw_mdgf",
+        "id": "act_claw_2bb5",
         "name": "Claw",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 5 ft., one target. {@h}14 (2d6 + 7) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 14 (2d6 + 7) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 5 ft., one target. {@h}14 ({@damage 2d6 + 7}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -975,32 +1089,13 @@
         }
       },
       {
-        "id": "act_tail_sp4u",
-        "name": "Tail",
-        "actionType": "action",
-        "descriptionHtml": "<p>mw +12 to hit, reach 15 ft., one target. {@h}16 (2d8 + 7) bludgeoning damage.</p>",
-        "macro": {
-          "isAttack": true,
-          "attackType": null,
-          "attackBonus": 12,
-          "reach": 15,
-          "range": null,
-          "targets": "one target",
-          "save": null,
-          "damages": [
-            {
-              "formula": "2d8 + 7",
-              "type": "Bludgeoning"
-            }
-          ],
-          "recharge": null
-        }
-      },
-      {
-        "id": "act_frightful_presence_4bkf",
+        "id": "act_frightful_presence_2k47",
         "name": "Frightful Presence",
         "actionType": "action",
-        "descriptionHtml": "<p>Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
+        "descriptionHtml": "<p>Each creature of Runara's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
+        "entries": [
+          "Each creature of Runara's choice that is within 120 feet of the dragon and aware of it must succeed on a {@dc 17} Wisdom saving throw or become {@condition frightened} for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1017,10 +1112,29 @@
         }
       },
       {
-        "id": "act_breath_weapons__recharge_5__di92",
+        "id": "act_breath_weapons__recharge_5__55fy",
         "name": "Breath Weapons (Recharge 5)",
         "actionType": "action",
-        "descriptionHtml": "<p>The dragon uses one of the following breath weapons.</p><ul><li><strong><em>Lightning Breath.</em></strong> <p>The dragon exhales lightning in a 90-foot line that is 5 feet wide. Each creature in that line must make a DC 19 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p></li><li><strong><em>Repulsion Breath.</em></strong> <p>The dragon exhales repulsion energy in a 30-foot cone. Each creature in that area must succeed on a DC 19 Strength saving throw. On a failed save, the creature is pushed 60 feet away from the dragon.</p></li></ul>",
+        "descriptionHtml": "<p>Runara uses one of the following breath weapons.</p><ul><li><strong><em>Lightning Breath.</em></strong> <p>Runara exhales lightning in a 90-foot line that is 5 feet wide. Each creature in that line must make a DC 19 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p></li><li><strong><em>Repulsion Breath.</em></strong> <p>Runara exhales repulsion energy in a 30-foot cone. Each creature in that area must succeed on a DC 19 Strength saving throw. On a failed save, the creature is pushed 60 feet away from the dragon.</p></li></ul>",
+        "entries": [
+          "Runara uses one of the following breath weapons.",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Lightning Breath",
+                "entry": "Runara exhales lightning in a 90-foot line that is 5 feet wide. Each creature in that line must make a {@dc 19} Dexterity saving throw, taking 66 ({@damage 12d10}) lightning damage on a failed save, or half as much damage on a successful one."
+              },
+              {
+                "type": "item",
+                "name": "Repulsion Breath",
+                "entry": "Runara exhales repulsion energy in a 30-foot cone. Each creature in that area must succeed on a {@dc 19} Strength saving throw. On a failed save, the creature is pushed 60 feet away from the dragon."
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1028,16 +1142,27 @@
           "reach": null,
           "range": null,
           "targets": null,
-          "save": null,
-          "damages": [],
+          "save": {
+            "dc": 19,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "12d10",
+              "type": "Lightning"
+            }
+          ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_change_shape_2h04",
+        "id": "act_change_shape_ruzk",
         "name": "Change Shape",
         "actionType": "action",
-        "descriptionHtml": "<p>The dragon magically polymorphs into a humanoid or beast that has a challenge rating no higher than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the dragon's choice).</p><p>In a new form, the dragon retains its alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Its statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form.</p>",
+        "descriptionHtml": "<p>Runara magically transforms into a Humanoid or Beast that is Medium or Small, while retaining her game statistics (other than her size). This transformation ends if Runara is reduced to 0 hit points or uses a bonus action to end it.</p>",
+        "entries": [
+          "Runara magically transforms into a Humanoid or Beast that is Medium or Small, while retaining her game statistics (other than her size). This transformation ends if Runara is reduced to 0 hit points or uses a bonus action to end it."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1058,12 +1183,16 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_lair_action_81ue",
-        "name": "Lair Action",
+        "id": "act_dragon_creates_fog_bb08",
+        "name": "Dragon Creates Fog",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon creates fog as though it had cast the fog cloud spell. The fog lasts until initiative count 20 on the next round.</p>",
+        "entries": [
+          "The dragon creates fog as though it had cast the {@spell fog cloud} spell. The fog lasts until initiative count 20 on the next round."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1077,10 +1206,13 @@
         }
       },
       {
-        "id": "act_lair_action_njez",
-        "name": "Lair Action",
+        "id": "act_thunderclap_originates_vexn",
+        "name": "Thunderclap Originates",
         "actionType": "lair",
         "descriptionHtml": "<p>A thunderclap originates at a point the dragon can see within 120 feet of it. Each creature within a 20-foot radius centered on that point must make a DC 15 Constitution saving throw or take 5 (1d10) thunder damage and be deafened until the end of its next turn.</p>",
+        "entries": [
+          "A thunderclap originates at a point the dragon can see within 120 feet of it. Each creature within a 20-foot radius centered on that point must make a {@dc 15} Constitution saving throw or take 5 ({@damage 1d10}) thunder damage and be {@condition deafened} until the end of its next turn."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1102,10 +1234,177 @@
         }
       },
       {
-        "id": "act_additional_lair_actions_plen",
-        "name": "Additional Lair Actions",
+        "id": "act_ocean_s_call_417k",
+        "name": "Ocean's Call",
         "actionType": "lair",
-        "descriptionHtml": "<p>At your discretion, a legendary (Adult Bronze Dragon or Ancient Bronze Dragon) bronze dragon can use one or more of the following additional lair actions while in its lair:</p><ul><li><strong><em>Ocean's Call.</em></strong> <p>The dragon conjures a swarm of spectral dolphins. Each creature in the water within 120 feet of the dragon must succeed on a DC 15 Dexterity saving throw or take 5 (1d10) slashing damage; then the swarm vanishes.</p></li><li><strong><em>Salt Burst.</em></strong> <p>The dragon chooses a point it can see in the lair. The air in a 20-foot-radius sphere centered on that point bursts with abrasive salt crystals. Each creature in that area must succeed on a DC 15 Dexterity saving throw or take 10 (3d6) slashing damage.</p></li><li><strong><em>Whelming Water.</em></strong> <p>The dragon causes a strong current to course through the water in its lair. The dragon chooses any number of creatures it can see that are standing or swimming in water within 120 feet of it. Each chosen creature must succeed on a DC 15 Strength saving throw or be knocked prone.</p></li></ul>",
+        "descriptionHtml": "<p>The dragon conjures a swarm of spectral dolphins. Each creature in the water within 120 feet of the dragon must succeed on a DC 15 Dexterity saving throw or take 5 (1d10) slashing damage; then the swarm vanishes.</p>",
+        "entries": [
+          "The dragon conjures a swarm of spectral dolphins. Each creature in the water within 120 feet of the dragon must succeed on a {@dc 15} Dexterity saving throw or take 5 ({@damage 1d10}) slashing damage; then the swarm vanishes."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "1d10",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_salt_burst_z0x6",
+        "name": "Salt Burst",
+        "actionType": "lair",
+        "descriptionHtml": "<p>The dragon chooses a point it can see in the lair. The air in a 20-foot-radius sphere centered on that point bursts with abrasive salt crystals. Each creature in that area must succeed on a DC 15 Dexterity saving throw or take 10 (3d6) slashing damage.</p>",
+        "entries": [
+          "The dragon chooses a point it can see in the lair. The air in a 20-foot-radius sphere centered on that point bursts with abrasive salt crystals. Each creature in that area must succeed on a {@dc 15} Dexterity saving throw or take 10 ({@damage 3d6}) slashing damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "3d6",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_whelming_water_ngsr",
+        "name": "Whelming Water",
+        "actionType": "lair",
+        "descriptionHtml": "<p>The dragon causes a strong current to course through the water in its lair. The dragon chooses any number of creatures it can see that are standing or swimming in water within 120 feet of it. Each chosen creature must succeed on a DC 15 Strength saving throw or be knocked prone.</p>",
+        "entries": [
+          "The dragon causes a strong current to course through the water in its lair. The dragon chooses any number of creatures it can see that are standing or swimming in water within 120 feet of it. Each chosen creature must succeed on a {@dc 15} Strength saving throw or be knocked {@condition prone}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "STR"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "lairHeader": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects:",
+    "lairActionsDesc": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects:",
+    "regionalEffects": [
+      {
+        "id": "act_regional_effect_vomr",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Once per day, the dragon can alter the weather in a 6-mile radius centered on its lair. The dragon doesn't need to be outdoors; otherwise the effect is identical to the control weather spell.</p>",
+        "entries": [
+          "Once per day, the dragon can alter the weather in a 6-mile radius centered on its lair. The dragon doesn't need to be outdoors; otherwise the effect is identical to the {@spell control weather} spell."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_birx",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Underwater plants within 6 miles of the dragon's lair take on dazzlingly brilliant hues.</p>",
+        "entries": [
+          "Underwater plants within 6 miles of the dragon's lair take on dazzlingly brilliant hues."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_regional_effect_6ifa",
+        "name": "Regional Effect",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Within its lair, the dragon can set illusory sounds, such as soft music and strange echoes, so that they can be heard in various parts of the lair.</p>",
+        "entries": [
+          "Within its lair, the dragon can set illusory sounds, such as soft music and strange echoes, so that they can be heard in various parts of the lair."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_additional_regional_effects_cgxq",
+        "name": "Additional Regional Effects",
+        "actionType": "regional",
+        "descriptionHtml": "<p>Any of these effects might appear in the area around a bronze dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Phantom Escort.</em></strong> <p>Ghostly naval ships from an ancient armada appear, escorting well-meaning creatures in need of the dragon's help toward the dragon's lair.</p></li><li><strong><em>Underwater Pursuit.</em></strong> <p>Sailors glimpse the shadowy, illusory form of a dragon in the depths below them, keeping pace with their vessel.</p></li><li><strong><em>Unfailing Faithfulness.</em></strong> <p>Sapient creatures that spend a year within 10 miles of the dragon's lair find it nearly impossible to break a promise.</p></li></ul>",
+        "entries": [
+          "Any of these effects might appear in the area around a bronze dragon's lair, in addition to or instead of the effects described in the {@i Monster Manual}:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Phantom Escort",
+                "entry": "Ghostly naval ships from an ancient armada appear, escorting well-meaning creatures in need of the dragon's help toward the dragon's lair."
+              },
+              {
+                "type": "item",
+                "name": "Underwater Pursuit",
+                "entry": "Sailors glimpse the shadowy, illusory form of a dragon in the depths below them, keeping pace with their vessel."
+              },
+              {
+                "type": "item",
+                "name": "Unfailing Faithfulness",
+                "entry": "Sapient creatures that spend a year within 10 miles of the dragon's lair find it nearly impossible to break a promise."
+              }
+            ]
+          }
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1119,10 +1418,103 @@
         }
       }
     ],
+    "regionalEffectsHtml": "<p>The region containing a legendary bronze dragon's lair is warped by the dragon's magic.</p><ul><li>Once per day, the dragon can alter the weather in a 6-mile radius centered on its lair. The dragon doesn't need to be outdoors; otherwise the effect is identical to the control weather spell.</li><li>Underwater plants within 6 miles of the dragon's lair take on dazzlingly brilliant hues.</li><li>Within its lair, the dragon can set illusory sounds, such as soft music and strange echoes, so that they can be heard in various parts of the lair.</li></ul><p>If the dragon dies, changed weather reverts to normal, as described in the spell, and the other effects fade in 1d10 days.</p><div><strong><em>Additional Regional Effects.</em></strong> <p>Any of these effects might appear in the area around a bronze dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Phantom Escort.</em></strong> <p>Ghostly naval ships from an ancient armada appear, escorting well-meaning creatures in need of the dragon's help toward the dragon's lair.</p></li><li><strong><em>Underwater Pursuit.</em></strong> <p>Sailors glimpse the shadowy, illusory form of a dragon in the depths below them, keeping pace with their vessel.</p></li><li><strong><em>Unfailing Faithfulness.</em></strong> <p>Sapient creatures that spend a year within 10 miles of the dragon's lair find it nearly impossible to break a promise.</p></li></ul></div>",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Customizing Dragons",
+        "descriptionHtml": "<p>You can customize any dragon's stat block to reflect Runara's unique character. Minor changes such as those below are easy to make and have no impact on a dragon's challenge rating.</p><div><strong><em>Languages.</em></strong> <p>Most dragons prefer to speak Draconic but learn Common for dealing with allies and minions. But given their high Intelligence and long life span, dragons can easily learn additional languages. You can add languages to a dragon's stat block.</p></div><div><strong><em>Skills.</em></strong> <p>Most dragons are proficient in the Perception and Stealth skills, and many dragons have additional skill proficiencies. As with languages, you can customize a dragon's skill list (even doubling their proficiency bonus with certain skills) to reflect particular interests and activities. You can also give a dragon tool proficiencies, particularly if Runara spends time in Humanoid form.</p></div><div><strong><em>Spells.</em></strong> <p><em>See the \"Variant: Dragons as Innate Spellcasters\" inset(s), below.</em></p></div><div><strong><em>Other Traits and Actions.</em></strong> <p>You can borrow traits and actions from other monsters to add unique flavor to a dragon. Consider these examples:</p><ul><li><strong><em>Change Shape.</em></strong> <p>You can decide that a dragon acquires this action at a younger age than usual, particularly if you want to feature a dragon in Humanoid form in your campaign:</p><p>Runara magically polymorphs into a humanoid or beast that has a challenge rating no higher than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the dragon's choice).</p><p>In a new form, Runara retains its alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Its statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form.</p></li><li><strong><em>Flyby.</em></strong> <p>Runara is an agile flier, quick to fly out of enemies' reach.</p><p>Runara doesn't provoke an opportunity attack when it flies out of an enemy's reach.</p></li><li><strong><em>Mimicry.</em></strong> <p>Impersonating characters or their allies could be a fun trick for a crafty dragon.</p><p>Runara can mimic any sounds it has heard, including voices. A creature that hears the sounds can tell they are imitations with a successful DC 12 Wisdom (Insight) check.</p></li><li><strong><em>Rejuvenation.</em></strong> <p>You might decide that dragons in your campaign, being an essential part of the Material Plane, are nearly impossible to destroy. A dragon's life essence might be preserved in the egg from which it first emerged, in its hoard, or in a cavernous hall at the center of the world, just as a lich's essence is hidden in a phylactery.</p><p>If it has an essence-preserving object, a destroyed dragon gains a new body in 1d10 days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the object.</p></li><li><strong><em>Special Senses.</em></strong> <p>Most dragons have blindsight and darkvision. You might upgrade blindsight to truesight, or you could give a dragon with a burrowing speed tremorsense.</p></li></ul></div>",
+        "entries": [
+          "You can customize any dragon's stat block to reflect Runara's unique character. Minor changes such as those below are easy to make and have no impact on a dragon's challenge rating.",
+          {
+            "type": "entries",
+            "name": "Languages",
+            "entries": [
+              "Most dragons prefer to speak Draconic but learn Common for dealing with allies and minions. But given their high Intelligence and long life span, dragons can easily learn additional languages. You can add languages to a dragon's stat block."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Skills",
+            "entries": [
+              "Most dragons are proficient in the {@skill Perception} and {@skill Stealth} skills, and many dragons have additional skill proficiencies. As with languages, you can customize a dragon's skill list (even doubling their proficiency bonus with certain skills) to reflect particular interests and activities. You can also give a dragon tool proficiencies, particularly if Runara spends time in Humanoid form."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Spells",
+            "entries": [
+              "{@note See the \"Variant: Dragons as Innate Spellcasters\" inset(s), below.}"
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Other Traits and Actions",
+            "entries": [
+              "You can borrow traits and actions from other monsters to add unique flavor to a dragon. Consider these examples:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Change Shape",
+                    "entries": [
+                      "You can decide that a dragon acquires this action at a younger age than usual, particularly if you want to feature a dragon in Humanoid form in your campaign:",
+                      "Runara magically polymorphs into a humanoid or beast that has a challenge rating no higher than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the dragon's choice).",
+                      "In a new form, Runara retains its alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Its statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Flyby",
+                    "entries": [
+                      "Runara is an agile flier, quick to fly out of enemies' reach.",
+                      "Runara doesn't provoke an opportunity attack when it flies out of an enemy's reach."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Mimicry",
+                    "entries": [
+                      "Impersonating characters or their allies could be a fun trick for a crafty dragon.",
+                      "Runara can mimic any sounds it has heard, including voices. A creature that hears the sounds can tell they are imitations with a successful {@dc 12} Wisdom ({@skill Insight}) check."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Rejuvenation",
+                    "entries": [
+                      "You might decide that dragons in your campaign, being an essential part of the Material Plane, are nearly impossible to destroy. A dragon's life essence might be preserved in the egg from which it first emerged, in its hoard, or in a cavernous hall at the center of the world, just as a lich's essence is hidden in a phylactery.",
+                      "If it has an essence-preserving object, a destroyed dragon gains a new body in {@dice 1d10} days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the object."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Special Senses",
+                    "entries": [
+                      "Most dragons have {@sense blindsight} and {@sense darkvision}. You might upgrade {@sense blindsight} to {@sense truesight}, or you could give a dragon with a burrowing speed {@sense tremorsense|MM}."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Runara.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Runara.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": {
+      "name": "Bronze Dragon",
+      "source": "MM"
+    }
   },
   {
     "id": "creature_sinensa_dosi",
@@ -1209,10 +1601,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_distress_spores_udli",
+        "id": "act_distress_spores_o399",
         "name": "Distress Spores",
         "actionType": "trait",
-        "descriptionHtml": "<p>When the myconid takes damage, all other myconids within 240 feet of it can sense its pain.</p>",
+        "descriptionHtml": "<p>When Sinensa takes damage, all other myconids within 240 feet of it can sense its pain.</p>",
+        "entries": [
+          "When Sinensa takes damage, all other myconids within 240 feet of it can sense its pain."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1226,10 +1621,13 @@
         }
       },
       {
-        "id": "act_sun_sickness_89zx",
+        "id": "act_sun_sickness_cbfu",
         "name": "Sun Sickness",
         "actionType": "trait",
-        "descriptionHtml": "<p>While in sunlight, the myconid has disadvantage on ability checks, attack rolls, and saving throws. The myconid dies if it spends more than 1 hour in direct sunlight.</p>",
+        "descriptionHtml": "<p>While in sunlight, Sinensa has disadvantage on ability checks, attack rolls, and saving throws. The myconid dies if it spends more than 1 hour in direct sunlight.</p>",
+        "entries": [
+          "While in sunlight, Sinensa has disadvantage on ability checks, attack rolls, and saving throws. The myconid dies if it spends more than 1 hour in direct sunlight."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1245,10 +1643,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1iam",
+        "id": "act_multiattack_sr0l",
         "name": "Multiattack",
         "actionType": "action",
-        "descriptionHtml": "<p>The myconid uses either its Hallucination Spores or its Pacifying Spores, then makes a fist attack.</p>",
+        "descriptionHtml": "<p>The myconid makes one Fist attack and uses its Hallucination Spores.</p>",
+        "entries": [
+          "The myconid makes one Fist attack and uses its Hallucination Spores."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1262,10 +1663,13 @@
         }
       },
       {
-        "id": "act_fist_xtom",
+        "id": "act_fist_jkqe",
         "name": "Fist",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}8 (3d4 + 1) bludgeoning damage plus 7 (3d4) poison damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 8 (3d4 + 1) bludgeoning damage plus 7 (2d4) poison damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}8 ({@damage 3d4 + 1}) bludgeoning damage plus 7 ({@damage 2d4}) poison damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1280,7 +1684,7 @@
               "type": "Bludgeoning"
             },
             {
-              "formula": "3d4",
+              "formula": "2d4",
               "type": "Poison"
             }
           ],
@@ -1288,27 +1692,13 @@
         }
       },
       {
-        "id": "act_animating_spores__3_day__h8zx",
-        "name": "Animating Spores (3/Day)",
-        "actionType": "action",
-        "descriptionHtml": "<p>The myconid targets one corpse of a humanoid or a Large or smaller beast within 5 feet of it and releases spores at the corpse. In 24 hours, the corpse rises as a spore servant. The corpse stays animated for 1d4 + 1 weeks or until destroyed, and it can't be animated again in this way.</p>",
-        "macro": {
-          "isAttack": false,
-          "attackType": null,
-          "attackBonus": null,
-          "reach": null,
-          "range": null,
-          "targets": null,
-          "save": null,
-          "damages": [],
-          "recharge": null
-        }
-      },
-      {
-        "id": "act_hallucination_spores_zgm3",
+        "id": "act_hallucination_spores_ylr6",
         "name": "Hallucination Spores",
         "actionType": "action",
-        "descriptionHtml": "<p>The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be poisoned for 1 minute. The poisoned target is incapacitated while it hallucinates. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "descriptionHtml": "<p>Sinensa ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be poisoned for 1 minute. The poisoned target is incapacitated while it hallucinates. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+        "entries": [
+          "Sinensa ejects spores at one creature it can see within 5 feet of it. The target must succeed on a {@dc 12} Constitution saving throw or be {@condition poisoned} for 1 minute. The {@condition poisoned} target is {@condition incapacitated} while it hallucinates. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1325,30 +1715,13 @@
         }
       },
       {
-        "id": "act_pacifying_spores_3ia9",
-        "name": "Pacifying Spores",
-        "actionType": "action",
-        "descriptionHtml": "<p>The myconid ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be stunned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
-        "macro": {
-          "isAttack": false,
-          "attackType": null,
-          "attackBonus": null,
-          "reach": null,
-          "range": null,
-          "targets": null,
-          "save": {
-            "dc": 12,
-            "ability": "CON"
-          },
-          "damages": [],
-          "recharge": null
-        }
-      },
-      {
-        "id": "act_rapport_spores_yn3j",
+        "id": "act_rapport_spores_izo4",
         "name": "Rapport Spores",
         "actionType": "action",
-        "descriptionHtml": "<p>A 30-foot radius of spores extends from the myconid. These spores can go around corners and affect only creatures with an Intelligence of 2 or higher that aren't undead, constructs, or elementals. Affected creatures can communicate telepathically with one another while they are within 30 feet of each other. The effect lasts for 1 hour.</p>",
+        "descriptionHtml": "<p>A 30-foot radius of spores extends from Sinensa. These spores can go around corners and affect only creatures with an Intelligence of 2 or higher that aren't undead, constructs, or elementals. Affected creatures can communicate telepathically with one another while they are within 30 feet of each other. The effect lasts for 1 hour.</p>",
+        "entries": [
+          "A 30-foot radius of spores extends from Sinensa. These spores can go around corners and affect only creatures with an Intelligence of 2 or higher that aren't undead, constructs, or elementals. Affected creatures can communicate telepathically with one another while they are within 30 feet of each other. The effect lasts for 1 hour."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1369,11 +1742,52 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [
+      {
+        "name": "Zuggtomoy's Empowerment",
+        "descriptionHtml": "<p>Myconids that embrace Zuggtmoy can develop new, more destructive kinds of spores. Myconid sovereigns have all these spore effects.</p><div><strong><em>Caustic Spores (1/Day).</em></strong> <p>Sinensa releases spores in a 30-foot cone. Each creature inside the cone must succeed on a DC 12 Dexterity saving throw or take 3 (1d6) acid damage at the start of each of the myconid's turns. A creature can repeat the saving throw at the end of its turn, ending the effect on itself on a success. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus.</p></div><div><strong><em>Infestation Spores (1/Day).</em></strong> <p>Sinensa releases spores that burst out in a cloud that fills a 10-foot-radius sphere centered on it, and the cloud lingers for 1 minute. Any flesh-and-blood creature in the cloud when it appears, or that enters it later, must make a DC 12 Constitution saving throw. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus. On a successful save, the creature can't be infected by these spores for 24 hours. On a failed save, the creature is infected with a disease called the spores of Zuggtmoy and also gains a random form of indefinite madness (determined by rolling on the Madness of Zuggtmoy table) that lasts until the creature is cured of the disease or dies. While infected in this way, the creature can't be reinfected, and it must repeat the saving throw at the end of every 24 hours, ending the infection on a success. On a failure, the infected creature's body is slowly taken over by fungal growth, and after three such failed saves, the creature dies and is reanimated as a spore servant if it's a humanoid or a Large or smaller beast.</p></div><div><strong><em>Euphoria Spores (1/Day).</em></strong> <p>Sinensa releases a cloud of spores in a 20-foot-radius sphere centered on itself. Other creatures in that area must each succeed on a DC 12 Constitution saving throw or become poisoned for 1 minute. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus. A creature can repeat the saving throw at the end of each of its turns, ending the effect early on itself on a success. When the effect ends on it, the creature gains one level of exhaustion.</p></div>",
+        "entries": [
+          "Myconids that embrace {@creature Zuggtmoy|MTF} can develop new, more destructive kinds of spores. Myconid sovereigns have all these spore effects.",
+          {
+            "type": "entries",
+            "name": "Caustic Spores (1/Day)",
+            "entries": [
+              "Sinensa releases spores in a 30-foot cone. Each creature inside the cone must succeed on a {@dc 12} Dexterity saving throw or take 3 ({@damage 1d6}) acid damage at the start of each of the myconid's turns. A creature can repeat the saving throw at the end of its turn, ending the effect on itself on a success. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Infestation Spores (1/Day)",
+            "entries": [
+              "Sinensa releases spores that burst out in a cloud that fills a 10-foot-radius sphere centered on it, and the cloud lingers for 1 minute. Any flesh-and-blood creature in the cloud when it appears, or that enters it later, must make a {@dc 12} Constitution saving throw. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus. On a successful save, the creature can't be infected by these spores for 24 hours. On a failed save, the creature is infected with a disease called the spores of Zuggtmoy and also gains a random form of indefinite madness (determined by rolling on the Madness of {@creature Zuggtmoy|MTF} table) that lasts until the creature is cured of the disease or dies. While infected in this way, the creature can't be reinfected, and it must repeat the saving throw at the end of every 24 hours, ending the infection on a success. On a failure, the infected creature's body is slowly taken over by fungal growth, and after three such failed saves, the creature dies and is reanimated as a spore servant if it's a humanoid or a Large or smaller beast."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Euphoria Spores (1/Day)",
+            "entries": [
+              "Sinensa releases a cloud of spores in a 20-foot-radius sphere centered on itself. Other creatures in that area must each succeed on a {@dc 12} Constitution saving throw or become {@condition poisoned} for 1 minute. The save DC is 8 + the myconid's Constitution modifier + the myconid's proficiency bonus. A creature can repeat the saving throw at the end of each of its turns, ending the effect early on itself on a success. When the effect ends on it, the creature gains one level of {@condition exhaustion}."
+            ]
+          }
+        ]
+      }
+    ],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Sinensa.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Sinensa.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_spore_servant_octopus_dosi",
@@ -1465,10 +1879,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_nqbf",
+        "id": "act_hold_breath_myxe",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>While out of water, the octopus can hold its breath for 1 hour.</p>",
+        "entries": [
+          "While out of water, the octopus can hold its breath for 1 hour."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1482,10 +1899,13 @@
         }
       },
       {
-        "id": "act_water_breathing_v0yy",
+        "id": "act_water_breathing_xxbq",
         "name": "Water Breathing",
         "actionType": "trait",
         "descriptionHtml": "<p>The octopus can breathe only underwater.</p>",
+        "entries": [
+          "The octopus can breathe only underwater."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1501,10 +1921,13 @@
     ],
     "actions": [
       {
-        "id": "act_tentacles_gbof",
+        "id": "act_tentacles_cvoe",
         "name": "Tentacles",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 15 ft., one target {@h}7 (1d8 + 3) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 15 ft., one target Hit: 7 (1d8 + 3) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 15 ft., one target {@h}7 ({@damage 1d8 + 3}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1530,11 +1953,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Spore Servant Octopus.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Spore Servant Octopus.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_tarak_dosi",
@@ -1636,10 +2071,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_5s8x",
+        "id": "act_multiattack_bikv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Tarak makes three Dagger attacks.</p>",
+        "entries": [
+          "Tarak makes three Dagger attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1653,10 +2091,13 @@
         }
       },
       {
-        "id": "act_dagger_vltg",
+        "id": "act_dagger_jnr1",
         "name": "Dagger",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +5 to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 (1d4 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 5} to hit, reach 5 ft. or range 20/60 ft., one target. {@h}5 ({@damage 1d4 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1677,10 +2118,13 @@
     ],
     "bonusActions": [
       {
-        "id": "act_cunning_action_y0c3",
+        "id": "act_cunning_action_72nt",
         "name": "Cunning Action",
         "actionType": "bonus",
         "descriptionHtml": "<p>Tarak takes the Dash, Disengage, or Hide action.</p>",
+        "entries": [
+          "Tarak takes the {@action Dash}, {@action Disengage}, or {@action Hide} action."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1700,11 +2144,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Tarak.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Tarak.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_varnoth_dosi",
@@ -1804,10 +2260,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_g14j",
+        "id": "act_multiattack_w8h8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Varnoth makes three Shortsword attacks.</p>",
+        "entries": [
+          "Varnoth makes three Shortsword attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1821,10 +2280,13 @@
         }
       },
       {
-        "id": "act_shortsword_21ru",
+        "id": "act_shortsword_dgnv",
         "name": "Shortsword",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}6 (1d6 + 3) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d6 + 3}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1850,11 +2312,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Varnoth.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Varnoth.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_violet_fungus_dosi",
@@ -1945,10 +2419,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_425r",
+        "id": "act_false_appearance_pmi6",
         "name": "False Appearance",
         "actionType": "trait",
-        "descriptionHtml": "<p>While the violet fungus remains motionless, it is indistinguishable from an ordinary fungus.</p>",
+        "descriptionHtml": "<p>If the violet fungus is motionless at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the fungus move or act, that creature must succeed on a DC 18 Intelligence (Investigation) check to discern that the violet fungus isn't ordinary fungus.</p>",
+        "entries": [
+          "If the violet fungus is motionless at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the fungus move or act, that creature must succeed on a {@dc 18} Intelligence ({@skill Investigation}) check to discern that the violet fungus isn't ordinary fungus."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1956,7 +2433,10 @@
           "reach": null,
           "range": null,
           "targets": null,
-          "save": null,
+          "save": {
+            "dc": 18,
+            "ability": null
+          },
           "damages": [],
           "recharge": null
         }
@@ -1964,10 +2444,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_llww",
+        "id": "act_multiattack_64up",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fungus makes 1d4 Rotting Touch attacks.</p>",
+        "entries": [
+          "The fungus makes {@dice 1d4} Rotting Touch attacks."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1981,10 +2464,13 @@
         }
       },
       {
-        "id": "act_rotting_touch_j96z",
+        "id": "act_rotting_touch_wgoz",
         "name": "Rotting Touch",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 10 ft., one creature. {@h}4 (1d8) necrotic damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 10 ft., one creature. Hit: 4 (1d8) necrotic damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 10 ft., one creature. {@h}4 ({@damage 1d8}) necrotic damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -2010,10 +2496,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DoSI/Violet Fungus.webp",
     "tokenImg": "img/bestiary/tokens/DoSI/Violet Fungus.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

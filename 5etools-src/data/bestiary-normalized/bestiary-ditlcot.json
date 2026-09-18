@@ -104,7 +104,7 @@
       {
         "id": "sc_pech_0",
         "name": "Communal Spellcasting (2/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 2,
@@ -168,7 +168,7 @@
       {
         "id": "sc_pech_1",
         "name": "Stone Shape (3/Day)",
-        "type": "spellcasting",
+        "type": "slot",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 2,
@@ -210,10 +210,13 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_4w90",
+        "id": "act_magic_resistance_k8f9",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The pech has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The pech has advantage on saving throws against spells and other magical effects."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -227,10 +230,13 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_zbok",
+        "id": "act_sunlight_sensitivity_ry1i",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the pech has disadvantage on attack rolls.</p>",
+        "entries": [
+          "While in sunlight, the pech has disadvantage on attack rolls."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -246,10 +252,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8fhk",
+        "id": "act_multiattack_7c5o",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The pech makes two Fortified Pickaxe attacks. If it hits a Large or smaller creature with both attacks, the target must succeed on a DC 14 Strength saving throw or have the prone condition.</p>",
+        "entries": [
+          "The pech makes two Fortified Pickaxe attacks. If it hits a Large or smaller creature with both attacks, the target must succeed on a {@dc 14} Strength saving throw or have the {@condition prone} condition."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -266,10 +275,13 @@
         }
       },
       {
-        "id": "act_fortified_pickaxe_md9z",
+        "id": "act_fortified_pickaxe_yomf",
         "name": "Fortified Pickaxe",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}11 (2d6 + 4) force damage. If the target is a Construct or an object, the attack is automatically a critical hit.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) force damage. If the target is a Construct or an object, the attack is automatically a critical hit.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d6 + 4}) force damage. If the target is a Construct or an object, the attack is automatically a critical hit."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -295,10 +307,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/DitLCoT/Pech.webp",
     "tokenImg": "img/bestiary/tokens/DitLCoT/Pech.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

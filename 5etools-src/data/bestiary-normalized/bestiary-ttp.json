@@ -93,10 +93,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_nb58",
+        "id": "act_multiattack_bdkd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The decapus makes two attacks: one with its bite and one with its tentacles.</p>",
+        "entries": [
+          "The decapus makes two attacks: one with its bite and one with its tentacles."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -110,10 +113,13 @@
         }
       },
       {
-        "id": "act_bite_tb6a",
+        "id": "act_bite_p4h7",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one creature grappled by the decapus. {@h}7 (2d4 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature grappled by the decapus. Hit: 7 (2d4 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one creature {@condition grappled} by the decapus. {@h}7 ({@damage 2d4 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -132,10 +138,13 @@
         }
       },
       {
-        "id": "act_tentacles_w0qd",
+        "id": "act_tentacles_ciyd",
         "name": "Tentacles",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 10 ft., one target. {@h}24 (9d4 + 2) bludgeoning damage or 14 (5d4 + 2) bludgeoning damage if the decapus is grappling a creature other than the target or if the decapus is on the ground or floor. The target is also grappled (escape DC 14) unless the decapus is already grappling a creature. Until this grapple ends, the target is restrained.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 24 (9d4 + 2) bludgeoning damage or 14 (5d4 + 2) bludgeoning damage if the decapus is grappling a creature other than the target or if the decapus is on the ground or floor. The target is also grappled (escape DC 14) unless the decapus is already grappling a creature. Until this grapple ends, the target is restrained.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 10 ft., one target. {@h}24 ({@damage 9d4 + 2}) bludgeoning damage or 14 ({@damage 5d4 + 2}) bludgeoning damage if the decapus is grappling a creature other than the target or if the decapus is on the ground or floor. The target is also {@condition grappled} (escape {@dc 14}) unless the decapus is already grappling a creature. Until this grapple ends, the target is {@condition restrained}."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -145,7 +154,7 @@
           "targets": "one target",
           "save": {
             "dc": 14,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [
             {
@@ -168,11 +177,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TTP/Decapus.webp",
     "tokenImg": "img/bestiary/tokens/TTP/Decapus.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_geonid_ttp",
@@ -265,10 +286,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_boulder_guise_tkus",
+        "id": "act_boulder_guise_b9gg",
         "name": "Boulder Guise",
         "actionType": "trait",
         "descriptionHtml": "<p>While fully withdrawn into its shell, the geonid can't see and is indistinguishable from a small boulder</p>",
+        "entries": [
+          "While fully withdrawn into its shell, the geonid can't see and is indistinguishable from a small boulder"
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -284,10 +308,13 @@
     ],
     "actions": [
       {
-        "id": "act_club_96j6",
+        "id": "act_club_ski9",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -306,10 +333,13 @@
         }
       },
       {
-        "id": "act_stone_tell_dtbt",
+        "id": "act_stone_tell_k8lt",
         "name": "Stone Tell",
         "actionType": "action",
         "descriptionHtml": "<p>The geonid touches a stone object or surface and knows what types of creatures have been within 10 feet of that stone in the past 24 hours. The geonid can also determine the number of creatures of each type, but not their identities.</p>",
+        "entries": [
+          "The geonid touches a stone object or surface and knows what types of creatures have been within 10 feet of that stone in the past 24 hours. The geonid can also determine the number of creatures of each type, but not their identities."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -330,11 +360,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TTP/Geonid.webp",
     "tokenImg": "img/bestiary/tokens/TTP/Geonid.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_giant_slug_ttp",
@@ -430,7 +472,7 @@
       {
         "id": "sc_giant_slug_0",
         "name": "Innate Spellcasting",
-        "type": "spellcasting",
+        "type": "innate",
         "displayAs": "action",
         "ability": "wis",
         "abilityMod": 1,
@@ -463,7 +505,9 @@
                   "formula": "4d6",
                   "type": "Radiant",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -514,7 +558,9 @@
                   "formula": "1d8",
                   "type": "Force",
                   "label": "",
-                  "stat": "none"
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
                 }
               ],
               "components": "V, S",
@@ -530,10 +576,13 @@
     ],
     "traits": [
       {
-        "id": "act_keen_smell_v3r6",
+        "id": "act_keen_smell_c78a",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The slug has advantage on Wisdom (Perception) checks that rely on smell.</p>",
+        "entries": [
+          "The slug has advantage on Wisdom ({@skill Perception}) checks that rely on smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -547,10 +596,13 @@
         }
       },
       {
-        "id": "act_spider_climb_2u40",
+        "id": "act_spider_climb_19d3",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The slug can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "entries": [
+          "The slug can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -566,10 +618,13 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dtsk",
+        "id": "act_multiattack_ut0n",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The slug makes two attacks: one with its tentacles and one with its bite.</p>",
+        "entries": [
+          "The slug makes two attacks: one with its tentacles and one with its bite."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -583,10 +638,13 @@
         }
       },
       {
-        "id": "act_tentacles_riuw",
+        "id": "act_tentacles_cz44",
         "name": "Tentacles",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +8 to hit, reach 10 ft., one creature. {@h}4 (1d4 + 2) poison damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 minute. Until this poison ends, the target is paralyzed. The target can repeat the saving throw at the end of each of its turns, ending the poison on itself on a success.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one creature. Hit: 4 (1d4 + 2) poison damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 minute. Until this poison ends, the target is paralyzed. The target can repeat the saving throw at the end of each of its turns, ending the poison on itself on a success.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 10 ft., one creature. {@h}4 ({@damage 1d4 + 2}) poison damage, and the target must succeed on a {@dc 13} Constitution saving throw or be {@condition poisoned} for 1 minute. Until this poison ends, the target is {@condition paralyzed}. The target can repeat the saving throw at the end of each of its turns, ending the poison on itself on a success."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -608,10 +666,13 @@
         }
       },
       {
-        "id": "act_bite_tsdi",
+        "id": "act_bite_xgpg",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}7 (2d4 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -633,10 +694,13 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_animate_tentacle_gh9p",
+        "id": "act_animate_tentacle_ofbf",
         "name": "Animate Tentacle",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the slug takes damage in this cave (Shrine of Umberlee), it can use its reaction to animate one of the tentacles of the kraken statue and cause it to   make a melee weapon attack (+3 to hit) against one creature within 20 feet of the statue that the slug can see. The tentacle deals 8 (1d8 + 4) bludgeoning damage on a hit.</p>",
+        "entries": [
+          "When the slug takes damage in this cave ({@adventure Shrine of Umberlee|ttp|3|24. Shrine of Umberlee}), it can use its reaction to animate one of the tentacles of the kraken statue and cause it to   make a melee weapon attack ({@hit 3} to hit) against one creature within 20 feet of the statue that the slug can see. The tentacle deals 8 ({@damage 1d8 + 4}) bludgeoning damage on a hit."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": "mw",
@@ -660,11 +724,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TTP/Giant Slug.webp",
     "tokenImg": "img/bestiary/tokens/TTP/Giant Slug.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_topi_ttp",
@@ -759,10 +835,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_turn_resistance_adn1",
+        "id": "act_turn_resistance_1odd",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The topi has advantage on saving throws against any effect that turns undead.</p>",
+        "entries": [
+          "The topi has advantage on saving throws against any effect that turns undead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -776,10 +855,13 @@
         }
       },
       {
-        "id": "act_undead_fortitude_eecg",
+        "id": "act_undead_fortitude_6yzx",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the topi to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, the topi drops to 1 hit point instead.</p>",
+        "entries": [
+          "If damage reduces the topi to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, the topi drops to 1 hit point instead."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -795,10 +877,13 @@
     ],
     "actions": [
       {
-        "id": "act_venomous_claws_ukpt",
+        "id": "act_venomous_claws_zn9l",
         "name": "Venomous Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}4 (1d4 + 2) slashing damage plus 2 (1d4) poison damage, and the target must succeed on a DC 11 Constitution saving throw or be poisoned until the end of the target's next turn.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) slashing damage plus 2 (1d4) poison damage, and the target must succeed on a DC 11 Constitution saving throw or be poisoned until the end of the target's next turn.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d4 + 2}) slashing damage plus 2 ({@damage 1d4}) poison damage, and the target must succeed on a {@dc 11} Constitution saving throw or be {@condition poisoned} until the end of the target's next turn."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -831,11 +916,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TTP/Topi.webp",
     "tokenImg": "img/bestiary/tokens/TTP/Topi.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_two_headed_plesiosaurus_ttp",
@@ -928,10 +1025,33 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_qex8",
+        "id": "act_two_heads_og1f",
+        "name": "Two Heads",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The two-headed plesiosaurus has advantage on Wisdom (Perception) checks and on saving throws against being blinded, charmed, deafened, frightened, stunned, and knocked unconscious.</p>",
+        "entries": [
+          "The two-headed plesiosaurus has advantage on Wisdom ({@skill Perception}) checks and on saving throws against being {@condition blinded}, {@condition charmed}, {@condition deafened}, {@condition frightened}, {@condition stunned}, and knocked {@condition unconscious}."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_hold_breath_fgk7",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The plesiosaurus can hold its breath for 1 hour.</p>",
+        "entries": [
+          "The plesiosaurus can hold its breath for 1 hour."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -947,10 +1067,33 @@
     ],
     "actions": [
       {
-        "id": "act_bite_1j3z",
+        "id": "act_multiattack_dp17",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The two-headed plesiosaurus makes two bite attacks.</p>",
+        "entries": [
+          "The two-headed plesiosaurus makes two bite attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_0pej",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 10 ft., one target. {@h}14 (3d6 + 4) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 14 (3d6 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 10 ft., one target. {@h}14 ({@damage 3d6 + 4}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -976,10 +1119,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/TTP/Two-Headed Plesiosaurus.webp",
     "tokenImg": "img/bestiary/tokens/TTP/Two-Headed Plesiosaurus.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

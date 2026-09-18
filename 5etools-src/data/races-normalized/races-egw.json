@@ -1,11 +1,891 @@
 [
   {
+    "id": "race_dragonborn_draconblood_egw",
+    "name": "Dragonborn (Draconblood)",
+    "raceName": "Dragonborn",
+    "subraceName": "Draconblood",
+    "source": "EGW",
+    "page": 168,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Forceful Presence.</strong> <p>You can use your understanding of creative diplomacy or intimidation to guide a conversation in your favor. When you make a Charisma (Intimidation or Persuasion) check, you can do so with advantage. Once you use this trait, you can't do so again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Ancestry.</strong> <p>You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon is determined by the dragon type, as shown in the table.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th><th>Breath Weapon</th></tr></thead><tbody><tr><td>Black</td><td>Acid</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Blue</td><td>Lightning</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Brass</td><td>Fire</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Bronze</td><td>Lightning</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Copper</td><td>Acid</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Gold</td><td>Fire</td><td>15 ft. cone (Dex. save)</td></tr><tr><td>Green</td><td>Poison</td><td>15 ft. cone (Con. save)</td></tr><tr><td>Red</td><td>Fire</td><td>15 ft. cone (Dex. save)</td></tr><tr><td>Silver</td><td>Cold</td><td>15 ft. cone (Con. save)</td></tr><tr><td>White</td><td>Cold</td><td>15 ft. cone (Con. save)</td></tr></tbody></table></div>",
+    "traits": [
+      {
+        "id": "trait_dragonborn_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_draconblood_draconic_ancestry_egw",
+        "name": "Draconic Ancestry",
+        "source": "EGW",
+        "raceName": "Dragonborn",
+        "subraceName": "Draconblood",
+        "actionType": "passive",
+        "description": "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon is determined by the dragon type, as shown in the table.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon is determined by the dragon type, as shown in the table.",
+          {
+            "type": "table",
+            "caption": "Draconic Ancestry",
+            "colLabels": [
+              "Dragon",
+              "Damage Type",
+              "Breath Weapon"
+            ],
+            "colStyles": [
+              "col-3 text-center",
+              "col-3 text-center",
+              "col-6"
+            ],
+            "rows": [
+              [
+                "Black",
+                "Acid",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Blue",
+                "Lightning",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Brass",
+                "Fire",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Bronze",
+                "Lightning",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Copper",
+                "Acid",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Gold",
+                "Fire",
+                "15 ft. cone (Dex. save)"
+              ],
+              [
+                "Green",
+                "Poison",
+                "15 ft. cone (Con. save)"
+              ],
+              [
+                "Red",
+                "Fire",
+                "15 ft. cone (Dex. save)"
+              ],
+              [
+                "Silver",
+                "Cold",
+                "15 ft. cone (Con. save)"
+              ],
+              [
+                "White",
+                "Cold",
+                "15 ft. cone (Con. save)"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dragonborn_breath_weapon_phb",
+        "name": "Breath Weapon",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.\n\nWhen you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level.\n\nAfter you use your breath weapon, you can't use it again until you complete a short or long rest.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "2d6",
+        "formulaConfig": {
+          "baseDice": "2d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.",
+          "When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes {@damage 2d6} damage on a failed save, and half as much damage on a successful one. The damage increases to {@damage 3d6} at 6th level, {@damage 4d6} at 11th level, and {@damage 5d6} at 16th level.",
+          "After you use your breath weapon, you can't use it again until you complete a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_damage_resistance_phb",
+        "name": "Damage Resistance",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have resistance to the damage type associated with your draconic ancestry.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to the damage type associated with your draconic ancestry."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_draconblood_darkvision_egw",
+        "name": "Darkvision",
+        "source": "EGW",
+        "raceName": "Dragonborn",
+        "subraceName": "Draconblood",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_draconblood_forceful_presence_egw",
+        "name": "Forceful Presence",
+        "source": "EGW",
+        "raceName": "Dragonborn",
+        "subraceName": "Draconblood",
+        "actionType": "passive",
+        "description": "You can use your understanding of creative diplomacy or intimidation to guide a conversation in your favor. When you make a Charisma (Intimidation or Persuasion) check, you can do so with advantage. Once you use this trait, you can't do so again until you finish a short or long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can use your understanding of creative diplomacy or intimidation to guide a conversation in your favor. When you make a Charisma ({@skill Intimidation} or {@skill Persuasion}) check, you can do so with advantage. Once you use this trait, you can't do so again until you finish a short or long rest."
+        ]
+      }
+    ],
+    "description": "**Age**: Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80.\n\n**Size**: Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium.\n\n**Draconic Ancestry**: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon is determined by the dragon type, as shown in the table.\n\n**Breath Weapon**: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.\n\nWhen you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level.\n\nAfter you use your breath weapon, you can't use it again until you complete a short or long rest.\n\n**Damage Resistance**: You have resistance to the damage type associated with your draconic ancestry.\n\n**Languages**: You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Forceful Presence**: You can use your understanding of creative diplomacy or intimidation to guide a conversation in your favor. When you make a Charisma (Intimidation or Persuasion) check, you can do so with advantage. Once you use this trait, you can't do so again until you finish a short or long rest."
+  },
+  {
+    "id": "race_dragonborn_ravenite_egw",
+    "name": "Dragonborn (Ravenite)",
+    "raceName": "Dragonborn",
+    "subraceName": "Ravenite",
+    "source": "EGW",
+    "page": 168,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.</p></div>\n<div class=\"compendium-subentry\"><strong>Vengeful Assault.</strong> <p>When you take damage from a creature in range of a weapon you are wielding, you can use your reaction to make an attack with the weapon against that creature. Once you use this trait, you can't do so again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Draconic Ancestry.</strong> <p>You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon is determined by the dragon type, as shown in the table.</p>\n<table class=\"compendium-table\"><thead><tr><th>Dragon</th><th>Damage Type</th><th>Breath Weapon</th></tr></thead><tbody><tr><td>Black</td><td>Acid</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Blue</td><td>Lightning</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Brass</td><td>Fire</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Bronze</td><td>Lightning</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Copper</td><td>Acid</td><td>5 by 30 ft. line (Dex. save)</td></tr><tr><td>Gold</td><td>Fire</td><td>15 ft. cone (Dex. save)</td></tr><tr><td>Green</td><td>Poison</td><td>15 ft. cone (Con. save)</td></tr><tr><td>Red</td><td>Fire</td><td>15 ft. cone (Dex. save)</td></tr><tr><td>Silver</td><td>Cold</td><td>15 ft. cone (Con. save)</td></tr><tr><td>White</td><td>Cold</td><td>15 ft. cone (Con. save)</td></tr></tbody></table></div>",
+    "traits": [
+      {
+        "id": "trait_dragonborn_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_ravenite_draconic_ancestry_egw",
+        "name": "Draconic Ancestry",
+        "source": "EGW",
+        "raceName": "Dragonborn",
+        "subraceName": "Ravenite",
+        "actionType": "passive",
+        "description": "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon is determined by the dragon type, as shown in the table.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon is determined by the dragon type, as shown in the table.",
+          {
+            "type": "table",
+            "caption": "Draconic Ancestry",
+            "colLabels": [
+              "Dragon",
+              "Damage Type",
+              "Breath Weapon"
+            ],
+            "colStyles": [
+              "col-3 text-center",
+              "col-3 text-center",
+              "col-6"
+            ],
+            "rows": [
+              [
+                "Black",
+                "Acid",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Blue",
+                "Lightning",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Brass",
+                "Fire",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Bronze",
+                "Lightning",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Copper",
+                "Acid",
+                "5 by 30 ft. line (Dex. save)"
+              ],
+              [
+                "Gold",
+                "Fire",
+                "15 ft. cone (Dex. save)"
+              ],
+              [
+                "Green",
+                "Poison",
+                "15 ft. cone (Con. save)"
+              ],
+              [
+                "Red",
+                "Fire",
+                "15 ft. cone (Dex. save)"
+              ],
+              [
+                "Silver",
+                "Cold",
+                "15 ft. cone (Con. save)"
+              ],
+              [
+                "White",
+                "Cold",
+                "15 ft. cone (Con. save)"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_dragonborn_breath_weapon_phb",
+        "name": "Breath Weapon",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.\n\nWhen you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level.\n\nAfter you use your breath weapon, you can't use it again until you complete a short or long rest.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "2d6",
+        "formulaConfig": {
+          "baseDice": "2d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.",
+          "When you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes {@damage 2d6} damage on a failed save, and half as much damage on a successful one. The damage increases to {@damage 3d6} at 6th level, {@damage 4d6} at 11th level, and {@damage 5d6} at 16th level.",
+          "After you use your breath weapon, you can't use it again until you complete a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_damage_resistance_phb",
+        "name": "Damage Resistance",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You have resistance to the damage type associated with your draconic ancestry.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have resistance to the damage type associated with your draconic ancestry."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Dragonborn",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_ravenite_darkvision_egw",
+        "name": "Darkvision",
+        "source": "EGW",
+        "raceName": "Dragonborn",
+        "subraceName": "Ravenite",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_dragonborn_ravenite_vengeful_assault_egw",
+        "name": "Vengeful Assault",
+        "source": "EGW",
+        "raceName": "Dragonborn",
+        "subraceName": "Ravenite",
+        "actionType": "passive",
+        "description": "When you take damage from a creature in range of a weapon you are wielding, you can use your reaction to make an attack with the weapon against that creature. Once you use this trait, you can't do so again until you finish a short or long rest.",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you take damage from a creature in range of a weapon you are wielding, you can use your reaction to make an attack with the weapon against that creature. Once you use this trait, you can't do so again until you finish a short or long rest."
+        ]
+      }
+    ],
+    "description": "**Age**: Young dragonborn grow quickly. They walk hours after hatching, attain the size and development of a 10-year-old human child by the age of 3, and reach adulthood by 15. They live to be around 80.\n\n**Size**: Dragonborn are taller and heavier than humans, standing well over 6 feet tall and averaging almost 250 pounds. Your size is Medium.\n\n**Draconic Ancestry**: You have draconic ancestry. Choose one type of dragon from the Draconic Ancestry table. Your breath weapon is determined by the dragon type, as shown in the table.\n\n**Breath Weapon**: You can use your action to exhale destructive energy. Your draconic ancestry determines the size, shape, and damage type of the exhalation.\n\nWhen you use your breath weapon, each creature in the area of the exhalation must make a saving throw, the type of which is determined by your draconic ancestry. The DC for this saving throw equals 8 + your Constitution modifier + your proficiency bonus. A creature takes 2d6 damage on a failed save, and half as much damage on a successful one. The damage increases to 3d6 at 6th level, 4d6 at 11th level, and 5d6 at 16th level.\n\nAfter you use your breath weapon, you can't use it again until you complete a short or long rest.\n\n**Damage Resistance**: You have resistance to the damage type associated with your draconic ancestry.\n\n**Languages**: You can speak, read, and write Common and Draconic. Draconic is thought to be one of the oldest languages and is often used in the study of magic. The language sounds harsh to most other creatures and includes numerous hard consonants and sibilants.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Vengeful Assault**: When you take damage from a creature in range of a weapon you are wielding, you can use your reaction to make an attack with the weapon against that creature. Once you use this trait, you can't do so again until you finish a short or long rest."
+  },
+  {
+    "id": "race_elf_pallid_egw",
+    "name": "Elf (Pallid)",
+    "raceName": "Elf",
+    "subraceName": "Pallid",
+    "source": "EGW",
+    "page": 21,
+    "size": [
+      "M"
+    ],
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Incisive Sense.</strong> <p>You have advantage on Intelligence (Investigation) and Wisdom (Insight) checks.</p></div>\n<div class=\"compendium-subentry\"><strong>Blessing of the Moon Weaver.</strong> <p>You know the light cantrip. When you reach 3rd level, you can cast the sleep spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the invisibility spell (targeting yourself only) once with this trait and regain the ability to do so when you finish a long rest. Casting these spells with this trait doesn't require material components. Wisdom is your spellcasting ability for these spells.</p></div>",
+    "traits": [
+      {
+        "id": "trait_elf_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old."
+        ]
+      },
+      {
+        "id": "trait_elf_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_elf_darkvision_phb",
+        "name": "Darkvision",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_elf_keen_senses_phb",
+        "name": "Keen Senses",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception} skill."
+        ]
+      },
+      {
+        "id": "trait_elf_fey_ancestry_phb",
+        "name": "Fey Ancestry",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition charmed}, and magic can't put you to sleep."
+        ]
+      },
+      {
+        "id": "trait_elf_trance_phb",
+        "name": "Trance",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.",
+          "{@note If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.}"
+        ]
+      },
+      {
+        "id": "trait_elf_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Elf",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires."
+        ]
+      },
+      {
+        "id": "trait_elf_pallid_incisive_sense_egw",
+        "name": "Incisive Sense",
+        "source": "EGW",
+        "raceName": "Elf",
+        "subraceName": "Pallid",
+        "actionType": "passive",
+        "description": "You have advantage on Intelligence (Investigation) and Wisdom (Insight) checks.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on Intelligence ({@skill Investigation}) and Wisdom ({@skill Insight}) checks."
+        ]
+      },
+      {
+        "id": "trait_elf_pallid_blessing_of_the_moon_weaver_egw",
+        "name": "Blessing of the Moon Weaver",
+        "source": "EGW",
+        "raceName": "Elf",
+        "subraceName": "Pallid",
+        "actionType": "passive",
+        "description": "You know the light cantrip. When you reach 3rd level, you can cast the sleep spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the invisibility spell (targeting yourself only) once with this trait and regain the ability to do so when you finish a long rest. Casting these spells with this trait doesn't require material components. Wisdom is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell light} cantrip. When you reach 3rd level, you can cast the {@spell sleep} spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell invisibility} spell (targeting yourself only) once with this trait and regain the ability to do so when you finish a long rest. Casting these spells with this trait doesn't require material components. Wisdom is your spellcasting ability for these spells."
+        ]
+      }
+    ],
+    "description": "**Age**: Although elves reach physical maturity at about the same age as humans, the elven understanding of adulthood goes beyond physical growth to encompass worldly experience. An elf typically claims adulthood and an adult name around the age of 100 and can live to be 750 years old.\n\n**Size**: Elves range from under 5 to over 6 feet tall and have slender builds. Your size is Medium.\n\n**Darkvision**: Accustomed to twilit forests and the night sky, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Keen Senses**: You have proficiency in the Perception skill.\n\n**Fey Ancestry**: You have advantage on saving throws against being charmed, and magic can't put you to sleep.\n\n**Trance**: Elves don't need to sleep. Instead, they meditate deeply, remaining semiconscious, for 4 hours a day. (The Common word for such meditation is \"trance.\") While meditating, you can dream after a fashion; such dreams are actually mental exercises that have become reflexive through years of practice. After resting in this way, you gain the same benefit that a human does from 8 hours of sleep.\n\nNote: If you meditate during a long rest, you finish the rest after only 4 hours. You otherwise obey all the rules for a long rest; only the duration is changed.\n\n**Languages**: You can speak, read, and write Common and Elvish. Elvish is fluid, with subtle intonations and intricate grammar. Elven literature is rich and varied, and their songs and poems are famous among other races. Many bards learn their language so they can add Elvish ballads to their repertoires.\n\n**Incisive Sense**: You have advantage on Intelligence (Investigation) and Wisdom (Insight) checks.\n\n**Blessing of the Moon Weaver**: You know the light cantrip. When you reach 3rd level, you can cast the sleep spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the invisibility spell (targeting yourself only) once with this trait and regain the ability to do so when you finish a long rest. Casting these spells with this trait doesn't require material components. Wisdom is your spellcasting ability for these spells."
+  },
+  {
+    "id": "race_halfling_lotusden_egw",
+    "name": "Halfling (Lotusden)",
+    "raceName": "Halfling",
+    "subraceName": "Lotusden",
+    "source": "EGW",
+    "page": 164,
+    "size": [
+      "S"
+    ],
+    "speed": "25 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Child of the Wood.</strong> <p>You know the druidcraft cantrip. When you reach 3rd level, you can cast the entangle spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the spike growth spell once with this trait and regain the ability to do so when you finish a long rest. Casting these spells with this trait doesn't require material components. Wisdom is your spellcasting ability for these spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Timberwalk.</strong> <p>Ability checks made to track you have disadvantage, and you can move across difficult terrain||3 made of nonmagical plants and undergrowth without expending extra movement.</p></div>",
+    "traits": [
+      {
+        "id": "trait_halfling_age_phb",
+        "name": "Age",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century."
+        ]
+      },
+      {
+        "id": "trait_halfling_size_phb",
+        "name": "Size",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small."
+        ]
+      },
+      {
+        "id": "trait_halfling_lucky_phb",
+        "name": "Lucky",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll."
+        ]
+      },
+      {
+        "id": "trait_halfling_brave_phb",
+        "name": "Brave",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws against being frightened.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws against being {@condition frightened}."
+        ]
+      },
+      {
+        "id": "trait_halfling_halfling_nimbleness_phb",
+        "name": "Halfling Nimbleness",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You can move through the space of any creature that is of a size larger than yours.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can move through the space of any creature that is of a size larger than yours."
+        ]
+      },
+      {
+        "id": "trait_halfling_languages_phb",
+        "name": "Languages",
+        "source": "PHB",
+        "raceName": "Halfling",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Halfling. The Halfling language isn't secret, but halflings are loath to share it with others. They write very little, so they don't have a rich body of literature. Their oral tradition, however, is very strong. Almost all halflings speak Common to converse with the people in whose lands they dwell or through which they are traveling.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Halfling. The Halfling language isn't secret, but halflings are loath to share it with others. They write very little, so they don't have a rich body of literature. Their oral tradition, however, is very strong. Almost all halflings speak Common to converse with the people in whose lands they dwell or through which they are traveling."
+        ]
+      },
+      {
+        "id": "trait_halfling_lotusden_child_of_the_wood_egw",
+        "name": "Child of the Wood",
+        "source": "EGW",
+        "raceName": "Halfling",
+        "subraceName": "Lotusden",
+        "actionType": "passive",
+        "description": "You know the druidcraft cantrip. When you reach 3rd level, you can cast the entangle spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the spike growth spell once with this trait and regain the ability to do so when you finish a long rest. Casting these spells with this trait doesn't require material components. Wisdom is your spellcasting ability for these spells.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell druidcraft} cantrip. When you reach 3rd level, you can cast the {@spell entangle} spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the {@spell spike growth} spell once with this trait and regain the ability to do so when you finish a long rest. Casting these spells with this trait doesn't require material components. Wisdom is your spellcasting ability for these spells."
+        ]
+      },
+      {
+        "id": "trait_halfling_lotusden_timberwalk_egw",
+        "name": "Timberwalk",
+        "source": "EGW",
+        "raceName": "Halfling",
+        "subraceName": "Lotusden",
+        "actionType": "passive",
+        "description": "Ability checks made to track you have disadvantage, and you can move across difficult terrain||3 made of nonmagical plants and undergrowth without expending extra movement.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Ability checks made to track you have disadvantage, and you can move across {@quickref difficult terrain||3} made of nonmagical plants and undergrowth without expending extra movement."
+        ]
+      }
+    ],
+    "description": "**Age**: A halfling reaches adulthood at the age of 20 and generally lives into the middle of his or her second century.\n\n**Size**: Halflings average about 3 feet tall and weigh about 40 pounds. Your size is Small.\n\n**Lucky**: When you roll a 1 on an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll.\n\n**Brave**: You have advantage on saving throws against being frightened.\n\n**Halfling Nimbleness**: You can move through the space of any creature that is of a size larger than yours.\n\n**Languages**: You can speak, read, and write Common and Halfling. The Halfling language isn't secret, but halflings are loath to share it with others. They write very little, so they don't have a rich body of literature. Their oral tradition, however, is very strong. Almost all halflings speak Common to converse with the people in whose lands they dwell or through which they are traveling.\n\n**Child of the Wood**: You know the druidcraft cantrip. When you reach 3rd level, you can cast the entangle spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level, you can cast the spike growth spell once with this trait and regain the ability to do so when you finish a long rest. Casting these spells with this trait doesn't require material components. Wisdom is your spellcasting ability for these spells.\n\n**Timberwalk**: Ability checks made to track you have disadvantage, and you can move across difficult terrain||3 made of nonmagical plants and undergrowth without expending extra movement."
+  },
+  {
     "id": "race_orc_egw",
     "name": "Orc",
     "source": "EGW",
     "page": 178,
     "size": "Medium",
     "speed": "30 ft",
-    "traitsHtml": ""
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_orc_age_egw",
+        "name": "Age",
+        "source": "EGW",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "Orcs reach adulthood at age 16, and live up to 80 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Orcs reach adulthood at age 16, and live up to 80 years."
+        ]
+      },
+      {
+        "id": "trait_orc_alignment_egw",
+        "name": "Alignment",
+        "source": "EGW",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "Orcs fear the curse of ruin that is said to plague their race, and tend strongly toward either chaos (accepting their fate), or toward law (rejecting it).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Orcs fear the curse of ruin that is said to plague their race, and tend strongly toward either chaos (accepting their fate), or toward law (rejecting it)."
+        ]
+      },
+      {
+        "id": "trait_orc_size_egw",
+        "name": "Size",
+        "source": "EGW",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "Orcs stand easily 8 feet tall and corded with powerful muscles, weighing up to 280 pounds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Orcs stand easily 8 feet tall and corded with powerful muscles, weighing up to 280 pounds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_orc_darkvision_egw",
+        "name": "Darkvision",
+        "source": "EGW",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray."
+        ]
+      },
+      {
+        "id": "trait_orc_aggressive_egw",
+        "name": "Aggressive",
+        "source": "EGW",
+        "raceName": "Orc",
+        "actionType": "bonus",
+        "description": "As a bonus action, you can move up to your movement speed toward a hostile creature you can see or hear. You must end this move closer to the enemy than you started.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a bonus action, you can move up to your movement speed toward a hostile creature you can see or hear. You must end this move closer to the enemy than you started."
+        ]
+      },
+      {
+        "id": "trait_orc_primal_intuition_egw",
+        "name": "Primal Intuition",
+        "source": "EGW",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You have proficiency in two of the following skills of your choice: Animal Handling, Insight, Intimidation, Medicine, Perception, and Survival.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in two of the following skills of your choice: {@skill Animal Handling}, {@skill Insight}, {@skill Intimidation}, {@skill Medicine}, {@skill Perception}, and {@skill Survival}."
+        ]
+      },
+      {
+        "id": "trait_orc_powerful_build_egw",
+        "name": "Powerful Build",
+        "source": "EGW",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift."
+        ]
+      },
+      {
+        "id": "trait_orc_languages_egw",
+        "name": "Languages",
+        "source": "EGW",
+        "raceName": "Orc",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Orc.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Orc."
+        ]
+      }
+    ],
+    "description": "**Age**: Orcs reach adulthood at age 16, and live up to 80 years.\n\n**Alignment**: Orcs fear the curse of ruin that is said to plague their race, and tend strongly toward either chaos (accepting their fate), or toward law (rejecting it).\n\n**Size**: Orcs stand easily 8 feet tall and corded with powerful muscles, weighing up to 280 pounds. Your size is Medium.\n\n**Darkvision**: You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can't discern color in darkness, only shades of gray.\n\n**Aggressive**: As a bonus action, you can move up to your movement speed toward a hostile creature you can see or hear. You must end this move closer to the enemy than you started.\n\n**Primal Intuition**: You have proficiency in two of the following skills of your choice: Animal Handling, Insight, Intimidation, Medicine, Perception, and Survival.\n\n**Powerful Build**: You count as one size larger when determining your carrying capacity and the weight you can push, drag, or lift.\n\n**Languages**: You can speak, read, and write Common and Orc."
   }
 ]

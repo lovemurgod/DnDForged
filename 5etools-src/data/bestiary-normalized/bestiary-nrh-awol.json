@@ -90,10 +90,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_spider_climb_nmv3",
+        "id": "act_spider_climb_y7vz",
         "name": "Spider Climb",
         "actionType": "trait",
-        "descriptionHtml": "<p>The spider can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "descriptionHtml": "<p>Szikzith can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
+        "entries": [
+          "Szikzith can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -107,10 +110,13 @@
         }
       },
       {
-        "id": "act_web_sense_8pc2",
+        "id": "act_web_sense_i31n",
         "name": "Web Sense",
         "actionType": "trait",
-        "descriptionHtml": "<p>While in contact with a web, the spider knows the exact location of any other creature in contact with the same web.</p>",
+        "descriptionHtml": "<p>While in contact with a web, Szikzith knows the exact location of any other creature in contact with the same web.</p>",
+        "entries": [
+          "While in contact with a web, Szikzith knows the exact location of any other creature in contact with the same web."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -124,10 +130,13 @@
         }
       },
       {
-        "id": "act_web_walker_s48a",
+        "id": "act_web_walker_bo50",
         "name": "Web Walker",
         "actionType": "trait",
-        "descriptionHtml": "<p>The spider ignores movement restrictions caused by webbing.</p>",
+        "descriptionHtml": "<p>Szikzith ignores movement restrictions caused by webbing.</p>",
+        "entries": [
+          "Szikzith ignores movement restrictions caused by webbing."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -143,10 +152,13 @@
     ],
     "actions": [
       {
-        "id": "act_bite_ilbb",
+        "id": "act_bite_ggut",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one creature. {@h}4 (1d6 + 1) piercing damage, and the target must make a DC 11 Constitution saving throw, taking 7 (2d6) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one creature. Hit: 4 (1d6 + 1) piercing damage, and the target must make a DC 11 Constitution saving throw, taking 7 (2d6) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one creature. {@h}4 ({@damage 1d6 + 1}) piercing damage, and the target must make a {@dc 11} Constitution saving throw, taking 7 ({@damage 2d6}) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but {@condition poisoned} for 1 hour, even after regaining hit points, and is {@condition paralyzed} while {@condition poisoned} in this way."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -179,10 +191,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/NRH-AWoL/Szikzith.webp",
     "tokenImg": "img/bestiary/tokens/NRH-AWoL/Szikzith.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

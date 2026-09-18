@@ -148,7 +148,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.innerHTML = `
                     ${thumbHtml}
                     <span class="asset-name" title="${item.name}">${item.name}</span>
+                    <button class="btn-mobile-spawn-token asset-mobile-spawn-btn" title="Place on Map" style="position: absolute; top: 4px; right: 4px; z-index: 5;">
+                        <i class="fa-solid fa-plus pointer-events-none"></i>
+                    </button>
                 `;
+
+                const mobileSpawnBtn = el.querySelector('.asset-mobile-spawn-btn');
+                if (mobileSpawnBtn) {
+                    mobileSpawnBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (window.VTT?.spawnAssetAtCenter) {
+                            window.VTT.spawnAssetAtCenter({
+                                name: item.name,
+                                url: item.url,
+                                assetType: isVideo ? 'video' : 'image'
+                            });
+                        }
+                    });
+                }
                 
                 // Drag and drop setup
                 el.draggable = true;

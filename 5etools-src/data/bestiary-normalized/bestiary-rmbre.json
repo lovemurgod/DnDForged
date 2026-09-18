@@ -102,10 +102,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_and_smell_ti8u",
+        "id": "act_keen_sight_and_smell_jst2",
         "name": "Keen Sight and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>Billy Beaver has advantage on Wisdom (Perception) checks that rely on sight or smell.</p>",
+        "entries": [
+          "Billy Beaver has advantage on Wisdom ({@skill Perception}) checks that rely on sight or smell."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -121,10 +124,13 @@
     ],
     "actions": [
       {
-        "id": "act_beak_5lwe",
+        "id": "act_beak_9tpx",
         "name": "Beak",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +7 to hit, reach 5 ft., one creature. {@h}10 (1d10 + 5) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one creature. Hit: 10 (1d10 + 5) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one creature. {@h}10 ({@damage 1d10 + 5}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -150,11 +156,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RMBRE/Billy Beaver.webp",
     "tokenImg": "img/bestiary/tokens/RMBRE/Billy Beaver.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_buster_the_bear_rmbre",
@@ -261,10 +279,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_surprise_attack_v3lb",
+        "id": "act_surprise_attack_sk07",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If Buster the Bear surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
+        "entries": [
+          "If Buster the Bear surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 ({@damage 2d6}) damage from the attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -285,10 +306,13 @@
     ],
     "actions": [
       {
-        "id": "act_bashin__banjo_vdxk",
+        "id": "act_bashin__banjo_ghng",
         "name": "Bashin' Banjo",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}6 (1d8 + 2) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}6 ({@damage 1d8 + 2}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -314,11 +338,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RMBRE/Buster the Bear.webp",
     "tokenImg": "img/bestiary/tokens/RMBRE/Buster the Bear.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_large_mimic_rmbre",
@@ -413,10 +449,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_9uuu",
+        "id": "act_shapechanger_zphb",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic can use its action to polymorph into an object or back into its true, amorphous form. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
+        "entries": [
+          "The mimic can use its action to polymorph into an object or back into its true, amorphous form. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -430,10 +469,13 @@
         }
       },
       {
-        "id": "act_adhesive__object_form_only__yast",
+        "id": "act_adhesive__object_form_only__wafg",
         "name": "Adhesive (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic adheres to anything that touches it. A Huge or smaller creature adhered to the mimic is also grappled by it (escape DC 13). Ability checks made to escape this grapple have disadvantage.</p>",
+        "entries": [
+          "The mimic adheres to anything that touches it. A Huge or smaller creature adhered to the mimic is also {@condition grappled} by it (escape {@dc 13}). Ability checks made to escape this grapple have disadvantage."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -443,17 +485,20 @@
           "targets": null,
           "save": {
             "dc": 13,
-            "ability": "Save"
+            "ability": null
           },
           "damages": [],
           "recharge": null
         }
       },
       {
-        "id": "act_false_appearance__object_form_only__tm7s",
+        "id": "act_false_appearance__object_form_only__goth",
         "name": "False Appearance (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>While the mimic remains motionless, it is indistinguishable from an ordinary object.</p>",
+        "entries": [
+          "While the mimic remains motionless, it is indistinguishable from an ordinary object."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -467,10 +512,13 @@
         }
       },
       {
-        "id": "act_grappler_sg5g",
+        "id": "act_grappler_etdp",
         "name": "Grappler",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic has advantage on attack rolls against any creature grappled by it.</p>",
+        "entries": [
+          "The mimic has advantage on attack rolls against any creature {@condition grappled} by it."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -486,10 +534,33 @@
     ],
     "actions": [
       {
-        "id": "act_pseudopod_qtc9",
+        "id": "act_multiattack_3xux",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The mimic makes three attacks: two with its pseudopods and one with its bite.</p>",
+        "entries": [
+          "The mimic makes three attacks: two with its pseudopods and one with its bite."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_pseudopod_l1ok",
         "name": "Pseudopod",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage. If the mimic is in object form, the target is subjected to its Adhesive trait.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. If the mimic is in object form, the target is subjected to its Adhesive trait.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) bludgeoning damage. If the mimic is in object form, the target is subjected to its Adhesive trait."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -508,10 +579,13 @@
         }
       },
       {
-        "id": "act_bite_e8ly",
+        "id": "act_bite_1ax2",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) piercing damage plus 4 (1d8) acid damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage plus 4 (1d8) acid damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) piercing damage plus 4 ({@damage 1d8}) acid damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -541,11 +615,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RMBRE/Large Mimic.webp",
     "tokenImg": "img/bestiary/tokens/RMBRE/Large Mimic.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_layla_the_lizard_rmbre",
@@ -647,10 +733,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_heix",
+        "id": "act_bite_0zqa",
         "name": "Bite",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one creature. {@h}9 (2d6 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one creature. Hit: 9 (2d6 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one creature. {@h}9 ({@damage 2d6 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -669,10 +758,13 @@
         }
       },
       {
-        "id": "act_claws_mwq4",
+        "id": "act_claws_ov9g",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}7 (2d4 + 2) slashing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}7 ({@damage 2d4 + 2}) slashing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -698,11 +790,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RMBRE/Layla the Lizard.webp",
     "tokenImg": "img/bestiary/tokens/RMBRE/Layla the Lizard.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_lycanthropickle_rmbre",
@@ -800,10 +904,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_9rhn",
+        "id": "act_false_appearance_hf3s",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the lycanthropickle remains motionless, it is indistinguishable from a pickle.</p>",
+        "entries": [
+          "While the lycanthropickle remains motionless, it is indistinguishable from a pickle."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -819,10 +926,13 @@
     ],
     "actions": [
       {
-        "id": "act_claws_b1aw",
+        "id": "act_claws_igoq",
         "name": "Claws",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +3 to hit, reach 5 ft., one target. {@h}3 (1d4 + 1) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}3 ({@damage 1d4 + 1}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -848,11 +958,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RMBRE/Lycanthropickle.webp",
     "tokenImg": "img/bestiary/tokens/RMBRE/Lycanthropickle.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_meeseeks_rmbre",
@@ -942,10 +1064,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_jfnv",
+        "id": "act_club_un3h",
         "name": "Club",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +2 to hit, reach 5 ft., one target. {@h}2 (1d4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 2} to hit, reach 5 ft., one target. {@h}2 ({@damage 1d4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -971,11 +1096,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RMBRE/Meeseeks.webp",
     "tokenImg": "img/bestiary/tokens/RMBRE/Meeseeks.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_piggy_wiggle_butt_rmbre",
@@ -1080,10 +1217,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_aggressive_dvxv",
+        "id": "act_aggressive_15c0",
         "name": "Aggressive",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Piggy Wiggle Butt can move up to its speed toward a hostile creature that it can see.</p>",
+        "entries": [
+          "As a bonus action, Piggy Wiggle Butt can move up to its speed toward a hostile creature that it can see."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1099,10 +1239,13 @@
     ],
     "actions": [
       {
-        "id": "act_clay_jug_0h98",
+        "id": "act_clay_jug_1w3j",
         "name": "Clay Jug",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +5 to hit, reach 5 ft., one target. {@h}7 (1d8 + 3) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 5} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d8 + 3}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1128,11 +1271,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RMBRE/Piggy Wiggle Butt.webp",
     "tokenImg": "img/bestiary/tokens/RMBRE/Piggy Wiggle Butt.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_thomas_t__toad_rmbre",
@@ -1234,10 +1389,13 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_webby_hands_tonc",
+        "id": "act_webby_hands_k88i",
         "name": "Webby Hands",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +6 to hit, reach 5 ft., one target. {@h}8 (1d8 + 4) bludgeoning damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}8 ({@damage 1d8 + 4}) bludgeoning damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1263,11 +1421,23 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RMBRE/Thomas T. Toad.webp",
     "tokenImg": "img/bestiary/tokens/RMBRE/Thomas T. Toad.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   },
   {
     "id": "creature_tommy_two_butts_rmbre",
@@ -1363,10 +1533,13 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brute_zfa4",
+        "id": "act_brute_jj2z",
         "name": "Brute",
         "actionType": "trait",
-        "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when the bugbear hits with it (included in the attack).</p>",
+        "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when Tommy hits with it (included in the attack).</p>",
+        "entries": [
+          "A melee weapon deals one extra die of its damage when Tommy hits with it (included in the attack)."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1380,10 +1553,13 @@
         }
       },
       {
-        "id": "act_surprise_attack_p825",
+        "id": "act_surprise_attack_x0nr",
         "name": "Surprise Attack",
         "actionType": "trait",
-        "descriptionHtml": "<p>If the bugbear surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
+        "descriptionHtml": "<p>If Tommy surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
+        "entries": [
+          "If Tommy surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 ({@damage 2d6}) damage from the attack."
+        ],
         "macro": {
           "isAttack": false,
           "attackType": null,
@@ -1404,10 +1580,13 @@
     ],
     "actions": [
       {
-        "id": "act_morningstar_hyfb",
+        "id": "act_morningstar_pueg",
         "name": "Morningstar",
         "actionType": "action",
-        "descriptionHtml": "<p>mw +4 to hit, reach 5 ft., one target. {@h}11 (2d8 + 2) piercing damage.</p>",
+        "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 11 (2d8 + 2) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 4} to hit, reach 5 ft., one target. {@h}11 ({@damage 2d8 + 2}) piercing damage."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1426,10 +1605,13 @@
         }
       },
       {
-        "id": "act_javelin_tpbt",
+        "id": "act_javelin_vzi9",
         "name": "Javelin",
         "actionType": "action",
-        "descriptionHtml": "<p>mw,rw +4 to hit, reach 5 ft. or range 30/120 ft., one target. {@h}9 (2d6 + 2) piercing damage in melee or 5 (1d6 + 2) piercing damage at range.</p>",
+        "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 9 (2d6 + 2) piercing damage in melee or 5 (1d6 + 2) piercing damage at range.</p>",
+        "entries": [
+          "{@atk mw,rw} {@hit 4} to hit, reach 5 ft. or range 30/120 ft., one target. {@h}9 ({@damage 2d6 + 2}) piercing damage in melee or 5 ({@damage 1d6 + 2}) piercing damage at range."
+        ],
         "macro": {
           "isAttack": true,
           "attackType": null,
@@ -1459,10 +1641,22 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": []
     },
+    "legendaryActionsLair": null,
     "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
     "hasToken": true,
     "tokenUrl": "img/bestiary/tokens/RMBRE/Tommy Two-Butts.webp",
     "tokenImg": "img/bestiary/tokens/RMBRE/Tommy Two-Butts.webp",
-    "fluff": null
+    "fluff": null,
+    "legendaryGroup": null
   }
 ]

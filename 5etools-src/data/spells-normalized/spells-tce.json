@@ -28,21 +28,28 @@
         "formula": "4d12",
         "type": "Force",
         "label": "Damage 1",
-        "stat": "none"
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
       },
       {
         "formula": "8d12",
         "type": "Force",
         "label": "Damage 2",
-        "stat": "none"
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
       },
       {
         "formula": "12d12",
         "type": "Force",
         "label": "Damage 3",
-        "stat": "none"
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
       }
     ],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "spell",
     "upcastBonus": "",
@@ -87,14 +94,19 @@
       {
         "formula": "0d8",
         "type": "Thunder",
-        "stat": "none"
+        "label": "Hit",
+        "stat": "none",
+        "cantripScale": true
       },
       {
         "formula": "1d8",
         "type": "Thunder",
-        "stat": "none"
+        "label": "If Moves",
+        "stat": "none",
+        "cantripScale": true
       }
     ],
+    "cantripScale": true,
     "saveAbility": "",
     "attackStat": "spell",
     "upcastBonus": "",
@@ -154,6 +166,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -198,14 +211,19 @@
       {
         "formula": "0d8",
         "type": "Fire",
-        "stat": "none"
+        "label": "Hit",
+        "stat": "none",
+        "cantripScale": true
       },
       {
         "formula": "1d8",
         "type": "Fire",
-        "stat": "spell"
+        "label": "Leap Fire",
+        "stat": "spell",
+        "cantripScale": true
       }
     ],
+    "cantripScale": true,
     "saveAbility": "",
     "attackStat": "spell",
     "upcastBonus": "",
@@ -268,6 +286,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -312,9 +331,11 @@
         "formula": "1d8",
         "type": "Lightning",
         "label": "",
-        "stat": "none"
+        "stat": "none",
+        "cantripScale": true
       }
     ],
+    "cantripScale": true,
     "saveAbility": "strength",
     "attackStat": "none",
     "upcastBonus": "1d8",
@@ -383,9 +404,11 @@
         "formula": "1d6",
         "type": "Psychic",
         "label": "",
-        "stat": "none"
+        "stat": "none",
+        "cantripScale": true
       }
     ],
+    "cantripScale": true,
     "saveAbility": "intelligence",
     "attackStat": "none",
     "upcastBonus": "1d6",
@@ -439,9 +462,12 @@
         "formula": "1d8",
         "type": "Extra",
         "label": "",
-        "stat": "none"
+        "stat": "none",
+        "upcastBonus": "1d8",
+        "upcastScaleStep": 2
       }
     ],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "1d8",
@@ -501,6 +527,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -553,6 +580,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -598,6 +626,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -650,6 +679,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -703,6 +733,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -757,6 +788,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -794,6 +826,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -831,6 +864,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -876,6 +910,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",
@@ -919,9 +954,11 @@
         "formula": "1d6",
         "type": "Force",
         "label": "",
-        "stat": "none"
+        "stat": "none",
+        "cantripScale": true
       }
     ],
+    "cantripScale": true,
     "saveAbility": "dexterity",
     "attackStat": "none",
     "upcastBonus": "1d6",
@@ -973,9 +1010,12 @@
         "formula": "2d4",
         "type": "Acid",
         "label": "",
-        "stat": "none"
+        "stat": "none",
+        "upcastBonus": "2d4",
+        "upcastScaleStep": 1
       }
     ],
+    "cantripScale": false,
     "saveAbility": "dexterity",
     "attackStat": "none",
     "upcastBonus": "2d4",
@@ -1014,9 +1054,12 @@
         "formula": "3d6",
         "type": "Psychic",
         "label": "",
-        "stat": "none"
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
       }
     ],
+    "cantripScale": false,
     "saveAbility": "intelligence",
     "attackStat": "none",
     "upcastBonus": "",
@@ -1057,6 +1100,7 @@
     "backgrounds": [],
     "feats": [],
     "damageList": [],
+    "cantripScale": false,
     "saveAbility": "",
     "attackStat": "none",
     "upcastBonus": "",

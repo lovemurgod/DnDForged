@@ -1,0 +1,1199 @@
+[
+  {
+    "id": "creature_anaya_maladyofminarrh",
+    "name": "Anaya",
+    "source": "MaladyOfMinarrh",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "cleric",
+    "alignment": "N",
+    "ac": [
+      {
+        "value": 13,
+        "condition": null
+      }
+    ],
+    "primaryAc": 13,
+    "acCondition": "",
+    "hp": {
+      "average": 38,
+      "formula": "7d8 + 7"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 16,
+        "mod": 3
+      },
+      "dex": {
+        "score": 16,
+        "mod": 3
+      },
+      "con": {
+        "score": 12,
+        "mod": 1
+      },
+      "int": {
+        "score": 13,
+        "mod": 1
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 13,
+        "mod": 1
+      }
+    },
+    "str": 16,
+    "dex": 16,
+    "con": 12,
+    "int": 13,
+    "wis": 18,
+    "cha": 13,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "medicine": "+8",
+      "perception": "+6",
+      "religion": "+5"
+    },
+    "skills": {
+      "medicine": "+8",
+      "perception": "+6",
+      "religion": "+5"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "frightened"
+    ],
+    "passive": 16,
+    "senses": {
+      "passivePerception": 16,
+      "sensesString": ""
+    },
+    "languages": [
+      "Abyssal",
+      "Common",
+      "Infernal"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_anaya_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "Anaya casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 14):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_light_xphb",
+            "name": "Light",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "1 hour",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, M (a firefly or phosphorescent moss)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_thaumaturgy_xphb",
+            "name": "Thaumaturgy",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1": [
+            {
+              "spellId": "sp_dispel_evil_and_good_xphb",
+              "name": "Dispel Evil and Good",
+              "source": "XPHB",
+              "level": 5,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "charisma",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [],
+              "components": "V, S, M (powdered silver and iron)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_sending_xphb",
+              "name": "Sending",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Divination",
+              "castingTime": "1 action",
+              "range": "unlimited",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a copper wire)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_spirit_guardians_xphb",
+              "name": "Spirit Guardians",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "Self (15 feet emanation)",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 14,
+              "damageList": [
+                {
+                  "formula": "3d8",
+                  "type": "Necrotic",
+                  "stat": "none",
+                  "upcastBonus": "1d8",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "3d8",
+                  "type": "Radiant",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (a prayer scroll)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Light",
+          "Thaumaturgy"
+        ]
+      },
+      {
+        "id": "sc_anaya_1",
+        "name": "Divine Aid (3/Day)",
+        "type": "slot",
+        "displayAs": "bonus",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 14,
+        "atkMod": 6,
+        "header": "Anaya casts Bless, Dispel Magic, Healing Word, or Lesser Restoration, using the same spellcasting ability as Spellcasting.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [],
+        "daily": {
+          "3": [
+            {
+              "spellId": "sp_bless_xphb",
+              "name": "Bless",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "30 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a Holy Symbol worth 5+ GP)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_dispel_magic_xphb",
+              "name": "Dispel Magic",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "120 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_healing_word_xphb",
+              "name": "Healing Word",
+              "source": "XPHB",
+              "level": 1,
+              "school": "Abjuration",
+              "castingTime": "1 bonus action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [
+                {
+                  "formula": "2d4",
+                  "type": "Healing",
+                  "stat": "spell",
+                  "upcastBonus": "2d4",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_lesser_restoration_xphb",
+              "name": "Lesser Restoration",
+              "source": "XPHB",
+              "level": 2,
+              "school": "Abjuration",
+              "castingTime": "1 bonus action",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": []
+      }
+    ],
+    "traits": [],
+    "actions": [
+      {
+        "id": "act_radiant_flame_vuqj",
+        "name": "Radiant Flame",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Attack: +6, range 60 ft. Hit: 11 (2d10) Radiant damage.</p>",
+        "entries": [
+          "{@atkr r} {@hit 6}, range 60 ft. {@h}11 ({@damage 2d10}) Radiant damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": null,
+          "range": "60 ft.",
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d10",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MaladyOfMinarrh/Anaya.webp",
+    "tokenImg": "img/bestiary/tokens/MaladyOfMinarrh/Anaya.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_tharian__possessed__maladyofminarrh",
+    "name": "Tharian (Possessed)",
+    "source": "MaladyOfMinarrh",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Humanoid",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 12,
+        "condition": null
+      }
+    ],
+    "primaryAc": 12,
+    "acCondition": "",
+    "hp": {
+      "average": 127,
+      "formula": "17d8 + 51"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 19,
+        "mod": 4
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 12,
+        "mod": 1
+      },
+      "wis": {
+        "score": 18,
+        "mod": 4
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": 19,
+    "dex": 15,
+    "con": 16,
+    "int": 12,
+    "wis": 18,
+    "cha": 10,
+    "proficiencyBonus": 3,
+    "save": {
+      "con": "+6",
+      "wis": "+7"
+    },
+    "saves": {
+      "con": "+6",
+      "wis": "+7"
+    },
+    "skill": {
+      "perception": "+7",
+      "religion": "+4"
+    },
+    "skills": {
+      "perception": "+7",
+      "religion": "+4"
+    },
+    "immune": [],
+    "resist": [
+      "necrotic",
+      "poison"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 17,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 17,
+      "sensesString": "Darkvision 90 ft. (unimpeded by magical {@variantrule Darkness|XPHB})"
+    },
+    "languages": [
+      "Abyssal",
+      "Common",
+      "Infernal"
+    ],
+    "cr": "8",
+    "crNumeric": 8,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_tharian__possessed__0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "Tharian casts one of the following spells, using Wisdom as the spellcasting ability (spell save DC 15, +7 to hit with spell attacks):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_scorching_ray_xphb",
+            "name": "Scorching Ray",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "spell",
+            "atkMod": 7,
+            "dc": null,
+            "damageList": [
+              {
+                "formula": "2d6",
+                "type": "Fire",
+                "label": "",
+                "stat": "none",
+                "upcastBonus": "",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_thaumaturgy_xphb",
+            "name": "Thaumaturgy",
+            "source": "XPHB",
+            "level": 0,
+            "school": "Transmutation",
+            "castingTime": "1 action",
+            "range": "30 feet",
+            "duration": "1 minute",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "2": [
+            {
+              "spellId": "sp_fireball_xphb",
+              "name": "Fireball",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "150 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 15,
+              "damageList": [
+                {
+                  "formula": "8d6",
+                  "type": "Fire",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (a ball of bat guano and sulfur)",
+              "usesMax": 2,
+              "usesRemaining": 2,
+              "dailyKey": "2",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Scorching Ray",
+          "Thaumaturgy"
+        ]
+      },
+      {
+        "id": "sc_tharian__possessed__1",
+        "name": "Hellish Rebuke",
+        "type": "slot",
+        "displayAs": "reaction",
+        "ability": "wis",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 15,
+        "atkMod": 7,
+        "header": "Tharian casts Hellish Rebuke in response to that spell's trigger, using the same spellcasting ability as Spellcasting.",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_hellish_rebuke_xphb",
+            "name": "Hellish Rebuke",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Evocation",
+            "castingTime": "1 reaction (which you take in response to taking damage from a creature that you can see within 60 feet of yourself)",
+            "range": "60 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "dexterity",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": 15,
+            "damageList": [
+              {
+                "formula": "2d10",
+                "type": "Fire",
+                "label": "",
+                "stat": "none",
+                "upcastBonus": "1d10",
+                "upcastScaleStep": 1
+              }
+            ],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {},
+        "will": [
+          "Hellish Rebuke"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_fiendish_infusion_bbu1",
+        "name": "Fiendish Infusion",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Attacks and spells that deal Fire damage instead deal Necrotic or Poison damage (his choice).</p>",
+        "entries": [
+          "Attacks and spells that deal Fire damage instead deal Necrotic or Poison damage (his choice)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_62on",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Tharian makes three Pact Axe attacks.</p>",
+        "entries": [
+          "Tharian makes three Pact Axe attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_pact_axe_5hw3",
+        "name": "Pact Axe",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +7, reach 5 ft. Hit: 10 (1d12 + 4) Slashing damage plus 13 (3d8) Necroticor Poisondamage.</p>",
+        "entries": [
+          "{@atkr m} {@hit 7}, reach 5 ft. {@h}10 ({@damage 1d12 + 4}) Slashing damage plus 13 ({@dice 3d8}) Necroticor Poisondamage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d12 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MaladyOfMinarrh/Tharian (Possessed).webp",
+    "tokenImg": "img/bestiary/tokens/MaladyOfMinarrh/Tharian (Possessed).webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_xarashtar_maladyofminarrh",
+    "name": "Xarashtar",
+    "source": "MaladyOfMinarrh",
+    "edition": "2014",
+    "page": 0,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Fiend",
+    "subtype": "demon",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 189,
+      "formula": "18d10 + 90"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 20,
+        "mod": 5
+      },
+      "dex": {
+        "score": 15,
+        "mod": 2
+      },
+      "con": {
+        "score": 21,
+        "mod": 5
+      },
+      "int": {
+        "score": 19,
+        "mod": 4
+      },
+      "wis": {
+        "score": 17,
+        "mod": 3
+      },
+      "cha": {
+        "score": 16,
+        "mod": 3
+      }
+    },
+    "str": 20,
+    "dex": 15,
+    "con": 21,
+    "int": 19,
+    "wis": 17,
+    "cha": 16,
+    "proficiencyBonus": 4,
+    "save": {
+      "str": "+9",
+      "con": "+9",
+      "wis": "+7",
+      "cha": "+7"
+    },
+    "saves": {
+      "str": "+9",
+      "con": "+9",
+      "wis": "+7",
+      "cha": "+7"
+    },
+    "skill": {
+      "deception": "+7",
+      "perception": "+7"
+    },
+    "skills": {
+      "deception": "+7",
+      "perception": "+7"
+    },
+    "immune": [
+      "poison"
+    ],
+    "resist": [
+      "cold",
+      "fire",
+      "lightning"
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 17,
+    "initiative": {
+      "proficiency": 1
+    },
+    "senses": {
+      "passivePerception": 17,
+      "sensesString": "Truesight 120 ft."
+    },
+    "languages": [
+      "Abyssal; telepathy 120 ft."
+    ],
+    "cr": "9",
+    "crNumeric": 9,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_xarashtar_0",
+        "name": "Spellcasting",
+        "type": "slot",
+        "displayAs": "action",
+        "ability": "int",
+        "abilityMod": 4,
+        "casterLevel": 1,
+        "dc": 16,
+        "atkMod": 8,
+        "header": "Xarashtar casts one of the following spells, requiring no Material components and using Intelligence as the spellcasting ability (spell save DC 16):",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_darkness_xphb",
+            "name": "Darkness",
+            "source": "XPHB",
+            "level": 2,
+            "school": "Evocation",
+            "castingTime": "1 action",
+            "range": "60 feet",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, M (bat fur and a piece of coal)",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_detect_magic_xphb",
+            "name": "Detect Magic",
+            "source": "XPHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "Self (30 feet sphere)",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": true,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_dispel_magic_xphb",
+            "name": "Dispel Magic",
+            "source": "XPHB",
+            "level": 3,
+            "school": "Abjuration",
+            "castingTime": "1 action",
+            "range": "120 feet",
+            "duration": "Instantaneous",
+            "concentration": false,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_confusion_xphb",
+              "name": "Confusion",
+              "source": "XPHB",
+              "level": 4,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [],
+              "components": "V, S, M (three nut shells)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_fly_xphb",
+              "name": "Fly",
+              "source": "XPHB",
+              "level": 3,
+              "school": "Transmutation",
+              "castingTime": "1 action",
+              "range": "touch",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a feather)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_mass_suggestion_xphb",
+              "name": "Mass Suggestion",
+              "source": "XPHB",
+              "level": 6,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "24 hours",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "wisdom",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [],
+              "components": "V, M (a snake's tongue)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_power_word_stun_xphb",
+              "name": "Power Word Stun",
+              "source": "XPHB",
+              "level": 8,
+              "school": "Enchantment",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 16,
+              "damageList": [],
+              "components": "V",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Darkness",
+          "Detect Magic",
+          "Dispel Magic"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_demonic_restoration_l9f3",
+        "name": "Demonic Restoration",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If Xarashtar dies outside the Abyss, his body dissolves into ichor, and he gains a new body instantly, reviving with all of his Hit Points somewhere in the Abyss.</p>",
+        "entries": [
+          "If Xarashtar dies outside the Abyss, his body dissolves into ichor, and he gains a new body instantly, reviving with all of his {@variantrule Hit Points|XPHB} somewhere in the Abyss."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_h73l",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Xarashtar has Advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "Xarashtar has {@variantrule Advantage|XPHB} on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_sbfb",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Xarashtar makes two Pincer attacks and uses Pummel or Spellcasting.</p>",
+        "entries": [
+          "Xarashtar makes two Pincer attacks and uses Pummel or Spellcasting."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_pincer_92wo",
+        "name": "Pincer",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 16 (2d10 + 5) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 15) from one of two pincers.</p>",
+        "entries": [
+          "{@atkr m} {@hit 9}, reach 10 ft. {@h}16 ({@damage 2d10 + 5}) Slashing damage. If the target is a Medium or smaller creature, it has the {@condition Grappled|XPHB} condition (escape {@dc 15}) from one of two pincers."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 9,
+          "reach": 10,
+          "range": null,
+          "targets": "it has the {@condition Grappled|XPHB} condition (escape {@dc 15}) from one of two pincers",
+          "save": {
+            "dc": 15,
+            "ability": null
+          },
+          "damages": [
+            {
+              "formula": "2d10 + 5",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_pummel_9ts0",
+        "name": "Pummel",
+        "actionType": "action",
+        "descriptionHtml": "<p>dex DC 17, one creature Grappled by Xarashtar. {@actSaveFail} 15 (3d6 + 5) Bludgeoning damage. {@actSaveSuccess} Half damage.</p>",
+        "entries": [
+          "{@actSave dex} {@dc 17}, one creature {@condition Grappled|XPHB} by Xarashtar. {@actSaveFail} 15 ({@damage 3d6 + 5}) Bludgeoning damage. {@actSaveSuccess} Half damage."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 17,
+            "ability": "DEX"
+          },
+          "damages": [
+            {
+              "formula": "3d6 + 5",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/MaladyOfMinarrh/Xarashtar.webp",
+    "tokenImg": "img/bestiary/tokens/MaladyOfMinarrh/Xarashtar.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

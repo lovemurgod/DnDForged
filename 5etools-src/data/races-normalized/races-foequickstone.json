@@ -1,0 +1,721 @@
+[
+  {
+    "id": "race_gargoyle_foequickstone",
+    "name": "Gargoyle",
+    "source": "FoEQuickstone",
+    "page": 157,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Elemental Resilience.</strong> <p>You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws you make to avoid or end the Poisoned condition.</p></div>\n<div class=\"compendium-subentry\"><strong>False Appearance.</strong> <p>You have Advantage|XPHB on any ability check you make to Hide while holding still.</p></div>\n<div class=\"compendium-subentry\"><strong>Immutable Form.</strong> <p>You have Immunity|XPHB to Magical Contagions. You also can't be subjected to the Petrified condition against your will.</p></div>\n<div class=\"compendium-subentry\"><strong>Sentry's Rest.</strong> <p>You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 6 hours if you spend those hours in an inactive, motionless state. During this time, you appear inert but remain conscious.</p></div>\n<div class=\"compendium-subentry\"><strong>Stoneskin.</strong> <p>Your thick stone hide provides you with natural armor. While you aren't wearing armor, your base Armor Class|XPHB equals 13 plus your Dexterity modifier. You can use a Shield and still gain this benefit.</p></div>\n<div class=\"compendium-subentry\"><strong>Tireless.</strong> <p>You don't gain Exhaustion levels due to dehydration, malnutrition, or suffocation.</p></div>",
+    "traits": [
+      {
+        "id": "trait_gargoyle_darkvision_foequickstone",
+        "name": "Darkvision",
+        "source": "FoEQuickstone",
+        "raceName": "Gargoyle",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_gargoyle_elemental_resilience_foequickstone",
+        "name": "Elemental Resilience",
+        "source": "FoEQuickstone",
+        "raceName": "Gargoyle",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws you make to avoid or end the Poisoned condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Poison damage. You also have {@variantrule Advantage|XPHB} on saving throws you make to avoid or end the {@condition Poisoned|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_gargoyle_false_appearance_foequickstone",
+        "name": "False Appearance",
+        "source": "FoEQuickstone",
+        "raceName": "Gargoyle",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on any ability check you make to Hide while holding still.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on any ability check you make to {@action Hide|XPHB} while holding still."
+        ]
+      },
+      {
+        "id": "trait_gargoyle_immutable_form_foequickstone",
+        "name": "Immutable Form",
+        "source": "FoEQuickstone",
+        "raceName": "Gargoyle",
+        "actionType": "passive",
+        "description": "You have Immunity|XPHB to Magical Contagions. You also can't be subjected to the Petrified condition against your will.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Immunity|XPHB} to Magical Contagions. You also can't be subjected to the {@condition Petrified|XPHB} condition against your will."
+        ]
+      },
+      {
+        "id": "trait_gargoyle_sentry_s_rest_foequickstone",
+        "name": "Sentry's Rest",
+        "source": "FoEQuickstone",
+        "raceName": "Gargoyle",
+        "actionType": "passive",
+        "description": "You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 6 hours if you spend those hours in an inactive, motionless state. During this time, you appear inert but remain conscious.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't need to sleep, and magic can't put you to sleep. You can finish a {@variantrule Long Rest|XPHB} in 6 hours if you spend those hours in an inactive, motionless state. During this time, you appear inert but remain conscious."
+        ]
+      },
+      {
+        "id": "trait_gargoyle_stoneskin_foequickstone",
+        "name": "Stoneskin",
+        "source": "FoEQuickstone",
+        "raceName": "Gargoyle",
+        "actionType": "passive",
+        "description": "Your thick stone hide provides you with natural armor. While you aren't wearing armor, your base Armor Class|XPHB equals 13 plus your Dexterity modifier. You can use a Shield and still gain this benefit.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your thick stone hide provides you with natural armor. While you aren't wearing armor, your base {@variantrule Armor Class|XPHB} equals 13 plus your Dexterity modifier. You can use a {@item Shield|XPHB} and still gain this benefit."
+        ]
+      },
+      {
+        "id": "trait_gargoyle_tireless_foequickstone",
+        "name": "Tireless",
+        "source": "FoEQuickstone",
+        "raceName": "Gargoyle",
+        "actionType": "passive",
+        "description": "You don't gain Exhaustion levels due to dehydration, malnutrition, or suffocation.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't gain {@condition Exhaustion|XPHB} levels due to dehydration, malnutrition, or suffocation."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Elemental Resilience**: You have Resistance|XPHB to Poison damage. You also have Advantage|XPHB on saving throws you make to avoid or end the Poisoned condition.\n\n**False Appearance**: You have Advantage|XPHB on any ability check you make to Hide while holding still.\n\n**Immutable Form**: You have Immunity|XPHB to Magical Contagions. You also can't be subjected to the Petrified condition against your will.\n\n**Sentry's Rest**: You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 6 hours if you spend those hours in an inactive, motionless state. During this time, you appear inert but remain conscious.\n\n**Stoneskin**: Your thick stone hide provides you with natural armor. While you aren't wearing armor, your base Armor Class|XPHB equals 13 plus your Dexterity modifier. You can use a Shield and still gain this benefit.\n\n**Tireless**: You don't gain Exhaustion levels due to dehydration, malnutrition, or suffocation."
+  },
+  {
+    "id": "race_gnoll_foequickstone",
+    "name": "Gnoll",
+    "source": "FoEQuickstone",
+    "page": 161,
+    "size": "Medium",
+    "speed": "30 ft",
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_gnoll_darkvision_foequickstone",
+        "name": "Darkvision",
+        "source": "FoEQuickstone",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_gnoll_bite_foequickstone",
+        "name": "Bite",
+        "source": "FoEQuickstone",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "Your teeth are natural weapons, which you can use to make Unarmed Strike|XPHB|Unarmed Strikes. If you hit with them, you deal Piercing damage equal to 1d6 plus your Strength modifier in place of the normal Bludgeoning damage of your Unarmed Strike|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6 + @str",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your teeth are natural weapons, which you can use to make {@variantrule Unarmed Strike|XPHB|Unarmed Strikes}. If you hit with them, you deal Piercing damage equal to {@dice 1d6} plus your Strength modifier in place of the normal Bludgeoning damage of your {@variantrule Unarmed Strike|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_gnoll_hunter_s_senses_foequickstone",
+        "name": "Hunter's Senses",
+        "source": "FoEQuickstone",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception, Stealth, or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception|XPHB}, {@skill Stealth|XPHB}, or {@skill Survival|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_gnoll_rampage_foequickstone",
+        "name": "Rampage",
+        "source": "FoEQuickstone",
+        "raceName": "Gnoll",
+        "actionType": "passive",
+        "description": "When you use your Bite or reduce a creature to 0 Hit Points|XPHB with an attack, you can take a Bonus Action|XPHB to move up to half your Speed|XPHB and make one attack with a weapon or an Unarmed Strike|XPHB using your Bite.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you use your Bite or reduce a creature to 0 {@variantrule Hit Points|XPHB} with an attack, you can take a {@variantrule Bonus Action|XPHB} to move up to half your {@variantrule Speed|XPHB} and make one attack with a weapon or an {@variantrule Unarmed Strike|XPHB} using your Bite."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Bite**: Your teeth are natural weapons, which you can use to make Unarmed Strike|XPHB|Unarmed Strikes. If you hit with them, you deal Piercing damage equal to 1d6 plus your Strength modifier in place of the normal Bludgeoning damage of your Unarmed Strike|XPHB.\n\n**Hunter's Senses**: You have proficiency in the Perception, Stealth, or Survival skill.\n\n**Rampage**: When you use your Bite or reduce a creature to 0 Hit Points|XPHB with an attack, you can take a Bonus Action|XPHB to move up to half your Speed|XPHB and make one attack with a weapon or an Unarmed Strike|XPHB using your Bite."
+  },
+  {
+    "id": "race_harpy_foequickstone",
+    "name": "Harpy",
+    "source": "FoEQuickstone",
+    "page": 159,
+    "size": "M",
+    "speed": "30 ft, fly true ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Flight.</strong> <p>You have a Fly Speed|XPHB equal to your Speed|XPHB while you aren't wearing Medium or Heavy armor.</p></div>\n<div class=\"compendium-subentry\"><strong>Songbird.</strong> <p>You have proficiency in the Performance skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Harpy's Charms.</strong> <p>You know the Friends cantrip and can cast it using only Verbal components in place of its usual components. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose when you select this species).</p></div>\n<div class=\"compendium-subentry\"><strong>Shadow's Magic.</strong> <p>If you have the Spellcasting or the Pact Magic class feature, the spells on the Harpy Spells table are added to that feature's spell list. You can cast these spells using only Verbal components in place of their usual components.</p>\n<div class=\"compendium-subentry\"><strong>Harpy Spells.</strong> </div>\n<div class=\"compendium-subentry\"><strong>Shadow's Magic.</strong> <p>Harpies and Medusas both possess a trait called Shadow's Magic, which adds a set of spells to the spell list of any spellcasting class. While these abilities are resolved exactly like spells, they are supposed to reflect enhanced aspects of the harpy's voice or the medusa's gaze. When a Medusa Wizard uses Shadow's Magic to cast Hypnotic Pattern, they might glare at a group of people, their eyes flaring in iridescent colors. When a Harpy casts Suggestion, they might sing their request, the insidious power of their voice making it a command. Because of this, spells cast in this way don't require all of the usual components. While this is only true for spells on the Shadow's Magic lists, a Harpy or Medusa spellcaster could describe other spells as being manifestations of their voice or gaze. A Medusa Cleric could describe her Guiding Bolt as emerging from her eyes, while a Harpy Bard casting Shatter could describe it as a deadly song. This provides no mechanical benefit, but it's a way to add unique flavor to a character and to present their magic as expanded gifts of the Shadow.</p></div></div>",
+    "traits": [
+      {
+        "id": "trait_harpy_flight_foequickstone",
+        "name": "Flight",
+        "source": "FoEQuickstone",
+        "raceName": "Harpy",
+        "actionType": "passive",
+        "description": "You have a Fly Speed|XPHB equal to your Speed|XPHB while you aren't wearing Medium or Heavy armor.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a {@variantrule Fly Speed|XPHB} equal to your {@variantrule Speed|XPHB} while you aren't wearing Medium or Heavy armor."
+        ]
+      },
+      {
+        "id": "trait_harpy_songbird_foequickstone",
+        "name": "Songbird",
+        "source": "FoEQuickstone",
+        "raceName": "Harpy",
+        "actionType": "passive",
+        "description": "You have proficiency in the Performance skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Performance|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_harpy_harpy_s_charms_foequickstone",
+        "name": "Harpy's Charms",
+        "source": "FoEQuickstone",
+        "raceName": "Harpy",
+        "actionType": "passive",
+        "description": "You know the Friends cantrip and can cast it using only Verbal components in place of its usual components. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Friends|XPHB} cantrip and can cast it using only Verbal components in place of its usual components. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose when you select this species)."
+        ]
+      },
+      {
+        "id": "trait_harpy_shadow_s_magic_foequickstone",
+        "name": "Shadow's Magic",
+        "source": "FoEQuickstone",
+        "raceName": "Harpy",
+        "actionType": "passive",
+        "description": "If you have the Spellcasting or the Pact Magic class feature, the spells on the Harpy Spells table are added to that feature's spell list. You can cast these spells using only Verbal components in place of their usual components.\n\n**Harpy Spells**\n\n**Shadow's Magic**\n\nHarpies and Medusas both possess a trait called Shadow's Magic, which adds a set of spells to the spell list of any spellcasting class. While these abilities are resolved exactly like spells, they are supposed to reflect enhanced aspects of the harpy's voice or the medusa's gaze. When a Medusa Wizard uses Shadow's Magic to cast Hypnotic Pattern, they might glare at a group of people, their eyes flaring in iridescent colors. When a Harpy casts Suggestion, they might sing their request, the insidious power of their voice making it a command. Because of this, spells cast in this way don't require all of the usual components. While this is only true for spells on the Shadow's Magic lists, a Harpy or Medusa spellcaster could describe other spells as being manifestations of their voice or gaze. A Medusa Cleric could describe her Guiding Bolt as emerging from her eyes, while a Harpy Bard casting Shatter could describe it as a deadly song. This provides no mechanical benefit, but it's a way to add unique flavor to a character and to present their magic as expanded gifts of the Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "If you have the Spellcasting or the Pact Magic class feature, the spells on the Harpy Spells table are added to that feature's spell list. You can cast these spells using only Verbal components in place of their usual components.",
+          {
+            "name": "Harpy Spells",
+            "type": "table",
+            "caption": "Harpy Spells",
+            "page": 159,
+            "colStyles": [
+              "col-2 text-center",
+              "col-10"
+            ],
+            "colLabels": [
+              "Spell Level",
+              "Spell"
+            ],
+            "rows": [
+              [
+                "1",
+                "{@spell Charm Person|XPHB}"
+              ],
+              [
+                "2",
+                "{@spell Suggestion|XPHB}"
+              ],
+              [
+                "3",
+                "{@spell Enemies Abound|XGE}"
+              ],
+              [
+                "4",
+                "{@spell Charm Monster|XPHB}"
+              ],
+              [
+                "5",
+                "{@spell Dominate Person|XPHB}"
+              ]
+            ]
+          },
+          {
+            "type": "inset",
+            "name": "Shadow's Magic",
+            "entries": [
+              "Harpies and Medusas both possess a trait called Shadow's Magic, which adds a set of spells to the spell list of any spellcasting class. While these abilities are resolved exactly like spells, they are supposed to reflect enhanced aspects of the harpy's voice or the medusa's gaze. When a Medusa Wizard uses Shadow's Magic to cast {@spell Hypnotic Pattern|XPHB}, they might glare at a group of people, their eyes flaring in iridescent colors. When a Harpy casts {@spell Suggestion|XPHB}, they might sing their request, the insidious power of their voice making it a command. Because of this, spells cast in this way don't require all of the usual components. While this is only true for spells on the Shadow's Magic lists, a Harpy or Medusa spellcaster could describe other spells as being manifestations of their voice or gaze. A Medusa Cleric could describe her {@spell Guiding Bolt|XPHB} as emerging from her eyes, while a Harpy Bard casting {@spell Shatter|XPHB} could describe it as a deadly song. This provides no mechanical benefit, but it's a way to add unique flavor to a character and to present their magic as expanded gifts of the Shadow."
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Flight**: You have a Fly Speed|XPHB equal to your Speed|XPHB while you aren't wearing Medium or Heavy armor.\n\n**Songbird**: You have proficiency in the Performance skill.\n\n**Harpy's Charms**: You know the Friends cantrip and can cast it using only Verbal components in place of its usual components. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose when you select this species).\n\n**Shadow's Magic**: If you have the Spellcasting or the Pact Magic class feature, the spells on the Harpy Spells table are added to that feature's spell list. You can cast these spells using only Verbal components in place of their usual components.\n\n**Harpy Spells**\n\n**Shadow's Magic**\n\nHarpies and Medusas both possess a trait called Shadow's Magic, which adds a set of spells to the spell list of any spellcasting class. While these abilities are resolved exactly like spells, they are supposed to reflect enhanced aspects of the harpy's voice or the medusa's gaze. When a Medusa Wizard uses Shadow's Magic to cast Hypnotic Pattern, they might glare at a group of people, their eyes flaring in iridescent colors. When a Harpy casts Suggestion, they might sing their request, the insidious power of their voice making it a command. Because of this, spells cast in this way don't require all of the usual components. While this is only true for spells on the Shadow's Magic lists, a Harpy or Medusa spellcaster could describe other spells as being manifestations of their voice or gaze. A Medusa Cleric could describe her Guiding Bolt as emerging from her eyes, while a Harpy Bard casting Shatter could describe it as a deadly song. This provides no mechanical benefit, but it's a way to add unique flavor to a character and to present their magic as expanded gifts of the Shadow."
+  },
+  {
+    "id": "race_medusa_foequickstone",
+    "name": "Medusa",
+    "source": "FoEQuickstone",
+    "page": 160,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Fearsome Presence.</strong> <p>You have proficiency in the Intimidation skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Serpentine.</strong> <p>You know Serpentine|FoEQuickstone, a sign language conveyed through the motion of the snakes atop your head. Serpentine has no written form and can only be utilized by medusas.</p></div>\n<div class=\"compendium-subentry\"><strong>Petrifying Gaze.</strong> <p>You know the Gray Gaze cantrip and can cast it without components. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose when you select this species). When you reduce a creature to 0 Hit Points|XPHB with this spell, you can cause it to turn to stone. A creature turned to stone in this way has the Petrified condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Medusa's Gift.</strong> <p>When you cast Gray Gaze, you can choose to augment it. If a creature fails its saving throw against the augmented spell, it has the Restrained|XPHB condition for 1 minute instead of having Disadvantage|XPHB on its next Dexterity saving throw. A Restrained|XPHB target makes another Constitution saving throw at the end of each of its turns, ending the effect on a success. You must concentrate to maintain the effect. If you lose your Concentration|XPHB, the creature no longer has the Restrained|XPHB condition.</p>\n<p>You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Shadow's Magic.</strong> <p>If you have the Spellcasting or the Pact Magic class feature, the spells on the Medusa Spells table are added to that feature's spell list. You can cast these spells without Material components.</p>\n<table class=\"compendium-table\"><thead><tr><th>Spell Level</th><th>Spell</th></tr></thead><tbody><tr><td>1</td><td>Ensnaring Strike</td></tr><tr><td>2</td><td>Hold Person</td></tr><tr><td>3</td><td>Hypnotic Pattern</td></tr><tr><td>4</td><td>Stoneskin</td></tr><tr><td>5</td><td>Hold Monster</td></tr></tbody></table>\n<div class=\"compendium-subentry\"><strong>Shadow's Magic.</strong> <p>Harpies and Medusas both possess a trait called Shadow's Magic, which adds a set of spells to the spell list of any spellcasting class. While these abilities are resolved exactly like spells, they are supposed to reflect enhanced aspects of the harpy's voice or the medusa's gaze. When a Medusa Wizard uses Shadow's Magic to cast Hypnotic Pattern, they might glare at a group of people, their eyes flaring in iridescent colors. When a Harpy casts Suggestion, they might sing their request, the insidious power of their voice making it a command. Because of this, spells cast in this way don't require all of the usual components. While this is only true for spells on the Shadow's Magic lists, a Harpy or Medusa spellcaster could describe other spells as being manifestations of their voice or gaze. A Medusa Cleric could describe her Guiding Bolt as emerging from her eyes, while a Harpy Bard casting Shatter could describe it as a deadly song. This provides no mechanical benefit, but it's a way to add unique flavor to a character and to present their magic as expanded gifts of the Shadow.</p></div></div>",
+    "traits": [
+      {
+        "id": "trait_medusa_darkvision_foequickstone",
+        "name": "Darkvision",
+        "source": "FoEQuickstone",
+        "raceName": "Medusa",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_medusa_fearsome_presence_foequickstone",
+        "name": "Fearsome Presence",
+        "source": "FoEQuickstone",
+        "raceName": "Medusa",
+        "actionType": "passive",
+        "description": "You have proficiency in the Intimidation skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Intimidation|XPHB} skill."
+        ]
+      },
+      {
+        "id": "trait_medusa_serpentine_foequickstone",
+        "name": "Serpentine",
+        "source": "FoEQuickstone",
+        "raceName": "Medusa",
+        "actionType": "passive",
+        "description": "You know Serpentine|FoEQuickstone, a sign language conveyed through the motion of the snakes atop your head. Serpentine has no written form and can only be utilized by medusas.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know {@language Serpentine|FoEQuickstone}, a sign language conveyed through the motion of the snakes atop your head. Serpentine has no written form and can only be utilized by medusas."
+        ]
+      },
+      {
+        "id": "trait_medusa_petrifying_gaze_foequickstone",
+        "name": "Petrifying Gaze",
+        "source": "FoEQuickstone",
+        "raceName": "Medusa",
+        "actionType": "passive",
+        "description": "You know the Gray Gaze cantrip and can cast it without components. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose when you select this species). When you reduce a creature to 0 Hit Points|XPHB with this spell, you can cause it to turn to stone. A creature turned to stone in this way has the Petrified condition.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Gray Gaze|FoEQuickstone} cantrip and can cast it without components. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose when you select this species). When you reduce a creature to 0 {@variantrule Hit Points|XPHB} with this spell, you can cause it to turn to stone. A creature turned to stone in this way has the {@condition Petrified|XPHB} condition."
+        ]
+      },
+      {
+        "id": "trait_medusa_medusa_s_gift_foequickstone",
+        "name": "Medusa's Gift",
+        "source": "FoEQuickstone",
+        "raceName": "Medusa",
+        "actionType": "passive",
+        "description": "When you cast Gray Gaze, you can choose to augment it. If a creature fails its saving throw against the augmented spell, it has the Restrained|XPHB condition for 1 minute instead of having Disadvantage|XPHB on its next Dexterity saving throw. A Restrained|XPHB target makes another Constitution saving throw at the end of each of its turns, ending the effect on a success. You must concentrate to maintain the effect. If you lose your Concentration|XPHB, the creature no longer has the Restrained|XPHB condition.\n\nYou can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "When you cast {@spell Gray Gaze|FoEQuickstone}, you can choose to augment it. If a creature fails its saving throw against the augmented spell, it has the {@variantrule Restrained|XPHB} condition for 1 minute instead of having {@variantrule Disadvantage|XPHB} on its next Dexterity saving throw. A {@variantrule Restrained|XPHB} target makes another Constitution saving throw at the end of each of its turns, ending the effect on a success. You must concentrate to maintain the effect. If you lose your {@status Concentration|XPHB}, the creature no longer has the {@variantrule Restrained|XPHB} condition.",
+          "You can use this trait a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_medusa_shadow_s_magic_foequickstone",
+        "name": "Shadow's Magic",
+        "source": "FoEQuickstone",
+        "raceName": "Medusa",
+        "actionType": "passive",
+        "description": "If you have the Spellcasting or the Pact Magic class feature, the spells on the Medusa Spells table are added to that feature's spell list. You can cast these spells without Material components.\n\n**Shadow's Magic**\n\nHarpies and Medusas both possess a trait called Shadow's Magic, which adds a set of spells to the spell list of any spellcasting class. While these abilities are resolved exactly like spells, they are supposed to reflect enhanced aspects of the harpy's voice or the medusa's gaze. When a Medusa Wizard uses Shadow's Magic to cast Hypnotic Pattern, they might glare at a group of people, their eyes flaring in iridescent colors. When a Harpy casts Suggestion, they might sing their request, the insidious power of their voice making it a command. Because of this, spells cast in this way don't require all of the usual components. While this is only true for spells on the Shadow's Magic lists, a Harpy or Medusa spellcaster could describe other spells as being manifestations of their voice or gaze. A Medusa Cleric could describe her Guiding Bolt as emerging from her eyes, while a Harpy Bard casting Shatter could describe it as a deadly song. This provides no mechanical benefit, but it's a way to add unique flavor to a character and to present their magic as expanded gifts of the Shadow.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "If you have the Spellcasting or the Pact Magic class feature, the spells on the Medusa Spells table are added to that feature's spell list. You can cast these spells without Material components.",
+          {
+            "type": "table",
+            "caption": "Medusa Spells",
+            "page": 160,
+            "colStyles": [
+              "col-2 text-center",
+              "col-10"
+            ],
+            "colLabels": [
+              "Spell Level",
+              "Spell"
+            ],
+            "rows": [
+              [
+                "1",
+                "{@spell Ensnaring Strike|XPHB}"
+              ],
+              [
+                "2",
+                "{@spell Hold Person|XPHB}"
+              ],
+              [
+                "3",
+                "{@spell Hypnotic Pattern|XPHB}"
+              ],
+              [
+                "4",
+                "{@spell Stoneskin|XPHB}"
+              ],
+              [
+                "5",
+                "{@spell Hold Monster|XPHB}"
+              ]
+            ]
+          },
+          {
+            "type": "inset",
+            "name": "Shadow's Magic",
+            "entries": [
+              "Harpies and Medusas both possess a trait called Shadow's Magic, which adds a set of spells to the spell list of any spellcasting class. While these abilities are resolved exactly like spells, they are supposed to reflect enhanced aspects of the harpy's voice or the medusa's gaze. When a Medusa Wizard uses Shadow's Magic to cast {@spell Hypnotic Pattern|XPHB}, they might glare at a group of people, their eyes flaring in iridescent colors. When a Harpy casts {@spell Suggestion|XPHB}, they might sing their request, the insidious power of their voice making it a command. Because of this, spells cast in this way don't require all of the usual components. While this is only true for spells on the Shadow's Magic lists, a Harpy or Medusa spellcaster could describe other spells as being manifestations of their voice or gaze. A Medusa Cleric could describe her {@spell Guiding Bolt|XPHB} as emerging from her eyes, while a Harpy Bard casting {@spell Shatter|XPHB} could describe it as a deadly song. This provides no mechanical benefit, but it's a way to add unique flavor to a character and to present their magic as expanded gifts of the Shadow."
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Fearsome Presence**: You have proficiency in the Intimidation skill.\n\n**Serpentine**: You know Serpentine|FoEQuickstone, a sign language conveyed through the motion of the snakes atop your head. Serpentine has no written form and can only be utilized by medusas.\n\n**Petrifying Gaze**: You know the Gray Gaze cantrip and can cast it without components. Intelligence, Wisdom, or Charisma is your spellcasting ability for this spell (choose when you select this species). When you reduce a creature to 0 Hit Points|XPHB with this spell, you can cause it to turn to stone. A creature turned to stone in this way has the Petrified condition.\n\n**Medusa's Gift**: When you cast Gray Gaze, you can choose to augment it. If a creature fails its saving throw against the augmented spell, it has the Restrained|XPHB condition for 1 minute instead of having Disadvantage|XPHB on its next Dexterity saving throw. A Restrained|XPHB target makes another Constitution saving throw at the end of each of its turns, ending the effect on a success. You must concentrate to maintain the effect. If you lose your Concentration|XPHB, the creature no longer has the Restrained|XPHB condition.\n\nYou can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\n**Shadow's Magic**: If you have the Spellcasting or the Pact Magic class feature, the spells on the Medusa Spells table are added to that feature's spell list. You can cast these spells without Material components.\n\n**Shadow's Magic**\n\nHarpies and Medusas both possess a trait called Shadow's Magic, which adds a set of spells to the spell list of any spellcasting class. While these abilities are resolved exactly like spells, they are supposed to reflect enhanced aspects of the harpy's voice or the medusa's gaze. When a Medusa Wizard uses Shadow's Magic to cast Hypnotic Pattern, they might glare at a group of people, their eyes flaring in iridescent colors. When a Harpy casts Suggestion, they might sing their request, the insidious power of their voice making it a command. Because of this, spells cast in this way don't require all of the usual components. While this is only true for spells on the Shadow's Magic lists, a Harpy or Medusa spellcaster could describe other spells as being manifestations of their voice or gaze. A Medusa Cleric could describe her Guiding Bolt as emerging from her eyes, while a Harpy Bard casting Shatter could describe it as a deadly song. This provides no mechanical benefit, but it's a way to add unique flavor to a character and to present their magic as expanded gifts of the Shadow."
+  },
+  {
+    "id": "race_tiefling_foequickstone",
+    "name": "Tiefling",
+    "source": "FoEQuickstone",
+    "page": 161,
+    "size": "Medium",
+    "speed": "30 ft",
+    "traitsHtml": "",
+    "traits": [
+      {
+        "id": "trait_tiefling_darkvision_foequickstone",
+        "name": "Darkvision",
+        "source": "FoEQuickstone",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_tiefling_fiendish_legacy_foequickstone",
+        "name": "Fiendish Legacy",
+        "source": "FoEQuickstone",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You are the recipient of a legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table. You gain the level 1 benefit of the chosen legacy.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the legacy).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You are the recipient of a legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table. You gain the level 1 benefit of the chosen legacy.",
+          "When you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a {@variantrule Long Rest|XPHB}. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the legacy).",
+          {
+            "type": "table",
+            "caption": "Fiendish Legacies",
+            "colLabels": [
+              "Legacy",
+              "Level 1",
+              "Level 3",
+              "Level 5"
+            ],
+            "colStyles": [
+              "col-2",
+              "col-6",
+              "col-2",
+              "col-2"
+            ],
+            "rows": [
+              [
+                "Abyssal",
+                "You have {@variantrule Resistance|XPHB} to Poison damage. You also know the {@spell Poison Spray|XPHB} cantrip.",
+                "{@spell Ray of Sickness|XPHB}",
+                "{@spell Hold Person|XPHB}"
+              ],
+              [
+                "Chthonic",
+                "You have {@variantrule Resistance|XPHB} to Necrotic damage. You also know the {@spell Chill Touch|XPHB} cantrip.",
+                "{@spell False Life|XPHB}",
+                "{@spell Ray of Enfeeblement|XPHB}"
+              ],
+              [
+                "Infernal",
+                "You have {@variantrule Resistance|XPHB} to Fire damage. You also know the {@spell Fire Bolt|XPHB} cantrip.",
+                "{@spell Hellish Rebuke|XPHB}",
+                "{@spell Darkness|XPHB}"
+              ]
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_tiefling_otherworldly_presence_foequickstone",
+        "name": "Otherworldly Presence",
+        "source": "FoEQuickstone",
+        "raceName": "Tiefling",
+        "actionType": "passive",
+        "description": "You know the Thaumaturgy cantrip. When you cast it with this trait, the spell uses the same spellcasting ability you use for your Fiendish Legacy Trait.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You know the {@spell Thaumaturgy|XPHB} cantrip. When you cast it with this trait, the spell uses the same spellcasting ability you use for your Fiendish Legacy Trait."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Fiendish Legacy**: You are the recipient of a legacy that grants you supernatural abilities. Choose a legacy from the Fiendish Legacies table. You gain the level 1 benefit of the chosen legacy.\n\nWhen you reach character levels 3 and 5, you learn a higher-level spell, as shown on the table. You always have that spell prepared. You can cast it once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select the legacy).\n\n**Otherworldly Presence**: You know the Thaumaturgy cantrip. When you cast it with this trait, the spell uses the same spellcasting ability you use for your Fiendish Legacy Trait."
+  },
+  {
+    "id": "race_worg_foequickstone",
+    "name": "Worg",
+    "source": "FoEQuickstone",
+    "page": 163,
+    "size": "M",
+    "speed": "40 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Keen Senses.</strong> <p>You have proficiency in the Perception skill, and you have Advantage|XPHB on Wisdom (Perception) checks that rely on hearing or smell.</p></div>\n<div class=\"compendium-subentry\"><strong>Bite.</strong> <p>Your formidable jaws are a natural weapon, which you can use to make Unarmed Strike|XPHB|Unarmed Strikes. If you hit with them, you deal Piercing damage equal to 1d8 plus your Strength modifier in place of the normal Bludgeoning damage of your Unarmed Strike|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>For the Pack.</strong> <p>You can use the Help action as a Bonus Action|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Natural Armor.</strong> <p>Your dense fur and thick hide provide you with natural armor. While you aren't wearing armor, your base Armor Class|XPHB equals 13 plus your Dexterity modifier.</p></div>\n<div class=\"compendium-subentry\"><strong>Quadruped.</strong> <p>You have several traits based on your quadrupedal body shape.</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Hands Off.</strong> <p>You cannot hold items in your paws, and you cannot wield weapons or a Shield unless otherwise noted in the weapon's description (see Steel Jaws). You can perform the Somatic components of spells with your front paws but you have Disadvantage|XPHB on ability checks that require fine manipulation.</p></div></li><li><div class=\"compendium-subentry\"><strong>Sturdy Steed.</strong> <p>You can carry a rider of Medium size or smaller. You also count as one size larger when determining your carrying capacity.</p></div></li><li><div class=\"compendium-subentry\"><strong>Battle Beast.</strong> <p>You cannot wear armor designed for Humanoids, you must wear barding instead. The cost is four times the equivalent armor made for Humanoids, and it weighs twice as much.</p></div></li><li><div class=\"compendium-subentry\"><strong>Vertically Challenged.</strong> <p>Any climb that requires hands is especially difficult for you. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot.</p></div></li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_worg_darkvision_foequickstone",
+        "name": "Darkvision",
+        "source": "FoEQuickstone",
+        "raceName": "Worg",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_worg_keen_senses_foequickstone",
+        "name": "Keen Senses",
+        "source": "FoEQuickstone",
+        "raceName": "Worg",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception skill, and you have Advantage|XPHB on Wisdom (Perception) checks that rely on hearing or smell.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception|XPHB} skill, and you have {@variantrule Advantage|XPHB} on Wisdom ({@skill Perception|XPHB}) checks that rely on hearing or smell."
+        ]
+      },
+      {
+        "id": "trait_worg_bite_foequickstone",
+        "name": "Bite",
+        "source": "FoEQuickstone",
+        "raceName": "Worg",
+        "actionType": "passive",
+        "description": "Your formidable jaws are a natural weapon, which you can use to make Unarmed Strike|XPHB|Unarmed Strikes. If you hit with them, you deal Piercing damage equal to 1d8 plus your Strength modifier in place of the normal Bludgeoning damage of your Unarmed Strike|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d8 + @str",
+        "formulaConfig": {
+          "baseDice": "1d8",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your formidable jaws are a natural weapon, which you can use to make {@variantrule Unarmed Strike|XPHB|Unarmed Strikes}. If you hit with them, you deal Piercing damage equal to {@dice 1d8} plus your Strength modifier in place of the normal Bludgeoning damage of your {@variantrule Unarmed Strike|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_worg_for_the_pack_foequickstone",
+        "name": "For the Pack",
+        "source": "FoEQuickstone",
+        "raceName": "Worg",
+        "actionType": "bonus",
+        "description": "You can use the Help action as a Bonus Action|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can use the {@action Help|XPHB} action as a {@variantrule Bonus Action|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_worg_natural_armor_foequickstone",
+        "name": "Natural Armor",
+        "source": "FoEQuickstone",
+        "raceName": "Worg",
+        "actionType": "passive",
+        "description": "Your dense fur and thick hide provide you with natural armor. While you aren't wearing armor, your base Armor Class|XPHB equals 13 plus your Dexterity modifier.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your dense fur and thick hide provide you with natural armor. While you aren't wearing armor, your base {@variantrule Armor Class|XPHB} equals 13 plus your Dexterity modifier."
+        ]
+      },
+      {
+        "id": "trait_worg_quadruped_foequickstone",
+        "name": "Quadruped",
+        "source": "FoEQuickstone",
+        "raceName": "Worg",
+        "actionType": "passive",
+        "description": "You have several traits based on your quadrupedal body shape.\n\n- **Hands Off**\n\nYou cannot hold items in your paws, and you cannot wield weapons or a Shield unless otherwise noted in the weapon's description (see Steel Jaws). You can perform the Somatic components of spells with your front paws but you have Disadvantage|XPHB on ability checks that require fine manipulation.\n- **Sturdy Steed**\n\nYou can carry a rider of Medium size or smaller. You also count as one size larger when determining your carrying capacity.\n- **Battle Beast**\n\nYou cannot wear armor designed for Humanoids, you must wear barding instead. The cost is four times the equivalent armor made for Humanoids, and it weighs twice as much.\n- **Vertically Challenged**\n\nAny climb that requires hands is especially difficult for you. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have several traits based on your quadrupedal body shape.",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Hands Off",
+                "entries": [
+                  "You cannot hold items in your paws, and you cannot wield weapons or a {@item Shield|XPHB} unless otherwise noted in the weapon's description (see {@item Steel Jaws|FoEQuickstone}). You can perform the Somatic components of spells with your front paws but you have {@variantrule Disadvantage|XPHB} on ability checks that require fine manipulation."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Sturdy Steed",
+                "entries": [
+                  "You can carry a rider of Medium size or smaller. You also count as one size larger when determining your carrying capacity."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Battle Beast",
+                "entries": [
+                  "You cannot wear armor designed for Humanoids, you must wear barding instead. The cost is four times the equivalent armor made for Humanoids, and it weighs twice as much."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Vertically Challenged",
+                "entries": [
+                  "Any climb that requires hands is especially difficult for you. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Keen Senses**: You have proficiency in the Perception skill, and you have Advantage|XPHB on Wisdom (Perception) checks that rely on hearing or smell.\n\n**Bite**: Your formidable jaws are a natural weapon, which you can use to make Unarmed Strike|XPHB|Unarmed Strikes. If you hit with them, you deal Piercing damage equal to 1d8 plus your Strength modifier in place of the normal Bludgeoning damage of your Unarmed Strike|XPHB.\n\n**For the Pack**: You can use the Help action as a Bonus Action|XPHB.\n\n**Natural Armor**: Your dense fur and thick hide provide you with natural armor. While you aren't wearing armor, your base Armor Class|XPHB equals 13 plus your Dexterity modifier.\n\n**Quadruped**: You have several traits based on your quadrupedal body shape.\n\n- **Hands Off**\n\nYou cannot hold items in your paws, and you cannot wield weapons or a Shield unless otherwise noted in the weapon's description (see Steel Jaws). You can perform the Somatic components of spells with your front paws but you have Disadvantage|XPHB on ability checks that require fine manipulation.\n- **Sturdy Steed**\n\nYou can carry a rider of Medium size or smaller. You also count as one size larger when determining your carrying capacity.\n- **Battle Beast**\n\nYou cannot wear armor designed for Humanoids, you must wear barding instead. The cost is four times the equivalent armor made for Humanoids, and it weighs twice as much.\n- **Vertically Challenged**\n\nAny climb that requires hands is especially difficult for you. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot."
+  }
+]

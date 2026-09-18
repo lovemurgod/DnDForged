@@ -1,0 +1,324 @@
+[
+  {
+    "id": "race_centaur_uacentaursminotaurs",
+    "name": "Centaur",
+    "source": "UACentaursMinotaurs",
+    "page": 1,
+    "size": "M",
+    "speed": "40 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Centaurs mature and age at about the same rate as humans.</p></div>\n<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Centaurs are inclined toward neutrality.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Your size is Medium, yet you tower over most other humanoids.</p></div>\n<div class=\"compendium-subentry\"><strong>Charge.</strong> <p>If you move at least 20 feet straight toward a target and then hit it with a melee weapon attack on the same turn, roll the weapon's damage dice twice and add them together. Once you use this ability, you can't use it again until you finish a short or long rest.</p></div>\n<div class=\"compendium-subentry\"><strong>Hooves.</strong> <p>Your hooves are natural melee weapons, with which you're proficient. If you hit with a hoof, the target takes bludgeoning damage equal to 1d6 + your Strength modifier.</p></div>\n<div class=\"compendium-subentry\"><strong>Equine Build.</strong> <p>You count as one size larger when determining your carrying capacity and the weight you can push or drag. In addition, any climb that requires hands and feet is especially difficult for you because of your hooves. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot. Finally, a Medium or smaller creature can ride on your equine back if you allow it. In such a situation, you continue to act independently, not as a controlled mount.</p></div>\n<div class=\"compendium-subentry\"><strong>Survivor.</strong> <p>You have proficiency in the Survival skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Hybrid Nature.</strong> <p>You have two creature types: humanoid and monstrosity. You can be affected by a game effect if it works on either of your creature types.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Sylvan.</p></div>",
+    "traits": [
+      {
+        "id": "trait_centaur_age_uacentaursminotaurs",
+        "name": "Age",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "Centaurs mature and age at about the same rate as humans.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Centaurs mature and age at about the same rate as humans."
+        ]
+      },
+      {
+        "id": "trait_centaur_alignment_uacentaursminotaurs",
+        "name": "Alignment",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "Centaurs are inclined toward neutrality.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Centaurs are inclined toward neutrality."
+        ]
+      },
+      {
+        "id": "trait_centaur_size_uacentaursminotaurs",
+        "name": "Size",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "Your size is Medium, yet you tower over most other humanoids.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your size is Medium, yet you tower over most other humanoids."
+        ]
+      },
+      {
+        "id": "trait_centaur_charge_uacentaursminotaurs",
+        "name": "Charge",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "If you move at least 20 feet straight toward a target and then hit it with a melee weapon attack on the same turn, roll the weapon's damage dice twice and add them together. Once you use this ability, you can't use it again until you finish a short or long rest.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "If you move at least 20 feet straight toward a target and then hit it with a melee weapon attack on the same turn, roll the weapon's damage dice twice and add them together. Once you use this ability, you can't use it again until you finish a short or long rest."
+        ]
+      },
+      {
+        "id": "trait_centaur_hooves_uacentaursminotaurs",
+        "name": "Hooves",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "Your hooves are natural melee weapons, with which you're proficient. If you hit with a hoof, the target takes bludgeoning damage equal to 1d6 + your Strength modifier.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6 + @str",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your hooves are natural melee weapons, with which you're proficient. If you hit with a hoof, the target takes bludgeoning damage equal to {@dice 1d6} + your Strength modifier."
+        ]
+      },
+      {
+        "id": "trait_centaur_equine_build_uacentaursminotaurs",
+        "name": "Equine Build",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "You count as one size larger when determining your carrying capacity and the weight you can push or drag. In addition, any climb that requires hands and feet is especially difficult for you because of your hooves. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot. Finally, a Medium or smaller creature can ride on your equine back if you allow it. In such a situation, you continue to act independently, not as a controlled mount.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You count as one size larger when determining your carrying capacity and the weight you can push or drag. In addition, any climb that requires hands and feet is especially difficult for you because of your hooves. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot. Finally, a Medium or smaller creature can ride on your equine back if you allow it. In such a situation, you continue to act independently, not as a controlled mount."
+        ]
+      },
+      {
+        "id": "trait_centaur_survivor_uacentaursminotaurs",
+        "name": "Survivor",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "You have proficiency in the Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Survival} skill."
+        ]
+      },
+      {
+        "id": "trait_centaur_hybrid_nature_uacentaursminotaurs",
+        "name": "Hybrid Nature",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "You have two creature types: humanoid and monstrosity. You can be affected by a game effect if it works on either of your creature types.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have two creature types: humanoid and monstrosity. You can be affected by a game effect if it works on either of your creature types."
+        ]
+      },
+      {
+        "id": "trait_centaur_languages_uacentaursminotaurs",
+        "name": "Languages",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Centaur",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Sylvan.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Sylvan."
+        ]
+      }
+    ],
+    "description": "**Age**: Centaurs mature and age at about the same rate as humans.\n\n**Alignment**: Centaurs are inclined toward neutrality.\n\n**Size**: Your size is Medium, yet you tower over most other humanoids.\n\n**Charge**: If you move at least 20 feet straight toward a target and then hit it with a melee weapon attack on the same turn, roll the weapon's damage dice twice and add them together. Once you use this ability, you can't use it again until you finish a short or long rest.\n\n**Hooves**: Your hooves are natural melee weapons, with which you're proficient. If you hit with a hoof, the target takes bludgeoning damage equal to 1d6 + your Strength modifier.\n\n**Equine Build**: You count as one size larger when determining your carrying capacity and the weight you can push or drag. In addition, any climb that requires hands and feet is especially difficult for you because of your hooves. When you make such a climb, each foot of movement costs you 4 extra feet, instead of the normal 1 extra foot. Finally, a Medium or smaller creature can ride on your equine back if you allow it. In such a situation, you continue to act independently, not as a controlled mount.\n\n**Survivor**: You have proficiency in the Survival skill.\n\n**Hybrid Nature**: You have two creature types: humanoid and monstrosity. You can be affected by a game effect if it works on either of your creature types.\n\n**Languages**: You can speak, read, and write Common and Sylvan."
+  },
+  {
+    "id": "race_minotaur_uacentaursminotaurs",
+    "name": "Minotaur",
+    "source": "UACentaursMinotaurs",
+    "page": 2,
+    "size": "M",
+    "speed": "30 ft",
+    "traitsHtml": "<div class=\"compendium-subentry\"><p><em>Note: In 2015, minotaurs appeared as a playtest option in Unearthed Arcana. Here is a revised set of traits for minotaur player characters. These traits are suitable for minotaurs on Krynn and in other D&D worlds where these people have avoided the demonic influence of Baphomet.</em></p></div>\n<div class=\"compendium-subentry\"><strong>Age.</strong> <p>Minotaurs enter adulthood at around the age of 17 and can live up to 150 years.</p></div>\n<div class=\"compendium-subentry\"><strong>Alignment.</strong> <p>Most minotaurs lean toward lawful alignments.</p></div>\n<div class=\"compendium-subentry\"><strong>Size.</strong> <p>Minotaurs average over 6 feet in height, and they have strong, stocky builds. Your size is Medium.</p></div>\n<div class=\"compendium-subentry\"><strong>Horns.</strong> <p>Your horns are natural melee weapons, with which you're proficient. When you hit with them, the target takes piercing damage equal to 1d6 + your Strength modifier.</p></div>\n<div class=\"compendium-subentry\"><strong>Goring Rush.</strong> <p>Immediately after you use the Dash action on your turn and move at least as far as your speed, you can make one melee attack with your horns as a bonus action.</p></div>\n<div class=\"compendium-subentry\"><strong>Hammering Horns.</strong> <p>Immediately after you hit a creature with a melee attack as part of the Attack action on your turn, you can attempt to shove that creature with your horns using your reaction. The creature must be no more than one size larger than you and within 5 feet of you. It must make a Strength saving throw against a DC equal to 8 + your proficiency bonus + your Strength modifier. If it fails, you push it up to 5 feet away from you.</p></div>\n<div class=\"compendium-subentry\"><strong>Menacing.</strong> <p>You have proficiency in the Intimidation skill.</p></div>\n<div class=\"compendium-subentry\"><strong>Hybrid Nature.</strong> <p>You have two creature types: humanoid and monstrosity. You can be affected by a game effect if it works on either of your creature types.</p></div>\n<div class=\"compendium-subentry\"><strong>Languages.</strong> <p>You can speak, read, and write Common and Minotaur.</p></div>",
+    "traits": [
+      {
+        "id": "trait_minotaur_age_uacentaursminotaurs",
+        "name": "Age",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Minotaurs enter adulthood at around the age of 17 and can live up to 150 years.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Minotaurs enter adulthood at around the age of 17 and can live up to 150 years."
+        ]
+      },
+      {
+        "id": "trait_minotaur_alignment_uacentaursminotaurs",
+        "name": "Alignment",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Most minotaurs lean toward lawful alignments.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Most minotaurs lean toward lawful alignments."
+        ]
+      },
+      {
+        "id": "trait_minotaur_size_uacentaursminotaurs",
+        "name": "Size",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Minotaurs average over 6 feet in height, and they have strong, stocky builds. Your size is Medium.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Minotaurs average over 6 feet in height, and they have strong, stocky builds. Your size is Medium."
+        ]
+      },
+      {
+        "id": "trait_minotaur_horns_uacentaursminotaurs",
+        "name": "Horns",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Your horns are natural melee weapons, with which you're proficient. When you hit with them, the target takes piercing damage equal to 1d6 + your Strength modifier.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6 + @str",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "STR",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your horns are natural melee weapons, with which you're proficient. When you hit with them, the target takes piercing damage equal to {@dice 1d6} + your Strength modifier."
+        ]
+      },
+      {
+        "id": "trait_minotaur_goring_rush_uacentaursminotaurs",
+        "name": "Goring Rush",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Minotaur",
+        "actionType": "bonus",
+        "description": "Immediately after you use the Dash action on your turn and move at least as far as your speed, you can make one melee attack with your horns as a bonus action.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Immediately after you use the {@action Dash} action on your turn and move at least as far as your speed, you can make one melee attack with your horns as a bonus action."
+        ]
+      },
+      {
+        "id": "trait_minotaur_hammering_horns_uacentaursminotaurs",
+        "name": "Hammering Horns",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "Immediately after you hit a creature with a melee attack as part of the Attack action on your turn, you can attempt to shove that creature with your horns using your reaction. The creature must be no more than one size larger than you and within 5 feet of you. It must make a Strength saving throw against a DC equal to 8 + your proficiency bonus + your Strength modifier. If it fails, you push it up to 5 feet away from you.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Immediately after you hit a creature with a melee attack as part of the {@action Attack} action on your turn, you can attempt to shove that creature with your horns using your reaction. The creature must be no more than one size larger than you and within 5 feet of you. It must make a Strength saving throw against a DC equal to 8 + your proficiency bonus + your Strength modifier. If it fails, you push it up to 5 feet away from you."
+        ]
+      },
+      {
+        "id": "trait_minotaur_menacing_uacentaursminotaurs",
+        "name": "Menacing",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "You have proficiency in the Intimidation skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Intimidation} skill."
+        ]
+      },
+      {
+        "id": "trait_minotaur_hybrid_nature_uacentaursminotaurs",
+        "name": "Hybrid Nature",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "You have two creature types: humanoid and monstrosity. You can be affected by a game effect if it works on either of your creature types.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have two creature types: humanoid and monstrosity. You can be affected by a game effect if it works on either of your creature types."
+        ]
+      },
+      {
+        "id": "trait_minotaur_languages_uacentaursminotaurs",
+        "name": "Languages",
+        "source": "UACentaursMinotaurs",
+        "raceName": "Minotaur",
+        "actionType": "passive",
+        "description": "You can speak, read, and write Common and Minotaur.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can speak, read, and write Common and Minotaur."
+        ]
+      }
+    ],
+    "description": "Note: In 2015, minotaurs appeared as a playtest option in Unearthed Arcana. Here is a revised set of traits for minotaur player characters. These traits are suitable for minotaurs on Krynn and in other D&D worlds where these people have avoided the demonic influence of Baphomet."
+  }
+]

@@ -1,0 +1,223 @@
+[
+  {
+    "id": "race_dhampir_ua2021gothiclineages",
+    "name": "Dhampir",
+    "source": "UA2021GothicLineages",
+    "page": 2,
+    "size": "S/M",
+    "speed": "35 ft, climb true ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Type:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> </div></li></ul>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light.</p></div>\n<div class=\"compendium-subentry\"><strong>Spider Climb.</strong> <p>You have a climbing speed equal to your walking speed. In addition, at 3rd level, you can move up, down, and across vertical surfaces and upside down along ceilings, while leaving your hands free.</p></div>\n<div class=\"compendium-subentry\"><strong>Vampiric Bite.</strong> <p>Your fanged bite is a natural weapon, which counts as a simple melee weapon with which you are proficient. You add your Constitution modifier to the attack and damage rolls when you attack with your bite. Your bite deals 1d4 piercing damage on a hit. While you are missing half or more of your hit points, you have advantage on attack rolls you make with this bite.</p>\n<p>When you use your bite and hit a creature that isn't a Construct or an Undead, you can empower yourself in one of the following ways of your choice:</p>\n<ul><li>regain hit points equal to the damage dealt by the bite</li><li>gain a bonus to the next ability check or attack roll you make; the bonus equals the damage dealt by the bite.</li></ul>\n<p>You can empower yourself with your bite a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dhampir_darkvision_ua2021gothiclineages",
+        "name": "Darkvision",
+        "source": "UA2021GothicLineages",
+        "raceName": "Dhampir",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light."
+        ]
+      },
+      {
+        "id": "trait_dhampir_spider_climb_ua2021gothiclineages",
+        "name": "Spider Climb",
+        "source": "UA2021GothicLineages",
+        "raceName": "Dhampir",
+        "actionType": "passive",
+        "description": "You have a climbing speed equal to your walking speed. In addition, at 3rd level, you can move up, down, and across vertical surfaces and upside down along ceilings, while leaving your hands free.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a climbing speed equal to your walking speed. In addition, at 3rd level, you can move up, down, and across vertical surfaces and upside down along ceilings, while leaving your hands free."
+        ]
+      },
+      {
+        "id": "trait_dhampir_vampiric_bite_ua2021gothiclineages",
+        "name": "Vampiric Bite",
+        "source": "UA2021GothicLineages",
+        "raceName": "Dhampir",
+        "actionType": "passive",
+        "description": "Your fanged bite is a natural weapon, which counts as a simple melee weapon with which you are proficient. You add your Constitution modifier to the attack and damage rolls when you attack with your bite. Your bite deals 1d4 piercing damage on a hit. While you are missing half or more of your hit points, you have advantage on attack rolls you make with this bite.\n\nWhen you use your bite and hit a creature that isn't a Construct or an Undead, you can empower yourself in one of the following ways of your choice:\n\n- regain hit points equal to the damage dealt by the bite\n- gain a bonus to the next ability check or attack roll you make; the bonus equals the damage dealt by the bite.\n\nYou can empower yourself with your bite a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "Your fanged bite is a natural weapon, which counts as a simple melee weapon with which you are proficient. You add your Constitution modifier to the attack and damage rolls when you attack with your bite. Your bite deals {@damage 1d4} piercing damage on a hit. While you are missing half or more of your hit points, you have advantage on attack rolls you make with this bite.",
+          "When you use your bite and hit a creature that isn't a Construct or an Undead, you can empower yourself in one of the following ways of your choice:",
+          {
+            "type": "list",
+            "items": [
+              "regain hit points equal to the damage dealt by the bite",
+              "gain a bonus to the next ability check or attack roll you make; the bonus equals the damage dealt by the bite."
+            ]
+          },
+          "You can empower yourself with your bite a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        ]
+      }
+    ],
+    "description": "**Type:** Humanoid and Undead\n\n**Size:** Medium or Small (choose when you gain this lineage)"
+  },
+  {
+    "id": "race_hexblood_ua2021gothiclineages",
+    "name": "Hexblood",
+    "source": "UA2021GothicLineages",
+    "page": 3,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Type:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> </div></li></ul>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light.</p></div>\n<div class=\"compendium-subentry\"><strong>Fey Resilience.</strong> <p>You have advantage on saving throws you make to avoid or end the charmed condition on yourself.</p></div>\n<div class=\"compendium-subentry\"><strong>Hex Magic.</strong> <p>You can cast the disguise self and hex spells with this trait. Intelligence, Wisdom, or Charisma is your spellcasting ability for these spells (choose when you gain this lineage). Once you cast either of these spells with this trait, you can't cast that spell with it again until you finish a long rest. You can also cast these spells using any spells slots you have.</p></div>\n<div class=\"compendium-subentry\"><strong>Magic Token.</strong> <p>As an action, you can harmlessly pull out one of your nails, a tooth, or a lock of hair. This token is imbued with magic until you finish a long rest. While the token is imbued in this way, you can use an action to send a telepathic message to the creature holding or carrying the token, as long as you are on the same plane of existence and are within 10 miles of it. The message can contain up to twenty-five words.</p>\n<p>In addition, while you are within 10 miles of the token, you can use an action to enter a trance for 1 minute, during which you can see and hear from the token as if you were located where it is. While you are using your senses at the token's location, you are blinded and deafened in regard to your own surroundings. Afterward, the token is harmlessly destroyed.</p>\n<p>Once you create a token using this feature, you can't do so again until you finish a long rest, at which point your missing part regrows.</p></div>",
+    "traits": [
+      {
+        "id": "trait_hexblood_darkvision_ua2021gothiclineages",
+        "name": "Darkvision",
+        "source": "UA2021GothicLineages",
+        "raceName": "Hexblood",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light."
+        ]
+      },
+      {
+        "id": "trait_hexblood_fey_resilience_ua2021gothiclineages",
+        "name": "Fey Resilience",
+        "source": "UA2021GothicLineages",
+        "raceName": "Hexblood",
+        "actionType": "passive",
+        "description": "You have advantage on saving throws you make to avoid or end the charmed condition on yourself.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have advantage on saving throws you make to avoid or end the {@condition charmed} condition on yourself."
+        ]
+      },
+      {
+        "id": "trait_hexblood_hex_magic_ua2021gothiclineages",
+        "name": "Hex Magic",
+        "source": "UA2021GothicLineages",
+        "raceName": "Hexblood",
+        "actionType": "passive",
+        "description": "You can cast the disguise self and hex spells with this trait. Intelligence, Wisdom, or Charisma is your spellcasting ability for these spells (choose when you gain this lineage). Once you cast either of these spells with this trait, you can't cast that spell with it again until you finish a long rest. You can also cast these spells using any spells slots you have.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can cast the {@spell disguise self} and {@spell hex} spells with this trait. Intelligence, Wisdom, or Charisma is your spellcasting ability for these spells (choose when you gain this lineage). Once you cast either of these spells with this trait, you can't cast that spell with it again until you finish a long rest. You can also cast these spells using any spells slots you have."
+        ]
+      },
+      {
+        "id": "trait_hexblood_magic_token_ua2021gothiclineages",
+        "name": "Magic Token",
+        "source": "UA2021GothicLineages",
+        "raceName": "Hexblood",
+        "actionType": "action",
+        "description": "As an action, you can harmlessly pull out one of your nails, a tooth, or a lock of hair. This token is imbued with magic until you finish a long rest. While the token is imbued in this way, you can use an action to send a telepathic message to the creature holding or carrying the token, as long as you are on the same plane of existence and are within 10 miles of it. The message can contain up to twenty-five words.\n\nIn addition, while you are within 10 miles of the token, you can use an action to enter a trance for 1 minute, during which you can see and hear from the token as if you were located where it is. While you are using your senses at the token's location, you are blinded and deafened in regard to your own surroundings. Afterward, the token is harmlessly destroyed.\n\nOnce you create a token using this feature, you can't do so again until you finish a long rest, at which point your missing part regrows.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As an action, you can harmlessly pull out one of your nails, a tooth, or a lock of hair. This token is imbued with magic until you finish a long rest. While the token is imbued in this way, you can use an action to send a telepathic message to the creature holding or carrying the token, as long as you are on the same plane of existence and are within 10 miles of it. The message can contain up to twenty-five words.",
+          "In addition, while you are within 10 miles of the token, you can use an action to enter a trance for 1 minute, during which you can see and hear from the token as if you were located where it is. While you are using your senses at the token's location, you are {@condition blinded} and {@condition deafened} in regard to your own surroundings. Afterward, the token is harmlessly destroyed.",
+          "Once you create a token using this feature, you can't do so again until you finish a long rest, at which point your missing part regrows."
+        ]
+      }
+    ],
+    "description": "**Type:** Fey and Humanoid\n\n**Size:** Medium or Small (choose when you gain this lineage)"
+  },
+  {
+    "id": "race_reborn_ua2021gothiclineages",
+    "name": "Reborn",
+    "source": "UA2021GothicLineages",
+    "page": 4,
+    "size": "S/M",
+    "speed": "30 ft",
+    "traitsHtml": "<ul><li><div class=\"compendium-subentry\"><strong>Type:.</strong> </div></li><li><div class=\"compendium-subentry\"><strong>Size:.</strong> </div></li></ul>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light.</p></div>\n<div class=\"compendium-subentry\"><strong>Deathless Nature.</strong> <p>You have escaped death, a fact represented by the following benefits:</p>\n<ul><li>You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage.</li><li>You have advantage on death saving throws.</li><li>You don't need to eat, drink, or breathe.</li><li>You don't need to sleep, and magic can't put you to sleep. You can finish a long rest in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness.</li></ul></div>\n<div class=\"compendium-subentry\"><strong>Knowledge from a Past Life.</strong> <p>You temporarily remember sporadic glimpses of the past, perhaps faded memories from ages ago or a previous life. When you make an ability check that uses a skill, you can roll a d6 and add the number rolled to the check. You can use this feature a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.</p></div>",
+    "traits": [
+      {
+        "id": "trait_reborn_darkvision_ua2021gothiclineages",
+        "name": "Darkvision",
+        "source": "UA2021GothicLineages",
+        "raceName": "Reborn",
+        "actionType": "passive",
+        "description": "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You can see in dim light within 60 feet of you as if it were bright light and in darkness as if it were dim light."
+        ]
+      },
+      {
+        "id": "trait_reborn_deathless_nature_ua2021gothiclineages",
+        "name": "Deathless Nature",
+        "source": "UA2021GothicLineages",
+        "raceName": "Reborn",
+        "actionType": "passive",
+        "description": "You have escaped death, a fact represented by the following benefits:\n\n- You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage.\n- You have advantage on death saving throws.\n- You don't need to eat, drink, or breathe.\n- You don't need to sleep, and magic can't put you to sleep. You can finish a long rest in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have escaped death, a fact represented by the following benefits:",
+          {
+            "type": "list",
+            "items": [
+              "You have advantage on saving throws against disease and being {@condition poisoned}, and you have resistance to poison damage.",
+              "You have advantage on death saving throws.",
+              "You don't need to eat, drink, or breathe.",
+              "You don't need to sleep, and magic can't put you to sleep. You can finish a long rest in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "trait_reborn_knowledge_from_a_past_life_ua2021gothiclineages",
+        "name": "Knowledge from a Past Life",
+        "source": "UA2021GothicLineages",
+        "raceName": "Reborn",
+        "actionType": "passive",
+        "description": "You temporarily remember sporadic glimpses of the past, perhaps faded memories from ages ago or a previous life. When you make an ability check that uses a skill, you can roll a d6 and add the number rolled to the check. You can use this feature a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest.",
+        "hasCounter": true,
+        "usesMax": "PB",
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You temporarily remember sporadic glimpses of the past, perhaps faded memories from ages ago or a previous life. When you make an ability check that uses a skill, you can roll a {@dice d6} and add the number rolled to the check. You can use this feature a number of times equal to your proficiency bonus, and you regain all expended uses when you finish a long rest."
+        ]
+      }
+    ],
+    "description": "**Type:** Humanoid, as well as Construct or Undead (choose when you gain this lineage)\n\n**Size:** Medium or Small (choose when you gain this lineage)"
+  }
+]

@@ -6,7 +6,101 @@
     "page": 28,
     "size": "S/M",
     "speed": "35 ft, climb true ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Spider Climb.</strong> <p>You have a Climb Speed|XPHB equal to your Speed|XPHB. When you reach character level 3, you can move up, down, and across vertical surfaces and along ceilings while leaving your hands free.</p></div>\n<div class=\"compendium-subentry\"><strong>Trace of Undeath.</strong> <p>You have Resistance|XPHB to Necrotic damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Vampiric Bite.</strong> <p>When you use your Unarmed Strike|XPHB and deal damage, you can choose to bite with your fangs. You deal Piercing damage equal to 1d4 plus your Constitution modifier instead of the normal damage of an Unarmed Strike|XPHB.</p>\n<p>In addition, when you deal this damage to a creature that isn't a Construct or an Undead, you can empower yourself in one of the following ways:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Drain.</strong> <p>You regain Hit Points|XPHB equal to the Piercing damage dealt.</p></div></li><li><div class=\"compendium-subentry\"><strong>Strengthen.</strong> <p>You gain a bonus to the next ability check or attack roll you make within the next minute; the bonus is equal to the Piercing damage dealt.</p></div></li></ul>\n<p>You can empower yourself with this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Spider Climb.</strong> <p>You have a Climb Speed|XPHB equal to your Speed|XPHB. When you reach character level 3, you can move up, down, and across vertical surfaces and along ceilings while leaving your hands free.</p></div>\n<div class=\"compendium-subentry\"><strong>Trace of Undeath.</strong> <p>You have Resistance|XPHB to Necrotic damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Vampiric Bite.</strong> <p>When you use your Unarmed Strike|XPHB and deal damage, you can choose to bite with your fangs. You deal Piercing damage equal to 1d4 plus your Constitution modifier instead of the normal damage of an Unarmed Strike|XPHB.</p>\n<p>In addition, when you deal this damage to a creature that isn't a Construct or an Undead, you can empower yourself in one of the following ways:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Drain.</strong> <p>You regain Hit Points|XPHB equal to the Piercing damage dealt.</p></div></li><li><div class=\"compendium-subentry\"><strong>Strengthen.</strong> <p>You gain a bonus to the next ability check or attack roll you make within the next minute; the bonus is equal to the Piercing damage dealt.</p></div></li></ul>\n<p>You can empower yourself with this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>",
+    "traits": [
+      {
+        "id": "trait_dhampir_darkvision_rhw",
+        "name": "Darkvision",
+        "source": "RHW",
+        "raceName": "Dhampir",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_dhampir_spider_climb_rhw",
+        "name": "Spider Climb",
+        "source": "RHW",
+        "raceName": "Dhampir",
+        "actionType": "passive",
+        "description": "You have a Climb Speed|XPHB equal to your Speed|XPHB. When you reach character level 3, you can move up, down, and across vertical surfaces and along ceilings while leaving your hands free.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have a {@variantrule Climb Speed|XPHB} equal to your {@variantrule Speed|XPHB}. When you reach character level 3, you can move up, down, and across vertical surfaces and along ceilings while leaving your hands free."
+        ]
+      },
+      {
+        "id": "trait_dhampir_trace_of_undeath_rhw",
+        "name": "Trace of Undeath",
+        "source": "RHW",
+        "raceName": "Dhampir",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to Necrotic damage.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to Necrotic damage."
+        ]
+      },
+      {
+        "id": "trait_dhampir_vampiric_bite_rhw",
+        "name": "Vampiric Bite",
+        "source": "RHW",
+        "raceName": "Dhampir",
+        "actionType": "passive",
+        "description": "When you use your Unarmed Strike|XPHB and deal damage, you can choose to bite with your fangs. You deal Piercing damage equal to 1d4 plus your Constitution modifier instead of the normal damage of an Unarmed Strike|XPHB.\n\nIn addition, when you deal this damage to a creature that isn't a Construct or an Undead, you can empower yourself in one of the following ways:\n\n- **Drain**\n\nYou regain Hit Points|XPHB equal to the Piercing damage dealt.\n- **Strengthen**\n\nYou gain a bonus to the next ability check or attack roll you make within the next minute; the bonus is equal to the Piercing damage dealt.\n\nYou can empower yourself with this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4 + @con",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "CON",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "When you use your {@variantrule Unarmed Strike|XPHB} and deal damage, you can choose to bite with your fangs. You deal Piercing damage equal to {@damage 1d4} plus your Constitution modifier instead of the normal damage of an {@variantrule Unarmed Strike|XPHB}.",
+          "In addition, when you deal this damage to a creature that isn't a Construct or an Undead, you can empower yourself in one of the following ways:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Drain",
+                "entries": [
+                  "You regain {@variantrule Hit Points|XPHB} equal to the Piercing damage dealt."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Strengthen",
+                "entries": [
+                  "You gain a bonus to the next ability check or attack roll you make within the next minute; the bonus is equal to the Piercing damage dealt."
+                ]
+              }
+            ]
+          },
+          "You can empower yourself with this trait a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Spider Climb**: You have a Climb Speed|XPHB equal to your Speed|XPHB. When you reach character level 3, you can move up, down, and across vertical surfaces and along ceilings while leaving your hands free.\n\n**Trace of Undeath**: You have Resistance|XPHB to Necrotic damage.\n\n**Vampiric Bite**: When you use your Unarmed Strike|XPHB and deal damage, you can choose to bite with your fangs. You deal Piercing damage equal to 1d4 plus your Constitution modifier instead of the normal damage of an Unarmed Strike|XPHB.\n\nIn addition, when you deal this damage to a creature that isn't a Construct or an Undead, you can empower yourself in one of the following ways:\n\n- **Drain**\n\nYou regain Hit Points|XPHB equal to the Piercing damage dealt.\n- **Strengthen**\n\nYou gain a bonus to the next ability check or attack roll you make within the next minute; the bonus is equal to the Piercing damage dealt.\n\nYou can empower yourself with this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB."
   },
   {
     "id": "race_hexblood_rhw",
@@ -15,7 +109,70 @@
     "page": 29,
     "size": "S/M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Eerie Token.</strong> <p>As a Bonus Action|XPHB, you can create a magical token by harmlessly removing a lock of hair, detaching a nail, or using some other method. While the token exists, you gain the following benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Distant Message.</strong> <p>As a Magic action, you can send a telepathic message of 25 words or fewer to a creature holding or carrying the token, as long as you are within 10 miles of it.</p></div></li><li><div class=\"compendium-subentry\"><strong>Remote Viewing.</strong> <p>If you are within 10 miles of the token, you can take a Magic action to extend your senses through the token for 1 minute, until you have the Incapacitated condition, or until you end this state (no action required). During this state, you can see and hear from the token as if you were located where it is. When this state ends, the token is harmlessly destroyed.</p>\n<p>Unless the token is destroyed early, it lasts until you finish a Long Rest|XPHB. Once you create a token using this feature, you can't do so again until you finish a Long Rest|XPHB.</p></div></li><li><div class=\"compendium-subentry\"><strong>Hex Magic.</strong> <p>You always have the Disguise Self and Hex spells prepared. You can cast each spell once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).</p></div></li></ul></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Eerie Token.</strong> <p>As a Bonus Action|XPHB, you can create a magical token by harmlessly removing a lock of hair, detaching a nail, or using some other method. While the token exists, you gain the following benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Distant Message.</strong> <p>As a Magic action, you can send a telepathic message of 25 words or fewer to a creature holding or carrying the token, as long as you are within 10 miles of it.</p></div></li><li><div class=\"compendium-subentry\"><strong>Remote Viewing.</strong> <p>If you are within 10 miles of the token, you can take a Magic action to extend your senses through the token for 1 minute, until you have the Incapacitated condition, or until you end this state (no action required). During this state, you can see and hear from the token as if you were located where it is. When this state ends, the token is harmlessly destroyed.</p>\n<p>Unless the token is destroyed early, it lasts until you finish a Long Rest|XPHB. Once you create a token using this feature, you can't do so again until you finish a Long Rest|XPHB.</p></div></li><li><div class=\"compendium-subentry\"><strong>Hex Magic.</strong> <p>You always have the Disguise Self and Hex spells prepared. You can cast each spell once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).</p></div></li></ul></div>",
+    "traits": [
+      {
+        "id": "trait_hexblood_darkvision_rhw",
+        "name": "Darkvision",
+        "source": "RHW",
+        "raceName": "Hexblood",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_hexblood_eerie_token_rhw",
+        "name": "Eerie Token",
+        "source": "RHW",
+        "raceName": "Hexblood",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you can create a magical token by harmlessly removing a lock of hair, detaching a nail, or using some other method. While the token exists, you gain the following benefits:\n\n- **Distant Message**\n\nAs a Magic action, you can send a telepathic message of 25 words or fewer to a creature holding or carrying the token, as long as you are within 10 miles of it.\n- **Remote Viewing**\n\nIf you are within 10 miles of the token, you can take a Magic action to extend your senses through the token for 1 minute, until you have the Incapacitated condition, or until you end this state (no action required). During this state, you can see and hear from the token as if you were located where it is. When this state ends, the token is harmlessly destroyed.\n\nUnless the token is destroyed early, it lasts until you finish a Long Rest|XPHB. Once you create a token using this feature, you can't do so again until you finish a Long Rest|XPHB.\n- **Hex Magic**\n\nYou always have the Disguise Self and Hex spells prepared. You can cast each spell once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species).",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you can create a magical token by harmlessly removing a lock of hair, detaching a nail, or using some other method. While the token exists, you gain the following benefits:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Distant Message",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you can send a telepathic message of 25 words or fewer to a creature holding or carrying the token, as long as you are within 10 miles of it."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Remote Viewing",
+                "entries": [
+                  "If you are within 10 miles of the token, you can take a {@action Magic|XPHB} action to extend your senses through the token for 1 minute, until you have the Incapacitated condition, or until you end this state (no action required). During this state, you can see and hear from the token as if you were located where it is. When this state ends, the token is harmlessly destroyed.",
+                  "Unless the token is destroyed early, it lasts until you finish a {@variantrule Long Rest|XPHB}. Once you create a token using this feature, you can't do so again until you finish a {@variantrule Long Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Hex Magic",
+                "entries": [
+                  "You always have the {@spell Disguise Self|XPHB} and {@spell Hex|XPHB} spells prepared. You can cast each spell once without a spell slot, and you regain the ability to cast it in that way when you finish a {@variantrule Long Rest|XPHB}. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species)."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Eerie Token**: As a Bonus Action|XPHB, you can create a magical token by harmlessly removing a lock of hair, detaching a nail, or using some other method. While the token exists, you gain the following benefits:\n\n- **Distant Message**\n\nAs a Magic action, you can send a telepathic message of 25 words or fewer to a creature holding or carrying the token, as long as you are within 10 miles of it.\n- **Remote Viewing**\n\nIf you are within 10 miles of the token, you can take a Magic action to extend your senses through the token for 1 minute, until you have the Incapacitated condition, or until you end this state (no action required). During this state, you can see and hear from the token as if you were located where it is. When this state ends, the token is harmlessly destroyed.\n\nUnless the token is destroyed early, it lasts until you finish a Long Rest|XPHB. Once you create a token using this feature, you can't do so again until you finish a Long Rest|XPHB.\n- **Hex Magic**\n\nYou always have the Disguise Self and Hex spells prepared. You can cast each spell once without a spell slot, and you regain the ability to cast it in that way when you finish a Long Rest|XPHB. You can also cast the spell using any spell slots you have of the appropriate level. Intelligence, Wisdom, or Charisma is your spellcasting ability for the spells you cast with this trait (choose the ability when you select this species)."
   },
   {
     "id": "race_lupin_rhw",
@@ -24,7 +181,75 @@
     "page": 30,
     "size": "S/M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Feral Pounce.</strong> <p>Your Unarmed Strike|XPHB|Unarmed Strikes deal Slashing damage instead of Bludgeoning damage. In addition, when you hit a creature with an Unarmed Strike|XPHB as part of the Attack action on your turn, you can use both the Damage|XPHB and the Shove options. You can use this benefit only once per turn.</p></div>\n<div class=\"compendium-subentry\"><strong>Howl.</strong> <p>As a Bonus Action|XPHB, you let out an unearthly howl. Each creature of your choice within 15 feet of you must succeed on a Wisdom saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus) or have Disadvantage|XPHB on attack rolls and saving throws until the start of your next turn.</p>\n<p>You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Werewolf Instincts.</strong> <p>You have proficiency in the Perception, Stealth, or Survival skill.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Feral Pounce.</strong> <p>Your Unarmed Strike|XPHB|Unarmed Strikes deal Slashing damage instead of Bludgeoning damage. In addition, when you hit a creature with an Unarmed Strike|XPHB as part of the Attack action on your turn, you can use both the Damage|XPHB and the Shove options. You can use this benefit only once per turn.</p></div>\n<div class=\"compendium-subentry\"><strong>Howl.</strong> <p>As a Bonus Action|XPHB, you let out an unearthly howl. Each creature of your choice within 15 feet of you must succeed on a Wisdom saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus) or have Disadvantage|XPHB on attack rolls and saving throws until the start of your next turn.</p>\n<p>You can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Werewolf Instincts.</strong> <p>You have proficiency in the Perception, Stealth, or Survival skill.</p></div>",
+    "traits": [
+      {
+        "id": "trait_lupin_darkvision_rhw",
+        "name": "Darkvision",
+        "source": "RHW",
+        "raceName": "Lupin",
+        "actionType": "passive",
+        "description": "You have Darkvision with a range of 60 feet.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+        ]
+      },
+      {
+        "id": "trait_lupin_feral_pounce_rhw",
+        "name": "Feral Pounce",
+        "source": "RHW",
+        "raceName": "Lupin",
+        "actionType": "passive",
+        "description": "Your Unarmed Strike|XPHB|Unarmed Strikes deal Slashing damage instead of Bludgeoning damage. In addition, when you hit a creature with an Unarmed Strike|XPHB as part of the Attack action on your turn, you can use both the Damage|XPHB and the Shove options. You can use this benefit only once per turn.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "Your {@variantrule Unarmed Strike|XPHB|Unarmed Strikes} deal Slashing damage instead of Bludgeoning damage. In addition, when you hit a creature with an {@variantrule Unarmed Strike|XPHB} as part of the {@action Attack|XPHB} action on your turn, you can use both the {@variantrule Damage|XPHB} and the Shove options. You can use this benefit only once per turn."
+        ]
+      },
+      {
+        "id": "trait_lupin_howl_rhw",
+        "name": "Howl",
+        "source": "RHW",
+        "raceName": "Lupin",
+        "actionType": "bonus",
+        "description": "As a Bonus Action|XPHB, you let out an unearthly howl. Each creature of your choice within 15 feet of you must succeed on a Wisdom saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus) or have Disadvantage|XPHB on attack rolls and saving throws until the start of your next turn.\n\nYou can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "As a {@variantrule Bonus Action|XPHB}, you let out an unearthly howl. Each creature of your choice within 15 feet of you must succeed on a Wisdom saving throw (DC 8 plus your Constitution modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or have {@variantrule Disadvantage|XPHB} on attack rolls and saving throws until the start of your next turn.",
+          "You can use this trait a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_lupin_werewolf_instincts_rhw",
+        "name": "Werewolf Instincts",
+        "source": "RHW",
+        "raceName": "Lupin",
+        "actionType": "passive",
+        "description": "You have proficiency in the Perception, Stealth, or Survival skill.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have proficiency in the {@skill Perception|XPHB}, {@skill Stealth|XPHB}, or {@skill Survival|XPHB} skill."
+        ]
+      }
+    ],
+    "description": "**Darkvision**: You have Darkvision with a range of 60 feet.\n\n**Feral Pounce**: Your Unarmed Strike|XPHB|Unarmed Strikes deal Slashing damage instead of Bludgeoning damage. In addition, when you hit a creature with an Unarmed Strike|XPHB as part of the Attack action on your turn, you can use both the Damage|XPHB and the Shove options. You can use this benefit only once per turn.\n\n**Howl**: As a Bonus Action|XPHB, you let out an unearthly howl. Each creature of your choice within 15 feet of you must succeed on a Wisdom saving throw (DC 8 plus your Constitution modifier and Proficiency|XPHB|Proficiency Bonus) or have Disadvantage|XPHB on attack rolls and saving throws until the start of your next turn.\n\nYou can use this trait a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\n**Werewolf Instincts**: You have proficiency in the Perception, Stealth, or Survival skill."
   },
   {
     "id": "race_reborn_rhw",
@@ -33,6 +258,79 @@
     "page": 31,
     "size": "S/M",
     "speed": "30 ft",
-    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Escaped Death.</strong> <p>You have Advantage|XPHB on Death Saving Throw|XPHB|Death Saving Throws.</p></div>\n<div class=\"compendium-subentry\"><strong>Everlasting.</strong> <p>You don't gain Exhaustion levels from dehydration, malnutrition, or suffocation. You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness.</p></div>\n<div class=\"compendium-subentry\"><strong>Knowledge from a Past Life.</strong> <p>You gain proficiency in one skill of your choice.</p>\n<p>In addition, you can temporarily peer into the past to aid you in the present. When you fail an ability check, you can roll 1d6 and add the number rolled to the d20, potentially turning the failure into a success. You can do this a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Strange Endurance.</strong> <p>You have Resistance|XPHB to one of the following damage types of your choice: Cold, Necrotic, or Poison.</p></div>"
+    "traitsHtml": "<div class=\"compendium-subentry\"><strong>Escaped Death.</strong> <p>You have Advantage|XPHB on Death Saving Throw|XPHB|Death Saving Throws.</p></div>\n<div class=\"compendium-subentry\"><strong>Everlasting.</strong> <p>You don't gain Exhaustion levels from dehydration, malnutrition, or suffocation. You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness.</p></div>\n<div class=\"compendium-subentry\"><strong>Knowledge from a Past Life.</strong> <p>You gain proficiency in one skill of your choice.</p>\n<p>In addition, you can temporarily peer into the past to aid you in the present. When you fail an ability check, you can roll 1d6 and add the number rolled to the d20, potentially turning the failure into a success. You can do this a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Strange Endurance.</strong> <p>You have Resistance|XPHB to one of the following damage types of your choice: Cold, Necrotic, or Poison.</p></div>",
+    "traits": [
+      {
+        "id": "trait_reborn_escaped_death_rhw",
+        "name": "Escaped Death",
+        "source": "RHW",
+        "raceName": "Reborn",
+        "actionType": "passive",
+        "description": "You have Advantage|XPHB on Death Saving Throw|XPHB|Death Saving Throws.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on {@variantrule Death Saving Throw|XPHB|Death Saving Throws}."
+        ]
+      },
+      {
+        "id": "trait_reborn_everlasting_rhw",
+        "name": "Everlasting",
+        "source": "RHW",
+        "raceName": "Reborn",
+        "actionType": "passive",
+        "description": "You don't gain Exhaustion levels from dehydration, malnutrition, or suffocation. You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You don't gain {@condition Exhaustion|XPHB} levels from dehydration, malnutrition, or suffocation. You don't need to sleep, and magic can't put you to sleep. You can finish a {@variantrule Long Rest|XPHB} in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness."
+        ]
+      },
+      {
+        "id": "trait_reborn_knowledge_from_a_past_life_rhw",
+        "name": "Knowledge from a Past Life",
+        "source": "RHW",
+        "raceName": "Reborn",
+        "actionType": "passive",
+        "description": "You gain proficiency in one skill of your choice.\n\nIn addition, you can temporarily peer into the past to aid you in the present. When you fail an ability check, you can roll 1d6 and add the number rolled to the d20, potentially turning the failure into a success. You can do this a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "rawEntries": [
+          "You gain proficiency in one skill of your choice.",
+          "In addition, you can temporarily peer into the past to aid you in the present. When you fail an ability check, you can roll {@dice 1d6} and add the number rolled to the {@dice d20}, potentially turning the failure into a success. You can do this a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "trait_reborn_strange_endurance_rhw",
+        "name": "Strange Endurance",
+        "source": "RHW",
+        "raceName": "Reborn",
+        "actionType": "passive",
+        "description": "You have Resistance|XPHB to one of the following damage types of your choice: Cold, Necrotic, or Poison.",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "rawEntries": [
+          "You have {@variantrule Resistance|XPHB} to one of the following damage types of your choice: Cold, Necrotic, or Poison."
+        ]
+      }
+    ],
+    "description": "**Escaped Death**: You have Advantage|XPHB on Death Saving Throw|XPHB|Death Saving Throws.\n\n**Everlasting**: You don't gain Exhaustion levels from dehydration, malnutrition, or suffocation. You don't need to sleep, and magic can't put you to sleep. You can finish a Long Rest|XPHB in 4 hours if you spend those hours in an inactive, motionless state, during which you retain consciousness.\n\n**Knowledge from a Past Life**: You gain proficiency in one skill of your choice.\n\nIn addition, you can temporarily peer into the past to aid you in the present. When you fail an ability check, you can roll 1d6 and add the number rolled to the d20, potentially turning the failure into a success. You can do this a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Long Rest|XPHB.\n\n**Strange Endurance**: You have Resistance|XPHB to one of the following damage types of your choice: Cold, Necrotic, or Poison."
   }
 ]
