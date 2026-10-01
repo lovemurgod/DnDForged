@@ -99,6 +99,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   const statPlayersCount = document.getElementById('stat-players-count');
   const btnSaveCampaignDetails = document.getElementById('btn-save-campaign-details');
   const btnDeleteCampaign = document.getElementById('btn-delete-campaign');
+  const btnGmImportCampaign = document.getElementById('btn-gm-import-campaign');
+  const btnDuplicateCampaign = document.getElementById('btn-duplicate-campaign');
+  const btnExportCampaign = document.getElementById('btn-export-campaign');
+  const statEntitiesCount = document.getElementById('stat-entities-count');
+
+  const entityTabBtns = document.querySelectorAll('.entity-tab-btn');
+  const entityPanels = document.querySelectorAll('.entity-panel');
+
+  const entityCountMaps = document.getElementById('entity-count-maps');
+  const entityCountPlayers = document.getElementById('entity-count-players');
+  const entityCountCompanions = document.getElementById('entity-count-companions');
+  const entityCountNpcs = document.getElementById('entity-count-npcs');
+
+  const gridCampaignMaps = document.getElementById('grid-campaign-maps');
+  const gridCampaignPlayers = document.getElementById('grid-campaign-players');
+  const gridCampaignCompanions = document.getElementById('grid-campaign-companions');
+  const gridCampaignNpcs = document.getElementById('grid-campaign-npcs');
+
+  const btnImportMap = document.getElementById('btn-import-map');
+  const btnExportAllMaps = document.getElementById('btn-export-all-maps');
+
+  const btnImportPlayer = document.getElementById('btn-import-player');
+  const btnExportAllPlayers = document.getElementById('btn-export-all-players');
+
+  const btnImportCompanion = document.getElementById('btn-import-companion');
+  const btnExportAllCompanions = document.getElementById('btn-export-all-companions');
+
+  const btnImportNpc = document.getElementById('btn-import-npc');
+  const btnExportAllNpcs = document.getElementById('btn-export-all-npcs');
+
+  const gmDropzoneOverlay = document.getElementById('gm-dropzone-overlay');
 
   // Modal elements
   const modalCreateCampaign = document.getElementById('modal-create-campaign');
@@ -112,6 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   let activeHostingMode = 'forgedvtt'; // 'forgedvtt' | 'custom'
   let currentCampaigns = [];
   let selectedCampaign = null;
+  let selectedCampaignFull = null;
   let currentAllowlist = [];
 
   function appendLogLine(logMsg) {
@@ -358,6 +390,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     statMapsCount.textContent = c.mapsCount || 1;
     statPlayersCount.textContent = c.playersCount || (c.knownPlayers ? c.knownPlayers.length : 0);
+    refreshSelectedCampaignEntities();
   }
 
   function clearCampaignEditor() {
@@ -370,6 +403,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderAllowlistPills();
     statMapsCount.textContent = '0';
     statPlayersCount.textContent = '0';
+    clearCampaignEntities();
   }
 
   function renderAllowlistPills() {
@@ -473,6 +507,376 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   btnRefreshCampaigns.addEventListener('click', () => {
     loadGmCampaigns();
+  });
+
+  // --- ENTITY TABS SWITCHING ---
+  entityTabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      entityTabBtns.forEach(b => b.classList.remove('active'));
+      entityPanels.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const targetId = btn.getAttribute('data-entity-target');
+      const targetPanel = document.getElementById(targetId);
+      if (targetPanel) targetPanel.classList.add('active');
+    });
+  });
+
+  // --- ENTITY RENDERING & MANAGEMENT ---
+  async function refreshSelectedCampaignEntities() {
+    if (!selectedCampaign) {
+      clearCampaignEntities();
+      return;
+    }
+    try {
+      const res = await api.gmGetCampaignDetails(selectedCampaign.id);
+      if (res && res.success && res.campaign) {
+        selectedCampaignFull = res.campaign;
+        renderCampaignEntities(selectedCampaignFull);
+      }
+    } catch (err) {
+      console.error('Failed refreshing campaign entities:', err);
+    }
+  }
+
+  function clearCampaignEntities() {
+    selectedCampaignFull = null;
+    if (gridCampaignMaps) gridCampaignMaps.innerHTML = '<div class="entity-empty-note">No campaign selected</div>';
+    if (gridCampaignPlayers) gridCampaignPlayers.innerHTML = '<div class="entity-empty-note">No campaign selected</div>';
+    if (gridCampaignCompanions) gridCampaignCompanions.innerHTML = '<div class="entity-empty-note">No campaign selected</div>';
+    if (gridCampaignNpcs) gridCampaignNpcs.innerHTML = '<div class="entity-empty-note">No campaign selected</div>';
+    if (entityCountMaps) entityCountMaps.textContent = '0';
+    if (entityCountPlayers) entityCountPlayers.textContent = '0';
+    if (entityCountCompanions) entityCountCompanions.textContent = '0';
+    if (entityCountNpcs) entityCountNpcs.textContent = '0';
+    if (statEntitiesCount) statEntitiesCount.textContent = '0';
+  }
+
+  function renderCampaignEntities(camp) {
+    const maps = camp.maps || {};
+    const chars = Object.values(camp.characters || {});
+
+    const isCompanion = (c) => Boolean(c.isCompanion || (c.id && c.id.startsWith('comp_')));
+    const isCustomNpc = (c) => Boolean(c.isCustomNpc || (c.id && c.id.startsWith('npc_')) || (c.monsterData && !c.isPlayer && !c.isCompanion && !(c.id && c.id.startsWith('char_'))));
+    const isPlayer = (c) => !isCompanion(c) && !isCustomNpc(c) && Boolean(c.isPlayer || (c.id && c.id.startsWith('char_')));
+
+    const playerChars = chars.filter(isPlayer);
+    const companionChars = chars.filter(isCompanion);
+    const npcChars = chars.filter(c => isCustomNpc(c) && !isCompanion(c) && !isPlayer(c));
+
+    const mapList = Object.values(maps);
+    if (entityCountMaps) entityCountMaps.textContent = mapList.length;
+    if (entityCountPlayers) entityCountPlayers.textContent = playerChars.length;
+    if (entityCountCompanions) entityCountCompanions.textContent = companionChars.length;
+    if (entityCountNpcs) entityCountNpcs.textContent = npcChars.length;
+    if (statEntitiesCount) statEntitiesCount.textContent = chars.length;
+    if (statMapsCount) statMapsCount.textContent = mapList.length;
+
+    // Render Maps Grid
+    if (gridCampaignMaps) {
+      gridCampaignMaps.innerHTML = '';
+      if (mapList.length === 0) {
+        gridCampaignMaps.innerHTML = '<div class="entity-empty-note">No maps in this campaign yet. Use "Import Map" or create one in the VTT!</div>';
+      } else {
+        mapList.forEach(m => {
+          const card = document.createElement('div');
+          card.className = 'entity-card';
+          const thumb = m.thumbnail || m.mapImage || '';
+          const tokenCount = Object.keys(m.tokens || {}).length;
+          card.innerHTML = `
+            <div class="entity-card-thumb" style="${thumb ? `background-image: url('${thumb}')` : ''}">
+              ${!thumb ? '<span class="entity-thumb-icon">🗺️</span>' : ''}
+            </div>
+            <div class="entity-card-info">
+              <h4 class="entity-card-title" title="${m.name || 'Untitled Map'}">${m.name || 'Untitled Map'}</h4>
+              <div class="entity-card-meta">
+                <span>${m.gridWidth || 40}x${m.gridHeight || 30} sq</span>
+                <span>•</span>
+                <span>${tokenCount} token${tokenCount === 1 ? '' : 's'}</span>
+              </div>
+            </div>
+            <div class="entity-card-actions">
+              <button class="btn btn-xs btn-outline btn-export-item" title="Export this map package">
+                📤 Export
+              </button>
+            </div>
+          `;
+          card.querySelector('.btn-export-item').addEventListener('click', async (e) => {
+            e.stopPropagation();
+            try {
+              const res = await api.gmExportGranular({
+                campaignId: camp.id,
+                entityType: 'map',
+                entityId: m.id,
+                batch: false
+              });
+              if (res && res.success) {
+                alert(`Map "${m.name}" successfully exported to:\n${res.filePath}`);
+              }
+            } catch (err) {
+              alert(`Export failed: ${err.message}`);
+            }
+          });
+          gridCampaignMaps.appendChild(card);
+        });
+      }
+    }
+
+    // Helper for Character Cards
+    function renderCharCards(container, charList, typeKey, emptyMsg) {
+      if (!container) return;
+      container.innerHTML = '';
+      if (charList.length === 0) {
+        container.innerHTML = `<div class="entity-empty-note">${emptyMsg}</div>`;
+        return;
+      }
+      charList.forEach(ch => {
+        const card = document.createElement('div');
+        card.className = 'entity-card';
+        const img = ch.tokenImage || ch.avatar || ch.img || '';
+        const subtitle = ch.class || ch.race || (ch.monsterData?.type || '') || ch.type || (typeKey === 'player' ? 'Player Character' : (typeKey === 'companion' ? 'Companion' : 'Custom NPC'));
+        const iconFallback = typeKey === 'player' ? '👤' : (typeKey === 'companion' ? '🐾' : '👾');
+
+        card.innerHTML = `
+          <div class="entity-card-thumb" style="${img ? `background-image: url('${img}')` : ''}">
+            ${!img ? `<span class="entity-thumb-icon">${iconFallback}</span>` : ''}
+          </div>
+          <div class="entity-card-info">
+            <h4 class="entity-card-title" title="${ch.name || 'Unnamed'}">${ch.name || 'Unnamed'}</h4>
+            <div class="entity-card-meta">
+              <span>${subtitle}</span>
+              ${ch.level ? `<span>• Lv ${ch.level}</span>` : ''}
+              ${ch.monsterData?.cr ? `<span>• CR ${ch.monsterData.cr}</span>` : ''}
+            </div>
+          </div>
+          <div class="entity-card-actions">
+            <button class="btn btn-xs btn-outline btn-export-item" title="Export this ${typeKey}">
+              📤 Export
+            </button>
+          </div>
+        `;
+        card.querySelector('.btn-export-item').addEventListener('click', async (e) => {
+          e.stopPropagation();
+          try {
+            const res = await api.gmExportGranular({
+              campaignId: camp.id,
+              entityType: typeKey,
+              entityId: ch.id,
+              batch: false
+            });
+            if (res && res.success) {
+              alert(`${ch.name || 'Item'} successfully exported to:\n${res.filePath}`);
+            }
+          } catch (err) {
+            alert(`Export failed: ${err.message}`);
+          }
+        });
+        container.appendChild(card);
+      });
+    }
+
+    renderCharCards(gridCampaignPlayers, playerChars, 'player', 'No player character sheets in this campaign yet.');
+    renderCharCards(gridCampaignCompanions, companionChars, 'companion', 'No companions in this campaign yet.');
+    renderCharCards(gridCampaignNpcs, npcChars, 'customNpc', 'No custom NPCs in this campaign yet.');
+  }
+
+  // --- CAMPAIGN DUPLICATION, EXPORT, & IMPORT HANDLERS ---
+  btnDuplicateCampaign?.addEventListener('click', async () => {
+    if (!selectedCampaign) return;
+    if (!confirm(`Duplicate campaign "${selectedCampaign.name}"?\nAll maps, characters, tokens, and uploaded media will be cloned into a new campaign.`)) {
+      return;
+    }
+
+    btnDuplicateCampaign.disabled = true;
+    btnDuplicateCampaign.textContent = 'Cloning...';
+
+    try {
+      const res = await api.gmDuplicateCampaign(selectedCampaign.id);
+      if (res && res.success && res.campaign) {
+        appendLogLine(`[Campaigns] Duplicated campaign "${selectedCampaign.name}" -> "${res.campaign.name}" (${res.campaign.id})`);
+        await loadGmCampaigns();
+        const duplicated = currentCampaigns.find(c => c.id === res.campaign.id);
+        if (duplicated) selectCampaign(duplicated);
+        alert(`Campaign duplicated successfully as "${res.campaign.name}"!`);
+      } else {
+        alert(`Failed to duplicate: ${res?.error || 'Unknown error'}`);
+      }
+    } catch (e) {
+      alert(`Error duplicating campaign: ${e.message}`);
+    } finally {
+      btnDuplicateCampaign.disabled = false;
+      btnDuplicateCampaign.textContent = '📋 Duplicate';
+    }
+  });
+
+  btnExportCampaign?.addEventListener('click', async () => {
+    if (!selectedCampaign) return;
+    btnExportCampaign.disabled = true;
+    btnExportCampaign.textContent = 'Exporting...';
+
+    try {
+      const res = await api.gmExportCampaign(selectedCampaign.id);
+      if (res && res.success) {
+        appendLogLine(`[Campaigns] Exported campaign "${selectedCampaign.name}" to ${res.filePath}`);
+        alert(`Campaign exported successfully to:\n${res.filePath}`);
+      } else if (!res?.canceled) {
+        alert(`Export failed: ${res?.error || 'Unknown error'}`);
+      }
+    } catch (e) {
+      alert(`Error exporting campaign: ${e.message}`);
+    } finally {
+      btnExportCampaign.disabled = false;
+      btnExportCampaign.textContent = '📤 Export Campaign';
+    }
+  });
+
+  btnGmImportCampaign?.addEventListener('click', async () => {
+    btnGmImportCampaign.disabled = true;
+    btnGmImportCampaign.textContent = 'Importing...';
+
+    try {
+      const res = await api.gmImportCampaign(null);
+      if (res && res.success && res.campaign) {
+        appendLogLine(`[Campaigns] Imported campaign "${res.campaign.name}" (${res.campaign.id})`);
+        await loadGmCampaigns();
+        const imported = currentCampaigns.find(c => c.id === res.campaign.id);
+        if (imported) selectCampaign(imported);
+        alert(`Campaign "${res.campaign.name}" imported successfully!`);
+      } else if (!res?.canceled) {
+        alert(`Import failed: ${res?.error || 'Unknown error'}`);
+      }
+    } catch (e) {
+      alert(`Error importing campaign: ${e.message}`);
+    } finally {
+      btnGmImportCampaign.disabled = false;
+      btnGmImportCampaign.textContent = '📥 Import Campaign';
+    }
+  });
+
+  // --- BATCH EXPORT & GRANULAR IMPORT HANDLERS ---
+  async function handleBatchExport(entityType, label) {
+    if (!selectedCampaign) return;
+    try {
+      const res = await api.gmExportGranular({
+        campaignId: selectedCampaign.id,
+        entityType,
+        batch: true
+      });
+      if (res && res.success) {
+        alert(`Exported ${res.count} ${label} to:\n${res.filePath}`);
+      } else if (!res?.canceled) {
+        alert(`Export failed: ${res?.error || 'No items to export'}`);
+      }
+    } catch (e) {
+      alert(`Export error: ${e.message}`);
+    }
+  }
+
+  async function handleGranularImport(entityType, label) {
+    if (!selectedCampaign) return;
+    try {
+      const res = await api.gmImportGranular({
+        campaignId: selectedCampaign.id,
+        explicitFilePath: null
+      });
+      if (res && res.success) {
+        alert(`Successfully imported ${res.count} ${label} into "${selectedCampaign.name}"!`);
+        await refreshSelectedCampaignEntities();
+      } else if (!res?.canceled) {
+        alert(`Import failed: ${res?.error || 'Unknown error'}`);
+      }
+    } catch (e) {
+      alert(`Import error: ${e.message}`);
+    }
+  }
+
+  btnExportAllMaps?.addEventListener('click', () => handleBatchExport('map', 'Maps'));
+  btnImportMap?.addEventListener('click', () => handleGranularImport('map', 'Map'));
+
+  btnExportAllPlayers?.addEventListener('click', () => handleBatchExport('player', 'Player Sheets'));
+  btnImportPlayer?.addEventListener('click', () => handleGranularImport('player', 'Player Sheet'));
+
+  btnExportAllCompanions?.addEventListener('click', () => handleBatchExport('companion', 'Companions'));
+  btnImportCompanion?.addEventListener('click', () => handleGranularImport('companion', 'Companion'));
+
+  btnExportAllNpcs?.addEventListener('click', () => handleBatchExport('customNpc', 'Custom NPCs'));
+  btnImportNpc?.addEventListener('click', () => handleGranularImport('customNpc', 'Custom NPC'));
+
+  // --- GLOBAL DRAG & DROP IMPORT HANDLER ---
+  let dragCounter = 0;
+  window.addEventListener('dragenter', (e) => {
+    e.preventDefault();
+    dragCounter++;
+    if (gmDropzoneOverlay) gmDropzoneOverlay.classList.remove('vtt-hidden');
+  });
+
+  window.addEventListener('dragover', (e) => {
+    e.preventDefault();
+  });
+
+  window.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    dragCounter--;
+    if (dragCounter <= 0) {
+      dragCounter = 0;
+      if (gmDropzoneOverlay) gmDropzoneOverlay.classList.add('vtt-hidden');
+    }
+  });
+
+  window.addEventListener('drop', async (e) => {
+    e.preventDefault();
+    dragCounter = 0;
+    if (gmDropzoneOverlay) gmDropzoneOverlay.classList.add('vtt-hidden');
+
+    const files = e.dataTransfer?.files;
+    if (!files || files.length === 0) return;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const filePath = file.path;
+      if (!filePath) continue;
+      const lower = filePath.toLowerCase();
+      if (!lower.endsWith('.zip') && !lower.endsWith('.json')) continue;
+
+      let asCampaign = true;
+      if (selectedCampaign) {
+        asCampaign = confirm(
+          `Dropped file: ${file.name}\n\nClick OK to import as a NEW CAMPAIGN.\nClick CANCEL to import items into currently selected campaign "${selectedCampaign.name}".`
+        );
+      }
+
+      if (asCampaign) {
+        try {
+          const res = await api.gmImportCampaign(filePath);
+          if (res && res.success && res.campaign) {
+            appendLogLine(`[Drop Import] Imported campaign "${res.campaign.name}" from ${file.name}`);
+            await loadGmCampaigns();
+            const imported = currentCampaigns.find(c => c.id === res.campaign.id);
+            if (imported) selectCampaign(imported);
+            alert(`Campaign "${res.campaign.name}" imported successfully!`);
+          } else {
+            alert(`Failed importing campaign from ${file.name}: ${res?.error || 'Unknown error'}`);
+          }
+        } catch (err) {
+          alert(`Drop import error: ${err.message}`);
+        }
+      } else {
+        try {
+          const res = await api.gmImportGranular({
+            campaignId: selectedCampaign.id,
+            explicitFilePath: filePath
+          });
+          if (res && res.success) {
+            appendLogLine(`[Drop Import] Imported ${res.count} item(s) into campaign "${selectedCampaign.name}"`);
+            await refreshSelectedCampaignEntities();
+            alert(`Successfully imported ${res.count} item(s) into "${selectedCampaign.name}"!`);
+          } else {
+            alert(`Failed importing into campaign: ${res?.error || 'Unknown error'}`);
+          }
+        } catch (err) {
+          alert(`Drop import error: ${err.message}`);
+        }
+      }
+    }
   });
 
   // Modal Create Campaign
@@ -670,7 +1074,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnCollapseAllCats = document.getElementById('btn-collapse-all-cats');
   const statTotalSources = document.getElementById('stat-total-sources');
   const statEnabledSources = document.getElementById('stat-enabled-sources');
+  const statPartneredSources = document.getElementById('stat-partnered-sources');
+  const statUASources = document.getElementById('stat-ua-sources');
   const statCustomSources = document.getElementById('stat-custom-sources');
+  const togglePartneredSources = document.getElementById('toggle-partnered-sources');
+  const toggleUASources = document.getElementById('toggle-ua-sources');
+  const badgeCountPartnered = document.getElementById('badge-count-partnered');
+  const badgeCountUA = document.getElementById('badge-count-ua');
   const sourcesCategoriesAccordion = document.getElementById('sources-categories-accordion');
 
   // Edit Source Modal & Visual Studio
@@ -822,6 +1232,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   let activeStatusFilter = 'all';
   let activeCampaignScope = '';
 
+  let isInitialSourcesLoad = true;
+
   async function loadCampaignsForSourceScope() {
     if (!sourcesCampaignScope) return;
     const currentVal = sourcesCampaignScope.value;
@@ -835,7 +1247,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           opt.textContent = `Campaign: ${camp.name || camp.id}`;
           sourcesCampaignScope.appendChild(opt);
         }
-        sourcesCampaignScope.value = currentVal;
+        if (activeCampaignScope) {
+          sourcesCampaignScope.value = activeCampaignScope;
+        } else {
+          sourcesCampaignScope.value = currentVal;
+        }
       }
     } catch (e) {
       console.error('Failed to populate campaign scope options:', e);
@@ -849,7 +1265,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       const res = await api.sourcesGetAll(activeCampaignScope || null);
       if (res && res.success && Array.isArray(res.categories)) {
         currentSourcesData = res;
-        updateSourceStats(res.categories);
+
+        // Restore persisted UI state on initial load
+        if (isInitialSourcesLoad && res.uiState) {
+          if (res.uiState.lastPreset && sourcesPresetSelect) {
+            sourcesPresetSelect.value = res.uiState.lastPreset;
+          }
+          if (res.uiState.lastScope !== undefined && sourcesCampaignScope) {
+            activeCampaignScope = res.uiState.lastScope;
+            sourcesCampaignScope.value = res.uiState.lastScope;
+          }
+          isInitialSourcesLoad = false;
+        }
+
+        // Sync Partnered & UA master toggle switches
+        if (togglePartneredSources && res.partneredStats) {
+          togglePartneredSources.checked = res.partneredStats.enabled > 0;
+        }
+        if (toggleUASources && res.uaStats) {
+          toggleUASources.checked = res.uaStats.enabled > 0;
+        }
+
+        updateSourceStats(res.categories, res.partneredStats, res.uaStats);
         renderCategoriesAccordion();
       } else {
         sourcesCategoriesAccordion.innerHTML = '<div class="loading-placeholder text-danger">Failed to load database sources.</div>';
@@ -860,22 +1297,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  function updateSourceStats(categories) {
+  function updateSourceStats(categories, partneredStats, uaStats) {
     let total = 0;
     let enabled = 0;
     let custom = 0;
+    let partnered = 0;
+    let ua = 0;
 
     for (const cat of categories) {
       for (const src of cat.sources) {
         total++;
         if (src.enabled) enabled++;
         if (src.isCustom) custom++;
+        if (src.isPartnered) partnered++;
+        if (src.isUA) ua++;
       }
     }
 
     if (statTotalSources) statTotalSources.textContent = total;
     if (statEnabledSources) statEnabledSources.textContent = enabled;
     if (statCustomSources) statCustomSources.textContent = custom;
+    if (statPartneredSources) statPartneredSources.textContent = partnered;
+    if (statUASources) statUASources.textContent = ua;
+
+    if (badgeCountPartnered) {
+      const pEnabled = partneredStats ? partneredStats.enabled : categories.reduce((acc, c) => acc + c.sources.filter(s => s.isPartnered && s.enabled).length, 0);
+      badgeCountPartnered.textContent = `${pEnabled} Active`;
+    }
+    if (badgeCountUA) {
+      const uEnabled = uaStats ? uaStats.enabled : categories.reduce((acc, c) => acc + c.sources.filter(s => s.isUA && s.enabled).length, 0);
+      badgeCountUA.textContent = `${uEnabled} Active`;
+    }
   }
 
   function renderCategoriesAccordion() {
@@ -889,6 +1341,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       const matchingSources = cat.sources.filter(src => {
         if (activeStatusFilter === 'active' && !src.enabled) return false;
         if (activeStatusFilter === 'inactive' && src.enabled) return false;
+        if (activeStatusFilter === 'partnered' && !src.isPartnered) return false;
+        if (activeStatusFilter === 'ua' && !src.isUA) return false;
         if (activeStatusFilter === 'custom' && !src.isCustom) return false;
 
         if (!term) return true;
@@ -994,6 +1448,16 @@ document.addEventListener('DOMContentLoaded', async () => {
           const sizeKb = src.fileSize ? `${Math.round(src.fileSize / 1024)} KB` : '';
           const countLabel = src.entryCount !== undefined ? `${src.entryCount} entries` : '';
 
+          const editionBadge = src.edition === '2024'
+            ? '<span class="badge-edition badge-edition-2024" title="2024 Modern Ruleset">2024</span>'
+            : '<span class="badge-edition badge-edition-2014" title="2014 Legacy Ruleset">2014</span>';
+          const partneredBadge = src.isPartnered
+            ? '<span class="badge-content badge-partnered" title="Partnered Content">Partnered</span>'
+            : '';
+          const uaBadge = src.isUA
+            ? '<span class="badge-content badge-ua" title="Unearthed Arcana (Playtest)">UA</span>'
+            : '';
+
           itemCard.innerHTML = `
             <div class="source-item-top">
               <div class="source-item-info">
@@ -1001,6 +1465,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                   <span class="source-dot ${src.enabled ? 'active' : ''}"></span>
                   <span class="source-item-title" title="${src.name || src.code}">${src.name || src.code}</span>
                   <span class="source-code-badge ${src.isCustom ? 'custom' : ''}">${src.code}</span>
+                  ${editionBadge}
+                  ${partneredBadge}
+                  ${uaBadge}
                   ${src.isCustom ? '<span class="badge badge-accent" style="font-size: 9px; padding: 1px 5px;">Custom</span>' : ''}
                 </div>
                 <div class="source-item-author">${src.author || 'Official Rulebook'}</div>
@@ -1124,6 +1591,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (sourcesCampaignScope) {
     sourcesCampaignScope.addEventListener('change', () => {
       activeCampaignScope = sourcesCampaignScope.value;
+      if (api.sourcesSaveUiState) {
+        api.sourcesSaveUiState({
+          lastPreset: sourcesPresetSelect?.value,
+          lastScope: activeCampaignScope
+        }).catch(() => {});
+      }
       loadAllSources();
     });
   }
@@ -1134,7 +1607,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  // Quick Master Switches for Partnered & UA
+  if (togglePartneredSources) {
+    togglePartneredSources.addEventListener('change', async () => {
+      const enabled = togglePartneredSources.checked;
+      togglePartneredSources.disabled = true;
+      try {
+        await api.sourcesTogglePartnered({
+          enabled,
+          campaignId: activeCampaignScope || null
+        });
+        await loadAllSources();
+      } catch (err) {
+        console.error('Failed toggling partnered sources:', err);
+      } finally {
+        togglePartneredSources.disabled = false;
+      }
+    });
+  }
+
+  if (toggleUASources) {
+    toggleUASources.addEventListener('change', async () => {
+      const enabled = toggleUASources.checked;
+      toggleUASources.disabled = true;
+      try {
+        await api.sourcesToggleUA({
+          enabled,
+          campaignId: activeCampaignScope || null
+        });
+        await loadAllSources();
+      } catch (err) {
+        console.error('Failed toggling UA sources:', err);
+      } finally {
+        toggleUASources.disabled = false;
+      }
+    });
+  }
+
   // Preset selector handler
+  if (sourcesPresetSelect) {
+    sourcesPresetSelect.addEventListener('change', () => {
+      if (api.sourcesSaveUiState) {
+        api.sourcesSaveUiState({
+          lastPreset: sourcesPresetSelect.value,
+          lastScope: activeCampaignScope
+        }).catch(() => {});
+      }
+    });
+  }
+
   if (btnApplyPreset && sourcesPresetSelect) {
     btnApplyPreset.addEventListener('click', async () => {
       const preset = sourcesPresetSelect.value;
@@ -1152,6 +1673,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         if (res && res.success) {
+          if (api.sourcesSaveUiState) {
+            api.sourcesSaveUiState({
+              lastPreset: preset,
+              lastScope: activeCampaignScope
+            }).catch(() => {});
+          }
           await loadAllSources();
         } else {
           alert(`Failed to apply preset: ${res?.error || 'Unknown error'}`);

@@ -263,13 +263,13 @@ export function initVttCreatureSheet(vtt) {
         console.log('[vtt-creature-sheet] openSheet called', { monsterData, tokenId, characterId });
         if (!monsterData) return;
 
-        // Hydrate from single-creature API if monsterData is only catalog summary or missing actions/lair
+        // Hydrate from single-creature API only if monsterData is an un-hydrated catalog summary and NOT a custom companion/NPC
         const lookupId = monsterData.id || monsterData.name;
-        const isCatalogOnly = Boolean(
+        const isCustomOrCompanion = Boolean(characterId || linkedCharacterId || monsterData.isCompanion || monsterData.isCustomNpc || (characterId && window.VTT?.campaignState?.characters?.[characterId]));
+        const isCatalogOnly = !isCustomOrCompanion && Boolean(
             monsterData.source && lookupId && (
-                !monsterData.actions || 
-                (monsterData.hasSpellcasting && (!monsterData.spellcasting || monsterData.spellcasting.length === 0)) ||
-                (monsterData.legendaryActions && monsterData.lairActions === undefined)
+                (!monsterData.actions && !monsterData.action) || 
+                (monsterData.hasSpellcasting && (!monsterData.spellcasting || monsterData.spellcasting.length === 0))
             )
         );
         if (isCatalogOnly) {
@@ -296,40 +296,40 @@ export function initVttCreatureSheet(vtt) {
                 }
                 if (full) {
                     monsterData = Object.assign({}, full, monsterData, {
-                        spellcasting: full.spellcasting || monsterData.spellcasting,
-                        actions: full.actions || monsterData.actions,
-                        bonusActions: full.bonusActions || monsterData.bonusActions,
-                        reactions: full.reactions || monsterData.reactions,
-                        legendaryActions: full.legendaryActions || monsterData.legendaryActions,
-                        legendaryActionsLair: full.legendaryActionsLair ?? monsterData.legendaryActionsLair,
-                        legendaryGroup: full.legendaryGroup || monsterData.legendaryGroup,
+                        spellcasting: monsterData.spellcasting || full.spellcasting,
+                        actions: monsterData.actions || monsterData.action || full.actions,
+                        bonusActions: monsterData.bonusActions || monsterData.bonus || full.bonusActions,
+                        reactions: monsterData.reactions || monsterData.reaction || full.reactions,
+                        legendaryActions: monsterData.legendaryActions || monsterData.legendary || full.legendaryActions,
+                        legendaryActionsLair: monsterData.legendaryActionsLair ?? full.legendaryActionsLair,
+                        legendaryGroup: monsterData.legendaryGroup || full.legendaryGroup,
                         lairActions: (monsterData.lairActions && monsterData.lairActions.length > 0) ? monsterData.lairActions : full.lairActions,
                         lairHeader: monsterData.lairHeader || full.lairHeader,
                         lairActionsDesc: monsterData.lairActionsDesc || full.lairActionsDesc,
                         regionalEffects: (monsterData.regionalEffects && monsterData.regionalEffects.length > 0) ? monsterData.regionalEffects : full.regionalEffects,
                         regionalEffectsHtml: monsterData.regionalEffectsHtml || full.regionalEffectsHtml,
-                        mythicActions: full.mythicActions || monsterData.mythicActions,
-                        traits: full.traits || monsterData.traits,
-                        abilities: full.abilities || monsterData.abilities,
-                        str: full.str ?? full.abilities?.str?.score ?? monsterData.str,
-                        dex: full.dex ?? full.abilities?.dex?.score ?? monsterData.dex,
-                        con: full.con ?? full.abilities?.con?.score ?? monsterData.con,
-                        int: full.int ?? full.abilities?.int?.score ?? monsterData.int,
-                        wis: full.wis ?? full.abilities?.wis?.score ?? monsterData.wis,
-                        cha: full.cha ?? full.abilities?.cha?.score ?? monsterData.cha,
-                        save: full.save ?? full.saves ?? monsterData.save,
-                        saves: full.saves ?? full.save ?? monsterData.saves,
-                        skill: full.skill ?? full.skills ?? monsterData.skill,
-                        skills: full.skills ?? full.skill ?? monsterData.skills,
-                        immune: full.immune ?? monsterData.immune,
-                        resist: full.resist ?? monsterData.resist,
-                        vulnerable: full.vulnerable ?? monsterData.vulnerable,
-                        conditionImmune: full.conditionImmune ?? monsterData.conditionImmune,
-                        senses: full.senses || monsterData.senses,
-                        speed: full.speed || monsterData.speed,
-                        hp: full.hp || monsterData.hp,
-                        ac: full.ac || monsterData.ac,
-                        primaryAc: full.primaryAc ?? monsterData.primaryAc
+                        mythicActions: monsterData.mythicActions || full.mythicActions,
+                        traits: monsterData.traits || monsterData.trait || full.traits,
+                        abilities: monsterData.abilities || full.abilities,
+                        str: monsterData.str ?? full.str ?? full.abilities?.str?.score,
+                        dex: monsterData.dex ?? full.dex ?? full.abilities?.dex?.score,
+                        con: monsterData.con ?? full.con ?? full.abilities?.con?.score,
+                        int: monsterData.int ?? full.int ?? full.abilities?.int?.score,
+                        wis: monsterData.wis ?? full.wis ?? full.abilities?.wis?.score,
+                        cha: monsterData.cha ?? full.cha ?? full.abilities?.cha?.score,
+                        save: monsterData.save ?? monsterData.saves ?? full.save ?? full.saves,
+                        saves: monsterData.saves ?? monsterData.save ?? full.saves ?? full.save,
+                        skill: monsterData.skill ?? monsterData.skills ?? full.skill ?? full.skills,
+                        skills: monsterData.skills ?? monsterData.skill ?? full.skills ?? full.skill,
+                        immune: monsterData.immune ?? full.immune,
+                        resist: monsterData.resist ?? full.resist,
+                        vulnerable: monsterData.vulnerable ?? full.vulnerable,
+                        conditionImmune: monsterData.conditionImmune ?? full.conditionImmune,
+                        senses: monsterData.senses || full.senses,
+                        speed: monsterData.speed || full.speed,
+                        hp: monsterData.hp || full.hp,
+                        ac: monsterData.ac || full.ac,
+                        primaryAc: monsterData.primaryAc ?? full.primaryAc
                     });
                 }
             } catch (err) {
@@ -2340,9 +2340,11 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function sizeCode(s) {
-        const letter = Array.isArray(s) ? s[0] : s;
+        if (!s) return '';
+        const raw = Array.isArray(s) ? s[0] : s;
+        const letter = String(raw).trim().charAt(0).toUpperCase();
         const map = { T: 'Tiny', S: 'Small', M: 'Medium', L: 'Large', H: 'Huge', G: 'Gargantuan' };
-        return map[letter?.toUpperCase()] || letter || '';
+        return map[letter] || raw || '';
     }
 
     function buildSpeedString(speed) {
@@ -2517,6 +2519,7 @@ export function initVttCreatureSheet(vtt) {
             const canvasTokens = window.VTT.canvasEngine.getTokens();
             const token = canvasTokens ? canvasTokens[linkedTokenId] : null;
             if (token) {
+                if (token.img) return token.img;
                 if (token.imgUrl) return token.imgUrl;
                 if (token.src) return token.src;
                 if (token.tokenUrl) return token.tokenUrl;
@@ -2943,7 +2946,8 @@ export function initVttCreatureSheet(vtt) {
 
         const saves = m.save || {};
 
-        const currSize = (Array.isArray(m.size) ? m.size[0] : (m.size || 'M')).toUpperCase();
+        const rawSize = Array.isArray(m.size) ? m.size[0] : (m.size || 'M');
+        const currSize = String(rawSize || 'M').trim().charAt(0).toUpperCase();
 
         const stdTypes = ['aberration', 'beast', 'celestial', 'construct', 'dragon', 'elemental', 'fey', 'fiend', 'giant', 'humanoid', 'monstrosity', 'ooze', 'plant', 'undead'];
         let typeCategory = 'humanoid';
@@ -3382,8 +3386,14 @@ export function initVttCreatureSheet(vtt) {
                             const modStr = parsedAtk >= 0 ? `+${parsedAtk}` : `${parsedAtk}`;
                             if (/\{@hit\s+[+-]?\d+\}/i.test(text)) {
                                 text = text.replace(/\{@hit\s+[+-]?\d+\}/gi, `{@hit ${parsedAtk}}`);
-                            } else if (/[+-]?\d+\s+to\s+hit/i.test(text)) {
-                                text = text.replace(/[+-]?\d+\s+to\s+hit/gi, `${modStr} to hit`);
+                            } else if (/\{@hitYourSpellAttack[^}]*\}/i.test(text)) {
+                                text = text.replace(/\{@hitYourSpellAttack[^}]*\}/gi, `${modStr} to hit`);
+                            } else if (/(?:your\s+spell\s+attack\s+modifier|[+-]?\d+)\s+to\s+hit/i.test(text)) {
+                                text = text.replace(/(?:your\s+spell\s+attack\s+modifier|[+-]?\d+)\s+to\s+hit/gi, `${modStr} to hit`);
+                            } else if (/\{@atk\s+[^}]+\}/i.test(text)) {
+                                text = text.replace(/(\{@atk\s+[^}]+\}\s*)/i, `$1${modStr} to hit, `);
+                            } else if (/(?:melee|ranged)\s+(?:weapon|spell)\s+attack:\s*/i.test(text)) {
+                                text = text.replace(/((?:melee|ranged)\s+(?:weapon|spell)\s+attack:\s*)/i, `$1${modStr} to hit, `);
                             }
                         }
                     }
@@ -3464,7 +3474,7 @@ export function initVttCreatureSheet(vtt) {
 
                     // Parse Damages
                     const parsedDamages = [];
-                    const dmgMatches = [...text.matchAll(/(?:\{@damage\s+([^}]+)\}|(?:(?:(\d+)\s*\(([^)]+)\))|([1-9]\d*d\d+(?:\s*[+-]\s*\d+)?))\s*([a-zA-Z]+)?\s*damage)/gi)];
+                    const dmgMatches = [...text.matchAll(/(?:\{@damage\s+([^}]+)\}|(?:(?:(\d+)\s*\(([^)]+)\))|([1-9]\d*d\d+(?:\s*[+-]\s*[^,.]+)?))\s*([a-zA-Z]+)?\s*damage)/gi)];
                     dmgMatches.forEach(dm => {
                         const formula = (dm[1] || dm[3] || dm[4] || '').trim();
                         let type = (dm[5] || 'slashing').toLowerCase().trim();

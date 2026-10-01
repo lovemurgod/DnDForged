@@ -20,7 +20,10 @@ export function createCampaignTemplate(id, name) {
         tokens: {},
         walls: [],
         lights: [],
-        shapes: {}
+        shapes: {},
+        drawings: {},
+        traps: [],
+        portals: []
       }
     },
     initiative: [],

@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, shell, Tray, Menu, dialog } from 'electron
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { spawn } from 'child_process';
+import { spawn, execFileSync } from 'child_process';
 import net from 'net';
 import crypto from 'crypto';
 import { SourceManager } from './source-manager.js';
@@ -726,6 +726,28 @@ ipcMain.handle('gm-get-campaigns', async () => {
   return { success: true, campaigns: [] };
 });
 
+ipcMain.handle('gm-get-campaign-details', async (_, campId) => {
+  try {
+    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`);
+    if (res.ok) {
+      const data = await res.json();
+      return { success: true, campaign: data };
+    }
+  } catch (e) {}
+
+  // Fallback to local file
+  try {
+    const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+    if (fs.existsSync(campFile)) {
+      const data = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+      if (data[campId]) {
+        return { success: true, campaign: data[campId] };
+      }
+    }
+  } catch (e) {}
+  return { success: false, error: 'Campaign not found' };
+});
+
 ipcMain.handle('gm-save-campaign', async (_, campaignData) => {
   try {
     const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignData.id}`, {
@@ -777,6 +799,558 @@ ipcMain.handle('gm-delete-campaign', async (_, campId) => {
   }
 });
 
+// --- Campaign Duplication & Packaging Helpers ---
+function getTarBin() {
+  return process.platform === 'win32' ? 'tar.exe' : 'tar';
+}
+
+function packZipArchive(sourceDir, zipFilePath) {
+  try {
+    if (fs.existsSync(zipFilePath)) fs.unlinkSync(zipFilePath);
+    execFileSync(getTarBin(), ['-a', '-c', '-f', zipFilePath, '-C', sourceDir, '.'], { stdio: 'ignore' });
+    return true;
+  } catch (err) {
+    console.error('Failed to create ZIP with tar:', err);
+    throw err;
+  }
+}
+
+function unpackZipArchive(zipFilePath, targetDir) {
+  try {
+    if (!fs.existsSync(targetDir)) fs.mkdirSync(targetDir, { recursive: true });
+    execFileSync(getTarBin(), ['-xf', zipFilePath, '-C', targetDir], { stdio: 'ignore' });
+    return true;
+  } catch (err) {
+    console.error('Failed to extract ZIP with tar:', err);
+    throw err;
+  }
+}
+
+function findReferencedUploads(dataObj) {
+  const fileNames = new Set();
+  const jsonStr = JSON.stringify(dataObj);
+  const regex = /(?:vtt-uploads|uploads)[\/\\]([a-zA-Z0-9_\-\.]+)/gi;
+  let match;
+  while ((match = regex.exec(jsonStr)) !== null) {
+    if (match[1]) fileNames.add(match[1]);
+  }
+  return Array.from(fileNames);
+}
+
+function collectAssets(fileNames, campaignId, destAssetsDir) {
+  const found = [];
+  if (!fs.existsSync(destAssetsDir)) fs.mkdirSync(destAssetsDir, { recursive: true });
+
+  const campUploads = path.join(appConfig.campaignDataDir, 'campaigns', campaignId, 'uploads');
+  const globalUploads = path.join(appConfig.campaignDataDir, 'uploads');
+
+  for (const fn of fileNames) {
+    const p1 = path.join(campUploads, fn);
+    const p2 = path.join(globalUploads, fn);
+    let srcFile = null;
+    if (fs.existsSync(p1)) srcFile = p1;
+    else if (fs.existsSync(p2)) srcFile = p2;
+
+    if (srcFile) {
+      const dest = path.join(destAssetsDir, fn);
+      try {
+        fs.copyFileSync(srcFile, dest);
+        found.push(fn);
+      } catch (e) {
+        console.warn(`Could not copy asset ${fn}:`, e);
+      }
+    }
+  }
+  return found;
+}
+
+function unpackAssetsToCampaign(extractedAssetsDir, targetCampaignId) {
+  if (!fs.existsSync(extractedAssetsDir)) return 0;
+  const targetUploads = path.join(appConfig.campaignDataDir, 'campaigns', targetCampaignId, 'uploads');
+  if (!fs.existsSync(targetUploads)) fs.mkdirSync(targetUploads, { recursive: true });
+
+  const files = fs.readdirSync(extractedAssetsDir);
+  let count = 0;
+  for (const f of files) {
+    const src = path.join(extractedAssetsDir, f);
+    const dst = path.join(targetUploads, f);
+    try {
+      fs.copyFileSync(src, dst);
+      count++;
+    } catch (e) {
+      console.warn(`Failed copying imported asset ${f}:`, e);
+    }
+  }
+  return count;
+}
+
+// Campaign Duplication IPC
+ipcMain.handle('gm-duplicate-campaign', async (_, campId) => {
+  try {
+    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}/duplicate`, {
+      method: 'POST'
+    });
+    if (res.ok) {
+      const data = await res.json();
+      appendLog(`[Campaigns] Duplicated campaign ${campId} -> ${data.campaign.name} (${data.campaign.id})`);
+      return { success: true, campaign: data.campaign };
+    }
+  } catch (e) {}
+
+  // Fallback to direct local file
+  try {
+    const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+    if (fs.existsSync(campFile)) {
+      const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+      const orig = all[campId];
+      if (!orig) return { success: false, error: 'Campaign not found' };
+
+      const safeName = (orig.name || 'Campaign').trim();
+      const newName = `${safeName} (Copy)`;
+      const newId = safeName.toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_copy_' + Date.now();
+      const cloned = JSON.parse(JSON.stringify(orig));
+      cloned.id = newId;
+      cloned.name = newName;
+      cloned.initiative = [];
+
+      // Copy uploads folder
+      const origUploads = path.join(appConfig.campaignDataDir, 'campaigns', campId, 'uploads');
+      const newUploads = path.join(appConfig.campaignDataDir, 'campaigns', newId, 'uploads');
+      if (fs.existsSync(origUploads)) {
+        fs.cpSync(origUploads, newUploads, { recursive: true });
+      }
+
+      all[newId] = cloned;
+      fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+      appendLog(`[Campaigns] (File) Duplicated campaign ${campId} -> ${newName} (${newId})`);
+      return { success: true, campaign: cloned };
+    }
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+  return { success: false, error: 'Failed to duplicate campaign' };
+});
+
+// Full Campaign Export IPC
+ipcMain.handle('gm-export-campaign', async (_, campId) => {
+  if (!mainWindow) return { canceled: true };
+
+  // 1. Fetch full campaign data
+  let campaign = null;
+  try {
+    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campId}`);
+    if (res.ok) campaign = await res.json();
+  } catch (e) {}
+
+  if (!campaign) {
+    try {
+      const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+      if (fs.existsSync(campFile)) {
+        const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+        campaign = all[campId];
+      }
+    } catch (e) {}
+  }
+
+  if (!campaign) return { success: false, error: 'Campaign not found' };
+
+  // 2. Determine assets
+  const referencedUploads = findReferencedUploads(campaign);
+  const campUploadsDir = path.join(appConfig.campaignDataDir, 'campaigns', campId, 'uploads');
+  let hasLocalUploads = referencedUploads.length > 0;
+  if (!hasLocalUploads && fs.existsSync(campUploadsDir)) {
+    try {
+      hasLocalUploads = fs.readdirSync(campUploadsDir).length > 0;
+    } catch (e) {}
+  }
+
+  const safeName = (campaign.name || 'Campaign').replace(/[^a-z0-9_\-]/gi, '_');
+  const defaultExt = hasLocalUploads ? 'zip' : 'json';
+  const defaultPath = path.join(appConfig.backupsDir, `${safeName}-Campaign.${defaultExt}`);
+
+  const { filePath, canceled } = await dialog.showSaveDialog(mainWindow, {
+    title: `Export Campaign: ${campaign.name}`,
+    defaultPath,
+    filters: [
+      { name: hasLocalUploads ? 'ForgeDVTT Archive (*.zip)' : 'ForgeDVTT Data (*.json, *.zip)', extensions: hasLocalUploads ? ['zip'] : ['json', 'zip'] },
+      { name: 'All Files', extensions: ['*'] }
+    ]
+  });
+
+  if (canceled || !filePath) return { canceled: true };
+
+  const isZip = filePath.toLowerCase().endsWith('.zip');
+  const tempDir = path.join(app.getPath('temp'), `forge-camp-exp-${Date.now()}`);
+  fs.mkdirSync(tempDir, { recursive: true });
+
+  try {
+    const manifest = {
+      format: 'forgedvtt-package',
+      version: 1,
+      type: 'campaign',
+      exportedAt: new Date().toISOString(),
+      campaign
+    };
+
+    if (isZip) {
+      fs.writeFileSync(path.join(tempDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
+      const assetsDir = path.join(tempDir, 'assets');
+      fs.mkdirSync(assetsDir, { recursive: true });
+
+      if (fs.existsSync(campUploadsDir)) {
+        fs.cpSync(campUploadsDir, assetsDir, { recursive: true });
+      }
+      collectAssets(referencedUploads, campId, assetsDir);
+
+      packZipArchive(tempDir, filePath);
+    } else {
+      fs.writeFileSync(filePath, JSON.stringify(manifest, null, 2), 'utf8');
+    }
+
+    appendLog(`[Campaigns] Successfully exported campaign "${campaign.name}" to ${filePath}`);
+    return { success: true, filePath };
+  } catch (err) {
+    appendLog(`[Campaigns Error] Failed exporting campaign: ${err.message}`);
+    return { success: false, error: err.message };
+  } finally {
+    try { fs.rmSync(tempDir, { recursive: true, force: true }); } catch (e) {}
+  }
+});
+
+// Full Campaign Import IPC
+ipcMain.handle('gm-import-campaign', async (_, explicitFilePath) => {
+  let targetFile = explicitFilePath;
+  if (!targetFile) {
+    if (!mainWindow) return { canceled: true };
+    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+      title: 'Select ForgeDVTT Campaign File (*.zip, *.json)',
+      filters: [
+        { name: 'ForgeDVTT Campaign (*.zip, *.json)', extensions: ['zip', 'json'] },
+        { name: 'All Files', extensions: ['*'] }
+      ],
+      properties: ['openFile']
+    });
+    if (canceled || !filePaths || filePaths.length === 0) return { canceled: true };
+    targetFile = filePaths[0];
+  }
+
+  if (!fs.existsSync(targetFile)) return { success: false, error: 'File not found' };
+
+  const ext = path.extname(targetFile).toLowerCase();
+  const tempDir = path.join(app.getPath('temp'), `forge-camp-imp-${Date.now()}`);
+  fs.mkdirSync(tempDir, { recursive: true });
+
+  try {
+    let manifest = null;
+    let assetsDir = null;
+
+    if (ext === '.zip') {
+      unpackZipArchive(targetFile, tempDir);
+      const manifestPath = path.join(tempDir, 'manifest.json');
+      if (!fs.existsSync(manifestPath)) {
+        return { success: false, error: 'Invalid ZIP archive: manifest.json not found inside package.' };
+      }
+      manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      assetsDir = path.join(tempDir, 'assets');
+    } else {
+      manifest = JSON.parse(fs.readFileSync(targetFile, 'utf8'));
+    }
+
+    const campData = manifest.campaign || (manifest.maps ? manifest : null);
+    if (!campData || !campData.name) {
+      return { success: false, error: 'Invalid campaign format: missing campaign data.' };
+    }
+
+    const safeBaseId = (campData.id || campData.name).toLowerCase().replace(/[^a-z0-9]/gi, '_');
+    const newCampId = `${safeBaseId}_imported_${Date.now()}`;
+    const newCamp = {
+      ...campData,
+      id: newCampId,
+      name: `${campData.name} (Imported)`
+    };
+
+    if (assetsDir && fs.existsSync(assetsDir)) {
+      unpackAssetsToCampaign(assetsDir, newCampId);
+    }
+
+    let saved = false;
+    try {
+      const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/import`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ campaign: newCamp })
+      });
+      if (res.ok) saved = true;
+    } catch (e) {}
+
+    if (!saved) {
+      const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+      let all = {};
+      if (fs.existsSync(campFile)) {
+        all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+      }
+      all[newCampId] = newCamp;
+      fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+    }
+
+    appendLog(`[Campaigns] Successfully imported campaign "${newCamp.name}" (${newCampId})`);
+    return { success: true, campaign: newCamp };
+  } catch (err) {
+    appendLog(`[Campaigns Error] Failed importing campaign: ${err.message}`);
+    return { success: false, error: err.message };
+  } finally {
+    try { fs.rmSync(tempDir, { recursive: true, force: true }); } catch (e) {}
+  }
+});
+
+// Granular Entity Export IPC (Map, Custom NPC, Companion, Player Sheet)
+ipcMain.handle('gm-export-granular', async (_, { campaignId, entityType, entityId, batch }) => {
+  if (!mainWindow) return { canceled: true };
+
+  let campaign = null;
+  try {
+    const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignId}`);
+    if (res.ok) campaign = await res.json();
+  } catch (e) {}
+
+  if (!campaign) {
+    try {
+      const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+      if (fs.existsSync(campFile)) {
+        const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+        campaign = all[campaignId];
+      }
+    } catch (e) {}
+  }
+
+  if (!campaign) return { success: false, error: 'Campaign not found' };
+
+  let items = [];
+  let exportLabel = '';
+
+  if (entityType === 'map') {
+    if (batch) {
+      items = Object.values(campaign.maps || {});
+      exportLabel = `${campaign.name || 'Campaign'}-All-Maps`;
+    } else {
+      const m = (campaign.maps || {})[entityId];
+      if (m) items = [m];
+      exportLabel = m?.name ? `${m.name}-Map` : 'Map';
+    }
+  } else if (entityType === 'player') {
+    const isCompanion = (c) => Boolean(c.isCompanion || (c.id && c.id.startsWith('comp_')));
+    const isCustomNpc = (c) => Boolean(c.isCustomNpc || (c.id && c.id.startsWith('npc_')) || (c.monsterData && !c.isPlayer && !c.isCompanion && !(c.id && c.id.startsWith('char_'))));
+    const isPlayer = (c) => !isCompanion(c) && !isCustomNpc(c) && Boolean(c.isPlayer || (c.id && c.id.startsWith('char_')));
+
+    const chars = Object.values(campaign.characters || {}).filter(isPlayer);
+    if (batch) {
+      items = chars;
+      exportLabel = `${campaign.name || 'Campaign'}-All-Players`;
+    } else {
+      const ch = (campaign.characters || {})[entityId];
+      if (ch) items = [ch];
+      exportLabel = ch?.name ? `${ch.name}-Player` : 'Player';
+    }
+  } else if (entityType === 'companion') {
+    const chars = Object.values(campaign.characters || {}).filter(c => c.isCompanion || (c.id && c.id.startsWith('comp_')));
+    if (batch) {
+      items = chars;
+      exportLabel = `${campaign.name || 'Campaign'}-All-Companions`;
+    } else {
+      const ch = (campaign.characters || {})[entityId];
+      if (ch) items = [ch];
+      exportLabel = ch?.name ? `${ch.name}-Companion` : 'Companion';
+    }
+  } else if (entityType === 'customNpc') {
+    const chars = Object.values(campaign.characters || {}).filter(c => c.isCustomNpc || (c.id && c.id.startsWith('npc_')) || (c.monsterData && !c.isPlayer && !c.isCompanion && !(c.id && c.id.startsWith('char_'))));
+    if (batch) {
+      items = chars;
+      exportLabel = `${campaign.name || 'Campaign'}-All-Custom-NPCs`;
+    } else {
+      const ch = (campaign.characters || {})[entityId];
+      if (ch) items = [ch];
+      exportLabel = ch?.name ? `${ch.name}-NPC` : 'CustomNPC';
+    }
+  }
+
+  if (items.length === 0) {
+    return { success: false, error: `No items found to export for ${entityType}` };
+  }
+
+  const cleanLabel = exportLabel.replace(/[^a-z0-9_\-]/gi, '_');
+  const referencedUploads = findReferencedUploads(items);
+  const hasLocalUploads = referencedUploads.length > 0;
+  const defaultExt = hasLocalUploads ? 'zip' : 'json';
+  const defaultPath = path.join(appConfig.backupsDir, `${cleanLabel}.${defaultExt}`);
+
+  const { filePath, canceled } = await dialog.showSaveDialog(mainWindow, {
+    title: `Export ${exportLabel}`,
+    defaultPath,
+    filters: [
+      { name: hasLocalUploads ? 'ForgeDVTT Archive (*.zip)' : 'ForgeDVTT Data (*.json, *.zip)', extensions: hasLocalUploads ? ['zip'] : ['json', 'zip'] },
+      { name: 'All Files', extensions: ['*'] }
+    ]
+  });
+
+  if (canceled || !filePath) return { canceled: true };
+
+  const isZip = filePath.toLowerCase().endsWith('.zip');
+  const tempDir = path.join(app.getPath('temp'), `forge-gran-exp-${Date.now()}`);
+  fs.mkdirSync(tempDir, { recursive: true });
+
+  try {
+    const manifest = {
+      format: 'forgedvtt-item',
+      version: 1,
+      entityType,
+      batch: !!batch,
+      count: items.length,
+      exportedAt: new Date().toISOString(),
+      sourceCampaign: campaign.name || campaign.id,
+      items
+    };
+
+    if (isZip) {
+      fs.writeFileSync(path.join(tempDir, 'manifest.json'), JSON.stringify(manifest, null, 2), 'utf8');
+      const assetsDir = path.join(tempDir, 'assets');
+      collectAssets(referencedUploads, campaignId, assetsDir);
+      packZipArchive(tempDir, filePath);
+    } else {
+      fs.writeFileSync(filePath, JSON.stringify(manifest, null, 2), 'utf8');
+    }
+
+    appendLog(`[Export] Successfully exported ${items.length} ${entityType}(s) to ${filePath}`);
+    return { success: true, filePath, count: items.length };
+  } catch (err) {
+    appendLog(`[Export Error] Failed exporting ${entityType}: ${err.message}`);
+    return { success: false, error: err.message };
+  } finally {
+    try { fs.rmSync(tempDir, { recursive: true, force: true }); } catch (e) {}
+  }
+});
+
+// Granular Entity Import IPC
+ipcMain.handle('gm-import-granular', async (_, { campaignId, explicitFilePath }) => {
+  let targetFile = explicitFilePath;
+  if (!targetFile) {
+    if (!mainWindow) return { canceled: true };
+    const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+      title: 'Select Item to Import (*.zip, *.json)',
+      filters: [
+        { name: 'ForgeDVTT Item (*.zip, *.json)', extensions: ['zip', 'json'] },
+        { name: 'All Files', extensions: ['*'] }
+      ],
+      properties: ['openFile']
+    });
+    if (canceled || !filePaths || filePaths.length === 0) return { canceled: true };
+    targetFile = filePaths[0];
+  }
+
+  if (!fs.existsSync(targetFile)) return { success: false, error: 'File not found' };
+
+  const ext = path.extname(targetFile).toLowerCase();
+  const tempDir = path.join(app.getPath('temp'), `forge-gran-imp-${Date.now()}`);
+  fs.mkdirSync(tempDir, { recursive: true });
+
+  try {
+    let manifest = null;
+    let assetsDir = null;
+
+    if (ext === '.zip') {
+      unpackZipArchive(targetFile, tempDir);
+      const manifestPath = path.join(tempDir, 'manifest.json');
+      if (!fs.existsSync(manifestPath)) {
+        return { success: false, error: 'Invalid ZIP archive: manifest.json not found.' };
+      }
+      manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      assetsDir = path.join(tempDir, 'assets');
+    } else {
+      manifest = JSON.parse(fs.readFileSync(targetFile, 'utf8'));
+    }
+
+    let items = [];
+    let entityType = manifest.entityType || 'unknown';
+
+    if (Array.isArray(manifest.items)) {
+      items = manifest.items;
+    } else if (manifest.item) {
+      items = [manifest.item];
+    } else if (Array.isArray(manifest)) {
+      items = manifest;
+    } else if (manifest.grid || manifest.tokens !== undefined) {
+      items = [manifest];
+      entityType = 'map';
+    } else if (manifest.id && (manifest.name || manifest.monsterData)) {
+      items = [manifest];
+    }
+
+    if (items.length === 0) {
+      return { success: false, error: 'No recognizable entity items found in file.' };
+    }
+
+    if (assetsDir && fs.existsSync(assetsDir)) {
+      unpackAssetsToCampaign(assetsDir, campaignId);
+    }
+
+    let resData = null;
+    try {
+      const res = await fetch(`http://127.0.0.1:${DEFAULT_PORT}/api/campaigns/${campaignId}/import-entity`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entityType, entities: items })
+      });
+      if (res.ok) resData = await res.json();
+    } catch (e) {}
+
+    if (!resData) {
+      const campFile = path.join(appConfig.campaignDataDir, 'campaigns.json');
+      if (fs.existsSync(campFile)) {
+        const all = JSON.parse(fs.readFileSync(campFile, 'utf8'));
+        const camp = all[campaignId];
+        if (!camp) return { success: false, error: 'Target campaign not found' };
+        if (!camp.maps) camp.maps = {};
+        if (!camp.characters) camp.characters = {};
+
+        const importedIds = [];
+        for (const item of items) {
+          if (entityType === 'map' || item.grid || item.tokens !== undefined) {
+            let mId = item.id;
+            let mName = item.name || 'Imported Map';
+            if (!mId || camp.maps[mId]) {
+              mId = `map_${campaignId}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+              mName = `${mName} (Copy)`;
+            }
+            camp.maps[mId] = { ...item, id: mId, name: mName };
+            importedIds.push(mId);
+          } else {
+            let cId = item.id;
+            let cName = item.name || 'Imported Character';
+            if (!cId || camp.characters[cId]) {
+              cId = `char_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+              cName = `${cName} (Copy)`;
+            }
+            camp.characters[cId] = { ...item, id: cId, name: cName };
+            importedIds.push(cId);
+          }
+        }
+        fs.writeFileSync(campFile, JSON.stringify(all, null, 2), 'utf8');
+        resData = { success: true, count: importedIds.length, importedIds, campaign: camp };
+      }
+    }
+
+    if (resData && resData.success) {
+      appendLog(`[Import] Successfully imported ${resData.count} item(s) into campaign ${campaignId}`);
+      return resData;
+    }
+    return { success: false, error: resData?.error || 'Failed to import entity' };
+  } catch (err) {
+    appendLog(`[Import Error] Failed importing entity: ${err.message}`);
+    return { success: false, error: err.message };
+  } finally {
+    try { fs.rmSync(tempDir, { recursive: true, force: true }); } catch (e) {}
+  }
+});
+
 // Database Sources & Homebrew Management IPC
 ipcMain.handle('sources-get-all', (_, campaignId) => {
   return sourceManager.getAllSources(campaignId);
@@ -794,6 +1368,24 @@ ipcMain.handle('sources-batch-toggle', async (_, { codes, enabled, campaignId })
   await syncSourcesToServer();
   appendLog(`[Sources] Bulk set ${result.count} sources to ${enabled ? 'Enabled' : 'Disabled'}.`);
   return result;
+});
+
+ipcMain.handle('sources-toggle-partnered', async (_, { enabled, campaignId }) => {
+  const result = sourceManager.togglePartnered(enabled, campaignId);
+  await syncSourcesToServer();
+  appendLog(`[Sources] ${enabled ? 'Enabled' : 'Disabled'} all Partnered sources (${result.count} sources updated).`);
+  return result;
+});
+
+ipcMain.handle('sources-toggle-ua', async (_, { enabled, campaignId }) => {
+  const result = sourceManager.toggleUA(enabled, campaignId);
+  await syncSourcesToServer();
+  appendLog(`[Sources] ${enabled ? 'Enabled' : 'Disabled'} all Unearthed Arcana (UA) sources (${result.count} sources updated).`);
+  return result;
+});
+
+ipcMain.handle('sources-save-ui-state', (_, uiState) => {
+  return sourceManager.saveUiState(uiState);
 });
 
 ipcMain.handle('sources-apply-preset', async (_, { preset, campaignId }) => {

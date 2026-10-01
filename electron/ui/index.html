@@ -238,15 +238,18 @@
               </div>
             </div>
           </div>
-        </section>
-
         <!-- Campaigns Management Card -->
         <section class="card gm-campaigns-card">
           <div class="card-header">
             <h2>📖 Campaigns Management</h2>
-            <button class="btn btn-sm btn-primary" id="btn-gm-new-campaign">
-              ➕ Create Campaign
-            </button>
+            <div class="card-header-actions">
+              <button class="btn btn-sm btn-outline" id="btn-gm-import-campaign" title="Import an exported campaign (.zip or .json)">
+                📥 Import Campaign
+              </button>
+              <button class="btn btn-sm btn-primary" id="btn-gm-new-campaign">
+                ➕ Create Campaign
+              </button>
+            </div>
           </div>
           <div class="card-body gm-campaigns-body">
             <!-- Left: Campaign Selector List -->
@@ -269,8 +272,14 @@
                   <small class="text-muted" id="editor-camp-id-display"></small>
                 </div>
                 <div class="editor-header-actions">
-                  <button class="btn btn-danger btn-sm" id="btn-delete-campaign">
-                    🗑️ Delete Campaign
+                  <button class="btn btn-secondary btn-sm" id="btn-duplicate-campaign" title="Duplicate entire campaign with all maps, characters, and uploads">
+                    📋 Duplicate
+                  </button>
+                  <button class="btn btn-secondary btn-sm" id="btn-export-campaign" title="Export full campaign (.zip or .json) to share or backup">
+                    📤 Export Campaign
+                  </button>
+                  <button class="btn btn-danger btn-sm" id="btn-delete-campaign" title="Delete this campaign">
+                    🗑️ Delete
                   </button>
                 </div>
               </div>
@@ -305,12 +314,103 @@
                 <div class="campaign-stats-row">
                   <span class="stat-pill">🗺️ <span id="stat-maps-count">0</span> Maps</span>
                   <span class="stat-pill">👥 <span id="stat-players-count">0</span> Known Players</span>
+                  <span class="stat-pill">👾 <span id="stat-entities-count">0</span> Entities</span>
                 </div>
 
                 <div class="editor-actions">
-                  <button class="btn btn-primary btn-large" id="btn-save-campaign-details">
+                  <button class="btn btn-primary" id="btn-save-campaign-details">
                     💾 Save Campaign Details
                   </button>
+                </div>
+
+                <!-- Campaign Entities Sub-Sections (Maps, Player Sheets, Companions, Custom NPCs) -->
+                <div class="campaign-entities-section">
+                  <div class="entities-nav-tabs">
+                    <button type="button" class="entity-tab-btn active" data-entity-target="entity-panel-maps">
+                      🗺️ Maps (<span id="entity-count-maps">0</span>)
+                    </button>
+                    <button type="button" class="entity-tab-btn" data-entity-target="entity-panel-players">
+                      👤 Player Sheets (<span id="entity-count-players">0</span>)
+                    </button>
+                    <button type="button" class="entity-tab-btn" data-entity-target="entity-panel-companions">
+                      🐾 Companions (<span id="entity-count-companions">0</span>)
+                    </button>
+                    <button type="button" class="entity-tab-btn" data-entity-target="entity-panel-npcs">
+                      👾 Custom NPCs (<span id="entity-count-npcs">0</span>)
+                    </button>
+                  </div>
+
+                  <!-- Panel 1: Maps -->
+                  <div class="entity-panel active" id="entity-panel-maps">
+                    <div class="entity-panel-toolbar">
+                      <span class="entity-panel-hint">Export or import full scene maps, grid alignments, walls, lights, and tokens.</span>
+                      <div class="entity-toolbar-actions">
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-import-map" title="Import Map (.zip, .json)">
+                          📥 Import Map
+                        </button>
+                        <button type="button" class="btn btn-xs btn-secondary" id="btn-export-all-maps" title="Export All Maps">
+                          📤 Export All Maps
+                        </button>
+                      </div>
+                    </div>
+                    <div class="entity-card-grid" id="grid-campaign-maps">
+                      <!-- Dynamic map cards -->
+                    </div>
+                  </div>
+
+                  <!-- Panel 2: Player Sheets -->
+                  <div class="entity-panel" id="entity-panel-players">
+                    <div class="entity-panel-toolbar">
+                      <span class="entity-panel-hint">Manage and export player character sheets to share between campaigns.</span>
+                      <div class="entity-toolbar-actions">
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-import-player" title="Import Player Sheet (.zip, .json)">
+                          📥 Import Player
+                        </button>
+                        <button type="button" class="btn btn-xs btn-secondary" id="btn-export-all-players" title="Export All Player Sheets">
+                          📤 Export All Players
+                        </button>
+                      </div>
+                    </div>
+                    <div class="entity-card-grid" id="grid-campaign-players">
+                      <!-- Dynamic player cards -->
+                    </div>
+                  </div>
+
+                  <!-- Panel 3: Companions -->
+                  <div class="entity-panel" id="entity-panel-companions">
+                    <div class="entity-panel-toolbar">
+                      <span class="entity-panel-hint">Familiars, animal companions, sidekicks, and summons.</span>
+                      <div class="entity-toolbar-actions">
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-import-companion" title="Import Companion (.zip, .json)">
+                          📥 Import Companion
+                        </button>
+                        <button type="button" class="btn btn-xs btn-secondary" id="btn-export-all-companions" title="Export All Companions">
+                          📤 Export All Companions
+                        </button>
+                      </div>
+                    </div>
+                    <div class="entity-card-grid" id="grid-campaign-companions">
+                      <!-- Dynamic companion cards -->
+                    </div>
+                  </div>
+
+                  <!-- Panel 4: Custom NPCs -->
+                  <div class="entity-panel" id="entity-panel-npcs">
+                    <div class="entity-panel-toolbar">
+                      <span class="entity-panel-hint">Custom monsters and NPCs created for this campaign.</span>
+                      <div class="entity-toolbar-actions">
+                        <button type="button" class="btn btn-xs btn-outline" id="btn-import-npc" title="Import Custom NPC (.zip, .json)">
+                          📥 Import NPC
+                        </button>
+                        <button type="button" class="btn btn-xs btn-secondary" id="btn-export-all-npcs" title="Export All Custom NPCs">
+                          📤 Export All NPCs
+                        </button>
+                      </div>
+                    </div>
+                    <div class="entity-card-grid" id="grid-campaign-npcs">
+                      <!-- Dynamic NPC cards -->
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -359,6 +459,20 @@
                 <button type="button" class="btn btn-sm btn-accent" id="btn-apply-preset" title="Apply Rulebook Preset">Apply</button>
               </div>
 
+              <!-- Quick Master Switches for Partnered & UA -->
+              <div class="sources-quick-toggles">
+                <label class="toggle-pill-label" title="Toggle all Partnered sourcebooks">
+                  <input type="checkbox" id="toggle-partnered-sources" class="form-checkbox" />
+                  <span>🤝 Partnered Content</span>
+                  <span class="pill-badge pill-badge-partnered" id="badge-count-partnered">0 Active</span>
+                </label>
+                <label class="toggle-pill-label" title="Toggle all Unearthed Arcana (playtest) sourcebooks">
+                  <input type="checkbox" id="toggle-ua-sources" class="form-checkbox" />
+                  <span>🧪 Unearthed Arcana</span>
+                  <span class="pill-badge pill-badge-ua" id="badge-count-ua">0 Active</span>
+                </label>
+              </div>
+
               <!-- Status Filter Dropdown -->
               <div class="sources-status-group">
                 <label for="sources-status-filter">Filter:</label>
@@ -366,6 +480,8 @@
                   <option value="all">All Sources</option>
                   <option value="active">Active Only</option>
                   <option value="inactive">Inactive Only</option>
+                  <option value="partnered">Partnered Only</option>
+                  <option value="ua">Unearthed Arcana (UA) Only</option>
                   <option value="custom">Custom Only</option>
                 </select>
               </div>
@@ -386,6 +502,8 @@
               <div class="sources-stat-pills">
                 <span class="stat-pill" title="Total Available Sources">📖 <strong id="stat-total-sources">0</strong> Sources</span>
                 <span class="stat-pill stat-pill-active" title="Enabled Active Sources">✅ <strong id="stat-enabled-sources">0</strong> Active</span>
+                <span class="stat-pill stat-pill-partnered" title="Partnered Content Sources">🤝 <strong id="stat-partnered-sources">0</strong> Partnered</span>
+                <span class="stat-pill stat-pill-ua" title="Unearthed Arcana Sources">🧪 <strong id="stat-ua-sources">0</strong> UA</span>
                 <span class="stat-pill stat-pill-custom" title="Custom Homebrew Sources">✨ <strong id="stat-custom-sources">0</strong> Custom</span>
               </div>
             </div>
@@ -1544,6 +1662,15 @@
         <div class="modal-footer">
           <button class="btn btn-primary" id="btn-confirm-conflict-choice">Continue</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Global Drag & Drop Overlay for Campaign & Entity Packages -->
+    <div class="vtt-dropzone-overlay vtt-hidden" id="gm-dropzone-overlay">
+      <div class="dropzone-box">
+        <div class="dropzone-icon">📥</div>
+        <h3>Drop Package to Import</h3>
+        <p>Drop a ForgeDVTT campaign (.zip, .json) or granular entity package to import.</p>
       </div>
     </div>
 

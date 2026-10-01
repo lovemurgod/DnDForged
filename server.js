@@ -1278,6 +1278,116 @@ app.delete('/api/campaigns/:id', (req, res) => {
   res.json({ success: true, deletedId: campId });
 });
 
+// Duplicate campaign
+app.post('/api/campaigns/:id/duplicate', (req, res) => {
+  const origId = req.params.id;
+  const origCamp = campaigns[origId];
+  if (!origCamp) return res.status(404).json({ error: "Campaign not found" });
+
+  const safeName = (origCamp.name || 'Campaign').trim();
+  const newName = `${safeName} (Copy)`;
+  const newId = safeName.toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_copy_' + Date.now();
+
+  // Deep clone campaign object
+  const cloned = JSON.parse(JSON.stringify(origCamp));
+  cloned.id = newId;
+  cloned.name = newName;
+  cloned.initiative = [];
+
+  // Copy campaign uploads folder if it exists
+  const origUploads = path.join(DATA_DIR, 'campaigns', origId, 'uploads');
+  const newUploads = path.join(DATA_DIR, 'campaigns', newId, 'uploads');
+  if (fs.existsSync(origUploads)) {
+    try {
+      fs.cpSync(origUploads, newUploads, { recursive: true });
+    } catch (e) {
+      console.error('[Duplicate] Failed copying uploads folder:', e);
+    }
+  }
+
+  // Clear chat log for the new duplicate campaign
+  if (chatLogs) {
+    chatLogs[newId] = [];
+    saveChat();
+  }
+
+  campaigns[newId] = cloned;
+  saveCampaigns(true);
+  res.json({ success: true, campaign: cloned });
+});
+
+// Import full campaign into server
+app.post('/api/campaigns/import', (req, res) => {
+  const { campaign } = req.body;
+  if (!campaign || !campaign.name) {
+    return res.status(400).json({ error: "Invalid campaign data for import" });
+  }
+
+  let campId = campaign.id;
+  if (!campId || campaigns[campId]) {
+    campId = (campaign.name || 'imported').toLowerCase().replace(/[^a-z0-9]/gi, '_') + '_' + Date.now();
+  }
+
+  const importedCamp = {
+    ...createCampaignTemplate(campId, campaign.name || 'Imported Campaign'),
+    ...campaign,
+    id: campId
+  };
+
+  campaigns[campId] = importedCamp;
+  saveCampaigns(true);
+  res.json({ success: true, campaign: importedCamp });
+});
+
+// Import granular entity (map, player, companion, customNpc) into a campaign
+app.post('/api/campaigns/:id/import-entity', (req, res) => {
+  const campId = req.params.id;
+  const campaign = campaigns[campId];
+  if (!campaign) return res.status(404).json({ error: "Campaign not found" });
+
+  const { entityType, entity, entities } = req.body;
+  const items = Array.isArray(entities) ? entities : (entity ? [entity] : []);
+  if (items.length === 0) {
+    return res.status(400).json({ error: "No entity data provided" });
+  }
+
+  if (!campaign.maps) campaign.maps = {};
+  if (!campaign.characters) campaign.characters = {};
+
+  const importedIds = [];
+
+  for (const item of items) {
+    if (!item) continue;
+    if (entityType === 'map' || item.grid || item.tokens !== undefined) {
+      // It's a map
+      let mapId = item.id;
+      let mapName = item.name || 'Imported Map';
+      if (!mapId || campaign.maps[mapId]) {
+        mapId = `map_${campId}_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+        mapName = `${mapName} (Copy)`;
+      }
+      const clonedMap = { ...item, id: mapId, name: mapName };
+      campaign.maps[mapId] = clonedMap;
+      importedIds.push(mapId);
+    } else {
+      // It's a character (player sheet, companion, custom NPC)
+      let charId = item.id;
+      let charName = item.name || 'Imported Character';
+      if (!charId || campaign.characters[charId]) {
+        charId = `char_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+        charName = `${charName} (Copy)`;
+      }
+      const clonedChar = { ...item, id: charId, name: charName };
+      campaign.characters[charId] = clonedChar;
+      importedIds.push(charId);
+    }
+  }
+
+  saveCampaigns();
+  broadcastCampaignSync(campId);
+  res.json({ success: true, count: importedIds.length, importedIds, campaign });
+});
+
 // Upload media file (map/token image)
 app.post('/api/upload', upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No image provided" });
@@ -1611,16 +1721,6 @@ function getSanitizedCampaignSync(camp, role, username) {
     for (const mapId in cloned.maps) {
       if (!activeIds.has(mapId)) {
         const m = cloned.maps[mapId];
-        // Retain background token if present so thumbnail / dimensions work
-        const bgTokens = {};
-        if (m.tokens) {
-          for (const tid in m.tokens) {
-            const tok = m.tokens[tid];
-            if (tok.layer === 'map' || tok.isBackground) {
-              bgTokens[tid] = tok;
-            }
-          }
-        }
         cloned.maps[mapId] = {
           id: m.id,
           name: m.name,
@@ -1630,11 +1730,14 @@ function getSanitizedCampaignSync(camp, role, username) {
           gridHeight: m.gridHeight,
           grid: m.grid,
           lightingSettings: m.lightingSettings,
-          tokens: bgTokens,
-          walls: [],
+          tokens: m.tokens || {},
+          walls: m.walls || [],
           notes: [],
-          lights: [],
-          shapes: {}
+          lights: m.lights || [],
+          shapes: {},
+          drawings: {},
+          traps: m.traps || [],
+          portals: m.portals || []
         };
       }
     }
@@ -1959,6 +2062,198 @@ io.on('connection', (socket) => {
     io.to(campaignId).emit('notes:updated', { mapId: targetMapId || data.mapId || campaigns[campaignId].activeMapId, notes: data.notes || [] });
   });
 
+  socket.on('traps:update', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+
+    const targetMapId = updateMapProperty(campaigns, campaignId, data.mapId, 'traps', data.traps || []);
+    if (targetMapId) saveCampaigns();
+
+    io.to(campaignId).emit('traps:updated', { mapId: targetMapId || data.mapId || campaigns[campaignId].activeMapId, traps: data.traps || [] });
+  });
+
+  socket.on('portals:update', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+    if (socket.role !== 'GM') return;
+
+    const targetMapId = updateMapProperty(campaigns, campaignId, data.mapId, 'portals', data.portals || []);
+    if (targetMapId) saveCampaigns();
+
+    io.to(campaignId).emit('portals:updated', { mapId: targetMapId || data.mapId || campaigns[campaignId].activeMapId, portals: data.portals || [] });
+  });
+
+  socket.on('trap:trigger', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+    const camp = campaigns[campaignId];
+    const mapId = data.mapId || camp.activeMapId;
+    if (camp.maps && camp.maps[mapId] && camp.maps[mapId].traps) {
+      const tr = camp.maps[mapId].traps.find(t => t.id === data.trapId);
+      if (tr) {
+        tr.isRevealed = true;
+        if (!tr.repeatTrigger) tr.isSpent = true;
+        saveCampaigns();
+        io.to(campaignId).emit('traps:updated', { mapId, traps: camp.maps[mapId].traps });
+      }
+    }
+
+    const chatMsg = {
+      id: `chat_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`,
+      username: 'SYSTEM',
+      role: 'GM',
+      text: `**TRAP TRIGGERED:** ${data.trapName || 'A concealed trap'}`,
+      roll: data.damageRoll || null,
+      trapCard: {
+        trapId: data.trapId,
+        trapName: data.trapName,
+        tokenId: data.tokenId,
+        tokenName: data.tokenName,
+        saveAbility: data.saveAbility,
+        saveDc: data.saveDc,
+        damage: data.damage,
+        damageRoll: data.damageRoll || null,
+        flavor: data.flavor
+      },
+      timestamp: Date.now(),
+      hidden: false,
+      whisperToGM: false
+    };
+    if (!chatLogs[campaignId]) chatLogs[campaignId] = [];
+    chatLogs[campaignId].push(chatMsg);
+    if (chatLogs[campaignId].length > 500) chatLogs[campaignId].shift();
+    saveChat();
+    io.to(campaignId).emit('chat:msg', chatMsg);
+    io.to(campaignId).emit('trap:triggered', data);
+  });
+
+  // Helper to resolve player username for a token
+  function resolveTokenPlayerUsername(camp, token) {
+    if (!token) return null;
+    if (token.owner) return token.owner;
+    if (token.playerUsername) return token.playerUsername;
+    if (token.characterId && camp.characters && camp.characters[token.characterId]) {
+      const c = camp.characters[token.characterId];
+      return c.player || c.username || c.owner || null;
+    }
+    return null;
+  }
+
+  socket.on('portal:teleport_inter_map', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+    const { sourceMapId, targetMapId, tokenId, targetX, targetY, username, targetPortalId } = data;
+    const camp = campaigns[campaignId];
+    if (!camp.maps || !camp.maps[sourceMapId] || !camp.maps[targetMapId]) return;
+
+    const sourceMap = camp.maps[sourceMapId];
+    const targetMap = camp.maps[targetMapId];
+    if (sourceMap.tokens && sourceMap.tokens[tokenId]) {
+      const token = sourceMap.tokens[tokenId];
+      delete sourceMap.tokens[tokenId];
+      token.x = targetX;
+      token.y = targetY;
+      if (!targetMap.tokens) targetMap.tokens = {};
+      targetMap.tokens[tokenId] = token;
+
+      if (!camp.playerMapOverrides) camp.playerMapOverrides = {};
+      const tokenOwner = resolveTokenPlayerUsername(camp, token) || (socket.role !== 'GM' ? socket.username : null) || (username && username !== 'GM' ? username : null);
+      if (tokenOwner) {
+        camp.playerMapOverrides[tokenOwner] = targetMapId;
+      }
+      saveCampaigns();
+      broadcastCampaignSync(campaignId);
+      io.to(campaignId).emit('token:deleted', { mapId: sourceMapId, tokenId, origin: socket.id });
+      io.to(campaignId).emit('token:added', { mapId: targetMapId, tokenId, token, origin: socket.id });
+      io.to(campaignId).emit('portal:teleported', {
+        tokenId,
+        tokenName: token.name || 'Token',
+        sourceMapId,
+        targetMapId,
+        targetPortalId: targetPortalId || null,
+        targetMapName: targetMap.name || 'New Map',
+        targetX,
+        targetY,
+        username: tokenOwner || username
+      });
+    }
+  });
+
+  // Batch inter-map portal teleportation (multi-token transit)
+  socket.on('portal:teleport_inter_map_batch', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+    const { sourceMapId, targetMapId, targetPortalId, transitions } = data;
+    if (!Array.isArray(transitions) || transitions.length === 0) return;
+    const camp = campaigns[campaignId];
+    if (!camp.maps || !camp.maps[sourceMapId] || !camp.maps[targetMapId]) return;
+
+    const sourceMap = camp.maps[sourceMapId];
+    const targetMap = camp.maps[targetMapId];
+    if (!sourceMap.tokens) return;
+    if (!targetMap.tokens) targetMap.tokens = {};
+    if (!camp.playerMapOverrides) camp.playerMapOverrides = {};
+
+    const movedTokens = [];
+    const affectedOwners = new Set();
+
+    transitions.forEach(tr => {
+      const { tokenId, targetX, targetY, username, targetPortalId: trPortalId } = tr;
+      if (sourceMap.tokens[tokenId]) {
+        const token = sourceMap.tokens[tokenId];
+        delete sourceMap.tokens[tokenId];
+        token.x = targetX;
+        token.y = targetY;
+        targetMap.tokens[tokenId] = token;
+
+        const owner = resolveTokenPlayerUsername(camp, token) || (socket.role !== 'GM' ? socket.username : null) || (username && username !== 'GM' ? username : null);
+        if (owner) {
+          camp.playerMapOverrides[owner] = targetMapId;
+          affectedOwners.add(owner);
+        }
+
+        movedTokens.push({
+          tokenId,
+          token,
+          tokenName: token.name || 'Token',
+          targetPortalId: trPortalId || targetPortalId || null,
+          targetX,
+          targetY,
+          owner
+        });
+
+        io.to(campaignId).emit('token:deleted', { mapId: sourceMapId, tokenId, origin: socket.id });
+        io.to(campaignId).emit('token:added', { mapId: targetMapId, tokenId, token, origin: socket.id });
+      }
+    });
+
+    if (movedTokens.length > 0) {
+      saveCampaigns();
+      broadcastCampaignSync(campaignId);
+      io.to(campaignId).emit('portal:teleported_batch', {
+        sourceMapId,
+        targetMapId,
+        targetPortalId: targetPortalId || null,
+        targetMapName: targetMap.name || 'New Map',
+        tokens: movedTokens
+      });
+      // Also emit individual notifications for compatibility with toast banners
+      movedTokens.forEach(mt => {
+        io.to(campaignId).emit('portal:teleported', {
+          tokenId: mt.tokenId,
+          tokenName: mt.tokenName,
+          sourceMapId,
+          targetMapId,
+          targetPortalId: mt.targetPortalId || targetPortalId || null,
+          targetMapName: targetMap.name || 'New Map',
+          targetX: mt.targetX,
+          targetY: mt.targetY,
+          username: mt.owner || socket.username
+        });
+      });
+    }
+  });
+
   // Sync combat initiative
   socket.on('initiative:update', (data) => {
     const { campaignId } = socket;
@@ -1979,6 +2274,17 @@ io.on('connection', (socket) => {
     if (targetMapId) saveCampaigns();
 
     io.to(campaignId).emit('shapes:updated', { mapId: targetMapId || data.mapId || campaigns[campaignId].activeMapId, shapes: data.shapes, origin: socket.id });
+  });
+
+  // Sync persistent drawings/paint objects
+  socket.on('drawings:update', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+
+    const targetMapId = updateMapProperty(campaigns, campaignId, data.mapId, 'drawings', data.drawings);
+    if (targetMapId) saveCampaigns();
+
+    io.to(campaignId).emit('drawings:updated', { mapId: targetMapId || data.mapId || campaigns[campaignId].activeMapId, drawings: data.drawings, origin: socket.id });
   });
 
   // Sync HP bar visibilities & settings (GM only)
@@ -2046,7 +2352,10 @@ io.on('connection', (socket) => {
       walls: data.walls || [],
       notes: data.notes || [],
       lights: data.lights || [],
-      shapes: data.shapes || {}
+      shapes: data.shapes || {},
+      drawings: data.drawings || {},
+      traps: data.traps || [],
+      portals: data.portals || []
     };
 
     if (!campaigns[campaignId].maps) campaigns[campaignId].maps = {};
@@ -2109,6 +2418,20 @@ io.on('connection', (socket) => {
     }
 
     socket.emit('campaign:state-sync', getSanitizedCampaignSync(camp, socket.role, socket.username));
+  });
+
+  // Client updates campaign settings/activeGMMapId
+  socket.on('campaign:update', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+    if (socket.role !== 'GM') return;
+
+    const camp = campaigns[campaignId];
+    if (data.activeGMMapId && camp.maps && camp.maps[data.activeGMMapId]) {
+      camp.activeGMMapId = data.activeGMMapId;
+      saveCampaigns();
+      socket.emit('campaign:state-sync', getSanitizedCampaignSync(camp, socket.role, socket.username));
+    }
   });
 
   // Activate map for players (GM only)
@@ -2236,8 +2559,10 @@ io.on('connection', (socket) => {
     const { campaignId } = socket;
     if (!campaignId || socket.role !== 'GM') return;
     socket.to(campaignId).emit('map:pannedTo', {
+      mapId: data.mapId,
       x: data.x,
-      y: data.y
+      y: data.y,
+      zoom: data.zoom
     });
   });
 
@@ -2259,6 +2584,23 @@ io.on('connection', (socket) => {
     socket.to(campaignId).emit('measure:cleared', {
       socketId: socket.id
     });
+  });
+
+  // Sync token force select event (player forces GM to select token)
+  socket.on('token:force_select_gm', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId) return;
+    socket.to(campaignId).emit('token:force_selected_gm', {
+      tokenId: data.tokenId,
+      username: socket.username
+    });
+  });
+
+  // Sync damage visual FX across all clients
+  socket.on('tokens:damage_fx', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId) return;
+    io.to(campaignId).emit('tokens:damage_fx', data);
   });
 
   socket.on('disconnect', () => {

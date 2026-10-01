@@ -6,11 +6,13 @@ export function initVttCanvas(vtt) {
 
     
     const canvasGrid = document.getElementById('vtt-canvas-grid');
+    const canvasPortals = document.getElementById('vtt-canvas-portals');
     const canvasFog = document.getElementById('vtt-canvas-fog');
 
     const canvasInteraction = document.getElementById('vtt-canvas-interaction');
 
     const ctxGrid = canvasGrid.getContext('2d');
+    const ctxPortals = canvasPortals ? canvasPortals.getContext('2d') : null;
     const ctxFog = canvasFog.getContext('2d');
     const ctxInteraction = canvasInteraction.getContext('2d');
 
@@ -72,6 +74,10 @@ export function initVttCanvas(vtt) {
     // Scratch canvas for lighting rendering and feathered angular masks
     const scratchLightCanvas = document.createElement('canvas');
     const ctxScratchLight = scratchLightCanvas.getContext('2d');
+
+    // Offscreen canvas for layer-level drawings and partial eraser masking (destination-out)
+    const offDrawingCanvas = document.createElement('canvas');
+    const offDrawingCtx = offDrawingCanvas.getContext('2d');
     
     // Active Layer State
     let activeLayer = 'token'; // token, gm, lighting, map
@@ -89,10 +95,33 @@ export function initVttCanvas(vtt) {
     let wallDragOffsetX1 = 0, wallDragOffsetY1 = 0;
     let wallDragOffsetX2 = 0, wallDragOffsetY2 = 0;
 
+    // Portal rotation & resize handle tracking
+    let activeRotatePortalId = null;
+    let hoveredRotatePortalId = null;
+    let hoveredMapToolHandle = null; // { type: 'resize'|'rotate', item, handle, portal, pos }
+    let lastBackquoteTime = 0;
+
+    // Token-specific presence tracking for portals (Re-arm on Exit)
+    const tokenInsidePortals = new Map(); // tokenId -> Set<portalId>
+    function isTokenInsidePortal(tokId, portalId) {
+        return tokenInsidePortals.has(tokId) && tokenInsidePortals.get(tokId).has(portalId);
+    }
+    function addTokenInsidePortal(tokId, portalId) {
+        if (!tokenInsidePortals.has(tokId)) tokenInsidePortals.set(tokId, new Set());
+        tokenInsidePortals.get(tokId).add(portalId);
+    }
+    function removeTokenInsidePortal(tokId, portalId) {
+        if (tokenInsidePortals.has(tokId)) {
+            tokenInsidePortals.get(tokId).delete(portalId);
+            if (tokenInsidePortals.get(tokId).size === 0) tokenInsidePortals.delete(tokId);
+        }
+    }
+
     // Advanced Multi-Selection states
     const selectedTokenIds = new Set();
     let selectedTokenId = null;
     const selectedShapeIds = new Set();
+    const selectedDrawingIds = new Set();
     const selectedWallIdxs = new Set();
 
     // Box select tracking
@@ -107,6 +136,8 @@ export function initVttCanvas(vtt) {
     // Relative movement start offsets
     let relativeMovementOffsets = {}; // { id: { dx, dy } }
     let tokenDragOriginalPositions = {}; // { id: { x, y } }
+    let shapeDragOriginalPositions = {}; // { id: { startPoint, endPoint, points } }
+    let drawingDragOriginalPositions = {}; // { id: { x, y, startPoint, endPoint, points } }
     let tokenAnimations = {};
     let tokenAnimFrame = null;
     let processedAnimKeys = new Set();
@@ -122,12 +153,18 @@ export function initVttCanvas(vtt) {
     let contextMenuTargetId = null;
     let dragTargetId = null;
     let currentMouseCoords = { x: 0, y: 0 };
+    let pendingFocusTokenId = null;
+    let pendingFocusTokenExpiry = 0;
 
     function clearAllSelections() {
         selectedTokenIds.clear();
         selectedTokenId = null;
         if (typeof selectedShapeIds !== 'undefined') selectedShapeIds.clear();
         if (typeof selectedWallIdxs !== 'undefined') selectedWallIdxs.clear();
+        if (typeof selectedDrawingIds !== 'undefined') selectedDrawingIds.clear();
+        selectedDrawingId = null;
+        activeDragDrawingId = null;
+        activeDrawingResizeHandle = null;
         selectedShapeId = null;
         selectedShapeComponent = null;
         selectedLightId = null;
@@ -1166,6 +1203,4376 @@ let isTokenMeasuring = false;
     let measureAnchorPoints = []; // Array of {x,y} for multi-segment polyline (line shape only)
     let otherMeasurements = {};
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Paint Tools & Persistent Drawings System
+    // ═══════════════════════════════════════════════════════════════════════════
+    let drawings = {};
+    let selectedDrawingId = null;
+    let hoveredDrawingId = null;
+
+    // Paint Ribbon State
+    let paintSubTool = 'pencil'; // pencil, brush, line, arrow, rect, circle, polygon, fill, text, eraser
+    let paintStrokeColor = '#eab308';
+    let paintFillColor = '#eab308';
+    let paintFillMode = 'stroke'; // stroke, both, fill
+    let paintStrokeWidth = 4;
+    let paintGridSnap = false;
+
+    // Drawing Interaction State
+    let isDrawingPaint = false;
+    let currentPaintStroke = null;
+    let polygonPoints = [];
+    let activeDrawingTextarea = null;
+    let paintUndoStack = [];
+    let paintRedoStack = [];
+
+    // Transform & Dragging State in Tool 1 (Select)
+    let activeDragDrawingId = null;
+    let drawingDragStart = null;
+    let drawingOriginalState = null;
+    let activeDrawingResizeHandle = null; // 'nw', 'n', 'ne', 'e', 'se', 's', 'sw', 'w'
+    let drawingResizeOppositePoint = null;
+    let drawingResizeOriginalBBox = null;
+    let erasedAnyDrawingInDrag = false;
+
+    const drawingImageCache = new Map();
+
+    function canvasToScreen(cx, cy) {
+        const vr = viewport.getBoundingClientRect();
+        return {
+            x: vr.left + panX + cx * zoom,
+            y: vr.top + panY + cy * zoom
+        };
+    }
+
+    function isDrawingControlledByPlayer(drawing) {
+        if (!drawing) return false;
+        if (vtt.role === 'GM') return true;
+        if (drawing.ownerUsername && drawing.ownerUsername === vtt.username) return true;
+        return false;
+    }
+
+    function emitDrawingsUpdate() {
+        if (vtt.campaignState && vtt.campaignState.maps && vtt.campaignState.maps[currentMapId]) {
+            vtt.campaignState.maps[currentMapId].drawings = drawings;
+        }
+        vtt.socket.emit('drawings:update', { mapId: currentMapId, drawings });
+    }
+
+    function getDrawingBoundingBox(d) {
+        if (!d) return null;
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        if (d.type === 'pencil' || d.type === 'brush' || d.type === 'eraser' || d.type === 'polygon') {
+            const pts = Array.isArray(d.points) ? d.points : [];
+            if (pts.length === 0) return null;
+            pts.forEach(p => {
+                if (p.x < minX) minX = p.x;
+                if (p.x > maxX) maxX = p.x;
+                if (p.y < minY) minY = p.y;
+                if (p.y > maxY) maxY = p.y;
+            });
+            const pad = Math.max(4, (d.strokeWidth || 4) / 2);
+            return { minX: minX - pad, minY: minY - pad, maxX: maxX + pad, maxY: maxY + pad, w: Math.max(1, (maxX - minX) + pad * 2), h: Math.max(1, (maxY - minY) + pad * 2) };
+        } else if (d.type === 'line' || d.type === 'arrow' || d.type === 'rect' || d.type === 'circle') {
+            const p1 = d.startPoint || { x: 0, y: 0 };
+            const p2 = d.endPoint || { x: 0, y: 0 };
+            minX = Math.min(p1.x, p2.x);
+            maxX = Math.max(p1.x, p2.x);
+            minY = Math.min(p1.y, p2.y);
+            maxY = Math.max(p1.y, p2.y);
+            const pad = Math.max(4, (d.strokeWidth || 4) / 2);
+            return { minX: minX - pad, minY: minY - pad, maxX: maxX + pad, maxY: maxY + pad, w: Math.max(1, (maxX - minX) + pad * 2), h: Math.max(1, (maxY - minY) + pad * 2) };
+        } else if (d.type === 'fill') {
+            return { minX: d.x, minY: d.y, maxX: d.x + (d.width || 0), maxY: d.y + (d.height || 0), w: Math.max(1, d.width || 0), h: Math.max(1, d.height || 0) };
+        } else if (d.type === 'text') {
+            const fs = d.fontSize || 16;
+            const lines = (d.text || '').split('\n');
+            let maxLineW = 30;
+            if (ctxInteraction) {
+                ctxInteraction.save();
+                ctxInteraction.font = `${fs}px ${d.fontFamily || 'Open Sans, sans-serif'}`;
+                lines.forEach(l => {
+                    const tw = ctxInteraction.measureText(l).width;
+                    if (tw > maxLineW) maxLineW = tw;
+                });
+                ctxInteraction.restore();
+            }
+            const textH = Math.max(fs, lines.length * (fs * 1.25));
+            return { minX: d.x, minY: d.y - fs, maxX: d.x + maxLineW + 8, maxY: d.y - fs + textH, w: maxLineW + 8, h: textH };
+        }
+        return null;
+    }
+
+    function getDrawingResizeHandles(d) {
+        const bbox = getDrawingBoundingBox(d);
+        if (!bbox || bbox.w <= 0 || bbox.h <= 0) return {};
+        const { minX, minY, maxX, maxY, w, h } = bbox;
+        const midX = minX + w / 2;
+        const midY = minY + h / 2;
+        return {
+            nw: { x: minX, y: minY },
+            n:  { x: midX, y: minY },
+            ne: { x: maxX, y: minY },
+            e:  { x: maxX, y: midY },
+            se: { x: maxX, y: maxY },
+            s:  { x: midX, y: maxY },
+            sw: { x: minX, y: maxY },
+            w:  { x: minX, y: midY }
+        };
+    }
+
+    function getDrawingResizeHandleAtPoint(d, pt) {
+        if (!d) return null;
+        const handles = getDrawingResizeHandles(d);
+        const threshold = 9 / zoom;
+        for (const [key, pos] of Object.entries(handles)) {
+            if (Math.hypot(pt.x - pos.x, pt.y - pos.y) <= threshold) {
+                return key;
+            }
+        }
+        return null;
+    }
+
+    function applyDrawingResize(d, origBbox, handle, mouse, origState) {
+        if (!origBbox || !origState) return;
+        let minX = origBbox.minX;
+        let minY = origBbox.minY;
+        let maxX = origBbox.maxX;
+        let maxY = origBbox.maxY;
+
+        if (handle.includes('w')) minX = Math.min(mouse.x, origBbox.maxX - 10);
+        if (handle.includes('e')) maxX = Math.max(mouse.x, origBbox.minX + 10);
+        if (handle.includes('n')) minY = Math.min(mouse.y, origBbox.maxY - 10);
+        if (handle.includes('s')) maxY = Math.max(mouse.y, origBbox.minY + 10);
+
+        const newW = Math.max(10, maxX - minX);
+        const newH = Math.max(10, maxY - minY);
+        const scaleX = newW / Math.max(1, origBbox.w);
+        const scaleY = newH / Math.max(1, origBbox.h);
+
+        if (origState.type === 'pencil' || origState.type === 'brush' || origState.type === 'polygon') {
+            if (origState.points) {
+                d.points = origState.points.map(p => ({
+                    x: minX + (p.x - origBbox.minX) * scaleX,
+                    y: minY + (p.y - origBbox.minY) * scaleY
+                }));
+            }
+        } else if (origState.type === 'line' || origState.type === 'arrow' || origState.type === 'rect' || origState.type === 'circle') {
+            if (origState.startPoint && origState.endPoint) {
+                d.startPoint = {
+                    x: minX + (origState.startPoint.x - origBbox.minX) * scaleX,
+                    y: minY + (origState.startPoint.y - origBbox.minY) * scaleY
+                };
+                d.endPoint = {
+                    x: minX + (origState.endPoint.x - origBbox.minX) * scaleX,
+                    y: minY + (origState.endPoint.y - origBbox.minY) * scaleY
+                };
+            }
+        } else if (origState.type === 'fill') {
+            d.x = minX;
+            d.y = minY;
+            d.width = newW;
+            d.height = newH;
+        } else if (origState.type === 'text') {
+            d.x = minX;
+            d.y = minY + (origState.fontSize || 16);
+            d.fontSize = Math.max(10, Math.round((origState.fontSize || 16) * scaleY));
+        }
+    }
+
+    function getDrawingAtPoint(pt, matchLayer = true) {
+        const sorted = Object.values(drawings).sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+        for (const d of sorted) {
+            const drawingLayer = d.layer || 'token';
+            if (matchLayer && drawingLayer !== activeLayer && vtt.role !== 'GM') continue;
+            if (matchLayer && vtt.role === 'GM' && drawingLayer !== activeLayer) continue;
+
+            const bbox = getDrawingBoundingBox(d);
+            if (!bbox) continue;
+
+            if (pt.x >= bbox.minX - 6 && pt.x <= bbox.maxX + 6 && pt.y >= bbox.minY - 6 && pt.y <= bbox.maxY + 6) {
+                return d;
+            }
+        }
+        return null;
+    }
+
+    function drawDrawingObject(ctx, d, isSelected = false) {
+        if (!d) return;
+        ctx.save();
+        ctx.globalAlpha = d.opacity !== undefined ? d.opacity : 1.0;
+
+        if (isSelected) {
+            ctx.shadowColor = '#d4af37';
+            ctx.shadowBlur = 8;
+        }
+
+        const strokeCol = d.strokeColor || '#eab308';
+        const fillCol = d.fillColor || strokeCol;
+        const strokeW = d.strokeWidth || 4;
+        const isFilled = d.fillMode === 'fill' || d.fillMode === 'both';
+        const hasStroke = !d.fillMode || d.fillMode === 'stroke' || d.fillMode === 'both';
+
+        ctx.strokeStyle = strokeCol;
+        ctx.fillStyle = fillCol;
+        ctx.lineWidth = strokeW;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        if (d.type === 'eraser') {
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.strokeStyle = '#000000';
+            ctx.fillStyle = '#000000';
+            ctx.lineWidth = d.strokeWidth || 24;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            const pts = d.points || [];
+            if (pts.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(pts[0].x, pts[0].y);
+                for (let i = 1; i < pts.length - 1; i++) {
+                    const xc = (pts[i].x + pts[i + 1].x) / 2;
+                    const yc = (pts[i].y + pts[i + 1].y) / 2;
+                    ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
+                }
+                ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+                ctx.stroke();
+            } else if (pts.length === 1) {
+                ctx.beginPath();
+                ctx.arc(pts[0].x, pts[0].y, (d.strokeWidth || 24) / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.restore();
+            return;
+        }
+
+        if (d.type === 'pencil' || d.type === 'brush') {
+            const pts = d.points || [];
+            if (pts.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(pts[0].x, pts[0].y);
+                for (let i = 1; i < pts.length - 1; i++) {
+                    const xc = (pts[i].x + pts[i + 1].x) / 2;
+                    const yc = (pts[i].y + pts[i + 1].y) / 2;
+                    ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
+                }
+                ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+                ctx.stroke();
+            } else if (pts.length === 1) {
+                ctx.beginPath();
+                ctx.arc(pts[0].x, pts[0].y, strokeW / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        } else if (d.type === 'line') {
+            const p1 = d.startPoint || { x: 0, y: 0 };
+            const p2 = d.endPoint || { x: 0, y: 0 };
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+        } else if (d.type === 'arrow') {
+            const p1 = d.startPoint || { x: 0, y: 0 };
+            const p2 = d.endPoint || { x: 0, y: 0 };
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const dist = Math.hypot(dx, dy);
+            const angle = Math.atan2(dy, dx);
+            const headLen = Math.max(12, strokeW * 3);
+
+            // Draw line shaft stopping just inside arrowhead base so round caps never protrude beyond p2
+            const shaftEndDist = Math.max(0, dist - headLen * 0.75);
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p1.x + Math.cos(angle) * shaftEndDist, p1.y + Math.sin(angle) * shaftEndDist);
+            ctx.stroke();
+
+            // Solid triangular arrowhead with apex precisely at p2
+            ctx.beginPath();
+            ctx.moveTo(p2.x, p2.y);
+            ctx.lineTo(p2.x - headLen * Math.cos(angle - Math.PI / 6), p2.y - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(p2.x - headLen * Math.cos(angle + Math.PI / 6), p2.y - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fillStyle = strokeCol;
+            ctx.fill();
+            ctx.stroke();
+        } else if (d.type === 'rect') {
+            const p1 = d.startPoint || { x: 0, y: 0 };
+            const p2 = d.endPoint || { x: 0, y: 0 };
+            const rx = Math.min(p1.x, p2.x);
+            const ry = Math.min(p1.y, p2.y);
+            const rw = Math.abs(p2.x - p1.x);
+            const rh = Math.abs(p2.y - p1.y);
+            if (isFilled) ctx.fillRect(rx, ry, rw, rh);
+            if (hasStroke) ctx.strokeRect(rx, ry, rw, rh);
+        } else if (d.type === 'circle') {
+            const p1 = d.startPoint || { x: 0, y: 0 };
+            const p2 = d.endPoint || { x: 0, y: 0 };
+            const cx = (p1.x + p2.x) / 2;
+            const cy = (p1.y + p2.y) / 2;
+            const rx = Math.abs(p2.x - p1.x) / 2;
+            const ry = Math.abs(p2.y - p1.y) / 2;
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, Math.max(1, rx), Math.max(1, ry), 0, 0, Math.PI * 2);
+            if (isFilled) ctx.fill();
+            if (hasStroke) ctx.stroke();
+        } else if (d.type === 'polygon') {
+            const pts = d.points || [];
+            if (pts.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(pts[0].x, pts[0].y);
+                for (let i = 1; i < pts.length; i++) {
+                    ctx.lineTo(pts[i].x, pts[i].y);
+                }
+                if (d.isClosed !== false) ctx.closePath();
+                if (isFilled && d.isClosed !== false) ctx.fill();
+                if (hasStroke) ctx.stroke();
+            }
+        } else if (d.type === 'fill') {
+            if (d.imageData) {
+                let img = drawingImageCache.get(d.imageData);
+                if (!img) {
+                    img = new Image();
+                    img.src = d.imageData;
+                    img.onload = () => renderAll();
+                    drawingImageCache.set(d.imageData, img);
+                }
+                if (img.complete) {
+                    ctx.drawImage(img, d.x, d.y, d.width, d.height);
+                }
+            }
+        } else if (d.type === 'text') {
+            const fs = d.fontSize || 16;
+            ctx.font = `${fs}px ${d.fontFamily || 'Open Sans, sans-serif'}`;
+            ctx.fillStyle = strokeCol;
+            const lines = (d.text || '').split('\n');
+            lines.forEach((l, idx) => {
+                ctx.fillText(l, d.x, d.y + idx * (fs * 1.25));
+            });
+        }
+
+        ctx.restore();
+
+        if (isSelected && activeTool === 'select') {
+            drawDrawingSelectionHandles(ctx, d);
+        }
+    }
+
+    function drawDrawingSelectionHandles(ctx, d) {
+        const bbox = getDrawingBoundingBox(d);
+        if (!bbox) return;
+
+        ctx.save();
+        ctx.strokeStyle = '#d4af37';
+        ctx.lineWidth = 1.5 / zoom;
+        ctx.setLineDash([4 / zoom, 3 / zoom]);
+        ctx.strokeRect(bbox.minX, bbox.minY, bbox.w, bbox.h);
+        ctx.setLineDash([]);
+
+        const handles = getDrawingResizeHandles(d);
+        const handleRadius = 4.5 / zoom;
+
+        for (const [key, pos] of Object.entries(handles)) {
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, handleRadius, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = 1.5 / zoom;
+            ctx.stroke();
+        }
+        ctx.restore();
+    }
+
+    function renderDrawingsPass(targetLayer) {
+        const isGmViewing = vtt.role === 'GM';
+        const layerDrawings = Object.values(drawings)
+            .filter(d => (d.layer || 'token') === targetLayer)
+            .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
+
+        const hasEraser = layerDrawings.some(d => d.type === 'eraser') || 
+            (currentPaintStroke && currentPaintStroke.type === 'eraser' && (currentPaintStroke.layer || 'token') === targetLayer);
+
+        if (!hasEraser) {
+            layerDrawings.forEach(d => {
+                const drawingLayer = d.layer || 'token';
+                if (drawingLayer !== activeLayer && !isGmViewing) return;
+                const isControlled = isDrawingControlledByPlayer(d);
+                const isSelected = isControlled && (selectedDrawingId === d.id || selectedDrawingIds.has(d.id));
+
+                ctxInteraction.save();
+                if (vtt.role === 'GM' && activeLayer !== drawingLayer) {
+                    ctxInteraction.globalAlpha = 0.45;
+                }
+                drawDrawingObject(ctxInteraction, d, isSelected);
+                ctxInteraction.restore();
+            });
+            return;
+        }
+
+        const mapW = canvasInteraction.width;
+        const mapH = canvasInteraction.height;
+        if (offDrawingCanvas.width !== mapW || offDrawingCanvas.height !== mapH) {
+            offDrawingCanvas.width = mapW;
+            offDrawingCanvas.height = mapH;
+        } else {
+            offDrawingCtx.clearRect(0, 0, mapW, mapH);
+        }
+
+        layerDrawings.forEach(d => {
+            const drawingLayer = d.layer || 'token';
+            if (drawingLayer !== activeLayer && !isGmViewing) return;
+            const isControlled = isDrawingControlledByPlayer(d);
+            const isSelected = isControlled && (selectedDrawingId === d.id || selectedDrawingIds.has(d.id));
+
+            offDrawingCtx.save();
+            drawDrawingObject(offDrawingCtx, d, isSelected);
+            offDrawingCtx.restore();
+        });
+
+        if (currentPaintStroke && currentPaintStroke.type === 'eraser' && (currentPaintStroke.layer || 'token') === targetLayer) {
+            offDrawingCtx.save();
+            drawDrawingObject(offDrawingCtx, currentPaintStroke, false);
+            offDrawingCtx.restore();
+        }
+
+        ctxInteraction.save();
+        if (vtt.role === 'GM' && activeLayer !== targetLayer) {
+            ctxInteraction.globalAlpha = 0.45;
+        }
+        ctxInteraction.drawImage(offDrawingCanvas, 0, 0);
+        ctxInteraction.restore();
+    }
+
+    function performCanvasFloodFill(startX, startY) {
+        const mapW = canvasInteraction.width;
+        const mapH = canvasInteraction.height;
+        if (startX < 0 || startX >= mapW || startY < 0 || startY >= mapH) return;
+
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = mapW;
+        offCanvas.height = mapH;
+        const offCtx = offCanvas.getContext('2d', { willReadFrequently: true });
+
+        Object.values(drawings)
+            .filter(d => (d.layer || 'token') === activeLayer)
+            .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0))
+            .forEach(d => drawDrawingObject(offCtx, d, false));
+
+        const imgData = offCtx.getImageData(0, 0, mapW, mapH);
+        const data = imgData.data;
+
+        const startIndex = (Math.floor(startY) * mapW + Math.floor(startX)) * 4;
+        const targetR = data[startIndex];
+        const targetG = data[startIndex + 1];
+        const targetB = data[startIndex + 2];
+        const targetA = data[startIndex + 3];
+
+        const fillRgb = hexToRgb(paintFillColor || '#eab308');
+        const fillR = fillRgb.r;
+        const fillG = fillRgb.g;
+        const fillB = fillRgb.b;
+        const fillA = 255;
+
+        if (Math.abs(targetR - fillR) < 5 && Math.abs(targetG - fillG) < 5 && Math.abs(targetB - fillB) < 5 && Math.abs(targetA - fillA) < 5) {
+            return;
+        }
+
+        const colorMatch = (idx) => {
+            const dr = data[idx] - targetR;
+            const dg = data[idx + 1] - targetG;
+            const db = data[idx + 2] - targetB;
+            const da = data[idx + 3] - targetA;
+            return (dr * dr + dg * dg + db * db + da * da) <= 900;
+        };
+
+        let minX = startX, maxX = startX, minY = startY, maxY = startY;
+        const queue = [Math.floor(startX), Math.floor(startY)];
+        const visited = new Uint8Array(mapW * mapH);
+        visited[Math.floor(startY) * mapW + Math.floor(startX)] = 1;
+
+        let count = 0;
+        const maxPixels = 400000;
+
+        while (queue.length > 0 && count < maxPixels) {
+            const cy = queue.pop();
+            const cx = queue.pop();
+            count++;
+
+            if (cx < minX) minX = cx;
+            if (cx > maxX) maxX = cx;
+            if (cy < minY) minY = cy;
+            if (cy > maxY) maxY = cy;
+
+            const neighbors = [
+                cx + 1, cy,
+                cx - 1, cy,
+                cx, cy + 1,
+                cx, cy - 1
+            ];
+
+            for (let i = 0; i < neighbors.length; i += 2) {
+                const nx = neighbors[i];
+                const ny = neighbors[i + 1];
+
+                if (nx >= 0 && nx < mapW && ny >= 0 && ny < mapH) {
+                    const nPos = ny * mapW + nx;
+                    if (!visited[nPos]) {
+                        visited[nPos] = 1;
+                        if (colorMatch(nPos * 4)) {
+                            queue.push(nx, ny);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (count < 4) return;
+
+        const stampW = Math.max(1, maxX - minX + 1);
+        const stampH = Math.max(1, maxY - minY + 1);
+        const stampCanvas = document.createElement('canvas');
+        stampCanvas.width = stampW;
+        stampCanvas.height = stampH;
+        const stampCtx = stampCanvas.getContext('2d');
+        const stampImgData = stampCtx.createImageData(stampW, stampH);
+        const stampData = stampImgData.data;
+
+        for (let y = minY; y <= maxY; y++) {
+            for (let x = minX; x <= maxX; x++) {
+                const pos = y * mapW + x;
+                if (visited[pos]) {
+                    const sIdx = ((y - minY) * stampW + (x - minX)) * 4;
+                    stampData[sIdx] = fillR;
+                    stampData[sIdx + 1] = fillG;
+                    stampData[sIdx + 2] = fillB;
+                    stampData[sIdx + 3] = fillA;
+                }
+            }
+        }
+
+        stampCtx.putImageData(stampImgData, 0, 0);
+        const dataUrl = stampCanvas.toDataURL('image/png');
+
+        const newId = `drawing_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+        const drawingObj = {
+            id: newId,
+            type: 'fill',
+            layer: activeLayer === 'lighting' ? 'token' : activeLayer,
+            ownerUsername: vtt.username,
+            createdAt: Date.now(),
+            zIndex: Date.now(),
+            x: minX,
+            y: minY,
+            width: stampW,
+            height: stampH,
+            imageData: dataUrl,
+            opacity: 1.0
+        };
+
+        drawings[newId] = drawingObj;
+        paintUndoStack.push({ action: 'add', drawing: drawingObj });
+        paintRedoStack = [];
+        emitDrawingsUpdate();
+        renderAll();
+    }
+
+    function hexToRgb(hex) {
+        let clean = (hex || '#000000').replace('#', '');
+        if (clean.length === 3) clean = clean.split('').map(c => c + c).join('');
+        const num = parseInt(clean, 16) || 0;
+        return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+    }
+
+    function openDrawingTextInput(x, y, existingDrawing = null) {
+        if (activeDrawingTextarea) {
+            commitDrawingTextInput();
+        }
+
+        const screenPos = canvasToScreen(x, y);
+        const ta = document.createElement('textarea');
+        ta.className = 'vtt-drawing-text-input';
+        ta.style.position = 'fixed';
+        ta.style.left = `${screenPos.x}px`;
+        ta.style.top = `${screenPos.y}px`;
+        ta.style.pointerEvents = 'auto';
+        ta.style.zIndex = '10005';
+        const strokeCol = existingDrawing ? (existingDrawing.strokeColor || paintStrokeColor) : paintStrokeColor;
+        ta.style.color = strokeCol;
+        const fontSize = existingDrawing ? (existingDrawing.fontSize || 16) : Math.max(12, paintStrokeWidth * 3 + 10);
+        ta.style.fontSize = `${fontSize * zoom}px`;
+        ta.placeholder = "Type text here...";
+        ta.rows = 1;
+        if (existingDrawing) {
+            ta.value = existingDrawing.text || '';
+        }
+
+        document.body.appendChild(ta);
+        setTimeout(() => {
+            ta.focus();
+            if (existingDrawing) {
+                ta.select();
+            }
+        }, 20);
+
+        const openedAt = Date.now();
+        activeDrawingTextarea = {
+            element: ta,
+            canvasX: x,
+            canvasY: y,
+            fontSize,
+            existingId: existingDrawing ? existingDrawing.id : null,
+            originalDrawing: existingDrawing ? JSON.parse(JSON.stringify(existingDrawing)) : null,
+            openedAt
+        };
+
+        const onKeyDown = (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                commitDrawingTextInput();
+            } else if (e.key === 'Escape') {
+                cancelDrawingTextInput();
+            }
+        };
+
+        const onBlur = () => {
+            // Ignore accidental blur caused by mouseup releasing the canvas click
+            if (Date.now() - openedAt < 350) {
+                ta.focus();
+                return;
+            }
+            setTimeout(() => {
+                if (activeDrawingTextarea && activeDrawingTextarea.element === ta) {
+                    commitDrawingTextInput();
+                }
+            }, 120);
+        };
+
+        ta.addEventListener('mousedown', (e) => e.stopPropagation());
+        ta.addEventListener('click', (e) => e.stopPropagation());
+        ta.addEventListener('keydown', onKeyDown);
+        ta.addEventListener('blur', onBlur);
+    }
+
+    function commitDrawingTextInput() {
+        if (!activeDrawingTextarea) return;
+        const { element, canvasX, canvasY, fontSize, existingId, originalDrawing } = activeDrawingTextarea;
+        const text = element.value.trim();
+        element.remove();
+        activeDrawingTextarea = null;
+
+        if (existingId) {
+            if (!text) {
+                // Erase drawing if emptied
+                paintUndoStack.push({ action: 'delete', drawing: { ...drawings[existingId] } });
+                paintRedoStack = [];
+                delete drawings[existingId];
+            } else {
+                const d = drawings[existingId];
+                if (d) {
+                    paintUndoStack.push({
+                        action: 'transform',
+                        drawingId: existingId,
+                        before: originalDrawing,
+                        after: { ...d, text, fontSize }
+                    });
+                    paintRedoStack = [];
+                    d.text = text;
+                    d.fontSize = fontSize;
+                }
+            }
+            emitDrawingsUpdate();
+            renderAll();
+            return;
+        }
+
+        if (!text) return;
+
+        const newId = `drawing_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+        const drawingObj = {
+            id: newId,
+            type: 'text',
+            layer: (activeLayer === 'lighting' || activeLayer === 'notes') ? 'token' : activeLayer,
+            ownerUsername: vtt.username,
+            createdAt: Date.now(),
+            zIndex: Date.now(),
+            x: canvasX,
+            y: canvasY,
+            text,
+            fontSize,
+            strokeColor: paintStrokeColor,
+            fontFamily: 'Open Sans, sans-serif'
+        };
+
+        drawings[newId] = drawingObj;
+        paintUndoStack.push({ action: 'add', drawing: drawingObj });
+        paintRedoStack = [];
+        emitDrawingsUpdate();
+        renderAll();
+    }
+
+    function cancelDrawingTextInput() {
+        if (!activeDrawingTextarea) return;
+        activeDrawingTextarea.element.remove();
+        activeDrawingTextarea = null;
+    }
+
+    function eraseDrawingsAtPoint(pt) {
+        const eraseRadius = Math.max(12, paintStrokeWidth * 2);
+        let erased = false;
+        Object.entries(drawings).forEach(([id, d]) => {
+            const drawingLayer = d.layer || 'token';
+            if (drawingLayer !== activeLayer && vtt.role !== 'GM') return;
+            if (!isDrawingControlledByPlayer(d)) return;
+
+            const bbox = getDrawingBoundingBox(d);
+            if (!bbox) return;
+
+            if (pt.x >= bbox.minX - eraseRadius && pt.x <= bbox.maxX + eraseRadius &&
+                pt.y >= bbox.minY - eraseRadius && pt.y <= bbox.maxY + eraseRadius) {
+                paintUndoStack.push({ action: 'delete', drawing: { ...d } });
+                paintRedoStack = [];
+                delete drawings[id];
+                if (selectedDrawingId === id) selectedDrawingId = null;
+                erased = true;
+                erasedAnyDrawingInDrag = true;
+            }
+        });
+        if (erased) renderAll();
+    }
+
+    function paintUndo() {
+        if (paintUndoStack.length === 0) return;
+        const item = paintUndoStack.pop();
+        if (item.action === 'add') {
+            const d = drawings[item.drawing.id];
+            if (d) {
+                delete drawings[item.drawing.id];
+                paintRedoStack.push({ action: 'add', drawing: d });
+            }
+        } else if (item.action === 'delete') {
+            drawings[item.drawing.id] = item.drawing;
+            paintRedoStack.push({ action: 'delete', drawing: item.drawing });
+        } else if (item.action === 'transform') {
+            drawings[item.drawingId] = JSON.parse(JSON.stringify(item.before));
+            paintRedoStack.push({ action: 'transform', drawingId: item.drawingId, before: item.before, after: item.after });
+        }
+        emitDrawingsUpdate();
+        renderAll();
+    }
+
+    function paintRedo() {
+        if (paintRedoStack.length === 0) return;
+        const item = paintRedoStack.pop();
+        if (item.action === 'add') {
+            drawings[item.drawing.id] = item.drawing;
+            paintUndoStack.push({ action: 'add', drawing: item.drawing });
+        } else if (item.action === 'delete') {
+            delete drawings[item.drawing.id];
+            paintUndoStack.push({ action: 'delete', drawing: item.drawing });
+        } else if (item.action === 'transform') {
+            drawings[item.drawingId] = JSON.parse(JSON.stringify(item.after));
+            paintUndoStack.push({ action: 'transform', drawingId: item.drawingId, before: item.before, after: item.after });
+        }
+        emitDrawingsUpdate();
+        renderAll();
+    }
+
+    function showDrawingContextMenu(drawingId, clientX, clientY) {
+        const oldMenu = document.getElementById('vtt-token-context-menu');
+        if (oldMenu) oldMenu.remove();
+
+        const d = drawings[drawingId];
+        if (!d) return;
+
+        const isControlled = isDrawingControlledByPlayer(d);
+        const isGM = vtt.role === 'GM';
+        if (!isControlled && !isGM) return;
+
+        const menu = document.createElement('div');
+        menu.id = 'vtt-token-context-menu';
+        menu.className = 'vtt-token-context-menu';
+        menu.style.left = `${clientX}px`;
+        menu.style.top = `${clientY}px`;
+
+        let typeLabel = d.type.charAt(0).toUpperCase() + d.type.slice(1);
+        let html = `
+            <div class="vtt-token-menu-header">
+                <i class="fa-solid fa-palette"></i> ${typeLabel} Drawing
+            </div>
+        `;
+
+        if (isGM) {
+            html += `
+                <div class="vtt-token-menu-item">
+                    <span><i class="fa-solid fa-layer-group item-icon"></i> Move to Layer</span>
+                    <i class="fa-solid fa-chevron-right chevron-icon"></i>
+                    <div class="vtt-token-submenu" style="min-width: 180px;">
+                        <div class="vtt-token-submenu-list scroll-styled">
+                            <div class="vtt-submenu-item menu-drawing-move-layer" data-layer="token">
+                                <span><i class="fa-solid fa-users" style="width: 16px; margin-right: 8px;"></i> Token Layer</span>
+                            </div>
+                            <div class="vtt-submenu-item menu-drawing-move-layer" data-layer="gm">
+                                <span><i class="fa-solid fa-user-secret" style="width: 16px; margin-right: 8px;"></i> GM Layer</span>
+                            </div>
+                            <div class="vtt-submenu-item menu-drawing-move-layer" data-layer="map">
+                                <span><i class="fa-solid fa-map" style="width: 16px; margin-right: 8px;"></i> Map Layer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="vtt-token-menu-divider"></div>
+            `;
+        }
+
+        html += `
+            <div class="vtt-token-menu-item" id="menu-drawing-front">
+                <span><i class="fa-solid fa-arrow-up item-icon"></i> Bring to Front</span>
+            </div>
+            <div class="vtt-token-menu-item" id="menu-drawing-back">
+                <span><i class="fa-solid fa-arrow-down item-icon"></i> Send to Back</span>
+            </div>
+            <div class="vtt-token-menu-divider"></div>
+            <div class="vtt-token-menu-item text-danger" id="menu-drawing-delete" style="color: var(--color-danger);">
+                <span><i class="fa-solid fa-trash item-icon"></i> Delete</span>
+            </div>
+        `;
+
+        menu.innerHTML = html;
+        document.body.appendChild(menu);
+
+        const menuRect = menu.getBoundingClientRect();
+        if (clientX + menuRect.width > window.innerWidth) menu.style.left = `${window.innerWidth - menuRect.width - 10}px`;
+        if (clientY + menuRect.height > window.innerHeight) menu.style.top = `${window.innerHeight - menuRect.height - 10}px`;
+
+        menu.querySelectorAll('.menu-drawing-move-layer').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetLayer = btn.dataset.layer;
+                if (targetLayer && isGM) {
+                    d.layer = targetLayer;
+                    emitDrawingsUpdate();
+                    renderAll();
+                }
+                menu.remove();
+            });
+        });
+
+        menu.querySelector('#menu-drawing-front')?.addEventListener('click', () => {
+            const maxZ = Math.max(...Object.values(drawings).map(x => x.zIndex || 0), 0);
+            d.zIndex = maxZ + 1;
+            emitDrawingsUpdate();
+            renderAll();
+            menu.remove();
+        });
+
+        menu.querySelector('#menu-drawing-back')?.addEventListener('click', () => {
+            const minZ = Math.min(...Object.values(drawings).map(x => x.zIndex || 0), 0);
+            d.zIndex = minZ - 1;
+            emitDrawingsUpdate();
+            renderAll();
+            menu.remove();
+        });
+
+        menu.querySelector('#menu-drawing-delete')?.addEventListener('click', () => {
+            paintUndoStack.push({ action: 'delete', drawing: { ...d } });
+            paintRedoStack = [];
+            delete drawings[drawingId];
+            if (selectedDrawingId === drawingId) selectedDrawingId = null;
+            emitDrawingsUpdate();
+            renderAll();
+            menu.remove();
+        });
+    }
+
+    function showPortalContextMenu(portalId, clientX, clientY) {
+        const oldMenu = document.getElementById('vtt-token-context-menu');
+        if (oldMenu) oldMenu.remove();
+
+        const portal = portals.find(p => p.id === portalId);
+        if (!portal || vtt.role !== 'GM') return;
+
+        const menu = document.createElement('div');
+        menu.id = 'vtt-token-context-menu';
+        menu.className = 'vtt-token-context-menu';
+        menu.style.left = `${clientX}px`;
+        menu.style.top = `${clientY}px`;
+
+        const html = `
+            <div class="vtt-token-menu-header">
+                <i class="fa-solid fa-archway"></i> ${portal.name || 'Portal'}
+            </div>
+            <div class="vtt-token-menu-item" id="menu-portal-front">
+                <span><i class="fa-solid fa-angles-up item-icon"></i> Bring to Front</span>
+            </div>
+            <div class="vtt-token-menu-item" id="menu-portal-forward">
+                <span><i class="fa-solid fa-angle-up item-icon"></i> Bring Forward</span>
+            </div>
+            <div class="vtt-token-menu-item" id="menu-portal-backward">
+                <span><i class="fa-solid fa-angle-down item-icon"></i> Send Backward</span>
+            </div>
+            <div class="vtt-token-menu-item" id="menu-portal-back">
+                <span><i class="fa-solid fa-angles-down item-icon"></i> Send to Back</span>
+            </div>
+            <div class="vtt-token-menu-divider"></div>
+            <div class="vtt-token-menu-item" id="menu-portal-flip">
+                <span><i class="fa-solid fa-arrows-rotate item-icon"></i> Flip 180°</span>
+            </div>
+            <div class="vtt-token-menu-item" id="menu-portal-edit">
+                <span><i class="fa-solid fa-pen-to-square item-icon"></i> Edit Portal</span>
+            </div>
+            <div class="vtt-token-menu-divider"></div>
+            <div class="vtt-token-menu-item text-danger" id="menu-portal-delete" style="color: var(--color-danger);">
+                <span><i class="fa-solid fa-trash item-icon"></i> Delete Portal</span>
+            </div>
+        `;
+
+        menu.innerHTML = html;
+        document.body.appendChild(menu);
+
+        const menuRect = menu.getBoundingClientRect();
+        if (clientX + menuRect.width > window.innerWidth) menu.style.left = `${window.innerWidth - menuRect.width - 10}px`;
+        if (clientY + menuRect.height > window.innerHeight) menu.style.top = `${window.innerHeight - menuRect.height - 10}px`;
+
+        function syncPortals() {
+            if (vtt.campaignState?.maps?.[currentMapId]) {
+                vtt.campaignState.maps[currentMapId].portals = portals;
+            }
+            vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+            renderPlacedPortalsList();
+            renderAll();
+        }
+
+        menu.querySelector('#menu-portal-front')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const allZ = [...portals.map(p => p.zIndex || 0), ...Object.values(tokens).map(t => t.zIndex || 0)];
+            const maxZ = Math.max(...allZ, 0);
+            portal.zIndex = maxZ + 1;
+            const idx = portals.findIndex(p => p.id === portalId);
+            if (idx !== -1 && idx < portals.length - 1) {
+                const [item] = portals.splice(idx, 1);
+                portals.push(item);
+            }
+            syncPortals();
+            menu.remove();
+        });
+
+        menu.querySelector('#menu-portal-forward')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            portal.zIndex = (portal.zIndex || 0) + 1;
+            const idx = portals.findIndex(p => p.id === portalId);
+            if (idx !== -1 && idx < portals.length - 1) {
+                const temp = portals[idx];
+                portals[idx] = portals[idx + 1];
+                portals[idx + 1] = temp;
+            }
+            syncPortals();
+            menu.remove();
+        });
+
+        menu.querySelector('#menu-portal-backward')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            portal.zIndex = (portal.zIndex || 0) - 1;
+            const idx = portals.findIndex(p => p.id === portalId);
+            if (idx > 0) {
+                const temp = portals[idx];
+                portals[idx] = portals[idx - 1];
+                portals[idx - 1] = temp;
+            }
+            syncPortals();
+            menu.remove();
+        });
+
+        menu.querySelector('#menu-portal-back')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const allZ = [...portals.map(p => p.zIndex || 0), ...Object.values(tokens).map(t => t.zIndex || 0)];
+            const minZ = Math.min(...allZ, 0);
+            portal.zIndex = minZ - 1;
+            const idx = portals.findIndex(p => p.id === portalId);
+            if (idx > 0) {
+                const [item] = portals.splice(idx, 1);
+                portals.unshift(item);
+            }
+            syncPortals();
+            menu.remove();
+        });
+
+        menu.querySelector('#menu-portal-flip')?.addEventListener('click', () => {
+            portal.facingAngle = ((portal.facingAngle !== undefined ? portal.facingAngle : 270) + 180) % 360;
+            portal.viewSideFlipped = !portal.viewSideFlipped;
+            syncPortals();
+            menu.remove();
+        });
+
+        menu.querySelector('#menu-portal-edit')?.addEventListener('click', () => {
+            selectMapToolItem('portal', portalId);
+            menu.remove();
+        });
+
+        menu.querySelector('#menu-portal-delete')?.addEventListener('click', () => {
+            selectedMapToolItem = { type: 'portal', id: portalId };
+            deleteSelectedMapToolItem('portal');
+            menu.remove();
+        });
+    }
+
+    function setupPaintRibbonControls() {
+        const ribbon = document.getElementById('panel-paint-ribbon');
+        if (!ribbon) return;
+
+        ribbon.querySelectorAll('.paint-subtool-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                ribbon.querySelectorAll('.paint-subtool-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                paintSubTool = btn.dataset.subtool;
+                polygonPoints = [];
+            });
+        });
+
+        ribbon.querySelectorAll('.paint-size-dot').forEach(btn => {
+            btn.addEventListener('click', () => {
+                ribbon.querySelectorAll('.paint-size-dot').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                paintStrokeWidth = parseInt(btn.dataset.size) || 4;
+                const lbl = document.getElementById('paint-size-label');
+                if (lbl) lbl.textContent = `${paintStrokeWidth}px`;
+            });
+        });
+
+        ribbon.querySelectorAll('.paint-opt-btn[data-fillmode]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                ribbon.querySelectorAll('.paint-opt-btn[data-fillmode]').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                paintFillMode = btn.dataset.fillmode;
+            });
+        });
+
+        const btnGridSnap = document.getElementById('btn-paint-gridsnap');
+        if (btnGridSnap) {
+            btnGridSnap.addEventListener('click', () => {
+                paintGridSnap = !paintGridSnap;
+                btnGridSnap.classList.toggle('active', paintGridSnap);
+            });
+        }
+
+        ribbon.querySelectorAll('.paint-swatch').forEach(btn => {
+            btn.addEventListener('click', () => {
+                ribbon.querySelectorAll('.paint-swatch').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                paintStrokeColor = btn.dataset.color;
+                paintFillColor = btn.dataset.color;
+                const ind = document.getElementById('paint-active-indicator');
+                if (ind) ind.style.background = paintStrokeColor;
+            });
+        });
+
+        const customColorInput = document.getElementById('paint-custom-color');
+        if (customColorInput) {
+            customColorInput.addEventListener('input', (e) => {
+                ribbon.querySelectorAll('.paint-swatch').forEach(b => b.classList.remove('active'));
+                paintStrokeColor = e.target.value;
+                paintFillColor = e.target.value;
+                const ind = document.getElementById('paint-active-indicator');
+                if (ind) ind.style.background = paintStrokeColor;
+            });
+        }
+
+        document.getElementById('btn-paint-undo')?.addEventListener('click', paintUndo);
+        document.getElementById('btn-paint-redo')?.addEventListener('click', paintRedo);
+    }
+
+    // ========================================================================
+    // MAP TOOLS: TRAPS & PORTALS SUBSYSTEM
+    // ========================================================================
+
+    let selectedMapToolItem = null; // { type: 'trap' | 'portal', id: string }
+    let activeDragMapToolItem = null; // { type: 'trap' | 'portal', id: string }
+    let activeResizeMapToolHandle = null; // { type: 'trap' | 'portal', id: string, handle: object, origGeom: object }
+    let mapToolDragStart = null; // { x, y }
+    let mapToolDragOriginalGeom = null; // cloned geom
+
+    function cloneMapToolGeom(geom) {
+        if (!geom) return null;
+        if (Array.isArray(geom.points)) {
+            return { points: geom.points.map(p => ({ x: p.x, y: p.y })) };
+        }
+        return { ...geom };
+    }
+
+    function updateDraggedMapToolGeom(geom, origGeom, dx, dy) {
+        if (!geom || !origGeom) return;
+        if (Array.isArray(origGeom.points)) {
+            geom.points = origGeom.points.map(p => ({ x: Math.round(p.x + dx), y: Math.round(p.y + dy) }));
+        } else if (origGeom.x !== undefined && origGeom.w !== undefined) {
+            geom.x = Math.round(origGeom.x + dx);
+            geom.y = Math.round(origGeom.y + dy);
+        } else if (origGeom.cx !== undefined) {
+            geom.cx = Math.round(origGeom.cx + dx);
+            geom.cy = Math.round(origGeom.cy + dy);
+        } else if (origGeom.x1 !== undefined) {
+            geom.x1 = Math.round(origGeom.x1 + dx);
+            geom.y1 = Math.round(origGeom.y1 + dy);
+            geom.x2 = Math.round(origGeom.x2 + dx);
+            geom.y2 = Math.round(origGeom.y2 + dy);
+        }
+    }
+
+    function getMapToolResizeHandles(item) {
+        if (!item || !item.geom) return [];
+        const g = item.geom;
+        const handles = [];
+        const shape = item.shape;
+
+        if (shape === 'rect') {
+            const minX = Math.min(g.x, g.x + g.w);
+            const maxX = Math.max(g.x, g.x + g.w);
+            const minY = Math.min(g.y, g.y + g.h);
+            const maxY = Math.max(g.y, g.y + g.h);
+            const midX = (minX + maxX) / 2;
+            const midY = (minY + maxY) / 2;
+
+            handles.push({ id: 'nw', x: minX, y: minY, cursor: 'nwse-resize' });
+            handles.push({ id: 'n',  x: midX, y: minY, cursor: 'ns-resize' });
+            handles.push({ id: 'ne', x: maxX, y: minY, cursor: 'nesw-resize' });
+            handles.push({ id: 'e',  x: maxX, y: midY, cursor: 'ew-resize' });
+            handles.push({ id: 'se', x: maxX, y: maxY, cursor: 'nwse-resize' });
+            handles.push({ id: 's',  x: midX, y: maxY, cursor: 'ns-resize' });
+            handles.push({ id: 'sw', x: minX, y: maxY, cursor: 'nesw-resize' });
+            handles.push({ id: 'w',  x: minX, y: midY, cursor: 'ew-resize' });
+        } else if (shape === 'circle') {
+            const r = g.r !== undefined ? g.r : (Math.hypot(g.endX - g.cx, g.endY - g.cy) || 25);
+            handles.push({ id: 'r-east',  x: g.cx + r, y: g.cy, cursor: 'ew-resize' });
+            handles.push({ id: 'r-west',  x: g.cx - r, y: g.cy, cursor: 'ew-resize' });
+            handles.push({ id: 'r-south', x: g.cx, y: g.cy + r, cursor: 'ns-resize' });
+            handles.push({ id: 'r-north', x: g.cx, y: g.cy - r, cursor: 'ns-resize' });
+        } else if (shape === 'line') {
+            handles.push({ id: 'p1', x: g.x1, y: g.y1, cursor: 'crosshair' });
+            handles.push({ id: 'p2', x: g.x2, y: g.y2, cursor: 'crosshair' });
+            handles.push({ id: 'mid', x: (g.x1 + g.x2) / 2, y: (g.y1 + g.y2) / 2, cursor: 'move' });
+        } else if (shape === 'polygon' && Array.isArray(g.points)) {
+            g.points.forEach((p, idx) => {
+                handles.push({ id: `vertex-${idx}`, x: p.x, y: p.y, cursor: 'crosshair', index: idx });
+            });
+        }
+        return handles;
+    }
+
+    function getMapToolResizeHandleAt(item, mouse, tolerance = null) {
+        const tol = tolerance !== null ? tolerance : Math.max(24 / zoom, 20);
+        const handles = getMapToolResizeHandles(item);
+        for (const h of handles) {
+            if (Math.hypot(mouse.x - h.x, mouse.y - h.y) <= tol) {
+                return h;
+            }
+        }
+        return null;
+    }
+
+    function getPortalHandleUnderMouse(mouse, tolerance = null) {
+        if (vtt.role !== 'GM') return null;
+        if (activeLayer !== 'portals' && selectedMapToolItem?.type !== 'portal' && activeTool !== 'maptools' && activeTool !== 'map-tools') return null;
+        const tol = tolerance !== null ? tolerance : Math.max(16, 24 / (zoom || 1));
+
+        // 1. Check currently selected portal first
+        if (selectedMapToolItem && selectedMapToolItem.type === 'portal') {
+            const sel = portals.find(p => p.id === selectedMapToolItem.id);
+            if (sel) {
+                if (!sel.isRadial) {
+                    const hPos = getPortalRotationHandlePos(sel);
+                    if (hPos && Math.hypot(mouse.x - hPos.x, mouse.y - hPos.y) <= tol) {
+                        return { type: 'rotate', portal: sel, pos: hPos };
+                    }
+                }
+                const rHandle = getMapToolResizeHandleAt(sel, mouse, tol);
+                if (rHandle) {
+                    return { type: 'resize', item: sel, handle: rHandle };
+                }
+            }
+        }
+
+        // 2. Check visible portals on portals layer if layer is portals or maptools is open
+        if (activeLayer === 'portals' || activeTool === 'maptools' || activeTool === 'map-tools') {
+            for (const p of portals) {
+                if (selectedMapToolItem?.id === p.id) continue;
+                const rHandle = getMapToolResizeHandleAt(p, mouse, tol);
+                if (rHandle) {
+                    return { type: 'resize', item: p, handle: rHandle };
+                }
+            }
+        }
+        return null;
+    }
+
+    function applyMapToolResize(item, origGeom, handle, mouse, e) {
+        if (!item || !origGeom || !handle) return;
+        const g = item.geom;
+        const shape = item.shape;
+        const doSnap = !(e && e.altKey);
+        const snapPos = doSnap ? snapToGrid(mouse.x, mouse.y, false) : { x: mouse.x, y: mouse.y };
+        const mx = snapPos.x;
+        const my = snapPos.y;
+
+        if (shape === 'rect') {
+            const origX1 = Math.min(origGeom.x, origGeom.x + origGeom.w);
+            const origX2 = Math.max(origGeom.x, origGeom.x + origGeom.w);
+            const origY1 = Math.min(origGeom.y, origGeom.y + origGeom.h);
+            const origY2 = Math.max(origGeom.y, origGeom.y + origGeom.h);
+
+            let newX1 = origX1, newX2 = origX2, newY1 = origY1, newY2 = origY2;
+            if (handle.id === 'nw') { newX1 = Math.min(mx, origX2 - 10); newY1 = Math.min(my, origY2 - 10); }
+            else if (handle.id === 'n') { newY1 = Math.min(my, origY2 - 10); }
+            else if (handle.id === 'ne') { newX2 = Math.max(mx, origX1 + 10); newY1 = Math.min(my, origY2 - 10); }
+            else if (handle.id === 'e') { newX2 = Math.max(mx, origX1 + 10); }
+            else if (handle.id === 'se') { newX2 = Math.max(mx, origX1 + 10); newY2 = Math.max(my, origY1 + 10); }
+            else if (handle.id === 's') { newY2 = Math.max(my, origY1 + 10); }
+            else if (handle.id === 'sw') { newX1 = Math.min(mx, origX2 - 10); newY2 = Math.max(my, origY1 + 10); }
+            else if (handle.id === 'w') { newX1 = Math.min(mx, origX2 - 10); }
+
+            g.x = Math.round(newX1);
+            g.y = Math.round(newY1);
+            g.w = Math.round(newX2 - newX1);
+            g.h = Math.round(newY2 - newY1);
+        } else if (shape === 'circle') {
+            const newR = Math.max(10, Math.round(Math.hypot(mx - origGeom.cx, my - origGeom.cy)));
+            g.r = newR;
+        } else if (shape === 'line') {
+            if (handle.id === 'p1') {
+                g.x1 = Math.round(mx);
+                g.y1 = Math.round(my);
+            } else if (handle.id === 'p2') {
+                g.x2 = Math.round(mx);
+                g.y2 = Math.round(my);
+            } else if (handle.id === 'mid') {
+                const origMidX = (origGeom.x1 + origGeom.x2) / 2;
+                const origMidY = (origGeom.y1 + origGeom.y2) / 2;
+                const dx = mx - origMidX;
+                const dy = my - origMidY;
+                g.x1 = Math.round(origGeom.x1 + dx);
+                g.y1 = Math.round(origGeom.y1 + dy);
+                g.x2 = Math.round(origGeom.x2 + dx);
+                g.y2 = Math.round(origGeom.y2 + dy);
+            }
+        } else if (shape === 'polygon' && Array.isArray(g.points) && handle.index !== undefined) {
+            if (g.points[handle.index]) {
+                g.points[handle.index].x = Math.round(mx);
+                g.points[handle.index].y = Math.round(my);
+            }
+        }
+    }
+
+    function isPointInPoly(pt, poly) {
+        if (!Array.isArray(poly) || poly.length < 3) return false;
+        let inside = false;
+        for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+            const xi = poly[i].x, yi = poly[i].y;
+            const xj = poly[j].x, yj = poly[j].y;
+            const intersect = ((yi > pt.y) !== (yj > pt.y)) &&
+                (pt.x < (xj - xi) * (pt.y - yi) / (yj - yi) + xi);
+            if (intersect) inside = !inside;
+        }
+        return inside;
+    }
+
+    function distToSegmentSq(p, v, w) {
+        const l2 = (v.x - w.x) * (v.x - w.x) + (v.y - w.y) * (v.y - w.y);
+        if (l2 === 0) return (p.x - v.x) * (p.x - v.x) + (p.y - v.y) * (p.y - v.y);
+        let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+        t = Math.max(0, Math.min(1, t));
+        const projX = v.x + t * (w.x - v.x);
+        const projY = v.y + t * (w.y - v.y);
+        return (p.x - projX) * (p.x - projX) + (p.y - projY) * (p.y - projY);
+    }
+
+    function checkLineIntersection(p1, p2, p3, p4) {
+        const denom = (p4.y - p3.y) * (p2.x - p1.x) - (p4.x - p3.x) * (p2.y - p1.y);
+        if (denom === 0) return null;
+        const ua = ((p4.x - p3.x) * (p1.y - p3.y) - (p4.y - p3.y) * (p1.x - p3.x)) / denom;
+        const ub = ((p2.x - p1.x) * (p1.y - p3.y) - (p2.y - p1.y) * (p1.x - p3.x)) / denom;
+        if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+            return {
+                x: p1.x + ua * (p2.x - p1.x),
+                y: p1.y + ua * (p2.y - p1.y),
+                t: ua
+            };
+        }
+        return null;
+    }
+
+    function checkLineCircleIntersection(p1, p2, center, radius) {
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        const fx = p1.x - center.x;
+        const fy = p1.y - center.y;
+        const a = dx * dx + dy * dy;
+        const b = 2 * (fx * dx + fy * dy);
+        const c = fx * fx + fy * fy - radius * radius;
+        let discriminant = b * b - 4 * a * c;
+        if (discriminant < 0) return null;
+        discriminant = Math.sqrt(discriminant);
+        const t1 = (-b - discriminant) / (2 * a);
+        const t2 = (-b + discriminant) / (2 * a);
+        let t = null;
+        if (t1 >= 0 && t1 <= 1) t = t1;
+        else if (t2 >= 0 && t2 <= 1) t = t2;
+        if (t !== null) {
+            return {
+                x: p1.x + t * dx,
+                y: p1.y + t * dy,
+                t: t
+            };
+        }
+        return null;
+    }
+
+    function isPointInsideGeometry(pt, shape, geom) {
+        if (!pt || !geom) return false;
+        if (shape === 'rect') {
+            const minX = Math.min(geom.x, geom.x + geom.w);
+            const maxX = Math.max(geom.x, geom.x + geom.w);
+            const minY = Math.min(geom.y, geom.y + geom.h);
+            const maxY = Math.max(geom.y, geom.y + geom.h);
+            return pt.x >= minX && pt.x <= maxX && pt.y >= minY && pt.y <= maxY;
+        } else if (shape === 'circle') {
+            const r = geom.r !== undefined ? geom.r : Math.hypot(geom.endX - geom.cx, geom.endY - geom.cy);
+            return Math.hypot(pt.x - geom.cx, pt.y - geom.cy) <= r;
+        } else if (shape === 'line') {
+            const p1 = { x: geom.x1, y: geom.y1 };
+            const p2 = { x: geom.x2, y: geom.y2 };
+            return distToSegmentSq(pt, p1, p2) <= 16;
+        } else if (shape === 'polygon') {
+            return isPointInPoly(pt, geom.points || []);
+        }
+        return false;
+    }
+
+    function findEarliestPathIntersection(p1, p2, shape, geom) {
+        if (!geom) return null;
+        if (shape === 'rect') {
+            const x1 = Math.min(geom.x, geom.x + geom.w);
+            const x2 = Math.max(geom.x, geom.x + geom.w);
+            const y1 = Math.min(geom.y, geom.y + geom.h);
+            const y2 = Math.max(geom.y, geom.y + geom.h);
+            const edges = [
+                [{ x: x1, y: y1 }, { x: x2, y: y1 }],
+                [{ x: x2, y: y1 }, { x: x2, y: y2 }],
+                [{ x: x2, y: y2 }, { x: x1, y: y2 }],
+                [{ x: x1, y: y2 }, { x: x1, y: y1 }]
+            ];
+            let best = null;
+            edges.forEach(([a, b]) => {
+                const hit = checkLineIntersection(p1, p2, a, b);
+                if (hit && (!best || hit.t < best.t)) best = hit;
+            });
+            if (best) return best;
+            if (isPointInsideGeometry(p2, shape, geom)) {
+                return { x: p2.x, y: p2.y, t: 1 };
+            }
+            return null;
+        } else if (shape === 'circle') {
+            const r = geom.r !== undefined ? geom.r : Math.hypot(geom.endX - geom.cx, geom.endY - geom.cy);
+            const hit = checkLineCircleIntersection(p1, p2, { x: geom.cx, y: geom.cy }, r);
+            if (hit) return hit;
+            if (isPointInsideGeometry(p2, shape, geom)) {
+                return { x: p2.x, y: p2.y, t: 1 };
+            }
+            return null;
+        } else if (shape === 'line') {
+            const a = { x: geom.x1, y: geom.y1 };
+            const b = { x: geom.x2, y: geom.y2 };
+            const hit = checkLineIntersection(p1, p2, a, b);
+            if (hit) return hit;
+            return null;
+        } else if (shape === 'polygon') {
+            const pts = geom.points || [];
+            if (pts.length < 2) return null;
+            let best = null;
+            for (let i = 0; i < pts.length; i++) {
+                const a = pts[i];
+                const b = pts[(i + 1) % pts.length];
+                const hit = checkLineIntersection(p1, p2, a, b);
+                if (hit && (!best || hit.t < best.t)) best = hit;
+            }
+            if (best) return best;
+            if (isPointInsideGeometry(p2, shape, geom)) {
+                return { x: p2.x, y: p2.y, t: 1 };
+            }
+            return null;
+        }
+        return null;
+    }
+
+    function isTokenCollidingWithPortal(token, portal, fromPos = null, toPos = null) {
+        if (!token || !portal || !portal.geom) return false;
+        const g = portal.geom;
+        const { drawW, drawH } = getTokenDrawDimensions(token);
+
+        let evalCenter;
+        if (toPos && toPos.x !== undefined && toPos.y !== undefined) {
+            evalCenter = toPos;
+        } else if (fromPos && fromPos.x !== undefined && fromPos.y !== undefined) {
+            evalCenter = fromPos;
+        } else {
+            evalCenter = { x: token.x + drawW / 2, y: token.y + drawH / 2 };
+        }
+
+        if (portal.shape === 'line') {
+            if (fromPos && toPos) {
+                const hit = checkLineIntersection(fromPos, toPos, { x: g.x1, y: g.y1 }, { x: g.x2, y: g.y2 });
+                if (hit) return true;
+            }
+            return distToSegmentSq(evalCenter, { x: g.x1, y: g.y1 }, { x: g.x2, y: g.y2 }) <= 16;
+        } else if (portal.shape === 'rect') {
+            if (isPointInsideGeometry(evalCenter, 'rect', g)) return true;
+            if (fromPos && toPos && findEarliestPathIntersection(fromPos, toPos, 'rect', g)) return true;
+            return false;
+        } else if (portal.shape === 'circle') {
+            const r = g.r !== undefined ? g.r : (Math.hypot(g.endX - g.cx, g.endY - g.cy) || 25);
+            const dist = Math.hypot(evalCenter.x - g.cx, evalCenter.y - g.cy);
+            if (dist <= r) return true;
+            if (fromPos && toPos && checkLineCircleIntersection(fromPos, toPos, { x: g.cx, y: g.cy }, r)) return true;
+            return false;
+        } else if (portal.shape === 'polygon') {
+            if (isPointInsideGeometry(evalCenter, 'polygon', g)) return true;
+            if (fromPos && toPos && findEarliestPathIntersection(fromPos, toPos, 'polygon', g)) return true;
+            return false;
+        }
+
+        return false;
+    }
+
+    function calcPortalCenter(portal) {
+        if (!portal || !portal.geom) return { x: 0, y: 0 };
+        const g = portal.geom;
+        if (portal.shape === 'rect') {
+            return { x: g.x + g.w / 2, y: g.y + g.h / 2 };
+        } else if (portal.shape === 'circle') {
+            return { x: g.cx, y: g.cy };
+        } else if (portal.shape === 'line') {
+            return { x: (g.x1 + g.x2) / 2, y: (g.y1 + g.y2) / 2 };
+        } else if (portal.shape === 'polygon') {
+            const pts = g.points || [];
+            if (pts.length === 0) return { x: 0, y: 0 };
+            let sx = 0, sy = 0;
+            pts.forEach(p => { sx += p.x; sy += p.y; });
+            return { x: sx / pts.length, y: sy / pts.length };
+        }
+        return { x: 0, y: 0 };
+    }
+
+    function getPortalNormalVector(portal, approachVector = null) {
+        if (!portal || !portal.geom) return { dx: 0, dy: -1 };
+
+        // If radial/omnidirectional portal and approachVector is provided
+        if (portal.isRadial && approachVector) {
+            const len = Math.hypot(approachVector.dx, approachVector.dy) || 1;
+            return { dx: approachVector.dx / len, dy: approachVector.dy / len };
+        }
+
+        let dx = 0, dy = -1;
+        if (portal.facingAngle !== undefined && portal.facingAngle !== null && !isNaN(portal.facingAngle)) {
+            const rad = (portal.facingAngle * Math.PI) / 180;
+            dx = Math.cos(rad);
+            dy = Math.sin(rad);
+        } else if (portal.shape === 'line') {
+            const g = portal.geom;
+            const lx = g.x2 - g.x1;
+            const ly = g.y2 - g.y1;
+            const len = Math.hypot(lx, ly) || 1;
+            dx = -ly / len;
+            dy = lx / len;
+        } else {
+            dx = 0;
+            dy = -1;
+        }
+
+        if (portal.viewSideFlipped) {
+            dx = -dx;
+            dy = -dy;
+        }
+        return { dx, dy };
+    }
+
+    function getPortalRotationHandlePos(portal) {
+        if (!portal || !portal.geom) return null;
+        const center = calcPortalCenter(portal);
+        const norm = getPortalNormalVector(portal);
+        let radius = 30;
+        const g = portal.geom;
+        if (portal.shape === 'circle') radius = g.r !== undefined ? g.r : (Math.hypot(g.endX - g.cx, g.endY - g.cy) || 30);
+        else if (portal.shape === 'rect') radius = Math.hypot(g.w || 50, g.h || 50) / 2;
+        else if (portal.shape === 'line') radius = Math.hypot((g.x2 - g.x1) || 0, (g.y2 - g.y1) || 0) / 2;
+        else if (portal.shape === 'polygon' && Array.isArray(g.points) && g.points.length > 0) {
+            radius = g.points.reduce((max, p) => Math.max(max, Math.hypot(p.x - center.x, p.y - center.y)), 30);
+        }
+        const dist = Math.max(35, radius + 24);
+        return {
+            center,
+            x: center.x + norm.dx * dist,
+            y: center.y + norm.dy * dist,
+            angleDeg: Math.round(((Math.atan2(norm.dy, norm.dx) * 180 / Math.PI) + 360) % 360)
+        };
+    }
+
+    function checkOneWayPortalEntry(portal, fromPos, toPos) {
+        if (!portal.isOneWay || portal.isRadial) return true;
+        const norm = getPortalNormalVector(portal);
+        const moveDx = toPos.x - fromPos.x;
+        const moveDy = toPos.y - fromPos.y;
+        const dot = moveDx * norm.dx + moveDy * norm.dy;
+        return dot < 0; // Negative dot product means entering facing the active face
+    }
+
+    function calcSpatialPortalDestination(sourcePortal, targetPortal, fromCenter, toCenter, targetMap = null, token = null) {
+        if (!targetPortal) return { x: 0, y: 0 };
+        const centerA = sourcePortal ? calcPortalCenter(sourcePortal) : calcPortalCenter(targetPortal);
+        const normA = sourcePortal ? getPortalNormalVector(sourcePortal) : { dx: 0, dy: -1 };
+        const centerB = calcPortalCenter(targetPortal);
+        const normB = getPortalNormalVector(targetPortal);
+
+        const targetGrid = targetMap?.grid || grid;
+        const unitSize = (targetGrid && targetGrid.size ? targetGrid.size : 50) * (targetGrid && targetGrid.scale ? targetGrid.scale : 1);
+
+        const isReflect = sourcePortal && (sourcePortal.reflectMode === 'one-way' || sourcePortal.reflectMode === 'two-way' || targetPortal.reflectMode === 'two-way');
+
+        function isPadPortal(p) {
+            if (!p || !p.geom) return false;
+            if (p.shape === 'rect') {
+                return (p.geom.w || 50) <= unitSize * 1.25 && (p.geom.h || 50) <= unitSize * 1.25;
+            }
+            if (p.shape === 'circle') {
+                const r = p.geom.r !== undefined ? p.geom.r : 25;
+                return r <= unitSize * 0.65;
+            }
+            return false;
+        }
+
+        let targetCenterX, targetCenterY;
+
+        const isSinglePad = isPadPortal(sourcePortal) || isPadPortal(targetPortal);
+        if (isSinglePad) {
+            // Dedicated 1-square pad: map cleanly center-to-center
+            targetCenterX = centerB.x;
+            targetCenterY = centerB.y;
+        } else if (isReflect || (sourcePortal?.isRadial && targetPortal?.isRadial)) {
+            // Direct 1:1 offset translation (top-down pits, shafts, or radial pads)
+            const relX = toCenter.x - centerA.x;
+            const relY = toCenter.y - centerA.y;
+            targetCenterX = centerB.x + relX;
+            targetCenterY = centerB.y + relY;
+        } else {
+            // Relative orientation rotation between Portal A and Portal B (angleB - angleA)
+            const angleA = Math.atan2(normA.dy, normA.dx);
+            const angleB = Math.atan2(normB.dy, normB.dx);
+            const thetaRot = angleB - angleA;
+
+            const relX = toCenter.x - centerA.x;
+            const relY = toCenter.y - centerA.y;
+            const cosRot = Math.cos(thetaRot);
+            const sinRot = Math.sin(thetaRot);
+            const rotX = relX * cosRot - relY * sinRot;
+            const rotY = relX * sinRot + relY * cosRot;
+
+            targetCenterX = centerB.x + rotX;
+            targetCenterY = centerB.y + rotY;
+
+            // Only push forward if destination is a 1D line doorway:
+            if (targetPortal.shape === 'line') {
+                if (sourcePortal && sourcePortal.shape === 'line') {
+                    const distPast = (targetCenterX - centerB.x) * normB.dx + (targetCenterY - centerB.y) * normB.dy;
+                    if (distPast < unitSize * 0.4) {
+                        const push = (unitSize * 0.5) - distPast;
+                        targetCenterX += normB.dx * push;
+                        targetCenterY += normB.dy * push;
+                    }
+                } else {
+                    // Stepping from an area pad into a line doorway: place token in front of doorway
+                    targetCenterX = centerB.x + normB.dx * (unitSize * 0.6);
+                    targetCenterY = centerB.y + normB.dy * (unitSize * 0.6);
+                }
+            }
+        }
+
+        const { drawW, drawH } = token ? getTokenDrawDimensions(token) : { drawW: unitSize, drawH: unitSize };
+        if (targetGrid.type === 'hex-v' || targetGrid.type === 'hex-h') {
+            const hex = getNearestHexFeatures(targetCenterX, targetCenterY, targetGrid, unitSize);
+            return { x: hex.cx - drawW / 2, y: hex.cy - drawH / 2 };
+        }
+        const offX = targetGrid?.offsetX || 0;
+        const offY = targetGrid?.offsetY || 0;
+        const snappedX = Math.round((targetCenterX - drawW / 2 - offX) / unitSize) * unitSize + offX;
+        const snappedY = Math.round((targetCenterY - drawH / 2 - offY) / unitSize) * unitSize + offY;
+        return { x: snappedX, y: snappedY };
+    }
+
+    function triggerTokenStepThroughAnimation(tokenId, startX, startY, endX, endY, duration = 260) {
+        const dist = Math.hypot(endX - startX, endY - startY);
+        if (dist < 1) return;
+        tokenAnimations[tokenId] = {
+            startX,
+            startY,
+            endX,
+            endY,
+            startTime: Date.now(),
+            duration,
+            totalDist: dist,
+            segments: [{ start: { x: startX, y: startY }, end: { x: endX, y: endY }, dist }],
+            currentPos: { x: startX, y: startY }
+        };
+        if (!tokenAnimFrame) {
+            tokenAnimFrame = requestAnimationFrame(animateTokens);
+        }
+    }
+
+    function precacheConnectedMapAssets(currentPortals) {
+        if (!Array.isArray(currentPortals) || !vtt.campaignState?.maps) return;
+        const connectedMapIds = new Set();
+        currentPortals.forEach(p => {
+            if (p.targetMapId && p.targetMapId !== currentMapId) {
+                connectedMapIds.add(p.targetMapId);
+            }
+        });
+
+        connectedMapIds.forEach(mapId => {
+            const tMap = vtt.campaignState.maps[mapId];
+            if (!tMap) return;
+            if (tMap.mapImage) {
+                const safeUrl = typeof getSafeVttUrl === 'function' ? getSafeVttUrl(tMap.mapImage) : tMap.mapImage;
+                if (!imageCache[safeUrl] && !imageCache[tMap.mapImage]) {
+                    const img = new Image();
+                    img.src = safeUrl;
+                    imageCache[safeUrl] = img;
+                    imageCache[tMap.mapImage] = img;
+                }
+            }
+            if (tMap.tokens) {
+                Object.values(tMap.tokens).forEach(tok => {
+                    const imgUrl = tok.img || tok.customImg || tok.tokenImg;
+                    if (imgUrl) {
+                        const safeTokenUrl = typeof getSafeVttUrl === 'function' ? getSafeVttUrl(imgUrl) : imgUrl;
+                        if (!imageCache[safeTokenUrl] && !imageCache[imgUrl]) {
+                            const tImg = new Image();
+                            tImg.src = safeTokenUrl;
+                            imageCache[safeTokenUrl] = tImg;
+                            imageCache[imgUrl] = tImg;
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function checkTokenMoveTriggers(token, originalPos) {
+        if (!token || !originalPos) return null;
+        if (token._portalTransitLock && Date.now() < token._portalTransitLock) return null;
+        const { drawW, drawH } = getTokenDrawDimensions(token);
+        const from = { x: originalPos.x + drawW / 2, y: originalPos.y + drawH / 2 };
+        const to = { x: token.x + drawW / 2, y: token.y + drawH / 2 };
+        if (from.x === to.x && from.y === to.y) return null;
+
+        // Debounce cleanup: clear debounce once token has physically stepped off destination portal
+        if (tokenPortalDebounce.has(token.id)) {
+            const db = tokenPortalDebounce.get(token.id);
+            const debouncedPortal = portals.find(p => p.id === db.portalId);
+            if (debouncedPortal) {
+                const isStillInside = isTokenCollidingWithPortal(token, debouncedPortal, null, to);
+                if (!isStillInside) {
+                    tokenPortalDebounce.delete(token.id);
+                }
+            } else {
+                tokenPortalDebounce.delete(token.id);
+            }
+        }
+
+        // Prune any stale portal presence if the token is no longer colliding with that portal
+        if (tokenInsidePortals.has(token.id)) {
+            const insideSet = tokenInsidePortals.get(token.id);
+            insideSet.forEach(pId => {
+                const pObj = portals.find(p => p.id === pId);
+                if (!pObj || !isTokenCollidingWithPortal(token, pObj, null, to)) {
+                    insideSet.delete(pId);
+                }
+            });
+            if (insideSet.size === 0) tokenInsidePortals.delete(token.id);
+        }
+
+        const hits = [];
+
+        // 1. Armed Traps
+        traps.forEach(tr => {
+            if (tr.isSpent && !tr.repeatTrigger) return;
+            const wasInside = isPointInsideGeometry(from, tr.shape, tr.geom);
+            const isInside = isPointInsideGeometry(to, tr.shape, tr.geom);
+            if (wasInside && !isInside) return; // Stepping out of the trap
+
+            let hit = findEarliestPathIntersection(from, to, tr.shape, tr.geom);
+            if (!hit && isInside) {
+                hit = { x: to.x, y: to.y, t: 1 };
+            }
+            if (hit) {
+                hits.push({ type: 'trap', entity: tr, hit, droppedInside: isInside && !wasInside });
+            }
+        });
+
+        // 2. Walk-Through Portals
+        portals.forEach(po => {
+            if (!po.walkThrough) return;
+
+            if (po.shape === 'line') {
+                if (tokenPortalDebounce.has(token.id) && tokenPortalDebounce.get(token.id).portalId === po.id) {
+                    const hitCheck = checkLineIntersection(from, to, { x: po.geom.x1, y: po.geom.y1 }, { x: po.geom.x2, y: po.geom.y2 });
+                    if (!hitCheck) {
+                        tokenPortalDebounce.delete(token.id);
+                    }
+                    return;
+                }
+
+                if (!checkOneWayPortalEntry(po, from, to)) return;
+
+                const hit = checkLineIntersection(from, to, { x: po.geom.x1, y: po.geom.y1 }, { x: po.geom.x2, y: po.geom.y2 });
+                if (hit) {
+                    hits.push({ type: 'portal', entity: po, hit });
+                }
+            } else {
+                const wasInside = isTokenInsidePortal(token.id, po.id) || isPointInsideGeometry(from, po.shape, po.geom);
+                const isInsideNow = isPointInsideGeometry(to, po.shape, po.geom);
+
+                // Case A: Stepping out of the portal -> Re-arm on exit
+                if (wasInside && !isInsideNow) {
+                    removeTokenInsidePortal(token.id, po.id);
+                    if (tokenPortalDebounce.has(token.id) && tokenPortalDebounce.get(token.id).portalId === po.id) {
+                        tokenPortalDebounce.delete(token.id);
+                    }
+                    return;
+                }
+
+                // Case B: Moving around while already inside -> Do not trigger
+                if (wasInside && isInsideNow) {
+                    addTokenInsidePortal(token.id, po.id);
+                    return;
+                }
+
+                // Case C: Transitioning from outside to inside
+                if (!wasInside) {
+                    if (tokenPortalDebounce.has(token.id) && tokenPortalDebounce.get(token.id).portalId === po.id) return;
+                    if (!checkOneWayPortalEntry(po, from, to)) return;
+
+                    let hit = findEarliestPathIntersection(from, to, po.shape, po.geom);
+                    if (!hit && isInsideNow) {
+                        hit = { x: to.x, y: to.y, t: 1 };
+                    }
+                    if (hit) {
+                        hits.push({ type: 'portal', entity: po, hit });
+                    }
+                }
+            }
+        });
+
+        if (hits.length === 0) return null;
+
+        hits.sort((a, b) => a.hit.t - b.hit.t);
+        const first = hits[0];
+
+        if (first.type === 'trap') {
+            const trap = first.entity;
+            if (first.droppedInside) {
+                // Snaps cleanly to the dropped grid square where the trap is laid
+                const snapped = snapToGrid(token.x, token.y, true);
+                token.x = snapped.x;
+                token.y = snapped.y;
+            } else {
+                // Moving into or across the trap: step just inside the trap boundary along movement vector and snap to that square
+                const dx = to.x - from.x;
+                const dy = to.y - from.y;
+                const dist = Math.hypot(dx, dy) || 1;
+                const stepInX = first.hit.x + (dx / dist) * 14;
+                const stepInY = first.hit.y + (dy / dist) * 14;
+                const snapped = snapToGrid(stepInX - drawW / 2, stepInY - drawH / 2, true);
+                token.x = snapped.x;
+                token.y = snapped.y;
+            }
+
+            delete token._animReq;
+            if (tokenAnimations[token.id]) delete tokenAnimations[token.id];
+
+            if (trap.triggerAuto) {
+                trap.isRevealed = true;
+                if (!trap.repeatTrigger) {
+                    trap.isSpent = true;
+                }
+                vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+                renderPlacedTrapsList();
+                renderAll();
+
+                let damageRoll = null;
+                const rawDamage = trap.damage || '';
+                const match = String(rawDamage).match(/(\d+d\d+(?:\s*[+-]\s*\d+)?)/i);
+                const diceFormula = match ? match[1].replace(/\s+/g, '') : null;
+                if (diceFormula) {
+                    try {
+                        const rollFn = window.vttPlayerSheetAPI?.simulateRoll || (typeof simulateRoll === 'function' ? simulateRoll : null);
+                        if (rollFn) {
+                            damageRoll = rollFn(diceFormula);
+                        }
+                    } catch (e) {
+                        console.warn('[VTT] Failed to simulate trap damage roll:', e);
+                    }
+                }
+
+                vtt.socket.emit('trap:trigger', {
+                    mapId: currentMapId,
+                    trapId: trap.id,
+                    trapName: trap.name || 'Concealed Trap',
+                    tokenId: token.id,
+                    tokenName: token.name || 'Creature',
+                    saveAbility: trap.saveAbility || 'DEX',
+                    saveDc: trap.saveDc || 15,
+                    damage: trap.damage || '4d6 piercing',
+                    damageRoll: damageRoll,
+                    flavor: trap.flavor || 'A concealed hazard is sprung upon entry!',
+                    coords: { x: token.x + drawW / 2, y: token.y + drawH / 2 }
+                });
+            }
+            return { triggered: true, action: 'trap' };
+        } else if (first.type === 'portal') {
+            const portal = first.entity;
+            const targetMapId = portal.targetMapId || currentMapId;
+            const targetPortalId = portal.targetPortalId;
+            if (!targetPortalId) return null;
+
+            let targetPortal = null;
+            let targetMap = null;
+            if (targetMapId === currentMapId) {
+                targetPortal = portals.find(p => p.id === targetPortalId);
+                targetMap = vtt.campaignState?.maps?.[currentMapId];
+            } else if (vtt.campaignState?.maps?.[targetMapId]) {
+                targetMap = vtt.campaignState.maps[targetMapId];
+                targetPortal = targetMap?.portals?.find(p => p.id === targetPortalId);
+            }
+            if (!targetPortal) return null;
+
+            const exitPos = calcSpatialPortalDestination(portal, targetPortal, from, to, targetMap, token);
+            addTokenInsidePortal(token.id, targetPortal.id);
+            tokenPortalDebounce.set(token.id, { portalId: targetPortal.id, time: Date.now() });
+            token._portalTransitLock = Date.now() + 300;
+
+            delete token._animReq;
+            if (tokenAnimations[token.id]) delete tokenAnimations[token.id];
+
+            if (targetMapId === currentMapId) {
+                const { drawW, drawH } = getTokenDrawDimensions(token);
+                token.x = exitPos.x;
+                token.y = exitPos.y;
+                selectedTokenIds.clear();
+                selectedTokenIds.add(token.id);
+                selectedTokenId = token.id;
+                window.emitTokenUpdates(tokens);
+                panTo(exitPos.x + drawW / 2, exitPos.y + drawH / 2, null, 300);
+                renderAll();
+            } else {
+                token._teleportedInterMap = true;
+                delete tokens[token.id];
+                delete lastBroadcastedTokens[token.id];
+
+                // Pre-populate target map token cache
+                if (vtt.campaignState?.maps?.[targetMapId]) {
+                    if (!vtt.campaignState.maps[targetMapId].tokens) {
+                        vtt.campaignState.maps[targetMapId].tokens = {};
+                    }
+                    const movedToken = { ...token, x: exitPos.x, y: exitPos.y };
+                    delete movedToken._teleportedInterMap;
+                    vtt.campaignState.maps[targetMapId].tokens[token.id] = movedToken;
+                }
+
+                pendingFocusTokenId = token.id;
+                pendingFocusTokenExpiry = Date.now() + 30000;
+                window._portalTransitInfo = {
+                    tokenId: token.id,
+                    targetMapId: targetMapId,
+                    targetPortalId: targetPortal.id,
+                    exitPos: { x: exitPos.x, y: exitPos.y },
+                    timestamp: Date.now()
+                };
+
+                vtt.socket.emit('portal:teleport_inter_map', {
+                    sourceMapId: currentMapId,
+                    targetMapId: targetMapId,
+                    targetPortalId: targetPortal.id,
+                    tokenId: token.id,
+                    targetX: exitPos.x,
+                    targetY: exitPos.y,
+                    username: vtt.username
+                });
+                renderAll();
+            }
+            return { triggered: true, action: 'teleport' };
+        }
+        return null;
+    }
+
+    function postTrapTriggerChatCard(data) {
+        // Chat cards are now handled officially via server broadcast into the persistent chat feed
+    }
+
+    function rollTrapSave(trapId, tokenId, ability, dc) {
+        if (!ability || ability === 'NONE') return;
+        const t = tokens[tokenId];
+        const ab = ability.toLowerCase();
+        let charName = t?.name || 'Creature';
+        let totalMod = 0;
+        let toggleFormulaStr = '';
+
+        if (t && t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
+            const char = vtt.campaignState.characters[t.characterId];
+            charName = char.name || charName;
+            const score = (char.stats && char.stats[ab]) || (char.abilities && (char.abilities[ab]?.score || char.abilities[ab])) || 10;
+            const statMod = (char.statMods && char.statMods[ab]) || 0;
+            const baseMod = Math.floor((score + statMod - 10) / 2);
+            const isProf = char.saves ? !!char.saves[ab] : (char.abilities?.[ab]?.saveProf || false);
+            const level = char.level || 1;
+            const pb = Math.floor((level - 1) / 4) + 2;
+            const globalMod = char.globalSaveMod || 0;
+            const customMod = (char.saveMods && char.saveMods[ab]) || 0;
+
+            if (char.saveToggles) {
+                char.saveToggles.filter(tg => tg.enabled).forEach(tg => {
+                    if (tg.target === 'all' || tg.target === ab) {
+                        if (tg.formula.startsWith('+') || tg.formula.startsWith('-')) {
+                            toggleFormulaStr += tg.formula;
+                        } else {
+                            toggleFormulaStr += '+' + tg.formula;
+                        }
+                    }
+                });
+            }
+
+            totalMod = baseMod + (isProf ? pb : 0) + globalMod + customMod;
+        } else if (t) {
+            const score = t.abilities?.[ab]?.score || t.abilities?.[ab] || 10;
+            totalMod = Math.floor((score - 10) / 2);
+        }
+
+        const modStr = totalMod >= 0 ? `+${totalMod}` : `${totalMod}`;
+        const formula = `1d20${modStr}${toggleFormulaStr}`;
+        const rollFn = window.vttPlayerSheetAPI?.simulateRoll || (typeof simulateRoll === 'function' ? simulateRoll : null);
+        const rollData = rollFn ? rollFn(formula) : null;
+
+        if (vtt.socket) {
+            vtt.socket.emit('chat:msg', {
+                text: `[${charName}: ${ability.toUpperCase()} Save] rolls **Saving Throw**`,
+                roll: rollData || { formula, total: Math.floor(Math.random() * 20) + 1 + totalMod }
+            });
+        }
+    }
+
+    function triggerTrapSpringFX(data) {
+        // Quiet presentation per user choice: no camera shake
+    }
+
+    function playPortalTeleportFX(coords) {
+        renderAll();
+    }
+
+    function showGMInterMapPortalToast(data) {
+        if (vtt.role !== 'GM') return;
+        const container = document.getElementById('vtt-toast-container') || document.body;
+        const toast = document.createElement('div');
+        toast.className = 'vtt-intermap-toast glassmorphism animated-fade-in';
+        toast.style.cssText = 'position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(20,10,35,0.92); border: 1px solid #a855f7; border-radius: 8px; padding: 12px 18px; z-index: 10002; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 20px rgba(168,85,247,0.4); color: #fff; font-size: 0.88rem;';
+        toast.innerHTML = `
+            <i class="fa-solid fa-door-open" style="color: #c084fc; font-size: 1.2rem;"></i>
+            <span><strong>${data.tokenName || 'Token'}</strong> walked through portal to <strong>${data.targetMapName || 'Another Map'}</strong>.</span>
+            <button type="button" class="btn btn-primary btn-xs" style="margin-left: 8px; background: #a855f7; border-color: #c084fc;" onclick="window.VTT.canvasEngine.switchMapTo('${data.targetMapId}', '${data.tokenId || ''}'); this.parentElement.remove();">
+                <i class="fa-solid fa-map"></i> Switch to Map
+            </button>
+            <button type="button" class="btn btn-secondary btn-xs" onclick="this.parentElement.remove();"><i class="fa-solid fa-xmark"></i></button>
+        `;
+        container.appendChild(toast);
+        setTimeout(() => { if (toast.parentElement) toast.remove(); }, 12000);
+    }
+
+    function showPlayerInterMapPortalToast(mapName) {
+        const container = document.getElementById('vtt-portal-toast-container');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = 'vtt-portal-gm-toast';
+        toast.style.background = 'linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(49, 46, 129, 0.95))';
+        toast.style.borderColor = '#818cf8';
+        toast.innerHTML = `
+            <i class="fa-solid fa-door-open" style="color: #a5b4fc; font-size: 1.2rem;"></i>
+            <span>Traveled through portal to <strong>${mapName || 'New Map'}</strong>.</span>
+            <button type="button" class="btn btn-secondary btn-xs" onclick="this.parentElement.remove();"><i class="fa-solid fa-xmark"></i></button>
+        `;
+        container.appendChild(toast);
+        setTimeout(() => { if (toast.parentElement) toast.remove(); }, 6000);
+    }
+
+    function switchMapTo(mapId, tokenId = null) {
+        if (!mapId) return;
+        if (tokenId) {
+            pendingFocusTokenId = tokenId;
+            pendingFocusTokenExpiry = Date.now() + 30000;
+        }
+        if (vtt.role === 'GM') {
+            vtt.socket.emit('map:switch-gm', { mapId });
+            vtt.socket.emit('campaign:update', { activeGMMapId: mapId });
+        }
+        if (vtt.campaignState?.maps?.[mapId]) {
+            loadMap(mapId);
+        }
+        vtt.socket.emit('map:request_sync', { mapId });
+    }
+
+    // --- Hit Testing & Selection Logic ---
+
+    function getMapToolItemAtCoord(x, y) {
+        if (vtt.role !== 'GM') return null;
+        const pt = { x, y };
+
+        // Portals are restricted to being placed on the portal layer and are only interactable on the portal layer.
+        if (activeLayer === 'portals') {
+            const sortedPortals = [...portals].sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0));
+            for (const p of sortedPortals) {
+                if (isPointInsideGeometry(pt, p.shape, p.geom)) {
+                    return { type: 'portal', item: p };
+                }
+            }
+            return null;
+        }
+
+        // Test Traps (interactable when not on portal layer)
+        for (let i = traps.length - 1; i >= 0; i--) {
+            const t = traps[i];
+            if (isPointInsideGeometry(pt, t.shape, t.geom)) {
+                return { type: 'trap', item: t };
+            }
+        }
+
+        return null;
+    }
+
+    function selectMapToolItem(type, id) {
+        selectedMapToolItem = { type, id };
+
+        const panel = document.getElementById('panel-map-tools');
+        if (panel && panel.classList.contains('vtt-hidden')) {
+            panel.classList.remove('vtt-hidden');
+        }
+
+        if (type === 'trap') {
+            const trap = traps.find(t => t.id === id);
+            if (!trap) return;
+
+            activeMapToolSubmode = 'traps';
+            currentMapToolShape = trap.shape || 'rect';
+
+            panel?.querySelectorAll('.maptools-tab-btn').forEach(b => {
+                b.classList.toggle('active', (b.dataset.submode || b.dataset.tab) === 'traps');
+            });
+            document.getElementById('subpanel-maptools-traps')?.classList.remove('vtt-hidden');
+            document.getElementById('subpanel-maptools-portals')?.classList.add('vtt-hidden');
+
+            const activeSubpanel = document.getElementById('subpanel-maptools-traps');
+            activeSubpanel?.querySelectorAll('.maptools-shape-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.shape === trap.shape);
+            });
+
+            // Populate form
+            const nameEl = document.getElementById('maptools-trap-name');
+            if (nameEl) nameEl.value = trap.name || 'Spike Pit';
+            const abilityEl = document.getElementById('maptools-trap-ability');
+            if (abilityEl) abilityEl.value = trap.saveAbility || 'DEX';
+            const dcEl = document.getElementById('maptools-trap-dc');
+            if (dcEl) dcEl.value = trap.saveDc || 15;
+            const dmgEl = document.getElementById('maptools-trap-damage');
+            if (dmgEl) dmgEl.value = trap.damage || '4d6 piercing';
+            const autoEl = document.getElementById('maptools-trap-auto');
+            if (autoEl) autoEl.checked = trap.triggerAuto !== false;
+            const repeatEl = document.getElementById('maptools-trap-repeat');
+            if (repeatEl) repeatEl.checked = trap.repeatTrigger === true;
+
+            // Show edit banner & action buttons
+            const banner = document.getElementById('maptools-trap-edit-banner');
+            const title = document.getElementById('maptools-trap-edit-title');
+            const actions = document.getElementById('maptools-trap-edit-actions');
+            if (banner) banner.classList.remove('vtt-hidden');
+            if (title) title.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editing: ${trap.name || 'Trap'}`;
+            if (actions) actions.classList.remove('vtt-hidden');
+
+            // Hide portal edit elements
+            document.getElementById('maptools-portal-edit-banner')?.classList.add('vtt-hidden');
+            document.getElementById('maptools-portal-edit-actions')?.classList.add('vtt-hidden');
+        } else {
+            const portal = portals.find(p => p.id === id);
+            if (!portal) return;
+
+            activeMapToolSubmode = 'portals';
+            currentMapToolShape = portal.shape || 'line';
+
+            panel?.querySelectorAll('.maptools-tab-btn').forEach(b => {
+                b.classList.toggle('active', (b.dataset.submode || b.dataset.tab) === 'portals');
+            });
+            document.getElementById('subpanel-maptools-portals')?.classList.remove('vtt-hidden');
+            document.getElementById('subpanel-maptools-traps')?.classList.add('vtt-hidden');
+
+            const activeSubpanel = document.getElementById('subpanel-maptools-portals');
+            activeSubpanel?.querySelectorAll('.maptools-shape-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.shape === portal.shape);
+            });
+
+            // Populate form
+            const nameEl = document.getElementById('maptools-portal-name');
+            if (nameEl) nameEl.value = portal.name || 'Mystic Portal';
+            const mapEl = document.getElementById('maptools-portal-target-map');
+            if (mapEl) mapEl.value = portal.targetMapId || '';
+
+            populateTargetPortalsDropdown(portal.id);
+
+            const portalSelect = document.getElementById('maptools-portal-target-portal');
+            if (portalSelect) portalSelect.value = portal.targetPortalId || '';
+            const linkEl = document.getElementById('maptools-portal-linkback');
+            if (linkEl) linkEl.checked = portal.linkBack !== false;
+            const walkEl = document.getElementById('maptools-portal-walkthrough');
+            if (walkEl) walkEl.checked = portal.walkThrough !== false;
+            const viewEl = document.getElementById('maptools-portal-viewthrough');
+            if (viewEl) viewEl.checked = portal.viewThrough === true;
+            const oneWayEl = document.getElementById('maptools-portal-oneway');
+            if (oneWayEl) oneWayEl.checked = portal.isOneWay === true;
+            const revEl = document.getElementById('maptools-portal-revealed');
+            if (revEl) revEl.checked = portal.isRevealed !== false;
+            const reflectEl = document.getElementById('maptools-portal-reflect-mode');
+            if (reflectEl) reflectEl.value = portal.reflectMode || 'none';
+            const radialEl = document.getElementById('maptools-portal-radial');
+            if (radialEl) radialEl.checked = portal.isRadial === true;
+            const angleVal = (portal.facingAngle !== undefined && portal.facingAngle !== null) ? Math.round(portal.facingAngle) : 270;
+            const angleSlider = document.getElementById('maptools-portal-facing-angle');
+            const angleNum = document.getElementById('maptools-portal-facing-angle-num');
+            const angleText = document.getElementById('maptools-portal-facing-angle-val');
+            if (angleSlider) angleSlider.value = angleVal;
+            if (angleNum) angleNum.value = angleVal;
+            if (angleText) angleText.textContent = `${angleVal}°`;
+
+            const actions = document.getElementById('maptools-portal-edit-actions');
+            if (actions) actions.classList.remove('vtt-hidden');
+
+            // Hide trap edit elements
+            document.getElementById('maptools-trap-edit-banner')?.classList.add('vtt-hidden');
+            document.getElementById('maptools-trap-edit-actions')?.classList.add('vtt-hidden');
+        }
+
+        renderPlacedTrapsList();
+        renderPlacedPortalsList();
+        renderAll();
+    }
+
+    function deselectMapToolItem() {
+        selectedMapToolItem = null;
+        document.getElementById('maptools-trap-edit-banner')?.classList.add('vtt-hidden');
+        document.getElementById('maptools-trap-edit-actions')?.classList.add('vtt-hidden');
+        document.getElementById('maptools-portal-edit-actions')?.classList.add('vtt-hidden');
+        document.getElementById('maptools-portal-edit-actions')?.classList.add('vtt-hidden');
+        if (activeTool === 'select') {
+            document.getElementById('panel-map-tools')?.classList.add('vtt-hidden');
+        }
+        renderPlacedTrapsList();
+        renderPlacedPortalsList();
+        renderAll();
+    }
+
+    function saveSelectedMapToolItem(type) {
+        if (!selectedMapToolItem || selectedMapToolItem.type !== type) return;
+        const id = selectedMapToolItem.id;
+
+        if (type === 'trap') {
+            const trap = traps.find(t => t.id === id);
+            if (!trap) return;
+
+            trap.name = document.getElementById('maptools-trap-name')?.value || trap.name;
+            trap.saveAbility = document.getElementById('maptools-trap-ability')?.value || trap.saveAbility;
+            trap.saveDc = parseInt(document.getElementById('maptools-trap-dc')?.value) || trap.saveDc;
+            trap.damage = document.getElementById('maptools-trap-damage')?.value || trap.damage;
+            trap.triggerAuto = document.getElementById('maptools-trap-auto')?.checked ?? trap.triggerAuto;
+            trap.repeatTrigger = document.getElementById('maptools-trap-repeat')?.checked ?? trap.repeatTrigger;
+
+            if (vtt.campaignState?.maps?.[currentMapId]) {
+                vtt.campaignState.maps[currentMapId].traps = traps;
+            }
+            vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+            renderPlacedTrapsList();
+
+            const title = document.getElementById('maptools-trap-edit-title');
+            if (title) title.innerHTML = `<i class="fa-solid fa-check text-success"></i> Updated: ${trap.name}`;
+        } else {
+            const portal = portals.find(p => p.id === id);
+            if (!portal) return;
+
+            const prevTargetMapId = portal.targetMapId || currentMapId;
+            const prevTargetPortalId = portal.targetPortalId || '';
+
+            portal.name = document.getElementById('maptools-portal-name')?.value || portal.name;
+            portal.targetMapId = document.getElementById('maptools-portal-target-map')?.value || currentMapId;
+            portal.targetPortalId = document.getElementById('maptools-portal-target-portal')?.value || '';
+            portal.linkBack = document.getElementById('maptools-portal-linkback')?.checked ?? true;
+            portal.walkThrough = document.getElementById('maptools-portal-walkthrough')?.checked ?? true;
+            portal.viewThrough = document.getElementById('maptools-portal-viewthrough')?.checked ?? false;
+            portal.isOneWay = document.getElementById('maptools-portal-oneway')?.checked ?? false;
+            portal.isRevealed = document.getElementById('maptools-portal-revealed')?.checked ?? true;
+            portal.reflectMode = document.getElementById('maptools-portal-reflect-mode')?.value || 'none';
+            portal.isRadial = document.getElementById('maptools-portal-radial')?.checked ?? false;
+            const inputAngle = parseInt(document.getElementById('maptools-portal-facing-angle')?.value);
+            portal.facingAngle = isNaN(inputAngle) ? 270 : ((inputAngle % 360) + 360) % 360;
+
+            const newTargetMapId = portal.targetMapId;
+            const newTargetPortalId = portal.targetPortalId;
+
+            // 1. If previous destination portal was pointing back to this portal, and target changed OR linkBack disabled, sever it
+            if (prevTargetPortalId && (prevTargetPortalId !== newTargetPortalId || prevTargetMapId !== newTargetMapId || !portal.linkBack)) {
+                if (prevTargetMapId === currentMapId) {
+                    const prevTarget = portals.find(p => p.id === prevTargetPortalId);
+                    if (prevTarget && prevTarget.targetPortalId === portal.id) {
+                        prevTarget.targetPortalId = '';
+                    }
+                } else if (vtt.campaignState?.maps?.[prevTargetMapId]?.portals) {
+                    const prevList = vtt.campaignState.maps[prevTargetMapId].portals;
+                    const prevTarget = prevList.find(p => p.id === prevTargetPortalId);
+                    if (prevTarget && prevTarget.targetPortalId === portal.id) {
+                        prevTarget.targetPortalId = '';
+                        vtt.socket.emit('portals:update', { mapId: prevTargetMapId, portals: prevList });
+                    }
+                }
+            }
+
+            // 2. Synchronize link with CURRENT target portal
+            if (newTargetPortalId) {
+                if (portal.linkBack) {
+                    // Two-way: ensure target points back to this portal
+                    if (newTargetMapId === currentMapId) {
+                        const target = portals.find(p => p.id === newTargetPortalId);
+                        if (target) {
+                            target.targetPortalId = portal.id;
+                            target.targetMapId = currentMapId;
+                            target.linkBack = true;
+                            if (portal.viewThrough) target.viewThrough = true;
+                        }
+                    } else if (vtt.campaignState?.maps?.[newTargetMapId]?.portals) {
+                        const targetList = vtt.campaignState.maps[newTargetMapId].portals;
+                        const target = targetList.find(p => p.id === newTargetPortalId);
+                        if (target) {
+                            target.targetPortalId = portal.id;
+                            target.targetMapId = currentMapId;
+                            target.linkBack = true;
+                            if (portal.viewThrough) target.viewThrough = true;
+                            vtt.socket.emit('portals:update', { mapId: newTargetMapId, portals: targetList });
+                        }
+                    }
+                } else {
+                    // One-way: if target was pointing back to this portal, disconnect it
+                    if (newTargetMapId === currentMapId) {
+                        const target = portals.find(p => p.id === newTargetPortalId);
+                        if (target && target.targetPortalId === portal.id) {
+                            target.targetPortalId = '';
+                        }
+                    } else if (vtt.campaignState?.maps?.[newTargetMapId]?.portals) {
+                        const targetList = vtt.campaignState.maps[newTargetMapId].portals;
+                        const target = targetList.find(p => p.id === newTargetPortalId);
+                        if (target && target.targetPortalId === portal.id) {
+                            target.targetPortalId = '';
+                            vtt.socket.emit('portals:update', { mapId: newTargetMapId, portals: targetList });
+                        }
+                    }
+                }
+            }
+
+            if (vtt.campaignState?.maps?.[currentMapId]) {
+                vtt.campaignState.maps[currentMapId].portals = portals;
+            }
+            vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+            renderPlacedPortalsList();
+            populateTargetPortalsDropdown(portal.id);
+
+            const title = document.getElementById('maptools-portal-edit-title');
+            if (title) title.innerHTML = `<i class="fa-solid fa-check text-success"></i> Updated: ${portal.name}`;
+        }
+
+        renderAll();
+    }
+
+    function cleanupPortalReferences(deletedId) {
+        if (!deletedId) return;
+        let changedCurrent = false;
+        portals.forEach(p => {
+            if (p.targetPortalId === deletedId) {
+                p.targetPortalId = '';
+                changedCurrent = true;
+            }
+        });
+        if (changedCurrent) {
+            if (vtt.campaignState?.maps?.[currentMapId]) {
+                vtt.campaignState.maps[currentMapId].portals = portals;
+            }
+            vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+        }
+        if (vtt.campaignState?.maps) {
+            Object.keys(vtt.campaignState.maps).forEach(mId => {
+                if (mId === currentMapId) return;
+                const otherList = vtt.campaignState.maps[mId]?.portals;
+                if (Array.isArray(otherList)) {
+                    let changed = false;
+                    otherList.forEach(p => {
+                        if (p.targetPortalId === deletedId) {
+                            p.targetPortalId = '';
+                            changed = true;
+                        }
+                    });
+                    if (changed) {
+                        vtt.socket.emit('portals:update', { mapId: mId, portals: otherList });
+                    }
+                }
+            });
+        }
+    }
+
+    function deleteSelectedMapToolItem(type) {
+        if (!selectedMapToolItem || selectedMapToolItem.type !== type) return;
+        const id = selectedMapToolItem.id;
+
+        if (type === 'trap') {
+            const idx = traps.findIndex(t => t.id === id);
+            if (idx !== -1) {
+                traps.splice(idx, 1);
+                if (vtt.campaignState?.maps?.[currentMapId]) {
+                    vtt.campaignState.maps[currentMapId].traps = traps;
+                }
+                vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+            }
+        } else {
+            const idx = portals.findIndex(p => p.id === id);
+            if (idx !== -1) {
+                portals.splice(idx, 1);
+                cleanupPortalReferences(id);
+                if (vtt.campaignState?.maps?.[currentMapId]) {
+                    vtt.campaignState.maps[currentMapId].portals = portals;
+                }
+                vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+            }
+        }
+
+        deselectMapToolItem();
+    }
+
+    // --- Map Tools Drawing & Canvas Handlers ---
+
+    function handleMapToolMouseDown(mouse, e) {
+        if (vtt.role !== 'GM') return;
+        if (e.button !== 0) return;
+
+        // If in portals mode, ensure we are on portals layer
+        if (activeMapToolSubmode === 'portals' && activeLayer !== 'portals') {
+            if (typeof switchActiveLayer === 'function') {
+                switchActiveLayer('portals');
+            } else {
+                activeLayer = 'portals';
+            }
+        }
+
+        // Priority 1: Check if clicking rotation or resize handles of portals (selected or visible on portal layer)
+        const handleHit = getPortalHandleUnderMouse(mouse);
+        if (handleHit) {
+            if (e) { e.preventDefault(); e.stopPropagation(); }
+            if (handleHit.type === 'rotate') {
+                activeRotatePortalId = handleHit.portal.id;
+                selectMapToolItem('portal', handleHit.portal.id);
+                renderAll();
+                return;
+            } else if (handleHit.type === 'resize') {
+                selectMapToolItem('portal', handleHit.item.id);
+                activeResizeMapToolHandle = {
+                    type: 'portal',
+                    id: handleHit.item.id,
+                    handle: handleHit.handle,
+                    origGeom: cloneMapToolGeom(handleHit.item.geom)
+                };
+                renderAll();
+                return;
+            }
+        }
+
+        // Priority 2: Check if clicking resize handles of selected trap
+        if (selectedMapToolItem && selectedMapToolItem.type === 'trap') {
+            const selItem = traps.find(t => t.id === selectedMapToolItem.id);
+            if (selItem) {
+                const rHandle = getMapToolResizeHandleAt(selItem, mouse);
+                if (rHandle) {
+                    activeResizeMapToolHandle = {
+                        type: 'trap',
+                        id: selItem.id,
+                        handle: rHandle,
+                        origGeom: cloneMapToolGeom(selItem.geom)
+                    };
+                    renderAll();
+                    return;
+                }
+            }
+        }
+
+        // Priority 3: Check if clicking on an existing trap or portal body to select / drag
+        const hit = getMapToolItemAtCoord(mouse.x, mouse.y);
+        if (hit) {
+            selectMapToolItem(hit.type, hit.item.id);
+            activeDragMapToolItem = { type: hit.type, id: hit.item.id };
+            mapToolDragStart = { x: mouse.x, y: mouse.y };
+            mapToolDragOriginalGeom = cloneMapToolGeom(hit.item.geom);
+            isDrawingMapTool = false;
+            updateMapToolDrawingUI(false);
+            renderAll();
+            return;
+        }
+
+        // Clicking empty canvas: deselect existing item and begin drawing new shape
+        if (selectedMapToolItem) {
+            deselectMapToolItem();
+        }
+
+        if (currentMapToolShape === 'polygon') {
+            if (mapToolPolygonPoints.length === 0) {
+                mapToolPolygonPoints.push({ x: mouse.x, y: mouse.y });
+                isDrawingMapTool = true;
+                updateMapToolDrawingUI(true);
+            } else {
+                const firstPt = mapToolPolygonPoints[0];
+                const distToFirst = Math.hypot(mouse.x - firstPt.x, mouse.y - firstPt.y);
+                if (mapToolPolygonPoints.length >= 3 && distToFirst <= 15) {
+                    finalizeMapToolPolygon();
+                    return;
+                }
+                mapToolPolygonPoints.push({ x: mouse.x, y: mouse.y });
+            }
+            renderAll();
+        } else {
+            // Rect, Circle, Line
+            isDrawingMapTool = true;
+            mapToolStartPoint = { x: mouse.x, y: mouse.y };
+            mapToolCurrentPoint = { x: mouse.x, y: mouse.y };
+            updateMapToolDrawingUI(true);
+            renderAll();
+        }
+    }
+
+    function handleMapToolMouseMove(mouse, e) {
+        // Resizing existing selected item via handles
+        if (activeResizeMapToolHandle) {
+            const item = activeResizeMapToolHandle.type === 'trap'
+                ? traps.find(t => t.id === activeResizeMapToolHandle.id)
+                : portals.find(p => p.id === activeResizeMapToolHandle.id);
+            if (item) {
+                applyMapToolResize(item, activeResizeMapToolHandle.origGeom, activeResizeMapToolHandle.handle, mouse, e);
+                renderAll();
+            }
+            return;
+        }
+
+        // Dragging existing selected trap or portal
+        if (activeDragMapToolItem && mapToolDragStart && mapToolDragOriginalGeom) {
+            const dx = mouse.x - mapToolDragStart.x;
+            const dy = mouse.y - mapToolDragStart.y;
+            const item = activeDragMapToolItem.type === 'trap'
+                ? traps.find(t => t.id === activeDragMapToolItem.id)
+                : portals.find(p => p.id === activeDragMapToolItem.id);
+            if (item) {
+                updateDraggedMapToolGeom(item.geom, mapToolDragOriginalGeom, dx, dy);
+                renderAll();
+            }
+            return;
+        }
+
+        // Handle cursor hover over resize / rotation handles
+        hoveredRotatePortalId = null;
+        hoveredMapToolHandle = null;
+        if (activeLayer === 'portals') {
+            const handleHit = getPortalHandleUnderMouse(mouse);
+            if (handleHit) {
+                hoveredMapToolHandle = handleHit;
+                if (handleHit.type === 'rotate') {
+                    hoveredRotatePortalId = handleHit.portal.id;
+                    canvasInteraction.style.cursor = 'grab';
+                    if (viewport) viewport.style.cursor = 'grab';
+                    renderAll();
+                    return;
+                } else if (handleHit.type === 'resize') {
+                    canvasInteraction.style.cursor = handleHit.handle.cursor || 'pointer';
+                    if (viewport) viewport.style.cursor = handleHit.handle.cursor || 'pointer';
+                    renderAll();
+                    return;
+                }
+            }
+        } else if (selectedMapToolItem && selectedMapToolItem.type === 'trap') {
+            const selItem = traps.find(t => t.id === selectedMapToolItem.id);
+            if (selItem) {
+                const rHandle = getMapToolResizeHandleAt(selItem, mouse);
+                if (rHandle) {
+                    canvasInteraction.style.cursor = rHandle.cursor;
+                    if (viewport) viewport.style.cursor = rHandle.cursor;
+                    return;
+                }
+            }
+        }
+        canvasInteraction.style.cursor = '';
+        if (viewport) viewport.style.cursor = '';
+
+        if (!isDrawingMapTool) return;
+        mapToolCurrentPoint = { x: mouse.x, y: mouse.y };
+        renderAll();
+    }
+
+    function handleMapToolMouseUp(mouse, e) {
+        if (activeResizeMapToolHandle) {
+            if (activeResizeMapToolHandle.type === 'trap') {
+                if (vtt.campaignState?.maps?.[currentMapId]) {
+                    vtt.campaignState.maps[currentMapId].traps = traps;
+                }
+                vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+                renderPlacedTrapsList();
+            } else {
+                if (vtt.campaignState?.maps?.[currentMapId]) {
+                    vtt.campaignState.maps[currentMapId].portals = portals;
+                }
+                vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                renderPlacedPortalsList();
+            }
+            activeResizeMapToolHandle = null;
+            renderAll();
+            return;
+        }
+
+        // Drop dragging selected map tool
+        if (activeDragMapToolItem) {
+            if (activeDragMapToolItem.type === 'trap') {
+                if (vtt.campaignState?.maps?.[currentMapId]) {
+                    vtt.campaignState.maps[currentMapId].traps = traps;
+                }
+                vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+                renderPlacedTrapsList();
+            } else {
+                if (vtt.campaignState?.maps?.[currentMapId]) {
+                    vtt.campaignState.maps[currentMapId].portals = portals;
+                }
+                vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                renderPlacedPortalsList();
+            }
+            activeDragMapToolItem = null;
+            mapToolDragStart = null;
+            mapToolDragOriginalGeom = null;
+            renderAll();
+            return;
+        }
+
+        if (!isDrawingMapTool) return;
+        if (currentMapToolShape === 'polygon') return; // Polygons finalize on double-click or closing point
+
+        const start = mapToolStartPoint;
+        const end = mouse;
+        if (!start) return;
+
+        const dist = Math.hypot(end.x - start.x, end.y - start.y);
+        if (dist >= 10) {
+            commitNewMapToolItem(start, end);
+        }
+
+        isDrawingMapTool = false;
+        mapToolStartPoint = null;
+        mapToolCurrentPoint = null;
+        updateMapToolDrawingUI(false);
+        renderAll();
+    }
+
+    function finalizeMapToolPolygon() {
+        if (mapToolPolygonPoints.length >= 3) {
+            const pts = [...mapToolPolygonPoints];
+            commitNewMapToolItem(null, null, pts);
+        }
+        cancelMapToolDrawing();
+    }
+
+    function cancelMapToolDrawing() {
+        isDrawingMapTool = false;
+        mapToolStartPoint = null;
+        mapToolCurrentPoint = null;
+        mapToolPolygonPoints = [];
+        updateMapToolDrawingUI(false);
+        renderAll();
+    }
+
+    function updateMapToolDrawingUI(isDrawing) {
+        const trapIndicator = document.getElementById('maptools-trap-drawing-indicator');
+        const portalIndicator = document.getElementById('maptools-portal-drawing-indicator');
+        if (activeMapToolSubmode === 'traps') {
+            if (trapIndicator) trapIndicator.classList.toggle('vtt-hidden', !isDrawing);
+            if (portalIndicator) portalIndicator.classList.add('vtt-hidden');
+        } else {
+            if (portalIndicator) portalIndicator.classList.toggle('vtt-hidden', !isDrawing);
+            if (trapIndicator) trapIndicator.classList.add('vtt-hidden');
+        }
+    }
+
+    function commitNewMapToolItem(start, end, polyPts) {
+        const id = 'mt_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+        let geom = null;
+
+        if (currentMapToolShape === 'rect') {
+            const x = Math.min(start.x, end.x);
+            const y = Math.min(start.y, end.y);
+            const w = Math.abs(end.x - start.x);
+            const h = Math.abs(end.y - start.y);
+            geom = { x, y, w, h };
+        } else if (currentMapToolShape === 'circle') {
+            const cx = start.x;
+            const cy = start.y;
+            const r = Math.hypot(end.x - start.x, end.y - start.y);
+            geom = { cx, cy, r };
+        } else if (currentMapToolShape === 'line') {
+            geom = { x1: start.x, y1: start.y, x2: end.x, y2: end.y };
+        } else if (currentMapToolShape === 'polygon') {
+            geom = { points: polyPts || [] };
+        }
+
+        if (activeMapToolSubmode === 'traps') {
+            const name = document.getElementById('maptools-trap-name')?.value || 'Spike Pit';
+            const saveAbility = document.getElementById('maptools-trap-ability')?.value || 'DEX';
+            const saveDc = parseInt(document.getElementById('maptools-trap-dc')?.value) || 15;
+            const damage = document.getElementById('maptools-trap-damage')?.value || '4d6 piercing';
+            const triggerAuto = document.getElementById('maptools-trap-auto')?.checked ?? true;
+            const repeatTrigger = document.getElementById('maptools-trap-repeat')?.checked ?? false;
+
+            const newTrap = {
+                id,
+                mapId: currentMapId,
+                name,
+                shape: currentMapToolShape,
+                geom,
+                triggerAuto,
+                repeatTrigger,
+                isRevealed: false,
+                isSpent: false,
+                saveAbility,
+                saveDc,
+                damage,
+                flavor: 'A concealed hazard is sprung upon entry!'
+            };
+
+            traps.push(newTrap);
+            if (vtt.campaignState?.maps?.[currentMapId]) {
+                vtt.campaignState.maps[currentMapId].traps = traps;
+            }
+            vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+            renderPlacedTrapsList();
+            selectMapToolItem('trap', id);
+        } else {
+            const name = document.getElementById('maptools-portal-name')?.value || 'Mystic Portal';
+            const targetMapId = document.getElementById('maptools-portal-target-map')?.value || currentMapId;
+            const targetPortalId = document.getElementById('maptools-portal-target-portal')?.value || '';
+            const linkBack = document.getElementById('maptools-portal-linkback')?.checked ?? true;
+            const walkThrough = document.getElementById('maptools-portal-walkthrough')?.checked ?? true;
+            const viewThrough = document.getElementById('maptools-portal-viewthrough')?.checked ?? false;
+            const isOneWay = document.getElementById('maptools-portal-oneway')?.checked ?? false;
+            const isRevealed = document.getElementById('maptools-portal-revealed')?.checked ?? true;
+            const reflectMode = document.getElementById('maptools-portal-reflect-mode')?.value || 'none';
+            const isRadial = document.getElementById('maptools-portal-radial')?.checked ?? false;
+            const inputAngle = parseInt(document.getElementById('maptools-portal-facing-angle')?.value);
+            let facingAngle;
+            if (!isNaN(inputAngle)) {
+                facingAngle = ((inputAngle % 360) + 360) % 360;
+            } else if (currentMapToolShape === 'line' && geom) {
+                const lx = geom.x2 - geom.x1;
+                const ly = geom.y2 - geom.y1;
+                facingAngle = Math.round(((Math.atan2(lx, -ly) * 180 / Math.PI) + 360) % 360);
+            } else {
+                facingAngle = 270;
+            }
+
+            const newPortal = {
+                id,
+                mapId: currentMapId,
+                name,
+                layer: 'portals',
+                zIndex: 1,
+                shape: currentMapToolShape,
+                geom,
+                targetMapId,
+                targetPortalId,
+                linkBack,
+                walkThrough,
+                viewThrough,
+                isOneWay,
+                viewSideFlipped: false,
+                reflectMode,
+                isRadial,
+                facingAngle,
+                isRevealed
+            };
+
+            portals.push(newPortal);
+
+            // Auto Link Back if destination portal exists and linkBack is on
+            if (linkBack && targetPortalId) {
+                if (targetMapId === currentMapId) {
+                    const target = portals.find(p => p.id === targetPortalId);
+                    if (target) {
+                        target.targetPortalId = id;
+                        target.targetMapId = currentMapId;
+                        target.linkBack = true;
+                        if (viewThrough) target.viewThrough = true;
+                    }
+                } else if (vtt.campaignState?.maps?.[targetMapId]?.portals) {
+                    const targetList = vtt.campaignState.maps[targetMapId].portals;
+                    const target = targetList.find(p => p.id === targetPortalId);
+                    if (target) {
+                        target.targetPortalId = id;
+                        target.targetMapId = currentMapId;
+                        target.linkBack = true;
+                        if (viewThrough) target.viewThrough = true;
+                        vtt.socket.emit('portals:update', { mapId: targetMapId, portals: targetList });
+                    }
+                }
+            }
+
+            if (vtt.campaignState?.maps?.[currentMapId]) {
+                vtt.campaignState.maps[currentMapId].portals = portals;
+            }
+            vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+            renderPlacedPortalsList();
+            populateTargetPortalsDropdown(id);
+            selectMapToolItem('portal', id);
+        }
+
+        renderAll();
+    }
+
+    // --- Rendering Pipelines for Traps & Portals ---
+
+    function renderTraps(ctx) {
+        if (!Array.isArray(traps) || traps.length === 0) return;
+        const isGM = vtt.role === 'GM';
+
+        traps.forEach(trap => {
+            if (!isGM && !trap.isRevealed) return;
+
+            ctx.save();
+            const isSpent = trap.isSpent && !trap.repeatTrigger;
+            const strokeColor = isSpent ? 'rgba(239, 68, 68, 0.4)' : '#ef4444';
+            const fillColor = isSpent ? 'rgba(100, 116, 139, 0.15)' : 'rgba(239, 68, 68, 0.18)';
+
+            ctx.strokeStyle = strokeColor;
+            ctx.fillStyle = fillColor;
+            ctx.lineWidth = 2.5 / zoom;
+            ctx.setLineDash([8 / zoom, 5 / zoom]);
+
+            const g = trap.geom;
+            if (!g) { ctx.restore(); return; }
+
+            ctx.beginPath();
+            if (trap.shape === 'rect') {
+                ctx.rect(g.x, g.y, g.w, g.h);
+            } else if (trap.shape === 'circle') {
+                ctx.arc(g.cx, g.cy, g.r !== undefined ? g.r : 20, 0, Math.PI * 2);
+            } else if (trap.shape === 'line') {
+                ctx.moveTo(g.x1, g.y1);
+                ctx.lineTo(g.x2, g.y2);
+            } else if (trap.shape === 'polygon' && g.points && g.points.length >= 2) {
+                ctx.moveTo(g.points[0].x, g.points[0].y);
+                for (let i = 1; i < g.points.length; i++) {
+                    ctx.lineTo(g.points[i].x, g.points[i].y);
+                }
+                ctx.closePath();
+            }
+
+            if (trap.shape !== 'line') ctx.fill();
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Center Badge
+            let center = { x: 0, y: 0 };
+            if (trap.shape === 'rect') center = { x: g.x + g.w / 2, y: g.y + g.h / 2 };
+            else if (trap.shape === 'circle') center = { x: g.cx, y: g.cy };
+            else if (trap.shape === 'line') center = { x: (g.x1 + g.x2) / 2, y: (g.y1 + g.y2) / 2 };
+            else if (trap.shape === 'polygon' && g.points?.length > 0) {
+                let sx = 0, sy = 0;
+                g.points.forEach(p => { sx += p.x; sy += p.y; });
+                center = { x: sx / g.points.length, y: sy / g.points.length };
+            }
+
+            // Draw status icon / label
+            ctx.fillStyle = isSpent ? '#94a3b8' : '#fee2e2';
+            ctx.font = `bold ${Math.max(10, 13 / zoom)}px "Open Sans", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            const label = isSpent ? '⚡ [Sprung]' : `⚠️ ${trap.name || 'Trap'}`;
+            ctx.fillText(label, center.x, center.y);
+
+            ctx.restore();
+        });
+    }
+
+    function resolveTokenImageSrc(token) {
+        if (!token) return null;
+        if (token.img) return token.img;
+        const charId = token.characterId;
+        if (charId && vtt.campaignState?.characters?.[charId]) {
+            const c = vtt.campaignState.characters[charId];
+            if (c.tokenImages && c.activeTokenIndex !== undefined && c.tokenImages[c.activeTokenIndex]?.url) {
+                return c.tokenImages[c.activeTokenIndex].url;
+            }
+            if (c.img) return c.img;
+            if (c.avatar) return c.avatar;
+            if (c.tokenUrl) return c.tokenUrl;
+            if (c.monsterData?.tokenUrl) return c.monsterData.tokenUrl;
+            if (c.monsterData?.source && c.name) {
+                const cleanName = c.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                return `img/bestiary/tokens/${c.monsterData.source}/${cleanName}.webp`;
+            }
+        }
+        return null;
+    }
+
+    function getOrLoadTokenImage(token) {
+        if (!token) return null;
+        if (token.id) {
+            const domNode = document.getElementById('asset_node_' + token.id);
+            if (domNode && domNode.tagName === 'IMG' && domNode.complete && domNode.naturalWidth > 0) {
+                return domNode;
+            }
+            if (domNode && domNode.tagName === 'VIDEO' && domNode.readyState >= 2) {
+                return domNode;
+            }
+        }
+        const imgSrc = resolveTokenImageSrc(token);
+        if (imgSrc) {
+            const safeUrl = typeof getSafeVttUrl === 'function' ? getSafeVttUrl(imgSrc) : imgSrc;
+            if (imageCache[imgSrc] && imageCache[imgSrc].complete && imageCache[imgSrc].naturalWidth > 0) {
+                return imageCache[imgSrc];
+            }
+            if (imageCache[safeUrl] && imageCache[safeUrl].complete && imageCache[safeUrl].naturalWidth > 0) {
+                return imageCache[safeUrl];
+            }
+            if (!imageCache[imgSrc] && !imageCache[safeUrl]) {
+                const img = new Image();
+                img.src = safeUrl;
+                img.onload = () => renderAll();
+                imageCache[imgSrc] = img;
+                imageCache[safeUrl] = img;
+            }
+        }
+        return null;
+    }
+
+    function resolveRulerPortalBending(polyPoints) {
+        if (!Array.isArray(polyPoints) || polyPoints.length < 2) return [];
+        if (!Array.isArray(portals) || portals.length === 0) {
+            let totalLen = 0;
+            for (let i = 1; i < polyPoints.length; i++) {
+                totalLen += Math.hypot(polyPoints[i].x - polyPoints[i - 1].x, polyPoints[i].y - polyPoints[i - 1].y);
+            }
+            return [{ points: polyPoints, length: totalLen, isTerminal: true }];
+        }
+
+        const visitedPortalIds = new Set();
+        const segments = [];
+        let currentLeg = [polyPoints[0]];
+        let currentLegLen = 0;
+
+        for (let i = 0; i < polyPoints.length - 1; i++) {
+            const p1 = polyPoints[i];
+            const p2 = polyPoints[i + 1];
+
+            // Find earliest portal intersection along p1 -> p2
+            let bestHit = null;
+            let hitPortal = null;
+
+            for (const po of portals) {
+                if (!po.targetPortalId || !po.geom || visitedPortalIds.has(po.id)) continue;
+                if (po.isOneWay && !checkOneWayPortalEntry(po, p1, p2)) continue;
+                const hit = findEarliestPathIntersection(p1, p2, po.shape, po.geom);
+                if (hit && (!bestHit || hit.t < bestHit.t)) {
+                    bestHit = hit;
+                    hitPortal = po;
+                }
+            }
+
+            if (bestHit && hitPortal) {
+                visitedPortalIds.add(hitPortal.id);
+                currentLeg.push({ x: bestHit.x, y: bestHit.y });
+                currentLegLen += Math.hypot(bestHit.x - p1.x, bestHit.y - p1.y);
+                const isInterMap = hitPortal.targetMapId && hitPortal.targetMapId !== currentMapId;
+                const remDist = Math.hypot(p2.x - bestHit.x, p2.y - bestHit.y);
+
+                if (isInterMap) {
+                    segments.push({
+                        points: currentLeg,
+                        length: currentLegLen + remDist,
+                        isTerminal: true
+                    });
+                    return segments;
+                } else {
+                    const targetPortal = portals.find(p => p.id === hitPortal.targetPortalId);
+                    if (targetPortal) {
+                        segments.push({
+                            points: currentLeg,
+                            length: currentLegLen,
+                            isPortalJunction: true
+                        });
+
+                        const srcCenter = calcPortalCenter(hitPortal);
+                        const srcNorm = getPortalNormalVector(hitPortal);
+                        const srcTangent = { dx: -srcNorm.dy, dy: srcNorm.dx };
+                        const targetCenter = calcPortalCenter(targetPortal);
+                        const targetNorm = getPortalNormalVector(targetPortal);
+                        const targetTangent = { dx: -targetNorm.dy, dy: targetNorm.dx };
+
+                        const relX = bestHit.x - srcCenter.x;
+                        const relY = bestHit.y - srcCenter.y;
+                        const lateralOffset = relX * srcTangent.dx + relY * srcTangent.dy;
+                        const exitThresholdPoint = {
+                            x: targetCenter.x + targetTangent.dx * lateralOffset,
+                            y: targetCenter.y + targetTangent.dy * lateralOffset
+                        };
+
+                        const incomingAngle = Math.atan2(p2.y - bestHit.y, p2.x - bestHit.x);
+                        const srcAngle = Math.atan2(srcNorm.dy, srcNorm.dx);
+                        const targetAngle = Math.atan2(targetNorm.dy, targetNorm.dx);
+                        const angleDelta = targetAngle - srcAngle;
+                        const outAngle = incomingAngle + angleDelta;
+
+                        const exitEndPoint = {
+                            x: exitThresholdPoint.x + Math.cos(outAngle) * remDist,
+                            y: exitThresholdPoint.y + Math.sin(outAngle) * remDist
+                        };
+
+                        currentLeg = [exitThresholdPoint, exitEndPoint];
+                        currentLegLen = remDist;
+                        continue;
+                    } else {
+                        currentLegLen += remDist;
+                    }
+                }
+            } else {
+                currentLeg.push(p2);
+                currentLegLen += Math.hypot(p2.x - p1.x, p2.y - p1.y);
+            }
+        }
+
+        if (currentLeg.length >= 2) {
+            segments.push({
+                points: currentLeg,
+                length: currentLegLen,
+                isTerminal: true
+            });
+        }
+
+        return segments.length > 0 ? segments : [{ points: polyPoints, length: currentLegLen, isTerminal: true }];
+    }
+
+    function drawMeasurementTemplate(ctx, startPoint, endPoint, shapeType, squareAnchor, beamWidth, color, ownerUsername, _unused, points, showDistance, gridRef = null) {
+        if (!startPoint || !endPoint) return;
+        const fillColor = color || '#00ffff';
+        const strokeColor = fillColor;
+        const activeGrid = gridRef || grid;
+
+        ctx.save();
+        ctx.fillStyle = fillColor;
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 2;
+        ctx.setLineDash([]);
+
+        const dx = endPoint.x - startPoint.x;
+        const dy = endPoint.y - startPoint.y;
+        const radius = Math.hypot(dx, dy);
+
+        // Track the pixel measurement relevant to each shape type for the distance label
+        let distancePx = radius;
+        let labelAtX = endPoint.x;
+        let labelAtY = endPoint.y;
+
+        if (shapeType === 'circle') {
+            ctx.beginPath();
+            ctx.arc(startPoint.x, startPoint.y, radius, 0, Math.PI * 2);
+            ctx.globalAlpha = 0.7;
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            ctx.stroke();
+
+            // Draw radius line
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(startPoint.x, startPoint.y);
+            ctx.lineTo(endPoint.x, endPoint.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            distancePx = radius; // radius in pixels
+
+        } else if (shapeType === 'square') {
+            const halfSide = radius;
+            let rx = startPoint.x, ry = startPoint.y;
+            if (squareAnchor === 'center') {
+                rx = startPoint.x - halfSide;
+                ry = startPoint.y - halfSide;
+            } else {
+                // corner anchor: draw from startPoint toward endPoint
+                rx = Math.min(startPoint.x, endPoint.x);
+                ry = Math.min(startPoint.y, endPoint.y);
+            }
+            const side = halfSide * 2;
+            ctx.beginPath();
+            ctx.rect(rx, ry, side, side);
+            ctx.globalAlpha = 0.7;
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            ctx.stroke();
+
+            distancePx = side; // show the full side length
+
+        } else if (shapeType === 'cone') {
+            const angle = Math.atan2(dy, dx);
+            const halfAngle = Math.PI / 4; // 90 degree cone
+            ctx.beginPath();
+            ctx.moveTo(startPoint.x, startPoint.y);
+            ctx.arc(startPoint.x, startPoint.y, radius, angle - halfAngle, angle + halfAngle);
+            ctx.closePath();
+            ctx.globalAlpha = 0.7;
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            ctx.stroke();
+
+            distancePx = radius; // cone length
+
+        } else if (shapeType === 'beam') {
+            const angle = Math.atan2(dy, dx);
+            const length = radius;
+            // beamWidth is in feet — convert to canvas pixels using the grid scale
+            const pxPerFt = (activeGrid.size * (activeGrid.scale || 1.0)) / (activeGrid.feetPerSquare || 5);
+            const halfWidth = ((beamWidth || 5) * pxPerFt) / 2;
+            const cos = Math.cos(angle);
+            const sin = Math.sin(angle);
+            const perpX = -sin * halfWidth;
+            const perpY = cos * halfWidth;
+
+            ctx.beginPath();
+            ctx.moveTo(startPoint.x + perpX, startPoint.y + perpY);
+            ctx.lineTo(startPoint.x + cos * length + perpX, startPoint.y + sin * length + perpY);
+            ctx.lineTo(startPoint.x + cos * length - perpX, startPoint.y + sin * length - perpY);
+            ctx.lineTo(startPoint.x - perpX, startPoint.y - perpY);
+            ctx.closePath();
+            ctx.globalAlpha = 0.7;
+            ctx.fill();
+            ctx.globalAlpha = 1.0;
+            ctx.stroke();
+
+            distancePx = length; // beam length
+
+        } else {
+            // Default: line (polyline if points array given, else simple line)
+            const polyPoints = (Array.isArray(points) && points.length >= 2) ? points : [startPoint, endPoint];
+            const bentSegments = resolveRulerPortalBending(polyPoints);
+
+            let totalLen = 0;
+            let lastPt = polyPoints[polyPoints.length - 1];
+
+            bentSegments.forEach(seg => {
+                ctx.beginPath();
+                ctx.moveTo(seg.points[0].x, seg.points[0].y);
+                for (let i = 1; i < seg.points.length; i++) {
+                    ctx.lineTo(seg.points[i].x, seg.points[i].y);
+                }
+                ctx.lineWidth = 8;
+                ctx.globalAlpha = 0.7;
+                ctx.stroke();
+
+                if (seg.isPortalJunction) {
+                    ctx.save();
+                    ctx.beginPath();
+                    const pt = seg.points[seg.points.length - 1];
+                    ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.globalAlpha = 0.9;
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                if (seg.isTerminal) {
+                    ctx.beginPath();
+                    const pt = seg.points[seg.points.length - 1];
+                    ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
+                    ctx.fillStyle = strokeColor;
+                    ctx.globalAlpha = 1.0;
+                    ctx.fill();
+                    lastPt = pt;
+                }
+                totalLen += seg.length;
+            });
+
+            distancePx = totalLen;
+            labelAtX = lastPt.x;
+            labelAtY = lastPt.y;
+        }
+
+        // Distance label — shown only during live drawing (showDistance === true)
+        if (showDistance && distancePx > 0) {
+            const distFt = calcDistanceFt(distancePx);
+            const label = `${distFt} ft`;
+            ctx.save();
+            ctx.globalAlpha = 1.0;
+            ctx.font = 'bold 13px Inter, Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const tw = ctx.measureText(label).width;
+            const padX = 8;
+            const padY = 4;
+            const pillW = tw + padX * 2;
+            const pillH = 22;
+            // Position the pill above and slightly to the right of the endpoint
+            const pillX = labelAtX + 14;
+            const pillY = labelAtY - 22;
+            const r = pillH / 2;
+            // Draw pill background
+            ctx.fillStyle = 'rgba(15, 15, 20, 0.82)';
+            ctx.beginPath();
+            ctx.moveTo(pillX - pillW / 2 + r, pillY - pillH / 2);
+            ctx.arcTo(pillX + pillW / 2, pillY - pillH / 2, pillX + pillW / 2, pillY + pillH / 2, r);
+            ctx.arcTo(pillX + pillW / 2, pillY + pillH / 2, pillX - pillW / 2, pillY + pillH / 2, r);
+            ctx.arcTo(pillX - pillW / 2, pillY + pillH / 2, pillX - pillW / 2, pillY - pillH / 2, r);
+            ctx.arcTo(pillX - pillW / 2, pillY - pillH / 2, pillX + pillW / 2, pillY - pillH / 2, r);
+            ctx.closePath();
+            ctx.fill();
+            // Draw pill border in shape color
+            ctx.strokeStyle = fillColor;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            // Draw text
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText(label, pillX, pillY);
+            ctx.restore();
+        }
+
+        // Owner label
+        if (ownerUsername) {
+            ctx.font = '11px Inter, Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            const lx = (startPoint.x + endPoint.x) / 2;
+            const ly = Math.min(startPoint.y, endPoint.y) - 2;
+            const tw = ctx.measureText(ownerUsername).width + 8;
+            ctx.fillRect(lx - tw / 2, ly - 13, tw, 14);
+            ctx.fillStyle = fillColor;
+            ctx.fillText(ownerUsername, lx, ly);
+        }
+
+        ctx.restore();
+    }
+
+    function drawTargetRoomContent(ctx, targetMap, targetMapId, targetW, targetH, targetTokens, targetWalls, centerA, centerB) {
+        let bgDrawn = false;
+        const currentMap = vtt.campaignState?.maps?.[currentMapId];
+        const mapImgSrc = targetMap?.mapImage || (targetMapId === currentMapId ? currentMap?.mapImage : null);
+        if (mapImgSrc) {
+            const safeUrl = typeof getSafeVttUrl === 'function' ? getSafeVttUrl(mapImgSrc) : mapImgSrc;
+            let img = imageCache[safeUrl] || imageCache[mapImgSrc];
+            if (!img && targetMapId === currentMapId) {
+                const bgEl = document.querySelector('#vtt-map-bg-container img');
+                if (bgEl && bgEl.complete && bgEl.naturalWidth > 0) img = bgEl;
+            }
+            if (img && img.complete && img.naturalWidth > 0) {
+                ctx.drawImage(img, 0, 0, targetW, targetH);
+                bgDrawn = true;
+            } else if (!imageCache[mapImgSrc] && !imageCache[safeUrl]) {
+                const newImg = new Image();
+                newImg.src = safeUrl;
+                newImg.onload = () => renderAll();
+                imageCache[mapImgSrc] = newImg;
+                imageCache[safeUrl] = newImg;
+            }
+        }
+
+        const mapAssets = targetTokens.filter(t => t.layer === 'map' || t.isBackground);
+        if (mapAssets.length > 0) {
+            mapAssets.forEach(mAsset => {
+                const aImg = getOrLoadTokenImage(mAsset);
+                const { drawW, drawH } = getTokenDrawDimensions(mAsset);
+                if (aImg) {
+                    ctx.save();
+                    ctx.translate(mAsset.x + drawW / 2, mAsset.y + drawH / 2);
+                    if (mAsset.rotation) ctx.rotate((mAsset.rotation * Math.PI) / 180);
+                    ctx.drawImage(aImg, -drawW / 2, -drawH / 2, drawW, drawH);
+                    ctx.restore();
+                    bgDrawn = true;
+                }
+            });
+        }
+
+        if (!bgDrawn) {
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, targetW, targetH);
+        }
+
+        const tGrid = targetMap?.grid || grid;
+        const gSize = (tGrid.size || 50) * (tGrid.scale || 1.0);
+        if (gSize > 10) {
+            ctx.save();
+            ctx.strokeStyle = tGrid.color || '#ffffff';
+            ctx.globalAlpha = (tGrid.opacity !== undefined ? tGrid.opacity : 0.25) * 0.7;
+            ctx.lineWidth = 1;
+            for (let x = 0; x <= targetW; x += gSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, targetH); ctx.stroke();
+            }
+            for (let y = 0; y <= targetH; y += gSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(targetW, y); ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        if (Array.isArray(targetWalls) && targetWalls.length > 0) {
+            ctx.save();
+            targetWalls.forEach(w => {
+                if (w.isOpen) return;
+                ctx.beginPath();
+                ctx.moveTo(w.x1, w.y1);
+                ctx.lineTo(w.x2, w.y2);
+                if (w.isDoor) {
+                    ctx.strokeStyle = '#f59e0b';
+                    ctx.lineWidth = 3.5;
+                } else if (w.isWindow) {
+                    ctx.strokeStyle = '#06b6d4';
+                    ctx.lineWidth = 2.5;
+                } else {
+                    ctx.strokeStyle = w.color || '#475569';
+                    ctx.lineWidth = w.thickness || 3;
+                }
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            });
+            ctx.restore();
+        }
+
+        // Draw Target Room Persistent Shapes / Spell Areas visible through the portal
+        const targetShapes = targetMap?.shapes ? Object.values(targetMap.shapes) : [];
+        if (targetShapes.length > 0) {
+            targetShapes.forEach(s => {
+                if (s.layer === 'gm' && vtt.role !== 'GM') return;
+                drawMeasurementTemplate(ctx, s.startPoint, s.endPoint, s.shape, s.squareAnchor, s.beamWidth, s.color, s.ownerUsername, null, s.points || null, false, tGrid);
+            });
+        }
+
+        targetTokens.forEach(t => {
+            if (t.layer === 'gm' && vtt.role !== 'GM') return;
+            if (t.isVisible === false && vtt.role !== 'GM') return;
+            if (t.layer === 'map' || t.isBackground) return;
+
+            if (targetMapId === currentMapId && Math.hypot(t.x - centerA.x, t.y - centerA.y) < 70) return;
+
+            const { drawW, drawH, tokenRadius } = getTokenDrawDimensions(t);
+            const tCenter = getTokenCenter(t);
+
+            let blockedInRoom2 = false;
+            for (let wi = 0; wi < targetWalls.length; wi++) {
+                const tw = targetWalls[wi];
+                if (tw.isOpen) continue;
+                if (distToSegmentSq(centerB, { x: tw.x1, y: tw.y1 }, { x: tw.x2, y: tw.y2 }) <= (35 * 35)) continue;
+                if (checkLineIntersection(centerB, tCenter, { x: tw.x1, y: tw.y1 }, { x: tw.x2, y: tw.y2 })) {
+                    blockedInRoom2 = true;
+                    break;
+                }
+            }
+            if (blockedInRoom2) return;
+
+            const tImg = getOrLoadTokenImage(t);
+
+            ctx.save();
+            ctx.translate(t.x + drawW / 2, t.y + drawH / 2);
+            if (t.rotation) ctx.rotate((t.rotation * Math.PI) / 180);
+            if (t.flipX) ctx.scale(-1, 1);
+            if (t.flipY) ctx.scale(1, -1);
+
+            if (tImg) {
+                if (!t.isAsset) {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, tokenRadius, 0, Math.PI * 2);
+                    ctx.clip();
+                }
+                ctx.drawImage(tImg, -drawW / 2, -drawH / 2, drawW, drawH);
+                if (!t.isAsset && !t.isBorderless) {
+                    ctx.strokeStyle = t.isPlayer ? 'rgba(0, 123, 255, 0.95)' : 'rgba(220, 53, 69, 0.95)';
+                    ctx.lineWidth = 2.5;
+                    ctx.stroke();
+                }
+            } else {
+                ctx.beginPath();
+                ctx.arc(0, 0, tokenRadius, 0, Math.PI * 2);
+                const grad = ctx.createRadialGradient(0, 0, tokenRadius * 0.2, 0, 0, tokenRadius);
+                if (t.isPlayer) {
+                    grad.addColorStop(0, '#60a5fa');
+                    grad.addColorStop(1, '#1d4ed8');
+                } else {
+                    grad.addColorStop(0, '#f87171');
+                    grad.addColorStop(1, '#b91c1c');
+                }
+                ctx.fillStyle = t.color || grad;
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                const initial = (t.name || 'C').charAt(0).toUpperCase();
+                ctx.fillStyle = '#ffffff';
+                ctx.font = `bold ${Math.round(tokenRadius * 0.85)}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(initial, 0, 0);
+            }
+            ctx.restore();
+        });
+    }
+
+    // NON-EUCLIDEAN DOORWAY & REFLECT PROJECTION:
+    // Decoupled independent systems:
+    // 1. Reflect Mode: Top-down vertical aperture into target map (pits, vertical shafts, balustrades)
+    // 2. View Through: Horizontal perspective sightlines extending through doorways into Room 2
+    function renderProjectedPortals(ctx) {
+        if (!Array.isArray(portals) || portals.length === 0) return;
+        const isGM = vtt.role === 'GM';
+        const currentMap = vtt.campaignState?.maps?.[currentMapId];
+        const isDaylightMode = currentMap?.lightingSettings?.daylightMode;
+        const defaultSightRadius = 60; // feet
+
+        // Collect all tokens that grant vision to this client
+        let visionSources = Object.values(tokens).filter(token => {
+            if (isGM) {
+                if (gmTokenVisionMode) return selectedTokenIds.has(token.id);
+                if (selectedTokenIds.size > 0) return selectedTokenIds.has(token.id);
+                return token.isPlayer;
+            }
+            return token.isPlayer && isTokenControlledByPlayer(token);
+        });
+
+        // Fallback for players if no strictly owned token found: allow any player-assigned character or active player token
+        if (!isGM && visionSources.length === 0) {
+            visionSources = Object.values(tokens).filter(token => token.isPlayer);
+        }
+
+        if (visionSources.length === 0) return;
+
+        portals.forEach(portal => {
+            if (!portal.targetPortalId) return;
+            if (!isGM && portal.isRevealed === false) return;
+
+            const targetMapId = portal.targetMapId || currentMapId;
+            let targetPortal = null;
+            let targetMap = null;
+
+            if (targetMapId === currentMapId) {
+                targetPortal = portals.find(p => p.id === portal.targetPortalId);
+                targetMap = currentMap;
+            } else if (vtt.campaignState?.maps?.[targetMapId]) {
+                targetMap = vtt.campaignState.maps[targetMapId];
+                targetPortal = targetMap?.portals?.find(p => p.id === portal.targetPortalId);
+            }
+
+            if (!targetPortal) return;
+
+            const isReflect = (portal.reflectMode === 'one-way' || portal.reflectMode === 'two-way' || targetPortal.reflectMode === 'two-way');
+            const isViewThrough = !!portal.viewThrough;
+
+            if (!isViewThrough && !isReflect) return;
+
+            const centerA = calcPortalCenter(portal);
+            const normA = getPortalNormalVector(portal);
+            const centerB = calcPortalCenter(targetPortal);
+            const normB = getPortalNormalVector(targetPortal);
+
+            // Directional rotation between Portal A and Portal B (angleB - angleA)
+            const angleA = Math.atan2(normA.dy, normA.dx);
+            const angleB = Math.atan2(normB.dy, normB.dx);
+            const thetaRot = isReflect ? 0 : (angleB - angleA);
+
+            // Target map dimensions and data
+            const targetW = targetMap?.gridWidth ? targetMap.gridWidth * (grid.size || 50) * (grid.scale || 1) : 2000;
+            const targetH = targetMap?.gridHeight ? targetMap.gridHeight * (grid.size || 50) * (grid.scale || 1) : 1500;
+            const targetTokens = (targetMapId === currentMapId) ? Object.values(tokens) : Object.values(targetMap?.tokens || {});
+            const targetWalls = (targetMapId === currentMapId) ? walls : (targetMap?.walls || []);
+
+            // Aperture segment endpoints for Line Doorways
+            let p1A = null, p2A = null;
+            const gA = portal.geom;
+            if (portal.shape === 'line' && gA) {
+                p1A = { x: gA.x1, y: gA.y1 };
+                p2A = { x: gA.x2, y: gA.y2 };
+            }
+
+            // Portal dynamic threshold for wall exemption (ensures doorways do not self-block LOS)
+            const portalRadiusA = portal.shape === 'circle' && gA?.r ? gA.r : (portal.shape === 'rect' && gA ? Math.max(gA.w, gA.h) / 2 : 35);
+            const portalThresholdSqA = Math.max(portalRadiusA * portalRadiusA * 1.5, 55 * 55);
+
+            const targetRadiusB = targetPortal.shape === 'circle' && targetPortal.geom?.r ? targetPortal.geom.r : (targetPortal.shape === 'rect' && targetPortal.geom ? Math.max(targetPortal.geom.w, targetPortal.geom.h) / 2 : 35);
+            const portalThresholdSqB = Math.max(targetRadiusB * targetRadiusB * 1.5, 55 * 55);
+
+            visionSources.forEach(source => {
+                const sourceCenter = getTokenCenter(source);
+                const vInX = centerA.x - sourceCenter.x;
+                const vInY = centerA.y - sourceCenter.y;
+                const distToA = Math.hypot(vInX, vInY);
+
+                // Sight distance penetration past Portal A
+                const { tokenRadius } = getTokenDrawDimensions(source);
+                let sightFeet = parseInt(source.sightRange);
+                if (isNaN(sightFeet) || sightFeet <= 0) {
+                    const lightReach = Math.max(parseFloat(source.lightBright) || 0, parseFloat(source.lightDim) || 0);
+                    sightFeet = lightReach > 0 ? lightReach : defaultSightRadius;
+                }
+                if (isDaylightMode) sightFeet = 99999;
+                const sightDistPx = (sightFeet / (grid.feetPerSquare || 5)) * (grid.size || 50) * (grid.scale || 1);
+                const maxSightDist = sightFeet > 0 ? (tokenRadius + sightDistPx) : (isDaylightMode ? 99999 : 0);
+                if (distToA > maxSightDist && !isDaylightMode) return;
+
+                // Check direct line-of-sight from token to Portal A (ignore walls on the portal threshold)
+                let blocked = false;
+                for (let i = 0; i < walls.length; i++) {
+                    const w = walls[i];
+                    if (w.isOpen) continue;
+                    if (distToSegmentSq(centerA, { x: w.x1, y: w.y1 }, { x: w.x2, y: w.y2 }) <= portalThresholdSqA) continue;
+                    if (checkLineIntersection(sourceCenter, centerA, { x: w.x1, y: w.y1 }, { x: w.x2, y: w.y2 })) {
+                        blocked = true;
+                        break;
+                    }
+                }
+                if (blocked) return;
+
+                // 1. REFLECT PASS (Top-Down Aperture into Pit/Shaft, orthographic 1:1)
+                if (isReflect) {
+                    ctx.save();
+                    ctx.beginPath();
+                    if (portal.shape === 'circle' && gA) {
+                        ctx.arc(centerA.x, centerA.y, gA.r !== undefined ? gA.r : 25, 0, Math.PI * 2);
+                    } else if (portal.shape === 'rect' && gA) {
+                        ctx.rect(gA.x, gA.y, gA.w, gA.h);
+                    } else if (portal.shape === 'polygon' && gA?.points?.length >= 3) {
+                        ctx.moveTo(gA.points[0].x, gA.points[0].y);
+                        for (let pi = 1; pi < gA.points.length; pi++) ctx.lineTo(gA.points[pi].x, gA.points[pi].y);
+                        ctx.closePath();
+                    } else if (portal.shape === 'line' && gA) {
+                        const norm = getPortalNormalVector(portal);
+                        const halfThick = 20;
+                        ctx.moveTo(gA.x1 + norm.dx * halfThick, gA.y1 + norm.dy * halfThick);
+                        ctx.lineTo(gA.x2 + norm.dx * halfThick, gA.y2 + norm.dy * halfThick);
+                        ctx.lineTo(gA.x2 - norm.dx * halfThick, gA.y2 - norm.dy * halfThick);
+                        ctx.lineTo(gA.x1 - norm.dx * halfThick, gA.y1 - norm.dy * halfThick);
+                        ctx.closePath();
+                    } else {
+                        ctx.arc(centerA.x, centerA.y, 25, 0, Math.PI * 2);
+                    }
+                    ctx.clip();
+
+                    ctx.translate(centerA.x, centerA.y);
+                    ctx.translate(-centerB.x, -centerB.y);
+
+                    drawTargetRoomContent(ctx, targetMap, targetMapId, targetW, targetH, targetTokens, targetWalls, centerA, centerB);
+                    ctx.restore();
+                }
+
+                // 2. VIEW THROUGH PASS (Perspective Sightlines looking through doorway into Room 2)
+                const remainingSight = maxSightDist - distToA;
+                if (isViewThrough && !isReflect && remainingSight > 10) {
+                    // One-Way restriction: must approach front face (negative dot product)
+                    let canView = true;
+                    if (portal.isOneWay && !portal.isRadial) {
+                        const inDot = vInX * normA.dx + vInY * normA.dy;
+                        if (inDot >= 0) canView = false;
+                    }
+
+                    if (canView) {
+                        ctx.save();
+                        ctx.beginPath();
+                        if (portal.shape === 'line' && p1A && p2A) {
+                            // 1D Line Doorway: sight frustum fanning out into Room 2
+                            const d1X = p1A.x - sourceCenter.x;
+                            const d1Y = p1A.y - sourceCenter.y;
+                            const len1 = Math.hypot(d1X, d1Y) || 1;
+                            const e1 = { x: p1A.x + (d1X / len1) * remainingSight, y: p1A.y + (d1Y / len1) * remainingSight };
+
+                            const d2X = p2A.x - sourceCenter.x;
+                            const d2Y = p2A.y - sourceCenter.y;
+                            const len2 = Math.hypot(d2X, d2Y) || 1;
+                            const e2 = { x: p2A.x + (d2X / len2) * remainingSight, y: p2A.y + (d2Y / len2) * remainingSight };
+
+                            ctx.moveTo(p1A.x, p1A.y);
+                            ctx.lineTo(e1.x, e1.y);
+                            ctx.lineTo(e2.x, e2.y);
+                            ctx.lineTo(p2A.x, p2A.y);
+                            ctx.closePath();
+                        } else if (portal.shape === 'circle' && gA) {
+                            // 2D Circle Area Portal: aperture + dynamic silhouette frustum
+                            const r = gA.r !== undefined ? gA.r : 25;
+                            if (distToA <= r) {
+                                ctx.arc(sourceCenter.x, sourceCenter.y, maxSightDist, 0, Math.PI * 2);
+                            } else {
+                                const theta = Math.atan2(centerA.y - sourceCenter.y, centerA.x - sourceCenter.x);
+                                const alpha = Math.asin(Math.min(0.9999, r / distToA));
+                                const distToTan = Math.sqrt(Math.max(0, distToA * distToA - r * r));
+
+                                const theta1 = theta - alpha;
+                                const theta2 = theta + alpha;
+
+                                const t1 = {
+                                    x: sourceCenter.x + Math.cos(theta1) * distToTan,
+                                    y: sourceCenter.y + Math.sin(theta1) * distToTan
+                                };
+                                const t2 = {
+                                    x: sourceCenter.x + Math.cos(theta2) * distToTan,
+                                    y: sourceCenter.y + Math.sin(theta2) * distToTan
+                                };
+
+                                const e1 = {
+                                    x: t1.x + Math.cos(theta1) * remainingSight,
+                                    y: t1.y + Math.sin(theta1) * remainingSight
+                                };
+                                const e2 = {
+                                    x: t2.x + Math.cos(theta2) * remainingSight,
+                                    y: t2.y + Math.sin(theta2) * remainingSight
+                                };
+
+                                // 1. Circle aperture window
+                                ctx.arc(centerA.x, centerA.y, r, 0, Math.PI * 2);
+
+                                // 2. Perspective frustum radiating beyond circle silhouette
+                                ctx.moveTo(t1.x, t1.y);
+                                ctx.lineTo(e1.x, e1.y);
+                                ctx.lineTo(e2.x, e2.y);
+                                ctx.lineTo(t2.x, t2.y);
+                                ctx.closePath();
+                            }
+                        } else if (portal.shape === 'rect' && gA) {
+                            // 2D Box Area Portal: aperture + dynamic silhouette frustum
+                            const isInsideRect = sourceCenter.x >= gA.x && sourceCenter.x <= (gA.x + gA.w) &&
+                                                 sourceCenter.y >= gA.y && sourceCenter.y <= (gA.y + gA.h);
+                            if (isInsideRect) {
+                                ctx.arc(sourceCenter.x, sourceCenter.y, maxSightDist, 0, Math.PI * 2);
+                            } else {
+                                const rectPts = [
+                                    { x: gA.x, y: gA.y },
+                                    { x: gA.x + gA.w, y: gA.y },
+                                    { x: gA.x + gA.w, y: gA.y + gA.h },
+                                    { x: gA.x, y: gA.y + gA.h }
+                                ];
+                                const refAng = Math.atan2(centerA.y - sourceCenter.y, centerA.x - sourceCenter.x);
+                                let minDiff = Infinity, maxDiff = -Infinity;
+                                let vMin = rectPts[0], vMax = rectPts[0];
+
+                                rectPts.forEach(p => {
+                                    const ang = Math.atan2(p.y - sourceCenter.y, p.x - sourceCenter.x);
+                                    let diff = (ang - refAng) % (Math.PI * 2);
+                                    if (diff < -Math.PI) diff += Math.PI * 2;
+                                    if (diff > Math.PI) diff -= Math.PI * 2;
+                                    if (diff < minDiff) { minDiff = diff; vMin = p; }
+                                    if (diff > maxDiff) { maxDiff = diff; vMax = p; }
+                                });
+
+                                const d1X = vMin.x - sourceCenter.x;
+                                const d1Y = vMin.y - sourceCenter.y;
+                                const len1 = Math.hypot(d1X, d1Y) || 1;
+                                const e1 = { x: vMin.x + (d1X / len1) * remainingSight, y: vMin.y + (d1Y / len1) * remainingSight };
+
+                                const d2X = vMax.x - sourceCenter.x;
+                                const d2Y = vMax.y - sourceCenter.y;
+                                const len2 = Math.hypot(d2X, d2Y) || 1;
+                                const e2 = { x: vMax.x + (d2X / len2) * remainingSight, y: vMax.y + (d2Y / len2) * remainingSight };
+
+                                // 1. Box aperture window
+                                ctx.rect(gA.x, gA.y, gA.w, gA.h);
+
+                                // 2. Perspective frustum radiating beyond box silhouette
+                                ctx.moveTo(vMin.x, vMin.y);
+                                ctx.lineTo(e1.x, e1.y);
+                                ctx.lineTo(e2.x, e2.y);
+                                ctx.lineTo(vMax.x, vMax.y);
+                                ctx.closePath();
+                            }
+                        } else if (portal.shape === 'polygon' && gA?.points?.length >= 3) {
+                            // 2D Polygon Area Portal: aperture + dynamic silhouette frustum
+                            const polyPts = gA.points;
+                            let isInsidePoly = false;
+                            for (let i = 0, j = polyPts.length - 1; i < polyPts.length; j = i++) {
+                                const xi = polyPts[i].x, yi = polyPts[i].y;
+                                const xj = polyPts[j].x, yj = polyPts[j].y;
+                                const intersect = ((yi > sourceCenter.y) !== (yj > sourceCenter.y)) &&
+                                    (sourceCenter.x < (xj - xi) * (sourceCenter.y - yi) / (yj - yi) + xi);
+                                if (intersect) isInsidePoly = !isInsidePoly;
+                            }
+
+                            if (isInsidePoly) {
+                                ctx.arc(sourceCenter.x, sourceCenter.y, maxSightDist, 0, Math.PI * 2);
+                            } else {
+                                const refAng = Math.atan2(centerA.y - sourceCenter.y, centerA.x - sourceCenter.x);
+                                let minDiff = Infinity, maxDiff = -Infinity;
+                                let vMin = polyPts[0], vMax = polyPts[0];
+
+                                polyPts.forEach(p => {
+                                    const ang = Math.atan2(p.y - sourceCenter.y, p.x - sourceCenter.x);
+                                    let diff = (ang - refAng) % (Math.PI * 2);
+                                    if (diff < -Math.PI) diff += Math.PI * 2;
+                                    if (diff > Math.PI) diff -= Math.PI * 2;
+                                    if (diff < minDiff) { minDiff = diff; vMin = p; }
+                                    if (diff > maxDiff) { maxDiff = diff; vMax = p; }
+                                });
+
+                                const d1X = vMin.x - sourceCenter.x;
+                                const d1Y = vMin.y - sourceCenter.y;
+                                const len1 = Math.hypot(d1X, d1Y) || 1;
+                                const e1 = { x: vMin.x + (d1X / len1) * remainingSight, y: vMin.y + (d1Y / len1) * remainingSight };
+
+                                const d2X = vMax.x - sourceCenter.x;
+                                const d2Y = vMax.y - sourceCenter.y;
+                                const len2 = Math.hypot(d2X, d2Y) || 1;
+                                const e2 = { x: vMax.x + (d2X / len2) * remainingSight, y: vMax.y + (d2Y / len2) * remainingSight };
+
+                                // 1. Polygon aperture window
+                                ctx.moveTo(polyPts[0].x, polyPts[0].y);
+                                for (let pi = 1; pi < polyPts.length; pi++) ctx.lineTo(polyPts[pi].x, polyPts[pi].y);
+                                ctx.closePath();
+
+                                // 2. Perspective frustum radiating beyond polygon silhouette
+                                ctx.moveTo(vMin.x, vMin.y);
+                                ctx.lineTo(e1.x, e1.y);
+                                ctx.lineTo(e2.x, e2.y);
+                                ctx.lineTo(vMax.x, vMax.y);
+                                ctx.closePath();
+                            }
+                        } else {
+                            ctx.arc(centerA.x, centerA.y, 25, 0, Math.PI * 2);
+                        }
+                        ctx.clip();
+
+                        // Visibility polygon in Room 2 from centerB
+                        let room2VisPoly = null;
+                        if (typeof computeVisibilityPolygon === 'function') {
+                            room2VisPoly = computeVisibilityPolygon(
+                                centerB.x,
+                                centerB.y,
+                                remainingSight,
+                                targetW,
+                                targetH,
+                                360,
+                                0,
+                                (w) => distToSegmentSq(centerB, { x: w.x1, y: w.y1 }, { x: w.x2, y: w.y2 }) <= portalThresholdSqB,
+                                targetWalls
+                            );
+                        }
+
+                        ctx.translate(centerA.x, centerA.y);
+                        if (thetaRot !== 0) ctx.rotate(thetaRot);
+                        ctx.translate(-centerB.x, -centerB.y);
+
+                        if (Array.isArray(room2VisPoly) && room2VisPoly.length >= 3) {
+                            ctx.beginPath();
+                            ctx.moveTo(room2VisPoly[0].x, room2VisPoly[0].y);
+                            for (let pi = 1; pi < room2VisPoly.length; pi++) {
+                                ctx.lineTo(room2VisPoly[pi].x, room2VisPoly[pi].y);
+                            }
+                            ctx.closePath();
+                            ctx.clip();
+                        }
+
+                        drawTargetRoomContent(ctx, targetMap, targetMapId, targetW, targetH, targetTokens, targetWalls, centerA, centerB);
+                        ctx.restore();
+                    }
+                }
+            });
+        });
+    }
+
+    function renderPortals(ctx) {
+        if (!Array.isArray(portals) || portals.length === 0) return;
+        const isGM = vtt.role === 'GM';
+        // Seamless map transitions: portals are invisible connecting seams on the player side (no outline, no glow, no glyphs)
+        if (!isGM) return;
+
+        const sortedPortals = [...portals].sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
+        sortedPortals.forEach(portal => {
+            ctx.save();
+            const strokeColor = '#a855f7';
+            ctx.strokeStyle = strokeColor;
+            ctx.lineWidth = 2 / zoom;
+
+            const g = portal.geom;
+            if (!g) { ctx.restore(); return; }
+
+            const center = calcPortalCenter(portal);
+
+            ctx.beginPath();
+            if (portal.shape === 'rect') {
+                ctx.rect(g.x, g.y, g.w, g.h);
+            } else if (portal.shape === 'circle') {
+                ctx.arc(g.cx, g.cy, g.r !== undefined ? g.r : 20, 0, Math.PI * 2);
+            } else if (portal.shape === 'line') {
+                ctx.moveTo(g.x1, g.y1);
+                ctx.lineTo(g.x2, g.y2);
+            } else if (portal.shape === 'polygon' && g.points && g.points.length >= 2) {
+                ctx.moveTo(g.points[0].x, g.points[0].y);
+                for (let i = 1; i < g.points.length; i++) {
+                    ctx.lineTo(g.points[i].x, g.points[i].y);
+                }
+                ctx.closePath();
+            }
+            ctx.stroke();
+
+            // Portal Facing Direction Normal Arrow
+            if (!portal.isRadial) {
+                const norm = getPortalNormalVector(portal);
+                const arrowLen = 28 / zoom;
+                const ax = center.x + norm.dx * arrowLen;
+                const ay = center.y + norm.dy * arrowLen;
+
+                ctx.save();
+                ctx.strokeStyle = portal.isOneWay ? '#38bdf8' : '#c084fc';
+                ctx.fillStyle = portal.isOneWay ? '#38bdf8' : '#c084fc';
+                ctx.lineWidth = 2 / zoom;
+                ctx.beginPath();
+                ctx.moveTo(center.x, center.y);
+                ctx.lineTo(ax, ay);
+                ctx.stroke();
+
+                // Arrowhead
+                const headLen = 7 / zoom;
+                const angle = Math.atan2(norm.dy, norm.dx);
+                ctx.beginPath();
+                ctx.moveTo(ax, ay);
+                ctx.lineTo(ax - headLen * Math.cos(angle - Math.PI / 6), ay - headLen * Math.sin(angle - Math.PI / 6));
+                ctx.lineTo(ax - headLen * Math.cos(angle + Math.PI / 6), ay - headLen * Math.sin(angle + Math.PI / 6));
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // Dashed Link Line to Destination Portal on Same Map
+            if (portal.targetPortalId && (!portal.targetMapId || portal.targetMapId === currentMapId)) {
+                const target = portals.find(p => p.id === portal.targetPortalId);
+                if (target) {
+                    const targetCenter = calcPortalCenter(target);
+                    ctx.save();
+                    ctx.setLineDash([6 / zoom, 6 / zoom]);
+                    ctx.strokeStyle = 'rgba(192, 132, 252, 0.55)';
+                    ctx.lineWidth = 1.5 / zoom;
+                    ctx.beginPath();
+                    ctx.moveTo(center.x, center.y);
+                    ctx.lineTo(targetCenter.x, targetCenter.y);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            }
+
+            // Clean subtle label for GM
+            ctx.fillStyle = '#f5d0fe';
+            ctx.font = `600 ${Math.max(9, 11 / zoom)}px "Open Sans", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(portal.name || 'Portal', center.x, center.y);
+
+            ctx.restore();
+        });
+    }
+
+    function renderSelectedMapToolHighlight(ctx) {
+        if (!selectedMapToolItem || vtt.role !== 'GM') return;
+        const { type, id } = selectedMapToolItem;
+        const item = type === 'trap' ? traps.find(t => t.id === id) : portals.find(p => p.id === id);
+        if (!item || !item.geom) return;
+
+        const isTrap = type === 'trap';
+        const color = isTrap ? '#ef4444' : '#c084fc';
+
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5 / zoom;
+        if (isTrap) {
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.25)';
+            ctx.shadowColor = '#f87171';
+            ctx.shadowBlur = 8 / zoom;
+        } else {
+            ctx.fillStyle = 'transparent';
+        }
+
+        const g = item.geom;
+
+        function drawHandle(hx, hy, handleId = null) {
+            const isHovered = hoveredMapToolHandle && (
+                hoveredMapToolHandle.handle?.id === handleId
+            );
+            ctx.save();
+            ctx.fillStyle = isHovered ? '#e879f9' : '#ffffff';
+            ctx.strokeStyle = isHovered ? '#a855f7' : color;
+            ctx.lineWidth = (isHovered ? 2.5 : 2) / zoom;
+            if (isHovered) {
+                ctx.shadowColor = '#e879f9';
+                ctx.shadowBlur = 10 / zoom;
+            }
+            ctx.beginPath();
+            ctx.arc(hx, hy, (isHovered ? 6.5 : 5) / zoom, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        ctx.beginPath();
+        if (item.shape === 'rect') {
+            const x = Math.min(g.x, g.x + g.w);
+            const y = Math.min(g.y, g.y + g.h);
+            const w = Math.abs(g.w);
+            const h = Math.abs(g.h);
+            ctx.setLineDash([6 / zoom, 4 / zoom]);
+            ctx.rect(x, y, w, h);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            drawHandle(x, y, 'nw');
+            drawHandle(x + w, y, 'ne');
+            drawHandle(x + w, y + h, 'se');
+            drawHandle(x, y + h, 'sw');
+            drawHandle(x + w / 2, y, 'n');
+            drawHandle(x + w / 2, y + h, 's');
+            drawHandle(x, y + h / 2, 'w');
+            drawHandle(x + w, y + h / 2, 'e');
+        } else if (item.shape === 'circle') {
+            const r = g.r !== undefined ? g.r : 20;
+            ctx.setLineDash([6 / zoom, 4 / zoom]);
+            ctx.arc(g.cx, g.cy, r, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            drawHandle(g.cx + r, g.cy, 'r-east');
+            drawHandle(g.cx - r, g.cy, 'r-west');
+            drawHandle(g.cx, g.cy + r, 'r-south');
+            drawHandle(g.cx, g.cy - r, 'r-north');
+        } else if (item.shape === 'line') {
+            ctx.moveTo(g.x1, g.y1);
+            ctx.lineTo(g.x2, g.y2);
+            ctx.stroke();
+            drawHandle(g.x1, g.y1, 'p1');
+            drawHandle(g.x2, g.y2, 'p2');
+            drawHandle((g.x1 + g.x2) / 2, (g.y1 + g.y2) / 2, 'mid');
+        } else if (item.shape === 'polygon' && g.points) {
+            ctx.moveTo(g.points[0].x, g.points[0].y);
+            for (let i = 1; i < g.points.length; i++) {
+                ctx.lineTo(g.points[i].x, g.points[i].y);
+            }
+            ctx.closePath();
+            ctx.setLineDash([6 / zoom, 4 / zoom]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            g.points.forEach((p, idx) => drawHandle(p.x, p.y, 'vertex-' + idx));
+        }
+
+        // On-Canvas Interactive Rotation Handle for Portals
+        if (!isTrap) {
+            const rotHandle = typeof getPortalRotationHandlePos === 'function' ? getPortalRotationHandlePos(item) : null;
+            if (rotHandle && !item.isRadial) {
+                ctx.save();
+                ctx.setLineDash([4 / zoom, 3 / zoom]);
+                ctx.strokeStyle = '#c084fc';
+                ctx.lineWidth = 1.5 / zoom;
+                ctx.beginPath();
+                ctx.moveTo(rotHandle.center.x, rotHandle.center.y);
+                ctx.lineTo(rotHandle.x, rotHandle.y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                const hRadius = 8 / zoom;
+                ctx.beginPath();
+                ctx.arc(rotHandle.x, rotHandle.y, hRadius, 0, Math.PI * 2);
+                ctx.fillStyle = activeRotatePortalId === item.id ? '#a855f7' : (hoveredRotatePortalId === item.id ? '#e879f9' : '#ffffff');
+                ctx.fill();
+                ctx.strokeStyle = '#9333ea';
+                ctx.lineWidth = 2 / zoom;
+                ctx.stroke();
+
+                // Center dot
+                ctx.beginPath();
+                ctx.arc(rotHandle.x, rotHandle.y, 2.5 / zoom, 0, Math.PI * 2);
+                ctx.fillStyle = '#9333ea';
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Selected Floating Badge
+        const center = calcPortalCenter(item);
+        const text = `Selected: ${item.name || (isTrap ? 'Trap' : 'Portal')}`;
+        ctx.font = `bold ${Math.max(11, 13 / zoom)}px "Open Sans", sans-serif`;
+        const textW = ctx.measureText(text).width;
+        const padX = 8 / zoom;
+        const padY = 4 / zoom;
+        const badgeY = center.y - 24 / zoom;
+
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1.5 / zoom;
+        ctx.beginPath();
+        if (typeof ctx.roundRect === 'function') {
+            ctx.roundRect(center.x - textW / 2 - padX, badgeY - 10 / zoom - padY, textW + padX * 2, 20 / zoom + padY * 2, 4 / zoom);
+        } else {
+            ctx.rect(center.x - textW / 2 - padX, badgeY - 10 / zoom - padY, textW + padX * 2, 20 / zoom + padY * 2);
+        }
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#ffffff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, center.x, badgeY);
+
+        ctx.restore();
+    }
+
+    function renderMapToolDrawingPreview(ctx) {
+        if (!isDrawingMapTool) return;
+        ctx.save();
+
+        const isTraps = activeMapToolSubmode === 'traps';
+        ctx.strokeStyle = isTraps ? '#ef4444' : '#a855f7';
+        ctx.fillStyle = isTraps ? 'rgba(239, 68, 68, 0.22)' : 'rgba(168, 85, 247, 0.22)';
+        ctx.lineWidth = 2.5 / zoom;
+        ctx.setLineDash([6 / zoom, 4 / zoom]);
+
+        if (currentMapToolShape === 'polygon') {
+            if (mapToolPolygonPoints.length > 0) {
+                ctx.beginPath();
+                ctx.moveTo(mapToolPolygonPoints[0].x, mapToolPolygonPoints[0].y);
+                for (let i = 1; i < mapToolPolygonPoints.length; i++) {
+                    ctx.lineTo(mapToolPolygonPoints[i].x, mapToolPolygonPoints[i].y);
+                }
+                if (mapToolCurrentPoint) {
+                    ctx.lineTo(mapToolCurrentPoint.x, mapToolCurrentPoint.y);
+                }
+                ctx.stroke();
+
+                mapToolPolygonPoints.forEach((p, idx) => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, (idx === 0 ? 6 : 4.5) / zoom, 0, Math.PI * 2);
+                    ctx.fillStyle = idx === 0 ? '#10b981' : '#ffd700';
+                    ctx.fill();
+                    ctx.stroke();
+                });
+            }
+        } else if (mapToolStartPoint && mapToolCurrentPoint) {
+            const s = mapToolStartPoint;
+            const c = mapToolCurrentPoint;
+            ctx.beginPath();
+            if (currentMapToolShape === 'rect') {
+                const x = Math.min(s.x, c.x);
+                const y = Math.min(s.y, c.y);
+                const w = Math.abs(c.x - s.x);
+                const h = Math.abs(c.y - s.y);
+                ctx.rect(x, y, w, h);
+                ctx.fill();
+                ctx.stroke();
+            } else if (currentMapToolShape === 'circle') {
+                const r = Math.hypot(c.x - s.x, c.y - s.y);
+                ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            } else if (currentMapToolShape === 'line') {
+                ctx.moveTo(s.x, s.y);
+                ctx.lineTo(c.x, c.y);
+                ctx.stroke();
+            }
+        }
+
+        ctx.restore();
+    }
+
+    // --- UI Lists & Setup ---
+
+    function renderPlacedTrapsList() {
+        const countEl = document.getElementById('maptools-traps-count');
+        const listEl = document.getElementById('maptools-traps-list');
+        if (countEl) countEl.textContent = traps.length;
+        if (!listEl) return;
+
+        if (traps.length === 0) {
+            listEl.innerHTML = '<div class="maptools-empty-note">No traps placed on this map. Click & drag on the canvas to place one.</div>';
+            return;
+        }
+
+        listEl.innerHTML = '';
+        traps.forEach((trap, idx) => {
+            const isSelected = selectedMapToolItem && selectedMapToolItem.type === 'trap' && selectedMapToolItem.id === trap.id;
+            const card = document.createElement('div');
+            card.className = `maptools-item-card ${trap.isSpent && !trap.repeatTrigger ? 'is-spent' : ''} ${isSelected ? 'is-selected' : ''}`;
+            card.innerHTML = `
+                <div class="maptools-item-info">
+                    <div class="maptools-item-name">
+                        <i class="fa-solid ${trap.isSpent && !trap.repeatTrigger ? 'fa-bolt-lightning text-muted' : 'fa-triangle-exclamation'}" style="color: ${trap.isSpent && !trap.repeatTrigger ? '#94a3b8' : '#ef4444'};"></i>
+                        <span>${trap.name || 'Trap'}</span>
+                    </div>
+                    <div class="maptools-item-meta">
+                        ${trap.shape.toUpperCase()} | DC ${trap.saveDc} ${trap.saveAbility} | ${trap.damage}
+                        ${trap.isSpent && !trap.repeatTrigger ? '<span style="color:#f87171; font-weight:600; margin-left:4px;">[Sprung]</span>' : ''}
+                    </div>
+                </div>
+                <div class="maptools-item-actions">
+                    <button type="button" class="maptools-action-btn btn-edit ${isSelected ? 'active' : ''}" title="Select & Edit Trap" data-id="${trap.id}">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    ${trap.isSpent && !trap.repeatTrigger ? `
+                        <button type="button" class="maptools-action-btn btn-rearm" title="Reset/Re-arm Trap" data-idx="${idx}">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                    ` : ''}
+                    <button type="button" class="maptools-action-btn btn-focus" title="Center View on Trap" data-idx="${idx}">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <button type="button" class="maptools-action-btn btn-delete" title="Delete Trap" data-id="${trap.id}" data-idx="${idx}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            card.querySelector('.maptools-item-info')?.addEventListener('click', () => {
+                selectMapToolItem('trap', trap.id);
+            });
+
+            card.querySelector('.btn-edit')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectMapToolItem('trap', trap.id);
+            });
+
+            card.querySelector('.btn-focus')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const center = calcPortalCenter(trap);
+                panTo(center.x, center.y, zoom, 300);
+            });
+
+            card.querySelector('.btn-rearm')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                trap.isSpent = false;
+                vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+                renderPlacedTrapsList();
+                renderAll();
+            });
+
+            card.querySelector('.btn-delete')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                traps.splice(idx, 1);
+                if (vtt.campaignState?.maps?.[currentMapId]) {
+                    vtt.campaignState.maps[currentMapId].traps = traps;
+                }
+                vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+                if (selectedMapToolItem && selectedMapToolItem.type === 'trap' && selectedMapToolItem.id === trap.id) {
+                    deselectMapToolItem();
+                } else {
+                    renderPlacedTrapsList();
+                    renderAll();
+                }
+            });
+
+            listEl.appendChild(card);
+        });
+    }
+
+    function renderPlacedPortalsList() {
+        const countEl = document.getElementById('maptools-portals-count');
+        const listEl = document.getElementById('maptools-portals-list');
+        if (countEl) countEl.textContent = portals.length;
+        if (!listEl) return;
+
+        if (portals.length === 0) {
+            listEl.innerHTML = '<div class="maptools-empty-note">No portals placed on this map. Click & drag on the canvas to place one.</div>';
+            return;
+        }
+
+        listEl.innerHTML = '';
+        portals.forEach((portal, idx) => {
+            const isSelected = selectedMapToolItem && selectedMapToolItem.type === 'portal' && selectedMapToolItem.id === portal.id;
+            const card = document.createElement('div');
+            card.className = `maptools-item-card ${isSelected ? 'is-selected' : ''}`;
+            const targetMapName = (portal.targetMapId && portal.targetMapId !== currentMapId && vtt.campaignState?.maps?.[portal.targetMapId])
+                ? vtt.campaignState.maps[portal.targetMapId].name
+                : 'Current Map';
+
+            card.innerHTML = `
+                <div class="maptools-item-info">
+                    <div class="maptools-item-name">
+                        <i class="fa-solid fa-door-open" style="color: #c084fc;"></i>
+                        <span>${portal.name || 'Portal'}</span>
+                    </div>
+                    <div class="maptools-item-meta">
+                        ${portal.shape.toUpperCase()} &rarr; ${targetMapName}
+                        ${portal.isOneWay ? '<span style="color:#38bdf8; font-weight:600; margin-left:4px;">[1-Way]</span>' : ''}
+                    </div>
+                </div>
+                <div class="maptools-item-actions">
+                    <button type="button" class="maptools-action-btn btn-edit ${isSelected ? 'active' : ''}" title="Select & Edit Portal" data-id="${portal.id}">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    ${portal.isOneWay ? `
+                        <button type="button" class="maptools-action-btn btn-flip" title="Flip Viewing/Entry Side" data-idx="${idx}">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                    ` : ''}
+                    <button type="button" class="maptools-action-btn btn-focus" title="Center View on Portal" data-idx="${idx}">
+                        <i class="fa-solid fa-eye"></i>
+                    </button>
+                    <button type="button" class="maptools-action-btn btn-delete" title="Delete Portal" data-id="${portal.id}" data-idx="${idx}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            card.querySelector('.maptools-item-info')?.addEventListener('click', () => {
+                selectMapToolItem('portal', portal.id);
+            });
+
+            card.querySelector('.btn-edit')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectMapToolItem('portal', portal.id);
+            });
+
+            card.querySelector('.btn-focus')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const center = calcPortalCenter(portal);
+                panTo(center.x, center.y, zoom, 300);
+            });
+
+            card.querySelector('.btn-flip')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                portal.viewSideFlipped = !portal.viewSideFlipped;
+                vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                renderAll();
+            });
+
+            card.querySelector('.btn-delete')?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const pId = portal.id;
+                const pIdx = portals.findIndex(p => p.id === pId);
+                if (pIdx !== -1) {
+                    portals.splice(pIdx, 1);
+                    cleanupPortalReferences(pId);
+                    if (vtt.campaignState?.maps?.[currentMapId]) {
+                        vtt.campaignState.maps[currentMapId].portals = portals;
+                    }
+                    vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                    if (selectedMapToolItem && selectedMapToolItem.type === 'portal' && selectedMapToolItem.id === pId) {
+                        deselectMapToolItem();
+                    } else {
+                        renderPlacedPortalsList();
+                        populateTargetPortalsDropdown();
+                        renderAll();
+                    }
+                }
+            });
+
+            listEl.appendChild(card);
+        });
+    }
+
+    function populateTargetPortalsDropdown(excludeId = null) {
+        const mapSelect = document.getElementById('maptools-portal-target-map');
+        const portalSelect = document.getElementById('maptools-portal-target-portal');
+        if (!mapSelect || !portalSelect) return;
+
+        // Populate Target Maps
+        const currentMapVal = mapSelect.value;
+        mapSelect.innerHTML = '<option value="">-- Active Map (Intra-Map) --</option>';
+        if (vtt.campaignState && vtt.campaignState.maps) {
+            Object.values(vtt.campaignState.maps).forEach(m => {
+                if (m.id !== currentMapId) {
+                    const opt = document.createElement('option');
+                    opt.value = m.id;
+                    opt.textContent = m.name || 'Untitled Map';
+                    mapSelect.appendChild(opt);
+                }
+            });
+        }
+        if (currentMapVal) mapSelect.value = currentMapVal;
+
+        // Populate Destination Portals on chosen map
+        const selectedMapId = mapSelect.value || currentMapId;
+        const currentPortalVal = portalSelect.value;
+        portalSelect.innerHTML = '<option value="">-- None (Unlinked) --</option>';
+
+        let targetPortals = [];
+        if (selectedMapId === currentMapId) {
+            targetPortals = portals;
+        } else if (vtt.campaignState?.maps?.[selectedMapId]?.portals) {
+            targetPortals = vtt.campaignState.maps[selectedMapId].portals;
+        }
+
+        targetPortals.forEach(p => {
+            if (excludeId && p.id === excludeId) return; // Cannot target self
+            const opt = document.createElement('option');
+            opt.value = p.id;
+            opt.textContent = p.name || 'Portal';
+            portalSelect.appendChild(opt);
+        });
+
+        if (currentPortalVal) portalSelect.value = currentPortalVal;
+    }
+
+    function setupMapToolsControls() {
+        const panel = document.getElementById('panel-map-tools');
+        if (!panel) return;
+
+        // Submode Tabs (Traps vs Portals)
+        panel.querySelectorAll('.maptools-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                panel.querySelectorAll('.maptools-tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeMapToolSubmode = btn.dataset.submode || btn.dataset.tab || 'traps';
+
+                document.getElementById('subpanel-maptools-traps')?.classList.toggle('vtt-hidden', activeMapToolSubmode !== 'traps');
+                document.getElementById('subpanel-maptools-portals')?.classList.toggle('vtt-hidden', activeMapToolSubmode !== 'portals');
+
+                if (activeMapToolSubmode === 'portals') {
+                    if (typeof switchActiveLayer === 'function') {
+                        switchActiveLayer('portals');
+                    } else {
+                        activeLayer = 'portals';
+                        if (typeof updateLayerButtonIcon === 'function') updateLayerButtonIcon('portals');
+                    }
+                }
+
+                // Synchronize active shape to the selected tab's active shape button
+                const activeSubpanel = document.getElementById(activeMapToolSubmode === 'traps' ? 'subpanel-maptools-traps' : 'subpanel-maptools-portals');
+                const activeShapeBtn = activeSubpanel?.querySelector('.maptools-shape-btn.active');
+                if (activeShapeBtn) {
+                    currentMapToolShape = activeShapeBtn.dataset.shape || (activeMapToolSubmode === 'traps' ? 'rect' : 'line');
+                }
+                cancelMapToolDrawing();
+            });
+        });
+
+        // Shape Selection Grid
+        panel.querySelectorAll('.maptools-shape-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const parent = btn.closest('.maptools-subpanel');
+                if (parent) {
+                    parent.querySelectorAll('.maptools-shape-btn').forEach(b => b.classList.remove('active'));
+                }
+                btn.classList.add('active');
+                currentMapToolShape = btn.dataset.shape || 'rect';
+                cancelMapToolDrawing();
+            });
+        });
+
+        // Target map dropdown change -> refresh portal dropdown
+        document.getElementById('maptools-portal-target-map')?.addEventListener('change', () => {
+            populateTargetPortalsDropdown(selectedMapToolItem?.type === 'portal' ? selectedMapToolItem.id : null);
+        });
+
+        // Facing angle slider & number input listeners
+        const angleSlider = document.getElementById('maptools-portal-facing-angle');
+        const angleNum = document.getElementById('maptools-portal-facing-angle-num');
+        const angleVal = document.getElementById('maptools-portal-facing-angle-val');
+
+        function updatePortalAngle(val) {
+            val = parseInt(val);
+            if (isNaN(val)) val = 0;
+            val = Math.max(0, Math.min(359, val));
+            if (angleSlider) angleSlider.value = val;
+            if (angleNum) angleNum.value = val;
+            if (angleVal) angleVal.textContent = `${val}°`;
+
+            if (selectedMapToolItem && selectedMapToolItem.type === 'portal') {
+                const p = portals.find(item => item.id === selectedMapToolItem.id);
+                if (p) {
+                    p.facingAngle = val;
+                    vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                    renderAll();
+                }
+            }
+        }
+
+        angleSlider?.addEventListener('input', (e) => updatePortalAngle(e.target.value));
+        angleNum?.addEventListener('input', (e) => updatePortalAngle(e.target.value));
+
+        // Radial mode toggle
+        document.getElementById('maptools-portal-radial')?.addEventListener('change', (e) => {
+            const isRadial = !!e.target.checked;
+            document.getElementById('group-portal-facing-angle')?.classList.toggle('vtt-hidden', isRadial);
+            if (selectedMapToolItem && selectedMapToolItem.type === 'portal') {
+                const p = portals.find(item => item.id === selectedMapToolItem.id);
+                if (p) {
+                    p.isRadial = isRadial;
+                    vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                    renderAll();
+                }
+            }
+        });
+
+        // Reflect mode select
+        document.getElementById('maptools-portal-reflect-mode')?.addEventListener('change', (e) => {
+            const reflectMode = e.target.value;
+            if (selectedMapToolItem && selectedMapToolItem.type === 'portal') {
+                const p = portals.find(item => item.id === selectedMapToolItem.id);
+                if (p) {
+                    p.reflectMode = reflectMode;
+                    vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                    renderAll();
+                }
+            }
+        });
+
+        // Flip side button
+        document.getElementById('btn-maptools-portal-flip')?.addEventListener('click', () => {
+            if (selectedMapToolItem && selectedMapToolItem.type === 'portal') {
+                const p = portals.find(item => item.id === selectedMapToolItem.id);
+                if (p) {
+                    p.facingAngle = ((p.facingAngle !== undefined ? p.facingAngle : 270) + 180) % 360;
+                    p.viewSideFlipped = !p.viewSideFlipped;
+                    updatePortalAngle(p.facingAngle);
+                    vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                    renderAll();
+                    return;
+                }
+            }
+            if (portals.length > 0) {
+                const last = portals[portals.length - 1];
+                last.facingAngle = ((last.facingAngle !== undefined ? last.facingAngle : 270) + 180) % 360;
+                last.viewSideFlipped = !last.viewSideFlipped;
+                updatePortalAngle(last.facingAngle);
+                vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                renderAll();
+            }
+        });
+
+        // Trap Edit Actions: Save, Delete, Cancel/Done
+        document.getElementById('btn-save-trap')?.addEventListener('click', () => {
+            saveSelectedMapToolItem('trap');
+        });
+        document.getElementById('btn-delete-selected-trap')?.addEventListener('click', () => {
+            deleteSelectedMapToolItem('trap');
+        });
+        document.getElementById('btn-cancel-edit-trap')?.addEventListener('click', () => {
+            deselectMapToolItem();
+        });
+
+        // Portal Edit Actions: Save, Delete, Cancel/Done
+        document.getElementById('btn-save-portal')?.addEventListener('click', () => {
+            saveSelectedMapToolItem('portal');
+        });
+        document.getElementById('maptools-portal-target-portal')?.addEventListener('change', () => {
+            if (selectedMapToolItem && selectedMapToolItem.type === 'portal') {
+                saveSelectedMapToolItem('portal');
+            }
+        });
+        document.getElementById('maptools-portal-linkback')?.addEventListener('change', () => {
+            if (selectedMapToolItem && selectedMapToolItem.type === 'portal') {
+                saveSelectedMapToolItem('portal');
+            }
+        });
+        document.getElementById('btn-delete-selected-portal')?.addEventListener('click', () => {
+            deleteSelectedMapToolItem('portal');
+        });
+        document.getElementById('btn-cancel-edit-portal')?.addEventListener('click', () => {
+            deselectMapToolItem();
+        });
+
+        // Cancel buttons on drawing hints
+        document.getElementById('btn-cancel-trap-draw')?.addEventListener('click', cancelMapToolDrawing);
+        document.getElementById('btn-cancel-portal-draw')?.addEventListener('click', cancelMapToolDrawing);
+    }
+
     // Persistent Shapes/Effects State
     let shapes = {};
     let selectedShapeId = null;
@@ -1223,6 +5630,243 @@ let isTokenMeasuring = false;
             return [shapeObj.startPoint, shapeObj.endPoint];
         }
         return [];
+    }
+
+    function getShapeBoundingBox(s) {
+        if (!s) return null;
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        if (s.shape === 'line' && Array.isArray(s.points) && s.points.length > 0) {
+            s.points.forEach(p => {
+                if (p.x < minX) minX = p.x;
+                if (p.x > maxX) maxX = p.x;
+                if (p.y < minY) minY = p.y;
+                if (p.y > maxY) maxY = p.y;
+            });
+        } else if (s.startPoint && s.endPoint) {
+            const p1 = s.startPoint;
+            const p2 = s.endPoint;
+            if (s.shape === 'circle') {
+                const radius = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+                minX = p1.x - radius;
+                maxX = p1.x + radius;
+                minY = p1.y - radius;
+                maxY = p1.y + radius;
+            } else if (s.shape === 'cone') {
+                const radius = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+                minX = Math.min(p1.x - radius, p2.x);
+                maxX = Math.max(p1.x + radius, p2.x);
+                minY = Math.min(p1.y - radius, p2.y);
+                maxY = Math.max(p1.y + radius, p2.y);
+            } else {
+                minX = Math.min(p1.x, p2.x);
+                maxX = Math.max(p1.x, p2.x);
+                minY = Math.min(p1.y, p2.y);
+                maxY = Math.max(p1.y, p2.y);
+            }
+        } else {
+            return null;
+        }
+        return { minX, minY, maxX, maxY };
+    }
+
+    function isPointInsideShape(pt, s) {
+        if (!s || !pt || !s.startPoint || !s.endPoint) return false;
+        const p1 = s.startPoint;
+        const p2 = s.endPoint;
+        const radius = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+
+        if (s.shape === 'circle') {
+            return Math.hypot(pt.x - p1.x, pt.y - p1.y) <= radius;
+        } else if (s.shape === 'square') {
+            const halfSide = radius;
+            let rx, ry;
+            if (s.squareAnchor === 'center') {
+                rx = p1.x - halfSide;
+                ry = p1.y - halfSide;
+            } else {
+                rx = Math.min(p1.x, p2.x);
+                ry = Math.min(p1.y, p2.y);
+            }
+            const side = halfSide * 2;
+            return pt.x >= rx && pt.x <= rx + side && pt.y >= ry && pt.y <= ry + side;
+        } else if (s.shape === 'cone') {
+            const dist = Math.hypot(pt.x - p1.x, pt.y - p1.y);
+            if (dist > radius) return false;
+            if (dist < 1) return true;
+            const ptAng = Math.atan2(pt.y - p1.y, pt.x - p1.x);
+            const coneAng = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+            let diff = Math.abs(ptAng - coneAng);
+            while (diff > Math.PI) diff = Math.abs(diff - 2 * Math.PI);
+            return diff <= Math.PI / 4;
+        } else if (s.shape === 'beam') {
+            const activeGrid = grid;
+            const pxPerFt = (activeGrid.size * (activeGrid.scale || 1.0)) / (activeGrid.feetPerSquare || 5);
+            const halfWidth = ((s.beamWidth || 5) * pxPerFt) / 2;
+            return getDistanceToSegment(pt.x, pt.y, p1.x, p1.y, p2.x, p2.y) <= halfWidth;
+        } else if (s.shape === 'line' && Array.isArray(s.points) && s.points.length >= 2) {
+            const activeGrid = grid;
+            const pxPerFt = (activeGrid.size * (activeGrid.scale || 1.0)) / (activeGrid.feetPerSquare || 5);
+            const halfWidth = ((s.beamWidth || 5) * pxPerFt) / 2;
+            for (let i = 0; i < s.points.length - 1; i++) {
+                if (getDistanceToSegment(pt.x, pt.y, s.points[i].x, s.points[i].y, s.points[i + 1].x, s.points[i + 1].y) <= halfWidth) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    function isTokenIntersectingShape(token, s) {
+        if (!token || !s || !s.startPoint || !s.endPoint) return false;
+        const { drawW, drawH } = getTokenDrawDimensions(token);
+        const tokX1 = token.x;
+        const tokY1 = token.y;
+        const tokX2 = token.x + drawW;
+        const tokY2 = token.y + drawH;
+        const tokCx = token.x + drawW / 2;
+        const tokCy = token.y + drawH / 2;
+        const tokR = Math.max(drawW, drawH) / 2;
+
+        const p1 = s.startPoint;
+        const p2 = s.endPoint;
+        const radius = Math.hypot(p2.x - p1.x, p2.y - p1.y);
+
+        if (s.shape === 'circle') {
+            const centerDist = Math.hypot(tokCx - p1.x, tokCy - p1.y);
+            return centerDist <= (radius + tokR);
+        } else if (s.shape === 'square') {
+            const halfSide = radius;
+            let rx, ry;
+            if (s.squareAnchor === 'center') {
+                rx = p1.x - halfSide;
+                ry = p1.y - halfSide;
+            } else {
+                rx = Math.min(p1.x, p2.x);
+                ry = Math.min(p1.y, p2.y);
+            }
+            const side = halfSide * 2;
+            const sqX2 = rx + side;
+            const sqY2 = ry + side;
+            return !(tokX1 > sqX2 || tokX2 < rx || tokY1 > sqY2 || tokY2 < ry);
+        } else if (s.shape === 'cone') {
+            const centerDist = Math.hypot(tokCx - p1.x, tokCy - p1.y);
+            if (centerDist > radius + tokR) return false;
+            if (centerDist <= tokR) return true;
+            const ptAng = Math.atan2(tokCy - p1.y, tokCx - p1.x);
+            const coneAng = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+            let diff = Math.abs(ptAng - coneAng);
+            while (diff > Math.PI) diff = Math.abs(diff - 2 * Math.PI);
+            const angSlack = Math.asin(Math.min(1.0, tokR / Math.max(1, centerDist)));
+            return diff <= (Math.PI / 4 + angSlack);
+        } else if (s.shape === 'beam') {
+            const activeGrid = grid;
+            const pxPerFt = (activeGrid.size * (activeGrid.scale || 1.0)) / (activeGrid.feetPerSquare || 5);
+            const halfWidth = ((s.beamWidth || 5) * pxPerFt) / 2;
+            return getDistanceToSegment(tokCx, tokCy, p1.x, p1.y, p2.x, p2.y) <= (halfWidth + tokR);
+        } else if (s.shape === 'line' && Array.isArray(s.points) && s.points.length >= 2) {
+            const activeGrid = grid;
+            const pxPerFt = (activeGrid.size * (activeGrid.scale || 1.0)) / (activeGrid.feetPerSquare || 5);
+            const halfWidth = ((s.beamWidth || 5) * pxPerFt) / 2;
+            for (let i = 0; i < s.points.length - 1; i++) {
+                if (getDistanceToSegment(tokCx, tokCy, s.points[i].x, s.points[i].y, s.points[i + 1].x, s.points[i + 1].y) <= (halfWidth + tokR)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+    function getPersistentShapeAtPoint(pt) {
+        if (!shapes || !pt) return null;
+        const comp = getShapeComponentAtCoord(pt.x, pt.y, false);
+        if (comp && shapes[comp.shapeId]) {
+            return shapes[comp.shapeId];
+        }
+        const shapeList = Object.values(shapes);
+        for (let i = shapeList.length - 1; i >= 0; i--) {
+            const s = shapeList[i];
+            if (isPointInsideShape(pt, s)) {
+                return s;
+            }
+        }
+        return null;
+    }
+
+    function showShapeContextMenu(shape, clientX, clientY) {
+        const oldMenu = document.getElementById('vtt-token-context-menu');
+        if (oldMenu) oldMenu.remove();
+
+        if (!shape || vtt.role !== 'GM') return;
+
+        const menu = document.createElement('div');
+        menu.id = 'vtt-token-context-menu';
+        menu.className = 'vtt-token-context-menu';
+        menu.style.left = `${clientX}px`;
+        menu.style.top = `${clientY}px`;
+
+        const shapeType = shape.shape ? (shape.shape.charAt(0).toUpperCase() + shape.shape.slice(1)) : 'Shape';
+
+        menu.innerHTML = `
+            <div class="vtt-token-menu-header" style="display:flex; align-items:center; gap:8px;">
+                <i class="fa-solid fa-draw-polygon" style="color:var(--color-gold-base);"></i>
+                <span>Select Tokens?</span>
+            </div>
+            <div style="padding: 8px 12px; font-size: 0.85rem; color: var(--color-text-secondary); line-height: 1.3;">
+                Select all tokens touching this ${shapeType} shape?
+            </div>
+            <div style="display: flex; gap: 8px; padding: 6px 12px 10px;">
+                <button type="button" id="btn-shape-select-yes" class="btn btn-primary btn-xs" style="flex:1; display:flex; align-items:center; justify-content:center; gap:6px;">
+                    <i class="fa-solid fa-check"></i> Yes
+                </button>
+                <button type="button" id="btn-shape-select-no" class="btn btn-secondary btn-xs" style="flex:1; display:flex; align-items:center; justify-content:center; gap:6px;">
+                    <i class="fa-solid fa-xmark"></i> No
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(menu);
+
+        const menuRect = menu.getBoundingClientRect();
+        if (clientX + menuRect.width > window.innerWidth) menu.style.left = `${window.innerWidth - menuRect.width - 10}px`;
+        if (clientY + menuRect.height > window.innerHeight) menu.style.top = `${window.innerHeight - menuRect.height - 10}px`;
+
+        const btnYes = menu.querySelector('#btn-shape-select-yes');
+        const btnNo = menu.querySelector('#btn-shape-select-no');
+
+        btnYes.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.remove();
+            
+            const targetIds = [];
+            Object.entries(tokens).forEach(([id, tok]) => {
+                if (isTokenIntersectingShape(tok, shape)) {
+                    targetIds.push(id);
+                }
+            });
+
+            selectedTokenIds.clear();
+            if (targetIds.length > 0) {
+                targetIds.forEach(id => selectedTokenIds.add(id));
+                selectedTokenId = targetIds[0];
+            } else {
+                selectedTokenId = null;
+            }
+            renderAll();
+
+            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                JqueryUtil.doToast({
+                    type: targetIds.length > 0 ? 'success' : 'info',
+                    content: targetIds.length > 0 ? `Selected ${targetIds.length} token(s) touching shape.` : 'No tokens found within shape.'
+                });
+            }
+        });
+
+        btnNo.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.remove();
+        });
     }
 
     function getShapeComponentAtCoord(x, y, requireControl = true) {
@@ -1345,6 +5989,11 @@ let isTokenMeasuring = false;
     // Ping Animation State
     let activePings = [];
     let pingAnimFrame = null;
+    let pingForceSelectTimeout = null;
+
+    // 200ms Damage Visual Animation State
+    let activeDamageFX = [];
+    let damageFXAnimFrame = null;
     
     // Grid alignment settings
     let grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5 };
@@ -1358,6 +6007,19 @@ let isTokenMeasuring = false;
     let isDrawingWall = false;
     let wallStartPoint = null;
     let lastMouseEvent = null;
+
+    // Map Tools (Traps & Portals) State
+    let traps = [];
+    let portals = [];
+    let activeMapToolSubmode = 'traps'; // 'traps' | 'portals'
+    let currentMapToolShape = 'rect'; // 'rect' | 'circle' | 'line' | 'polygon'
+    let isDrawingMapTool = false;
+    let mapToolStartPoint = null;
+    let mapToolCurrentPoint = null;
+    let mapToolPolygonPoints = [];
+    let selectedMapToolId = null;
+    let tokenPortalDebounce = new Map(); // tokenId -> { portalId, time }
+    let mobileMapToolTapCount = 0;
 
     // Tokens state
     let tokens = {};
@@ -1416,7 +6078,7 @@ let lastBroadcastedTokens = {};
 
     let currentMapId = null;
 
-    function loadMap(mapId) {
+    function loadMap(mapId, preserveCamera = false) {
         if (!vtt.campaignState || !vtt.campaignState.maps || !vtt.campaignState.maps[mapId]) return;
         
         currentMapId = mapId;
@@ -1542,6 +6204,14 @@ let lastBroadcastedTokens = {};
         lights = mapData.lights || [];
         notes = mapData.notes || [];
         shapes = mapData.shapes || {};
+        drawings = mapData.drawings || {};
+        traps = Array.isArray(mapData.traps) ? mapData.traps : [];
+        portals = Array.isArray(mapData.portals) ? mapData.portals : [];
+        deselectMapToolItem();
+        renderPlacedTrapsList();
+        renderPlacedPortalsList();
+        populateTargetPortalsDropdown();
+        precacheConnectedMapAssets(portals);
         
         // Backward compatibility for old wall schema
         walls.forEach(w => {
@@ -1553,17 +6223,78 @@ let lastBroadcastedTokens = {};
         // 4. Update the preview indicator banner (GM Only)
         updatePreviewBanner();
 
-        // 5. Center viewport on map and redraw everything
+        // 5. Update viewport camera and redraw everything
         const mapW = (mapData.gridWidth || 40) * (grid.size || 50) * (grid.scale || 1.0);
         const mapH = (mapData.gridHeight || 30) * (grid.size || 50) * (grid.scale || 1.0);
         const w = viewport.clientWidth || 1000;
         const h = viewport.clientHeight || 800;
-        panX = (w - mapW) / 2;
-        panY = (h - mapH) / 2;
-        zoom = 1.0;
-        updateContainerTransform();
-        renderAll();
-        updateCoordinateDisplay(currentMouseCoords);
+
+        const transit = window._portalTransitInfo;
+        const isPortalArrival = transit && (transit.targetMapId === mapId) && (Date.now() - transit.timestamp < 15000);
+
+        if (isPortalArrival) {
+            const destPortal = portals.find(p => p.id === transit.targetPortalId);
+            const tok = tokens[transit.tokenId];
+            const { drawW, drawH } = tok ? getTokenDrawDimensions(tok) : { drawW: grid.size || 50, drawH: grid.size || 50 };
+            const destCenter = destPortal ? calcPortalCenter(destPortal) : (tok ? { x: tok.x + drawW / 2, y: tok.y + drawH / 2 } : { x: mapW / 2, y: mapH / 2 });
+
+            // Initialize camera directly aligned with destination portal threshold
+            panX = (w / 2) - destCenter.x;
+            panY = (h / 2) - destCenter.y;
+            zoom = 1.0;
+
+            if (tok) {
+                selectedTokenIds.clear();
+                selectedTokenIds.add(tok.id);
+                selectedTokenId = tok.id;
+                // Animate stepping forward from portal threshold into the room
+                const startStepX = destCenter.x - drawW / 2;
+                const startStepY = destCenter.y - drawH / 2;
+                triggerTokenStepThroughAnimation(tok.id, startStepX, startStepY, tok.x, tok.y, 300);
+            }
+
+            window._portalTransitInfo = null;
+            pendingFocusTokenId = null;
+
+            updateContainerTransform();
+            renderAll();
+            updateCoordinateDisplay(currentMouseCoords);
+
+            // Smoothly ease camera onto the arrived token after stepping through
+            if (tok) {
+                panTo(tok.x + drawW / 2, tok.y + drawH / 2, null, 400);
+            }
+        } else {
+            if (!preserveCamera) {
+                let playerToken = null;
+                if (vtt.role !== 'GM') {
+                    playerToken = Object.values(tokens).find(t => t.isPlayer && isTokenControlledByPlayer(t));
+                }
+                if (playerToken) {
+                    const { drawW, drawH } = getTokenDrawDimensions(playerToken);
+                    panX = (w / 2) - (playerToken.x + drawW / 2);
+                    panY = (h / 2) - (playerToken.y + drawH / 2);
+                    zoom = 1.0;
+                } else {
+                    panX = (w - mapW) / 2;
+                    panY = (h - mapH) / 2;
+                    zoom = 1.0;
+                }
+            }
+            updateContainerTransform();
+            renderAll();
+            updateCoordinateDisplay(currentMouseCoords);
+
+            if (pendingFocusTokenId && Date.now() < pendingFocusTokenExpiry && tokens[pendingFocusTokenId]) {
+                selectedTokenIds.clear();
+                selectedTokenIds.add(pendingFocusTokenId);
+                selectedTokenId = pendingFocusTokenId;
+                const tok = tokens[pendingFocusTokenId];
+                const { drawW, drawH } = getTokenDrawDimensions(tok);
+                panTo(tok.x + drawW / 2, tok.y + drawH / 2, null, 350);
+                pendingFocusTokenId = null;
+            }
+        }
     }
 
     function updatePreviewBanner() {
@@ -1639,6 +6370,9 @@ let lastBroadcastedTokens = {};
             }
             if (vtt.campaignState.shapes) {
                 shapes = vtt.campaignState.shapes;
+            }
+            if (vtt.campaignState.drawings) {
+                drawings = vtt.campaignState.drawings;
             }
         }
     }
@@ -2005,6 +6739,12 @@ let lastBroadcastedTokens = {};
             canvasGrid.height = height;
             canvasGrid.style.width = `${width}px`;
             canvasGrid.style.height = `${height}px`;
+            if (canvasPortals) {
+                canvasPortals.width = width;
+                canvasPortals.height = height;
+                canvasPortals.style.width = `${width}px`;
+                canvasPortals.style.height = `${height}px`;
+            }
             canvasInteraction.width = width;
             canvasInteraction.height = height;
             canvasInteraction.style.width = `${width}px`;
@@ -2018,11 +6758,21 @@ let lastBroadcastedTokens = {};
         // 1. Render Grid (and map layer assets underneath)
         renderGridLayer(width, height);
 
+        // 1.5 Render Portals & Projections Layer (Floor level - above Map/Grid, underneath Tokens)
+        renderPortalsLayer(width, height);
+
         // 2. Render Fog of War (Dynamic Raycasting)
         renderFogOfWarLayer(width, height);
 
         // 3. Render Interaction & Visuals (Tokens, Walls overlays, etc.)
         renderInteractionLayer();
+    }
+
+    function renderPortalsLayer(width, height) {
+        if (!ctxPortals) return;
+        ctxPortals.clearRect(0, 0, width, height);
+        renderProjectedPortals(ctxPortals);
+        renderPortals(ctxPortals);
     }
 
     function renderGridLayer(width, height) {
@@ -2146,10 +6896,14 @@ let lastBroadcastedTokens = {};
         // Reset vision polygons array
         visionPolygons = [];
 
-        // Collect all tokens that grant vision (Player tokens only for actual sight)
+        // Collect all tokens that grant vision (Player tokens only for actual sight, or selected tokens in GM mode)
         const visionSources = Object.values(tokens).filter(token => {
-            if (vtt.role === 'GM' && gmTokenVisionMode) {
-                return selectedTokenIds.has(token.id);
+            if (vtt.role === 'GM') {
+                if (gmTokenVisionMode) return selectedTokenIds.has(token.id);
+                // When GM has selected any token, grant vision to allow easy line-of-sight testing
+                if (selectedTokenIds.size > 0) return selectedTokenIds.has(token.id);
+                // When no token is selected by GM, default to showing what all player tokens see
+                return token.isPlayer;
             }
             // GM sees all player tokens, players only see tokens they control
             return token.isPlayer && isTokenControlledByPlayer(token);
@@ -2211,6 +6965,10 @@ let lastBroadcastedTokens = {};
                 ctxFog.fill();
             }
         });
+
+        // 1.5 Note: View-Through Portals projection is rendered directly through Portal A
+        // in renderProjectedPortals on the interaction layer. Distant Room B coordinates
+        // are NEVER unmasked in Fog of War to maintain total non-Euclidean spatial immersion.
 
         // 2. Gather and Process Light Sources (Tokens with lights + Standalone lights)
         const lightSources = [];
@@ -2475,7 +7233,7 @@ let lastBroadcastedTokens = {};
         requestAnimationFrame(lightingAnimationTick);
     }
 
-    function computeVisibilityPolygon(cx, cy, sightRadius, width, height, beamArc = 360, beamFacing = 0) {
+    function computeVisibilityPolygon(cx, cy, sightRadius, width, height, beamArc = 360, beamFacing = 0, ignoreWallFilter = null, wallsOverride = null) {
         const isAngular = typeof beamArc === 'number' && beamArc < 360 && beamArc > 0;
         const facingRad = ((beamFacing || 0) * Math.PI / 180) % (Math.PI * 2);
         const normFacing = facingRad < 0 ? facingRad + Math.PI * 2 : facingRad;
@@ -2503,7 +7261,9 @@ let lastBroadcastedTokens = {};
 
         // Process walls for active layout/collision calculations (e.g. including hinged open doors)
         const processedWalls = [];
-        walls.forEach(w => {
+        const wallsToUse = Array.isArray(wallsOverride) ? wallsOverride : walls;
+        wallsToUse.forEach(w => {
+            if (typeof ignoreWallFilter === 'function' && ignoreWallFilter(w)) return;
             const coords = getWallCoordinatesForRaycasting(w, cx, cy);
             if (coords) {
                 processedWalls.push({
@@ -3174,187 +7934,8 @@ let lastBroadcastedTokens = {};
             });
         }
 
-        // Helper: draw a spell effect/shape template on a canvas context
-        function drawMeasurementTemplate(ctx, startPoint, endPoint, shapeType, squareAnchor, beamWidth, color, ownerUsername, _unused, points, showDistance) {
-            if (!startPoint || !endPoint) return;
-            const fillColor = color || '#00ffff';
-            const strokeColor = fillColor;
-
-            ctx.save();
-            ctx.fillStyle = fillColor;
-            ctx.strokeStyle = strokeColor;
-            ctx.lineWidth = 2;
-            ctx.setLineDash([]);
-
-            const dx = endPoint.x - startPoint.x;
-            const dy = endPoint.y - startPoint.y;
-            const radius = Math.hypot(dx, dy);
-
-            // Track the pixel measurement relevant to each shape type for the distance label
-            let distancePx = radius;
-            let labelAtX = endPoint.x;
-            let labelAtY = endPoint.y;
-
-            if (shapeType === 'circle') {
-                ctx.beginPath();
-                ctx.arc(startPoint.x, startPoint.y, radius, 0, Math.PI * 2);
-                ctx.globalAlpha = 0.7;
-                ctx.fill();
-                ctx.globalAlpha = 1.0;
-                ctx.stroke();
-
-                // Draw radius line
-                ctx.setLineDash([4, 4]);
-                ctx.beginPath();
-                ctx.moveTo(startPoint.x, startPoint.y);
-                ctx.lineTo(endPoint.x, endPoint.y);
-                ctx.stroke();
-                ctx.setLineDash([]);
-
-                distancePx = radius; // radius in pixels
-
-            } else if (shapeType === 'square') {
-                const halfSide = radius;
-                let rx = startPoint.x, ry = startPoint.y;
-                if (squareAnchor === 'center') {
-                    rx = startPoint.x - halfSide;
-                    ry = startPoint.y - halfSide;
-                } else {
-                    // corner anchor: draw from startPoint toward endPoint
-                    rx = Math.min(startPoint.x, endPoint.x);
-                    ry = Math.min(startPoint.y, endPoint.y);
-                }
-                const side = halfSide * 2;
-                ctx.beginPath();
-                ctx.rect(rx, ry, side, side);
-                ctx.globalAlpha = 0.7;
-                ctx.fill();
-                ctx.globalAlpha = 1.0;
-                ctx.stroke();
-
-                distancePx = side; // show the full side length
-
-            } else if (shapeType === 'cone') {
-                const angle = Math.atan2(dy, dx);
-                const halfAngle = Math.PI / 4; // 90 degree cone
-                ctx.beginPath();
-                ctx.moveTo(startPoint.x, startPoint.y);
-                ctx.arc(startPoint.x, startPoint.y, radius, angle - halfAngle, angle + halfAngle);
-                ctx.closePath();
-                ctx.globalAlpha = 0.7;
-                ctx.fill();
-                ctx.globalAlpha = 1.0;
-                ctx.stroke();
-
-                distancePx = radius; // cone length
-
-            } else if (shapeType === 'beam') {
-                const angle = Math.atan2(dy, dx);
-                const length = radius;
-                // beamWidth is in feet — convert to canvas pixels using the grid scale
-                const pxPerFt = (grid.size * (grid.scale || 1.0)) / (grid.feetPerSquare || 5);
-                const halfWidth = ((beamWidth || 5) * pxPerFt) / 2;
-                const cos = Math.cos(angle);
-                const sin = Math.sin(angle);
-                const perpX = -sin * halfWidth;
-                const perpY = cos * halfWidth;
-
-                ctx.beginPath();
-                ctx.moveTo(startPoint.x + perpX, startPoint.y + perpY);
-                ctx.lineTo(startPoint.x + cos * length + perpX, startPoint.y + sin * length + perpY);
-                ctx.lineTo(startPoint.x + cos * length - perpX, startPoint.y + sin * length - perpY);
-                ctx.lineTo(startPoint.x - perpX, startPoint.y - perpY);
-                ctx.closePath();
-                ctx.globalAlpha = 0.7;
-                ctx.fill();
-                ctx.globalAlpha = 1.0;
-                ctx.stroke();
-
-                distancePx = length; // beam length
-
-            } else {
-                // Default: line (polyline if points array given, else simple line)
-                const polyPoints = (Array.isArray(points) && points.length >= 2) ? points : [startPoint, endPoint];
-                ctx.beginPath();
-                ctx.moveTo(polyPoints[0].x, polyPoints[0].y);
-                for (let i = 1; i < polyPoints.length; i++) {
-                    ctx.lineTo(polyPoints[i].x, polyPoints[i].y);
-                }
-                ctx.lineWidth = 8;
-                ctx.globalAlpha = 0.7;
-                ctx.stroke();
-
-                // Draw endpoint dot
-                ctx.beginPath();
-                ctx.arc(polyPoints[polyPoints.length - 1].x, polyPoints[polyPoints.length - 1].y, 6, 0, Math.PI * 2);
-                ctx.fillStyle = strokeColor;
-                ctx.globalAlpha = 1.0;
-                ctx.fill();
-
-                // Total polyline path length in pixels
-                let totalLen = 0;
-                for (let i = 1; i < polyPoints.length; i++) {
-                    totalLen += Math.hypot(polyPoints[i].x - polyPoints[i - 1].x, polyPoints[i].y - polyPoints[i - 1].y);
-                }
-                distancePx = totalLen;
-                labelAtX = polyPoints[polyPoints.length - 1].x;
-                labelAtY = polyPoints[polyPoints.length - 1].y;
-            }
-
-            // Distance label — shown only during live drawing (showDistance === true)
-            if (showDistance && distancePx > 0) {
-                const distFt = calcDistanceFt(distancePx);
-                const label = `${distFt} ft`;
-                ctx.save();
-                ctx.globalAlpha = 1.0;
-                ctx.font = 'bold 13px Inter, Arial, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                const tw = ctx.measureText(label).width;
-                const padX = 8;
-                const padY = 4;
-                const pillW = tw + padX * 2;
-                const pillH = 22;
-                // Position the pill above and slightly to the right of the endpoint
-                const pillX = labelAtX + 14;
-                const pillY = labelAtY - 22;
-                const r = pillH / 2;
-                // Draw pill background
-                ctx.fillStyle = 'rgba(15, 15, 20, 0.82)';
-                ctx.beginPath();
-                ctx.moveTo(pillX - pillW / 2 + r, pillY - pillH / 2);
-                ctx.arcTo(pillX + pillW / 2, pillY - pillH / 2, pillX + pillW / 2, pillY + pillH / 2, r);
-                ctx.arcTo(pillX + pillW / 2, pillY + pillH / 2, pillX - pillW / 2, pillY + pillH / 2, r);
-                ctx.arcTo(pillX - pillW / 2, pillY + pillH / 2, pillX - pillW / 2, pillY - pillH / 2, r);
-                ctx.arcTo(pillX - pillW / 2, pillY - pillH / 2, pillX + pillW / 2, pillY - pillH / 2, r);
-                ctx.closePath();
-                ctx.fill();
-                // Draw pill border in shape color
-                ctx.strokeStyle = fillColor;
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-                // Draw text
-                ctx.fillStyle = '#ffffff';
-                ctx.fillText(label, pillX, pillY);
-                ctx.restore();
-            }
-
-            // Owner label
-            if (ownerUsername) {
-                ctx.font = '11px Inter, Arial, sans-serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'bottom';
-                ctx.fillStyle = 'rgba(0,0,0,0.6)';
-                const lx = (startPoint.x + endPoint.x) / 2;
-                const ly = Math.min(startPoint.y, endPoint.y) - 2;
-                const tw = ctx.measureText(ownerUsername).width + 8;
-                ctx.fillRect(lx - tw / 2, ly - 13, tw, 14);
-                ctx.fillStyle = fillColor;
-                ctx.fillText(ownerUsername, lx, ly);
-            }
-
-            ctx.restore();
-        }
+        // 1.4 Render Map Layer Drawings
+        renderDrawingsPass('map');
 
         // 1.5 Draw Persistent Shapes/Effects Layer (Underneath Tokens)
         Object.values(shapes).forEach(s => {
@@ -3397,6 +7978,17 @@ let lastBroadcastedTokens = {};
                 ctxInteraction.restore();
             }
         });
+
+        // 1.6 Render Token Layer Drawings (Underneath Tokens)
+        renderDrawingsPass('token');
+
+        // 1.7 Render GM Layer Drawings (Visible only to GM)
+        if (vtt.role === 'GM') {
+            renderDrawingsPass('gm');
+        }
+
+        // 1.8 Render Traps (Floor/Hazard Level)
+        renderTraps(ctxInteraction);
 
         // 2.0 Draw Token Auras Pass (Floor Projection Mode)
         Object.entries(tokens)
@@ -4562,6 +9154,23 @@ let lastBroadcastedTokens = {};
             });
         }
 
+        // Render active 200ms damage visual animations
+        if (activeDamageFX && activeDamageFX.length > 0) {
+            const now = Date.now();
+            activeDamageFX.forEach(fx => {
+                const elapsed = now - fx.startTime;
+                if (elapsed >= fx.duration) return;
+                const progress = elapsed / fx.duration;
+                const opacity = 1.0 - progress;
+
+                ctxInteraction.save();
+                (fx.types || ['untyped']).forEach((type, idx) => {
+                    renderDamageFXBurst(ctxInteraction, fx.x, fx.y, fx.radius, progress, opacity, type, idx);
+                });
+                ctxInteraction.restore();
+            });
+        }
+
         // Cleanup orphaned token overlays for deleted tokens
         const cleanupOverlayLayer = document.getElementById('vtt-html-overlays');
         if (cleanupOverlayLayer) {
@@ -4574,6 +9183,58 @@ let lastBroadcastedTokens = {};
                     node.remove();
                 }
             });
+        }
+
+        // Draw in-progress live Paint stroke / shape preview
+        if (activeTool === 'paint') {
+            if (currentPaintStroke && currentPaintStroke.type !== 'eraser') {
+                drawDrawingObject(ctxInteraction, currentPaintStroke, false);
+            } else if (polygonPoints.length > 0) {
+                ctxInteraction.save();
+                ctxInteraction.strokeStyle = paintStrokeColor;
+                ctxInteraction.lineWidth = paintStrokeWidth;
+                ctxInteraction.beginPath();
+                ctxInteraction.moveTo(polygonPoints[0].x, polygonPoints[0].y);
+                for (let i = 1; i < polygonPoints.length; i++) {
+                    ctxInteraction.lineTo(polygonPoints[i].x, polygonPoints[i].y);
+                }
+                if (currentMouseCoords) {
+                    ctxInteraction.lineTo(currentMouseCoords.x, currentMouseCoords.y);
+                }
+                ctxInteraction.stroke();
+                polygonPoints.forEach((p, idx) => {
+                    ctxInteraction.beginPath();
+                    ctxInteraction.arc(p.x, p.y, (idx === 0 ? 5.5 : 4) / zoom, 0, Math.PI * 2);
+                    ctxInteraction.fillStyle = idx === 0 ? '#10b981' : '#ffd700';
+                    ctxInteraction.fill();
+                    ctxInteraction.strokeStyle = '#ffffff';
+                    ctxInteraction.lineWidth = 1 / zoom;
+                    ctxInteraction.stroke();
+                });
+                ctxInteraction.restore();
+            }
+
+            if (paintSubTool === 'eraser' && currentMouseCoords) {
+                const eraseR = Math.max(16, paintStrokeWidth * 3) / 2;
+                ctxInteraction.save();
+                ctxInteraction.strokeStyle = '#ffffff';
+                ctxInteraction.lineWidth = 1.5 / zoom;
+                ctxInteraction.beginPath();
+                ctxInteraction.arc(currentMouseCoords.x, currentMouseCoords.y, eraseR, 0, Math.PI * 2);
+                ctxInteraction.stroke();
+                ctxInteraction.strokeStyle = '#000000';
+                ctxInteraction.setLineDash([3 / zoom, 3 / zoom]);
+                ctxInteraction.stroke();
+                ctxInteraction.restore();
+            }
+        }
+
+        if (vtt.role === 'GM' && selectedMapToolItem) {
+            renderSelectedMapToolHighlight(ctxInteraction);
+        }
+
+        if (activeTool === 'maptools' || activeTool === 'map-tools') {
+            renderMapToolDrawingPreview(ctxInteraction);
         }
     }
 
@@ -4711,6 +9372,160 @@ let lastBroadcastedTokens = {};
             pingAnimFrame = requestAnimationFrame(animatePings);
         } else {
             pingAnimFrame = null;
+        }
+    }
+
+    function triggerDamageFXAnimation(x, y, radius, damageTypes) {
+        const types = Array.isArray(damageTypes) && damageTypes.length > 0 ? damageTypes : ['untyped'];
+        activeDamageFX.push({
+            x,
+            y,
+            radius: Math.max(18, radius || 25),
+            types,
+            startTime: Date.now(),
+            duration: 200 // exactly 200ms duration per design spec
+        });
+        if (!damageFXAnimFrame) {
+            animateDamageFX();
+        }
+    }
+
+    function animateDamageFX() {
+        const now = Date.now();
+        activeDamageFX = activeDamageFX.filter(fx => now - fx.startTime < fx.duration);
+        renderAll();
+        if (activeDamageFX.length > 0) {
+            damageFXAnimFrame = requestAnimationFrame(animateDamageFX);
+        } else {
+            damageFXAnimFrame = null;
+        }
+    }
+
+    function renderDamageFXBurst(ctx, x, y, baseRadius, progress, opacity, damageType, index = 0) {
+        const r = baseRadius * (0.6 + progress * 0.9);
+        const normType = (damageType || 'untyped').trim().toLowerCase();
+
+        if (normType.includes('fire')) {
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+            grad.addColorStop(0, `rgba(255, 240, 160, ${opacity})`);
+            grad.addColorStop(0.35, `rgba(255, 107, 53, ${opacity * 0.85})`);
+            grad.addColorStop(0.8, `rgba(220, 38, 38, ${opacity * 0.5})`);
+            grad.addColorStop(1, 'rgba(185, 28, 28, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (normType.includes('cold')) {
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+            grad.addColorStop(0, `rgba(255, 255, 255, ${opacity})`);
+            grad.addColorStop(0.4, `rgba(100, 181, 246, ${opacity * 0.85})`);
+            grad.addColorStop(1, 'rgba(30, 136, 229, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Crystalline frost spikes
+            ctx.strokeStyle = `rgba(227, 242, 253, ${opacity * 0.9})`;
+            ctx.lineWidth = 2.5;
+            for (let i = 0; i < 6; i++) {
+                const ang = (i * Math.PI) / 3;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + Math.cos(ang) * (r * 1.15), y + Math.sin(ang) * (r * 1.15));
+                ctx.stroke();
+            }
+        } else if (normType.includes('lightning')) {
+            ctx.fillStyle = `rgba(255, 249, 196, ${opacity * 0.45})`;
+            ctx.beginPath();
+            ctx.arc(x, y, r * 0.8, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = `rgba(255, 213, 79, ${opacity})`;
+            ctx.lineWidth = 3;
+            for (let i = 0; i < 4; i++) {
+                const ang = (i * Math.PI) / 2 + (progress * 0.4);
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                const midX = x + Math.cos(ang) * (r * 0.55) + ((i % 2 === 0 ? 1 : -1) * 7);
+                const midY = y + Math.sin(ang) * (r * 0.55) + ((i % 2 === 0 ? -1 : 1) * 7);
+                ctx.lineTo(midX, midY);
+                ctx.lineTo(x + Math.cos(ang) * (r * 1.15), y + Math.sin(ang) * (r * 1.15));
+                ctx.stroke();
+            }
+        } else if (normType.includes('acid')) {
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+            grad.addColorStop(0, `rgba(220, 255, 120, ${opacity})`);
+            grad.addColorStop(0.5, `rgba(174, 213, 129, ${opacity * 0.8})`);
+            grad.addColorStop(1, 'rgba(104, 159, 56, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (normType.includes('poison')) {
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+            grad.addColorStop(0, `rgba(165, 214, 167, ${opacity * 0.9})`);
+            grad.addColorStop(0.55, `rgba(129, 199, 132, ${opacity * 0.75})`);
+            grad.addColorStop(1, 'rgba(46, 125, 50, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (normType.includes('radiant')) {
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, r * 1.2);
+            grad.addColorStop(0, `rgba(255, 255, 255, ${opacity})`);
+            grad.addColorStop(0.3, `rgba(255, 241, 118, ${opacity * 0.9})`);
+            grad.addColorStop(0.7, `rgba(253, 216, 53, ${opacity * 0.5})`);
+            grad.addColorStop(1, 'rgba(251, 192, 45, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, r * 1.2, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (normType.includes('necrotic')) {
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+            grad.addColorStop(0, `rgba(40, 20, 50, ${opacity * 0.95})`);
+            grad.addColorStop(0.5, `rgba(156, 39, 176, ${opacity * 0.75})`);
+            grad.addColorStop(1, 'rgba(74, 20, 140, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+        } else if (normType.includes('force')) {
+            ctx.strokeStyle = `rgba(206, 147, 216, ${opacity * 0.95})`;
+            ctx.lineWidth = 4 * (1.0 - progress * 0.5);
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.75})`;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x, y, r * 0.7, 0, Math.PI * 2);
+            ctx.stroke();
+        } else if (normType.includes('psychic')) {
+            ctx.strokeStyle = `rgba(244, 143, 177, ${opacity * 0.95})`;
+            ctx.lineWidth = 3.5;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.stroke();
+        } else {
+            // Slashing, Piercing, Bludgeoning, or untyped physical strike
+            const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
+            grad.addColorStop(0, `rgba(255, 255, 255, ${opacity * 0.9})`);
+            grad.addColorStop(0.35, `rgba(239, 68, 68, ${opacity * 0.8})`);
+            grad.addColorStop(1, 'rgba(185, 28, 28, 0)');
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Dynamic impact cross-slash
+            ctx.strokeStyle = `rgba(255, 235, 238, ${opacity})`;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(x - r * 0.65, y - r * 0.65);
+            ctx.lineTo(x + r * 0.65, y + r * 0.65);
+            ctx.stroke();
         }
     }
 
@@ -5088,7 +9903,54 @@ window.emitTokenUpdates = function(currentTokens) {
             console.log('[campaign:state-sync] received, maps count:', camp?.maps ? Object.keys(camp.maps).length : 0, 'activeGMMapId:', camp?.activeGMMapId);
             vtt.campaignState = camp;
             const targetMapId = (vtt.role === 'GM') ? (camp.activeGMMapId || camp.activeMapId) : (camp.playerMapOverrides?.[vtt.username] || camp.activeMapId);
-            loadMap(targetMapId);
+            
+            if (targetMapId !== currentMapId) {
+                // Switching to a new map: full map load
+                loadMap(targetMapId, false);
+            } else {
+                // Already on the current map: non-destructive merge to protect active drags, selections & measurements
+                const mapData = camp?.maps?.[currentMapId];
+                if (mapData) {
+                    traps = Array.isArray(mapData.traps) ? mapData.traps : [];
+                    portals = Array.isArray(mapData.portals) ? mapData.portals : [];
+                    lights = mapData.lights || [];
+                    notes = mapData.notes || [];
+                    walls = mapData.walls || [];
+
+                    const serverTokens = mapData.tokens || {};
+                    const currentTokens = tokens || {};
+
+                    for (const id in serverTokens) {
+                        if (id === dragTargetId && currentTokens[id]) {
+                            continue; // Preserve actively dragged token coordinates
+                        }
+                        const sTok = serverTokens[id];
+                        if (currentTokens[id]) {
+                            const lock = currentTokens[id]._portalTransitLock;
+                            Object.assign(currentTokens[id], sTok);
+                            if (lock && Date.now() < lock) currentTokens[id]._portalTransitLock = lock;
+                        } else {
+                            currentTokens[id] = JSON.parse(JSON.stringify(sTok));
+                        }
+                    }
+
+                    for (const id in currentTokens) {
+                        const t = currentTokens[id];
+                        if (t && (t.layer === 'map' || t.isBackground) && t.isAsset) continue;
+                        if (id === dragTargetId) continue;
+                        if (!serverTokens[id]) {
+                            delete currentTokens[id];
+                            if (selectedTokenIds.has(id)) selectedTokenIds.delete(id);
+                            if (selectedTokenId === id) selectedTokenId = null;
+                        }
+                    }
+
+                    tokens = currentTokens;
+                    lastBroadcastedTokens = JSON.parse(JSON.stringify(tokens));
+                    renderAll();
+                }
+            }
+
             // Refresh map manager grid if it is open — use rAF so DOM state from
             // loadMap() has fully settled before re-drawing the card list.
             const mapModal = document.getElementById('modal-upload-map');
@@ -5105,7 +9967,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 vtt.campaignState.maps[data.mapId] = data.map;
             }
             if (data.mapId === currentMapId) {
-                loadMap(data.mapId);
+                loadMap(data.mapId, true);
             }
         });
 
@@ -5115,7 +9977,21 @@ window.emitTokenUpdates = function(currentTokens) {
                 vtt.campaignState.maps[data.mapId].tokens = data.tokens;
             }
             if (data.mapId === currentMapId) {
-                tokens = data.tokens;
+                const incoming = data.tokens || {};
+                for (const id in incoming) {
+                    if (id === dragTargetId && tokens[id]) continue;
+                    tokens[id] = incoming[id];
+                }
+                for (const id in tokens) {
+                    const t = tokens[id];
+                    if (t && (t.layer === 'map' || t.isBackground) && t.isAsset) continue;
+                    if (id === dragTargetId) continue;
+                    if (!incoming[id]) {
+                        delete tokens[id];
+                        if (selectedTokenIds.has(id)) selectedTokenIds.delete(id);
+                        if (selectedTokenId === id) selectedTokenId = null;
+                    }
+                }
                 lastBroadcastedTokens = JSON.parse(JSON.stringify(tokens));
                 processTokenAnimReqs(tokens);
                 renderAll();
@@ -5126,6 +10002,7 @@ window.emitTokenUpdates = function(currentTokens) {
         socket.on('token:added', (data) => {
             if (data.origin === vtt.socket.id) return;
             if (vtt.campaignState && vtt.campaignState.maps && vtt.campaignState.maps[data.mapId]) {
+                if (!vtt.campaignState.maps[data.mapId].tokens) vtt.campaignState.maps[data.mapId].tokens = {};
                 vtt.campaignState.maps[data.mapId].tokens[data.tokenId] = data.token;
             }
             if (data.mapId === currentMapId) {
@@ -5140,7 +10017,7 @@ window.emitTokenUpdates = function(currentTokens) {
             if (data.origin === vtt.socket.id) return;
             if (vtt.campaignState && vtt.campaignState.maps && vtt.campaignState.maps[data.mapId]) {
                 const mapTokens = vtt.campaignState.maps[data.mapId].tokens;
-                if (mapTokens[data.tokenId]) Object.assign(mapTokens[data.tokenId], data.changes);
+                if (mapTokens && mapTokens[data.tokenId]) Object.assign(mapTokens[data.tokenId], data.changes);
             }
             if (data.mapId === currentMapId) {
                 if (tokens[data.tokenId]) {
@@ -5155,7 +10032,7 @@ window.emitTokenUpdates = function(currentTokens) {
 
         socket.on('token:deleted', (data) => {
             if (data.origin === vtt.socket.id) return;
-            if (vtt.campaignState && vtt.campaignState.maps && vtt.campaignState.maps[data.mapId]) {
+            if (vtt.campaignState && vtt.campaignState.maps && vtt.campaignState.maps[data.mapId]?.tokens) {
                 delete vtt.campaignState.maps[data.mapId].tokens[data.tokenId];
             }
             if (data.mapId === currentMapId) {
@@ -5221,7 +10098,43 @@ window.emitTokenUpdates = function(currentTokens) {
             triggerPingAnimation(data.x, data.y, data.username, data.role);
         });
 
+        socket.on('token:force_selected_gm', (data) => {
+            if (vtt.role !== 'GM' || !data || !data.tokenId) return;
+            const targetToken = tokens[data.tokenId];
+            if (!targetToken) return;
+
+            selectedTokenIds.clear();
+            selectedTokenIds.add(data.tokenId);
+            selectedTokenId = data.tokenId;
+
+            const { drawW, drawH } = getTokenDrawDimensions(targetToken);
+            const tx = targetToken.x + drawW / 2;
+            const ty = targetToken.y + drawH / 2;
+            panTo(tx, ty, null, 350);
+            renderAll();
+
+            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                JqueryUtil.doToast({
+                    type: 'info',
+                    content: `${data.username || 'Player'} targeted ${targetToken.name || 'Token'}.`
+                });
+            }
+        });
+
+        socket.on('tokens:damage_fx', (data) => {
+            if (!data || !Array.isArray(data.tokenIds)) return;
+            data.tokenIds.forEach(tokenId => {
+                const token = tokens[tokenId];
+                if (!token) return;
+                const { drawW, drawH } = getTokenDrawDimensions(token);
+                const tx = token.x + drawW / 2;
+                const ty = token.y + drawH / 2;
+                triggerDamageFXAnimation(tx, ty, Math.max(drawW, drawH) / 2, data.damageTypes || ['untyped']);
+            });
+        });
+
         socket.on('map:pannedTo', (data) => {
+            if (data.mapId && data.mapId !== currentMapId) return;
             if (data.zoom) {
                 panTo(data.x, data.y, data.zoom, 400);
             } else {
@@ -5246,6 +10159,139 @@ window.emitTokenUpdates = function(currentTokens) {
             if (data.mapId === currentMapId) {
                 shapes = data.shapes;
                 renderAll();
+            }
+        });
+
+        socket.on('drawings:updated', (data) => {
+            if (vtt.campaignState && vtt.campaignState.maps && vtt.campaignState.maps[data.mapId]) {
+                vtt.campaignState.maps[data.mapId].drawings = data.drawings;
+            }
+            if (data.mapId === currentMapId) {
+                drawings = data.drawings || {};
+                renderAll();
+            }
+        });
+
+        socket.on('traps:updated', (data) => {
+            if (vtt.campaignState && vtt.campaignState.maps && vtt.campaignState.maps[data.mapId]) {
+                vtt.campaignState.maps[data.mapId].traps = data.traps;
+            }
+            if (data.mapId === currentMapId) {
+                traps = data.traps || [];
+                renderPlacedTrapsList();
+                renderAll();
+            }
+        });
+
+        socket.on('portals:updated', (data) => {
+            if (vtt.campaignState && vtt.campaignState.maps && vtt.campaignState.maps[data.mapId]) {
+                vtt.campaignState.maps[data.mapId].portals = data.portals;
+            }
+            if (data.mapId === currentMapId) {
+                portals = data.portals || [];
+                renderPlacedPortalsList();
+                populateTargetPortalsDropdown();
+                renderAll();
+            }
+        });
+
+        socket.on('trap:triggered', (data) => {
+            triggerTrapSpringFX(data);
+            postTrapTriggerChatCard(data);
+        });
+
+        socket.on('portal:teleported', (data) => {
+            if (tokens[data.tokenId]) {
+                tokens[data.tokenId]._portalTransitLock = Date.now() + 200;
+            }
+
+            if (data.targetMapId === currentMapId) {
+                const targetTok = tokens[data.tokenId];
+                const isOwner = (data.username && data.username === vtt.username) || 
+                                (targetTok && targetTok.isPlayer && isTokenControlledByPlayer(targetTok));
+                if (isOwner) {
+                    selectedTokenIds.clear();
+                    selectedTokenIds.add(data.tokenId);
+                    selectedTokenId = data.tokenId;
+                    panTo(data.targetX, data.targetY, null, 350);
+                }
+                renderAll();
+            } else if (vtt.role !== 'GM') {
+                const isOwner = (data.username && data.username === vtt.username);
+                const currentTok = tokens[data.tokenId];
+                const controlled = isOwner || (currentTok && currentTok.isPlayer && isTokenControlledByPlayer(currentTok));
+                if (controlled) {
+                    window._portalTransitInfo = {
+                        tokenId: data.tokenId,
+                        targetMapId: data.targetMapId,
+                        targetPortalId: data.targetPortalId || null,
+                        exitPos: { x: data.targetX, y: data.targetY },
+                        timestamp: Date.now()
+                    };
+                    pendingFocusTokenId = data.tokenId;
+                    pendingFocusTokenExpiry = Date.now() + 30000;
+                    if (vtt.campaignState?.maps?.[data.targetMapId]) {
+                        loadMap(data.targetMapId, false);
+                    }
+                    showPlayerInterMapPortalToast(data.targetMapName || vtt.campaignState?.maps?.[data.targetMapId]?.name);
+                }
+            } else if (vtt.role === 'GM') {
+                showGMInterMapPortalToast(data);
+            }
+        });
+
+        socket.on('portal:teleported_batch', (data) => {
+            if (!Array.isArray(data.tokens)) return;
+            data.tokens.forEach(mt => {
+                if (tokens[mt.tokenId]) {
+                    tokens[mt.tokenId]._portalTransitLock = Date.now() + 200;
+                }
+            });
+
+            if (data.targetMapId === currentMapId) {
+                const myTokens = data.tokens.filter(mt => {
+                    const tok = tokens[mt.tokenId];
+                    return (mt.owner && mt.owner === vtt.username) || (tok && tok.isPlayer && isTokenControlledByPlayer(tok));
+                });
+                if (myTokens.length > 0) {
+                    selectedTokenIds.clear();
+                    myTokens.forEach(mt => selectedTokenIds.add(mt.tokenId));
+                    selectedTokenId = myTokens[0].tokenId;
+                    panTo(myTokens[0].targetX, myTokens[0].targetY, null, 350);
+                }
+                renderAll();
+            } else if (vtt.role !== 'GM') {
+                const myTokens = data.tokens.filter(mt => {
+                    const tok = tokens[mt.tokenId];
+                    return (mt.owner && mt.owner === vtt.username) || (tok && tok.isPlayer && isTokenControlledByPlayer(tok));
+                });
+                if (myTokens.length > 0) {
+                    const lead = myTokens[0];
+                    window._portalTransitInfo = {
+                        tokenId: lead.tokenId,
+                        targetMapId: data.targetMapId,
+                        targetPortalId: data.targetPortalId || lead.targetPortalId || null,
+                        exitPos: { x: lead.targetX, y: lead.targetY },
+                        timestamp: Date.now()
+                    };
+                    pendingFocusTokenId = lead.tokenId;
+                    pendingFocusTokenExpiry = Date.now() + 30000;
+                    if (vtt.campaignState?.maps?.[data.targetMapId]) {
+                        loadMap(data.targetMapId, false);
+                    }
+                    showPlayerInterMapPortalToast(data.targetMapName || vtt.campaignState?.maps?.[data.targetMapId]?.name);
+                }
+            } else if (vtt.role === 'GM') {
+                const firstToken = data.tokens[0];
+                if (firstToken) {
+                    showGMInterMapPortalToast({
+                        tokenId: firstToken.tokenId,
+                        tokenName: data.tokens.length > 1 ? `${firstToken.tokenName} (+${data.tokens.length - 1} tokens)` : firstToken.tokenName,
+                        sourceMapId: data.sourceMapId,
+                        targetMapId: data.targetMapId,
+                        targetMapName: data.targetMapName
+                    });
+                }
             }
         });
 
@@ -6657,6 +11703,9 @@ window.emitTokenUpdates = function(currentTokens) {
                         }
 
                         vtt.socket.emit('character:update', { character: char });
+                        if (window.VTT?.playerSheet?.syncLiveHp) {
+                            window.VTT.playerSheet.syncLiveHp(char.id, char.hpCurrent, char.hpMax, char.tempHp);
+                        }
                     }
                 } else if (saveDefaults && (editedToken.monsterData || !editedToken.isPlayer)) {
                     // Bestiary token: prompt to save as Custom NPC in Campaign Library!
@@ -7013,9 +12062,10 @@ window.emitTokenUpdates = function(currentTokens) {
         if (dragTargetId) {
             const originalPos = tokenDragOriginalPositions[dragTargetId];
             if (originalPos && tokens[dragTargetId]) {
+                const hadMoved = (tokens[dragTargetId].x !== originalPos.x || tokens[dragTargetId].y !== originalPos.y);
                 tokens[dragTargetId].x = originalPos.x;
                 tokens[dragTargetId].y = originalPos.y;
-                window.emitTokenUpdates(tokens);
+                if (hadMoved) window.emitTokenUpdates(tokens);
             }
             dragTargetId = null;
         }
@@ -7062,6 +12112,8 @@ window.emitTokenUpdates = function(currentTokens) {
         return true;
     }
 
+    let lastTouchMeasureEmitTime = 0;
+
     function moveTouchTokenDrag(clientX, clientY) {
         if (!dragTargetId) return;
         const t = tokens[dragTargetId];
@@ -7090,6 +12142,7 @@ window.emitTokenUpdates = function(currentTokens) {
 
             walls.forEach(wall => {
                 if (wall.isOpen) return;
+                if (Array.isArray(portals) && portals.some(po => po.walkThrough && distToSegmentSq(calcPortalCenter(po), { x: wall.x1, y: wall.y1 }, { x: wall.x2, y: wall.y2 }) <= (35 * 35))) return;
                 const intersect = getLineIntersection(startCenter.x, startCenter.y, endCenter.x, endCenter.y, wall.x1, wall.y1, wall.x2, wall.y2);
                 if (intersect && intersect.t < closestT) {
                     closestT = intersect.t;
@@ -7137,7 +12190,11 @@ window.emitTokenUpdates = function(currentTokens) {
             const points = (measureAnchorPoints.length > 0) ? [...measureAnchorPoints, localMeasureEnd] : null;
             const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
             if (broadcast) {
-                vtt.socket.emit('measure:update', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: 'line', color, squareAnchor: anchor, beamWidth: beamW, points });
+                const now = Date.now();
+                if (now - lastTouchMeasureEmitTime >= 50) {
+                    lastTouchMeasureEmitTime = now;
+                    vtt.socket.emit('measure:update', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: 'line', color, squareAnchor: anchor, beamWidth: beamW, points });
+                }
             }
 
             const distFeet = calcDistanceFt(Math.hypot(localMeasureEnd.x - localMeasureStart.x, localMeasureEnd.y - localMeasureStart.y));
@@ -7156,22 +12213,37 @@ window.emitTokenUpdates = function(currentTokens) {
     function endTouchTokenDrag(clientX, clientY) {
         if (!dragTargetId) return;
         const t = tokens[dragTargetId];
+        let didMove = false;
         if (t) {
             const originalPos = tokenDragOriginalPositions[dragTargetId] || { x: t.x, y: t.y };
             if (originalPos.x !== t.x || originalPos.y !== t.y) {
-                t._animReq = {
-                    startX: originalPos.x,
-                    startY: originalPos.y,
-                    endX: t.x,
-                    endY: t.y,
-                    waypoints: isTokenMeasuring ? measureAnchorPoints.slice(1) : [],
-                    timestamp: Date.now(),
-                    duration: 500
-                };
+                didMove = true;
+                const triggerRes = checkTokenMoveTriggers(t, originalPos);
+                if (triggerRes?.action === 'teleport' || triggerRes?.action === 'trap') {
+                    delete t._animReq;
+                    if (tokenAnimations[t.id]) delete tokenAnimations[t.id];
+                    if (triggerRes?.action === 'teleport' && tokens[t.id]) {
+                        selectedTokenIds.clear();
+                        selectedTokenIds.add(t.id);
+                        selectedTokenId = t.id;
+                    }
+                } else {
+                    t._animReq = {
+                        startX: originalPos.x,
+                        startY: originalPos.y,
+                        endX: t.x,
+                        endY: t.y,
+                        waypoints: isTokenMeasuring ? measureAnchorPoints.slice(1) : [],
+                        timestamp: Date.now(),
+                        duration: 500
+                    };
+                }
             }
         }
-        window.emitTokenUpdates(tokens);
-        processTokenAnimReqs(tokens);
+        if (didMove) {
+            window.emitTokenUpdates(tokens);
+            processTokenAnimReqs(tokens);
+        }
         dragTargetId = null;
         tokenDragOriginalPositions = {};
         const dragPill = document.getElementById('vtt-mobile-drag-pill');
@@ -7193,12 +12265,21 @@ window.emitTokenUpdates = function(currentTokens) {
         isDraggingToken: () => !!dragTargetId,
         openTokenEditModal,
         renderAll,
+        syncCampaignState: (newCampaignState) => {
+            if (newCampaignState) {
+                vtt.campaignState = newCampaignState;
+                renderAll();
+            }
+        },
         getGrid: () => grid,
         getTokens: () => tokens,
         getSelectedTokenIds: () => Array.from(selectedTokenIds),
         selectToken: (tokenId) => {
             selectedTokenIds.clear();
-            if (tokenId) selectedTokenIds.add(tokenId);
+            if (tokenId) {
+                selectedTokenIds.add(tokenId);
+                selectedTokenId = tokenId;
+            }
             renderAll();
         },
         getCanvasMouseCoords,
@@ -7253,7 +12334,65 @@ window.emitTokenUpdates = function(currentTokens) {
         hideGmTokenTooltip,
         showTokenContextMenu,
         showMassRollContextMenu,
-        cancelActiveMeasurement
+        cancelActiveMeasurement,
+        setPaintSubTool: (tool) => {
+            paintSubTool = tool;
+            document.querySelectorAll('#panel-paint-ribbon .paint-subtool-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.subtool === tool);
+            });
+        },
+        setPaintStrokeWidth: (w) => {
+            paintStrokeWidth = w;
+            document.querySelectorAll('#panel-paint-ribbon .paint-size-dot').forEach(b => {
+                b.classList.toggle('active', parseInt(b.dataset.size) === w);
+            });
+            const lbl = document.getElementById('paint-size-label');
+            if (lbl) lbl.textContent = `${w}px`;
+        },
+        setPaintColor: (c) => {
+            paintStrokeColor = c;
+            paintFillColor = c;
+            const swatch = document.getElementById('paint-custom-color');
+            if (swatch) swatch.value = c;
+            const ind = document.getElementById('paint-active-indicator');
+            if (ind) ind.style.background = c;
+        },
+        getPaintState: () => ({
+            subTool: paintSubTool,
+            strokeColor: paintStrokeColor,
+            fillColor: paintFillColor,
+            fillMode: paintFillMode,
+            strokeWidth: paintStrokeWidth,
+            gridSnap: paintGridSnap
+        }),
+        getDrawingAtPoint: (pt, matchLayer = true) => getDrawingAtPoint(pt, matchLayer),
+        showDrawingContextMenu,
+        setMapToolSubmode: (mode) => {
+            activeMapToolSubmode = mode;
+            document.querySelectorAll('.maptools-tab-btn').forEach(b => {
+                b.classList.toggle('active', (b.dataset.submode || b.dataset.tab) === mode);
+            });
+            document.getElementById('subpanel-maptools-traps')?.classList.toggle('vtt-hidden', mode !== 'traps');
+            document.getElementById('subpanel-maptools-portals')?.classList.toggle('vtt-hidden', mode !== 'portals');
+            const activeSubpanel = document.getElementById(mode === 'traps' ? 'subpanel-maptools-traps' : 'subpanel-maptools-portals');
+            const activeShapeBtn = activeSubpanel?.querySelector('.maptools-shape-btn.active');
+            if (activeShapeBtn) {
+                currentMapToolShape = activeShapeBtn.dataset.shape || (mode === 'traps' ? 'rect' : 'line');
+            }
+            cancelMapToolDrawing();
+        },
+        setMapToolShape: (shape) => {
+            currentMapToolShape = shape;
+            document.querySelectorAll('.maptools-shape-btn, .vtt-shape-opt').forEach(b => {
+                b.classList.toggle('active', b.dataset.shape === shape);
+            });
+            cancelMapToolDrawing();
+        },
+        cancelMapToolDrawing: () => cancelMapToolDrawing(),
+        rollTrapSave: (trapId, tokenId, ability, dc) => rollTrapSave(trapId, tokenId, ability, dc),
+        switchMapTo: (mapId, tokenId = null) => switchMapTo(mapId, tokenId),
+        handleCardAction: (cardData, action) => handleCardAction(cardData, action),
+        triggerDamageFXAnimation: (x, y, radius, damageTypes) => triggerDamageFXAnimation(x, y, radius, damageTypes)
     };
 
     // =========================================================================
@@ -7751,6 +12890,20 @@ window.emitTokenUpdates = function(currentTokens) {
         const charSheet = (token.characterId && window.VTT?.campaignState?.characters) ? window.VTT.campaignState.characters[token.characterId] : null;
         
         const availableTokens = [];
+        const seenUrls = new Set();
+
+        const addAvailableToken = (url, idx, isDefault = false, label = '') => {
+            if (!url || typeof url !== 'string') return;
+            const trimmed = url.trim();
+            if (!trimmed || seenUrls.has(trimmed)) return;
+            seenUrls.add(trimmed);
+            availableTokens.push({
+                url: trimmed,
+                idx: idx,
+                isDefault: isDefault,
+                label: label
+            });
+        };
 
         // Helper to get default monster token
         const getMonsterTokenUrl = (monster) => {
@@ -7772,46 +12925,82 @@ window.emitTokenUpdates = function(currentTokens) {
             return (window.VTT && window.VTT.generateArcaneToken) ? window.VTT.generateArcaneToken(monster?.name || 'Creature', 'monster') : null;
         };
 
-        // 1. Add Default Token if NPC or Companion
+        // 1. Add Default Token if NPC, Companion, or monsterData
         let defaultTokenUrl = null;
         if (charSheet && (charSheet.isCompanion || charSheet.isCustomNpc || charSheet.monsterData)) {
             defaultTokenUrl = getMonsterTokenUrl(charSheet.monsterData || {});
         } else if (token.monsterData) {
             defaultTokenUrl = getMonsterTokenUrl(token.monsterData);
+        } else if (charSheet && !charSheet.isPlayer && charSheet.monster) {
+            defaultTokenUrl = getMonsterTokenUrl(charSheet.monster);
         }
 
         if (defaultTokenUrl) {
-            availableTokens.push({
-                url: defaultTokenUrl,
-                idx: -1,
-                isDefault: true
+            addAvailableToken(defaultTokenUrl, -1, true, 'Default Token');
+        }
+
+        // 2. Add custom Token Images from the character sheet gallery
+        if (charSheet && charSheet.tokenImages && Array.isArray(charSheet.tokenImages)) {
+            charSheet.tokenImages.forEach((imgObj, idx) => {
+                const url = typeof imgObj === 'string' ? imgObj : (imgObj?.url || '');
+                addAvailableToken(url, idx, false, (typeof imgObj === 'object' && imgObj?.name) ? imgObj.name : 'Gallery Token');
             });
         }
 
-        // 2. Add custom Token Images from the gallery
-        if (charSheet && charSheet.tokenImages && charSheet.tokenImages.length > 0) {
-            charSheet.tokenImages.forEach((imgObj, idx) => {
-                const url = typeof imgObj === 'string' ? imgObj : (imgObj.url || '');
-                if (url) {
-                    availableTokens.push({
-                        url: url,
-                        idx: idx,
-                        isDefault: false
-                    });
-                }
+        // 3. Add custom Token Images from token's own tokenImages array if present
+        if (token.tokenImages && Array.isArray(token.tokenImages)) {
+            token.tokenImages.forEach((imgObj, idx) => {
+                const url = typeof imgObj === 'string' ? imgObj : (imgObj?.url || '');
+                addAvailableToken(url, idx, false, (typeof imgObj === 'object' && imgObj?.name) ? imgObj.name : 'Token Gallery');
             });
         }
+
+        // 4. Add character's avatar / tokenImage / img if present
+        if (charSheet) {
+            if (charSheet.tokenImage) addAvailableToken(charSheet.tokenImage, -2, false, 'Sheet Token');
+            if (charSheet.avatar) addAvailableToken(charSheet.avatar, -3, false, 'Avatar');
+            if (charSheet.avatarUrl) addAvailableToken(charSheet.avatarUrl, -4, false, 'Avatar');
+            if (charSheet.img) addAvailableToken(charSheet.img, -5, false, 'Sheet Image');
+        }
+
+        // 5. Add current token active canvas art
+        if (token.img) addAvailableToken(token.img, -6, false, 'Current Canvas Art');
+        if (token.url) addAvailableToken(token.url, -7, false, 'Current URL');
 
         if (availableTokens.length > 0) {
             let galleryHtml = '';
             availableTokens.forEach((tData) => {
                 let isActive = false;
-                if (charSheet && charSheet.activeTokenIndex !== undefined && charSheet.activeTokenIndex !== null) {
-                    isActive = charSheet.activeTokenIndex === tData.idx;
+                if (charSheet && charSheet.activeTokenIndex !== undefined && charSheet.activeTokenIndex !== null && charSheet.activeTokenIndex >= 0) {
+                    isActive = (charSheet.activeTokenIndex === tData.idx) || (token.img === tData.url);
                 } else {
-                    isActive = token.img === tData.url;
+                    isActive = (token.img === tData.url);
                 }
-                galleryHtml += `<img src="${tData.url}" class="menu-token-selector-img" data-idx="${tData.idx}" data-url="${tData.url}" title="${tData.isDefault ? 'Default Token' : 'Custom Token'}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 2px solid ${isActive ? 'var(--color-success-base)' : 'rgba(255,255,255,0.2)'};" onerror="this.style.display='none'">`;
+
+                const cleanUrl = (tData.url || '').split('?')[0].toLowerCase();
+                const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i) || tData.url.includes('pinimg.com/videos');
+                const isYt = tData.url.includes('youtube.com') || tData.url.includes('youtu.be');
+
+                const borderStyle = `border: 2px solid ${isActive ? 'var(--color-success-base)' : 'rgba(255,255,255,0.2)'};`;
+                const titleAttr = `${tData.label || (tData.isDefault ? 'Default Token' : 'Custom Token')}`;
+
+                if (isVideo) {
+                    galleryHtml += `
+                        <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${tData.url}" title="${titleAttr}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${borderStyle} background: #000; flex-shrink: 0;">
+                            <video src="${tData.url}" autoplay muted loop playsinline preload="metadata" onloadeddata="this.play().catch(()=>{})" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;"></video>
+                            <span style="position: absolute; bottom: 1px; right: 2px; font-size: 9px; pointer-events: none; opacity: 0.85;">▶</span>
+                        </div>`;
+                } else if (isYt) {
+                    galleryHtml += `
+                        <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${tData.url}" title="${titleAttr}" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: pointer; ${borderStyle} background: #222; flex-shrink: 0;">
+                            <span style="font-size: 20px; pointer-events: none;">📺</span>
+                        </div>`;
+                } else {
+                    galleryHtml += `
+                        <div class="menu-token-selector-item" data-idx="${tData.idx}" data-url="${tData.url}" title="${titleAttr}" style="width: 48px; height: 48px; position: relative; border-radius: 4px; overflow: hidden; cursor: pointer; ${borderStyle} flex-shrink: 0;">
+                            <img src="${tData.url}" alt="${titleAttr}" style="width: 100%; height: 100%; object-fit: cover; pointer-events: none;" onerror="this.parentElement.style.display='none'">
+                        </div>`;
+                }
             });
 
             html += `
@@ -7819,7 +13008,7 @@ window.emitTokenUpdates = function(currentTokens) {
                     <span><i class="fa-solid fa-images item-icon"></i> Token Selector</span>
                     <i class="fa-solid fa-chevron-right chevron-icon"></i>
                     <div class="vtt-token-submenu">
-                        <div class="vtt-token-submenu-list scroll-styled" style="width: 240px; padding: 12px; cursor: default; max-height: 400px; display: flex; gap: 8px; flex-wrap: wrap;">
+                        <div class="vtt-token-submenu-list scroll-styled" style="width: 250px; padding: 12px; cursor: default; max-height: 400px; display: flex; gap: 8px; flex-wrap: wrap;">
                             ${galleryHtml}
                         </div>
                     </div>
@@ -8241,26 +13430,30 @@ window.emitTokenUpdates = function(currentTokens) {
 
 
         // Token Selector Click
-        menu.querySelectorAll('.menu-token-selector-img').forEach(img => {
-            img.addEventListener('click', (e) => {
+        menu.querySelectorAll('.menu-token-selector-item, .menu-token-selector-img').forEach(itemEl => {
+            itemEl.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const url = e.target.dataset.url;
-                const idx = parseInt(e.target.dataset.idx);
+                const url = itemEl.dataset.url || itemEl.getAttribute('data-url');
+                const idx = parseInt(itemEl.dataset.idx || itemEl.getAttribute('data-idx') || '-1', 10);
 
                 const t = tokens[tokenId];
-                if (!t) return;
+                if (!t || !url) return;
                 
                 t.url = url;
                 t.img = url;
                 
                 const cleanUrl = url.split('?')[0].toLowerCase();
-                t.isVideo = !!cleanUrl.match(/\.(mp4|webm|ogg)$/i) || url.includes('youtube.com');
+                const isGif = cleanUrl.endsWith('.gif') || url.includes('.gif');
+                t.isGif = isGif;
+                t.isVideo = !isGif && (!!cleanUrl.match(/\.(mp4|webm|ogg)$/i) || url.includes('youtube.com') || url.includes('pinimg.com/videos'));
 
                 // Update default on sheet
                 if (t.characterId) {
                     const char = window.VTT?.campaignState?.characters?.[t.characterId];
                     if (char) {
-                        char.activeTokenIndex = idx;
+                        if (idx >= 0 && Array.isArray(char.tokenImages) && idx < char.tokenImages.length) {
+                            char.activeTokenIndex = idx;
+                        }
                         char.tokenSize = t.size;
                         char.tokenSight = t.sightRange;
                         char.tokenAuras = t.auras;
@@ -9480,10 +14673,59 @@ window.emitTokenUpdates = function(currentTokens) {
         });
     }
 
+    // Bi-directional sync: Mirror token damage/healing back to the persistent Character Sheet
+    function syncTokensHpToCharacters(affectedTokens) {
+        if (!affectedTokens || affectedTokens.length === 0 || !vtt.campaignState?.characters) return;
+        const updatedChars = new Set();
+
+        affectedTokens.forEach(token => {
+            if (!token || !token.characterId) return;
+            const char = vtt.campaignState.characters[token.characterId];
+            if (!char) return;
+
+            let modified = false;
+            if (token.hp !== undefined && char.hpCurrent !== token.hp) {
+                char.hpCurrent = token.hp;
+                modified = true;
+            }
+            if (token.maxHp !== undefined && char.hpMax !== token.maxHp) {
+                char.hpMax = token.maxHp;
+                modified = true;
+            }
+            if (token.tempHp !== undefined && (char.tempHp ?? 0) !== (token.tempHp ?? 0)) {
+                char.tempHp = token.tempHp ?? 0;
+                modified = true;
+            }
+
+            if (modified) {
+                updatedChars.add(char);
+                // Mirror to any other token instances representing this character on the current map
+                Object.values(tokens).forEach(t => {
+                    if (t.id !== token.id && t.characterId === char.id) {
+                        t.hp = char.hpCurrent;
+                        t.maxHp = char.hpMax;
+                        t.tempHp = char.tempHp;
+                    }
+                });
+            }
+        });
+
+        if (updatedChars.size > 0 && vtt.socket) {
+            updatedChars.forEach(char => {
+                vtt.socket.emit('character:update', { character: char });
+
+                if (window.VTT?.playerSheet?.syncLiveHp) {
+                    window.VTT.playerSheet.syncLiveHp(char.id, char.hpCurrent, char.hpMax, char.tempHp);
+                }
+            });
+        }
+    }
+
     function applyDamageToTokens(tokenIds, amount, type, mode) {
         if (!vtt.socket || tokenIds.length === 0) return;
 
         let appliedCount = 0;
+        const affectedTokens = [];
         
         tokenIds.forEach(tokenId => {
             const token = tokens[tokenId];
@@ -9517,6 +14759,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 if (token.hp !== undefined && token.maxHp !== undefined) {
                     token.hp = Math.min(token.hp + finalAmount, token.maxHp);
                     appliedCount++;
+                    affectedTokens.push(token);
                 }
             } else {
                 if (token.hp !== undefined) {
@@ -9530,13 +14773,336 @@ window.emitTokenUpdates = function(currentTokens) {
                         token.hp = Math.max(0, token.hp - finalAmount);
                     }
                     appliedCount++;
+                    affectedTokens.push(token);
                 }
             }
         });
 
         if (appliedCount > 0) {
+            syncTokensHpToCharacters(affectedTokens);
             window.emitTokenUpdates(tokens);
             renderAll();
+        }
+    }
+
+    // Single-transaction composite damage application evaluating immunities/resistances per damage type
+    function applyCardDamageToToken(token, dmgRolls, multiplier = 1.0) {
+        if (!token || !dmgRolls || dmgRolls.length === 0 || multiplier <= 0) return 0;
+        let totalDeducted = 0;
+
+        dmgRolls.forEach(dr => {
+            const rawAmount = dr.roll ? dr.roll.total : (parseInt(dr.formula) || 0);
+            if (rawAmount <= 0) return;
+            const type = dr.type || 'untyped';
+
+            let finalAmount = rawAmount;
+
+            // Vulnerability, resistance, immunity check
+            if (type !== 'untyped' && token.monsterData) {
+                const md = token.monsterData;
+                let mult = 1;
+                if (md.immune && _hasResistanceType(md.immune, type)) mult = 0;
+                else if (md.vulnerable && _hasResistanceType(md.vulnerable, type)) mult = 2;
+                else if (md.resist && _hasResistanceType(md.resist, type)) mult = 0.5;
+                finalAmount = Math.floor(finalAmount * mult);
+            } else if (type !== 'untyped' && token.isPlayer && token.characterId && window.VTT?.campaignState?.characters?.[token.characterId]) {
+                const char = window.VTT.campaignState.characters[token.characterId];
+                let mult = 1;
+                if (char.immune && char.immune.includes(type)) mult = 0;
+                else if (char.vulnerable && char.vulnerable.includes(type)) mult = 2;
+                else if (char.resist && char.resist.includes(type)) mult = 0.5;
+                finalAmount = Math.floor(finalAmount * mult);
+            }
+
+            finalAmount = Math.floor(finalAmount * multiplier);
+
+            if (token.hp !== undefined && finalAmount > 0) {
+                let tempDamage = 0;
+                if (token.tempHp && token.tempHp > 0) {
+                    tempDamage = Math.min(token.tempHp, finalAmount);
+                    token.tempHp -= tempDamage;
+                    finalAmount -= tempDamage;
+                }
+                if (finalAmount > 0) {
+                    token.hp = Math.max(0, token.hp - finalAmount);
+                }
+                totalDeducted += (tempDamage + finalAmount);
+            }
+        });
+
+        return totalDeducted;
+    }
+
+    function applyCompositeDamageToTokens(tokenIds, dmgRolls, multiplier = 1.0) {
+        if (!tokenIds || tokenIds.length === 0 || !tokens) return;
+        const damageTypes = (dmgRolls || []).map(dr => dr.type || 'untyped').filter(Boolean);
+        let anyApplied = false;
+        const affectedTokens = [];
+
+        tokenIds.forEach(tokenId => {
+            const token = tokens[tokenId];
+            if (!token) return;
+
+            const deducted = applyCardDamageToToken(token, dmgRolls, multiplier);
+            if (deducted > 0) {
+                anyApplied = true;
+                affectedTokens.push(token);
+            }
+
+            const { drawW, drawH } = getTokenDrawDimensions(token);
+            triggerDamageFXAnimation(token.x + drawW / 2, token.y + drawH / 2, Math.max(drawW, drawH) / 2, damageTypes.length > 0 ? damageTypes : ['untyped']);
+        });
+
+        if (anyApplied) {
+            syncTokensHpToCharacters(affectedTokens);
+            window.emitTokenUpdates(tokens);
+            renderAll();
+        }
+
+        if (vtt.socket) {
+            vtt.socket.emit('tokens:damage_fx', {
+                mapId: currentMapId,
+                tokenIds,
+                damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
+            });
+        }
+    }
+
+    function getTokenSaveMod(t, ability) {
+        if (!t || !ability) return 0;
+        const ab = ability.toLowerCase();
+        let totalMod = 0;
+
+        if (t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
+            const char = vtt.campaignState.characters[t.characterId];
+            const score = (char.stats && char.stats[ab]) || (char.abilities && (char.abilities[ab]?.score || char.abilities[ab])) || 10;
+            const statMod = (char.statMods && char.statMods[ab]) || 0;
+            const baseMod = Math.floor((score + statMod - 10) / 2);
+            const isProf = char.saves ? !!char.saves[ab] : (char.abilities?.[ab]?.saveProf || false);
+            const level = char.level || 1;
+            const pb = Math.floor((level - 1) / 4) + 2;
+            const globalMod = char.globalSaveMod || 0;
+            const customMod = (char.saveMods && char.saveMods[ab]) || 0;
+            totalMod = baseMod + (isProf ? pb : 0) + globalMod + customMod;
+        } else {
+            const m = getResolvedCreatureMonsterData(t);
+            if (m && m.save && m.save[ab] !== undefined) {
+                totalMod = parseInt(m.save[ab]);
+            } else if (m && m[ab] !== undefined) {
+                totalMod = Math.floor((m[ab] - 10) / 2);
+            } else {
+                const score = t.abilities?.[ab]?.score || t.abilities?.[ab] || 10;
+                totalMod = Math.floor((score - 10) / 2);
+            }
+        }
+        return isNaN(totalMod) ? 0 : totalMod;
+    }
+
+    function promptGMSaveHalf(saveSummary, onResolve) {
+        const oldModal = document.getElementById('vtt-save-resolve-modal');
+        if (oldModal) oldModal.remove();
+
+        const modal = document.createElement('div');
+        modal.id = 'vtt-save-resolve-modal';
+        modal.className = 'vtt-modal animated-fade-in';
+        modal.style.zIndex = '100005';
+
+        const rowsHtml = saveSummary.results.map(r => {
+            const badge = r.passed
+                ? `<span style="color:#81c784; font-weight:700;"><i class="fa-solid fa-check"></i> Succeeded</span>`
+                : `<span style="color:#ef5350; font-weight:700;"><i class="fa-solid fa-xmark"></i> Failed</span>`;
+            return `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:7px 10px; border-bottom:1px solid rgba(255,255,255,0.06); font-size:0.88rem;">
+                    <span style="font-weight:600; color:var(--color-text-primary);">${r.token.name || 'Token'}</span>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:0.8rem; color:var(--color-text-muted);">Roll: ${r.d20}${r.mod >= 0 ? '+' : ''}${r.mod} = <strong>${r.total}</strong></span>
+                        ${badge}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        modal.innerHTML = `
+            <div class="vtt-modal-content" style="max-width: 440px; border-radius: 12px; border: 1px solid var(--color-border-active); box-shadow: 0 8px 32px rgba(0,0,0,0.65);">
+                <div class="vtt-modal-header" style="border-bottom: 1px solid rgba(212,175,55,0.2); padding: 10px 14px;">
+                    <h3 style="margin:0; font-size:1.05rem; display:flex; align-items:center; gap:8px; color:var(--color-gold-light);">
+                        <i class="fa-solid fa-shield-halved"></i> DC ${saveSummary.dc} ${saveSummary.ability} Save Resolution
+                    </h3>
+                    <button type="button" class="vtt-modal-close" id="btn-save-modal-close"><i class="fa-solid fa-times"></i></button>
+                </div>
+                <div class="vtt-modal-body" style="padding: 12px 14px;">
+                    <div style="max-height: 220px; overflow-y: auto; margin-bottom: 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 4px;">
+                        ${rowsHtml}
+                    </div>
+                    <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 14px; text-align: center;">
+                        Apply half damage to tokens that succeeded on the save?
+                    </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" id="btn-save-apply-half" class="btn btn-primary" style="flex:1; padding:8px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px;">
+                            <i class="fa-solid fa-check"></i> Yes (Half Damage)
+                        </button>
+                        <button type="button" id="btn-save-apply-zero" class="btn btn-secondary" style="flex:1; padding:8px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px;">
+                            <i class="fa-solid fa-ban"></i> No (0 Damage)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        const closeModal = () => modal.remove();
+        modal.querySelector('#btn-save-modal-close').addEventListener('click', closeModal);
+
+        modal.querySelector('#btn-save-apply-half').addEventListener('click', () => {
+            closeModal();
+            onResolve(true);
+        });
+
+        modal.querySelector('#btn-save-apply-zero').addEventListener('click', () => {
+            closeModal();
+            onResolve(false);
+        });
+    }
+
+    function processCardFullResolution(cardData, selectedIds) {
+        if (!selectedIds || selectedIds.length === 0) return;
+        const dmgRolls = cardData.dmgRolls || [];
+        const damageTypes = dmgRolls.map(dr => dr.type || 'untyped').filter(Boolean);
+        const hasAttack = !!cardData.atkRoll;
+        const saveObj = cardData.saveInfo || (cardData.saveDc ? { dc: cardData.saveDc, ability: cardData.saveAbility } : null);
+
+        const atkHitMap = {};
+        if (hasAttack) {
+            const atkRoll = cardData.atkRoll;
+            selectedIds.forEach(id => {
+                const token = tokens[id];
+                if (!token) return;
+                const ac = getTokenAC(token) ?? 10;
+                const hit = atkRoll.isCritSuccess || (!atkRoll.isCritFail && atkRoll.total >= ac);
+                atkHitMap[id] = hit;
+            });
+        }
+
+        if (saveObj) {
+            const ability = (saveObj.ability || 'DEX').toUpperCase();
+            const dc = parseInt(saveObj.dc) || 10;
+            const results = [];
+
+            selectedIds.forEach(id => {
+                const token = tokens[id];
+                if (!token) return;
+                const mod = getTokenSaveMod(token, ability);
+                const d20 = Math.floor(Math.random() * 20) + 1;
+                const total = d20 + mod;
+                const passed = total >= dc;
+                results.push({ token, d20, mod, total, passed });
+            });
+
+            promptGMSaveHalf({ dc, ability, results }, (applyHalf) => {
+                let anyChanged = false;
+                const affectedIds = [];
+                const affectedTokens = [];
+
+                results.forEach(r => {
+                    const token = r.token;
+                    if (hasAttack && !atkHitMap[token.id]) return;
+
+                    const multiplier = r.passed ? (applyHalf ? 0.5 : 0) : 1.0;
+                    if (multiplier > 0) {
+                        const deducted = applyCardDamageToToken(token, dmgRolls, multiplier);
+                        if (deducted > 0) {
+                            anyChanged = true;
+                            affectedTokens.push(token);
+                        }
+                        affectedIds.push(token.id);
+
+                        const { drawW, drawH } = getTokenDrawDimensions(token);
+                        triggerDamageFXAnimation(token.x + drawW / 2, token.y + drawH / 2, Math.max(drawW, drawH) / 2, damageTypes.length > 0 ? damageTypes : ['untyped']);
+                    }
+                });
+
+                if (anyChanged) {
+                    syncTokensHpToCharacters(affectedTokens);
+                    window.emitTokenUpdates(tokens);
+                    renderAll();
+                }
+
+                if (affectedIds.length > 0 && vtt.socket) {
+                    vtt.socket.emit('tokens:damage_fx', {
+                        mapId: currentMapId,
+                        tokenIds: affectedIds,
+                        damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
+                    });
+                }
+            });
+        } else if (hasAttack) {
+            let anyChanged = false;
+            const affectedIds = [];
+            const affectedTokens = [];
+
+            selectedIds.forEach(id => {
+                const token = tokens[id];
+                if (!token) return;
+                if (atkHitMap[id]) {
+                    const deducted = applyCardDamageToToken(token, dmgRolls, 1.0);
+                    if (deducted > 0) {
+                        anyChanged = true;
+                        affectedTokens.push(token);
+                    }
+                    affectedIds.push(token.id);
+
+                    const { drawW, drawH } = getTokenDrawDimensions(token);
+                    triggerDamageFXAnimation(token.x + drawW / 2, token.y + drawH / 2, Math.max(drawW, drawH) / 2, damageTypes.length > 0 ? damageTypes : ['untyped']);
+                }
+            });
+
+            if (anyChanged) {
+                syncTokensHpToCharacters(affectedTokens);
+                window.emitTokenUpdates(tokens);
+                renderAll();
+            }
+
+            if (affectedIds.length > 0 && vtt.socket) {
+                vtt.socket.emit('tokens:damage_fx', {
+                    mapId: currentMapId,
+                    tokenIds: affectedIds,
+                    damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
+                });
+            } else if (affectedIds.length === 0) {
+                if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                    JqueryUtil.doToast({
+                        type: 'info',
+                        content: `Attack (${cardData.atkRoll.total}) missed selected token(s).`
+                    });
+                }
+            }
+        } else {
+            applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0);
+        }
+    }
+
+    function handleCardAction(cardData, action) {
+        if (vtt.role !== 'GM') return;
+        const selectedIds = Array.from(selectedTokenIds);
+        if (selectedIds.length === 0) {
+            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                JqueryUtil.doToast({
+                    type: 'warning',
+                    content: 'No tokens selected. Select target token(s) first.'
+                });
+            }
+            return;
+        }
+
+        const dmgRolls = cardData.dmgRolls || [];
+
+        if (action === 'full') {
+            applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0);
+        } else if (action === 'half') {
+            applyCompositeDamageToTokens(selectedIds, dmgRolls, 0.5);
+        } else if (action === 'process') {
+            processCardFullResolution(cardData, selectedIds);
         }
     }
 
@@ -9622,7 +15188,8 @@ window.emitTokenUpdates = function(currentTokens) {
                 '2': 'gm',
                 '3': 'lighting',
                 '4': 'notes',
-                '5': 'map'
+                '5': 'map',
+                '6': 'portals'
             };
 
             if (layerMap[e.key]) {
@@ -9639,14 +15206,15 @@ window.emitTokenUpdates = function(currentTokens) {
             }
         } else if (!isLayerShortcutModifierDown && !isInputActive && !e.ctrlKey && !e.metaKey && !e.altKey) {
             const code = e.code || '';
-            const isDigit = code.startsWith('Digit') || (!code.startsWith('Numpad') && ['1', '2', '3', '4', '5'].includes(e.key));
+            const isDigit = code.startsWith('Digit') || (!code.startsWith('Numpad') && ['1', '2', '3', '4', '5', '6'].includes(e.key));
             if (isDigit) {
                 const toolMap = {
                     '1': 'tool-select',
                     '2': 'tool-measure',
                     '3': 'tool-shape',
                     '4': 'tool-ping',
-                    '5': vtt.role === 'GM' ? 'tool-lighting' : null
+                    '5': vtt.role === 'GM' ? 'tool-lighting' : null,
+                    '6': 'tool-paint'
                 };
                 const toolId = toolMap[e.key];
                 if (toolId) {
@@ -9656,12 +15224,33 @@ window.emitTokenUpdates = function(currentTokens) {
             }
         }
 
+        // Paint Undo / Redo Shortcuts (Ctrl+Z, Ctrl+Y, Ctrl+Shift+Z)
+        if ((e.ctrlKey || e.metaKey) && !isInputActive) {
+            if (e.key === 'z' || e.key === 'Z') {
+                if (e.shiftKey) {
+                    e.preventDefault();
+                    paintRedo();
+                } else {
+                    e.preventDefault();
+                    paintUndo();
+                }
+                return;
+            } else if (e.key === 'y' || e.key === 'Y') {
+                e.preventDefault();
+                paintRedo();
+                return;
+            }
+        }
+
         if (e.key === 'Escape') {
             if (isSplashOverlayOpen()) {
                 closeSplashOverlay();
             }
             const menu = document.getElementById('vtt-token-context-menu');
             if (menu) menu.remove();
+            if (activeDrawingTextarea) {
+                cancelDrawingTextInput();
+            }
         }
 
         // Shift+X / Shift+x: Cinematic Splash Art Zoom Shortcut
@@ -9695,6 +15284,18 @@ window.emitTokenUpdates = function(currentTokens) {
             }
             selectedShapeId = null;
             selectedShapeComponent = null;
+            renderAll();
+        }
+
+        if ((e.key === 'Delete' || e.key === 'Backspace') && selectedDrawingId && !isInputActive) {
+            const d = drawings[selectedDrawingId];
+            if (d && isDrawingControlledByPlayer(d)) {
+                paintUndoStack.push({ action: 'delete', drawing: { ...d } });
+                paintRedoStack = [];
+                delete drawings[selectedDrawingId];
+                emitDrawingsUpdate();
+            }
+            selectedDrawingId = null;
             renderAll();
         }
 
@@ -10331,8 +15932,29 @@ window.emitTokenUpdates = function(currentTokens) {
             if (hasPanned) return;
 
             const mouse = getCanvasMouseCoords(e);
+
+            // 1. Determine entities under mouse: portal vs token (respect z-axis on any layer)
+            let portalUnderMouse = null;
+            if (vtt.role === 'GM') {
+                const hitTool = getMapToolItemAtCoord(mouse.x, mouse.y);
+                portalUnderMouse = (hitTool && hitTool.type === 'portal') ? hitTool.item : null;
+                if (!portalUnderMouse) {
+                    portalUnderMouse = portals.slice().sort((a, b) => (b.zIndex || 0) - (a.zIndex || 0)).find(p => isTokenCollidingWithPortal({ x: mouse.x - 4, y: mouse.y - 4, drawW: 8, drawH: 8 }, p));
+                }
+            }
+
             const token = getTokenAtPoint(mouse);
-            
+
+            // Portals only intercept context menu if no token is present, OR if actively working on the Portals layer
+            if (portalUnderMouse && (!token || activeLayer === 'portals' || activeTool === 'maptools')) {
+                e.stopPropagation();
+                e.preventDefault();
+                selectMapToolItem('portal', portalUnderMouse.id);
+                renderAll();
+                showPortalContextMenu(portalUnderMouse.id, e.clientX, e.clientY);
+                return;
+            }
+
             // If right-clicking / long-pressing on a token, cancel any active measurement or drag and allow menu to open
             if (token) {
                 cancelActiveMeasurement();
@@ -10359,6 +15981,28 @@ window.emitTokenUpdates = function(currentTokens) {
                     showAddNoteContextMenu(mouse.x, mouse.y, e.clientX, e.clientY);
                 }
                 return;
+            }
+
+            // Persistent Shape Context Menu (Select Tokens? Yes/No for GM)
+            if (vtt.role === 'GM' && (activeTool === 'select' || activeTool === 'shape')) {
+                const clickedShape = getPersistentShapeAtPoint(mouse);
+                if (clickedShape) {
+                    selectedShapeId = clickedShape.id;
+                    renderAll();
+                    showShapeContextMenu(clickedShape, e.clientX, e.clientY);
+                    return;
+                }
+            }
+
+            // Drawing Context Menu (select tool or paint tool)
+            if (activeTool === 'select' || activeTool === 'paint') {
+                const clickedDrawing = getDrawingAtPoint(mouse, false);
+                if (clickedDrawing && isDrawingControlledByPlayer(clickedDrawing)) {
+                    selectedDrawingId = clickedDrawing.id;
+                    renderAll();
+                    showDrawingContextMenu(clickedDrawing.id, e.clientX, e.clientY);
+                    return;
+                }
             }
         });
     }
@@ -10579,19 +16223,19 @@ window.emitTokenUpdates = function(currentTokens) {
     }
 
     function hideAllToolPanels() {
-        ['panel-lighting-config', 'panel-measure-config', 'panel-layers-config'].forEach(id => {
+        ['panel-lighting-config', 'panel-measure-config', 'panel-layers-config', 'panel-paint-ribbon', 'panel-map-tools'].forEach(id => {
             const el = document.getElementById(id);
             if (el) el.classList.add('vtt-hidden');
         });
     }
 
     function setupToolControls() {
-        const tools = ['tool-select', 'tool-lighting', 'tool-measure', 'tool-shape', 'tool-ping'];
+        const tools = ['tool-select', 'tool-lighting', 'tool-measure', 'tool-shape', 'tool-ping', 'tool-paint', 'tool-map-tools'];
         tools.forEach(id => {
             const btn = document.getElementById(id);
             if (btn) {
                 btn.addEventListener('click', () => {
-                    if (id === 'tool-lighting' && vtt.role !== 'GM') return;
+                    if ((id === 'tool-lighting' || id === 'tool-map-tools') && vtt.role !== 'GM') return;
                     tools.forEach(otherId => {
                         const el = document.getElementById(otherId);
                         if (el) el.classList.remove('active');
@@ -10599,16 +16243,42 @@ window.emitTokenUpdates = function(currentTokens) {
                     btn.classList.add('active');
                     activeTool = id.replace('tool-', '');
                     
+                    if (activeDrawingTextarea) commitDrawingTextInput();
+                    if (activeTool !== 'paint') {
+                        polygonPoints = [];
+                        currentPaintStroke = null;
+                        isDrawingPaint = false;
+                    }
+                    if (activeTool !== 'maptools' && activeTool !== 'map-tools') {
+                        cancelMapToolDrawing();
+                    }
+
                     hideAllToolPanels();
                     
                     if (activeTool === 'lighting') {
                         document.getElementById('panel-lighting-config')?.classList.remove('vtt-hidden');
                     } else if (activeTool === 'measure' || activeTool === 'shape') {
                         document.getElementById('panel-measure-config')?.classList.remove('vtt-hidden');
+                    } else if (activeTool === 'paint') {
+                        const ribbon = document.getElementById('panel-paint-ribbon');
+                        if (ribbon) {
+                            ribbon.classList.remove('vtt-hidden');
+                            const lName = activeLayer.charAt(0).toUpperCase() + activeLayer.slice(1);
+                            const lEl = document.getElementById('paint-active-layer-name');
+                            if (lEl) lEl.textContent = `${lName} Layer`;
+                        }
+                    } else if (activeTool === 'maptools' || activeTool === 'map-tools') {
+                        document.getElementById('panel-map-tools')?.classList.remove('vtt-hidden');
+                        populateTargetPortalsDropdown();
+                        renderPlacedTrapsList();
+                        renderPlacedPortalsList();
                     }
                 });
             }
         });
+
+        setupPaintRibbonControls();
+        setupMapToolsControls();
 
         document.getElementById('measure-broadcast')?.addEventListener('change', (e) => {
             if (!e.target.checked && localIsMeasuring) {
@@ -10644,6 +16314,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 case 'lighting': iconClass = 'fa-solid fa-lightbulb'; layerName = 'Lighting'; break;
                 case 'map': iconClass = 'fa-solid fa-map'; layerName = 'Map'; break;
                 case 'notes': iconClass = 'fa-solid fa-book-journal-whills'; layerName = 'Notes'; break;
+                case 'portals': iconClass = 'fa-solid fa-archway'; layerName = 'Portals'; break;
             }
             
             icon.className = iconClass;
@@ -10653,19 +16324,30 @@ window.emitTokenUpdates = function(currentTokens) {
         updateLayerButtonIcon(activeLayer);
 
         const layerPanel = document.getElementById('panel-layers-config');
+
+        function switchActiveLayer(layer) {
+            if (!layer) return;
+            if (layerPanel) {
+                const layerBtns = layerPanel.querySelectorAll('.layer-btn');
+                layerBtns.forEach(b => b.classList.toggle('active', b.getAttribute('data-layer') === layer));
+            }
+            activeLayer = layer;
+            clearAllSelections();
+            updateLayerButtonIcon(layer);
+            const lName = activeLayer.charAt(0).toUpperCase() + activeLayer.slice(1);
+            const lEl = document.getElementById('paint-active-layer-name');
+            if (lEl) lEl.textContent = `${lName} Layer`;
+            renderAll();
+        }
+        window.switchActiveLayer = switchActiveLayer;
+
         if (layerPanel) {
             const layerBtns = layerPanel.querySelectorAll('.layer-btn');
             layerBtns.forEach(lb => {
                 lb.addEventListener('click', () => {
                     const layer = lb.getAttribute('data-layer');
                     if (layer) {
-                        layerBtns.forEach(b => b.classList.remove('active'));
-                        lb.classList.add('active');
-                        activeLayer = layer;
-                        clearAllSelections();
-                        updateLayerButtonIcon(layer);
-                        // vtt.socket.emit('chat:msg', { text: `[System] Switched to ${activeLayer.toUpperCase()} layer.` });
-                        renderAll();
+                        switchActiveLayer(layer);
                     }
                 });
             });
@@ -11251,8 +16933,16 @@ window.emitTokenUpdates = function(currentTokens) {
         });
 
         canvasInteraction.addEventListener('dblclick', e => {
-            if (activeTool !== 'select') return;
             const mouse = getCanvasMouseCoords(e);
+            if (activeTool === 'select' || activeTool === 'paint') {
+                const clickedDrawing = getDrawingAtPoint(mouse, true);
+                if (clickedDrawing && clickedDrawing.type === 'text' && isDrawingControlledByPlayer(clickedDrawing)) {
+                    e.preventDefault();
+                    openDrawingTextInput(clickedDrawing.x, clickedDrawing.y, clickedDrawing);
+                    return;
+                }
+            }
+            if (activeTool !== 'select') return;
             const token = getTokenAtPoint(mouse);
             if (token) {
                 e.preventDefault();
@@ -11261,6 +16951,12 @@ window.emitTokenUpdates = function(currentTokens) {
         });
 
         canvasInteraction.addEventListener('dblclick', (e) => {
+            if (activeTool === 'maptools' || activeTool === 'map-tools') {
+                if (currentMapToolShape === 'polygon') {
+                    finalizeMapToolPolygon();
+                }
+                return;
+            }
             if (activeTool !== 'select') return;
             const mouse = getCanvasMouseCoords(e);
             let resetId = null;
@@ -11334,12 +17030,20 @@ window.emitTokenUpdates = function(currentTokens) {
                 const mouse = getCanvasMouseCoords(e);
 
             if (e.button === 0) {
-                if (pingHoldTimeout) clearTimeout(pingHoldTimeout);
+                if (pingHoldTimeout) {
+                    clearTimeout(pingHoldTimeout);
+                    pingHoldTimeout = null;
+                }
+                if (pingForceSelectTimeout) {
+                    clearTimeout(pingForceSelectTimeout);
+                    pingForceSelectTimeout = null;
+                }
                 if (activeTool !== 'measure' && activeTool !== 'shape') {
                     const isShift = e.shiftKey;
                     const isGM = vtt.role === 'GM';
                     const startMouseX = mouse.x;
                     const startMouseY = mouse.y;
+                    const tokenUnderPing = getTokenAtPoint({ x: startMouseX, y: startMouseY }, false, true);
                     
                     pingHoldTimeout = setTimeout(() => {
                         pingHoldTimeout = null;
@@ -11348,6 +17052,18 @@ window.emitTokenUpdates = function(currentTokens) {
                         }
                         vtt.socket.emit('map:ping', { mapId: currentMapId, x: startMouseX, y: startMouseY, username: vtt.username, role: vtt.role });
                         triggerPingAnimation(startMouseX, startMouseY, vtt.username, vtt.role);
+
+                        // If a token is on the ping, holding down for an additional 500ms forces GM to select the token
+                        if (tokenUnderPing && vtt.socket) {
+                            pingForceSelectTimeout = setTimeout(() => {
+                                pingForceSelectTimeout = null;
+                                vtt.socket.emit('token:force_select_gm', {
+                                    tokenId: tokenUnderPing.id,
+                                    mapId: currentMapId,
+                                    username: vtt.username
+                                });
+                            }, 500);
+                        }
                     }, 1000);
                 }
             }
@@ -11554,11 +17270,75 @@ window.emitTokenUpdates = function(currentTokens) {
                         renderAll();
                     }
                 } else {
+                    // Check if clicking a drawing resize handle (for currently selected drawing)
+                    let clickedDrawingHandle = null;
+                    if (selectedDrawingId && drawings[selectedDrawingId]) {
+                        const selD = drawings[selectedDrawingId];
+                        if (isDrawingControlledByPlayer(selD)) {
+                            clickedDrawingHandle = getDrawingResizeHandleAtPoint(selD, mouse);
+                        }
+                    }
+
+                    if (clickedDrawingHandle) {
+                        activeDrawingResizeHandle = clickedDrawingHandle;
+                        activeDragDrawingId = selectedDrawingId;
+                        drawingOriginalState = JSON.parse(JSON.stringify(drawings[selectedDrawingId]));
+                        drawingResizeOriginalBBox = getDrawingBoundingBox(drawings[selectedDrawingId]);
+                        drawingDragStart = { x: mouse.x, y: mouse.y };
+                        renderAll();
+                        return;
+                    }
+
+                    // Check if clicking a drawing body
+                    const clickedDrawing = getDrawingAtPoint(mouse, true);
+                    if (clickedDrawing && isDrawingControlledByPlayer(clickedDrawing)) {
+                        if (e.ctrlKey || e.shiftKey) {
+                            if (selectedDrawingIds.has(clickedDrawing.id)) {
+                                if (e.ctrlKey) selectedDrawingIds.delete(clickedDrawing.id);
+                            } else {
+                                selectedDrawingIds.add(clickedDrawing.id);
+                            }
+                        } else {
+                            if (!selectedDrawingIds.has(clickedDrawing.id)) {
+                                selectedTokenIds.clear();
+                                selectedTokenId = null;
+                                selectedShapeIds.clear();
+                                selectedShapeId = null;
+                                selectedDrawingIds.clear();
+                                selectedDrawingIds.add(clickedDrawing.id);
+                            }
+                        }
+                        selectedDrawingId = clickedDrawing.id;
+                        activeDragDrawingId = clickedDrawing.id;
+                        drawingOriginalState = JSON.parse(JSON.stringify(clickedDrawing));
+                        drawingResizeOriginalBBox = getDrawingBoundingBox(clickedDrawing);
+                        drawingDragStart = { x: mouse.x, y: mouse.y };
+                        renderAll();
+                        return;
+                    } else if (e.button === 0 && !hoveredShapeComponent) {
+                        selectedDrawingId = null;
+                    }
+
                     if (hoveredShapeComponent) {
                         const shape = shapes[hoveredShapeComponent.shapeId];
                         const shapeLayer = shape?.layer || 'token';
                         if (shape && shapeLayer === activeLayer && isShapeControlledByPlayer(shape)) {
-                            selectedTokenIds.clear();
+                            if (e.ctrlKey || e.shiftKey) {
+                                if (selectedShapeIds.has(hoveredShapeComponent.shapeId)) {
+                                    if (e.ctrlKey) selectedShapeIds.delete(hoveredShapeComponent.shapeId);
+                                } else {
+                                    selectedShapeIds.add(hoveredShapeComponent.shapeId);
+                                }
+                            } else {
+                                if (!selectedShapeIds.has(hoveredShapeComponent.shapeId)) {
+                                    selectedTokenIds.clear();
+                                    selectedTokenId = null;
+                                    selectedDrawingIds.clear();
+                                    selectedDrawingId = null;
+                                    selectedShapeIds.clear();
+                                    selectedShapeIds.add(hoveredShapeComponent.shapeId);
+                                }
+                            }
                             selectedShapeId = hoveredShapeComponent.shapeId;
                             selectedShapeComponent = hoveredShapeComponent;
                             activeDragShapeId = hoveredShapeComponent.shapeId;
@@ -11578,6 +17358,47 @@ window.emitTokenUpdates = function(currentTokens) {
 
                     selectedShapeId = null;
                     selectedShapeComponent = null;
+
+                    if (vtt.role === 'GM' && e.button === 0) {
+                        const handleHit = getPortalHandleUnderMouse(mouse);
+                        if (handleHit) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (handleHit.type === 'rotate') {
+                                activeRotatePortalId = handleHit.portal.id;
+                                selectMapToolItem('portal', handleHit.portal.id);
+                                renderAll();
+                                return;
+                            } else if (handleHit.type === 'resize') {
+                                selectMapToolItem('portal', handleHit.item.id);
+                                activeResizeMapToolHandle = {
+                                    type: 'portal',
+                                    id: handleHit.item.id,
+                                    handle: handleHit.handle,
+                                    origGeom: cloneMapToolGeom(handleHit.item.geom)
+                                };
+                                renderAll();
+                                return;
+                            }
+                        }
+
+                        if (selectedMapToolItem && selectedMapToolItem.type === 'trap') {
+                            const selItem = traps.find(t => t.id === selectedMapToolItem.id);
+                            if (selItem) {
+                                const rHandle = getMapToolResizeHandleAt(selItem, mouse);
+                                if (rHandle) {
+                                    activeResizeMapToolHandle = {
+                                        type: 'trap',
+                                        id: selItem.id,
+                                        handle: rHandle,
+                                        origGeom: cloneMapToolGeom(selItem.geom)
+                                    };
+                                    renderAll();
+                                    return;
+                                }
+                            }
+                        }
+                    }
 
                     let clickedResizeTokenId = null;
                     let clickedRotateTokenId = null;
@@ -11629,6 +17450,12 @@ window.emitTokenUpdates = function(currentTokens) {
                     const clickedId = clickedToken ? clickedToken.id : null;
                     
                     if (clickedId) {
+                        if (tokens[clickedId]?._portalTransitLock && Date.now() < tokens[clickedId]._portalTransitLock) {
+                            return;
+                        }
+                        if (selectedMapToolItem) {
+                            deselectMapToolItem();
+                        }
                         dragTargetId = clickedId;
                         const t = tokens[clickedId];
                         dragOffsetX = mouse.x - t.x;
@@ -11660,6 +17487,30 @@ window.emitTokenUpdates = function(currentTokens) {
                                 tokenDragOriginalPositions[id] = { x: selected.x, y: selected.y };
                             }
                         });
+                        shapeDragOriginalPositions = {};
+                        selectedShapeIds.forEach(id => {
+                            const s = shapes[id];
+                            if (s) {
+                                shapeDragOriginalPositions[id] = {
+                                    startPoint: { ...s.startPoint },
+                                    endPoint: { ...s.endPoint },
+                                    points: s.points ? s.points.map(p => ({ ...p })) : null
+                                };
+                            }
+                        });
+                        drawingDragOriginalPositions = {};
+                        selectedDrawingIds.forEach(id => {
+                            const d = drawings[id];
+                            if (d) {
+                                drawingDragOriginalPositions[id] = {
+                                    x: d.x,
+                                    y: d.y,
+                                    startPoint: d.startPoint ? { ...d.startPoint } : null,
+                                    endPoint: d.endPoint ? { ...d.endPoint } : null,
+                                    points: d.points ? d.points.map(p => ({ ...p })) : null
+                                };
+                            }
+                        });
 
                         if (isMobileViewport() && isTokenControlledByPlayer(t)) {
                             isTokenMeasuring = true;
@@ -11672,10 +17523,68 @@ window.emitTokenUpdates = function(currentTokens) {
 
                         renderAll();
                     } else if (e.button === 0) {
+                        // Check if clicking a portal or trap resize/rotate handle first (highest priority)
+                        if (vtt.role === 'GM') {
+                            const handleHit = getPortalHandleUnderMouse(mouse);
+                            if (handleHit) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                if (handleHit.type === 'rotate') {
+                                    activeRotatePortalId = handleHit.portal.id;
+                                    selectMapToolItem('portal', handleHit.portal.id);
+                                    renderAll();
+                                    return;
+                                } else if (handleHit.type === 'resize') {
+                                    selectMapToolItem('portal', handleHit.item.id);
+                                    activeResizeMapToolHandle = {
+                                        type: 'portal',
+                                        id: handleHit.item.id,
+                                        handle: handleHit.handle,
+                                        origGeom: cloneMapToolGeom(handleHit.item.geom)
+                                    };
+                                    renderAll();
+                                    return;
+                                }
+                            }
+
+                            if (selectedMapToolItem && selectedMapToolItem.type === 'trap') {
+                                const selTrap = traps.find(t => t.id === selectedMapToolItem.id);
+                                if (selTrap) {
+                                    const rHandle = getMapToolResizeHandleAt(selTrap, mouse);
+                                    if (rHandle) {
+                                        activeResizeMapToolHandle = {
+                                            type: 'trap',
+                                            id: selTrap.id,
+                                            handle: rHandle,
+                                            origGeom: cloneMapToolGeom(selTrap.geom)
+                                        };
+                                        renderAll();
+                                        return;
+                                    }
+                                }
+                            }
+
+                            // Next Priority: check clicking a trap or portal body on canvas in select tool
+                            const hitTool = getMapToolItemAtCoord(mouse.x, mouse.y);
+                            if (hitTool) {
+                                selectMapToolItem(hitTool.type, hitTool.item.id);
+                                activeDragMapToolItem = { type: hitTool.type, id: hitTool.item.id };
+                                mapToolDragStart = { x: mouse.x, y: mouse.y };
+                                mapToolDragOriginalGeom = cloneMapToolGeom(hitTool.item.geom);
+                                renderAll();
+                                return;
+                            } else if (selectedMapToolItem && activeLayer !== 'portals') {
+                                deselectMapToolItem();
+                            }
+                        }
                         boxSelectAdditive = e.ctrlKey || e.shiftKey;
                         if (!boxSelectAdditive) {
                             selectedTokenIds.clear();
                             selectedTokenId = null;
+                            selectedShapeIds.clear();
+                            selectedShapeId = null;
+                            selectedDrawingIds.clear();
+                            selectedDrawingId = null;
                         }
                         isBoxSelecting = true;
                         boxSelectStart = mouse;
@@ -11759,6 +17668,98 @@ window.emitTokenUpdates = function(currentTokens) {
                     wallStartPoint = e.altKey ? mouse : snapToGrid(mouse.x, mouse.y);
                     renderAll();
                 }
+            } else if (activeTool === 'paint') {
+                if (paintSubTool === 'text') {
+                    openDrawingTextInput(mouse.x, mouse.y);
+                    return;
+                }
+                if (paintSubTool === 'fill') {
+                    performCanvasFloodFill(mouse.x, mouse.y);
+                    return;
+                }
+                if (paintSubTool === 'polygon') {
+                    const pt = paintGridSnap ? snapToGridCenter(mouse.x, mouse.y) : mouse;
+                    if (polygonPoints.length >= 2) {
+                        const startPt = polygonPoints[0];
+                        if (Math.hypot(pt.x - startPt.x, pt.y - startPt.y) <= 14 / zoom) {
+                            // Close polygon
+                            const newD = {
+                                id: 'draw_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                                type: 'polygon',
+                                points: [...polygonPoints],
+                                strokeColor: paintStrokeColor,
+                                fillColor: paintFillColor,
+                                strokeWidth: paintStrokeWidth,
+                                fillMode: paintFillMode,
+                                layer: (activeLayer === 'lighting' || activeLayer === 'notes') ? 'token' : activeLayer,
+                                ownerUsername: vtt.username,
+                                timestamp: Date.now()
+                            };
+                            drawings[newD.id] = newD;
+                            paintUndoStack.push({ action: 'add', drawing: { ...newD } });
+                            paintRedoStack = [];
+                            polygonPoints = [];
+                            emitDrawingsUpdate();
+                            renderAll();
+                            return;
+                        }
+                    }
+                    polygonPoints.push(pt);
+                    renderAll();
+                    return;
+                }
+                if (paintSubTool === 'eraser') {
+                    isDrawingPaint = true;
+                    currentPaintStroke = {
+                        id: 'draw_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        type: 'eraser',
+                        points: [{ x: mouse.x, y: mouse.y }],
+                        strokeWidth: Math.max(16, paintStrokeWidth * 3),
+                        layer: (activeLayer === 'lighting' || activeLayer === 'notes') ? 'token' : activeLayer,
+                        ownerUsername: vtt.username,
+                        timestamp: Date.now()
+                    };
+                    renderAll();
+                    return;
+                }
+                if (paintSubTool === 'pencil' || paintSubTool === 'brush') {
+                    isDrawingPaint = true;
+                    const w = paintSubTool === 'pencil' ? Math.max(1, Math.min(3, Math.round(paintStrokeWidth / 2))) : paintStrokeWidth;
+                    currentPaintStroke = {
+                        id: 'draw_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        type: paintSubTool,
+                        points: [{ x: mouse.x, y: mouse.y }],
+                        strokeColor: paintStrokeColor,
+                        strokeWidth: w,
+                        layer: (activeLayer === 'lighting' || activeLayer === 'notes') ? 'token' : activeLayer,
+                        ownerUsername: vtt.username,
+                        timestamp: Date.now()
+                    };
+                    renderAll();
+                    return;
+                }
+                if (paintSubTool === 'line' || paintSubTool === 'arrow' || paintSubTool === 'rect' || paintSubTool === 'circle') {
+                    isDrawingPaint = true;
+                    const startPt = paintGridSnap ? snapToGridCenter(mouse.x, mouse.y) : { x: mouse.x, y: mouse.y };
+                    currentPaintStroke = {
+                        id: 'draw_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                        type: paintSubTool,
+                        startPoint: startPt,
+                        endPoint: { ...startPt },
+                        strokeColor: paintStrokeColor,
+                        fillColor: paintFillColor,
+                        strokeWidth: paintStrokeWidth,
+                        fillMode: paintFillMode,
+                        layer: (activeLayer === 'lighting' || activeLayer === 'notes') ? 'token' : activeLayer,
+                        ownerUsername: vtt.username,
+                        timestamp: Date.now()
+                    };
+                    renderAll();
+                    return;
+                }
+            } else if (activeTool === 'maptools' || activeTool === 'map-tools') {
+                handleMapToolMouseDown(mouse, e);
+                return;
             }
             } catch (err) {
                 console.error("VTT Canvas Interaction Error (mousedown):", err);
@@ -11783,6 +17784,47 @@ window.emitTokenUpdates = function(currentTokens) {
                 boxSelectEnd = mouse;
                 renderAll();
                 return;
+            }
+
+            if (activeRotatePortalId) {
+                const mouse = getCanvasMouseCoords(e);
+                const portal = portals.find(p => p.id === activeRotatePortalId);
+                if (portal) {
+                    const center = calcPortalCenter(portal);
+                    let deg = Math.round((Math.atan2(mouse.y - center.y, mouse.x - center.x) * 180 / Math.PI + 360) % 360);
+                    if (e.shiftKey) deg = Math.round(deg / 15) * 15;
+                    portal.facingAngle = deg;
+                    portal.viewSideFlipped = false;
+
+                    const angleSlider = document.getElementById('maptools-portal-facing-angle');
+                    const angleNum = document.getElementById('maptools-portal-facing-angle-num');
+                    const angleVal = document.getElementById('maptools-portal-facing-angle-val');
+                    if (angleSlider) angleSlider.value = deg;
+                    if (angleNum) angleNum.value = deg;
+                    if (angleVal) angleVal.textContent = `${deg}°`;
+
+                    canvasInteraction.style.cursor = 'grabbing';
+                    renderAll();
+                }
+                return;
+            }
+
+            // Hover check for portal handles (rotation & resize)
+            hoveredRotatePortalId = null;
+            hoveredMapToolHandle = null;
+            if (vtt.role === 'GM' && (activeLayer === 'portals' || selectedMapToolItem?.type === 'portal' || activeTool === 'maptools' || activeTool === 'map-tools') && !activeResizeMapToolHandle && !activeDragMapToolItem && !activeRotatePortalId) {
+                const handleHit = getPortalHandleUnderMouse(currentMouseCoords);
+                if (handleHit) {
+                    hoveredMapToolHandle = handleHit;
+                    if (handleHit.type === 'rotate') {
+                        hoveredRotatePortalId = handleHit.portal.id;
+                        canvasInteraction.style.cursor = 'grab';
+                        renderAll();
+                    } else if (handleHit.type === 'resize') {
+                        canvasInteraction.style.cursor = handleHit.handle.cursor || 'pointer';
+                        renderAll();
+                    }
+                }
             }
 
             if (isRotatingLight && rotatingLightEntity) {
@@ -11822,6 +17864,94 @@ window.emitTokenUpdates = function(currentTokens) {
 
             if (activeTool === 'select') {
                 const mouse = getCanvasMouseCoords(e);
+
+                // Map tool resize in progress
+                if (activeResizeMapToolHandle) {
+                    const item = activeResizeMapToolHandle.type === 'trap'
+                        ? traps.find(t => t.id === activeResizeMapToolHandle.id)
+                        : portals.find(p => p.id === activeResizeMapToolHandle.id);
+                    if (item) {
+                        applyMapToolResize(item, activeResizeMapToolHandle.origGeom, activeResizeMapToolHandle.handle, mouse, e);
+                        renderAll();
+                    }
+                    return;
+                }
+
+                // Map tool drag reposition in progress
+                if (activeDragMapToolItem && mapToolDragStart && mapToolDragOriginalGeom) {
+                    const dx = mouse.x - mapToolDragStart.x;
+                    const dy = mouse.y - mapToolDragStart.y;
+                    const item = activeDragMapToolItem.type === 'trap'
+                        ? traps.find(t => t.id === activeDragMapToolItem.id)
+                        : portals.find(p => p.id === activeDragMapToolItem.id);
+                    if (item) {
+                        updateDraggedMapToolGeom(item.geom, mapToolDragOriginalGeom, dx, dy);
+                        renderAll();
+                    }
+                    return;
+                }
+
+                // Map tool resize handles hover cursor
+                if (selectedMapToolItem && !activeResizeMapToolHandle && !activeDragMapToolItem) {
+                    const selItem = selectedMapToolItem.type === 'trap'
+                        ? traps.find(t => t.id === selectedMapToolItem.id)
+                        : portals.find(p => p.id === selectedMapToolItem.id);
+                    if (selItem) {
+                        const rHandle = getMapToolResizeHandleAt(selItem, mouse);
+                        if (rHandle) {
+                            canvasInteraction.style.cursor = rHandle.cursor;
+                        }
+                        if (selectedMapToolItem.type === 'portal' && !selItem.isRadial) {
+                            const hPos = getPortalRotationHandlePos(selItem);
+                            if (hPos && Math.hypot(mouse.x - hPos.x, mouse.y - hPos.y) <= (14 / zoom)) {
+                                canvasInteraction.style.cursor = 'grab';
+                            }
+                        }
+                    }
+                }
+
+                // Drawing resize handles hover cursor
+                if (selectedDrawingId && drawings[selectedDrawingId] && !activeDragDrawingId) {
+                    const selD = drawings[selectedDrawingId];
+                    const handle = getDrawingResizeHandleAtPoint(selD, mouse);
+                    if (handle) {
+                        const cursors = {
+                            nw: 'nwse-resize', se: 'nwse-resize',
+                            ne: 'nesw-resize', sw: 'nesw-resize',
+                            n: 'ns-resize', s: 'ns-resize',
+                            w: 'ew-resize', e: 'ew-resize'
+                        };
+                        canvasInteraction.style.cursor = cursors[handle] || 'pointer';
+                    }
+                }
+
+                // Drawing Move / Resize in progress
+                if (activeDragDrawingId && drawings[activeDragDrawingId] && drawingOriginalState) {
+                    const d = drawings[activeDragDrawingId];
+                    if (activeDrawingResizeHandle && drawingResizeOriginalBBox) {
+                        applyDrawingResize(d, drawingResizeOriginalBBox, activeDrawingResizeHandle, mouse, drawingOriginalState);
+                    } else if (drawingDragStart) {
+                        const dx = mouse.x - drawingDragStart.x;
+                        const dy = mouse.y - drawingDragStart.y;
+                        if (drawingOriginalState.points) {
+                            d.points = drawingOriginalState.points.map(p => ({ x: p.x + dx, y: p.y + dy }));
+                        }
+                        if (drawingOriginalState.startPoint) {
+                            d.startPoint = { x: drawingOriginalState.startPoint.x + dx, y: drawingOriginalState.startPoint.y + dy };
+                        }
+                        if (drawingOriginalState.endPoint) {
+                            d.endPoint = { x: drawingOriginalState.endPoint.x + dx, y: drawingOriginalState.endPoint.y + dy };
+                        }
+                        if (drawingOriginalState.x !== undefined) {
+                            d.x = drawingOriginalState.x + dx;
+                        }
+                        if (drawingOriginalState.y !== undefined) {
+                            d.y = drawingOriginalState.y + dy;
+                        }
+                    }
+                    renderAll();
+                    return;
+                }
 
                 // Note pin drag
                 if (draggingNoteId) {
@@ -12158,6 +18288,12 @@ window.emitTokenUpdates = function(currentTokens) {
                         
                         walls.forEach(wall => {
                             if (wall.isOpen) return;
+                            if (Array.isArray(portals) && portals.some(po => {
+                                if (!po.walkThrough) return false;
+                                const pRad = po.shape === 'circle' && po.geom?.r ? po.geom.r : (po.shape === 'rect' && po.geom ? Math.max(po.geom.w, po.geom.h) / 2 : 45);
+                                const threshSq = Math.max(pRad * pRad * 1.5, 55 * 55);
+                                return distToSegmentSq(calcPortalCenter(po), { x: wall.x1, y: wall.y1 }, { x: wall.x2, y: wall.y2 }) <= threshSq;
+                            })) return;
                             
                             const intersect = getLineIntersection(startCenter.x, startCenter.y, endCenter.x, endCenter.y, wall.x1, wall.y1, wall.x2, wall.y2);
                             if (intersect && intersect.t < closestT) {
@@ -12194,6 +18330,52 @@ window.emitTokenUpdates = function(currentTokens) {
                             t.x = nx;
                             t.y = ny;
                         }
+                    }
+
+                    if (selectedShapeIds && selectedShapeIds.size > 0) {
+                        selectedShapeIds.forEach(id => {
+                            const s = shapes[id];
+                            const original = shapeDragOriginalPositions[id];
+                            if (!s || !original || !isShapeControlledByPlayer(s)) return;
+                            s.startPoint.x = original.startPoint.x + deltaX;
+                            s.startPoint.y = original.startPoint.y + deltaY;
+                            s.endPoint.x = original.endPoint.x + deltaX;
+                            s.endPoint.y = original.endPoint.y + deltaY;
+                            if (s.points && original.points) {
+                                s.points.forEach((p, idx) => {
+                                    if (original.points[idx]) {
+                                        p.x = original.points[idx].x + deltaX;
+                                        p.y = original.points[idx].y + deltaY;
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                    if (selectedDrawingIds && selectedDrawingIds.size > 0) {
+                        selectedDrawingIds.forEach(id => {
+                            const d = drawings[id];
+                            const original = drawingDragOriginalPositions[id];
+                            if (!d || !original || !isDrawingControlledByPlayer(d)) return;
+                            if (d.x !== undefined && original.x !== undefined) d.x = original.x + deltaX;
+                            if (d.y !== undefined && original.y !== undefined) d.y = original.y + deltaY;
+                            if (d.startPoint && original.startPoint) {
+                                d.startPoint.x = original.startPoint.x + deltaX;
+                                d.startPoint.y = original.startPoint.y + deltaY;
+                            }
+                            if (d.endPoint && original.endPoint) {
+                                d.endPoint.x = original.endPoint.x + deltaX;
+                                d.endPoint.y = original.endPoint.y + deltaY;
+                            }
+                            if (d.points && original.points) {
+                                d.points.forEach((p, idx) => {
+                                    if (original.points[idx]) {
+                                        p.x = original.points[idx].x + deltaX;
+                                        p.y = original.points[idx].y + deltaY;
+                                    }
+                                });
+                            }
+                        });
                     }
                     if (localIsMeasuring && isTokenMeasuring) {
                         const { drawW, drawH } = getTokenDrawDimensions(t);
@@ -12288,13 +18470,65 @@ window.emitTokenUpdates = function(currentTokens) {
                     hoveredLightId = getLightAtCoord(mouse.x, mouse.y);
                     renderAll();
                 }
-            }
+            } else if (activeTool === 'paint') {
+                if (paintSubTool === 'text') {
+                    canvasInteraction.style.cursor = 'text';
+                } else if (paintSubTool === 'eraser') {
+                    canvasInteraction.style.cursor = 'cell';
+                } else {
+                    canvasInteraction.style.cursor = 'crosshair';
+                }
+                const mouse = getCanvasMouseCoords(e);
+                if (paintSubTool === 'eraser' && !isDrawingPaint) {
+                    renderAll();
+                }
+                if (isDrawingPaint && currentPaintStroke) {
+                    if (currentPaintStroke.type === 'pencil' || currentPaintStroke.type === 'brush' || currentPaintStroke.type === 'eraser') {
+                        const pts = currentPaintStroke.points;
+                        const lastPt = pts[pts.length - 1];
+                        if (Math.hypot(mouse.x - lastPt.x, mouse.y - lastPt.y) >= 2) {
+                            pts.push({ x: mouse.x, y: mouse.y });
+                            renderAll();
+                        }
+                    } else if (currentPaintStroke.type === 'line' || currentPaintStroke.type === 'arrow' || currentPaintStroke.type === 'rect' || currentPaintStroke.type === 'circle') {
+                            let endPt = paintGridSnap ? snapToGridCenter(mouse.x, mouse.y) : { x: mouse.x, y: mouse.y };
+                            if (e.shiftKey) {
+                                const sp = currentPaintStroke.startPoint;
+                                const dx = endPt.x - sp.x;
+                                const dy = endPt.y - sp.y;
+                                if (currentPaintStroke.type === 'rect' || currentPaintStroke.type === 'circle') {
+                                    const side = Math.max(Math.abs(dx), Math.abs(dy));
+                                    endPt = {
+                                        x: sp.x + (dx >= 0 ? side : -side),
+                                        y: sp.y + (dy >= 0 ? side : -side)
+                                    };
+                                } else {
+                                    const angle = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * (Math.PI / 4);
+                                    const dist = Math.hypot(dx, dy);
+                                    endPt = {
+                                        x: sp.x + Math.cos(angle) * dist,
+                                        y: sp.y + Math.sin(angle) * dist
+                                    };
+                                }
+                            }
+                            currentPaintStroke.endPoint = endPt;
+                            renderAll();
+                        }
+                    }
+                } else if (activeTool === 'maptools' || activeTool === 'map-tools') {
+                    const mouse = currentMouseCoords || getCanvasMouseCoords(e);
+                    handleMapToolMouseMove(mouse, e);
+                }
         });
 
         window.addEventListener('mouseup', e => {
             if (pingHoldTimeout) {
                 clearTimeout(pingHoldTimeout);
                 pingHoldTimeout = null;
+            }
+            if (pingForceSelectTimeout) {
+                clearTimeout(pingForceSelectTimeout);
+                pingForceSelectTimeout = null;
             }
             if (isPanning) {
                 isPanning = false;
@@ -12313,6 +18547,16 @@ window.emitTokenUpdates = function(currentTokens) {
                     }
                     rotatingLightEntity = null;
                 }
+                renderAll();
+                return;
+            }
+
+            if (activeRotatePortalId) {
+                if (vtt.campaignState?.maps?.[currentMapId]) {
+                    vtt.campaignState.maps[currentMapId].portals = portals;
+                }
+                vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                activeRotatePortalId = null;
                 renderAll();
                 return;
             }
@@ -12353,6 +18597,16 @@ window.emitTokenUpdates = function(currentTokens) {
                             }
                         });
                     } else {
+                        if (!boxSelectAdditive) {
+                            selectedTokenIds.clear();
+                            selectedTokenId = null;
+                            selectedShapeIds.clear();
+                            selectedShapeId = null;
+                            selectedDrawingIds.clear();
+                            selectedDrawingId = null;
+                        }
+
+                        // 1. Tokens on activeLayer
                         const tokenIds = Object.keys(tokens);
                         tokenIds.forEach(id => {
                             const t = tokens[id];
@@ -12366,6 +18620,38 @@ window.emitTokenUpdates = function(currentTokens) {
                                 selectedTokenIds.add(id);
                             }
                         });
+
+                        // 2. Shapes on activeLayer
+                        if (typeof shapes !== 'undefined') {
+                            Object.entries(shapes).forEach(([id, s]) => {
+                                if (!s) return;
+                                const shapeLayer = s.layer || 'token';
+                                if (shapeLayer !== activeLayer) return;
+                                if (shapeLayer === 'gm' && vtt.role !== 'GM') return;
+                                if (!isShapeControlledByPlayer(s)) return;
+
+                                const sBBox = getShapeBoundingBox(s);
+                                if (sBBox && sBBox.minX <= bounds.x2 && sBBox.maxX >= bounds.x1 && sBBox.minY <= bounds.y2 && sBBox.maxY >= bounds.y1) {
+                                    selectedShapeIds.add(id);
+                                }
+                            });
+                        }
+
+                        // 3. Drawings on activeLayer
+                        if (typeof drawings !== 'undefined') {
+                            Object.entries(drawings).forEach(([id, d]) => {
+                                if (!d) return;
+                                const drawingLayer = d.layer || 'token';
+                                if (drawingLayer !== activeLayer) return;
+                                if (drawingLayer === 'gm' && vtt.role !== 'GM') return;
+                                if (!isDrawingControlledByPlayer(d)) return;
+
+                                const dBBox = getDrawingBoundingBox(d);
+                                if (dBBox && dBBox.minX <= bounds.x2 && dBBox.maxX >= bounds.x1 && dBBox.minY <= bounds.y2 && dBBox.maxY >= bounds.y1) {
+                                    selectedDrawingIds.add(id);
+                                }
+                            });
+                        }
                     }
                     renderAll();
                 }
@@ -12393,6 +18679,58 @@ window.emitTokenUpdates = function(currentTokens) {
                 }
                 draggingNoteId = null;
                 noteDragStartMouse = null;
+            } else if (activeDragDrawingId && activeTool === 'select') {
+                const d = drawings[activeDragDrawingId];
+                if (d && drawingOriginalState) {
+                    paintUndoStack.push({
+                        action: 'transform',
+                        drawingId: activeDragDrawingId,
+                        before: drawingOriginalState,
+                        after: JSON.parse(JSON.stringify(d))
+                    });
+                    paintRedoStack = [];
+                    emitDrawingsUpdate();
+                }
+                activeDragDrawingId = null;
+                activeDrawingResizeHandle = null;
+                drawingDragStart = null;
+                drawingOriginalState = null;
+                drawingResizeOriginalBBox = null;
+                renderAll();
+            } else if (activeResizeMapToolHandle) {
+                if (activeResizeMapToolHandle.type === 'trap') {
+                    if (vtt.campaignState?.maps?.[currentMapId]) {
+                        vtt.campaignState.maps[currentMapId].traps = traps;
+                    }
+                    vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+                    renderPlacedTrapsList();
+                } else {
+                    if (vtt.campaignState?.maps?.[currentMapId]) {
+                        vtt.campaignState.maps[currentMapId].portals = portals;
+                    }
+                    vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                    renderPlacedPortalsList();
+                }
+                activeResizeMapToolHandle = null;
+                renderAll();
+            } else if (activeDragMapToolItem) {
+                if (activeDragMapToolItem.type === 'trap') {
+                    if (vtt.campaignState?.maps?.[currentMapId]) {
+                        vtt.campaignState.maps[currentMapId].traps = traps;
+                    }
+                    vtt.socket.emit('traps:update', { mapId: currentMapId, traps });
+                    renderPlacedTrapsList();
+                } else {
+                    if (vtt.campaignState?.maps?.[currentMapId]) {
+                        vtt.campaignState.maps[currentMapId].portals = portals;
+                    }
+                    vtt.socket.emit('portals:update', { mapId: currentMapId, portals });
+                    renderPlacedPortalsList();
+                }
+                activeDragMapToolItem = null;
+                mapToolDragStart = null;
+                mapToolDragOriginalGeom = null;
+                renderAll();
             } else if (activeDragShapeId && activeTool === 'select') {
                 const s = shapes[activeDragShapeId];
                 if (s && isShapeControlledByPlayer(s)) {
@@ -12401,25 +18739,155 @@ window.emitTokenUpdates = function(currentTokens) {
                 activeDragShapeId = null;
                 activeDragShapeComponent = null;
             } else if (dragTargetId && activeTool === 'select') {
-                const t = tokens[dragTargetId];
-                if (t) {
-                    const originalPos = tokenDragOriginalPositions[dragTargetId] || {x: t.x, y: t.y};
+                const movedTokensList = Array.from(selectedTokenIds).map(id => tokens[id]).filter(Boolean);
+                if (!movedTokensList.some(t => t.id === dragTargetId) && tokens[dragTargetId]) {
+                    movedTokensList.push(tokens[dragTargetId]);
+                }
+
+                // Check if any moved token entered an inter-map portal (colliding with any square)
+                let interMapPortalTrigger = null;
+                for (const t of movedTokensList) {
+                    const originalPos = tokenDragOriginalPositions[t.id] || { x: t.x, y: t.y };
                     if (originalPos.x !== t.x || originalPos.y !== t.y) {
-                        t._animReq = {
-                            startX: originalPos.x,
-                            startY: originalPos.y,
-                            endX: t.x,
-                            endY: t.y,
-                            waypoints: isTokenMeasuring ? measureAnchorPoints.slice(1) : [],
-                            timestamp: Date.now(),
-                            duration: 500
-                        };
+                        const { drawW, drawH } = getTokenDrawDimensions(t);
+                        const from = { x: originalPos.x + drawW / 2, y: originalPos.y + drawH / 2 };
+                        const to = { x: t.x + drawW / 2, y: t.y + drawH / 2 };
+                        const hitPortal = portals.find(po => {
+                            if (!po.walkThrough) return false;
+                            if (tokenPortalDebounce.has(t.id) && tokenPortalDebounce.get(t.id).portalId === po.id) return false;
+                            if (!checkOneWayPortalEntry(po, from, to)) return false;
+                            return isTokenCollidingWithPortal(t, po, from, to);
+                        });
+
+                        if (hitPortal && hitPortal.targetPortalId && hitPortal.targetMapId && hitPortal.targetMapId !== currentMapId) {
+                            interMapPortalTrigger = { leadToken: t, portal: hitPortal };
+                            break;
+                        }
                     }
+                }
+
+                if (interMapPortalTrigger) {
+                    const { leadToken, portal } = interMapPortalTrigger;
+                    const targetMapId = portal.targetMapId;
+                    const targetMap = vtt.campaignState?.maps?.[targetMapId];
+                    const targetPortal = targetMap?.portals?.find(p => p.id === portal.targetPortalId);
+
+                    if (targetPortal) {
+                        const transitions = [];
+
+                        movedTokensList.forEach(t => {
+                            delete t._animReq;
+                            if (tokenAnimations[t.id]) delete tokenAnimations[t.id];
+                            tokenPortalDebounce.set(t.id, { portalId: targetPortal.id, time: Date.now() });
+                            t._portalTransitLock = Date.now() + 200;
+
+                            const origPos = tokenDragOriginalPositions[t.id] || { x: t.x, y: t.y };
+                            const { drawW: tW, drawH: tH } = getTokenDrawDimensions(t);
+                            const tFrom = { x: origPos.x + tW / 2, y: origPos.y + tH / 2 };
+                            const tTo = { x: t.x + tW / 2, y: t.y + tH / 2 };
+                            const finalPos = calcSpatialPortalDestination(portal, targetPortal, tFrom, tTo, targetMap, t);
+
+                            // Pre-populate target map cache
+                            if (targetMap) {
+                                if (!targetMap.tokens) targetMap.tokens = {};
+                                const moved = { ...t, x: finalPos.x, y: finalPos.y };
+                                targetMap.tokens[t.id] = moved;
+                            }
+
+                            delete tokens[t.id];
+                            delete lastBroadcastedTokens[t.id];
+
+                            transitions.push({
+                                tokenId: t.id,
+                                targetX: finalPos.x,
+                                targetY: finalPos.y,
+                                targetPortalId: targetPortal.id,
+                                username: vtt.username
+                            });
+                        });
+
+                        pendingFocusTokenId = leadToken.id;
+                        pendingFocusTokenExpiry = Date.now() + 30000;
+                        window._portalTransitInfo = {
+                            tokenId: leadToken.id,
+                            targetMapId: targetMapId,
+                            targetPortalId: targetPortal.id,
+                            exitPos: { x: transitions[0].targetX, y: transitions[0].targetY },
+                            timestamp: Date.now()
+                        };
+
+                        if (transitions.length > 1) {
+                            vtt.socket.emit('portal:teleport_inter_map_batch', {
+                                sourceMapId: currentMapId,
+                                targetMapId: targetMapId,
+                                targetPortalId: targetPortal.id,
+                                transitions
+                            });
+                        } else if (transitions.length === 1) {
+                            vtt.socket.emit('portal:teleport_inter_map', {
+                                sourceMapId: currentMapId,
+                                targetMapId: targetMapId,
+                                targetPortalId: targetPortal.id,
+                                tokenId: leadToken.id,
+                                targetX: transitions[0].targetX,
+                                targetY: transitions[0].targetY,
+                                username: vtt.username
+                            });
+                        }
+                        renderAll();
+                    }
+                } else {
+                    // Regular triggers (traps, intra-map portals) for each moved token
+                    movedTokensList.forEach(t => {
+                        const originalPos = tokenDragOriginalPositions[t.id] || { x: t.x, y: t.y };
+                        if (originalPos.x !== t.x || originalPos.y !== t.y) {
+                            if (tokenInsidePortals.has(t.id)) {
+                                const insideSet = tokenInsidePortals.get(t.id);
+                                const { drawW: dW, drawH: dH } = getTokenDrawDimensions(t);
+                                const currentCenter = { x: t.x + dW / 2, y: t.y + dH / 2 };
+                                insideSet.forEach(pId => {
+                                    const pObj = portals.find(p => p.id === pId);
+                                    if (!pObj || !isTokenCollidingWithPortal(t, pObj, null, currentCenter)) {
+                                        insideSet.delete(pId);
+                                    }
+                                });
+                                if (insideSet.size === 0) tokenInsidePortals.delete(t.id);
+                            }
+                            const triggerRes = checkTokenMoveTriggers(t, originalPos);
+                            if (triggerRes?.action === 'teleport' || triggerRes?.action === 'trap') {
+                                delete t._animReq;
+                                if (tokenAnimations[t.id]) delete tokenAnimations[t.id];
+                                if (triggerRes?.action === 'teleport' && tokens[t.id]) {
+                                    selectedTokenIds.clear();
+                                    selectedTokenIds.add(t.id);
+                                    selectedTokenId = t.id;
+                                }
+                            } else {
+                                t._animReq = {
+                                    startX: originalPos.x,
+                                    startY: originalPos.y,
+                                    endX: t.x,
+                                    endY: t.y,
+                                    waypoints: isTokenMeasuring ? measureAnchorPoints.slice(1) : [],
+                                    timestamp: Date.now(),
+                                    duration: 500
+                                };
+                            }
+                        }
+                    });
                 }
                 window.emitTokenUpdates(tokens);
                 processTokenAnimReqs(tokens);
+                if (selectedShapeIds && selectedShapeIds.size > 0) {
+                    vtt.socket.emit('shapes:update', { mapId: currentMapId, shapes });
+                }
+                if (selectedDrawingIds && selectedDrawingIds.size > 0) {
+                    emitDrawingsUpdate();
+                }
                 dragTargetId = null;
                 tokenDragOriginalPositions = {};
+                shapeDragOriginalPositions = {};
+                drawingDragOriginalPositions = {};
                 const dragPill = document.getElementById('vtt-mobile-drag-pill');
                 if (dragPill) dragPill.classList.add('vtt-hidden');
                 if (isTokenMeasuring) {
@@ -12547,6 +19015,21 @@ window.emitTokenUpdates = function(currentTokens) {
                 localShapeStart = null;
                 localShapeEnd = null;
                 renderAll();
+            } else if (activeTool === 'paint') {
+                if (isDrawingPaint) {
+                    isDrawingPaint = false;
+                    if (currentPaintStroke) {
+                        drawings[currentPaintStroke.id] = currentPaintStroke;
+                        paintUndoStack.push({ action: 'add', drawing: { ...currentPaintStroke } });
+                        paintRedoStack = [];
+                        currentPaintStroke = null;
+                        emitDrawingsUpdate();
+                        renderAll();
+                    }
+                }
+            } else if (activeTool === 'maptools' || activeTool === 'map-tools') {
+                const mouse = currentMouseCoords || getCanvasMouseCoords(e);
+                handleMapToolMouseUp(mouse, e);
             }
         });
 
@@ -12620,6 +19103,29 @@ window.emitTokenUpdates = function(currentTokens) {
                 vtt.socket.emit('notes:update', { mapId: currentMapId, notes });
                 renderAll();
                 return;
+            }
+
+            if (typeof selectedDrawingIds !== 'undefined' && selectedDrawingIds.size > 0) {
+                selectedDrawingIds.forEach(id => {
+                    const d = drawings[id];
+                    if (d && isDrawingControlledByPlayer(d)) {
+                        paintUndoStack.push({ action: 'delete', drawing: { ...d } });
+                        delete drawings[id];
+                    }
+                });
+                paintRedoStack = [];
+                selectedDrawingIds.clear();
+                selectedDrawingId = null;
+                emitDrawingsUpdate();
+            } else if (selectedDrawingId) {
+                const d = drawings[selectedDrawingId];
+                if (d && isDrawingControlledByPlayer(d)) {
+                    paintUndoStack.push({ action: 'delete', drawing: { ...d } });
+                    paintRedoStack = [];
+                    delete drawings[selectedDrawingId];
+                    emitDrawingsUpdate();
+                }
+                selectedDrawingId = null;
             }
 
             if (changedTokens) window.emitTokenUpdates(tokens);
@@ -12789,6 +19295,30 @@ window.emitTokenUpdates = function(currentTokens) {
             const key = e.key ? e.key.toLowerCase() : '';
             const code = e.code || '';
 
+            if (e.key === 'Enter' && isDrawingMapTool && currentMapToolShape === 'polygon') {
+                e.preventDefault();
+                finalizeMapToolPolygon();
+                return;
+            }
+
+            // Layer switching shortcuts: ` + 1..6 (e.g. `+6 for Portals layer)
+            if (e.key === '`' || e.code === 'Backquote') {
+                lastBackquoteTime = Date.now();
+            }
+
+            if (Date.now() - lastBackquoteTime < 1500 && ['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', '1', '2', '3', '4', '5', '6'].includes(e.code || e.key)) {
+                const num = (e.code && e.code.startsWith('Digit')) ? e.code.replace('Digit', '') : e.key;
+                const layerMap = { '1': 'token', '2': 'gm', '3': 'lighting', '4': 'notes', '5': 'map', '6': 'portals' };
+                if (layerMap[num]) {
+                    e.preventDefault();
+                    if (typeof switchActiveLayer === 'function') {
+                        switchActiveLayer(layerMap[num]);
+                    }
+                    lastBackquoteTime = 0;
+                    return;
+                }
+            }
+
             // Numpad 5: Center view to token / centroid / player character / map center
             // (or Shift+Numpad 5: GM broadcast view to players)
             if (code === 'Numpad5') {
@@ -12868,6 +19398,9 @@ window.emitTokenUpdates = function(currentTokens) {
             }
 
             if (e.key === 'Escape') {
+                if (isDrawingMapTool) {
+                    cancelMapToolDrawing();
+                }
                 // Clear active measurements or shapes
                 if (localIsMeasuring || localIsShaping || isTokenMeasuring || dragTargetId) {
                     if (dragTargetId) {
@@ -12902,7 +19435,10 @@ window.emitTokenUpdates = function(currentTokens) {
                 selectedTokenIds.clear();
                 gmTokenVisionMode = false;
                 if (typeof selectedShapeIds !== 'undefined') selectedShapeIds.clear();
+                if (typeof selectedDrawingIds !== 'undefined') selectedDrawingIds.clear();
                 if (typeof selectedWallIdxs !== 'undefined') selectedWallIdxs.clear();
+                selectedShapeId = null;
+                selectedDrawingId = null;
                 selectedLightId = null;
                 hoveredLightId = null;
                 hoveredWallIdx = -1;
@@ -12925,8 +19461,11 @@ window.emitTokenUpdates = function(currentTokens) {
                 e.preventDefault();
                 selectedTokenIds.clear();
                 if (typeof selectedShapeIds !== 'undefined') selectedShapeIds.clear();
+                if (typeof selectedDrawingIds !== 'undefined') selectedDrawingIds.clear();
                 if (typeof selectedWallIdxs !== 'undefined') selectedWallIdxs.clear();
                 selectedLightId = null;
+                selectedShapeId = null;
+                selectedDrawingId = null;
                 
                 if (activeLayer === 'lighting') {
                     if (typeof walls !== 'undefined') walls.forEach((w, idx) => selectedWallIdxs.add(idx));
@@ -12946,6 +19485,15 @@ window.emitTokenUpdates = function(currentTokens) {
                             const shapeLayer = s?.layer || 'token';
                             if (s && shapeLayer === activeLayer && isShapeControlledByPlayer(s)) {
                                 selectedShapeIds.add(id);
+                            }
+                        });
+                    }
+                    if (typeof drawings !== 'undefined') {
+                        Object.keys(drawings).forEach(id => {
+                            const d = drawings[id];
+                            const drawingLayer = d?.layer || 'token';
+                            if (d && drawingLayer === activeLayer && isDrawingControlledByPlayer(d)) {
+                                selectedDrawingIds.add(id);
                             }
                         });
                     }
@@ -12980,7 +19528,7 @@ window.emitTokenUpdates = function(currentTokens) {
             }
 
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                if (selectedTokenIds.size > 0 || (typeof selectedShapeIds !== 'undefined' && selectedShapeIds.size > 0) || selectedShapeId) {
+                if (selectedTokenIds.size > 0 || (typeof selectedShapeIds !== 'undefined' && selectedShapeIds.size > 0) || selectedShapeId || selectedDrawingId || (typeof selectedDrawingIds !== 'undefined' && selectedDrawingIds.size > 0)) {
                     e.preventDefault();
                     let dx = 0;
                     let dy = 0;
@@ -12992,10 +19540,28 @@ window.emitTokenUpdates = function(currentTokens) {
 
                     let changedTokens = false;
                     let changedShapes = false;
+                    let changedDrawings = false;
+
+                    const drawingsToNudge = new Set(selectedDrawingIds || []);
+                    if (selectedDrawingId) drawingsToNudge.add(selectedDrawingId);
+                    if (drawingsToNudge.size > 0) {
+                        drawingsToNudge.forEach(id => {
+                            const d = drawings[id];
+                            if (d && isDrawingControlledByPlayer(d)) {
+                                if (d.points) d.points.forEach(p => { p.x += dx; p.y += dy; });
+                                if (d.startPoint) { d.startPoint.x += dx; d.startPoint.y += dy; }
+                                if (d.endPoint) { d.endPoint.x += dx; d.endPoint.y += dy; }
+                                if (d.x !== undefined) d.x += dx;
+                                if (d.y !== undefined) d.y += dy;
+                                changedDrawings = true;
+                            }
+                        });
+                    }
 
                     selectedTokenIds.forEach(id => {
                         const t = tokens[id];
                         if (isTokenControlledByPlayer(t)) {
+                            if (t._portalTransitLock && Date.now() < t._portalTransitLock) return;
                             let logicalX = t.x;
                             let logicalY = t.y;
                             if (tokenAnimations[id]) {
@@ -13017,6 +19583,12 @@ window.emitTokenUpdates = function(currentTokens) {
                                 
                                 walls.forEach(wall => {
                                     if (wall.isOpen) return;
+                                    if (Array.isArray(portals) && portals.some(po => {
+                                        if (!po.walkThrough) return false;
+                                        const pRad = po.shape === 'circle' && po.geom?.r ? po.geom.r : (po.shape === 'rect' && po.geom ? Math.max(po.geom.w, po.geom.h) / 2 : (po.shape === 'line' && po.geom ? Math.hypot(po.geom.x2 - po.geom.x1, po.geom.y2 - po.geom.y1) / 2 : 45));
+                                        const threshSq = Math.max(pRad * pRad * 1.5, 55 * 55);
+                                        return distToSegmentSq(calcPortalCenter(po), { x: wall.x1, y: wall.y1 }, { x: wall.x2, y: wall.y2 }) <= threshSq;
+                                    })) return;
                                     const intersect = getLineIntersection(startCenter.x, startCenter.y, endCenter.x, endCenter.y, wall.x1, wall.y1, wall.x2, wall.y2);
                                     if (intersect && intersect.t < closestT) {
                                         closestT = intersect.t;
@@ -13035,20 +19607,31 @@ window.emitTokenUpdates = function(currentTokens) {
                             }
                             
                             if (logicalX !== nx || logicalY !== ny) {
-                                t._animReq = {
-                                    startX: t.x,
-                                    startY: t.y,
-                                    endX: nx,
-                                    endY: ny,
-                                    waypoints: [],
-                                    timestamp: Date.now(),
-                                    duration: 300
-                                };
+                                t.x = nx;
+                                t.y = ny;
+                                const originalPos = { x: logicalX, y: logicalY };
+                                const triggerRes = checkTokenMoveTriggers(t, originalPos);
+                                if (triggerRes?.action === 'teleport' || triggerRes?.action === 'trap') {
+                                    delete t._animReq;
+                                    if (tokenAnimations[id]) delete tokenAnimations[id];
+                                    if (triggerRes?.action === 'teleport' && tokens[id]) {
+                                        selectedTokenIds.clear();
+                                        selectedTokenIds.add(id);
+                                        selectedTokenId = id;
+                                    }
+                                } else {
+                                    t._animReq = {
+                                        startX: originalPos.x,
+                                        startY: originalPos.y,
+                                        endX: t.x,
+                                        endY: t.y,
+                                        waypoints: [],
+                                        timestamp: Date.now(),
+                                        duration: 300
+                                    };
+                                }
+                                changedTokens = true;
                             }
-                            
-                            t.x = nx;
-                            t.y = ny;
-                            changedTokens = true;
                         }
                     });
                     
@@ -13071,7 +19654,8 @@ window.emitTokenUpdates = function(currentTokens) {
                         processTokenAnimReqs(tokens);
                     }
                     if (changedShapes) vtt.socket.emit('shapes:update', { mapId: currentMapId, shapes });
-                    if (changedTokens || changedShapes) renderAll();
+                    if (changedDrawings) emitDrawingsUpdate();
+                    if (changedTokens || changedShapes || changedDrawings) renderAll();
                 }
                 return;
             }

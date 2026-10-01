@@ -17,7 +17,11 @@ const outputDir = path.join(dataDir, 'bestiary-normalized');
 const catalogPath = path.join(dataDir, 'bestiary-catalog.json');
 const legGroupsPath = path.join(bestiaryDir, 'legendarygroups.json');
 
-const EDITION_2024_SOURCES = new Set(['XMM', 'XPHB', 'FRAiF', 'NF', 'EFA']);
+const EDITION_2024_SOURCES = new Set([
+    'XMM', 'XPHB', 'XDMG', 'XSCREEN', 'XSAC', 'XSCREENRHW',
+    'RHW', 'AU', 'AUD', 'ABH', 'FRAIF', 'FRHOF', 'NF', 'LFL', 'EFA',
+    'CABOMP', 'UTHTLH', 'SCOEE', 'HBTD', 'BQGT', 'HOTB', 'WTTHC', 'FFOTR', 'BQDD'
+]);
 
 // CR to Proficiency Bonus mapping
 function crToPb(crStr) {
@@ -994,7 +998,9 @@ function buildCreatureDatabase() {
         if (seenCreatures.has(uniqueKey)) return;
         seenCreatures.add(uniqueKey);
 
-        const edition = EDITION_2024_SOURCES.has(source) || m.srd52 || m.basicRules2024 ? '2024' : '2014';
+        const srcUpper = source.toUpperCase();
+        const is2024Src = EDITION_2024_SOURCES.has(srcUpper) || srcUpper.startsWith('XUA') || (srcUpper.startsWith('UA') && /202[4-9]/.test(srcUpper)) || m.edition === 'one' || m.edition === '2024' || m.srd52 || m.basicRules2024;
+        const edition = is2024Src ? '2024' : '2014';
         const id = `creature_${name.toLowerCase().replace(/[^a-z0-9]/g, '_')}_${source.toLowerCase()}`;
 
         // CR parsing

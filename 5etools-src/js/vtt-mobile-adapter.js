@@ -11,13 +11,22 @@
  */
 
 export function initVttMobileAdapter(vtt) {
+    // Detect if device supports touch/coarse pointer input (phones, iPads, tablets, touchscreens)
+    const isTouchDevice = () => {
+        return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+    };
+
     // Support user manual preference: 'true' (force mobile), 'false' (force desktop), or null (auto)
+    // Phone UI layout (bottom nav, full drawer overlays) applies when forced or on narrow screens (<= 900px)
     const isMobileViewport = () => {
         const forced = localStorage.getItem('vtt_force_mobile_ui');
         if (forced === 'true') return true;
         if (forced === 'false') return false;
-        return window.innerWidth <= 900 || ((window.matchMedia && window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window) && window.innerWidth <= 1366);
+        return window.innerWidth <= 900;
     };
+
+    // Universal touch gestures (pan, pinch-to-zoom, hold-drag) work on any touch-capable screen
+    const isTouchSupported = () => isTouchDevice() || isMobileViewport();
 
     // Apply document-level override class on initial load
     const forcedMode = localStorage.getItem('vtt_force_mobile_ui');
@@ -31,7 +40,9 @@ export function initVttMobileAdapter(vtt) {
 
     let activeNavTab = 'map';
     let longPressTimer = null;
+    let tokenHoldDragTimer = null;
     let didLongPress = false;
+    let isTokenDragEngaged = false;
     let lastTapInfo = { time: 0, x: 0, y: 0 };
     let initialPinchDist = 0;
     let lastPinchMid = null;
@@ -87,7 +98,7 @@ export function initVttMobileAdapter(vtt) {
     }
 
     function handleViewportResize() {
-        if (!isMobileViewport()) return;
+        if (!isTouchSupported()) return;
         clearTimeout(resizeDebounce);
         resizeDebounce = setTimeout(() => {
             if (window.VTT?.canvasEngine?.renderAll) {
@@ -97,7 +108,7 @@ export function initVttMobileAdapter(vtt) {
     }
 
     function onTouchStart(e) {
-        if (!isMobileViewport()) return;
+        if (!isTouchSupported()) return;
 
         // Prevent browser 300ms delays, ghost-clicks, and elastic bouncing
         if (e.cancelable) e.preventDefault();
@@ -135,6 +146,7 @@ export function initVttMobileAdapter(vtt) {
 
         // Two-Finger Gesture: Pan & Pinch-to-Zoom OR Second-Finger Drag Cancel
         if (e.touches.length === 2) {
+            cancelHoldDrag();
             cancelLongPress();
 
             // Second-finger tap during token drag (Esc equivalent: restores token position)
@@ -150,6 +162,7 @@ export function initVttMobileAdapter(vtt) {
                 isSingleTouching = false;
                 is1FingerPanning = false;
                 isPinching = false;
+                isTokenDragEngaged = false;
                 activeTouchedToken = null;
                 if (mobileDragPill) mobileDragPill.classList.add('vtt-hidden');
                 if (mobileTokenActions) mobileTokenActions.classList.add('vtt-hidden');
@@ -168,6 +181,7 @@ export function initVttMobileAdapter(vtt) {
                     dispatchSyntheticMouseEvent('mouseup', e.touches[0].clientX, e.touches[0].clientY, 0);
                 }
                 isSingleTouching = false;
+                isTokenDragEngaged = false;
             }
 
             isPinching = true;
@@ -185,6 +199,7 @@ export function initVttMobileAdapter(vtt) {
         if (e.touches.length === 1) {
             isPinching = false;
             didLongPress = false;
+            isTokenDragEngaged = false;
             const touch = e.touches[0];
             touchStartPos = { x: touch.clientX, y: touch.clientY };
 
@@ -194,6 +209,7 @@ export function initVttMobileAdapter(vtt) {
             const distFromLast = Math.hypot(touch.clientX - lastTapInfo.x, touch.clientY - lastTapInfo.y);
 
             if (timeSinceLast > 40 && timeSinceLast < 320 && distFromLast < 24) {
+                cancelHoldDrag();
                 cancelLongPress();
                 is1FingerPanning = false;
                 isSingleTouching = false;
@@ -232,15 +248,23 @@ export function initVttMobileAdapter(vtt) {
                 const zoom = canvasEngine.getZoom ? canvasEngine.getZoom() : 1;
                 // Generous screen touch slop radius (24px in screen units) converted to world coords
                 const touchRadius = 24 / Math.max(0.1, zoom);
+                // requireControl is true: unowned tokens return null, ensuring unowned tokens pass through to panning
                 touchedToken = canvasEngine.getTokenAtPoint(mouseCoords, true, true, touchRadius);
             }
 
-            // If in Select mode and touching empty canvas ground -> SMART 1-FINGER PAN!
-            if (activeTool === 'select' && !touchedToken) {
+            let touchedDrawing = null;
+            if (activeTool === 'select' && !touchedToken && canvasEngine?.getDrawingAtPoint) {
+                const mouseCoords = canvasEngine.getCanvasMouseCoords({ clientX: touch.clientX, clientY: touch.clientY });
+                touchedDrawing = canvasEngine.getDrawingAtPoint(mouseCoords, true);
+            }
+
+            // If in Select mode and touching empty canvas ground OR unowned token -> SMART 1-FINGER PAN!
+            if (activeTool === 'select' && !touchedToken && !touchedDrawing) {
                 is1FingerPanning = true;
                 panStartPos = { x: touch.clientX, y: touch.clientY };
                 isSingleTouching = true;
                 activeTouchedToken = null;
+                isTokenDragEngaged = false;
                 if (mobileTokenActions) mobileTokenActions.classList.add('vtt-hidden');
                 return;
             }
@@ -249,16 +273,32 @@ export function initVttMobileAdapter(vtt) {
             is1FingerPanning = false;
             isSingleTouching = true;
             activeTouchedToken = touchedToken;
+            isTokenDragEngaged = false;
             touchMoveDist = 0;
 
-            // If in Select mode with an owned token, start direct first-class touch token drag!
-            if (activeTool === 'select' && touchedToken && canvasEngine?.startTouchTokenDrag) {
-                canvasEngine.startTouchTokenDrag(touchedToken.id, touch.clientX, touch.clientY);
+            // Dedicated Selection Tap & Hold-to-Drag Paradigm:
+            // When an owned token is tapped, select it immediately so selection ring appears.
+            // Do NOT engage drag immediately to prevent accidental displacement while panning.
+            if (activeTool === 'select' && touchedToken) {
+                if (canvasEngine?.selectToken) {
+                    canvasEngine.selectToken(touchedToken.id);
+                }
+                cancelHoldDrag();
+                tokenHoldDragTimer = setTimeout(() => {
+                    if (isSingleTouching && activeTouchedToken && !isDragCancelled && !is1FingerPanning) {
+                        isTokenDragEngaged = true;
+                        if (navigator.vibrate) navigator.vibrate(25);
+                        if (canvasEngine?.startTouchTokenDrag) {
+                            canvasEngine.startTouchTokenDrag(activeTouchedToken.id, touch.clientX, touch.clientY);
+                        }
+                    }
+                }, 150);
             }
 
             // Start 500ms Long-Press Timer for Right-Click Context Menu
             longPressTimer = setTimeout(() => {
                 didLongPress = true;
+                cancelHoldDrag();
                 if (navigator.vibrate) navigator.vibrate(40);
                 const canvasEngine = window.VTT?.canvasEngine;
                 if (canvasEngine?.cancelTouchTokenDrag) {
@@ -287,7 +327,7 @@ export function initVttMobileAdapter(vtt) {
     }
 
     function onTouchMove(e) {
-        if (!isMobileViewport()) return;
+        if (!isTouchSupported()) return;
 
         if (isDragCancelled) return;
 
@@ -337,7 +377,7 @@ export function initVttMobileAdapter(vtt) {
             return;
         }
 
-        // Single-Finger Smart Pan on Empty Canvas
+        // Single-Finger Smart Pan on Empty Canvas or Unowned Token
         if (e.touches.length === 1 && is1FingerPanning) {
             const touch = e.touches[0];
             const dx = touch.clientX - panStartPos.x;
@@ -361,11 +401,23 @@ export function initVttMobileAdapter(vtt) {
                 if (mobileTokenActions) mobileTokenActions.classList.add('vtt-hidden');
             }
 
+            // Drag threshold: if finger moves >= 10px before the 150ms hold, engage drag immediately!
+            const activeToolBtn = document.querySelector('.control-btn.active');
+            const activeTool = activeToolBtn ? activeToolBtn.id.replace('tool-', '') : 'select';
+            if (activeTool === 'select' && activeTouchedToken && !isTokenDragEngaged && touchMoveDist >= 10) {
+                cancelHoldDrag();
+                isTokenDragEngaged = true;
+                const canvasEngine = window.VTT?.canvasEngine;
+                if (canvasEngine?.startTouchTokenDrag) {
+                    canvasEngine.startTouchTokenDrag(activeTouchedToken.id, touchStartPos.x, touchStartPos.y);
+                }
+            }
+
             if (!didLongPress) {
                 const canvasEngine = window.VTT?.canvasEngine;
-                if (activeTouchedToken && canvasEngine?.moveTouchTokenDrag && canvasEngine?.isDraggingToken?.()) {
+                if (activeTouchedToken && isTokenDragEngaged && canvasEngine?.moveTouchTokenDrag && canvasEngine?.isDraggingToken?.()) {
                     canvasEngine.moveTouchTokenDrag(touch.clientX, touch.clientY);
-                } else {
+                } else if (!activeTouchedToken) {
                     dispatchSyntheticMouseEvent('mousemove', touch.clientX, touch.clientY, 0);
                 }
             }
@@ -373,8 +425,9 @@ export function initVttMobileAdapter(vtt) {
     }
 
     function onTouchEnd(e) {
-        if (!isMobileViewport()) return;
+        if (!isTouchSupported()) return;
 
+        cancelHoldDrag();
         cancelLongPress();
 
         if (e.touches.length === 0) {
@@ -413,25 +466,31 @@ export function initVttMobileAdapter(vtt) {
 
                 if (!didLongPress && !isDragCancelled) {
                     const canvasEngine = window.VTT?.canvasEngine;
-                    if (activeTouchedToken && canvasEngine?.endTouchTokenDrag && canvasEngine?.isDraggingToken?.()) {
+                    if (activeTouchedToken && isTokenDragEngaged && canvasEngine?.endTouchTokenDrag && canvasEngine?.isDraggingToken?.()) {
+                        // Token drag completed!
                         canvasEngine.endTouchTokenDrag(changedTouch.clientX, changedTouch.clientY);
+                    } else if (activeTouchedToken) {
+                        // Clean tap on token (no drag threshold engaged)
+                        if (canvasEngine?.cancelTouchTokenDrag) {
+                            canvasEngine.cancelTouchTokenDrag();
+                        }
+                        if (touchMoveDist < 10) {
+                            showMobileTokenActions(changedTouch.clientX, changedTouch.clientY, activeTouchedToken);
+                        }
                     } else {
                         dispatchSyntheticMouseEvent('mouseup', changedTouch.clientX, changedTouch.clientY, 0);
-                    }
-
-                    // If tap on token with negligible movement, show Quick Action Bar
-                    if (activeTouchedToken && touchMoveDist < 8) {
-                        showMobileTokenActions(changedTouch.clientX, changedTouch.clientY, activeTouchedToken);
                     }
                 }
             }
             activeTouchedToken = null;
+            isTokenDragEngaged = false;
             isSingleTouching = false;
             didLongPress = false;
         }
     }
 
     function onTouchCancel() {
+        cancelHoldDrag();
         cancelLongPress();
         const canvasEngine = window.VTT?.canvasEngine;
         if (canvasEngine?.cancelTouchTokenDrag) {
@@ -442,11 +501,20 @@ export function initVttMobileAdapter(vtt) {
         isPinching = false;
         isSingleTouching = false;
         is1FingerPanning = false;
+        isTokenDragEngaged = false;
         didLongPress = false;
         activeTouchedToken = null;
     }
 
+    function cancelHoldDrag() {
+        if (tokenHoldDragTimer) {
+            clearTimeout(tokenHoldDragTimer);
+            tokenHoldDragTimer = null;
+        }
+    }
+
     function cancelLongPress() {
+        cancelHoldDrag();
         if (longPressTimer) {
             clearTimeout(longPressTimer);
             longPressTimer = null;
@@ -525,6 +593,12 @@ export function initVttMobileAdapter(vtt) {
 
         // Setup Mobile Shape & Color Bottom Sheet
         setupMobileShapeUI();
+
+        // Setup Mobile Paint Studio Drawer
+        setupMobilePaintDrawer();
+
+        // Setup Mobile Map Tools Bottom Sheet
+        setupMobileMapToolsUI();
 
         // Setup Modal Backdrop Click/Tap Dismissal
         setupModalBackdropDismissal();
@@ -644,6 +718,10 @@ export function initVttMobileAdapter(vtt) {
         if (mobileFab) mobileFab.classList.remove('active');
         if (mobileShapeSheet) mobileShapeSheet.classList.add('vtt-hidden');
         if (mobileTokenActions) mobileTokenActions.classList.add('vtt-hidden');
+        const mobilePaintModal = document.getElementById('modal-mobile-paint-drawer');
+        if (mobilePaintModal) mobilePaintModal.classList.add('vtt-hidden');
+        const maptoolsSheet = document.getElementById('vtt-mobile-maptools-sheet');
+        if (maptoolsSheet) maptoolsSheet.classList.add('vtt-hidden');
     }
 
     function openMobileSidebarTab(targetTabId, isSubPanel = false) {
@@ -746,6 +824,11 @@ export function initVttMobileAdapter(vtt) {
                     <span style="font-weight: 600;">Asset Gallery</span>
                     <span style="font-size: 0.75rem; color: #94a3b8;">Media & tokens</span>
                 </div>
+                <div class="mobile-more-card" data-action="map-tools">
+                    <i class="fa-solid fa-dungeon" style="font-size: 1.8rem; color: #f5c242;"></i>
+                    <span style="font-weight: 600;">Map Tools</span>
+                    <span style="font-size: 0.75rem; color: #94a3b8;">Traps & Portals</span>
+                </div>
                 ` : `
                 <div class="mobile-more-card" data-action="characters">
                     <i class="fa-solid fa-users" style="font-size: 1.8rem; color: #f5c242;"></i>
@@ -753,6 +836,11 @@ export function initVttMobileAdapter(vtt) {
                     <span style="font-size: 0.75rem; color: #94a3b8;">Party members</span>
                 </div>
                 `}
+                <div class="mobile-more-card" data-action="paint">
+                    <i class="fa-solid fa-palette" style="font-size: 1.8rem; color: #f5c242;"></i>
+                    <span style="font-weight: 600;">Paint Tools</span>
+                    <span style="font-size: 0.75rem; color: #94a3b8;">Draw, shapes & text</span>
+                </div>
                 <div class="mobile-more-card" data-action="config">
                     <i class="fa-solid fa-gear" style="font-size: 1.8rem; color: #f5c242;"></i>
                     <span style="font-weight: 600;">Settings</span>
@@ -784,6 +872,14 @@ export function initVttMobileAdapter(vtt) {
                     setActiveNavTab('map');
                     const btnChangeMap = document.getElementById('btn-change-map');
                     if (btnChangeMap) btnChangeMap.click();
+                } else if (action === 'paint') {
+                    closeAllDrawers();
+                    setActiveNavTab('map');
+                    activateTool('paint');
+                } else if (action === 'map-tools') {
+                    closeAllDrawers();
+                    setActiveNavTab('map');
+                    activateTool('maptools');
                 } else if (action === 'characters') {
                     openMobileSidebarTab('tab-characters', true);
                 } else if (action === 'handouts') {
@@ -1051,9 +1147,9 @@ export function initVttMobileAdapter(vtt) {
     }
 
     function activateTool(toolKey) {
-        // Enforce player parity: players cannot activate lighting or switch layers
+        // Enforce player parity: players cannot activate lighting, switch layers, or access GM map tools
         const isGM = (vtt.role || 'Player') === 'GM';
-        if ((toolKey === 'lighting' || toolKey === 'layers' || toolKey === 'map') && !isGM) {
+        if ((toolKey === 'lighting' || toolKey === 'layers' || toolKey === 'map' || toolKey === 'maptools') && !isGM) {
             return;
         }
 
@@ -1063,6 +1159,8 @@ export function initVttMobileAdapter(vtt) {
             'shape': 'tool-shape',
             'ping': 'tool-ping',
             'lighting': 'tool-lighting',
+            'paint': 'tool-paint',
+            'maptools': 'tool-map-tools',
             'layers': 'btn-layers',
             'map': 'btn-change-map'
         };
@@ -1095,6 +1193,20 @@ export function initVttMobileAdapter(vtt) {
             if (mobileShapePill) mobileShapePill.classList.add('vtt-hidden');
             if (mobileShapeSheet) mobileShapeSheet.classList.remove('vtt-hidden');
             if (mobileBackdrop) mobileBackdrop.classList.add('active');
+        } else if (toolKey === 'paint') {
+            // Open full-screen paint studio drawer modal on mobile
+            const paintModal = document.getElementById('modal-mobile-paint-drawer');
+            if (paintModal) {
+                paintModal.classList.remove('vtt-hidden');
+                if (mobileBackdrop) mobileBackdrop.classList.add('active');
+            }
+        } else if (toolKey === 'maptools') {
+            // Open mobile map tools bottom sheet
+            const maptoolsSheet = document.getElementById('vtt-mobile-maptools-sheet');
+            if (maptoolsSheet) {
+                maptoolsSheet.classList.remove('vtt-hidden');
+                if (mobileBackdrop) mobileBackdrop.classList.add('active');
+            }
         } else {
             // Hide shape selector and pill when switching to any other tool
             if (mobileShapePill) mobileShapePill.classList.add('vtt-hidden');
@@ -1223,6 +1335,105 @@ export function initVttMobileAdapter(vtt) {
             mobileBackdrop.addEventListener('touchend', () => {
                 if (!mobileShapeSheet.classList.contains('vtt-hidden')) {
                     minimizeShapeSheet(true);
+                }
+            });
+        }
+    }
+
+    function setupMobilePaintDrawer() {
+        const modal = document.getElementById('modal-mobile-paint-drawer');
+        if (!modal) return;
+
+        const subtoolBtns = modal.querySelectorAll('.mobile-paint-tool-btn');
+        const sizeSlider = document.getElementById('mobile-paint-size-slider');
+        const sizeVal = document.getElementById('mobile-paint-size-val');
+        const swatches = modal.querySelectorAll('.mobile-paint-swatch');
+        const closeBtn = document.getElementById('btn-close-mobile-paint');
+        const startBtn = document.getElementById('btn-mobile-start-drawing');
+
+        subtoolBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                subtoolBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const subtool = btn.dataset.subtool;
+                if (window.VTT?.canvasEngine?.setPaintSubTool) {
+                    window.VTT.canvasEngine.setPaintSubTool(subtool);
+                }
+            });
+        });
+
+        if (sizeSlider) {
+            sizeSlider.addEventListener('input', (e) => {
+                const val = parseInt(e.target.value) || 4;
+                if (sizeVal) sizeVal.textContent = `${val}px`;
+                if (window.VTT?.canvasEngine?.setPaintStrokeWidth) {
+                    window.VTT.canvasEngine.setPaintStrokeWidth(val);
+                }
+            });
+        }
+
+        swatches.forEach(sw => {
+            sw.addEventListener('click', () => {
+                swatches.forEach(s => s.classList.remove('active'));
+                sw.classList.add('active');
+                const color = sw.dataset.color;
+                if (window.VTT?.canvasEngine?.setPaintColor) {
+                    window.VTT.canvasEngine.setPaintColor(color);
+                }
+            });
+        });
+
+        const hideDrawer = () => {
+            modal.classList.add('vtt-hidden');
+            if (mobileBackdrop) mobileBackdrop.classList.remove('active');
+        };
+
+        if (closeBtn) closeBtn.addEventListener('click', hideDrawer);
+        if (startBtn) startBtn.addEventListener('click', hideDrawer);
+    }
+
+    function setupMobileMapToolsUI() {
+        const sheet = document.getElementById('vtt-mobile-maptools-sheet');
+        if (!sheet) return;
+
+        const closeBtn = document.getElementById('btn-close-maptools-sheet');
+        const modeBtns = sheet.querySelectorAll('.mobile-maptools-mode-btn');
+        const shapeBtns = sheet.querySelectorAll('.vtt-shape-opt');
+        const cancelBtn = document.getElementById('btn-mobile-maptools-cancel');
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                sheet.classList.add('vtt-hidden');
+                if (mobileBackdrop) mobileBackdrop.classList.remove('active');
+            });
+        }
+
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const mode = btn.dataset.mode;
+                if (window.VTT?.canvasEngine?.setMapToolSubmode) {
+                    window.VTT.canvasEngine.setMapToolSubmode(mode);
+                }
+            });
+        });
+
+        shapeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                shapeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const shape = btn.dataset.shape;
+                if (window.VTT?.canvasEngine?.setMapToolShape) {
+                    window.VTT.canvasEngine.setMapToolShape(shape);
+                }
+            });
+        });
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => {
+                if (window.VTT?.canvasEngine?.cancelMapToolDrawing) {
+                    window.VTT.canvasEngine.cancelMapToolDrawing();
                 }
             });
         }
@@ -1429,6 +1640,8 @@ export function initVttMobileAdapter(vtt) {
     setupMobileNavigation();
     setupDrawerSwipeDismiss();
     setupMobileUiToggle();
+    setupMobilePaintDrawer();
+    setupMobileMapToolsUI();
 
     // Re-check role on socket campaign ready
     if (vtt.socket) {

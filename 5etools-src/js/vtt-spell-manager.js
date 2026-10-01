@@ -77,7 +77,7 @@ export function scaleUpcastFormula(upcastFormula, extra) {
     let formula = String(upcastFormula).trim();
     if (!formula) return '';
 
-    const tokenRegex = /([+-]?)\s*(?:(\d*)[dD](\d+)|(\d+))/g;
+    const tokenRegex = /([+-]?)\s*(?:(\d*)[dD](\d+)((?:[a-zA-Z><=!]+\d*)*)|(\d+))/g;
     let scaledParts = [];
     let match;
 
@@ -86,11 +86,12 @@ export function scaleUpcastFormula(upcastFormula, extra) {
         if (match[3] !== undefined) {
             const count = match[2] ? parseInt(match[2], 10) : 1;
             const faces = match[3];
+            const suffix = match[4] || '';
             const scaledCount = count * extra;
             const op = sign === -1 ? '-' : '+';
-            scaledParts.push(`${op} ${scaledCount}d${faces}`);
-        } else if (match[4] !== undefined) {
-            const num = parseInt(match[4], 10);
+            scaledParts.push(`${op} ${scaledCount}d${faces}${suffix}`);
+        } else if (match[5] !== undefined) {
+            const num = parseInt(match[5], 10);
             const scaledNum = num * extra;
             const op = sign === -1 ? '-' : '+';
             scaledParts.push(`${op} ${scaledNum}`);
@@ -136,10 +137,12 @@ export function invalidateSpellCache() {
     pSpellPromise = null;
 }
 
-export async function loadSpells() {
+export async function loadSpells(explicitCampId = null) {
     if (sharedSpellCache) return sharedSpellCache;
     if (pSpellPromise) return pSpellPromise;
-    pSpellPromise = fetch(`/data/spells-catalog.json?v=${Date.now()}`)
+    const campId = explicitCampId || (typeof window !== 'undefined' ? (window.VTT?.campaignId || window.VTT?.campaignState?.id || (new URLSearchParams(window.location.search)).get('campaignId') || (new URLSearchParams(window.location.search)).get('campaign') || '') : '');
+    const qs = campId ? `?campaignId=${encodeURIComponent(campId)}&v=${Date.now()}` : `?v=${Date.now()}`;
+    pSpellPromise = fetch(`/data/spells-catalog.json${qs}`)
         .then(res => {
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             return res.json();
@@ -152,7 +155,7 @@ export async function loadSpells() {
             return spells;
         }).catch(async err => {
             try {
-                const res = await fetch('/api/spells/catalog');
+                const res = await fetch(`/api/spells/catalog${qs}`);
                 if (res.ok) {
                     const spells = await res.json();
                     sharedSpellCache = spells;

@@ -169,6 +169,12 @@
             <button class="mobile-tool-item" data-tool="ping">
                 <i class="fa-solid fa-bullseye"></i> <span>Ping Map</span>
             </button>
+            <button class="mobile-tool-item" data-tool="paint">
+                <i class="fa-solid fa-palette"></i> <span>Paint Tools</span>
+            </button>
+            <button class="mobile-tool-item gm-only" data-tool="maptools">
+                <i class="fa-solid fa-dungeon"></i> <span>Map Tools</span>
+            </button>
             <button class="mobile-tool-item gm-only" data-tool="lighting">
                 <i class="fa-solid fa-lightbulb"></i> <span>Lighting & Walls</span>
             </button>
@@ -193,6 +199,12 @@
             <span id="vtt-mobile-shape-pill-text">Line</span>
             <span id="vtt-mobile-shape-pill-color" class="color-dot"></span>
         </button>
+
+        <!-- Real-Time Connection Status Pill -->
+        <div id="vtt-connection-status-pill" class="vtt-connection-pill vtt-hidden">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <span id="vtt-connection-status-text">Reconnecting...</span>
+        </div>
 
         <!-- Mobile Floating Token Drag Distance Pill -->
         <div id="vtt-mobile-drag-pill" class="vtt-hidden">
@@ -256,6 +268,48 @@
             </div>
         </div>
 
+        <!-- Mobile Map Tools (Traps & Portals) Bottom Sheet -->
+        <div id="vtt-mobile-maptools-sheet" class="vtt-mobile-bottom-sheet vtt-hidden">
+            <div class="vtt-sheet-handle"></div>
+            <div class="vtt-sheet-header">
+                <h4><i class="fa-solid fa-dungeon text-gradient-gold"></i> Map Tools</h4>
+                <button id="btn-close-maptools-sheet" class="vtt-sheet-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="vtt-sheet-body">
+                <div class="mobile-maptools-mode-toggle" style="display: flex; gap: 8px; margin-bottom: 12px;">
+                    <button type="button" class="btn btn-secondary flex-1 active mobile-maptools-mode-btn" data-mode="traps" id="mobile-mode-traps">
+                        <i class="fa-solid fa-skull-crossbones"></i> Traps
+                    </button>
+                    <button type="button" class="btn btn-secondary flex-1 mobile-maptools-mode-btn" data-mode="portals" id="mobile-mode-portals">
+                        <i class="fa-solid fa-archway"></i> Portals
+                    </button>
+                </div>
+                <div class="vtt-shape-grid" id="mobile-maptools-shape-grid">
+                    <button class="vtt-shape-opt active" data-shape="rect" title="Box">
+                        <i class="fa-regular fa-square"></i>
+                        <span>Box</span>
+                    </button>
+                    <button class="vtt-shape-opt" data-shape="circle" title="Circle">
+                        <i class="fa-regular fa-circle"></i>
+                        <span>Circle</span>
+                    </button>
+                    <button class="vtt-shape-opt" data-shape="line" title="Line">
+                        <i class="fa-solid fa-slash"></i>
+                        <span>Line</span>
+                    </button>
+                    <button class="vtt-shape-opt" data-shape="polygon" title="Polygon">
+                        <i class="fa-solid fa-draw-polygon"></i>
+                        <span>Poly</span>
+                    </button>
+                </div>
+                <div class="mobile-maptools-quick-actions" style="margin-top: 12px; display: flex; gap: 8px;">
+                    <button type="button" id="btn-mobile-maptools-cancel" class="btn btn-secondary btn-block vtt-hidden">
+                        <i class="fa-solid fa-xmark"></i> Cancel Drawing
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <nav id="vtt-mobile-nav"></nav>
 
         <!-- Floating Left Toolbar (GM / Player Controls) -->
@@ -274,6 +328,12 @@
             </button>
             <button id="tool-lighting" class="control-btn gm-only" title="Add Lighting Object (5)">
                 <i class="fa-solid fa-lightbulb"></i>
+            </button>
+            <button id="tool-paint" class="control-btn" title="Paint Tools (6)">
+                <i class="fa-solid fa-palette"></i>
+            </button>
+            <button id="tool-map-tools" class="control-btn gm-only" title="Map Tools: Traps & Portals (7)">
+                <i class="fa-solid fa-dungeon"></i>
             </button>
             <div class="control-divider gm-only"></div>
             <button id="btn-change-map" class="control-btn gm-only" title="Upload & Change Map Background">
@@ -386,6 +446,9 @@
 
                 <!-- Canvas layers overlay -->
                 <canvas id="vtt-canvas-grid" style="z-index: 2;"></canvas>
+                
+                <!-- Floor Portals Canvas Layer (Directly above Map/Grid, underneath Tokens) -->
+                <canvas id="vtt-canvas-portals" style="z-index: 3; pointer-events: none;"></canvas>
                 
                 <!-- HTML Asset Overlays Layer (for Videos & Embeds) -->
                 <div id="vtt-html-overlays" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; transform-origin: 0 0; z-index: 5;"></div>
@@ -1304,6 +1367,9 @@
             <button class="layer-btn" data-layer="map" title="Switch to Map Layer (`+5)">
                 <i class="fa-solid fa-map"></i> Map Layer
             </button>
+            <button class="layer-btn" data-layer="portals" title="Switch to Portals Layer (`+6)">
+                <i class="fa-solid fa-archway"></i> Portals Layer
+            </button>
         </div>
     </div>
 
@@ -1461,6 +1527,373 @@
                 <input type="checkbox" id="measure-broadcast" checked style="accent-color: var(--color-gold-base, #c9a050); cursor: pointer; width: 16px; height: 16px;">
                 Broadcast to others
             </label>
+        </div>
+    </div>
+
+    <!-- Paint Tools Floating Ribbon Panel -->
+    <div id="panel-paint-ribbon" class="glassmorphism floating-tool-panel vtt-hidden">
+        <div class="paint-ribbon-header">
+            <h4><i class="fa-solid fa-palette text-gradient-gold"></i> Paint Tools</h4>
+            <div class="paint-history-actions">
+                <button type="button" id="btn-paint-undo" class="paint-icon-btn" title="Undo (Ctrl+Z)"><i class="fa-solid fa-rotate-left"></i></button>
+                <button type="button" id="btn-paint-redo" class="paint-icon-btn" title="Redo (Ctrl+Y)"><i class="fa-solid fa-rotate-right"></i></button>
+            </div>
+        </div>
+
+        <!-- Sub-Tools Grid -->
+        <div class="paint-subtools-grid">
+            <button type="button" class="paint-subtool-btn active" data-subtool="pencil" title="Pencil (Fine)"><i class="fa-solid fa-pencil"></i></button>
+            <button type="button" class="paint-subtool-btn" data-subtool="brush" title="Paintbrush (Smooth)"><i class="fa-solid fa-paint-brush"></i></button>
+            <button type="button" class="paint-subtool-btn" data-subtool="line" title="Straight Line"><i class="fa-solid fa-slash"></i></button>
+            <button type="button" class="paint-subtool-btn" data-subtool="arrow" title="Arrow"><i class="fa-solid fa-arrow-right"></i></button>
+            <button type="button" class="paint-subtool-btn" data-subtool="rect" title="Rectangle"><i class="fa-regular fa-square"></i></button>
+            <button type="button" class="paint-subtool-btn" data-subtool="circle" title="Ellipse / Circle"><i class="fa-regular fa-circle"></i></button>
+            <button type="button" class="paint-subtool-btn" data-subtool="polygon" title="Polygon (Click points, dbl-click to finish)"><i class="fa-solid fa-draw-polygon"></i></button>
+            <button type="button" class="paint-subtool-btn" data-subtool="fill" title="Fill Bucket (Flood fill active layer)"><i class="fa-solid fa-fill-drip"></i></button>
+            <button type="button" class="paint-subtool-btn" data-subtool="text" title="Text (Click canvas to type)"><i class="fa-solid fa-font"></i></button>
+            <button type="button" class="paint-subtool-btn" data-subtool="eraser" title="Eraser (Rub over drawings)"><i class="fa-solid fa-eraser"></i></button>
+        </div>
+
+        <div class="paint-divider"></div>
+
+        <!-- Stroke Width -->
+        <div class="paint-section">
+            <div class="paint-section-label">Stroke Size: <span id="paint-size-label">4px</span></div>
+            <div class="paint-sizes-row">
+                <button type="button" class="paint-size-dot" data-size="2" title="2px"><span style="width:3px;height:3px;"></span></button>
+                <button type="button" class="paint-size-dot active" data-size="4" title="4px"><span style="width:6px;height:6px;"></span></button>
+                <button type="button" class="paint-size-dot" data-size="8" title="8px"><span style="width:10px;height:10px;"></span></button>
+                <button type="button" class="paint-size-dot" data-size="16" title="16px"><span style="width:14px;height:14px;"></span></button>
+                <button type="button" class="paint-size-dot" data-size="24" title="24px"><span style="width:18px;height:18px;"></span></button>
+            </div>
+        </div>
+
+        <div class="paint-divider"></div>
+
+        <!-- Fill Mode & Grid Snap -->
+        <div class="paint-section">
+            <div class="paint-section-label">Style & Snapping</div>
+            <div class="paint-options-row">
+                <div class="paint-fill-mode-selector">
+                    <button type="button" class="paint-opt-btn active" data-fillmode="stroke" title="Outline Only"><i class="fa-regular fa-square"></i></button>
+                    <button type="button" class="paint-opt-btn" data-fillmode="both" title="Outline + Fill"><i class="fa-solid fa-square-full" style="opacity:0.6;"></i></button>
+                    <button type="button" class="paint-opt-btn" data-fillmode="fill" title="Fill Only"><i class="fa-solid fa-square"></i></button>
+                </div>
+                <button type="button" id="btn-paint-gridsnap" class="paint-opt-btn" title="Snap to Grid (Toggle)"><i class="fa-solid fa-magnet"></i></button>
+            </div>
+        </div>
+
+        <div class="paint-divider"></div>
+
+        <!-- Color Swatches & Picker -->
+        <div class="paint-section">
+            <div class="paint-section-label">Color</div>
+            <div class="paint-swatches-grid">
+                <button type="button" class="paint-swatch active" data-color="#eab308" style="background:#eab308;" title="Gold"></button>
+                <button type="button" class="paint-swatch" data-color="#ef4444" style="background:#ef4444;" title="Red"></button>
+                <button type="button" class="paint-swatch" data-color="#3b82f6" style="background:#3b82f6;" title="Blue"></button>
+                <button type="button" class="paint-swatch" data-color="#22c55e" style="background:#22c55e;" title="Green"></button>
+                <button type="button" class="paint-swatch" data-color="#a855f7" style="background:#a855f7;" title="Purple"></button>
+                <button type="button" class="paint-swatch" data-color="#ffffff" style="background:#ffffff;" title="White"></button>
+                <button type="button" class="paint-swatch" data-color="#94a3b8" style="background:#94a3b8;" title="Silver"></button>
+                <button type="button" class="paint-swatch" data-color="#f97316" style="background:#f97316;" title="Orange"></button>
+                <button type="button" class="paint-swatch" data-color="#06b6d4" style="background:#06b6d4;" title="Cyan"></button>
+                <button type="button" class="paint-swatch" data-color="#0f172a" style="background:#0f172a; border-color:#475569;" title="Black"></button>
+            </div>
+            <div class="paint-custom-color-row">
+                <input type="color" id="paint-custom-color" value="#eab308" title="Pick custom color">
+                <label for="paint-custom-color">Custom Color</label>
+                <div id="paint-active-indicator" style="background:#eab308;"></div>
+            </div>
+        </div>
+
+        <div class="paint-layer-status">
+            Layer: <strong id="paint-active-layer-name">Token</strong>
+        </div>
+    </div>
+
+    <!-- Full-screen Mobile Paint Drawer Modal -->
+    <div id="modal-mobile-paint-drawer" class="vtt-overlay-panel vtt-hidden" style="z-index: 10006;">
+        <div class="mobile-paint-drawer-card glassmorphism animated-fade-in">
+            <div class="mobile-paint-drawer-header">
+                <h3><i class="fa-solid fa-palette text-gradient-gold"></i> Paint Studio</h3>
+                <button type="button" id="btn-close-mobile-paint" class="vtt-sheet-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="mobile-paint-drawer-body">
+                <div class="mobile-paint-subtools">
+                    <button class="mobile-paint-tool-btn active" data-subtool="pencil"><i class="fa-solid fa-pencil"></i><span>Pencil</span></button>
+                    <button class="mobile-paint-tool-btn" data-subtool="brush"><i class="fa-solid fa-paint-brush"></i><span>Brush</span></button>
+                    <button class="mobile-paint-tool-btn" data-subtool="line"><i class="fa-solid fa-slash"></i><span>Line</span></button>
+                    <button class="mobile-paint-tool-btn" data-subtool="arrow"><i class="fa-solid fa-arrow-right"></i><span>Arrow</span></button>
+                    <button class="mobile-paint-tool-btn" data-subtool="rect"><i class="fa-regular fa-square"></i><span>Rect</span></button>
+                    <button class="mobile-paint-tool-btn" data-subtool="circle"><i class="fa-regular fa-circle"></i><span>Circle</span></button>
+                    <button class="mobile-paint-tool-btn" data-subtool="fill"><i class="fa-solid fa-fill-drip"></i><span>Fill</span></button>
+                    <button class="mobile-paint-tool-btn" data-subtool="text"><i class="fa-solid fa-font"></i><span>Text</span></button>
+                    <button class="mobile-paint-tool-btn" data-subtool="eraser"><i class="fa-solid fa-eraser"></i><span>Eraser</span></button>
+                </div>
+                <div class="mobile-paint-slider-row">
+                    <label>Stroke Size: <span id="mobile-paint-size-val">4px</span></label>
+                    <input type="range" id="mobile-paint-size-slider" min="1" max="40" value="4">
+                </div>
+                <div class="mobile-paint-colors-section">
+                    <label>Color Palette</label>
+                    <div class="mobile-paint-swatches">
+                        <button class="mobile-paint-swatch active" data-color="#eab308" style="background:#eab308;"></button>
+                        <button class="mobile-paint-swatch" data-color="#ef4444" style="background:#ef4444;"></button>
+                        <button class="mobile-paint-swatch" data-color="#3b82f6" style="background:#3b82f6;"></button>
+                        <button class="mobile-paint-swatch" data-color="#22c55e" style="background:#22c55e;"></button>
+                        <button class="mobile-paint-swatch" data-color="#a855f7" style="background:#a855f7;"></button>
+                        <button class="mobile-paint-swatch" data-color="#ffffff" style="background:#ffffff;"></button>
+                        <button class="mobile-paint-swatch" data-color="#94a3b8" style="background:#94a3b8;"></button>
+                        <button class="mobile-paint-swatch" data-color="#f97316" style="background:#f97316;"></button>
+                        <button class="mobile-paint-swatch" data-color="#06b6d4" style="background:#06b6d4;"></button>
+                        <button class="mobile-paint-swatch" data-color="#0f172a" style="background:#0f172a; border-color:#475569;"></button>
+                    </div>
+                </div>
+                <button type="button" id="btn-mobile-start-drawing" class="btn btn-primary btn-block" style="margin-top: 20px;">
+                    <i class="fa-solid fa-paintbrush"></i> Start Drawing
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Tools (Traps & Portals) Floating Ribbon Panel -->
+    <div id="panel-map-tools" class="glassmorphism floating-tool-panel vtt-hidden" style="width: 320px; max-height: 85vh; overflow-y: auto;">
+        <div class="maptools-header">
+            <h4><i class="fa-solid fa-dungeon text-gradient-gold"></i> Map Tools</h4>
+            <div class="maptools-tabs-nav">
+                <button type="button" class="maptools-tab-btn active" data-tab="traps" id="tab-btn-maptools-traps">
+                    <i class="fa-solid fa-skull-crossbones"></i> Traps
+                </button>
+                <button type="button" class="maptools-tab-btn" data-tab="portals" id="tab-btn-maptools-portals">
+                    <i class="fa-solid fa-archway"></i> Portals
+                </button>
+            </div>
+        </div>
+
+        <!-- Traps Sub-Panel -->
+        <div id="subpanel-maptools-traps" class="maptools-subpanel active">
+            <div class="maptools-section-label">Shape to Draw</div>
+            <div class="maptools-shapes-grid">
+                <button type="button" class="maptools-shape-btn active" data-shape="rect" title="Box / Zone">
+                    <i class="fa-regular fa-square"></i><span>Box</span>
+                </button>
+                <button type="button" class="maptools-shape-btn" data-shape="circle" title="Circle / Rune">
+                    <i class="fa-regular fa-circle"></i><span>Circle</span>
+                </button>
+                <button type="button" class="maptools-shape-btn" data-shape="line" title="Tripwire / Line">
+                    <i class="fa-solid fa-slash"></i><span>Line</span>
+                </button>
+                <button type="button" class="maptools-shape-btn" data-shape="polygon" title="Polygon (Click points, dbl-click to finish)">
+                    <i class="fa-solid fa-draw-polygon"></i><span>Poly</span>
+                </button>
+            </div>
+
+            <div id="maptools-trap-drawing-indicator" class="maptools-draw-hint vtt-hidden">
+                <span id="maptools-trap-draw-text"><i class="fa-solid fa-pen"></i> Drawing on canvas...</span>
+                <button type="button" id="btn-cancel-trap-draw" class="btn btn-secondary btn-xs"><i class="fa-solid fa-xmark"></i> Cancel</button>
+            </div>
+
+            <div id="maptools-trap-edit-banner" class="maptools-edit-banner vtt-hidden">
+                <span id="maptools-trap-edit-title" class="maptools-edit-title"><i class="fa-solid fa-pen-to-square"></i> Editing Trap</span>
+                <button type="button" id="btn-cancel-edit-trap" class="btn btn-secondary btn-xs" title="Cancel edit and return to drawing new traps"><i class="fa-solid fa-xmark"></i> Done</button>
+            </div>
+
+            <div class="paint-divider"></div>
+
+            <div class="maptools-form">
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label for="maptools-trap-name">Trap Name</label>
+                    <input type="text" id="maptools-trap-name" value="Spike Pit" placeholder="Trap Name">
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <div class="form-group" style="flex: 1.2;">
+                        <label for="maptools-trap-ability">Save Ability</label>
+                        <select id="maptools-trap-ability" style="width: 100%;">
+                            <option value="DEX" selected>DEX (Dexterity)</option>
+                            <option value="CON">CON (Constitution)</option>
+                            <option value="WIS">WIS (Wisdom)</option>
+                            <option value="STR">STR (Strength)</option>
+                            <option value="INT">INT (Intelligence)</option>
+                            <option value="CHA">CHA (Charisma)</option>
+                            <option value="NONE">None</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 0.8;">
+                        <label for="maptools-trap-dc">Save DC</label>
+                        <input type="number" id="maptools-trap-dc" value="15" min="1" max="30">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label for="maptools-trap-damage">Damage / Effect</label>
+                    <input type="text" id="maptools-trap-damage" value="4d6 piercing" placeholder="e.g. 4d6 piercing">
+                </div>
+
+                <div class="maptools-toggle-row">
+                    <label class="maptools-checkbox-label">
+                        <input type="checkbox" id="maptools-trap-auto" checked>
+                        <span>Trigger Automatically</span>
+                    </label>
+                </div>
+                <div class="maptools-toggle-row">
+                    <label class="maptools-checkbox-label">
+                        <input type="checkbox" id="maptools-trap-repeat">
+                        <span>Repeat Trigger (Multiple times)</span>
+                    </label>
+                </div>
+
+                <div id="maptools-trap-edit-actions" class="maptools-edit-actions vtt-hidden" style="margin-top: 10px; display: flex; gap: 8px;">
+                    <button type="button" id="btn-save-trap" class="btn btn-primary btn-sm flex-1" style="background: #ef4444; border-color: #f87171;">
+                        <i class="fa-solid fa-check"></i> Update Trap
+                    </button>
+                    <button type="button" id="btn-delete-selected-trap" class="btn btn-secondary btn-sm" title="Delete this trap">
+                        <i class="fa-solid fa-trash text-danger"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="paint-divider"></div>
+
+            <div class="maptools-list-header">
+                <div class="maptools-section-label">Placed Traps (<span id="maptools-traps-count">0</span>)</div>
+            </div>
+            <div id="maptools-traps-list" class="maptools-items-list">
+                <div class="maptools-empty-note">No traps placed on this map. Click & drag on the canvas to place one.</div>
+            </div>
+        </div>
+
+        <!-- Portals Sub-Panel -->
+        <div id="subpanel-maptools-portals" class="maptools-subpanel vtt-hidden">
+            <div class="maptools-section-label">Shape to Draw</div>
+            <div class="maptools-shapes-grid">
+                <button type="button" class="maptools-shape-btn active" data-shape="line" title="Doorway / Archway (Line)">
+                    <i class="fa-solid fa-slash"></i><span>Line</span>
+                </button>
+                <button type="button" class="maptools-shape-btn" data-shape="circle" title="Teleport Ring (Circle)">
+                    <i class="fa-regular fa-circle"></i><span>Circle</span>
+                </button>
+                <button type="button" class="maptools-shape-btn" data-shape="rect" title="Threshold / Box">
+                    <i class="fa-regular fa-square"></i><span>Box</span>
+                </button>
+                <button type="button" class="maptools-shape-btn" data-shape="polygon" title="Planar Rift (Polygon)">
+                    <i class="fa-solid fa-draw-polygon"></i><span>Poly</span>
+                </button>
+            </div>
+
+            <div id="maptools-portal-drawing-indicator" class="maptools-draw-hint vtt-hidden">
+                <span id="maptools-portal-draw-text"><i class="fa-solid fa-pen"></i> Drawing on canvas...</span>
+                <button type="button" id="btn-cancel-portal-draw" class="btn btn-secondary btn-xs"><i class="fa-solid fa-xmark"></i> Cancel</button>
+            </div>
+
+            <div class="paint-divider"></div>
+
+            <div class="maptools-form">
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label for="maptools-portal-name">Portal Name</label>
+                    <input type="text" id="maptools-portal-name" value="Mystic Gateway" placeholder="Portal Name">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label for="maptools-portal-target-map">Target Map</label>
+                    <select id="maptools-portal-target-map" style="width: 100%;">
+                        <option value="">-- Active Map (Intra-Map) --</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label for="maptools-portal-target-portal">Link Destination Portal</label>
+                    <select id="maptools-portal-target-portal" style="width: 100%;">
+                        <option value="">-- None (Unlinked) --</option>
+                    </select>
+                </div>
+
+                <div class="maptools-toggle-row">
+                    <label class="maptools-checkbox-label">
+                        <input type="checkbox" id="maptools-portal-linkback" checked>
+                        <span>Link Back (Two-Way Portal)</span>
+                    </label>
+                </div>
+
+                <div class="maptools-toggle-row">
+                    <label class="maptools-checkbox-label">
+                        <input type="checkbox" id="maptools-portal-walkthrough" checked>
+                        <span>Walk Through (Teleport on move)</span>
+                    </label>
+                </div>
+
+                <div class="maptools-toggle-row">
+                    <label class="maptools-checkbox-label">
+                        <input type="checkbox" id="maptools-portal-viewthrough">
+                        <span>View Through (Line of Sight to other side)</span>
+                    </label>
+                </div>
+
+
+
+                <div class="form-group" style="margin-bottom: 8px;">
+                    <label for="maptools-portal-reflect-mode">Reflect Mode (Look Down/Vertical Shaft)</label>
+                    <select id="maptools-portal-reflect-mode" style="width: 100%;">
+                        <option value="none">Disabled (Standard Gateway)</option>
+                        <option value="one-way">One-Way (Look Down / Pit)</option>
+                        <option value="two-way">Two-Way (Reflect Both Sides)</option>
+                    </select>
+                </div>
+
+                <div class="maptools-toggle-row">
+                    <label class="maptools-checkbox-label">
+                        <input type="checkbox" id="maptools-portal-radial">
+                        <span>Radial / Omnidirectional (Any Angle Entry)</span>
+                    </label>
+                </div>
+
+                <div class="form-group" id="group-portal-facing-angle" style="margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <label for="maptools-portal-facing-angle" style="margin-bottom: 0;">Facing Angle</label>
+                        <span id="maptools-portal-facing-angle-val" style="font-size: 0.75rem; color: #a855f7; font-weight: bold;">270°</span>
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="range" id="maptools-portal-facing-angle" min="0" max="359" value="270" style="flex: 1;">
+                        <input type="number" id="maptools-portal-facing-angle-num" min="0" max="359" value="270" style="width: 60px; padding: 2px 4px; font-size: 0.8rem;">
+                    </div>
+                </div>
+
+                <div class="maptools-toggle-row" style="display: flex; align-items: center; justify-content: space-between;">
+                    <label class="maptools-checkbox-label" style="margin-bottom: 0;">
+                        <input type="checkbox" id="maptools-portal-oneway">
+                        <span>One-Way Viewing/Entry</span>
+                    </label>
+                    <button type="button" id="btn-maptools-portal-flip" class="btn btn-secondary btn-xs" title="Flip viewing side normal direction">
+                        <i class="fa-solid fa-arrows-rotate"></i> Flip 180°
+                    </button>
+                </div>
+
+                <div class="maptools-toggle-row">
+                    <label class="maptools-checkbox-label">
+                        <input type="checkbox" id="maptools-portal-revealed" checked>
+                        <span>Visible to Players</span>
+                    </label>
+                </div>
+
+                <div id="maptools-portal-edit-actions" class="maptools-edit-actions vtt-hidden" style="margin-top: 10px; display: flex; gap: 8px;">
+                    <button type="button" id="btn-save-portal" class="btn btn-primary btn-sm flex-1" style="background: #a855f7; border-color: #c084fc;">
+                        <i class="fa-solid fa-check"></i> Update Portal
+                    </button>
+                    <button type="button" id="btn-delete-selected-portal" class="btn btn-secondary btn-sm" title="Delete this portal">
+                        <i class="fa-solid fa-trash text-danger"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="paint-divider"></div>
+
+            <div class="maptools-list-header">
+                <div class="maptools-section-label">Placed Portals (<span id="maptools-portals-count">0</span>)</div>
+            </div>
+            <div id="maptools-portals-list" class="maptools-items-list">
+                <div class="maptools-empty-note">No portals placed on this map. Click & drag on the canvas to place one.</div>
+            </div>
         </div>
     </div>
 
@@ -1973,12 +2406,41 @@
                     try { window.VTT.socket.disconnect(); } catch (e) {}
                 }
 
-                // Initialise Socket connection
+                // Initialise Resilient Socket connection with infinite auto-reconnect
                 const socket = io({
                     transports: ['websocket', 'polling'],
-                    timeout: 8000,
-                    reconnectionAttempts: 2
+                    timeout: 10000,
+                    reconnection: true,
+                    reconnectionAttempts: Infinity,
+                    reconnectionDelay: 1000,
+                    reconnectionDelayMax: 5000,
+                    randomizationFactor: 0.3
                 });
+
+                let hasJoinedSession = false;
+                const connectionPill = document.getElementById('vtt-connection-status-pill');
+
+                function updateConnectionStatus(status, text) {
+                    if (!connectionPill) return;
+                    if (status === 'hidden') {
+                        connectionPill.classList.add('vtt-hidden');
+                        connectionPill.classList.remove('connected');
+                        return;
+                    }
+                    connectionPill.classList.remove('vtt-hidden');
+                    if (status === 'reconnecting') {
+                        connectionPill.classList.remove('connected');
+                        connectionPill.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>${text || 'Reconnecting to server...'}</span>`;
+                    } else if (status === 'connected') {
+                        connectionPill.classList.add('connected');
+                        connectionPill.innerHTML = `<i class="fa-solid fa-check"></i> <span>${text || 'Connected!'}</span>`;
+                        setTimeout(() => {
+                            if (connectionPill.classList.contains('connected')) {
+                                connectionPill.classList.add('vtt-hidden');
+                            }
+                        }, 2200);
+                    }
+                }
 
                 // Override emit to automatically inject whisperToGM state from the UI toggle
                 const originalEmit = socket.emit;
@@ -2001,17 +2463,54 @@
                 if (elRemoteUrl) elRemoteUrl.value = `${absoluteHost}/vtt.html`;
 
                 let connTimeout = setTimeout(() => {
-                    if (!socket.connected) {
+                    if (!socket.connected && !hasJoinedSession) {
                         resetBtnJoin();
-                        alert("Connection Timeout: Unable to connect to VTT server at " + absoluteHost + ".\nPlease ensure the backend server is running.");
+                        if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                            JqueryUtil.doToast({
+                                type: 'warning',
+                                content: `Connecting is taking longer than usual. Still attempting to reach server at ${absoluteHost}...`
+                            });
+                        }
                     }
                 }, 8000);
 
+                socket.on('disconnect', (reason) => {
+                    console.warn('[Socket] Disconnected from server:', reason);
+                    if (hasJoinedSession) {
+                        updateConnectionStatus('reconnecting', 'Connection paused — Reconnecting...');
+                    }
+                });
+
+                if (socket.io) {
+                    socket.io.on('reconnect_attempt', (attempt) => {
+                        if (hasJoinedSession) {
+                            updateConnectionStatus('reconnecting', `Reconnecting... (Attempt ${attempt})`);
+                        }
+                    });
+
+                    socket.io.on('reconnect', () => {
+                        console.log('[Socket] Reconnected successfully to backend!');
+                        if (hasJoinedSession) {
+                            updateConnectionStatus('connected', 'Reconnected!');
+                            socket.emit('join', { campaignId, username, role, gmPassword });
+                        }
+                    });
+                }
+
                 socket.on('connect_error', (err) => {
-                    clearTimeout(connTimeout);
-                    resetBtnJoin();
-                    console.error("Socket connect_error:", err);
-                    alert("Connection Failure: Failed to reach VTT server (" + (err.message || 'Server offline') + ").\nPlease check if the backend server is running on " + absoluteHost);
+                    console.warn('[Socket] connect_error:', err?.message || err);
+                    if (!hasJoinedSession) {
+                        clearTimeout(connTimeout);
+                        resetBtnJoin();
+                        if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                            JqueryUtil.doToast({
+                                type: 'error',
+                                content: `Connection error: ${err.message || 'Server offline'}. Retrying...`
+                            });
+                        }
+                    } else {
+                        updateConnectionStatus('reconnecting', 'Reconnecting...');
+                    }
                 });
 
                 socket.on('connect', () => {
@@ -2045,6 +2544,8 @@
                 });
 
                 socket.on('joined', async ({ role: serverRole, userRole, campaignState, chatHistory }) => {
+                    hasJoinedSession = true;
+                    updateConnectionStatus('connected', 'Connected!');
                     clearTimeout(connTimeout);
                     resetBtnJoin();
                     if (modalGmPassword) modalGmPassword.classList.add('vtt-hidden');
@@ -2072,6 +2573,19 @@
 
                     document.getElementById('login-overlay')?.classList.add('vtt-hidden');
                     document.getElementById('vtt-workspace')?.classList.remove('vtt-hidden');
+
+                    // IDEMPOTENCY GUARD: If modules are already initialized, do NOT re-run init!
+                    // Re-running module initializers re-binds DOM and socket listeners, causing duplicate/triplicate events!
+                    if (window.VTT._modulesInitialized) {
+                        console.log('[vtt.html] Session re-joined. Synchronizing campaign state and UI without re-binding listeners.');
+                        if (window.VTT.canvasEngine?.syncCampaignState) {
+                            window.VTT.canvasEngine.syncCampaignState(campaignState);
+                        } else if (window.VTT.canvasEngine?.renderAll) {
+                            window.VTT.canvasEngine.renderAll();
+                        }
+                        return;
+                    }
+                    window.VTT._modulesInitialized = true;
                     
                     // Boot VTT Modules (awaiting promise guarantees all 7 modules finish importing)
                     try {
@@ -2100,6 +2614,12 @@
                         }
                         
                         console.log("Joined and VTT loaded!");
+                        const currentCampId = campaignState?.id || campaignId;
+                        if (window.loadBestiaryData) window.loadBestiaryData(currentCampId);
+                        if (window.VTTSpellManager?.invalidateSpellCache) {
+                            window.VTTSpellManager.invalidateSpellCache();
+                            window.VTTSpellManager.loadSpells?.(currentCampId);
+                        }
                     } catch (err) {
                         alert("INIT ERROR: " + err.message + "\n" + err.stack);
                         document.body.innerHTML = "<div style='color:red; background:white; padding: 20px; font-size:24px; position:absolute; z-index:999999; top:0; left:0; width:100vw; height:100vh;'><pre>" + err.stack + "</pre></div>";

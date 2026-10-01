@@ -17,6 +17,7 @@
     "sync:content": "node scripts/sync-partnered-brew.mjs",
     "sync:partnered": "node scripts/sync-partnered-brew.mjs --partnered-only",
     "app": "electron .",
+    "push": "electron-builder --dir",
     "dist": "electron-builder",
     "dist:portable": "electron-builder --win portable"
   },
@@ -45,6 +46,12 @@
       "index.html",
       "matto.json",
       "5etools-src/**/*",
+      "!5etools-src/node_modules/**",
+      "!5etools-src/test/**",
+      "!5etools-src/node/**",
+      "!5etools-src/scss/**",
+      "!5etools-src/.github/**",
+      "!5etools-src/spellcheck/**",
       "electron/**/*",
       "package.json"
     ],

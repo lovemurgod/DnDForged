@@ -252,6 +252,28 @@ export function initVttChat(vtt, chatHistory) {
                 }
                 if (formula) rollAndSend(formula);
                 e.stopPropagation();
+                return;
+            }
+
+            // Macro chatcard resolution & damage buttons (GM only)
+            const actionBtn = e.target.closest('.macro-btn-action');
+            if (actionBtn) {
+                const msgEl = actionBtn.closest('.chat-message');
+                let cardData = msgEl?._macroCardData;
+                if (!cardData) {
+                    const rowEl = actionBtn.closest('.macro-card-actions-row');
+                    if (rowEl && rowEl.dataset.cardData) {
+                        try { cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData)); } catch(err) {}
+                    }
+                }
+                const action = actionBtn.dataset.action;
+                if (cardData && action) {
+                    if (window.VTT?.canvasEngine?.handleCardAction) {
+                        window.VTT.canvasEngine.handleCardAction(cardData, action);
+                    }
+                }
+                e.stopPropagation();
+                return;
             }
         });
 
@@ -503,6 +525,25 @@ export function initVttChat(vtt, chatHistory) {
                 </div>`;
         }).join('');
 
+        let actionsRow = '';
+        if (vtt.role === 'GM' && (mc.atkRoll || mc.saveInfo || (mc.saveDc && mc.saveAbility) || (mc.dmgRolls && mc.dmgRolls.length > 0))) {
+            let encodedData = '';
+            try { encodedData = encodeURIComponent(JSON.stringify(mc)); } catch(err) {}
+            actionsRow = `
+                <div class="macro-card-actions-row" data-card-data="${encodedData}">
+                    <button type="button" class="macro-btn-action macro-btn-process" data-action="process" title="Automatically resolve attack roll / saving throw & apply damage to selected tokens">
+                        <i class="fa-solid fa-play"></i> Process
+                    </button>
+                    <button type="button" class="macro-btn-action macro-btn-full" data-action="full" title="Apply full damage to selected tokens">
+                        <i class="fa-solid fa-burst"></i> Full
+                    </button>
+                    <button type="button" class="macro-btn-action macro-btn-half" data-action="half" title="Apply half damage to selected tokens">
+                        <i class="fa-solid fa-shield-halved"></i> Half
+                    </button>
+                </div>
+            `;
+        }
+
         return `
             <div class="macro-chat-card">
                 <div class="macro-card-header">
@@ -520,6 +561,7 @@ export function initVttChat(vtt, chatHistory) {
                     ${saveSection}
                     ${dmgSections}
                 </div>
+                ${actionsRow}
             </div>
         `;
     }
@@ -608,6 +650,35 @@ export function initVttChat(vtt, chatHistory) {
                 </div>
             `;
         }
+        // Structured trap card
+        else if (msg.trapCard) {
+            const tc = msg.trapCard;
+            bodyText = `
+                <div class="trap-chat-card">
+                    <div class="trap-chat-header">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>TRAP TRIGGERED: ${tc.trapName || 'Trap'}</span>
+                    </div>
+                    <div class="trap-chat-body">
+                        <span class="trap-chat-victim">${tc.tokenName || 'Creature'}</span> stepped into a trap!
+                        <div style="margin-top: 4px; color: #cbd5e1; font-style: italic;">${tc.flavor || ''}</div>
+                    </div>
+                    <div class="trap-chat-details">
+                        ${tc.saveAbility && tc.saveAbility !== 'NONE' ? `<span class="trap-chat-badge"><i class="fa-solid fa-shield"></i> DC ${tc.saveDc} ${tc.saveAbility} Save</span>` : ''}
+                        ${tc.damageRoll ? `
+                            <span class="trap-chat-badge" style="background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.6); color: #fca5a5;">
+                                <i class="fa-solid fa-burst"></i> Damage: <strong>${tc.damageRoll.total}</strong> <span style="font-size: 0.85em; opacity: 0.85;">(${tc.damageRoll.breakdownStr || tc.damageRoll.formula || tc.damage || ''})</span>
+                            </span>
+                        ` : (tc.damage ? `<span class="trap-chat-badge"><i class="fa-solid fa-burst"></i> ${tc.damage}</span>` : '')}
+                    </div>
+                    ${tc.saveAbility && tc.saveAbility !== 'NONE' ? `
+                        <button type="button" class="trap-chat-save-btn" onclick="window.VTT?.canvasEngine?.rollTrapSave ? window.VTT.canvasEngine.rollTrapSave('${tc.trapId}', '${tc.tokenId}', '${tc.saveAbility}', ${tc.saveDc}) : null">
+                            <i class="fa-solid fa-dice-d20"></i> Roll ${tc.saveAbility} Save (DC ${tc.saveDc})
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+        }
         // If there's parsed rolls, append dice roll cards
         else if (msg.roll) {
             let breakdownHtml = "";
@@ -659,6 +730,7 @@ export function initVttChat(vtt, chatHistory) {
         }
         // Combined macro card: attack + save + per-type damage rows
         else if (msg.macroCard) {
+            messageDiv._macroCardData = msg.macroCard;
             bodyText = renderMacroCardHtml(msg.macroCard, isHistorical);
         }
         // Stylized item card for pinging inventory items
@@ -1430,7 +1502,7 @@ export function initVttChat(vtt, chatHistory) {
                     if (isTargetYt) {
                         initMinAvatar.innerHTML = '📺';
                     } else if (isTargetVideo) {
-                        initMinAvatar.innerHTML = `<video src="${actTargetImg}" muted loop playsinline preload="metadata"></video>`;
+                        initMinAvatar.innerHTML = `<video src="${actTargetImg}" autoplay muted loop playsinline preload="auto" onloadeddata="this.play().catch(()=>{})"></video>`;
                     } else {
                         initMinAvatar.innerHTML = `<img src="${actTargetImg}" alt="${actName}" onerror="this.parentElement.innerHTML='<div class=\\'init-monogram-avatar\\' style=\\'background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};\\'>${actMonogram.letters}</div>';">`;
                     }
@@ -1520,7 +1592,7 @@ export function initVttChat(vtt, chatHistory) {
                 } else if (isTargetVideo) {
                     avatarHtml = `
                         <div class="init-token-avatar-wrap">
-                            <video class="init-token-avatar" src="${targetImg}" muted loop playsinline preload="metadata"></video>
+                            <video class="init-token-avatar" src="${targetImg}" autoplay muted loop playsinline preload="auto" onloadeddata="this.play().catch(()=>{})"></video>
                         </div>`;
                 } else {
                     avatarHtml = `
@@ -1662,6 +1734,7 @@ export function initVttChat(vtt, chatHistory) {
 
         // Structured macro card (private)
         if (msg.macroCard) {
+            messageDiv._macroCardData = msg.macroCard;
             bodyText = renderMacroCardHtml(msg.macroCard, isHistorical);
         }
         // Structured ability card (private)

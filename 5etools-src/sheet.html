@@ -222,8 +222,8 @@
         });
 
         socket.on('character:update', (data) => {
-            const char = data.character || data;
-            if (!char || !window.VTT.campaignState) return;
+            const char = data?.character || data;
+            if (!char || !char.id || !window.VTT.campaignState) return;
             window.VTT.campaignState.characters = window.VTT.campaignState.characters || {};
             window.VTT.campaignState.characters[char.id] = char;
 
@@ -240,8 +240,9 @@
             }
         });
 
-        socket.on('character:updated', (char) => {
-            if (!window.VTT.campaignState) return;
+        socket.on('character:updated', (data) => {
+            const char = data?.character || data;
+            if (!char || !char.id || !window.VTT.campaignState) return;
             window.VTT.campaignState.characters = window.VTT.campaignState.characters || {};
             window.VTT.campaignState.characters[char.id] = char;
 
@@ -415,8 +416,10 @@
 
             // 3. Try searching catalog to find source if source was missing or unknown
             try {
-                let catRes = await fetch('/api/bestiary/catalog');
-                if (!catRes.ok) catRes = await fetch('data/bestiary-catalog.json');
+                const sheetCampId = urlParams.get('campaignId') || urlParams.get('campaign') || '';
+                const qs = sheetCampId ? `?campaignId=${encodeURIComponent(sheetCampId)}` : '';
+                let catRes = await fetch(`/api/bestiary/catalog${qs}`);
+                if (!catRes.ok) catRes = await fetch(`data/bestiary-catalog.json${qs}`);
                 if (catRes.ok) {
                     const catalog = await catRes.json();
                     const match = catalog.find(m => m.name.toLowerCase() === qName && (!qSource || m.source.toLowerCase() === qSource));

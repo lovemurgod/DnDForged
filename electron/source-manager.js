@@ -24,12 +24,19 @@ export class SourceManager {
     this.configFilePath = path.join(this.campaignDataDir, 'sources-config.json');
     this.bookTitlesCache = null;
     this.cachedBuiltinCategories = null;
+    this.partneredSourcesCache = null;
     this.config = {
       disabledSources: {
         global: [],
         campaigns: {}
       },
-      customSources: []
+      customSources: [],
+      uiState: {
+        lastPreset: '2024-ruleset',
+        lastScope: '',
+        includePartnered: true,
+        includeUA: true
+      }
     };
     this.ensureDirs();
     this.loadConfig();
@@ -38,6 +45,8 @@ export class SourceManager {
   setCampaignDataDir(newDir) {
     this.campaignDataDir = newDir;
     this.configFilePath = path.join(this.campaignDataDir, 'sources-config.json');
+    this.cachedBuiltinCategories = null;
+    this.partneredSourcesCache = null;
     this.ensureDirs();
     this.loadConfig();
   }
@@ -68,10 +77,16 @@ export class SourceManager {
         const parsed = JSON.parse(fs.readFileSync(this.configFilePath, 'utf8'));
         this.config = {
           disabledSources: {
-            global: parsed.disabledSources?.global || [],
-            campaigns: parsed.disabledSources?.campaigns || {}
+            global: Array.isArray(parsed.disabledSources?.global) ? parsed.disabledSources.global : [],
+            campaigns: parsed.disabledSources?.campaigns && typeof parsed.disabledSources.campaigns === 'object' ? parsed.disabledSources.campaigns : {}
           },
-          customSources: parsed.customSources || []
+          customSources: Array.isArray(parsed.customSources) ? parsed.customSources : [],
+          uiState: {
+            lastPreset: parsed.uiState?.lastPreset || '2024-ruleset',
+            lastScope: parsed.uiState?.lastScope || '',
+            includePartnered: parsed.uiState?.includePartnered !== false,
+            includeUA: parsed.uiState?.includeUA !== false
+          }
         };
       } else {
         this.saveConfig();
@@ -89,6 +104,105 @@ export class SourceManager {
     }
   }
 
+  saveUiState(uiState = {}) {
+    if (!this.config.uiState) {
+      this.config.uiState = {};
+    }
+    this.config.uiState = {
+      ...this.config.uiState,
+      ...uiState
+    };
+    this.saveConfig();
+    return { success: true, uiState: this.config.uiState };
+  }
+
+  getPartneredSourcesSet() {
+    if (this.partneredSourcesCache) return this.partneredSourcesCache;
+    const set = new Set([
+      '24GRIFFONSSADDLEBAG1', 'BOOKOFEBONTIDES', 'BOUNDBYBLOOD', 'CROOKEDMOON24',
+      'CTHULHUTORCHLIGHT', 'DNDBEYONDDROPS', 'DODKSEARCHSMUGGLERSSECRETS',
+      'DUNGEONSDRAKKENHEIM', 'EXPLORINGEBERRON24', 'FLEEMORTALS', 'FOEQUICKSTONE',
+      'GRIFFONSSADDLEBAG2', 'GRIMHOLLOWCG24', 'GRIMHOLLOWLAIRSETHARIS', 'GRIMHOLLOWPG24',
+      'HELIANASGUIDETOMONSTERHUNTING', 'HUMBLEWOODCAMPAIGNSETTING', 'HUMBLEWOODTALES',
+      'ILLRIGGERREVISED', 'MALADYOFMINARRH', 'MONSTERSOFDRAKKENHEIM', 'NORTHLANDSSAGAS',
+      'NORTHLANDSWORLDBOOK', 'ONESHOTWONDERSHOLIDAYPACK', 'PUGILIST2024',
+      'TALDOREICAMPAIGNSETTINGREBORN', 'TALESFROMTHESHADOWS', 'TLOTRR', 'TOB1-2023',
+      'VALDAPLAYERPACK2', 'WHEREEVILLIVES', 'VALDAGUNSLINGER', 'VALDASPIREOFSECRETS',
+      'STEINHARDTGUIDE', 'ONESHOTWONDERSFOREST', 'DOD', 'KP', 'MCDM', 'TGS', 'VSOS'
+    ]);
+
+    try {
+      const pDir = path.join(this.dataDir, 'partnered');
+      if (fs.existsSync(pDir)) {
+        const files = fs.readdirSync(pDir);
+        for (const f of files) {
+          if (!f.endsWith('.json')) continue;
+          const base = f.replace(/\.json$/i, '').toUpperCase();
+          const cleanCode = base.replace(/[^A-Z0-9]/g, '');
+          set.add(cleanCode);
+          try {
+            const raw = fs.readFileSync(path.join(pDir, f), 'utf8');
+            const data = JSON.parse(raw);
+            if (data._meta?.sources && Array.isArray(data._meta.sources)) {
+              for (const s of data._meta.sources) {
+                if (s.json) set.add(String(s.json).toUpperCase());
+                if (s.abbreviation) set.add(String(s.abbreviation).toUpperCase());
+              }
+            }
+          } catch (e) {}
+        }
+      }
+    } catch (e) {}
+
+    this.partneredSourcesCache = set;
+    return set;
+  }
+
+  isPartneredSource(code, hint = '') {
+    if (!code) return false;
+    const clean = String(code).trim().toUpperCase();
+    const set = this.getPartneredSourcesSet();
+    if (set.has(clean)) return true;
+    const stripSpecial = clean.replace(/[^A-Z0-9]/g, '');
+    if (set.has(stripSpecial)) return true;
+    for (const item of set) {
+      if (stripSpecial.includes(item) || item.includes(stripSpecial)) {
+        if (stripSpecial.length >= 4 && item.length >= 4) return true;
+      }
+    }
+    return false;
+  }
+
+  isUASource(code) {
+    if (!code) return false;
+    const clean = String(code).trim().toUpperCase();
+    return clean.startsWith('UA') || clean.startsWith('XUA');
+  }
+
+  is2024Source(code, meta = {}) {
+    if (!code) return false;
+    const clean = String(code).trim().toUpperCase();
+
+    const REVISION_2024_CODES = new Set([
+      'XPHB', 'XMM', 'XDMG', 'XSCREEN', 'XSAC', 'XSCREENRHW',
+      'RHW', 'AU', 'AUD', 'ABH', 'FRAIF', 'FRHOF', 'NF', 'LFL', 'EFA',
+      'CABOMP', 'UTHTLH', 'SCOEE', 'HBTD', 'BQGT', 'HOTB', 'WTTHC', 'FFOTR', 'BQDD'
+    ]);
+
+    if (REVISION_2024_CODES.has(clean)) return true;
+    if (clean.startsWith('XUA')) return true;
+    if (clean.startsWith('UA') && /202[4-9]/.test(clean)) return true;
+    if (clean.includes('2024') || clean.includes('2025') || clean.includes('2026')) return true;
+
+    if (meta.published) {
+      const pub = String(meta.published).trim();
+      if (pub >= '2024-09-01') return true;
+    }
+    if (meta.edition === 'one' || meta.edition === '2024') return true;
+
+    return false;
+  }
+
   getBookTitlesMap() {
     if (this.bookTitlesCache) return this.bookTitlesCache;
     const titles = new Map();
@@ -101,6 +215,15 @@ export class SourceManager {
       'XMM': 'Monster Manual (2024)',
       'DMG': "Dungeon Master's Guide (2014)",
       'XDMG': "Dungeon Master's Guide (2024)",
+      'RHW': 'Ravenloft: The Horrors Within (2024)',
+      'XSCREENRHW': "Dungeon Master's Screen: Ravenloft (2024)",
+      'AU': 'Arcana Unleashed (2024)',
+      'AUD': 'Arcana Unleashed: Deadfall (2024)',
+      'ABH': "Astarion's Book of Hungers (2024)",
+      'FRHOF': 'Forgotten Realms: Heroes of Faerûn (2024)',
+      'LFL': 'Lorwyn: First Light (2024)',
+      'EFA': 'Eberron: Forge of the Artificer (2024)',
+      'CABOMP': 'Crochet: A Book of Many Patterns (2024)',
       'XGE': "Xanathar's Guide to Everything",
       'TCE': "Tasha's Cauldron of Everything",
       'FTD': "Fizban's Treasury of Dragons",
@@ -128,7 +251,6 @@ export class SourceManager {
       'PAbtSO': 'Phandelver and Below: The Shattered Obelisk',
       'CRCOTN': 'Critical Role: Call of the Netherdeep',
       'FRAIF': 'Forgotten Realms: Adventures in Faerûn',
-      'EFA': 'Elminster\'s Forgotten Archive',
       'NF': 'Nightfall',
       'DoD': 'Dungeons of Drakkenheim',
       'KP': 'Kobold Press',
@@ -206,6 +328,13 @@ export class SourceManager {
     }
 
     const categoriesResult = [];
+    let totalPartnered = 0;
+    let enabledPartnered = 0;
+    let totalUA = 0;
+    let enabledUA = 0;
+
+    const countedPartnered = new Set();
+    const countedUA = new Set();
 
     for (const cat of SOURCE_CATEGORIES) {
       const sourcesMap = new Map();
@@ -222,9 +351,22 @@ export class SourceManager {
       // Convert map to array and assign enabled flag
       const list = Array.from(sourcesMap.values()).map(src => {
         const upperCode = src.code.toUpperCase();
+        const enabled = !disabledSet.has(upperCode);
+
+        if (src.isPartnered && !countedPartnered.has(upperCode)) {
+          countedPartnered.add(upperCode);
+          totalPartnered++;
+          if (enabled) enabledPartnered++;
+        }
+        if (src.isUA && !countedUA.has(upperCode)) {
+          countedUA.add(upperCode);
+          totalUA++;
+          if (enabled) enabledUA++;
+        }
+
         return {
           ...src,
-          enabled: !disabledSet.has(upperCode)
+          enabled
         };
       });
 
@@ -250,7 +392,15 @@ export class SourceManager {
       success: true,
       categories: categoriesResult,
       globalDisabled: this.config.disabledSources.global || [],
-      campaignDisabled: campaignId ? (this.config.disabledSources.campaigns?.[campaignId] || []) : []
+      campaignDisabled: campaignId ? (this.config.disabledSources.campaigns?.[campaignId] || []) : [],
+      partneredStats: { total: totalPartnered, enabled: enabledPartnered },
+      uaStats: { total: totalUA, enabled: enabledUA },
+      uiState: this.config.uiState || {
+        lastPreset: '2024-ruleset',
+        lastScope: '',
+        includePartnered: true,
+        includeUA: true
+      }
     };
   }
 
@@ -317,20 +467,27 @@ export class SourceManager {
           } catch (e) {}
 
           const name = titlesMap.get(srcCode) || this.formatTitle(srcCode);
+          const isUA = this.isUASource(srcCode);
+          const isPartnered = this.isPartneredSource(srcCode, file);
+          const is2024 = this.is2024Source(srcCode, { category: categoryId });
+          const edition = is2024 ? '2024' : '2014';
 
           sourcesMap.set(srcCode, {
             id: `${categoryId}-${srcCode.toLowerCase()}`,
             code: srcCode,
             name,
             category: categoryId,
+            edition,
+            isPartnered,
+            isUA,
             isCustom: false,
             entryCount,
             fileSize,
             filePath,
             fileName: file,
-            author: 'Official / Published',
-            version: '1.0',
-            description: `Core database partition containing ${entryCount} ${categoryId} records.`
+            author: isPartnered ? 'Partnered Publisher' : (isUA ? 'WotC Unearthed Arcana' : 'Official / Published'),
+            version: is2024 ? '2024' : '2014',
+            description: `Core database partition containing ${entryCount} ${categoryId} records (${edition} Ruleset).`
           });
         }
       }
@@ -348,19 +505,27 @@ export class SourceManager {
           for (const b of data.book) {
             const code = (b.id || b.source || '').toUpperCase();
             if (!code || sourcesMap.has(code)) continue;
+            const isUA = this.isUASource(code);
+            const isPartnered = this.isPartneredSource(code, b.name);
+            const is2024 = this.is2024Source(code, { published: b.published, name: b.name });
+            const edition = is2024 ? '2024' : '2014';
+
             sourcesMap.set(code, {
               id: `adventures-${code.toLowerCase()}`,
               code,
               name: b.name || titlesMap.get(code) || code,
               category: 'adventures',
+              edition,
+              isPartnered,
+              isUA,
               isCustom: false,
               entryCount: b.contents?.length || 1,
               fileSize: 0,
               filePath: booksFile,
               fileName: 'books.json',
               author: b.author || 'Wizards RPG Team',
-              version: b.published || '2014-2024',
-              description: `Sourcebook contents and reference rules.`
+              version: b.published || (is2024 ? '2024' : '2014'),
+              description: `Sourcebook contents and reference rules (${edition} Ruleset).`
             });
           }
         }
@@ -375,19 +540,27 @@ export class SourceManager {
           for (const a of data.adventure) {
             const code = (a.id || a.source || '').toUpperCase();
             if (!code || sourcesMap.has(code)) continue;
+            const isUA = this.isUASource(code);
+            const isPartnered = this.isPartneredSource(code, a.name);
+            const is2024 = this.is2024Source(code, { published: a.published, name: a.name });
+            const edition = is2024 ? '2024' : '2014';
+
             sourcesMap.set(code, {
               id: `adventures-${code.toLowerCase()}`,
               code,
               name: a.name || titlesMap.get(code) || code,
               category: 'adventures',
+              edition,
+              isPartnered,
+              isUA,
               isCustom: false,
               entryCount: a.contents?.length || 1,
               fileSize: 0,
               filePath: advFile,
               fileName: 'adventures.json',
               author: a.author || 'Wizards of the Coast',
-              version: a.published || 'Published',
-              description: `Campaign adventure module with chapters and maps.`
+              version: a.published || (is2024 ? '2024' : 'Published'),
+              description: `Campaign adventure module with chapters and maps (${edition} Ruleset).`
             });
           }
         }
@@ -448,11 +621,19 @@ export class SourceManager {
           if (configMeta.description) description = configMeta.description;
         }
 
+        const isUA = this.isUASource(srcCode);
+        const isPartnered = this.isPartneredSource(srcCode, name);
+        const is2024 = this.is2024Source(srcCode, { version, name });
+        const edition = is2024 ? '2024' : '2014';
+
         sourcesMap.set(srcCode, {
           id: `custom-${categoryId}-${srcCode.toLowerCase()}`,
           code: srcCode,
           name,
           category: categoryId,
+          edition,
+          isPartnered,
+          isUA,
           isCustom: true,
           entryCount,
           fileSize,
@@ -507,8 +688,64 @@ export class SourceManager {
   batchToggle(sourceCodes, enabled, campaignId = null) {
     const codes = (sourceCodes || []).map(c => String(c).trim().toUpperCase());
     for (const code of codes) {
-      this.toggleSource(code, enabled, campaignId);
+      if (campaignId) {
+        if (!this.config.disabledSources.campaigns) this.config.disabledSources.campaigns = {};
+        if (!this.config.disabledSources.campaigns[campaignId]) this.config.disabledSources.campaigns[campaignId] = [];
+        const list = this.config.disabledSources.campaigns[campaignId];
+        const idx = list.indexOf(code);
+        if (enabled && idx !== -1) list.splice(idx, 1);
+        else if (!enabled && idx === -1) list.push(code);
+      } else {
+        if (!Array.isArray(this.config.disabledSources.global)) this.config.disabledSources.global = [];
+        const list = this.config.disabledSources.global;
+        const idx = list.indexOf(code);
+        if (enabled && idx !== -1) list.splice(idx, 1);
+        else if (!enabled && idx === -1) list.push(code);
+      }
     }
+    this.saveConfig();
+    return { success: true, count: codes.length, enabled, campaignId };
+  }
+
+  /**
+   * Toggle all Partnered Content sources on or off
+   */
+  togglePartnered(enabled, campaignId = null) {
+    const all = this.getAllSources(campaignId);
+    const partneredCodes = new Set();
+    for (const cat of all.categories) {
+      for (const s of cat.sources) {
+        if (s.isPartnered) {
+          partneredCodes.add(s.code.toUpperCase());
+        }
+      }
+    }
+    const codes = Array.from(partneredCodes);
+    this.batchToggle(codes, enabled, campaignId);
+    if (!this.config.uiState) this.config.uiState = {};
+    this.config.uiState.includePartnered = enabled;
+    this.saveConfig();
+    return { success: true, count: codes.length, enabled, campaignId };
+  }
+
+  /**
+   * Toggle all Unearthed Arcana (UA) sources on or off
+   */
+  toggleUA(enabled, campaignId = null) {
+    const all = this.getAllSources(campaignId);
+    const uaCodes = new Set();
+    for (const cat of all.categories) {
+      for (const s of cat.sources) {
+        if (s.isUA) {
+          uaCodes.add(s.code.toUpperCase());
+        }
+      }
+    }
+    const codes = Array.from(uaCodes);
+    this.batchToggle(codes, enabled, campaignId);
+    if (!this.config.uiState) this.config.uiState = {};
+    this.config.uiState.includeUA = enabled;
+    this.saveConfig();
     return { success: true, count: codes.length, enabled, campaignId };
   }
 
@@ -525,7 +762,11 @@ export class SourceManager {
       }
     }
 
-    const REVISION_2024_CODES = new Set(['XPHB', 'XMM', 'XDMG', 'EFA', 'FRAIF', 'NF']);
+    const REVISION_2024_CODES = new Set([
+      'XPHB', 'XMM', 'XDMG', 'XSCREEN', 'XSAC', 'XSCREENRHW',
+      'RHW', 'AU', 'AUD', 'ABH', 'FRAIF', 'FRHOF', 'NF', 'LFL', 'EFA',
+      'CABOMP', 'UTHTLH', 'SCOEE', 'HBTD', 'BQGT', 'HOTB', 'WTTHC', 'FFOTR', 'BQDD'
+    ]);
     const LEGACY_2014_CODES = new Set(['PHB', 'MM', 'DMG', 'VGM', 'MTF']);
     const CORE_CODES = new Set(['PHB', 'XPHB', 'MM', 'XMM', 'DMG', 'XDMG']);
 
@@ -536,9 +777,18 @@ export class SourceManager {
         toDisable = Array.from(LEGACY_2014_CODES);
         break;
 
-      case '2014-classic':
-        toDisable = Array.from(REVISION_2024_CODES);
+      case '2014-classic': {
+        const dSet = new Set(Array.from(REVISION_2024_CODES));
+        for (const cat of all.categories) {
+          for (const s of cat.sources) {
+            if (s.edition === '2024' || this.is2024Source(s.code, s)) {
+              dSet.add(s.code.toUpperCase());
+            }
+          }
+        }
+        toDisable = Array.from(dSet);
         break;
+      }
 
       case 'core-only':
         toDisable = Array.from(allCodes).filter(c => !CORE_CODES.has(c));
@@ -548,7 +798,7 @@ export class SourceManager {
         toDisable = [];
         for (const cat of all.categories) {
           for (const s of cat.sources) {
-            if (s.isCustom || s.code.startsWith('UA') || s.code.startsWith('XUA')) {
+            if (s.isCustom || s.isUA || s.isPartnered) {
               toDisable.push(s.code.toUpperCase());
             }
           }
@@ -575,6 +825,9 @@ export class SourceManager {
     } else {
       this.config.disabledSources.global = toDisable;
     }
+
+    if (!this.config.uiState) this.config.uiState = {};
+    this.config.uiState.lastPreset = key;
 
     this.saveConfig();
     return { success: true, preset: key, disabledCount: toDisable.length, campaignId };

@@ -17,8 +17,7 @@
 #vtt-mobile-backdrop,
 #vtt-mobile-shape-pill,
 #vtt-mobile-shape-sheet,
-#vtt-mobile-drag-pill,
-#vtt-mobile-token-actions,
+#vtt-mobile-maptools-sheet,
 .mobile-only,
 .mobile-sheet-topbar,
 .mobile-drawer-header,
@@ -28,6 +27,50 @@
 .btn-mobile-spawn-asset,
 .mobile-sheet-spawn-btn {
     display: none !important;
+}
+
+/* Universal Touch Elements: Hidden by class only */
+#vtt-mobile-drag-pill.vtt-hidden,
+#vtt-mobile-token-actions.vtt-hidden {
+    display: none !important;
+}
+
+#vtt-mobile-drag-pill {
+    display: flex;
+    position: fixed;
+    z-index: 1500;
+    pointer-events: none;
+    background: rgba(15, 23, 42, 0.94);
+    border: 1.5px solid #d4af37;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.75), 0 0 12px rgba(212, 175, 55, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 6px 14px;
+    border-radius: 20px;
+    color: #fef08a;
+    font-size: 0.95rem;
+    font-weight: 700;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    transform: translate(-50%, -140%);
+    transition: opacity 0.15s ease;
+}
+
+#vtt-mobile-token-actions {
+    display: flex;
+    position: fixed;
+    z-index: 840;
+    gap: 8px;
+    background: rgba(14, 18, 27, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    border-radius: 24px;
+    padding: 4px 8px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.75), 0 0 15px rgba(212, 175, 55, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transform: translate(-50%, -130%);
+    animation: fadeInQuickAction 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ============================================================================
@@ -1385,6 +1428,7 @@ html.force-desktop-ui #vtt-mobile-tools-menu,
 html.force-desktop-ui #vtt-mobile-backdrop,
 html.force-desktop-ui #vtt-mobile-shape-pill,
 html.force-desktop-ui #vtt-mobile-shape-sheet,
+html.force-desktop-ui #vtt-mobile-maptools-sheet,
 html.force-desktop-ui #vtt-mobile-drag-pill,
 html.force-desktop-ui #vtt-mobile-token-actions,
 html.force-desktop-ui .mobile-only,
@@ -1424,3 +1468,95 @@ html.force-desktop-ui #vtt-canvas-viewport {
     width: 100% !important;
     height: 100% !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* Mobile Paint Studio Drawer Modal                                            */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+.mobile-paint-drawer-card {
+    width: 90%;
+    max-width: 380px;
+    max-height: 85vh;
+    padding: 18px;
+    border-radius: 12px;
+    overflow-y: auto;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.8), 0 0 20px rgba(212, 175, 55, 0.2);
+}
+.mobile-paint-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+.mobile-paint-drawer-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.mobile-paint-subtools {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.mobile-paint-tool-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    color: #e2e8f0;
+    padding: 10px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.mobile-paint-tool-btn i {
+    font-size: 1.15rem;
+}
+.mobile-paint-tool-btn.active {
+    background: rgba(212, 175, 55, 0.25);
+    border-color: var(--color-gold-base, #d4af37);
+    color: #ffd700;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+}
+.mobile-paint-slider-row {
+    margin-bottom: 14px;
+}
+.mobile-paint-slider-row label {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 4px;
+}
+.mobile-paint-slider-row input[type="range"] {
+    width: 100%;
+}
+.mobile-paint-colors-section label {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 6px;
+}
+.mobile-paint-swatches {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+.mobile-paint-swatch {
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+}
+.mobile-paint-swatch.active {
+    border: 2px solid #fff;
+    box-shadow: 0 0 8px #ffd700;
+}
+

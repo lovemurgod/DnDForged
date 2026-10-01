@@ -49,13 +49,15 @@ export function initVttPlayerSheet(vtt) {
             fetch('data/races-catalog.json').then(r => r.json()).catch(() => fetch('data/races.json').then(r => r.json()).catch(() => ({}))),
             fetch('data/backgrounds-catalog.json').then(r => r.json()).catch(() => fetch('data/backgrounds.json').then(r => r.json()).catch(() => ({}))),
             fetch('data/classes-catalog.json').then(r => r.json()).catch(() => fetch('data/class/index.json').then(res => res.json()).catch(() => ({}))),
-            fetch('data/class/index.json').then(r => r.json()).catch(() => ({}))
-        ]).then(([raceData, bgData, classCatalog, classIndex]) => {
+            fetch('data/class/index.json').then(r => r.json()).catch(() => ({})),
+            fetch('data/feats-catalog.json').then(r => r.json()).catch(() => fetch('/data/feats-catalog.json').then(r => r.json()).catch(() => ({})))
+        ]).then(([raceData, bgData, classCatalog, classIndex, featsData]) => {
             builderCache = {
                 races: Array.isArray(raceData) ? raceData : (raceData.race || []),
                 bgs: Array.isArray(bgData) ? bgData : (bgData.background || []),
                 classes: Array.isArray(classCatalog) ? classCatalog : null,
-                classIndex: classIndex || {}
+                classIndex: classIndex || {},
+                feats: Array.isArray(featsData) ? featsData : (featsData.feat || [])
             };
             return builderCache;
         }).catch(err => {
@@ -2753,9 +2755,2190 @@ function simulateRoll(formula, critRange = 20) {
         renderSheetData(char);
     }
 
+    // ─── Character Builder & Level Up Assistant ──────────────────────────────
+    function ensureCharacterBuilderModalExists() {
+        if (document.getElementById('pc-character-builder-modal')) return;
+
+        const container = document.createElement('div');
+        container.innerHTML = `
+            <div id="pc-character-builder-overlay" class="vtt-sheet-submodal-overlay vtt-hidden" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); backdrop-filter:blur(4px); z-index:3010;"></div>
+            <div id="pc-character-builder-modal" class="vtt-sheet-submodal vtt-hidden glassmorphism" style="position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); z-index:3015;">
+                <div style="padding:14px 20px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.4);">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <i class="fa-solid fa-wand-magic-sparkles text-gradient-gold" style="font-size:1.35rem;"></i>
+                        <div>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <h3 style="margin:0; color:var(--color-gold-base); font-size:1.15rem; font-family:var(--font-heading);">Character Builder & Level Up Assistant</h3>
+                                <span id="pc-builder-audit-badge" class="badge" style="background:rgba(46,204,113,0.15); border:1px solid rgba(46,204,113,0.4); color:#2ecc71; font-size:0.75rem; padding:2px 8px; border-radius:4px;">Audit Ready</span>
+                            </div>
+                            <div id="pc-builder-char-summary" style="font-size:0.8rem; color:var(--color-text-secondary); margin-top:2px;">
+                                Loading character audit...
+                            </div>
+                        </div>
+                    </div>
+                    <button id="pc-builder-close-btn" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.3rem; padding:4px;" title="Close"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div id="pc-builder-body" class="scroll-styled" style="flex:1; overflow-y:auto; padding:16px 20px; display:flex; flex-direction:column; gap:16px;">
+                    <!-- Populated dynamically by openCharacterBuilderModal -->
+                </div>
+
+                <div style="padding:12px 20px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.4);">
+                    <div id="pc-builder-footer-counts" style="font-size:0.82rem; color:var(--color-text-secondary);">
+                        0 Abilities, 0 Items, 0 Spells selected
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button id="pc-builder-cancel-btn" class="btn btn-secondary btn-sm">Cancel</button>
+                        <button id="pc-builder-apply-btn" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:8px; font-weight:600; box-shadow:0 0 14px rgba(212,175,55,0.35);">
+                            <i class="fa-solid fa-check-double"></i> Apply & Import to Character
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(container);
+    }
+
+    async function openCharacterBuilderModal(char) {
+        if (!char) return;
+        ensureCharacterBuilderModalExists();
+
+        const modal = document.getElementById('pc-character-builder-modal');
+        const overlay = document.getElementById('pc-character-builder-overlay');
+        const bodyEl = document.getElementById('pc-builder-body');
+        const summaryEl = document.getElementById('pc-builder-char-summary');
+        const countsEl = document.getElementById('pc-builder-footer-counts');
+        const closeBtn = document.getElementById('pc-builder-close-btn');
+        const cancelBtn = document.getElementById('pc-builder-cancel-btn');
+        const applyBtn = document.getElementById('pc-builder-apply-btn');
+
+        if (!modal || !overlay || !bodyEl) return;
+
+        modal.classList.remove('vtt-hidden');
+        overlay.classList.remove('vtt-hidden');
+        applyBtn.disabled = false;
+        applyBtn.innerHTML = '<i class="fa-solid fa-check-double"></i> Apply & Import to Character';
+        bodyEl.innerHTML = `
+            <div style="text-align:center; padding:40px 20px; color:var(--color-text-muted);">
+                <i class="fa-solid fa-spinner fa-spin" style="font-size:2rem; color:var(--color-gold-base); margin-bottom:12px;"></i>
+                <div style="font-size:1rem; font-weight:600; color:var(--color-gold-light);">Auditing Character & Loading Compendiums...</div>
+                <div style="font-size:0.8rem; margin-top:4px;">Gathering Class Features, Racial Traits, Background Gear, Spells & Vital Calculations</div>
+            </div>
+        `;
+
+        // 1. Load builder caches
+        await ensureBuilderCache();
+
+        // Helper: Automatically create attack macro for weapons
+        function generateWeaponMacro(targetChar, item, catalogItem) {
+            if (!targetChar || !item) return;
+            const cat = catalogItem || {};
+            const isWeapon = !!(cat.macroTemplate || cat.isWeapon || cat.dmg1 || cat.weaponCategory || cat.rawType === 'M' || cat.rawType === 'R' || item.rawType === 'M' || item.rawType === 'R' || (cat.type && cat.type.toLowerCase().includes('weapon')) || (item.type && item.type.toLowerCase().includes('weapon')));
+            if (!isWeapon) return;
+
+            if (!targetChar.macros) targetChar.macros = [];
+            if (!targetChar.macroCategories) targetChar.macroCategories = [];
+            let weapCat = targetChar.macroCategories.find(c => c.name.toLowerCase() === 'weapons');
+            if (!weapCat) {
+                weapCat = { id: 'cat_weapons', name: 'Weapons', collapsed: false };
+                targetChar.macroCategories.unshift(weapCat);
+            }
+
+            // Deduplicate against existing macro
+            const existing = targetChar.macros.find(m => (m.name || '').toLowerCase().trim() === item.name.toLowerCase().trim());
+            if (existing) return;
+
+            const tmpl = cat.macroTemplate || {};
+            const rawProps = Array.isArray(cat.properties) ? cat.properties : [];
+            const props = rawProps.map(p => typeof p === 'string' ? p.toLowerCase() : '');
+            const isFinesse = tmpl.isFinesse !== undefined ? tmpl.isFinesse : props.some(p => p.includes('finesse'));
+            const isRanged = tmpl.isRanged !== undefined ? tmpl.isRanged : (cat.rawType === 'R' || item.rawType === 'R' || (cat.type || '').toLowerCase().includes('ranged') || props.some(p => p.includes('ammunition')));
+
+            const strVal = parseInt(targetChar.stats?.str) || 10;
+            const dexVal = parseInt(targetChar.stats?.dex) || 10;
+            let chosenStat = 'str';
+            if (isRanged) chosenStat = 'dex';
+            else if (isFinesse) chosenStat = dexVal >= strVal ? 'dex' : 'str';
+            else if (tmpl.attackStat && tmpl.attackStat !== 'auto') chosenStat = tmpl.attackStat;
+
+            let bonusVal = tmpl.attackExtra !== undefined ? tmpl.attackExtra : 0;
+            if (!bonusVal && cat.bonusWeapon) {
+                bonusVal = parseInt(cat.bonusWeapon) || 0;
+            } else if (!bonusVal) {
+                const match = item.name.match(/\+(\d+)/);
+                if (match) bonusVal = parseInt(match[1]) || 0;
+            }
+
+            const rangeVal = tmpl.range || (isRanged ? '80/320 ft' : '5 ft');
+            const targetVal = tmpl.target || '1 target';
+
+            const dmgRows = (tmpl.damageRows && tmpl.damageRows.length > 0)
+                ? tmpl.damageRows.map((r, rIdx) => ({
+                    id: 'dmg_' + Date.now() + '_' + rIdx,
+                    formula: r.formula,
+                    stat: r.stat === 'auto' ? chosenStat : (r.stat || ''),
+                    extra: r.extra !== undefined ? r.extra : (rIdx === 0 ? bonusVal : 0),
+                    type: r.type || '',
+                    label: r.label || ''
+                }))
+                : [{
+                    id: 'dmg_' + Date.now(),
+                    formula: cat.dmg1 || '1d6',
+                    stat: chosenStat,
+                    extra: bonusVal,
+                    type: cat.dmgType ? (cat.dmgType.charAt(0).toUpperCase() + cat.dmgType.slice(1)) : 'Slashing',
+                    label: ''
+                }];
+
+            let descNote = item.description || (Array.isArray(cat.entries) ? cat.entries.join('\n') : '');
+            const versatileVal = tmpl.versatile || cat.dmg2;
+            if (versatileVal) {
+                descNote += (descNote ? '\n\n' : '') + `*Versatile:* Two-handed attack deals ${versatileVal} damage.`;
+            }
+
+            targetChar.macros.push({
+                id: 'mac_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                name: item.name,
+                categoryId: weapCat.id,
+                description: descNote,
+                range: rangeVal,
+                target: targetVal,
+                attackStat: chosenStat,
+                attackProf: true,
+                attackExtra: bonusVal,
+                critRange: 20,
+                attackBonus: '',
+                saveAbility: '',
+                saveDcStat: 'none',
+                saveDcExtra: 0,
+                saveDcCustom: null,
+                damage: dmgRows
+            });
+        }
+
+        // 2. Compute Character Stats
+        const classes = (char.classes && char.classes.length > 0) ? char.classes : [{ name: char.class || 'Fighter', subclass: '', level: char.level || 1 }];
+        const totalLevel = classes.reduce((acc, c) => acc + (parseInt(c.level) || 1), 0);
+        const conMod = getMod(getTotalStat(char, 'con'));
+        const dexMod = getMod(getTotalStat(char, 'dex'));
+        const wisMod = getMod(getTotalStat(char, 'wis'));
+        const existingHp = parseInt(char.hpMax) || 0;
+        const existingAc = parseInt(char.ac) || 10;
+        const prevLevel = parseInt(char.previousLevel) || (totalLevel > 1 ? totalLevel - 1 : 1);
+        const detectedNewLevels = Math.max(1, totalLevel - prevLevel);
+
+        const classLabel = classes.map(c => `${c.name}${c.subclass ? ` (${c.subclass})` : ''} Lv ${c.level}`).join(' / ');
+        const raceLabel = char.race || 'Unknown Species';
+        const bgLabel = char.background || 'Unknown Background';
+
+        summaryEl.innerHTML = `
+            <span class="builder-pill"><i class="fa-solid fa-shield"></i> ${classLabel}</span>
+            <span class="builder-pill"><i class="fa-solid fa-dna"></i> ${raceLabel}</span>
+            <span class="builder-pill"><i class="fa-solid fa-scroll"></i> ${bgLabel}</span>
+            <span class="builder-pill" style="color:#4fc3f7;"><i class="fa-solid fa-heart"></i> CON ${conMod >= 0 ? `+${conMod}` : conMod}</span>
+            <span class="builder-pill" style="color:#81c784;"><i class="fa-solid fa-shield-halved"></i> DEX ${dexMod >= 0 ? `+${dexMod}` : dexMod}</span>
+        `;
+
+        // 3. Existing Item/Ability Sets for Deduplication
+        const existingAbilities = new Set((char.abilityCards || []).map(a => (a.name || '').toLowerCase().trim()));
+        const existingEquip = new Set((char.equipment || []).map(e => (e.name || '').toLowerCase().trim()));
+        const existingSpells = new Set();
+        if (char.spells && typeof char.spells === 'object') {
+            Object.values(char.spells).forEach(lvlList => {
+                if (Array.isArray(lvlList)) {
+                    lvlList.forEach(s => { if (s && s.name) existingSpells.add(s.name.toLowerCase().trim()); });
+                }
+            });
+        }
+
+        // 4. Fetch Racial Traits
+        const rawRaceName = (char.race || '').replace(/\s*\[.*?\]$/, '').trim().toLowerCase();
+        const matchedRace = builderCache?.races?.find(r => 
+            (r.name && r.name.toLowerCase() === rawRaceName) ||
+            (r.id && r.id.toLowerCase() === rawRaceName) ||
+            (rawRaceName && r.name && rawRaceName.includes(r.name.toLowerCase()))
+        );
+        let candidateRacialTraits = [];
+        if (matchedRace) {
+            if (Array.isArray(matchedRace.traits)) {
+                candidateRacialTraits = matchedRace.traits.map(t => ({
+                    id: t.id || 'trait_' + Math.random().toString(36).substr(2, 6),
+                    name: t.name,
+                    source: matchedRace.source || 'PHB',
+                    actionType: t.actionType || 'passive',
+                    description: t.description || (Array.isArray(t.rawEntries) ? t.rawEntries.join('\n') : ''),
+                    formula: t.formula || '',
+                    formulaConfig: t.formulaConfig || null,
+                    hasCounter: !!t.hasCounter,
+                    usesMax: t.usesMax || null,
+                    resetType: t.resetType || 'short',
+                    category: `${matchedRace.name} Traits`,
+                    type: 'race'
+                }));
+            }
+        }
+
+        // 5. Fetch Background Features, Skills, Tools & Starting Equipment
+        const rawBgName = (char.background || '').replace(/\s*\[.*?\]$/, '').trim().toLowerCase();
+        const matchedBg = builderCache?.bgs?.find(b =>
+            (b.name && b.name.toLowerCase() === rawBgName) ||
+            (b.id && b.id.toLowerCase() === rawBgName) ||
+            (rawBgName && b.name && rawBgName.includes(b.name.toLowerCase()))
+        );
+        let candidateBgFeatures = [];
+        let candidateBgItems = [];
+        let candidateBgSkills = [];
+        let candidateBgTools = [];
+        let bgGold = 0;
+
+        if (matchedBg) {
+            // Background Features
+            if (Array.isArray(matchedBg.features) && matchedBg.features.length > 0) {
+                matchedBg.features.forEach(f => {
+                    candidateBgFeatures.push({
+                        id: 'bg_feat_' + Math.random().toString(36).substr(2, 6),
+                        name: f.name || `Feature: ${matchedBg.name}`,
+                        source: matchedBg.source || 'PHB',
+                        actionType: 'passive',
+                        description: f.description || '',
+                        formula: '',
+                        formulaConfig: null,
+                        hasCounter: false,
+                        usesMax: null,
+                        resetType: 'none',
+                        category: 'Background Features',
+                        type: 'background'
+                    });
+                });
+            } else if (matchedBg.description) {
+                candidateBgFeatures.push({
+                    id: 'bg_feat_' + Math.random().toString(36).substr(2, 6),
+                    name: `Feature: ${matchedBg.name}`,
+                    source: matchedBg.source || 'PHB',
+                    actionType: 'passive',
+                    description: matchedBg.description,
+                    formula: '',
+                    formulaConfig: null,
+                    hasCounter: false,
+                    usesMax: null,
+                    resetType: 'none',
+                    category: 'Background Features',
+                    type: 'background'
+                });
+            }
+
+            // Background Skills
+            if (matchedBg.skillsData) {
+                if (Array.isArray(matchedBg.skillsData.fixed)) {
+                    matchedBg.skillsData.fixed.forEach(s => {
+                        const norm = normalizeSkill(s);
+                        if (norm && !candidateBgSkills.includes(norm)) candidateBgSkills.push(norm);
+                    });
+                }
+                if (matchedBg.skillsData.choose && Array.isArray(matchedBg.skillsData.choose.from)) {
+                    matchedBg.skillsData.choose.from.forEach(s => {
+                        const norm = normalizeSkill(s);
+                        if (norm && !candidateBgSkills.includes(norm)) candidateBgSkills.push(norm);
+                    });
+                }
+            } else if (matchedBg.skills) {
+                matchedBg.skills.split(',').forEach(s => {
+                    const norm = normalizeSkill(s);
+                    if (norm && !candidateBgSkills.includes(norm)) candidateBgSkills.push(norm);
+                });
+            }
+
+            // Background Tools
+            if (matchedBg.toolsData) {
+                if (Array.isArray(matchedBg.toolsData.fixed)) {
+                    matchedBg.toolsData.fixed.forEach(t => {
+                        const norm = normalizeTool(t);
+                        if (norm && !candidateBgTools.includes(norm)) candidateBgTools.push(norm);
+                    });
+                }
+                if (matchedBg.toolsData.choose && Array.isArray(matchedBg.toolsData.choose.from)) {
+                    matchedBg.toolsData.choose.from.forEach(t => {
+                        const norm = normalizeTool(t);
+                        if (norm && !candidateBgTools.includes(norm)) candidateBgTools.push(norm);
+                    });
+                }
+            } else if (matchedBg.tools) {
+                matchedBg.tools.split(',').forEach(t => {
+                    const norm = normalizeTool(t);
+                    if (norm && !candidateBgTools.includes(norm)) candidateBgTools.push(norm);
+                });
+            }
+
+            // Background Equipment & Gold
+            if (matchedBg.equipmentData) {
+                if (Array.isArray(matchedBg.equipmentData.fixedItems)) {
+                    matchedBg.equipmentData.fixedItems.forEach(it => {
+                        candidateBgItems.push({
+                            id: 'bg_it_' + Math.random().toString(36).substr(2, 6),
+                            name: it.name || 'Item',
+                            qty: parseInt(it.quantity) || 1,
+                            weight: parseFloat(it.weight) || 0,
+                            type: 'Gear',
+                            source: 'Background',
+                            isArmor: false,
+                            isShield: false,
+                            ac: null,
+                            rawType: '',
+                            checked: !existingEquip.has((it.name || '').toLowerCase().trim())
+                        });
+                    });
+                }
+                if (matchedBg.equipmentData.fixedGold) {
+                    bgGold = parseInt(matchedBg.equipmentData.fixedGold) || 0;
+                    if (bgGold > 0) {
+                        // Checked by default if character currently has 0 GP
+                        const hasPriorGold = (parseInt(char.currency?.gp) || 0) > 0;
+                        candidateBgItems.push({
+                            id: 'bg_gold_' + Math.random().toString(36).substr(2, 6),
+                            name: `Starting Gold (${bgGold} GP)`,
+                            qty: bgGold,
+                            weight: parseFloat((bgGold * 0.02).toFixed(2)),
+                            type: 'Currency',
+                            source: 'Background',
+                            isArmor: false,
+                            isShield: false,
+                            ac: null,
+                            rawType: '',
+                            isGold: true,
+                            goldAmount: bgGold,
+                            checked: !hasPriorGold
+                        });
+                    }
+                }
+            }
+        }
+
+        // 6. Fetch Class Features, Saving Throws, Proficiencies & Starting Equipment (primary class for proficiencies & equipment)
+        let candidateClassFeatures = [];
+        let classEquipChoiceSets = [];
+        let classFixedItems = [];
+        let primaryClassProficiencies = {
+            saves: [],
+            skills: [],
+            armor: [],
+            weapons: [],
+            tools: []
+        };
+
+        function parseStartingEquipEntry(entry) {
+            if (!entry) return null;
+            let rawStr = '';
+            let qty = 1;
+            if (typeof entry === 'string') {
+                rawStr = entry;
+            } else if (typeof entry === 'object') {
+                if (entry.item) rawStr = entry.item;
+                else if (entry.equipmentType) {
+                    const eqTypeMap = {
+                        weaponMartial: 'Martial Weapon',
+                        weaponSimple: 'Simple Weapon',
+                        weaponMartialMelee: 'Martial Melee Weapon',
+                        weaponSimpleMelee: 'Simple Melee Weapon',
+                        focusHoly: 'Holy Symbol',
+                        focusArcane: 'Arcane Focus',
+                        focusDruidic: 'Druidic Focus',
+                        instrumentMusical: 'Musical Instrument'
+                    };
+                    rawStr = eqTypeMap[entry.equipmentType] || entry.equipmentType.replace(/([A-Z])/g, ' $1').trim();
+                }
+                if (entry.quantity) qty = parseInt(entry.quantity) || 1;
+            }
+            if (!rawStr) return null;
+            const parts = String(rawStr).split('|');
+            const rawName = parts[0] || '';
+            const countMatch = rawName.match(/\((\d+)\)/);
+            if (countMatch) qty = parseInt(countMatch[1]) || qty;
+            const clean = rawName.replace(/\s*\(\d+\)/, '').trim();
+            const displayName = clean.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            if (!displayName) return null;
+            return { name: displayName, qty: qty };
+        }
+
+        for (let cIdx = 0; cIdx < classes.length; cIdx++) {
+            const cls = classes[cIdx];
+            const rawClsName = (cls.name || '').replace(/\s*\[.*?\]$/, '').trim();
+            const clsLevel = parseInt(cls.level) || 1;
+            const subName = (cls.subclass || '').trim();
+            let cFeatures = [];
+            let scFeatures = [];
+            let startEquip = null;
+            let fullClassData = null;
+
+            // Prioritize loading full 5e class data from data/class/
+            if (builderCache?.classIndex) {
+                const file = builderCache.classIndex[rawClsName.toLowerCase()];
+                if (file) {
+                    try {
+                        let res = await fetch(`data/class/${file}`).catch(() => null);
+                        if (!res || !res.ok) res = await fetch(`/5etools-src/data/class/${file}`).catch(() => null);
+                        if (res && res.ok) {
+                            fullClassData = await res.json();
+                            if (fullClassData.classFeature) cFeatures = fullClassData.classFeature;
+                            if (fullClassData.subclassFeature) scFeatures = fullClassData.subclassFeature;
+                            if (cIdx === 0 && fullClassData.class?.[0]) {
+                                const cData = fullClassData.class[0];
+                                if (cData.startingEquipment) startEquip = cData.startingEquipment;
+                                if (cData.proficiency) primaryClassProficiencies.saves = cData.proficiency;
+                                if (cData.startingProficiencies) {
+                                    primaryClassProficiencies.skills = cData.startingProficiencies.skills || [];
+                                    primaryClassProficiencies.armor = cData.startingProficiencies.armor || [];
+                                    primaryClassProficiencies.weapons = cData.startingProficiencies.weapons || [];
+                                    primaryClassProficiencies.tools = cData.startingProficiencies.tools || [];
+                                }
+                            }
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            // Fallback to API if not loaded
+            if (!fullClassData && builderCache?.classes) {
+                const matchedC = builderCache.classes.find(c => 
+                    (cls.id && c.id === cls.id) ||
+                    (c.name.toLowerCase() === rawClsName.toLowerCase())
+                );
+                if (matchedC) {
+                    try {
+                        const res = await fetch(`/api/compendium/classes/${encodeURIComponent(matchedC.source)}/${encodeURIComponent(matchedC.id)}`);
+                        if (res.ok) {
+                            const full = await res.json();
+                            if (full.features) cFeatures = full.features;
+                            if (full.subclasses) {
+                                full.subclasses.forEach(sc => {
+                                    (sc.features || []).forEach(f => {
+                                        f.subclassName = sc.name;
+                                        f.subclassShortName = sc.shortName;
+                                        scFeatures.push(f);
+                                    });
+                                });
+                            }
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            // Filter class features up to clsLevel
+            cFeatures.forEach(f => {
+                const fLvl = parseInt(f.level) || 1;
+                if (fLvl <= clsLevel) {
+                    const desc = getFeatureDescriptionText(f);
+                    const counterInfo = detectFeatureCounter(f, desc, char);
+                    candidateClassFeatures.push({
+                        id: 'cls_feat_' + Math.random().toString(36).substr(2, 6),
+                        name: f.name,
+                        source: f.source || 'PHB',
+                        level: fLvl,
+                        className: rawClsName,
+                        actionType: f.actionType || (desc.toLowerCase().includes('bonus action') ? 'bonus' : (desc.toLowerCase().includes('reaction') ? 'reaction' : 'passive')),
+                        description: desc,
+                        formula: f.formula || '',
+                        formulaConfig: f.formulaConfig || null,
+                        hasCounter: counterInfo.hasCounter,
+                        usesMax: counterInfo.usesMax,
+                        resetType: counterInfo.resetType,
+                        category: `${rawClsName} Features`,
+                        type: 'class'
+                    });
+                }
+            });
+
+            // Filter subclass features if subclass is selected
+            if (subName) {
+                scFeatures.forEach(f => {
+                    const fLvl = parseInt(f.level) || 1;
+                    const fSub = (f.subclassName || f.subclassShortName || '').toLowerCase();
+                    if (fLvl <= clsLevel && (fSub.includes(subName.toLowerCase()) || subName.toLowerCase().includes(fSub))) {
+                        const desc = getFeatureDescriptionText(f);
+                        const counterInfo = detectFeatureCounter(f, desc, char);
+                        candidateClassFeatures.push({
+                            id: 'sc_feat_' + Math.random().toString(36).substr(2, 6),
+                            name: f.name,
+                            source: f.source || 'PHB',
+                            level: fLvl,
+                            className: rawClsName,
+                            subclassName: subName,
+                            actionType: f.actionType || (desc.toLowerCase().includes('bonus action') ? 'bonus' : (desc.toLowerCase().includes('reaction') ? 'reaction' : 'passive')),
+                            description: desc,
+                            formula: f.formula || '',
+                            formulaConfig: f.formulaConfig || null,
+                            hasCounter: counterInfo.hasCounter,
+                            usesMax: counterInfo.usesMax,
+                            resetType: counterInfo.resetType,
+                            category: `${subName} Features`,
+                            type: 'subclass'
+                        });
+                    }
+                });
+            }
+
+            // Extract starting equipment ONLY for primary class (classes[0])
+            if (cIdx === 0 && startEquip) {
+                if (Array.isArray(startEquip.defaultData)) {
+                    startEquip.defaultData.forEach((group, gIdx) => {
+                        const keys = Object.keys(group).filter(k => Array.isArray(group[k]));
+                        if (keys.length > 1) {
+                            const options = keys.map(k => {
+                                const parsedItems = group[k].map(entry => parseStartingEquipEntry(entry)).filter(Boolean);
+                                const label = parsedItems.map(p => (p.qty > 1 ? `${p.qty}x ` : '') + p.name).join(', ');
+                                return {
+                                    key: k.toLowerCase(),
+                                    displayKey: k.toUpperCase(),
+                                    items: parsedItems,
+                                    label: label
+                                };
+                            });
+                            classEquipChoiceSets.push({
+                                groupIndex: gIdx,
+                                options: options,
+                                selectedOption: options[0]?.key || 'a'
+                            });
+                        } else if (keys.length === 1) {
+                            group[keys[0]].forEach(entry => {
+                                const parsed = parseStartingEquipEntry(entry);
+                                if (parsed && parsed.name) {
+                                    classFixedItems.push({
+                                        id: 'cls_it_' + Math.random().toString(36).substr(2, 6),
+                                        name: parsed.name,
+                                        qty: parsed.qty || 1,
+                                        weight: 0,
+                                        type: 'Gear',
+                                        source: rawClsName,
+                                        isArmor: false,
+                                        isShield: false,
+                                        ac: null,
+                                        rawType: '',
+                                        checked: !existingEquip.has(parsed.name.toLowerCase().trim())
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else if (Array.isArray(startEquip.default)) {
+                    startEquip.default.forEach(line => {
+                        const matches = line.match(/\{@item ([^|}]+)(?:\|[^}]+)?\}/g);
+                        if (matches) {
+                            matches.forEach(m => {
+                                const inner = m.replace('{@item ', '').replace('}', '').split('|')[0];
+                                const displayName = inner.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+                                if (displayName) {
+                                    classFixedItems.push({
+                                        id: 'cls_it_' + Math.random().toString(36).substr(2, 6),
+                                        name: displayName,
+                                        qty: 1,
+                                        weight: 0,
+                                        type: 'Gear',
+                                        source: rawClsName,
+                                        isArmor: false,
+                                        isShield: false,
+                                        ac: null,
+                                        rawType: '',
+                                        checked: !existingEquip.has(displayName.toLowerCase().trim())
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        }
+
+        // 7. Proficiencies & Saving Throws candidate list (primary class saves pre-checked)
+        const saveMap = { str: 'Strength', dex: 'Dexterity', con: 'Constitution', int: 'Intelligence', wis: 'Wisdom', cha: 'Charisma' };
+        const candidateProficiencies = [];
+        Object.keys(saveMap).forEach(ab => {
+            const isPrimarySave = primaryClassProficiencies.saves.map(s => s.toLowerCase()).includes(ab);
+            const isCharSave = !!char.saves?.[ab];
+            const isDefault = isPrimarySave || isCharSave;
+            candidateProficiencies.push({
+                id: 'save_' + ab,
+                label: `${saveMap[ab]} Save`,
+                type: 'save',
+                stat: ab,
+                source: `${classes[0]?.name || 'Primary Class'} Save`,
+                checked: isDefault
+            });
+        });
+
+        if (primaryClassProficiencies.armor && primaryClassProficiencies.armor.length > 0) {
+            primaryClassProficiencies.armor.forEach(arm => {
+                const aStr = String(arm);
+                const label = aStr.charAt(0).toUpperCase() + aStr.slice(1) + (aStr.toLowerCase() === 'shield' ? 's' : ' Armor');
+                candidateProficiencies.push({
+                    id: 'prof_armor_' + aStr.toLowerCase(),
+                    label: label,
+                    type: 'armor',
+                    value: aStr,
+                    source: `${classes[0]?.name || 'Primary Class'} Armor`,
+                    checked: true
+                });
+            });
+        }
+
+        if (primaryClassProficiencies.weapons && primaryClassProficiencies.weapons.length > 0) {
+            primaryClassProficiencies.weapons.forEach(w => {
+                const wStr = String(w);
+                const label = wStr.charAt(0).toUpperCase() + wStr.slice(1) + ' Weapons';
+                candidateProficiencies.push({
+                    id: 'prof_weap_' + wStr.toLowerCase(),
+                    label: label,
+                    type: 'weapon',
+                    value: wStr,
+                    source: `${classes[0]?.name || 'Primary Class'} Weapon`,
+                    checked: true
+                });
+            });
+        }
+
+        // 8. Unified Skills: Background skills pre-checked + Class skill choices with limit
+        let classSkillLimit = 2;
+        let classSkillOptions = [];
+        if (Array.isArray(primaryClassProficiencies.skills)) {
+            primaryClassProficiencies.skills.forEach(entry => {
+                if (entry.choose) {
+                    if (entry.choose.count) classSkillLimit = parseInt(entry.choose.count) || 2;
+                    if (Array.isArray(entry.choose.from)) {
+                        entry.choose.from.forEach(s => {
+                            const norm = normalizeSkill(s);
+                            if (norm && !classSkillOptions.includes(norm)) classSkillOptions.push(norm);
+                        });
+                    }
+                } else if (entry.any) {
+                    classSkillLimit = parseInt(entry.any) || 3;
+                    classSkillOptions = [...SKILL_NAMES_MASTER];
+                }
+            });
+        }
+        if (classSkillOptions.length === 0) {
+            classSkillOptions = [...SKILL_NAMES_MASTER];
+            classSkillLimit = 2;
+        }
+
+        const bgSkillsSet = new Set(candidateBgSkills.map(s => s.toLowerCase()));
+        const availableClassSkills = classSkillOptions.filter(s => !bgSkillsSet.has(s.toLowerCase()));
+        const selectedClassSkills = new Set();
+        availableClassSkills.forEach(s => {
+            if (char.skills?.[s] && selectedClassSkills.size < classSkillLimit) {
+                selectedClassSkills.add(s);
+            }
+        });
+
+        // Combine abilities
+        const allCandidateAbilities = [...candidateRacialTraits, ...candidateClassFeatures, ...candidateBgFeatures];
+        allCandidateAbilities.forEach(a => {
+            a.checked = !existingAbilities.has(a.name.toLowerCase().trim());
+        });
+
+        // Load catalog items for AC/macro enrichments
+        let catalogItems = [];
+        try {
+            let itemRes = await fetch('/data/items-catalog.json?v=' + Date.now()).catch(() => null);
+            if (!itemRes || !itemRes.ok) itemRes = await fetch('data/items-catalog.json?v=' + Date.now()).catch(() => null);
+            if (itemRes && itemRes.ok) catalogItems = await itemRes.json();
+        } catch(e) {}
+
+        function enrichItem(it) {
+            if (!it.isGold && catalogItems.length > 0) {
+                const match = catalogItems.find(ci => ci.name.toLowerCase() === it.name.toLowerCase());
+                if (match) {
+                    it.weight = match.weight || it.weight || 0;
+                    it.type = match.type || it.type || 'Gear';
+                    it.rawType = match.rawType || '';
+                    it.ac = match.ac || null;
+                    it.bonusAc = match.bonusAc || null;
+                    it.isArmor = !!match.isArmor;
+                    it.isShield = (match.rawType === 'S' || match.name.toLowerCase().includes('shield'));
+                }
+            }
+            if (!it.isGold && !it.rawType) {
+                const ln = it.name.toLowerCase();
+                if (ln.includes('chain mail') || ln.includes('splint') || ln.includes('ring mail') || ln === 'plate' || ln.includes('plate armor')) { it.rawType = 'HA'; it.isArmor = true; it.ac = it.ac || 16; }
+                else if (ln.includes('scale mail') || ln.includes('breastplate') || ln.includes('half plate') || ln.includes('hide armor')) { it.rawType = 'MA'; it.isArmor = true; it.ac = it.ac || 14; }
+                else if (ln.includes('leather armor') || ln.includes('padded armor') || ln.includes('studded leather')) { it.rawType = 'LA'; it.isArmor = true; it.ac = it.ac || 11; }
+                else if (ln === 'shield' || ln.includes('shield')) { it.rawType = 'S'; it.isShield = true; it.ac = 2; }
+            }
+        }
+
+        function getResolvedClassItems() {
+            const res = [...classFixedItems];
+            classEquipChoiceSets.forEach((set, sIdx) => {
+                const opt = set.options.find(o => o.key === set.selectedOption) || set.options[0];
+                if (opt && Array.isArray(opt.items)) {
+                    opt.items.forEach((p, pIdx) => {
+                        const itemObj = {
+                            id: `cls_opt_${sIdx}_${pIdx}_` + p.name.replace(/\W+/g, '_'),
+                            name: p.name,
+                            qty: p.qty || 1,
+                            weight: 0,
+                            type: 'Gear',
+                            source: `${classes[0]?.name || 'Class'} (Pkg ${opt.displayKey})`,
+                            isArmor: false,
+                            isShield: false,
+                            ac: null,
+                            rawType: '',
+                            checked: !existingEquip.has(p.name.toLowerCase().trim())
+                        };
+                        enrichItem(itemObj);
+                        res.push(itemObj);
+                    });
+                }
+            });
+            return res;
+        }
+
+        candidateBgItems.forEach(it => enrichItem(it));
+        classFixedItems.forEach(it => enrichItem(it));
+
+        // 9. Spells Query & Per-Class Groupings
+        let spellList = [];
+        try {
+            let spRes = await fetch('/data/spells-catalog.json?v=' + Date.now()).catch(() => null);
+            if (!spRes || !spRes.ok) spRes = await fetch('data/spells-catalog.json?v=' + Date.now()).catch(() => null);
+            if (spRes && spRes.ok) spellList = await spRes.json();
+        } catch(e) {}
+
+        const classSpellSections = [];
+        classes.forEach((c, cIdx) => {
+            const raw = (c.name || '').toLowerCase().replace(/\s*\[.*?\]$/, '').trim();
+            const sub = (c.subclass || '').toLowerCase();
+            const l = parseInt(c.level) || 1;
+
+            let isClsCaster = false;
+            let maxSlot = 0;
+            let maxCantrips = 0;
+            let maxSpells = 0;
+            let isDivinePrepared = false;
+
+            if (raw === 'cleric') {
+                isClsCaster = true;
+                isDivinePrepared = true;
+                maxSlot = Math.min(9, Math.ceil(l / 2));
+                maxCantrips = l >= 10 ? 5 : (l >= 4 ? 4 : 3);
+                maxSpells = Math.max(1, wisMod + l);
+            } else if (raw === 'druid') {
+                isClsCaster = true;
+                isDivinePrepared = true;
+                maxSlot = Math.min(9, Math.ceil(l / 2));
+                maxCantrips = l >= 10 ? 4 : (l >= 4 ? 3 : 2);
+                maxSpells = Math.max(1, wisMod + l);
+            } else if (raw === 'paladin') {
+                isClsCaster = true;
+                isDivinePrepared = true;
+                maxSlot = l >= 2 ? Math.min(5, Math.ceil(l / 4)) : 0;
+                maxCantrips = 0;
+                const chaMod = getMod(getTotalStat(char, 'cha'));
+                maxSpells = l >= 2 ? Math.max(1, chaMod + Math.floor(l / 2)) : 0;
+            } else if (raw === 'wizard') {
+                isClsCaster = true;
+                maxSlot = Math.min(9, Math.ceil(l / 2));
+                maxCantrips = l >= 10 ? 5 : (l >= 4 ? 4 : 3);
+                const intMod = getMod(getTotalStat(char, 'int'));
+                maxSpells = Math.max(1, intMod + l);
+            } else if (raw === 'sorcerer') {
+                isClsCaster = true;
+                maxSlot = Math.min(9, Math.ceil(l / 2));
+                maxCantrips = l >= 10 ? 6 : (l >= 4 ? 5 : 4);
+                const sorcKnown = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 13, 13, 14, 14, 15, 15, 15, 15];
+                maxSpells = sorcKnown[l - 1] || 2;
+            } else if (raw === 'bard') {
+                isClsCaster = true;
+                maxSlot = Math.min(9, Math.ceil(l / 2));
+                maxCantrips = l >= 10 ? 4 : (l >= 4 ? 3 : 2);
+                const bardKnown = [4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 15, 16, 16, 17, 17, 18, 18, 19, 22];
+                maxSpells = bardKnown[l - 1] || 4;
+            } else if (raw === 'warlock') {
+                isClsCaster = true;
+                maxSlot = l >= 9 ? 5 : Math.ceil(l / 2);
+                maxCantrips = l >= 10 ? 4 : (l >= 4 ? 3 : 2);
+                const warKnown = [2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15];
+                maxSpells = warKnown[l - 1] || 2;
+            } else if (raw === 'ranger') {
+                isClsCaster = true;
+                maxSlot = l >= 2 ? Math.min(5, Math.ceil(l / 4)) : 0;
+                maxCantrips = 0;
+                const rangerKnown = [0, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11];
+                maxSpells = rangerKnown[l - 1] || 0;
+            } else if (raw === 'artificer') {
+                isClsCaster = true;
+                isDivinePrepared = true;
+                maxSlot = Math.min(5, Math.ceil(l / 4));
+                maxCantrips = l >= 10 ? 4 : 2;
+                const intMod = getMod(getTotalStat(char, 'int'));
+                maxSpells = Math.max(1, intMod + Math.floor(l / 2));
+            } else if (sub.includes('eldritch knight') || sub.includes('arcane trickster')) {
+                isClsCaster = true;
+                maxSlot = l >= 3 ? Math.min(4, Math.ceil((l - 2) / 4)) : 0;
+                maxCantrips = l >= 10 ? 3 : 2;
+                const thirdKnown = [0, 0, 3, 4, 4, 4, 5, 6, 6, 7, 8, 8, 9, 10, 10, 11, 11, 11, 12, 13];
+                maxSpells = thirdKnown[l - 1] || 3;
+            }
+
+            if (isClsCaster && spellList.length > 0) {
+                const classSpellMatches = spellList.filter(sp => {
+                    const spLvl = parseInt(sp.level) || 0;
+                    if (spLvl > maxSlot) return false;
+                    if (!Array.isArray(sp.classes)) return false;
+                    return sp.classes.some(cName => cName.toLowerCase() === raw || cName.toLowerCase().includes(raw));
+                });
+
+                const items = classSpellMatches.map(sp => {
+                    const spLvl = parseInt(sp.level) || 0;
+                    const isAlreadyOnSheet = existingSpells.has(sp.name.toLowerCase().trim());
+                    let defaultChecked = false;
+                    if (!isAlreadyOnSheet) {
+                        if (isDivinePrepared) {
+                            defaultChecked = (spLvl > 0);
+                        } else {
+                            defaultChecked = false;
+                        }
+                    }
+                    return {
+                        id: 'sp_' + sp.name.replace(/\W+/g, '_') + '_' + cIdx,
+                        name: sp.name,
+                        level: spLvl,
+                        school: sp.school || '',
+                        time: sp.time || '',
+                        range: sp.range || '',
+                        duration: sp.duration || '',
+                        description: sp.descriptionMarkdown || sp.description || '',
+                        classes: sp.classes || [],
+                        className: c.name,
+                        classIdx: cIdx,
+                        checked: defaultChecked,
+                        isCantrip: spLvl === 0
+                    };
+                });
+
+                classSpellSections.push({
+                    className: c.name,
+                    classIdx: cIdx,
+                    isDivinePrepared,
+                    maxSlot,
+                    maxCantrips,
+                    maxSpells,
+                    spells: items
+                });
+            }
+        });
+
+        // 10. Fetch Feats & Determine ASI Tiers
+        let catalogFeats = (builderCache?.feats && builderCache.feats.length > 0) ? builderCache.feats : [];
+        if (catalogFeats.length === 0) {
+            try {
+                let featRes = await fetch('/data/feats-catalog.json?v=' + Date.now()).catch(() => null);
+                if (!featRes || !featRes.ok) featRes = await fetch('data/feats-catalog.json?v=' + Date.now()).catch(() => null);
+                if (featRes && featRes.ok) catalogFeats = await featRes.json();
+            } catch(e) {}
+        }
+
+        const asiTiers = [];
+        classes.forEach((c, cIdx) => {
+            const raw = (c.name || '').toLowerCase().replace(/\s*\[.*?\]$/, '').trim();
+            const l = parseInt(c.level) || 1;
+            let milestones = [4, 8, 12, 16, 19];
+            if (raw === 'fighter') milestones = [4, 6, 8, 12, 14, 16, 19];
+            else if (raw === 'rogue') milestones = [4, 8, 10, 12, 16, 19];
+
+            milestones.forEach(m => {
+                if (l >= m) {
+                    asiTiers.push({
+                        id: `asi_${raw}_${m}_${cIdx}`,
+                        className: c.name,
+                        level: m,
+                        label: `${c.name} Level ${m} ASI / Feat`,
+                        enabled: true,
+                        choice: 'asi',
+                        asiType: 'single_2',
+                        stat1: 'str',
+                        stat2: 'dex',
+                        allowOver20: true,
+                        featName: catalogFeats[0]?.name || ''
+                    });
+                }
+            });
+        });
+
+        // 11. Internal Builder State
+        const builderState = {
+            hpMode: 'average',
+            hpScope: existingHp > 0 ? 'new_levels' : 'all',
+            hpNewLevelsCount: detectedNewLevels,
+            calculatedHp: existingHp > 0 ? existingHp : Math.max(1, (parseInt(getClassHitDie(classes[0]?.name).replace('d','')) || 8) + conMod),
+            hpRolls: [],
+            hpChatBroadcast: true,
+            activeArmorId: 'none',
+            shieldEnabled: false,
+            calculatedAc: existingAc
+        };
+
+        // 12. AC Inventory & Candidate Detection
+        const allArmorOptions = [{ id: 'none', name: 'Unarmored', type: 'None', baseAc: 10, bonusAc: 0, rawType: 'NONE' }];
+        const hasBarbarian = classes.some(c => (c.name || '').toLowerCase().includes('barbarian')) || allCandidateAbilities.some(a => (a.name || '').toLowerCase().includes('unarmored defense') && (a.source || '').toLowerCase().includes('barbarian'));
+        const hasMonk = classes.some(c => (c.name || '').toLowerCase().includes('monk')) || allCandidateAbilities.some(a => (a.name || '').toLowerCase().includes('unarmored defense') && (a.source || '').toLowerCase().includes('monk'));
+        const hasDraconic = (char.race || '').toLowerCase().includes('dragon') || classes.some(c => (c.subclass || '').toLowerCase().includes('draconic'));
+
+        if (hasBarbarian) {
+            allArmorOptions.push({ id: 'barbarian', name: `Barbarian Unarmored Defense (10 + DEX [${dexMod}] + CON [${conMod}])`, type: 'Special', baseAc: 10 + dexMod + conMod, rawType: 'SPECIAL' });
+        }
+        if (hasMonk) {
+            allArmorOptions.push({ id: 'monk', name: `Monk Unarmored Defense (10 + DEX [${dexMod}] + WIS [${wisMod}])`, type: 'Special', baseAc: 10 + dexMod + wisMod, rawType: 'SPECIAL' });
+        }
+        if (hasDraconic) {
+            allArmorOptions.push({ id: 'draconic', name: `Draconic Resilience (13 + DEX [${dexMod}])`, type: 'Special', baseAc: 13 + dexMod, rawType: 'SPECIAL' });
+        }
+
+        (char.equipment || []).forEach(eq => {
+            const rawT = (eq.rawType || '').toUpperCase();
+            const isRealArmor = eq.isArmor || ['HA', 'MA', 'LA'].includes(rawT);
+            if (isRealArmor && rawT !== 'S') {
+                if (!allArmorOptions.some(a => a.name.toLowerCase() === eq.name.toLowerCase())) {
+                    allArmorOptions.push({
+                        id: eq.id || 'inv_' + eq.name,
+                        name: `${eq.name} [${eq.type || 'Armor'}]`,
+                        rawType: rawT || 'MA',
+                        baseAc: parseInt(eq.ac) || 14,
+                        bonusAc: parseInt(eq.bonusAc) || 0,
+                        isFromInventory: true
+                    });
+                }
+            }
+        });
+
+        // Helper calculations
+        function runHpCalculation() {
+            const rolls = [];
+            let total = 0;
+            const primaryDie = parseInt(getClassHitDie(classes[0]?.name).replace('d', '')) || 8;
+            const avgPrimary = Math.floor(primaryDie / 2) + 1;
+
+            if (builderState.hpScope === 'new_levels' && existingHp > 0) {
+                total = existingHp;
+                const levelsToRoll = Math.max(1, builderState.hpNewLevelsCount);
+                for (let i = 0; i < levelsToRoll; i++) {
+                    const currentLvl = (totalLevel - levelsToRoll + 1) + i;
+                    let roll = 0;
+                    if (builderState.hpMode === 'max') roll = primaryDie;
+                    else if (builderState.hpMode === 'average') roll = avgPrimary;
+                    else if (builderState.hpMode === 'roll') roll = Math.floor(Math.random() * primaryDie) + 1;
+                    else if (builderState.hpMode === 'roll_avg_min') roll = Math.max(avgPrimary, Math.floor(Math.random() * primaryDie) + 1);
+                    const gain = Math.max(1, roll + conMod);
+                    rolls.push({ level: currentLvl, roll, con: conMod, total: gain, hd: primaryDie, val: roll });
+                    total += gain;
+                }
+                builderState.addedHp = total - existingHp;
+            } else {
+                let lvlCounter = 1;
+                classes.forEach(c => {
+                    const cLvl = parseInt(c.level) || 1;
+                    const die = parseInt(getClassHitDie(c.name).replace('d', '')) || 8;
+                    const avg = Math.floor(die / 2) + 1;
+                    for (let i = 0; i < cLvl; i++) {
+                        let roll = 0;
+                        if (lvlCounter === 1) {
+                            roll = die;
+                            const gain = Math.max(1, roll + conMod);
+                            rolls.push({ level: lvlCounter, roll, con: conMod, total: gain, hd: die, isMax: true, val: roll });
+                            total += gain;
+                        } else {
+                            if (builderState.hpMode === 'max') roll = die;
+                            else if (builderState.hpMode === 'average') roll = avg;
+                            else if (builderState.hpMode === 'roll') roll = Math.floor(Math.random() * die) + 1;
+                            else if (builderState.hpMode === 'roll_avg_min') roll = Math.max(avg, Math.floor(Math.random() * die) + 1);
+                            const gain = Math.max(1, roll + conMod);
+                            rolls.push({ level: lvlCounter, roll, con: conMod, total: gain, hd: die, val: roll });
+                            total += gain;
+                        }
+                        lvlCounter++;
+                    }
+                });
+            }
+            builderState.calculatedHp = Math.max(1, total);
+            builderState.hpRolls = rolls;
+        }
+
+        function renderHpBreakdownHtml() {
+            if (builderState.hpRolls.length === 0) return '';
+            return builderState.hpRolls.map(r => `
+                <div style="font-size:0.75rem; display:flex; justify-content:space-between; padding:2px 0; border-bottom:1px solid rgba(255,255,255,0.03);">
+                    <span>Lv ${r.level}: [1d${r.hd} ${r.isMax ? '(Max)' : ''} &rarr; ${r.val}] + CON (${r.con >= 0 ? `+${r.con}` : r.con})</span>
+                    <strong style="color:var(--color-gold-light);">+${r.total} HP</strong>
+                </div>
+            `).join('');
+        }
+
+        function runAcCalculation() {
+            const chosen = allArmorOptions.find(a => a.id === builderState.activeArmorId) || allArmorOptions[0];
+            let base = 10;
+            let formula = '';
+
+            if (chosen.id === 'none') {
+                base = 10 + dexMod;
+                formula = `Unarmored (10 + DEX [${dexMod}])`;
+            } else if (chosen.rawType === 'SPECIAL') {
+                base = chosen.baseAc;
+                formula = chosen.name;
+            } else if (chosen.rawType === 'HA' || (chosen.name || '').toLowerCase().includes('heavy')) {
+                base = chosen.baseAc + (chosen.bonusAc || 0);
+                formula = `${chosen.name} [Base ${chosen.baseAc}${chosen.bonusAc ? ` + ${chosen.bonusAc}` : ''}, no DEX]`;
+            } else if (chosen.rawType === 'MA' || (chosen.name || '').toLowerCase().includes('medium')) {
+                const capDex = Math.min(2, Math.max(0, dexMod));
+                base = chosen.baseAc + capDex + (chosen.bonusAc || 0);
+                formula = `${chosen.name} [Base ${chosen.baseAc} + DEX max 2 (${capDex})${chosen.bonusAc ? ` + ${chosen.bonusAc}` : ''}]`;
+            } else {
+                const uncapDex = Math.max(0, dexMod);
+                base = chosen.baseAc + uncapDex + (chosen.bonusAc || 0);
+                formula = `${chosen.name} [Base ${chosen.baseAc} + DEX (${uncapDex})${chosen.bonusAc ? ` + ${chosen.bonusAc}` : ''}]`;
+            }
+
+            let shieldVal = 0;
+            if (builderState.shieldEnabled && !(chosen.id === 'monk')) {
+                shieldVal = 2;
+                formula += ` + Shield (+2)`;
+            }
+
+            builderState.calculatedAc = base + shieldVal;
+            builderState.acFormulaText = formula;
+        }
+
+        runHpCalculation();
+        runAcCalculation();
+
+        function updateCountsDisplay() {
+            const abCount = bodyEl.querySelectorAll('.pc-builder-ab-chk:checked').length;
+            const profCount = bodyEl.querySelectorAll('.pc-builder-prof-chk:checked').length;
+            const itCount = bodyEl.querySelectorAll('.pc-builder-it-chk:checked').length;
+            const spCount = bodyEl.querySelectorAll('.pc-builder-sp-chk:checked').length;
+            countsEl.innerHTML = `
+                <strong style="color:var(--color-gold-light);">${abCount}</strong> Abilities, 
+                <strong style="color:var(--color-gold-light);">${profCount}</strong> Proficiencies, 
+                <strong style="color:var(--color-gold-light);">${itCount}</strong> Items, 
+                <strong style="color:var(--color-gold-light);">${spCount}</strong> Spells selected &bull; 
+                HP: <span style="color:#4fc3f7; font-weight:bold;">${builderState.calculatedHp}</span> &bull; 
+                AC: <span style="color:#81c784; font-weight:bold;">${builderState.calculatedAc}</span>
+            `;
+
+            // Update per-class spell counters
+            classSpellSections.forEach(sec => {
+                const cantripsChecked = sec.spells.filter(s => s.isCantrip && s.checked).length;
+                const leveledChecked = sec.spells.filter(s => !s.isCantrip && s.checked).length;
+                const cEl = document.getElementById(`pc-builder-cantrips-count-${sec.classIdx}`);
+                const sEl = document.getElementById(`pc-builder-spells-count-${sec.classIdx}`);
+                if (cEl) cEl.innerText = `${cantripsChecked} / ${sec.maxCantrips}`;
+                if (sEl) sEl.innerText = `${leveledChecked} / ${sec.maxSpells}`;
+            });
+
+            // Update class skills counter
+            const csCountEl = document.getElementById('pc-builder-class-skills-count');
+            if (csCountEl) {
+                csCountEl.innerText = `${selectedClassSkills.size} / ${classSkillLimit}`;
+            }
+        }
+
+        // Render Dashboard HTML
+        function renderDashboard() {
+            const statOptions = ['str', 'dex', 'con', 'int', 'wis', 'cha'];
+            const statNames = { str: 'Strength', dex: 'Dexterity', con: 'Constitution', int: 'Intelligence', wis: 'Wisdom', cha: 'Charisma' };
+            const resolvedClassItems = getResolvedClassItems();
+            const currentCandidateItems = [...candidateBgItems, ...resolvedClassItems];
+
+            bodyEl.innerHTML = `
+                <!-- SECTION 1: PROFICIENCIES & SAVING THROWS -->
+                <div class="builder-section-box">
+                    <div class="builder-section-header">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-award text-gradient-gold"></i>
+                            <strong style="font-size:0.95rem; color:var(--color-gold-base);">Proficiencies & Saving Throws</strong>
+                            <span class="builder-pill">${classes[0]?.name || 'Primary Class'}</span>
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                            <button id="pc-builder-prof-all" class="btn btn-secondary btn-xxs">Select All</button>
+                            <button id="pc-builder-prof-none" class="btn btn-secondary btn-xxs">Deselect All</button>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div>
+                            <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:4px; font-weight:600;">Saving Throws</div>
+                            <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                                ${candidateProficiencies.filter(p => p.type === 'save').map(p => `
+                                    <label class="builder-badge-check ${p.checked ? 'is-checked' : ''}" style="margin:0;">
+                                        <input type="checkbox" class="pc-builder-prof-chk" data-prof-id="${p.id}" ${p.checked ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                        <strong>${p.label}</strong>
+                                    </label>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ${candidateProficiencies.some(p => p.type === 'armor' || p.type === 'weapon') ? `
+                            <div>
+                                <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:4px; font-weight:600;">Armor & Weapons</div>
+                                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                                    ${candidateProficiencies.filter(p => p.type !== 'save').map(p => `
+                                        <label class="builder-badge-check ${p.checked ? 'is-checked' : ''}" style="margin:0;">
+                                            <input type="checkbox" class="pc-builder-prof-chk" data-prof-id="${p.id}" ${p.checked ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                            <span>${p.label}</span>
+                                        </label>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- SECTION 2: SKILLS & TOOL PROFICIENCIES -->
+                <div class="builder-section-box">
+                    <div class="builder-section-header">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-graduation-cap text-gradient-gold"></i>
+                            <strong style="font-size:0.95rem; color:var(--color-gold-base);">Skill & Tool Proficiencies</strong>
+                            <span class="builder-pill" style="color:#4fc3f7;">Class Skills: <strong id="pc-builder-class-skills-count">${selectedClassSkills.size} / ${classSkillLimit}</strong></span>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <!-- Background Skills -->
+                        ${candidateBgSkills.length > 0 ? `
+                            <div>
+                                <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:4px; font-weight:600;">
+                                    Background Skills <span style="font-size:0.7rem; color:#90caf9; text-transform:none;">(Granted by ${bgLabel})</span>
+                                </div>
+                                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                                    ${candidateBgSkills.map(s => `
+                                        <div class="builder-badge-check is-bg" style="margin:0;" title="Granted by Background">
+                                            <i class="fa-solid fa-check" style="font-size:0.75rem;"></i>
+                                            <strong>${s}</strong>
+                                            <span class="badge" style="font-size:0.65rem; background:rgba(255,255,255,0.1); padding:0 4px; border-radius:3px;">Background</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+
+                        <!-- Class Skills -->
+                        <div>
+                            <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:4px; font-weight:600;">
+                                Class Skills <span style="font-size:0.7rem; color:var(--color-gold-light); text-transform:none;">(Choose up to ${classSkillLimit} for ${classes[0]?.name || 'Primary Class'})</span>
+                            </div>
+                            <div style="display:flex; flex-wrap:wrap; gap:6px;" id="pc-builder-class-skills-container">
+                                ${availableClassSkills.map(s => {
+                                    const isChecked = selectedClassSkills.has(s);
+                                    const isDisabled = !isChecked && (selectedClassSkills.size >= classSkillLimit);
+                                    const skillObj = ALL_SKILLS.find(sk => sk.name.toLowerCase() === s.toLowerCase());
+                                    const abLabel = skillObj ? skillObj.ability.toUpperCase() : '';
+                                    return `
+                                        <label class="builder-badge-check ${isChecked ? 'is-checked' : ''} ${isDisabled ? 'is-disabled' : ''}" data-skill="${s}" style="margin:0;">
+                                            <input type="checkbox" class="pc-builder-class-skill-chk" data-skill="${s}" ${isChecked ? 'checked' : ''} ${isDisabled ? 'disabled' : ''} style="accent-color:var(--color-gold-base); cursor:pointer;">
+                                            <span>${s}</span>
+                                            ${abLabel ? `<span style="font-size:0.68rem; opacity:0.7;">(${abLabel})</span>` : ''}
+                                        </label>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Tool Proficiencies -->
+                        ${candidateBgTools.length > 0 ? `
+                            <div>
+                                <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); margin-bottom:4px; font-weight:600;">
+                                    Tool Proficiencies
+                                </div>
+                                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                                    ${candidateBgTools.map(t => `
+                                        <div class="builder-badge-check is-bg" style="margin:0;">
+                                            <i class="fa-solid fa-toolbox" style="font-size:0.75rem;"></i>
+                                            <span>${t}</span>
+                                            <span class="badge" style="font-size:0.65rem; background:rgba(255,255,255,0.1); padding:0 4px; border-radius:3px;">Background</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- SECTION 3: ABILITIES & FEATURES -->
+                <div class="builder-section-box">
+                    <div class="builder-section-header">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-address-card text-gradient-gold"></i>
+                            <strong style="font-size:0.95rem; color:var(--color-gold-base);">Abilities & Features</strong>
+                            <span class="builder-pill">${allCandidateAbilities.length} detected</span>
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                            <button id="pc-builder-ab-all" class="btn btn-secondary btn-xxs">Select All</button>
+                            <button id="pc-builder-ab-none" class="btn btn-secondary btn-xxs">Deselect All</button>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:4px; max-height:220px; overflow-y:auto;" class="scroll-styled">
+                        ${allCandidateAbilities.length === 0 ? '<div style="color:var(--color-text-muted); font-size:0.8rem; padding:8px;">No abilities detected.</div>' : allCandidateAbilities.map((ab, idx) => `
+                            <label class="builder-item-row ${ab.checked ? 'is-checked' : ''}" style="cursor:pointer; margin:0;">
+                                <input type="checkbox" class="pc-builder-ab-chk" data-idx="${idx}" ${ab.checked ? 'checked' : ''} style="margin-top:3px; accent-color:var(--color-gold-base);">
+                                <div style="flex:1;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <div>
+                                            <strong style="font-size:0.85rem; color:var(--color-text-primary);">${ab.name}</strong>
+                                            <span style="font-size:0.7rem; background:rgba(255,255,255,0.06); padding:1px 6px; border-radius:4px; color:var(--color-text-muted); margin-left:6px;">${ab.category}</span>
+                                        </div>
+                                        <span class="badge" style="font-size:0.68rem; text-transform:uppercase; padding:1px 6px; border-radius:4px; background:rgba(212,175,55,0.15); color:var(--color-gold-light);">${ab.actionType}</span>
+                                    </div>
+                                    <div style="font-size:0.75rem; color:var(--color-text-secondary); margin-top:2px; line-height:1.3;">
+                                        ${(ab.description || '').replace(/^#+\s+/gm, '').slice(0, 180)}${(ab.description || '').length > 180 ? '...' : ''}
+                                    </div>
+                                </div>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- SECTION 4: ITEMS & STARTING GEAR -->
+                <div class="builder-section-box">
+                    <div class="builder-section-header">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-shield-halved text-gradient-gold"></i>
+                            <strong style="font-size:0.95rem; color:var(--color-gold-base);">Starting Equipment & Items</strong>
+                            <span class="builder-pill">${currentCandidateItems.length} items</span>
+                            ${bgGold > 0 ? `<span class="builder-pill" style="color:#ffd54f;"><i class="fa-solid fa-coins"></i> +${bgGold} GP</span>` : ''}
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                            <button id="pc-builder-it-all" class="btn btn-secondary btn-xxs">Select All</button>
+                            <button id="pc-builder-it-none" class="btn btn-secondary btn-xxs">Deselect All</button>
+                        </div>
+                    </div>
+
+                    <!-- Class Equipment Package Choices -->
+                    ${classEquipChoiceSets.length > 0 ? `
+                        <div style="background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:10px 12px; margin-bottom:10px;">
+                            <div style="font-size:0.8rem; font-weight:600; color:var(--color-gold-light); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                                <i class="fa-solid fa-boxes-packing"></i> Class Equipment Packages (${classes[0]?.name || 'Primary Class'})
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:8px;">
+                                ${classEquipChoiceSets.map((set, si) => `
+                                    <div style="display:flex; flex-direction:column; gap:4px;">
+                                        <div style="font-size:0.72rem; color:var(--color-text-muted);">Package Choice ${si + 1}:</div>
+                                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                            ${set.options.map(opt => `
+                                                <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.78rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid ${set.selectedOption === opt.key ? 'var(--color-gold-base)' : 'var(--color-border-subtle)'}; padding:4px 8px; border-radius:4px; margin:0;">
+                                                    <input type="radio" name="pc-builder-cls-equip-${si}" class="pc-builder-cls-equip-radio" data-set-idx="${si}" value="${opt.key}" ${set.selectedOption === opt.key ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                                    <strong style="color:var(--color-gold-light);">Option ${opt.displayKey}:</strong>
+                                                    <span>${opt.label}</span>
+                                                </label>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <div style="display:flex; flex-direction:column; gap:4px; max-height:180px; overflow-y:auto;" class="scroll-styled" id="pc-builder-items-container">
+                        ${currentCandidateItems.length === 0 ? '<div style="color:var(--color-text-muted); font-size:0.8rem; padding:8px;">No starting items detected.</div>' : currentCandidateItems.map((it, idx) => `
+                            <label class="builder-item-row ${it.checked ? 'is-checked' : ''}" style="cursor:pointer; margin:0;">
+                                <input type="checkbox" class="pc-builder-it-chk" data-item-id="${it.id}" ${it.checked ? 'checked' : ''} style="margin-top:3px; accent-color:var(--color-gold-base);">
+                                <div style="flex:1; display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                        <strong style="font-size:0.85rem; color:var(--color-text-primary);">${it.name}</strong>
+                                        ${it.qty > 1 ? `<span style="color:var(--color-gold-base); font-size:0.75rem; margin-left:4px;">&times;${it.qty}</span>` : ''}
+                                        <span style="font-size:0.7rem; background:rgba(255,255,255,0.06); padding:1px 6px; border-radius:4px; color:var(--color-text-muted); margin-left:6px;">${it.source}</span>
+                                    </div>
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        ${it.weight ? `<span style="font-size:0.75rem; color:var(--color-text-muted);">${it.weight} lb</span>` : ''}
+                                        <span class="badge" style="font-size:0.7rem; padding:1px 6px; border-radius:4px; background:rgba(255,255,255,0.08); color:var(--color-text-secondary);">${it.type}</span>
+                                    </div>
+                                </div>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- SECTION 5: SPELLCASTING & SPELLS (PER CLASS, TABULAR) -->
+                ${classSpellSections.length === 0 ? '' : `
+                    <div class="builder-section-box">
+                        <div class="builder-section-header">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-wand-sparkles text-gradient-gold"></i>
+                                <strong style="font-size:0.95rem; color:var(--color-gold-base);">Spellcasting & Spells</strong>
+                            </div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:16px;">
+                            ${classSpellSections.map(sec => `
+                                <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:12px;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+                                        <div style="display:flex; align-items:center; gap:8px;">
+                                            <strong style="color:var(--color-gold-light); font-size:0.9rem;">${sec.className} Spells</strong>
+                                            <span class="builder-pill" style="font-size:0.72rem;">Max Slot: Lv ${sec.maxSlot}</span>
+                                            <span class="builder-pill" style="color:#4fc3f7; font-size:0.72rem;">Cantrips: <strong id="pc-builder-cantrips-count-${sec.classIdx}">0 / ${sec.maxCantrips}</strong></span>
+                                            <span class="builder-pill" style="color:#81c784; font-size:0.72rem;">Spells: <strong id="pc-builder-spells-count-${sec.classIdx}">0 / ${sec.maxSpells}</strong></span>
+                                        </div>
+                                        <div style="display:flex; gap:6px;">
+                                            <button class="btn btn-secondary btn-xxs pc-builder-sp-cls-all" data-cls-idx="${sec.classIdx}">Select All</button>
+                                            <button class="btn btn-secondary btn-xxs pc-builder-sp-cls-none" data-cls-idx="${sec.classIdx}">Deselect All</button>
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom:8px;">
+                                        <input type="text" class="pc-builder-spell-search" data-cls-idx="${sec.classIdx}" placeholder="Search ${sec.className} spells by name or school...">
+                                    </div>
+                                    <div class="scroll-styled pc-builder-spell-list" data-cls-idx="${sec.classIdx}" style="max-height:280px; overflow-y:auto; border:1px solid rgba(255,255,255,0.06); border-radius:6px;">
+                                        <table class="builder-spell-table">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:36px; text-align:center;"></th>
+                                                    <th>Spell Name</th>
+                                                    <th style="width:90px;">Level</th>
+                                                    <th style="width:110px;">School</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${sec.spells.length === 0 ? `<tr><td colspan="4" style="text-align:center; color:var(--color-text-muted); padding:16px;">No spells found.</td></tr>` : sec.spells.map((sp, idx) => `
+                                                    <tr class="builder-spell-tr ${sp.checked ? 'is-checked' : ''}" data-cls-idx="${sec.classIdx}" data-sp-id="${sp.id}" data-name="${sp.name.toLowerCase()}" data-school="${(sp.school || '').toLowerCase()}">
+                                                        <td style="text-align:center;">
+                                                            <input type="checkbox" class="pc-builder-sp-chk" data-cls-idx="${sec.classIdx}" data-sp-id="${sp.id}" ${sp.checked ? 'checked' : ''} style="accent-color:var(--color-gold-base); cursor:pointer;">
+                                                        </td>
+                                                        <td>
+                                                            <strong>${sp.name}</strong>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge" style="font-size:0.7rem; background:rgba(212,175,55,0.12); color:var(--color-gold-light); padding:1px 6px; border-radius:4px;">${sp.level === 0 ? 'Cantrip' : `Level ${sp.level}`}</span>
+                                                        </td>
+                                                        <td style="color:var(--color-text-secondary); font-size:0.75rem;">
+                                                            ${sp.school || '—'}
+                                                        </td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `}
+
+                <!-- SECTION 6: ABILITY SCORE IMPROVEMENTS & FEATS -->
+                ${asiTiers.length === 0 ? '' : `
+                    <div class="builder-section-box">
+                        <div class="builder-section-header">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-arrow-trend-up text-gradient-gold"></i>
+                                <strong style="font-size:0.95rem; color:var(--color-gold-base);">Ability Score Improvements & Feats</strong>
+                                <span class="builder-pill">${asiTiers.length} unlocked</span>
+                            </div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:12px;">
+                            ${asiTiers.map((tier, tIdx) => `
+                                <div class="builder-asi-card" data-tier-idx="${tIdx}">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                                        <strong style="color:var(--color-gold-light); font-size:0.9rem;">${tier.label}</strong>
+                                        <div style="display:flex; gap:12px;">
+                                            <label style="display:flex; align-items:center; gap:6px; font-size:0.82rem; cursor:pointer; margin:0;">
+                                                <input type="radio" name="pc-builder-asi-choice-${tIdx}" value="asi" ${tier.choice === 'asi' ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                                <span>Ability Score Increase</span>
+                                            </label>
+                                            <label style="display:flex; align-items:center; gap:6px; font-size:0.82rem; cursor:pointer; margin:0;">
+                                                <input type="radio" name="pc-builder-asi-choice-${tIdx}" value="feat" ${tier.choice === 'feat' ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                                <span>Choose a Feat</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- ASI Options -->
+                                    <div class="pc-builder-asi-options-wrap" data-tier-idx="${tIdx}" style="display:${tier.choice === 'asi' ? 'flex' : 'none'}; flex-direction:column; gap:8px; background:rgba(0,0,0,0.2); padding:8px 12px; border-radius:6px;">
+                                        <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap;">
+                                            <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; margin:0;">
+                                                <input type="radio" name="pc-builder-asi-mode-${tIdx}" value="single_2" ${tier.asiType === 'single_2' ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                                <span>+2 to One Stat</span>
+                                            </label>
+                                            <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; margin:0;">
+                                                <input type="radio" name="pc-builder-asi-mode-${tIdx}" value="split_1_1" ${tier.asiType === 'split_1_1' ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                                <span>+1 to Two Stats</span>
+                                            </label>
+                                            <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; margin:0; margin-left:auto; color:var(--color-text-secondary);">
+                                                <input type="checkbox" class="pc-builder-asi-over20" data-tier-idx="${tIdx}" ${tier.allowOver20 ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                                <span>Allow exceeding 20</span>
+                                            </label>
+                                        </div>
+                                        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                                            <div class="form-group" style="flex:1; min-width:140px; margin:0;">
+                                                <label style="font-size:0.75rem;">${tier.asiType === 'single_2' ? 'Stat to boost by +2' : 'First Stat (+1)'}</label>
+                                                <select class="pc-builder-asi-stat1 form-control form-control-sm" data-tier-idx="${tIdx}">
+                                                    ${statOptions.map(st => `
+                                                        <option value="${st}" ${tier.stat1 === st ? 'selected' : ''}>${statNames[st]} (${char.stats?.[st] || 10})</option>
+                                                    `).join('')}
+                                                </select>
+                                            </div>
+                                            <div class="form-group pc-builder-asi-stat2-wrap" data-tier-idx="${tIdx}" style="flex:1; min-width:140px; margin:0; display:${tier.asiType === 'split_1_1' ? 'block' : 'none'};">
+                                                <label style="font-size:0.75rem;">Second Stat (+1)</label>
+                                                <select class="pc-builder-asi-stat2 form-control form-control-sm" data-tier-idx="${tIdx}">
+                                                    ${statOptions.map(st => `
+                                                        <option value="${st}" ${tier.stat2 === st ? 'selected' : ''}>${statNames[st]} (${char.stats?.[st] || 10})</option>
+                                                    `).join('')}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Feat Options -->
+                                    <div class="pc-builder-feat-options-wrap" data-tier-idx="${tIdx}" style="display:${tier.choice === 'feat' ? 'flex' : 'none'}; flex-direction:column; gap:8px; background:rgba(0,0,0,0.2); padding:8px 12px; border-radius:6px;">
+                                        <div class="form-group" style="margin:0;">
+                                            <label style="font-size:0.75rem;">Select Feat</label>
+                                            <select class="pc-builder-feat-sel form-control form-control-sm" data-tier-idx="${tIdx}">
+                                                ${catalogFeats.map(ft => `
+                                                    <option value="${ft.name}" ${tier.featName === ft.name ? 'selected' : ''}>${ft.name} [${ft.source || 'PHB'}]</option>
+                                                `).join('')}
+                                            </select>
+                                        </div>
+                                        <div class="pc-builder-feat-preview" data-tier-idx="${tIdx}" style="font-size:0.78rem; color:var(--color-text-secondary); line-height:1.4; padding:6px 10px; background:rgba(0,0,0,0.3); border-radius:4px;">
+                                            ${(catalogFeats.find(f => f.name === tier.featName) || catalogFeats[0])?.description?.slice(0, 180) || ''}...
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `}
+
+                <!-- SECTION 7: HIT POINTS (HP) CALCULATOR -->
+                <div class="builder-section-box">
+                    <div class="builder-section-header">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-heart-pulse" style="color:#ef5350;"></i>
+                            <strong style="font-size:0.95rem; color:var(--color-gold-base);">Hit Points (HP) Calculator</strong>
+                            <span class="builder-pill" style="color:#4fc3f7;">Current: ${existingHp} HP</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.8rem; color:var(--color-text-secondary);">Calculated Max HP:</span>
+                            <span id="pc-builder-hp-preview" style="font-size:1.15rem; font-weight:bold; color:#4fc3f7; background:rgba(79,195,247,0.15); border:1px solid rgba(79,195,247,0.4); padding:2px 10px; border-radius:4px;">${builderState.calculatedHp}</span>
+                        </div>
+                    </div>
+
+                    <!-- HP Calculation Mode Buttons -->
+                    <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+                        <button type="button" class="builder-mode-btn ${builderState.hpMode === 'max' ? 'active' : ''}" data-hpmode="max">
+                            <i class="fa-solid fa-angles-up"></i> Max Hit Dice
+                        </button>
+                        <button type="button" class="builder-mode-btn ${builderState.hpMode === 'average' ? 'active' : ''}" data-hpmode="average">
+                            <i class="fa-solid fa-scale-balanced"></i> Average (5e Standard)
+                        </button>
+                        <button type="button" class="builder-mode-btn ${builderState.hpMode === 'roll' ? 'active' : ''}" data-hpmode="roll">
+                            <i class="fa-solid fa-dice-d20"></i> Roll Hit Dice
+                        </button>
+                        <button type="button" class="builder-mode-btn ${builderState.hpMode === 'roll_avg_min' ? 'active' : ''}" data-hpmode="roll_avg_min">
+                            <i class="fa-solid fa-shield-cat"></i> Roll (Avg as Min)
+                        </button>
+                    </div>
+
+                    <!-- HP Scope Options if Existing HP exists -->
+                    ${existingHp > 0 ? `
+                        <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                            <div style="display:flex; gap:16px;">
+                                <label style="display:flex; align-items:center; gap:6px; font-size:0.82rem; cursor:pointer; margin:0;">
+                                    <input type="radio" name="pc-builder-hp-scope" value="new_levels" ${builderState.hpScope === 'new_levels' ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
+                                    <span><strong>Roll New Levels</strong> (Keep existing ${existingHp} HP)</span>
+                                </label>
+                                <label style="display:flex; align-items:center; gap:6px; font-size:0.82rem; cursor:pointer; margin:0;">
+                                    <input type="radio" name="pc-builder-hp-scope" value="all" ${builderState.hpScope === 'all' ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
+                                    <span><strong>Roll All Levels</strong> (Recalculate Lv 1..${totalLevel})</span>
+                                </label>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px;" id="pc-builder-new-levels-wrap" style="display:${builderState.hpScope === 'new_levels' ? 'flex' : 'none'};">
+                                <span style="font-size:0.75rem; color:var(--color-text-muted);">Levels to add:</span>
+                                <input type="number" id="pc-builder-new-levels-input" min="1" max="20" value="${builderState.hpNewLevelsCount}" style="width:46px; text-align:center; padding:2px; font-size:0.8rem; background:rgba(0,0,0,0.4); border:1px solid var(--color-border-subtle); color:var(--color-gold-light); border-radius:4px;">
+                            </div>
+                        </div>
+                    ` : ''}
+
+                    <!-- Live Breakdown / Roll List -->
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="font-size:0.78rem; font-weight:600; color:var(--color-text-secondary);">Level-by-Level Breakdown:</span>
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            <label style="display:flex; align-items:center; gap:6px; font-size:0.75rem; cursor:pointer; margin:0; color:var(--color-text-muted);">
+                                <input type="checkbox" id="pc-builder-hp-broadcast" ${builderState.hpChatBroadcast ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                <span>Broadcast roll to VTT chat</span>
+                            </label>
+                            ${(builderState.hpMode === 'roll' || builderState.hpMode === 'roll_avg_min') ? `
+                                <button type="button" id="pc-builder-recalculate-hp" class="btn btn-secondary btn-xxs" style="display:inline-flex; align-items:center; gap:4px;">
+                                    <i class="fa-solid fa-rotate-right"></i> Re-roll
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <div id="pc-builder-roll-log" style="background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); border-radius:4px; padding:6px 10px; max-height:100px; overflow-y:auto;" class="scroll-styled">
+                        ${renderHpBreakdownHtml()}
+                    </div>
+                </div>
+
+                <!-- SECTION 8: ARMOR CLASS (AC) ENGINE -->
+                <div class="builder-section-box">
+                    <div class="builder-section-header">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-shield text-gradient-gold"></i>
+                            <strong style="font-size:0.95rem; color:var(--color-gold-base);">Armor Class (AC) Setup</strong>
+                            <span class="builder-pill" style="color:#81c784;">Current: ${existingAc} AC</span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span style="font-size:0.8rem; color:var(--color-text-secondary);">Preview AC:</span>
+                            <span id="pc-builder-preview-ac" style="font-size:1.15rem; font-weight:bold; color:#81c784; background:rgba(129,199,132,0.15); border:1px solid rgba(129,199,132,0.4); padding:2px 10px; border-radius:4px;">${builderState.calculatedAc}</span>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <!-- Armor Options List -->
+                        <div style="display:flex; flex-direction:column; gap:6px;">
+                            <div style="font-size:0.75rem; text-transform:uppercase; color:var(--color-text-muted); font-weight:600;">Choose Armor Base:</div>
+                            ${allArmorOptions.map(arm => `
+                                <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; cursor:pointer; background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); padding:6px 10px; border-radius:4px; margin:0;">
+                                    <input type="radio" name="pc-builder-active-armor" value="${arm.id}" ${builderState.activeArmorId === arm.id ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
+                                    <div style="flex:1; display:flex; justify-content:space-between; align-items:center;">
+                                        <span>${arm.name}</span>
+                                        ${arm.isFromInventory ? '<span class="badge" style="font-size:0.65rem; background:rgba(255,255,255,0.06); color:var(--color-text-muted);">Inventory</span>' : ''}
+                                    </div>
+                                </label>
+                            `).join('')}
+                        </div>
+
+                        <!-- Shield Option Toggle -->
+                        <div style="padding-top:4px; border-top:1px solid rgba(255,255,255,0.05); display:flex; justify-content:space-between; align-items:center;">
+                            <label style="display:flex; align-items:center; gap:8px; font-size:0.82rem; cursor:pointer; margin:0;">
+                                <input type="checkbox" id="pc-builder-shield-cb" ${builderState.shieldEnabled ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
+                                <span><strong>Equip Shield (+2 AC)</strong></span>
+                            </label>
+                            <div id="pc-builder-ac-formula-display" style="font-size:0.75rem; color:var(--color-text-secondary); font-family:monospace;">
+                                <i class="fa-solid fa-calculator"></i> <strong>Formula:</strong> ${builderState.acFormulaText} = <strong>${builderState.calculatedAc} AC</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Wire up event listeners
+            wireDashboardEvents();
+            updateCountsDisplay();
+        }
+
+        function wireDashboardEvents() {
+            // Proficiencies Select All / None
+            document.getElementById('pc-builder-prof-all')?.addEventListener('click', () => {
+                candidateProficiencies.forEach(p => { p.checked = true; });
+                bodyEl.querySelectorAll('.pc-builder-prof-chk').forEach(c => {
+                    c.checked = true;
+                    c.closest('.builder-badge-check')?.classList.add('is-checked');
+                });
+                updateCountsDisplay();
+            });
+            document.getElementById('pc-builder-prof-none')?.addEventListener('click', () => {
+                candidateProficiencies.forEach(p => { p.checked = false; });
+                bodyEl.querySelectorAll('.pc-builder-prof-chk').forEach(c => {
+                    c.checked = false;
+                    c.closest('.builder-badge-check')?.classList.remove('is-checked');
+                });
+                updateCountsDisplay();
+            });
+
+            bodyEl.querySelectorAll('.pc-builder-prof-chk').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const profId = e.target.dataset.profId;
+                    const p = candidateProficiencies.find(item => item.id === profId);
+                    if (p) p.checked = e.target.checked;
+                    e.target.closest('.builder-badge-check')?.classList.toggle('is-checked', e.target.checked);
+                    updateCountsDisplay();
+                });
+            });
+
+            // Class Skills Selection & Limit Enforcement
+            function updateClassSkillPills() {
+                const isMaxReached = selectedClassSkills.size >= classSkillLimit;
+                bodyEl.querySelectorAll('.pc-builder-class-skill-chk').forEach(chk => {
+                    const s = chk.dataset.skill;
+                    const isChecked = selectedClassSkills.has(s);
+                    chk.checked = isChecked;
+                    const parent = chk.closest('.builder-badge-check');
+                    if (parent) {
+                        parent.classList.toggle('is-checked', isChecked);
+                        if (!isChecked && isMaxReached) {
+                            chk.disabled = true;
+                            parent.classList.add('is-disabled');
+                        } else {
+                            chk.disabled = false;
+                            parent.classList.remove('is-disabled');
+                        }
+                    }
+                });
+                updateCountsDisplay();
+            }
+
+            bodyEl.querySelectorAll('.pc-builder-class-skill-chk').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const s = e.target.dataset.skill;
+                    if (e.target.checked) {
+                        if (selectedClassSkills.size < classSkillLimit) {
+                            selectedClassSkills.add(s);
+                        } else {
+                            e.target.checked = false;
+                        }
+                    } else {
+                        selectedClassSkills.delete(s);
+                    }
+                    updateClassSkillPills();
+                });
+            });
+
+            // Abilities Select All / None
+            document.getElementById('pc-builder-ab-all')?.addEventListener('click', () => {
+                allCandidateAbilities.forEach(a => { a.checked = true; });
+                bodyEl.querySelectorAll('.pc-builder-ab-chk').forEach(c => {
+                    c.checked = true;
+                    c.closest('.builder-item-row')?.classList.add('is-checked');
+                });
+                updateCountsDisplay();
+            });
+            document.getElementById('pc-builder-ab-none')?.addEventListener('click', () => {
+                allCandidateAbilities.forEach(a => { a.checked = false; });
+                bodyEl.querySelectorAll('.pc-builder-ab-chk').forEach(c => {
+                    c.checked = false;
+                    c.closest('.builder-item-row')?.classList.remove('is-checked');
+                });
+                updateCountsDisplay();
+            });
+
+            bodyEl.querySelectorAll('.pc-builder-ab-chk').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const idx = parseInt(e.target.dataset.idx);
+                    if (allCandidateAbilities[idx]) allCandidateAbilities[idx].checked = e.target.checked;
+                    e.target.closest('.builder-item-row')?.classList.toggle('is-checked', e.target.checked);
+                    updateCountsDisplay();
+                });
+            });
+
+            // Class Equipment Package Radio Changes
+            bodyEl.querySelectorAll('.pc-builder-cls-equip-radio').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const sIdx = parseInt(e.target.dataset.setIdx);
+                    if (classEquipChoiceSets[sIdx]) {
+                        classEquipChoiceSets[sIdx].selectedOption = e.target.value;
+                        // Re-render items container
+                        const resolvedItems = getResolvedClassItems();
+                        const allCurrentItems = [...candidateBgItems, ...resolvedItems];
+                        const container = document.getElementById('pc-builder-items-container');
+                        if (container) {
+                            container.innerHTML = allCurrentItems.length === 0 ? '<div style="color:var(--color-text-muted); font-size:0.8rem; padding:8px;">No starting items detected.</div>' : allCurrentItems.map(it => `
+                                <label class="builder-item-row ${it.checked ? 'is-checked' : ''}" style="cursor:pointer; margin:0;">
+                                    <input type="checkbox" class="pc-builder-it-chk" data-item-id="${it.id}" ${it.checked ? 'checked' : ''} style="margin-top:3px; accent-color:var(--color-gold-base);">
+                                    <div style="flex:1; display:flex; justify-content:space-between; align-items:center;">
+                                        <div>
+                                            <strong style="font-size:0.85rem; color:var(--color-text-primary);">${it.name}</strong>
+                                            ${it.qty > 1 ? `<span style="color:var(--color-gold-base); font-size:0.75rem; margin-left:4px;">&times;${it.qty}</span>` : ''}
+                                            <span style="font-size:0.7rem; background:rgba(255,255,255,0.06); padding:1px 6px; border-radius:4px; color:var(--color-text-muted); margin-left:6px;">${it.source}</span>
+                                        </div>
+                                        <div style="display:flex; align-items:center; gap:8px;">
+                                            ${it.weight ? `<span style="font-size:0.75rem; color:var(--color-text-muted);">${it.weight} lb</span>` : ''}
+                                            <span class="badge" style="font-size:0.7rem; padding:1px 6px; border-radius:4px; background:rgba(255,255,255,0.08); color:var(--color-text-secondary);">${it.type}</span>
+                                        </div>
+                                    </div>
+                                </label>
+                            `).join('');
+                            wireItemCheckboxes();
+                            updateCountsDisplay();
+                        }
+                    }
+                });
+            });
+
+            function wireItemCheckboxes() {
+                bodyEl.querySelectorAll('.pc-builder-it-chk').forEach(chk => {
+                    chk.addEventListener('change', (e) => {
+                        const itemId = e.target.dataset.itemId;
+                        const bgIt = candidateBgItems.find(i => i.id === itemId);
+                        if (bgIt) bgIt.checked = e.target.checked;
+                        const fixIt = classFixedItems.find(i => i.id === itemId);
+                        if (fixIt) fixIt.checked = e.target.checked;
+                        classEquipChoiceSets.forEach(s => {
+                            s.options.forEach(o => {
+                                o.items.forEach((p, pIdx) => {
+                                    if (`cls_opt_${s.groupIndex}_${pIdx}_` + p.name.replace(/\W+/g, '_') === itemId) {
+                                        p.checked = e.target.checked;
+                                    }
+                                });
+                            });
+                        });
+                        e.target.closest('.builder-item-row')?.classList.toggle('is-checked', e.target.checked);
+                        updateCountsDisplay();
+                    });
+                });
+            }
+            wireItemCheckboxes();
+
+            // Items Select All / None
+            document.getElementById('pc-builder-it-all')?.addEventListener('click', () => {
+                candidateBgItems.forEach(i => { i.checked = true; });
+                classFixedItems.forEach(i => { i.checked = true; });
+                classEquipChoiceSets.forEach(s => s.options.forEach(o => o.items.forEach(i => { i.checked = true; })));
+                bodyEl.querySelectorAll('.pc-builder-it-chk').forEach(c => {
+                    c.checked = true;
+                    c.closest('.builder-item-row')?.classList.add('is-checked');
+                });
+                updateCountsDisplay();
+            });
+            document.getElementById('pc-builder-it-none')?.addEventListener('click', () => {
+                candidateBgItems.forEach(i => { i.checked = false; });
+                classFixedItems.forEach(i => { i.checked = false; });
+                classEquipChoiceSets.forEach(s => s.options.forEach(o => o.items.forEach(i => { i.checked = false; })));
+                bodyEl.querySelectorAll('.pc-builder-it-chk').forEach(c => {
+                    c.checked = false;
+                    c.closest('.builder-item-row')?.classList.remove('is-checked');
+                });
+                updateCountsDisplay();
+            });
+
+            // Spells Select All / None per class
+            bodyEl.querySelectorAll('.pc-builder-sp-cls-all').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const clsIdx = parseInt(e.target.dataset.clsIdx);
+                    const sec = classSpellSections.find(s => s.classIdx === clsIdx);
+                    if (sec) {
+                        sec.spells.forEach(sp => { sp.checked = true; });
+                        bodyEl.querySelectorAll(`.pc-builder-sp-chk[data-cls-idx="${clsIdx}"]`).forEach(c => {
+                            c.checked = true;
+                            c.closest('tr')?.classList.add('is-checked');
+                        });
+                        updateCountsDisplay();
+                    }
+                });
+            });
+
+            bodyEl.querySelectorAll('.pc-builder-sp-cls-none').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const clsIdx = parseInt(e.target.dataset.clsIdx);
+                    const sec = classSpellSections.find(s => s.classIdx === clsIdx);
+                    if (sec) {
+                        sec.spells.forEach(sp => { sp.checked = false; });
+                        bodyEl.querySelectorAll(`.pc-builder-sp-chk[data-cls-idx="${clsIdx}"]`).forEach(c => {
+                            c.checked = false;
+                            c.closest('tr')?.classList.remove('is-checked');
+                        });
+                        updateCountsDisplay();
+                    }
+                });
+            });
+
+            // Live spell search per class
+            bodyEl.querySelectorAll('.pc-builder-spell-search').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const clsIdx = parseInt(e.target.dataset.clsIdx);
+                    const q = (e.target.value || '').toLowerCase().trim();
+                    const rows = bodyEl.querySelectorAll(`.builder-spell-tr[data-cls-idx="${clsIdx}"]`);
+                    rows.forEach(r => {
+                        const name = r.dataset.name || '';
+                        const school = r.dataset.school || '';
+                        const match = !q || name.includes(q) || school.includes(q);
+                        r.style.display = match ? '' : 'none';
+                    });
+                });
+            });
+
+            // Spell Table Row Click & Checkbox Handling
+            bodyEl.querySelectorAll('.builder-spell-tr').forEach(tr => {
+                tr.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'INPUT') return;
+                    const chk = tr.querySelector('.pc-builder-sp-chk');
+                    if (chk) {
+                        chk.checked = !chk.checked;
+                        chk.dispatchEvent(new Event('change'));
+                    }
+                });
+            });
+
+            bodyEl.querySelectorAll('.pc-builder-sp-chk').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const clsIdx = parseInt(e.target.dataset.clsIdx);
+                    const spId = e.target.dataset.spId;
+                    const sec = classSpellSections.find(s => s.classIdx === clsIdx);
+                    if (sec) {
+                        const sp = sec.spells.find(s => s.id === spId);
+                        if (sp) sp.checked = e.target.checked;
+                    }
+                    e.target.closest('tr')?.classList.toggle('is-checked', e.target.checked);
+                    updateCountsDisplay();
+                });
+            });
+
+            // ASI tier controls
+            asiTiers.forEach((tier, tIdx) => {
+                bodyEl.querySelectorAll(`input[name="pc-builder-asi-choice-${tIdx}"]`).forEach(r => {
+                    r.addEventListener('change', (e) => {
+                        tier.choice = e.target.value;
+                        const asiWrap = bodyEl.querySelector(`.pc-builder-asi-options-wrap[data-tier-idx="${tIdx}"]`);
+                        const featWrap = bodyEl.querySelector(`.pc-builder-feat-options-wrap[data-tier-idx="${tIdx}"]`);
+                        if (asiWrap) asiWrap.style.display = (tier.choice === 'asi') ? 'flex' : 'none';
+                        if (featWrap) featWrap.style.display = (tier.choice === 'feat') ? 'flex' : 'none';
+                    });
+                });
+
+                bodyEl.querySelectorAll(`input[name="pc-builder-asi-mode-${tIdx}"]`).forEach(r => {
+                    r.addEventListener('change', (e) => {
+                        tier.asiType = e.target.value;
+                        const stat2Wrap = bodyEl.querySelector(`.pc-builder-asi-stat2-wrap[data-tier-idx="${tIdx}"]`);
+                        if (stat2Wrap) stat2Wrap.style.display = (tier.asiType === 'split_1_1') ? 'block' : 'none';
+                    });
+                });
+
+                const stat1Sel = bodyEl.querySelector(`.pc-builder-asi-stat1[data-tier-idx="${tIdx}"]`);
+                stat1Sel?.addEventListener('change', (e) => { tier.stat1 = e.target.value; });
+
+                const stat2Sel = bodyEl.querySelector(`.pc-builder-asi-stat2[data-tier-idx="${tIdx}"]`);
+                stat2Sel?.addEventListener('change', (e) => { tier.stat2 = e.target.value; });
+
+                const over20Cb = bodyEl.querySelector(`.pc-builder-asi-over20[data-tier-idx="${tIdx}"]`);
+                over20Cb?.addEventListener('change', (e) => { tier.allowOver20 = e.target.checked; });
+
+                const featSel = bodyEl.querySelector(`.pc-builder-feat-sel[data-tier-idx="${tIdx}"]`);
+                featSel?.addEventListener('change', (e) => {
+                    tier.featName = e.target.value;
+                    const ft = catalogFeats.find(f => f.name === tier.featName);
+                    const prevEl = bodyEl.querySelector(`.pc-builder-feat-preview[data-tier-idx="${tIdx}"]`);
+                    if (prevEl && ft) {
+                        prevEl.innerText = `${ft.description ? ft.description.slice(0, 200) : ''}...`;
+                    }
+                });
+            });
+
+            // HP Mode Buttons
+            bodyEl.querySelectorAll('.builder-mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    bodyEl.querySelectorAll('.builder-mode-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    builderState.hpMode = btn.dataset.hpmode;
+                    runHpCalculation();
+                    document.getElementById('pc-builder-hp-preview').innerText = builderState.calculatedHp;
+                    document.getElementById('pc-builder-roll-log').innerHTML = renderHpBreakdownHtml();
+                    updateCountsDisplay();
+                });
+            });
+
+            // HP Scope Radios
+            bodyEl.querySelectorAll('input[name="pc-builder-hp-scope"]').forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    builderState.hpScope = e.target.value;
+                    const wrap = document.getElementById('pc-builder-new-levels-wrap');
+                    if (wrap) wrap.style.display = (builderState.hpScope === 'new_levels') ? 'flex' : 'none';
+                    runHpCalculation();
+                    document.getElementById('pc-builder-hp-preview').innerText = builderState.calculatedHp;
+                    document.getElementById('pc-builder-roll-log').innerHTML = renderHpBreakdownHtml();
+                    updateCountsDisplay();
+                });
+            });
+
+            // New levels input
+            document.getElementById('pc-builder-new-levels-input')?.addEventListener('input', (e) => {
+                builderState.hpNewLevelsCount = Math.max(1, parseInt(e.target.value) || 1);
+                runHpCalculation();
+                document.getElementById('pc-builder-hp-preview').innerText = builderState.calculatedHp;
+                document.getElementById('pc-builder-roll-log').innerHTML = renderHpBreakdownHtml();
+                updateCountsDisplay();
+            });
+
+            // Recalculate / Re-roll HP
+            document.getElementById('pc-builder-recalculate-hp')?.addEventListener('click', () => {
+                runHpCalculation();
+                document.getElementById('pc-builder-hp-preview').innerText = builderState.calculatedHp;
+                document.getElementById('pc-builder-roll-log').innerHTML = renderHpBreakdownHtml();
+                updateCountsDisplay();
+            });
+
+            // HP Chat Broadcast Checkbox
+            document.getElementById('pc-builder-hp-broadcast')?.addEventListener('change', (e) => {
+                builderState.hpChatBroadcast = e.target.checked;
+            });
+
+            // AC Armor Radios
+            bodyEl.querySelectorAll('input[name="pc-builder-active-armor"]').forEach(r => {
+                r.addEventListener('change', (e) => {
+                    builderState.activeArmorId = e.target.value;
+                    runAcCalculation();
+                    document.getElementById('pc-builder-preview-ac').innerText = builderState.calculatedAc;
+                    document.getElementById('pc-builder-ac-formula-display').innerHTML = `<i class="fa-solid fa-calculator"></i> <strong>Formula:</strong> ${builderState.acFormulaText} = <strong>${builderState.calculatedAc} AC</strong>`;
+                    updateCountsDisplay();
+                });
+            });
+
+            // AC Shield Checkbox
+            document.getElementById('pc-builder-shield-cb')?.addEventListener('change', (e) => {
+                builderState.shieldEnabled = e.target.checked;
+                runAcCalculation();
+                document.getElementById('pc-builder-preview-ac').innerText = builderState.calculatedAc;
+                document.getElementById('pc-builder-ac-formula-display').innerHTML = `<i class="fa-solid fa-calculator"></i> <strong>Formula:</strong> ${builderState.acFormulaText} = <strong>${builderState.calculatedAc} AC</strong>`;
+                updateCountsDisplay();
+            });
+        }
+
+        renderDashboard();
+
+        // Close / Cancel Handlers
+        const closeModal = () => {
+            modal.classList.add('vtt-hidden');
+            overlay.classList.add('vtt-hidden');
+            applyBtn.disabled = false;
+            applyBtn.innerHTML = '<i class="fa-solid fa-check-double"></i> Apply & Import to Character';
+        };
+        closeBtn.onclick = closeModal;
+        cancelBtn.onclick = closeModal;
+        overlay.onclick = closeModal;
+
+        // 13. Single-Click Apply & Import Execution
+        applyBtn.onclick = async () => {
+            applyBtn.disabled = true;
+            applyBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Applying Build...';
+
+            char.abilityCategories = char.abilityCategories || [];
+            char.abilityCards = char.abilityCards || [];
+            char.equipment = char.equipment || [];
+            char.spells = (typeof char.spells === 'object' && char.spells !== null && !Array.isArray(char.spells)) ? char.spells : {
+                cantrip: [], '1': [], '2': [], '3': [], '4': [], '5': [], '6': [], '7': [], '8': [], '9': []
+            };
+
+            // 1. Import Checked Abilities
+            const checkedAbilities = allCandidateAbilities.filter(a => a.checked);
+            checkedAbilities.forEach(ab => {
+                let catName = ab.category || 'Imported Features';
+                let existingCat = char.abilityCategories.find(c => c.name.toLowerCase() === catName.toLowerCase());
+                let catId = existingCat ? existingCat.id : null;
+                if (!catId) {
+                    catId = 'cat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+                    char.abilityCategories.push({
+                        id: catId,
+                        name: catName,
+                        collapsed: false
+                    });
+                }
+
+                const resolvedMax = ab.hasCounter ? evaluateAbilityMaxUses(ab.usesMax, char) : 0;
+                char.abilityCards.push({
+                    id: 'ab_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                    name: ab.name,
+                    actionType: ab.actionType || 'passive',
+                    categoryId: catId,
+                    description: ab.description || '',
+                    formula: ab.formula || '',
+                    formulaConfig: ab.formulaConfig || null,
+                    customFields: [],
+                    hasCounter: !!ab.hasCounter,
+                    usesCurrent: resolvedMax,
+                    usesMax: resolvedMax,
+                    resetType: ab.resetType || 'none'
+                });
+            });
+
+            // 2. Import Saving Throws & Proficiencies
+            char.saves = char.saves || {};
+            candidateProficiencies.forEach(p => {
+                if (p.type === 'save') {
+                    char.saves[p.stat] = !!p.checked;
+                }
+            });
+
+            char.proficiencies = char.proficiencies || { languages: '', weapons: '', armor: '', tools: '' };
+            const checkedArmorProfs = candidateProficiencies.filter(p => p.type === 'armor' && p.checked).map(p => p.label);
+            if (checkedArmorProfs.length > 0) {
+                char.proficiencies.armor = checkedArmorProfs.join(', ');
+            }
+
+            const checkedWeapProfs = candidateProficiencies.filter(p => p.type === 'weapon' && p.checked).map(p => p.label);
+            if (checkedWeapProfs.length > 0) {
+                char.proficiencies.weapons = checkedWeapProfs.join(', ');
+            }
+
+            // 3. Import Skills (Background + Chosen Class Skills)
+            char.skills = char.skills || {};
+            candidateBgSkills.forEach(s => {
+                char.skills[s] = true;
+            });
+            selectedClassSkills.forEach(s => {
+                char.skills[s] = true;
+            });
+
+            // 4. Import Tool Proficiencies from Background
+            char.tools = char.tools || {};
+            candidateBgTools.forEach(t => {
+                const defTool = STANDARD_TOOLS.find(st => st.name.toLowerCase() === t.toLowerCase());
+                const ab = defTool ? defTool.ability : 'dex';
+                char.tools[t] = {
+                    proficient: true,
+                    ability: ab,
+                    customBonus: 0
+                };
+            });
+            if (candidateBgTools.length > 0) {
+                const curTools = (char.proficiencies.tools || '').split(',').map(s => s.trim()).filter(Boolean);
+                candidateBgTools.forEach(t => {
+                    if (!curTools.some(ct => ct.toLowerCase() === t.toLowerCase())) curTools.push(t);
+                });
+                char.proficiencies.tools = curTools.join(', ');
+            }
+
+            // 5. Import Checked Items & Automatically Create Weapon Attack Macros
+            const resolvedClassItems = getResolvedClassItems();
+            const allCurrentItems = [...candidateBgItems, ...resolvedClassItems];
+            const checkedItems = allCurrentItems.filter(it => it.checked);
+
+            checkedItems.forEach(it => {
+                if (it.isGold) {
+                    char.currency = char.currency || { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 };
+                    char.currency.gp = (parseInt(char.currency.gp) || 0) + it.goldAmount;
+                    return;
+                }
+                const isEquippedArmor = (it.id === builderState.activeArmorId) || (it.name.toLowerCase() === builderState.activeArmorId.toLowerCase());
+                const isEquippedShield = builderState.shieldEnabled && (it.rawType === 'S' || it.name.toLowerCase().includes('shield'));
+                const newEq = {
+                    id: 'eq_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                    name: it.name,
+                    qty: it.qty || 1,
+                    weight: it.weight || 0,
+                    type: it.type || 'Gear',
+                    ac: it.ac || null,
+                    bonusAc: it.bonusAc || null,
+                    rawType: it.rawType || '',
+                    equipped: isEquippedArmor || isEquippedShield,
+                    description: it.description || '',
+                    containerId: null
+                };
+                char.equipment.push(newEq);
+
+                // Automatically generate weapon attack macro
+                const matchCat = catalogItems.find(ci => ci.name.toLowerCase() === it.name.toLowerCase());
+                generateWeaponMacro(char, newEq, matchCat);
+            });
+
+            // Update equipped state on existing inventory if chosen as active armor/shield
+            (char.equipment || []).forEach(eq => {
+                const isArmor = eq.isArmor || eq.ac || ['HA', 'MA', 'LA'].includes((eq.rawType || '').toUpperCase()) || (eq.type || '').toLowerCase().includes('armor');
+                const isShield = eq.rawType === 'S' || (eq.name || '').toLowerCase().includes('shield');
+                if (isArmor && !isShield) {
+                    if (eq.id === builderState.activeArmorId || eq.name.toLowerCase() === builderState.activeArmorId.toLowerCase()) {
+                        eq.equipped = true;
+                    } else if (builderState.activeArmorId !== 'none') {
+                        eq.equipped = false;
+                    }
+                }
+                if (isShield) {
+                    eq.equipped = builderState.shieldEnabled;
+                }
+            });
+
+            // 6. Import Checked Spells across all class spell sections
+            let importedSpellsCount = 0;
+            classSpellSections.forEach(sec => {
+                sec.spells.filter(sp => sp.checked).forEach(sp => {
+                    const spLvl = parseInt(sp.level) || 0;
+                    const lvlKey = spLvl === 0 ? 'cantrip' : String(spLvl);
+                    if (!char.spells[lvlKey]) char.spells[lvlKey] = [];
+                    if (!char.spells[lvlKey].some(s => (s.name || '').toLowerCase().trim() === sp.name.toLowerCase().trim())) {
+                        char.spells[lvlKey].push({
+                            name: sp.name,
+                            level: spLvl,
+                            school: sp.school || '',
+                            time: sp.time || '',
+                            range: sp.range || '',
+                            duration: sp.duration || '',
+                            description: sp.descriptionMarkdown || sp.description || ''
+                        });
+                        importedSpellsCount++;
+                    }
+                });
+            });
+
+            // 7. Apply Ability Score Improvements (ASI) & Feats
+            char.stats = char.stats || { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 };
+            asiTiers.forEach(tier => {
+                if (tier.choice === 'asi') {
+                    if (tier.asiType === 'single_2') {
+                        let cur = parseInt(char.stats[tier.stat1]) || 10;
+                        cur += 2;
+                        if (!tier.allowOver20) cur = Math.min(20, cur);
+                        char.stats[tier.stat1] = cur;
+                    } else {
+                        let cur1 = parseInt(char.stats[tier.stat1]) || 10;
+                        let cur2 = parseInt(char.stats[tier.stat2]) || 10;
+                        cur1 += 1;
+                        cur2 += 1;
+                        if (!tier.allowOver20) {
+                            cur1 = Math.min(20, cur1);
+                            cur2 = Math.min(20, cur2);
+                        }
+                        char.stats[tier.stat1] = cur1;
+                        char.stats[tier.stat2] = cur2;
+                    }
+                } else if (tier.choice === 'feat' && tier.featName) {
+                    const matchedFeat = catalogFeats.find(f => f.name === tier.featName);
+                    if (matchedFeat) {
+                        let featCat = char.abilityCategories.find(c => c.name.toLowerCase() === 'feats');
+                        if (!featCat) {
+                            featCat = {
+                                id: 'cat_feats_' + Date.now(),
+                                name: 'Feats',
+                                collapsed: false
+                            };
+                            char.abilityCategories.push(featCat);
+                        }
+                        if (!char.abilityCards.some(a => (a.name || '').toLowerCase().trim() === matchedFeat.name.toLowerCase().trim())) {
+                            char.abilityCards.push({
+                                id: 'feat_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                                name: matchedFeat.name,
+                                actionType: matchedFeat.actionType || 'passive',
+                                categoryId: featCat.id,
+                                description: matchedFeat.description || '',
+                                formula: matchedFeat.formula || '',
+                                formulaConfig: matchedFeat.formulaConfig || null,
+                                customFields: [],
+                                hasCounter: !!matchedFeat.hasCounter,
+                                usesCurrent: matchedFeat.usesMax || 0,
+                                usesMax: matchedFeat.usesMax || 0,
+                                resetType: matchedFeat.resetType || 'none'
+                            });
+                        }
+                    }
+                }
+            });
+
+            // 8. Apply HP and AC
+            const oldHp = char.hpMax || 0;
+            char.hpMax = builderState.calculatedHp;
+            if (char.hpCurrent === undefined || char.hpCurrent === null || char.hpCurrent === oldHp || char.hpCurrent === 0) {
+                char.hpCurrent = char.hpMax;
+            }
+            char.previousLevel = totalLevel;
+            char.ac = builderState.calculatedAc;
+
+            // 9. Broadcast HP Rolls to Chat if enabled
+            if (builderState.hpChatBroadcast && (builderState.hpMode === 'roll' || builderState.hpMode === 'roll_avg_min') && vtt.socket) {
+                let chatRollMsg = `🎲 **${char.name || 'Character'}** calculated HP via **${builderState.hpMode === 'roll' ? 'Hit Dice Roll' : 'Roll (Average Min)'}**:\n`;
+                if (builderState.hpScope === 'new_levels') {
+                    builderState.hpRolls.forEach(r => {
+                        chatRollMsg += `&bull; Level ${r.level}: [1d${r.hd} -> **${r.val}**] + CON (${r.con >= 0 ? `+${r.con}` : r.con}) = **+${r.total} HP**\n`;
+                    });
+                    chatRollMsg += `**New Max HP: ${char.hpMax}** (+${builderState.addedHp} HP gained)`;
+                } else {
+                    builderState.hpRolls.forEach(r => {
+                        if (r.isMax) chatRollMsg += `&bull; Level 1 (Max): ${r.val} + CON (${r.con >= 0 ? `+${r.con}` : r.con}) = **${r.total} HP**\n`;
+                        else chatRollMsg += `&bull; Level ${r.level}: [1d${r.hd} -> **${r.val}**] + CON (${r.con >= 0 ? `+${r.con}` : r.con}) = **${r.total} HP**\n`;
+                    });
+                    chatRollMsg += `**Total Max HP: ${char.hpMax}**`;
+                }
+                vtt.socket.emit('chat:msg', { text: chatRollMsg });
+            }
+
+            saveAndEmit(char);
+            renderSheetData(char);
+            closeModal();
+
+            if (typeof window.showToast === 'function') {
+                window.showToast(`Character updated! Imported ${checkedAbilities.length} abilities, ${checkedItems.length} items, and ${importedSpellsCount} spells.`);
+            }
+        };
+    }
+
     function renderSkillTogglesList() {
         const list = document.getElementById('modal-skill-toggles-list');
         if (!list) return;
+
         const char = currentChar;
         if (!char || !char.skillToggles) return;
 
@@ -3224,6 +5407,18 @@ function simulateRoll(formula, critRange = 20) {
         });
     }
 
+    // Helper to resolve active token image URL safely with fallbacks
+    function getPlayerActiveTokenUrl(c) {
+        if (!c) return 'favicon.svg';
+        if (Array.isArray(c.tokenImages) && c.tokenImages.length > 0) {
+            const idx = (typeof c.activeTokenIndex === 'number' && c.activeTokenIndex >= 0 && c.activeTokenIndex < c.tokenImages.length) ? c.activeTokenIndex : 0;
+            const raw = c.tokenImages[idx] || c.tokenImages[0];
+            const u = typeof raw === 'string' ? raw : (raw?.url || '');
+            if (u) return u;
+        }
+        return c.tokenImage || c.avatar || c.img || c.avatarUrl || (c.monsterData && typeof window.Renderer !== 'undefined' && window.Renderer.monster ? window.Renderer.monster.getTokenUrl(c.monsterData) : null) || 'favicon.svg';
+    }
+
     // Updates the 48px portrait circle beside the sheet name to show the correct media type
     function updateTokenPortrait(url) {
         const portrait = document.getElementById('pc-token-portrait');
@@ -3510,7 +5705,7 @@ function simulateRoll(formula, critRange = 20) {
                     // Usually we might not have a direct link if they just spawned it manually.
                     // But if we injected characterId, check it, else check name matching exactly.
                     if (t.characterId === currentChar.id || (t.isPlayer && t.name === currentChar.name)) {
-                        const activeImageUrl = (currentChar.tokenImages && currentChar.tokenImages.length > 0 && currentChar.activeTokenIndex >= 0 && currentChar.activeTokenIndex < currentChar.tokenImages.length) ? currentChar.tokenImages[currentChar.activeTokenIndex].url : 'favicon.svg';
+                        const activeImageUrl = getPlayerActiveTokenUrl(currentChar);
                         t.img = activeImageUrl;
                         t.size = currentChar.tokenSize;
                         t.sightRange = currentChar.tokenSight;
@@ -3559,7 +5754,7 @@ function simulateRoll(formula, critRange = 20) {
                 if (canvasUpdated) {
                     window.VTT.canvasEngine.setTokens(tokens); // this broadcasts token:update internally
                     if (window.VTT?.chatEngine?.updateCombatantTokenArt) {
-                        const activeImageUrl = (currentChar.tokenImages && currentChar.tokenImages.length > 0 && currentChar.activeTokenIndex >= 0 && currentChar.activeTokenIndex < currentChar.tokenImages.length) ? currentChar.tokenImages[currentChar.activeTokenIndex].url : 'favicon.svg';
+                        const activeImageUrl = getPlayerActiveTokenUrl(currentChar);
                         window.VTT.chatEngine.updateCombatantTokenArt(null, activeImageUrl, currentChar.id);
                     }
                 }
@@ -4861,6 +7056,7 @@ function simulateRoll(formula, critRange = 20) {
 
     // ─── Right Sidebar Character List ────────────────────────────────────────
     function renderCharacterList() {
+        if (!charListEl) return;
         if (!vtt.campaignState || !vtt.campaignState.characters) return;
         let chars = Object.values(vtt.campaignState.characters);
         
@@ -4964,7 +7160,8 @@ function simulateRoll(formula, critRange = 20) {
 
                 if (c.isCompanion && c.monsterData) {
                     // Extract size from bestiary
-                    const sz = c.monsterData.size ? (Array.isArray(c.monsterData.size) ? c.monsterData.size[0] : c.monsterData.size) : 'M';
+                    const rawSz = c.monsterData.size ? (Array.isArray(c.monsterData.size) ? c.monsterData.size[0] : c.monsterData.size) : 'M';
+                    const sz = String(rawSz).trim().charAt(0).toUpperCase();
                     switch (sz) {
                         case 'T': size = 0.5; break;
                         case 'S': size = 1; break;
@@ -5252,7 +7449,8 @@ function simulateRoll(formula, critRange = 20) {
                 tools: {},
                 tokenImages: [],
                 activeTokenIndex: 0,
-                assignedPlayers: assigned
+                assignedPlayers: assigned,
+                isPlayer: true
             };
             vtt.socket.emit('character:update', { character: newChar });
 
@@ -5475,15 +7673,15 @@ function simulateRoll(formula, critRange = 20) {
         char.globalAbilityMod = char.globalAbilityMod || "0";
         char.skillMods = char.skillMods || {};
         char.skillToggles = char.skillToggles || [];
-        char.tokenImages = char.tokenImages || [];
-        char.activeTokenIndex = char.activeTokenIndex || 0;
+        char.tokenImages = Array.isArray(char.tokenImages) ? char.tokenImages : (char.tokenImages ? [char.tokenImages] : []);
+        if (typeof char.activeTokenIndex !== 'number' || char.activeTokenIndex < 0 || (char.tokenImages.length > 0 && char.activeTokenIndex >= char.tokenImages.length)) {
+            char.activeTokenIndex = 0;
+        }
         char.proficiencies = char.proficiencies || { languages: '', weapons: '', armor: '' };
         char.inspiration = !!char.inspiration;
         char.heroPoints = typeof char.heroPoints === 'number' ? char.heroPoints : (parseInt(char.heroPoints) || 0);
 
-        const activeImageUrl = (char.tokenImages && char.tokenImages.length > 0 && char.activeTokenIndex < char.tokenImages.length)
-            ? char.tokenImages[char.activeTokenIndex].url
-            : 'favicon.svg';
+        const activeImageUrl = getPlayerActiveTokenUrl(char);
 
         const hdMax = {};
         if (char.classes && char.classes.length > 0) {
@@ -6142,7 +8340,14 @@ function simulateRoll(formula, critRange = 20) {
                 <label>Other Notes</label>
                 <textarea id="pc-bio-notes" class="scroll-styled" style="height:120px; resize:vertical; background:rgba(0,0,0,0.35); border:1px solid var(--color-border-subtle); color:var(--color-text-primary); padding:10px 14px; border-radius:6px; font-family:var(--font-primary); font-size:0.9rem; line-height:1.5;">${char.bio.notes}</textarea>
             </div>
-            <button id="pc-save-build" class="btn btn-primary btn-block mb-4 mt-2">Save Build & Info</button>
+            <div style="display:flex; gap:12px; margin-top:16px; margin-bottom:24px;">
+                <button id="pc-open-character-builder-btn" type="button" class="btn btn-primary" style="flex:1; padding:10px 16px; font-weight:600; display:inline-flex; align-items:center; justify-content:center; gap:8px; box-shadow:0 0 14px rgba(212,175,55,0.35);">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Build / Level Up
+                </button>
+                <button id="pc-save-build" type="button" class="btn btn-secondary" style="flex:1; padding:10px 16px; font-weight:600; display:inline-flex; align-items:center; justify-content:center; gap:8px;">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Edits
+                </button>
+            </div>
         `;
         document.getElementById('ps-build').innerHTML = buildHtml;
         
@@ -9596,38 +11801,22 @@ function simulateRoll(formula, critRange = 20) {
 
         document.getElementById('pc-save-build')?.addEventListener('click', () => {
             harvestBuildTab();
-            saveAndEmit(char); renderSheetData(char);
+            saveAndEmit(char);
+            renderSheetData(char);
+            if (typeof window.showToast === 'function') {
+                window.showToast('Character edits saved successfully.');
+            }
+        });
+
+        document.getElementById('pc-open-character-builder-btn')?.addEventListener('click', () => {
+            harvestBuildTab();
+            openCharacterBuilderModal(currentChar);
         });
 
         document.getElementById('pc-background')?.addEventListener('change', (e) => {
-            const val = e.target.value;
-            if (!val) return;
-            const openBgModal = (bgs) => {
-                const bg = (bgs || []).find(b => {
-                    const badge = getDisplaySourceBadge(b.source);
-                    const tag = badge ? ` [${badge}]` : (b.source ? ` [${b.source}]` : '');
-                    return `${b.name}${tag}` === val || `${b.name} [${b.source}]` === val || b.name === val || b.id === val;
-                });
-                if (bg) {
-                    promptBackgroundImportModal(bg, char, () => {
-                        const sel = document.getElementById('pc-background');
-                        if (sel) sel.value = char.background || '';
-                    });
-                }
-            };
-
-            if (builderCache && builderCache.bgs && builderCache.bgs.length > 0) {
-                openBgModal(builderCache.bgs);
-            } else {
-                fetch('data/backgrounds-catalog.json')
-                    .then(r => r.json())
-                    .then(data => openBgModal(Array.isArray(data) ? data : (data.background || [])))
-                    .catch(() => {
-                        fetch('data/backgrounds.json')
-                            .then(r => r.json())
-                            .then(data => openBgModal(Array.isArray(data) ? data : (data.background || [])));
-                    });
-            }
+            char.background = e.target.value || '';
+            harvestBuildTab();
+            saveAndEmit(char);
         });
 
         ['pc-sense-darkvision', 'pc-sense-devilsight', 'pc-sense-blindsight', 'pc-sense-truesight'].forEach(id => {
@@ -9938,6 +12127,9 @@ function simulateRoll(formula, critRange = 20) {
 
     function saveAndEmit(char) {
         if (!vtt.campaignState.characters) vtt.campaignState.characters = {};
+        if (char.isPlayer === undefined && !char.isCompanion && !char.isCustomNpc) {
+            char.isPlayer = true;
+        }
         vtt.campaignState.characters[char.id] = char;
         vtt.socket.emit('character:update', { character: char });
         renderCharacterList();
@@ -9973,7 +12165,32 @@ function simulateRoll(formula, critRange = 20) {
         }
     }
 
+    // Live update of character sheet HP when damage/healing occurs on map canvas
+    function syncLiveHp(charId, hpCurrent, hpMax, tempHp) {
+        if (!currentChar || currentChar.id !== charId) return;
+        currentChar.hpCurrent = hpCurrent;
+        if (hpMax !== undefined) currentChar.hpMax = hpMax;
+        if (tempHp !== undefined) currentChar.tempHp = tempHp;
 
+        const hpInput = document.getElementById('pc-hp-current-input');
+        if (hpInput && document.activeElement !== hpInput) {
+            hpInput.value = hpCurrent;
+        }
+
+        const hpBar = document.getElementById('pc-hp-bar');
+        if (hpBar && currentChar.hpMax > 0) {
+            hpBar.style.width = `${Math.round(hpCurrent / currentChar.hpMax * 100)}%`;
+        }
+
+        const tempInput = document.getElementById('pc-temp-hp-current');
+        if (tempInput && document.activeElement !== tempInput) {
+            tempInput.value = tempHp || 0;
+        }
+
+        if (window.VTT?.mobileAdapter?.syncPlayerSheetTopbar) {
+            window.VTT.mobileAdapter.syncPlayerSheetTopbar();
+        }
+    }
 
     // ─── Socket listeners for multiplayer sync ────────────────────────────────
     if (vtt.socket) {
@@ -10233,9 +12450,7 @@ function simulateRoll(formula, critRange = 20) {
     contentEl.addEventListener('dragstart', (e) => {
         const tokenPortrait = e.target.closest('#pc-token-portrait');
         if (tokenPortrait && currentChar) {
-            const activeImageUrl = (currentChar.tokenImages && currentChar.tokenImages.length > 0 && currentChar.activeTokenIndex >= 0 && currentChar.activeTokenIndex < currentChar.tokenImages.length)
-                ? currentChar.tokenImages[currentChar.activeTokenIndex].url
-                : (currentChar.monsterData && typeof window.Renderer !== 'undefined' && window.Renderer.monster ? window.Renderer.monster.getTokenUrl(currentChar.monsterData) : 'favicon.svg');
+            const activeImageUrl = getPlayerActiveTokenUrl(currentChar);
             const auras = (currentChar.tokenAuras || []).map(a => { const { isExpanded, ...clean } = a; return clean; });
 
             e.dataTransfer.setData('application/json', JSON.stringify({
@@ -10362,6 +12577,7 @@ function simulateRoll(formula, critRange = 20) {
         openPanel,
         minimizePanel,
         closeSheet,
-        getCurrentChar: () => currentChar
+        getCurrentChar: () => currentChar,
+        syncLiveHp
     };
 }

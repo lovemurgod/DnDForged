@@ -934,6 +934,9 @@ Renderer.dice = class {
 					<li>Maximize dice; <span class="out-roll-item-code">dmax(8d6)</span></li>
 					<li>Minimize dice; <span class="out-roll-item-code">dmin(8d6)</span></li>
 
+					<li>Minimum die floor (e.g. Elemental Adept); <span class="out-roll-item-code">8d6min2</span></li>
+					<li>Maximum die ceiling; <span class="out-roll-item-code">8d6max5</span></li>
+
 					<li>Other functions; <span class="out-roll-item-code">sign(1d6-3)</span>, <span class="out-roll-item-code">abs(1d6-3)</span>, ...etc.</li>
 				</ul>
 				Up and down arrow keys cycle input history.<br>
@@ -1287,8 +1290,28 @@ Renderer.dice.lang = class {
 			case "random": self.tokenStack.push(Renderer.dice.tk.RANDOM); break;
 			case "trunc": self.tokenStack.push(Renderer.dice.tk.TRUNC); break;
 			case "pow": self.tokenStack.push(Renderer.dice.tk.POW); break;
-			case "max": self.tokenStack.push(Renderer.dice.tk.MAX); break;
-			case "min": self.tokenStack.push(Renderer.dice.tk.MIN); break;
+			case "max": {
+				const prevTk = self.tokenStack[self.tokenStack.length - 1];
+				if (prevTk && (prevTk.type === Renderer.dice.tk.TYP_NUMBER || prevTk.opts?.isDiceModifier || prevTk.type === Renderer.dice.tk.PAREN_CLOSE)) {
+					self.tokenStack.push(Renderer.dice.tk.DICE_MAX);
+				} else {
+					self.tokenStack.push(Renderer.dice.tk.MAX);
+				}
+				break;
+			}
+			case "max>": self.tokenStack.push(Renderer.dice.tk.DICE_MAX_GT); break;
+			case "max>=": self.tokenStack.push(Renderer.dice.tk.DICE_MAX_GTEQ); break;
+			case "min": {
+				const prevTk = self.tokenStack[self.tokenStack.length - 1];
+				if (prevTk && (prevTk.type === Renderer.dice.tk.TYP_NUMBER || prevTk.opts?.isDiceModifier || prevTk.type === Renderer.dice.tk.PAREN_CLOSE)) {
+					self.tokenStack.push(Renderer.dice.tk.DICE_MIN);
+				} else {
+					self.tokenStack.push(Renderer.dice.tk.MIN);
+				}
+				break;
+			}
+			case "min<": self.tokenStack.push(Renderer.dice.tk.DICE_MIN_LT); break;
+			case "min<=": self.tokenStack.push(Renderer.dice.tk.DICE_MIN_LTEQ); break;
 			case "d": self.tokenStack.push(Renderer.dice.tk.DICE); break;
 			case "dh": self.tokenStack.push(Renderer.dice.tk.DROP_HIGHEST); break;
 			case "kh":
@@ -1588,6 +1611,12 @@ Renderer.dice.lang = class {
 			|| this._parse3_match(self, Renderer.dice.tk.MARGIN_SUCCESS_GTEQ)
 			|| this._parse3_match(self, Renderer.dice.tk.MARGIN_SUCCESS_LT)
 			|| this._parse3_match(self, Renderer.dice.tk.MARGIN_SUCCESS_LTEQ)
+			|| this._parse3_match(self, Renderer.dice.tk.DICE_MIN)
+			|| this._parse3_match(self, Renderer.dice.tk.DICE_MIN_LT)
+			|| this._parse3_match(self, Renderer.dice.tk.DICE_MIN_LTEQ)
+			|| this._parse3_match(self, Renderer.dice.tk.DICE_MAX)
+			|| this._parse3_match(self, Renderer.dice.tk.DICE_MAX_GT)
+			|| this._parse3_match(self, Renderer.dice.tk.DICE_MAX_GTEQ)
 		) {
 			const nxtSym = this._parse3_nextSym(self);
 			const nxtFactor = this._parse3__dice_modifiers_nxtFactor(self, nxtSym);
@@ -1775,6 +1804,12 @@ Renderer.dice.tk.MARGIN_SUCCESS_GT = Renderer.dice.tk._new("MARGIN_SUCCESS_GT", 
 Renderer.dice.tk.MARGIN_SUCCESS_GTEQ = Renderer.dice.tk._new("MARGIN_SUCCESS_GTEQ", "ms>=", {isDiceModifier: true});
 Renderer.dice.tk.MARGIN_SUCCESS_LT = Renderer.dice.tk._new("MARGIN_SUCCESS_LT", "ms<", {isDiceModifier: true});
 Renderer.dice.tk.MARGIN_SUCCESS_LTEQ = Renderer.dice.tk._new("MARGIN_SUCCESS_LTEQ", "ms<=", {isDiceModifier: true});
+Renderer.dice.tk.DICE_MIN = Renderer.dice.tk._new("DICE_MIN", "min", {isDiceModifier: true});
+Renderer.dice.tk.DICE_MIN_LT = Renderer.dice.tk._new("DICE_MIN_LT", "min<", {isDiceModifier: true});
+Renderer.dice.tk.DICE_MIN_LTEQ = Renderer.dice.tk._new("DICE_MIN_LTEQ", "min<=", {isDiceModifier: true});
+Renderer.dice.tk.DICE_MAX = Renderer.dice.tk._new("DICE_MAX", "max", {isDiceModifier: true});
+Renderer.dice.tk.DICE_MAX_GT = Renderer.dice.tk._new("DICE_MAX_GT", "max>", {isDiceModifier: true});
+Renderer.dice.tk.DICE_MAX_GTEQ = Renderer.dice.tk._new("DICE_MAX_GTEQ", "max>=", {isDiceModifier: true});
 
 Renderer.dice.AbstractSymbol = class {
 	constructor () { this.type = Renderer.dice.tk.TYP_SYMBOL; }
@@ -2080,6 +2115,34 @@ Renderer.dice.parsed = class {
 					break;
 				}
 
+				case Renderer.dice.tk.DICE_MIN.type:
+				case Renderer.dice.tk.DICE_MIN_LT.type:
+				case Renderer.dice.tk.DICE_MIN_LTEQ.type: {
+					valsAlive.forEach(val => {
+						if (val.val < modNum) {
+							val.originalVal = val.val;
+							val.val = modNum;
+							val.isClamped = true;
+							val.isMinClamped = true;
+						}
+					});
+					break;
+				}
+
+				case Renderer.dice.tk.DICE_MAX.type:
+				case Renderer.dice.tk.DICE_MAX_GT.type:
+				case Renderer.dice.tk.DICE_MAX_GTEQ.type: {
+					valsAlive.forEach(val => {
+						if (val.val > modNum) {
+							val.originalVal = val.val;
+							val.val = modNum;
+							val.isClamped = true;
+							val.isMaxClamped = true;
+						}
+					});
+					break;
+				}
+
 				default: throw new Error(`Unimplemented!`);
 			}
 		}
@@ -2088,6 +2151,11 @@ Renderer.dice.parsed = class {
 	}
 
 	static _rollToNumPart_html (r, faces) {
+		if (r.isClamped) {
+			const origNumPart = (faces != null && r.originalVal === 1) ? `<span class="rll__min--muted">${r.originalVal}</span>` : (faces != null && r.originalVal === faces ? `<span class="rll__max--muted">${r.originalVal}</span>` : r.originalVal);
+			const newNumPart = (faces != null && r.val === faces) ? `<span class="rll__max--muted">${r.val}</span>` : r.val;
+			return `<span class="rll__clamped" title="Value adjusted: ${r.originalVal} &rarr; ${r.val}"><span class="rll__dropped">${origNumPart}</span>&rarr;${newNumPart}</span>`;
+		}
 		if (faces == null) return r.val;
 		if (r.isCritSuccess != null) return r.isCritSuccess ? `<span class="rll__max--muted">${r.val}</span>` : (r.isCritFumble ? `<span class="rll__min--muted">${r.val}</span>` : r.val);
 		return r.val === faces ? `<span class="rll__max--muted">${r.val}</span>` : r.val === 1 ? `<span class="rll__min--muted">${r.val}</span>` : r.val;
@@ -2396,9 +2464,10 @@ Renderer.dice.parsed = class {
 					else return `[${numPart}]`;
 				}).join("+");
 
-				const asText = displayRolls.map(r => `[${r.val}]`).join("+");
+				const asText = displayRolls.map(r => r.isClamped ? `[${r.originalVal}->${r.val}]` : `[${r.val}]`).join("+");
 
 				const asMd = displayRolls.map(r => {
+					if (r.isClamped) return `~~[${r.originalVal}]~~[${r.val}]`;
 					if (r.isDropped) return `~~[${r.val}]~~`;
 					else if (r.isExploded) return `_[${r.val}]_`;
 					else if (r.isSuccess) return `**[${r.val}]**`;

@@ -69,13 +69,16 @@ export function initVttDataBridge(vtt) {
     loadBestiaryData();
     initSidebarResizer();
 
-    async function loadBestiaryData() {
+    async function loadBestiaryData(explicitCampId = null) {
         try {
             listContainer.innerHTML = '<div class="text-muted p-3"><i class="fa-solid fa-spinner fa-spin"></i> Loading normalized bestiary catalog...</div>';
             
-            let catalogRes = await fetch('/api/bestiary/catalog');
+            const campId = explicitCampId || window.VTT?.campaignId || window.VTT?.campaignState?.id || (new URLSearchParams(window.location.search)).get('campaignId') || (new URLSearchParams(window.location.search)).get('campaign') || '';
+            const qs = campId ? `?campaignId=${encodeURIComponent(campId)}&_t=${Date.now()}` : `?_t=${Date.now()}`;
+
+            let catalogRes = await fetch(`/api/bestiary/catalog${qs}`);
             if (!catalogRes.ok) {
-                catalogRes = await fetch('/data/bestiary-catalog.json');
+                catalogRes = await fetch(`/data/bestiary-catalog.json${qs}`);
             }
             if (!catalogRes.ok) throw new Error('Could not load bestiary catalog');
             
@@ -88,6 +91,7 @@ export function initVttDataBridge(vtt) {
             listContainer.innerHTML = '<div class="text-danger p-3"><i class="fa-solid fa-triangle-exclamation"></i> Error accessing bestiary library.</div>';
         }
     }
+    window.loadBestiaryData = loadBestiaryData;
 
     function sortMonsters(list) {
         return list.slice().sort((a, b) => {
@@ -638,8 +642,9 @@ export function initVttDataBridge(vtt) {
     // Translate 5etools sizes (S, M, L, H, G) to grid square sizes
     function translateSizeCategory(sizeLetter) {
         if (!sizeLetter) return 1;
-        const letter = Array.isArray(sizeLetter) ? sizeLetter[0] : sizeLetter;
-        switch(letter.toUpperCase()) {
+        const raw = Array.isArray(sizeLetter) ? sizeLetter[0] : sizeLetter;
+        const letter = String(raw).trim().charAt(0).toUpperCase();
+        switch(letter) {
             case 'T': return 1; // Tiny
             case 'S': return 1; // Small
             case 'M': return 1; // Medium
@@ -1774,10 +1779,11 @@ export function initVttDataBridge(vtt) {
         vtt.socket.on('sources:updated', () => {
             console.log('[VTT] Received database sources update, reloading compendium...');
             creatureCache.clear();
-            loadBestiaryData();
+            const activeCampId = window.VTT?.campaignId || window.VTT?.campaignState?.id || null;
+            loadBestiaryData(activeCampId);
             if (window.VTTSpellManager?.invalidateSpellCache) {
                 window.VTTSpellManager.invalidateSpellCache();
-                window.VTTSpellManager.loadSpells?.();
+                window.VTTSpellManager.loadSpells?.(activeCampId);
             }
             if (window.VTT?.toast) {
                 window.VTT.toast('📚 Database sources updated');
