@@ -15,12 +15,16 @@
     "build:compendium": "node scripts/build-compendium-db.mjs",
     "build:handouts": "node scripts/build-handout-db.mjs",
     "build:dbs": "node scripts/build-spell-db.mjs && node scripts/build-creature-db.mjs && node scripts/build-item-db.mjs && node scripts/build-compendium-db.mjs && node scripts/build-handout-db.mjs",
+    "build:srd": "node scripts/build-srd-db.mjs",
+    "release:stage": "node scripts/prepare-clean-release.mjs",
     "sync:content": "node scripts/sync-partnered-brew.mjs",
     "sync:partnered": "node scripts/sync-partnered-brew.mjs --partnered-only",
     "app": "electron .",
     "push": "electron-builder --dir",
-    "dist": "electron-builder",
-    "dist:portable": "electron-builder --win portable"
+    "dist": "node scripts/prepare-clean-release.mjs && electron-builder --config electron-builder-srd.json",
+    "dist:portable": "node scripts/prepare-clean-release.mjs && electron-builder --config electron-builder-srd.json --win portable",
+    "dist:full": "electron-builder",
+    "dist:full:portable": "electron-builder --win portable"
   },
   "dependencies": {
     "cors": "^2.8.5",

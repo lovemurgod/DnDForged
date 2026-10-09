@@ -7,6 +7,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.join(__dirname, '..');
 
+const isSrdOnly = process.argv.includes('--srd-only');
+const outArgIdx = process.argv.indexOf('--out');
+const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
+    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+    : path.join(rootDir, '5etools-src', 'data');
+
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 
 function cleanTags(text) {
@@ -470,13 +476,18 @@ function buildRaces() {
     if (!fs.existsSync(racesFile)) return;
 
     const data = JSON.parse(fs.readFileSync(racesFile, 'utf8'));
-    const rawList = [...(data.race || []), ...getBrewEntities('race')];
-    const rawSubList = [...(data.subrace || []), ...getBrewEntities('subrace')];
+    const rawList = [...(data.race || []), ...(isSrdOnly ? [] : getBrewEntities('race'))];
+    const rawSubList = [...(data.subrace || []), ...(isSrdOnly ? [] : getBrewEntities('subrace'))];
     const allRaces = [];
     const seen = new Set();
 
     // 1. Unpack traits on all primary races and store back in data.race
     for (const r of rawList) {
+        if (isSrdOnly) {
+            const isSrd = r.srd !== undefined || r.srd52 !== undefined;
+            if (!isSrd) continue;
+        }
+
         const name = (r.name || '').trim();
         const source = (r.source || 'PHB').trim();
         if (!name) continue;
@@ -514,6 +525,11 @@ function buildRaces() {
 
     // 2. Unpack traits on all subraces and combine with base race traits
     for (const s of rawSubList) {
+        if (isSrdOnly) {
+            const isSrd = s.srd !== undefined || s.srd52 !== undefined;
+            if (!isSrd) continue;
+        }
+
         const subName = (s.name || '').trim();
         const raceName = (s.raceName || '').trim();
         const source = (s.source || 'PHB').trim();
@@ -569,11 +585,16 @@ function buildRaces() {
     }
 
     // Save enriched data back to races.json
-    fs.writeFileSync(racesFile, JSON.stringify(data, null, 2), 'utf8');
+    if (!isSrdOnly) {
+        fs.writeFileSync(racesFile, JSON.stringify(data, null, 2), 'utf8');
+    }
 
     allRaces.sort((a, b) => a.name.localeCompare(b.name));
 
     // Catalog with pre-unpacked traits and descriptions
+    if (!fs.existsSync(targetDataDir)) {
+        fs.mkdirSync(targetDataDir, { recursive: true });
+    }
     const catalog = allRaces.map(r => ({ 
         id: r.id, 
         name: r.name, 
@@ -584,10 +605,10 @@ function buildRaces() {
         traits: r.traits,
         description: r.description
     }));
-    fs.writeFileSync(path.join(dataDir, 'races-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
+    fs.writeFileSync(path.join(targetDataDir, 'races-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
 
     // Partitions
-    const partDir = path.join(dataDir, 'races-normalized');
+    const partDir = path.join(targetDataDir, 'races-normalized');
     if (!fs.existsSync(partDir)) fs.mkdirSync(partDir, { recursive: true });
 
     const grouped = new Map();
@@ -609,11 +630,16 @@ function buildFeats() {
     if (!fs.existsSync(featsFile)) return;
 
     const data = JSON.parse(fs.readFileSync(featsFile, 'utf8'));
-    const rawList = [...(data.feat || []), ...getBrewEntities('feat')];
+    const rawList = [...(data.feat || []), ...(isSrdOnly ? [] : getBrewEntities('feat'))];
     const allFeats = [];
     const seen = new Set();
 
     for (const f of rawList) {
+        if (isSrdOnly) {
+            const isSrd = f.srd !== undefined || f.srd52 !== undefined;
+            if (!isSrd) continue;
+        }
+
         const name = (f.name || '').trim();
         const source = (f.source || 'PHB').trim();
         if (!name) continue;
@@ -687,10 +713,10 @@ function buildFeats() {
         formula: f.formula,
         formulaConfig: f.formulaConfig
     }));
-    fs.writeFileSync(path.join(dataDir, 'feats-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
+    fs.writeFileSync(path.join(targetDataDir, 'feats-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
 
     // Partitions
-    const partDir = path.join(dataDir, 'feats-normalized');
+    const partDir = path.join(targetDataDir, 'feats-normalized');
     if (!fs.existsSync(partDir)) fs.mkdirSync(partDir, { recursive: true });
 
     const grouped = new Map();
@@ -928,11 +954,16 @@ function buildBackgrounds() {
     if (!fs.existsSync(bgFile)) return;
 
     const data = JSON.parse(fs.readFileSync(bgFile, 'utf8'));
-    const rawList = [...(data.background || []), ...getBrewEntities('background')];
+    const rawList = [...(data.background || []), ...(isSrdOnly ? [] : getBrewEntities('background'))];
     const allBg = [];
     const seen = new Set();
 
     for (const b of rawList) {
+        if (isSrdOnly) {
+            const isSrd = b.srd !== undefined || b.srd52 !== undefined;
+            if (!isSrd) continue;
+        }
+
         const name = (b.name || '').trim();
         const source = (b.source || 'PHB').trim();
         if (!name) continue;
@@ -1025,10 +1056,10 @@ function buildBackgrounds() {
         formula: b.formula,
         formulaConfig: b.formulaConfig
     }));
-    fs.writeFileSync(path.join(dataDir, 'backgrounds-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
+    fs.writeFileSync(path.join(targetDataDir, 'backgrounds-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
 
     // Partitions
-    const partDir = path.join(dataDir, 'backgrounds-normalized');
+    const partDir = path.join(targetDataDir, 'backgrounds-normalized');
     if (!fs.existsSync(partDir)) fs.mkdirSync(partDir, { recursive: true });
 
     const grouped = new Map();
@@ -1096,7 +1127,7 @@ function buildClasses() {
             if (data.class) rawClasses.push(...data.class);
             if (data.subclass) rawSubclasses.push(...data.subclass);
 
-            if (modified) {
+            if (modified && !isSrdOnly) {
                 fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
             }
         } catch (e) {
@@ -1105,7 +1136,7 @@ function buildClasses() {
     }
 
     // Ingest Partnered and UA classes, subclasses, and features
-    const brewClassFeatures = getBrewEntities('classFeature');
+    const brewClassFeatures = isSrdOnly ? [] : getBrewEntities('classFeature');
     brewClassFeatures.forEach(cf => {
         const plainText = extractPlainText(cf.entries);
         cf.actionType = detectActionType(plainText, cf.name);
@@ -1119,7 +1150,7 @@ function buildClasses() {
     });
     rawClassFeatures.push(...brewClassFeatures);
 
-    const brewSubclassFeatures = getBrewEntities('subclassFeature');
+    const brewSubclassFeatures = isSrdOnly ? [] : getBrewEntities('subclassFeature');
     brewSubclassFeatures.forEach(sf => {
         const plainText = extractPlainText(sf.entries);
         sf.actionType = detectActionType(plainText, sf.name);
@@ -1133,8 +1164,10 @@ function buildClasses() {
     });
     rawSubclassFeatures.push(...brewSubclassFeatures);
 
-    rawClasses.push(...getBrewEntities('class'));
-    rawSubclasses.push(...getBrewEntities('subclass'));
+    if (!isSrdOnly) {
+        rawClasses.push(...getBrewEntities('class'));
+        rawSubclasses.push(...getBrewEntities('subclass'));
+    }
 
     console.log(`Loaded ${rawClasses.length} classes, ${rawSubclasses.length} subclasses, ${rawClassFeatures.length} class features, ${rawSubclassFeatures.length} subclass features.`);
 
@@ -1239,6 +1272,11 @@ function buildClasses() {
     const seen = new Set();
 
     for (const c of rawClasses) {
+        if (isSrdOnly) {
+            const isSrd = c.srd !== undefined || c.srd52 !== undefined;
+            if (!isSrd) continue;
+        }
+
         const name = (c.name || '').trim();
         const source = (c.source || 'PHB').trim();
         if (!name) continue;
@@ -1257,7 +1295,8 @@ function buildClasses() {
         // Get subclasses for this class and deduplicate by name (prefer native source or higher feature count)
         const rawClassSubclasses = processedSubclasses.filter(sc =>
             (sc.className || '').toLowerCase() === name.toLowerCase() &&
-            (sc.classSource || '').toLowerCase() === source.toLowerCase()
+            (sc.classSource || '').toLowerCase() === source.toLowerCase() &&
+            (!isSrdOnly || (sc.srd !== undefined || sc.srd52 !== undefined))
         );
 
         const scByName = new Map();
@@ -1308,10 +1347,10 @@ function buildClasses() {
             featuresCount: s.features.length
         }))
     }));
-    fs.writeFileSync(path.join(dataDir, 'classes-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
+    fs.writeFileSync(path.join(targetDataDir, 'classes-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
 
     // Partitions
-    const partDir = path.join(dataDir, 'classes-normalized');
+    const partDir = path.join(targetDataDir, 'classes-normalized');
     if (!fs.existsSync(partDir)) fs.mkdirSync(partDir, { recursive: true });
 
     const grouped = new Map();

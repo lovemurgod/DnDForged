@@ -106,10 +106,12 @@ npm run dist
 
 ---
 
-## 📄 License & Legal Disclaimer
+## 📄 License & Legal Compliance
 
-### Ownership & Copyright
-Copyright (c) 2026. All Rights Reserved.
+### Open Game Content & Attribution
+This repository distributes **only public-distribution-friendly content** from the **System Reference Document 5.1 ("SRD 5.1")** under the **Creative Commons Attribution 4.0 International License (CC-BY-4.0)** and the **D&D 2024 Free Rules (SRD 5.2)**.
+
+For full legal notices, official Wizards of the Coast attribution notices, and asset licensing details, see [LEGAL.md](LEGAL.md).
 
 ### Fan Content Disclaimer
-ForgeDVTT is unofficial Fan Content permitted under the Wizards of the Coast Fan Content Policy. Portions of the materials used are property of Wizards of the Coast. (c)Wizards of the Coast LLC.
+ForgeDVTT is unofficial Fan Content permitted under the Wizards of the Coast Fan Content Policy. Portions of the materials used are property of Wizards of the Coast LLC. © Wizards of the Coast LLC.

@@ -7,14 +7,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.join(__dirname, '..');
 
+const isSrdOnly = process.argv.includes('--srd-only');
+const outArgIdx = process.argv.indexOf('--out');
+const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
+    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+    : path.join(rootDir, '5etools-src', 'data');
+
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 const itemsFile = path.join(dataDir, 'items.json');
 const baseItemsFile = path.join(dataDir, 'items-base.json');
 const magicVariantsFile = path.join(dataDir, 'magicvariants.json');
 const fluffFile = path.join(dataDir, 'fluff-items.json');
 
-const catalogPath = path.join(dataDir, 'items-catalog.json');
-const partitionsDir = path.join(dataDir, 'items-normalized');
+const catalogPath = path.join(targetDataDir, 'items-catalog.json');
+const partitionsDir = path.join(targetDataDir, 'items-normalized');
 
 const ITEM_TYPE_MAP = {
     'M': 'Melee Weapon',
@@ -327,7 +333,15 @@ export function buildItemsDatabase() {
         return val || null;
     }
 
+    const SRD_ITEM_SOURCES = new Set(['DMG', 'XDMG', 'PHB', 'XPHB', 'MM', 'XMM']);
     function processItem(it) {
+        if (!it) return;
+        if (isSrdOnly) {
+            const srcUpper = (it.source || 'PHB').trim().toUpperCase();
+            if (!SRD_ITEM_SOURCES.has(srcUpper)) return;
+            const isSrd = it.srd !== undefined || it.srd52 !== undefined;
+            if (!isSrd) return;
+        }
         const name = (it.name || '').trim();
         const source = (it.source || 'PHB').trim();
         if (!name) return;
@@ -538,7 +552,7 @@ export function buildItemsDatabase() {
         baseItems.forEach(it => processItem(it));
     }
 
-    const brewBaseItems = getBrewEntities('baseitem');
+    const brewBaseItems = isSrdOnly ? [] : getBrewEntities('baseitem');
     brewBaseItems.forEach(it => {
         baseItems.push(it);
         processItem(it);
@@ -550,20 +564,27 @@ export function buildItemsDatabase() {
         (itemsData.itemGroup || []).forEach(it => processItem(it));
     }
 
-    const brewItems = getBrewEntities('item');
+    const brewItems = isSrdOnly ? [] : getBrewEntities('item');
     brewItems.forEach(it => processItem(it));
 
-    const brewItemGroups = getBrewEntities('itemGroup');
+    const brewItemGroups = isSrdOnly ? [] : getBrewEntities('itemGroup');
     brewItemGroups.forEach(it => processItem(it));
 
     // ─── Expand Magic Variants into standalone entries ───────────────────────
     if (fs.existsSync(magicVariantsFile) && baseItems.length > 0) {
         console.log('✨ Expanding magic item variants...');
         const variantData = JSON.parse(fs.readFileSync(magicVariantsFile, 'utf8'));
-        const variants = [...(variantData.magicvariant || []), ...getBrewEntities('magicvariant')];
+        const variants = [...(variantData.magicvariant || []), ...(isSrdOnly ? [] : getBrewEntities('magicvariant'))];
 
         let variantCount = 0;
         for (const variant of variants) {
+            if (isSrdOnly) {
+                const varSrcUpper = (variant.source || variant.inherits?.source || 'DMG').trim().toUpperCase();
+                if (!SRD_ITEM_SOURCES.has(varSrcUpper)) continue;
+                const isSrdVar = variant.srd !== undefined || variant.srd52 !== undefined;
+                if (!isSrdVar) continue;
+            }
+
             const rawReqs = variant.requires || [];
             const reqs = Array.isArray(rawReqs) ? rawReqs : (rawReqs ? [rawReqs] : []);
             if (!reqs.length) continue;
@@ -573,6 +594,11 @@ export function buildItemsDatabase() {
             const inherits = variant.inherits || {};
 
             const matchingBases = baseItems.filter(base => {
+                if (isSrdOnly) {
+                    const baseSrcUpper = (base.source || 'PHB').trim().toUpperCase();
+                    if (!SRD_ITEM_SOURCES.has(baseSrcUpper)) return false;
+                    if (base.srd === undefined && base.srd52 === undefined) return false;
+                }
                 if (excludes.length && excludes.some(ex => matchesCondition(base, ex))) return false;
                 return reqs.some(req => matchesCondition(base, req));
             });
@@ -617,6 +643,8 @@ export function buildItemsDatabase() {
                 const varItem = {
                     ...base,
                     ...inherits,
+                    srd: variant.srd !== undefined ? variant.srd : base.srd,
+                    srd52: variant.srd52 !== undefined ? variant.srd52 : base.srd52,
                     name: varName,
                     source: inherits.source || variant.source || base.source || 'DMG',
                     page: inherits.page || variant.page || base.page || 0,
@@ -646,6 +674,9 @@ export function buildItemsDatabase() {
     allItems.sort((a, b) => a.name.localeCompare(b.name));
 
     // 1. Generate full-featured search catalog
+    if (!fs.existsSync(targetDataDir)) {
+        fs.mkdirSync(targetDataDir, { recursive: true });
+    }
     const catalog = allItems.map(it => ({
         id: it.id,
         name: it.name,

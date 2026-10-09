@@ -7,14 +7,24 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.join(__dirname, '..');
 
+const isSrdOnly = process.argv.includes('--srd-only');
+const outArgIdx = process.argv.indexOf('--out');
+const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
+    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+    : path.join(rootDir, '5etools-src', 'data');
+
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 const bestiaryDir = path.join(dataDir, 'bestiary');
 const indexPath = path.join(bestiaryDir, 'index.json');
 const templatePath = path.join(bestiaryDir, 'template.json');
-const spellsCatalogPath = path.join(dataDir, 'spells-catalog.json');
-const spellsNormalizedDir = path.join(dataDir, 'spells-normalized');
-const outputDir = path.join(dataDir, 'bestiary-normalized');
-const catalogPath = path.join(dataDir, 'bestiary-catalog.json');
+const spellsCatalogPath = fs.existsSync(path.join(targetDataDir, 'spells-catalog.json'))
+    ? path.join(targetDataDir, 'spells-catalog.json')
+    : path.join(dataDir, 'spells-catalog.json');
+const spellsNormalizedDir = fs.existsSync(path.join(targetDataDir, 'spells-normalized'))
+    ? path.join(targetDataDir, 'spells-normalized')
+    : path.join(dataDir, 'spells-normalized');
+const outputDir = path.join(targetDataDir, 'bestiary-normalized');
+const catalogPath = path.join(targetDataDir, 'bestiary-catalog.json');
 const legGroupsPath = path.join(bestiaryDir, 'legendarygroups.json');
 
 const EDITION_2024_SOURCES = new Set([
@@ -908,7 +918,7 @@ function buildCreatureDatabase() {
         });
     }
 
-    const brewMonsters = getBrewEntities('monster');
+    const brewMonsters = isSrdOnly ? [] : getBrewEntities('monster');
     brewMonsters.forEach(m => {
         m.__prop = "monster";
         m.source = m.source || 'Partnered';
@@ -990,7 +1000,15 @@ function buildCreatureDatabase() {
     const normalizedBySource = {};
     const seenCreatures = new Set();
 
+    const SRD_BESTIARY_SOURCES = new Set(['MM', 'XMM', 'PHB', 'XPHB', 'DMG', 'XDMG']);
     allMonstersRaw.forEach(m => {
+        if (isSrdOnly) {
+            const srcUpper = (m.source || 'MM').trim().toUpperCase();
+            if (!SRD_BESTIARY_SOURCES.has(srcUpper)) return;
+            const isSrd = m.srd !== undefined || m.srd52 !== undefined;
+            if (!isSrd) return;
+        }
+
         const name = (m.name || 'Unnamed Creature').trim();
         const source = (m.source || 'MM').trim();
         const uniqueKey = `${name.toLowerCase()}|${source.toLowerCase()}`;

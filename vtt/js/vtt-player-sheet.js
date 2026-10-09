@@ -3713,7 +3713,6 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     try {
                         let res = await fetch(`data/class/${file}`).catch(() => null);
                         if (!res || !res.ok) res = await fetch(`/vtt/data/class/${file}`).catch(() => null);
-                        if (!res || !res.ok) res = await fetch(`/5etools-src/data/class/${file}`).catch(() => null);
                         if (res && res.ok) {
                             fullClassData = await res.json();
                             if (fullClassData.classFeature) cFeatures = fullClassData.classFeature;

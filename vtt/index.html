@@ -375,6 +375,9 @@
             </div>
 
             <div class="control-divider"></div>
+            <button id="btn-legal-notices" class="control-btn" title="Legal Notices & Open Game Content (SRD)" onclick="document.getElementById('modal-legal-notices').classList.remove('vtt-hidden')">
+                <i class="fa-solid fa-scale-balanced"></i>
+            </button>
             <button id="btn-logout" class="control-btn" title="Exit Game" style="color: var(--color-danger);">
                 <i class="fa-solid fa-right-from-bracket"></i>
             </button>
@@ -3617,6 +3620,39 @@
                 <button id="btn-clear-filters" class="btn btn-secondary" style="flex: 1;">Clear All</button>
                 <button id="btn-apply-filters" class="btn btn-primary" style="flex: 2;">
                     <i class="fa-solid fa-check"></i> Apply Filters
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Legal Notices & Open Game Content Modal -->
+    <div id="modal-legal-notices" class="vtt-modal vtt-hidden" style="position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center;">
+        <div class="glassmorphism" style="width:90%; max-width:680px; max-height:85vh; display:flex; flex-direction:column; padding:24px; border-radius:12px; border:1px solid rgba(212,175,55,0.3); background:#0f172a; color:#f8fafc; box-shadow:0 20px 40px rgba(0,0,0,0.8);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px; margin-bottom:16px;">
+                <h3 style="margin:0; font-family:'Cinzel', serif; color:#f1c40f; display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-scale-balanced"></i> Open Game Content & Legal Notices
+                </h3>
+                <button type="button" class="btn btn-secondary btn-xxs" onclick="document.getElementById('modal-legal-notices').classList.add('vtt-hidden')" style="padding:4px 8px; cursor:pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="scroll-styled" style="overflow-y:auto; flex:1; font-size:0.875rem; line-height:1.6; padding-right:8px;">
+                <h4 style="color:#60a5fa; margin-top:0;">System Reference Document 5.1 (SRD 5.1)</h4>
+                <p>This work includes material taken from the <strong>System Reference Document 5.1 (“SRD 5.1”)</strong> by Wizards of the Coast LLC and available at <a href="https://dnd.wizards.com/resources/systems-reference-document" target="_blank" style="color:#93c5fd;">dnd.wizards.com</a>. The SRD 5.1 is licensed under the <strong>Creative Commons Attribution 4.0 International License</strong> available at <a href="https://creativecommons.org/licenses/by/4.0/legalcode" target="_blank" style="color:#93c5fd;">CC-BY-4.0</a>.</p>
+                
+                <h4 style="color:#60a5fa;">D&amp;D 2024 Free Rules &amp; SRD 5.2 Content</h4>
+                <p>Rules terminology, character options, spells, items, and monster stat blocks correspond to public <strong>D&amp;D 2024 Free Rules (D&amp;D 5.2 SRD / Free Rules)</strong> content published by Wizards of the Coast LLC.</p>
+                <p>Wizards of the Coast, Dungeons &amp; Dragons, D&amp;D, and all Wizards of the Coast logos and trademarks are property of Wizards of the Coast LLC.</p>
+
+                <h4 style="color:#60a5fa;">Unofficial Fan Content Policy</h4>
+                <p>ForgeDVTT is unofficial Fan Content permitted under the Wizards of the Coast Fan Content Policy. It is not approved, endorsed, or sponsored by Wizards of the Coast LLC.</p>
+
+                <h4 style="color:#60a5fa;">Creature Tokens &amp; Artwork</h4>
+                <p>Bundled SRD creature tokens are sourced from open-license / CC0 public domain collections or procedurally rendered by ForgeDVTT's arcane token engine. No copyrighted commercial artwork, book covers, or adventure modules are distributed in this release.</p>
+            </div>
+            <div style="display:flex; justify-content:flex-end; margin-top:16px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('modal-legal-notices').classList.add('vtt-hidden')" style="padding:6px 16px;">
+                    Close
                 </button>
             </div>
         </div>

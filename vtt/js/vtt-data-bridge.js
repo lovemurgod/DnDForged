@@ -1800,14 +1800,13 @@ export function initVttDataBridge(vtt) {
         }
         
         try {
-            advSelect.innerHTML = '<option value="">Loading 5eTools map catalog...</option>';
+            advSelect.innerHTML = '<option value="">Checking map catalog...</option>';
             const res = await fetch('data/generated/gendata-maps.json');
-            if (!res.ok) throw new Error('Could not load gendata-maps.json');
+            if (!res.ok) throw new Error('gendata-maps.json not present in clean SRD release');
             mapCatalog = await res.json();
             populateAdventureDropdown(advSelect, mapSelect);
         } catch (e) {
-            console.error("Error fetching 5etools map catalog:", e);
-            advSelect.innerHTML = '<option value="">Error loading maps.</option>';
+            advSelect.innerHTML = '<option value="">No commercial maps bundled (Import custom map above)</option>';
         }
     }
 

@@ -1,0 +1,60 @@
+{
+  "appId": "com.forgedvtt.desktop",
+  "productName": "ForgeDVTT",
+  "asar": false,
+  "directories": {
+    "app": ".release-stage",
+    "output": "dist"
+  },
+  "files": [
+    "server.js",
+    "launcher.js",
+    "utils.js",
+    "index.html",
+    "LEGAL.md",
+    "electron/**/*",
+    "vtt/**/*",
+    "img/**/*",
+    "css/**/*",
+    "package.json"
+  ],
+  "extraResources": [
+    {
+      "from": "resources/bin",
+      "to": "bin",
+      "filter": [
+        "**/*"
+      ]
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      },
+      {
+        "target": "dir",
+        "arch": [
+          "x64"
+        ]
+      }
+    ],
+    "icon": ".release-stage/electron/icon.ico",
+    "forceCodeSigning": false,
+    "sign": null
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "ForgeDVTT",
+    "installerIcon": ".release-stage/electron/icon.ico",
+    "uninstallerIcon": ".release-stage/electron/icon.ico",
+    "installerHeaderIcon": ".release-stage/electron/icon.ico",
+    "artifactName": "ForgeDVTT-Setup-${version}.${ext}"
+  }
+}

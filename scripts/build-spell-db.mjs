@@ -7,11 +7,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.join(__dirname, '..');
 
+const isSrdOnly = process.argv.includes('--srd-only');
+const outArgIdx = process.argv.indexOf('--out');
+const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
+    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+    : path.join(rootDir, '5etools-src', 'data');
+
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 const spellsDir = path.join(dataDir, 'spells');
 const indexPath = path.join(spellsDir, 'index.json');
 const sourcesPath = path.join(spellsDir, 'sources.json');
-const outputPath = path.join(rootDir, '5etools-src', 'data', 'spells-normalized.json');
+const outputPath = path.join(targetDataDir, 'spells-normalized.json');
 
 const SCHOOL_MAP = {
     'A': 'Abjuration',
@@ -513,10 +519,15 @@ function buildNormalizedDatabase() {
         });
     }
 
-    const brewSpells = getBrewEntities('spell');
+    const brewSpells = isSrdOnly ? [] : getBrewEntities('spell');
     rawSpells.push(...brewSpells);
 
     rawSpells.forEach(sp => {
+        if (isSrdOnly) {
+            const isSrd = sp.srd !== undefined || sp.srd52 !== undefined;
+            if (!isSrd) return;
+        }
+
         const spellName = (sp.name || '').trim();
         const spellSource = (sp.source || 'PHB').trim();
         const uniqueKey = `${spellName.toLowerCase()}|${spellSource.toLowerCase()}`;
@@ -645,7 +656,10 @@ function buildNormalizedDatabase() {
     allSpells.sort((a, b) => a.name.localeCompare(b.name));
 
     // 1. Generate lightweight search catalog index
-    const catalogPath = path.join(rootDir, '5etools-src', 'data', 'spells-catalog.json');
+    if (!fs.existsSync(targetDataDir)) {
+        fs.mkdirSync(targetDataDir, { recursive: true });
+    }
+    const catalogPath = path.join(targetDataDir, 'spells-catalog.json');
     const catalog = allSpells.map(sp => ({
         id: sp.id,
         name: sp.name,
@@ -671,7 +685,7 @@ function buildNormalizedDatabase() {
     console.log(`📁 Spells search catalog generated: ${catalogPath} (${catalog.length} spells)`);
 
     // 2. Strict Source Partitions: output spells-normalized/spells-<source>.json
-    const partitionsDir = path.join(rootDir, '5etools-src', 'data', 'spells-normalized');
+    const partitionsDir = path.join(targetDataDir, 'spells-normalized');
     if (!fs.existsSync(partitionsDir)) {
         fs.mkdirSync(partitionsDir, { recursive: true });
     }

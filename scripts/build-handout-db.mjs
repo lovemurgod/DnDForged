@@ -6,11 +6,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.join(__dirname, '..');
 
+const isSrdOnly = process.argv.includes('--srd-only');
+const outArgIdx = process.argv.indexOf('--out');
+const targetDataDir = outArgIdx !== -1 && process.argv[outArgIdx + 1]
+    ? path.resolve(rootDir, process.argv[outArgIdx + 1])
+    : path.join(rootDir, '5etools-src', 'data');
+
 const dataDir = path.join(rootDir, '5etools-src', 'data');
 const adventuresFile = path.join(dataDir, 'adventures.json');
 const booksFile = path.join(dataDir, 'books.json');
-const catalogOutputPath = path.join(dataDir, 'handouts-catalog.json');
-const normalizedDir = path.join(dataDir, 'handouts-normalized');
+const catalogOutputPath = path.join(targetDataDir, 'handouts-catalog.json');
+const normalizedDir = path.join(targetDataDir, 'handouts-normalized');
 
 // Ensure output directories exist
 if (!fs.existsSync(normalizedDir)) {
@@ -237,7 +243,7 @@ async function buildHandoutDatabase() {
     let adventures = [];
     let books = [];
 
-    if (fs.existsSync(adventuresFile)) {
+    if (!isSrdOnly && fs.existsSync(adventuresFile)) {
         try {
             const raw = JSON.parse(fs.readFileSync(adventuresFile, 'utf8'));
             adventures = raw.adventure || [];
@@ -306,9 +312,11 @@ async function buildHandoutDatabase() {
         }
     }
 
+    const SRD_ALLOWED_BOOKS = new Set(['phb', 'dmg', 'xphb', 'xdmg']);
     // Process Books
     for (const book of books) {
         const key = (book.id || book.source).toLowerCase();
+        if (isSrdOnly && !SRD_ALLOWED_BOOKS.has(key)) continue;
         const filePath = path.join(dataDir, 'book', `book-${key}.json`);
         if (!fs.existsSync(filePath)) continue;
 
@@ -337,7 +345,7 @@ async function buildHandoutDatabase() {
                     published: book.published || '',
                     author: book.author || '',
                     storyline: book.group || '',
-                    cover: book.cover?.path ? `img/${book.cover.path}` : '',
+                    cover: isSrdOnly ? '' : (book.cover?.path ? `img/${book.cover.path}` : ''),
                     handoutCount: handouts.length,
                     imageCount: imgCount,
                     insetCount: insCount,
