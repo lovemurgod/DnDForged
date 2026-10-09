@@ -43,6 +43,12 @@ let CHAT_FILE = path.join(DATA_DIR, 'chat-log.json');
 let ASSETS_DIR = path.join(DATA_DIR, 'assets');
 let DISCORD_CACHE_DIR = path.join(DATA_DIR, 'discord-cache');
 
+// Standalone VTT directories
+const VTT_DIR = path.join(__dirname, 'vtt');
+const VTT_DATA_DIR = fs.existsSync(path.join(VTT_DIR, 'data'))
+  ? path.join(VTT_DIR, 'data')
+  : path.join(__dirname, '5etools-src', 'data');
+
 function ensureDirectories() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
   if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -255,8 +261,8 @@ app.use('/assets', (req, res, next) => {
   express.static(ASSETS_DIR)(req, res, next);
 });
 
-// Local Image Route for /img/* (Tokens, Bestiary, Items, Adventure Maps) with On-Demand Mirror Fallback
-app.get('/img/*', async (req, res, next) => {
+// Local Image Route for /img/* and /vtt/img/* (Tokens, Bestiary, Items, Adventure Maps) with On-Demand Mirror Fallback
+app.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
   let decodedPath;
   try {
     decodedPath = decodeURIComponent(req.path);
@@ -264,18 +270,46 @@ app.get('/img/*', async (req, res, next) => {
     decodedPath = req.path;
   }
 
-  // Prevent path traversal
-  const safePath = path.normalize(decodedPath).replace(/^(\.\.[\/\\])+/, '');
+  // Prevent path traversal and normalize vtt prefix
+  let safePath = path.normalize(decodedPath).replace(/^(\.\.[\/\\])+/, '');
+  safePath = safePath.replace(/^[\\/]?(?:vtt[\\/])/i, '');
+  if (!safePath.startsWith('img') && !safePath.startsWith('/img') && !safePath.startsWith('\\img')) {
+    safePath = path.join('img', safePath);
+  }
+
+  // Check in vtt/ directory first (for local standalone assets)
+  const vttTarget = path.join(VTT_DIR, safePath);
+  if (fs.existsSync(vttTarget) && fs.statSync(vttTarget).isFile()) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    return res.sendFile(vttTarget);
+  }
+
+  // Check variants in vtt/
+  if (safePath.includes(' ')) {
+    const vttHyphen = path.join(VTT_DIR, safePath.replace(/ /g, '-'));
+    if (fs.existsSync(vttHyphen) && fs.statSync(vttHyphen).isFile()) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      return res.sendFile(vttHyphen);
+    }
+  } else if (safePath.includes('-')) {
+    const vttSpace = path.join(VTT_DIR, safePath.replace(/-/g, ' '));
+    if (fs.existsSync(vttSpace) && fs.statSync(vttSpace).isFile()) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      return res.sendFile(vttSpace);
+    }
+  }
+
   const localTarget = path.join(__dirname, '5etools-src', safePath);
 
-  // 1. Check exact local path on disk
+  // 1. Check exact local path on disk in 5etools-src fallback
   if (fs.existsSync(localTarget) && fs.statSync(localTarget).isFile()) {
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     return res.sendFile(localTarget);
   }
 
   // 2. Also check raw encoded path locally
-  const rawTarget = path.join(__dirname, '5etools-src', req.path);
+  const rawRel = req.path.replace(/^[\\/]?(?:vtt[\\/])/i, '');
+  const rawTarget = path.join(__dirname, '5etools-src', rawRel);
   if (fs.existsSync(rawTarget) && fs.statSync(rawTarget).isFile()) {
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
     return res.sendFile(rawTarget);
@@ -391,7 +425,7 @@ let rawSpellsCatalogData = null;
 
 function getRawSpellsCatalog() {
   if (rawSpellsCatalogData) return rawSpellsCatalogData;
-  const catPath = path.join(__dirname, '5etools-src', 'data', 'spells-catalog.json');
+  const catPath = path.join(VTT_DATA_DIR, 'spells-catalog.json');
   if (fs.existsSync(catPath)) {
     try {
       rawSpellsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
@@ -403,7 +437,7 @@ function getRawSpellsCatalog() {
 
 function loadGzippedSpellsCatalog() {
   try {
-    const catPath = path.join(__dirname, '5etools-src', 'data', 'spells-catalog.json');
+    const catPath = path.join(VTT_DATA_DIR, 'spells-catalog.json');
     if (fs.existsSync(catPath)) {
       const raw = fs.readFileSync(catPath);
       gzippedSpellsCatalogBuf = zlib.gzipSync(raw, { level: 9 });
@@ -415,7 +449,7 @@ function loadGzippedSpellsCatalog() {
 }
 loadGzippedSpellsCatalog();
 
-app.get(['/api/spells/catalog', '/data/spells-catalog.json', '/5etools-src/data/spells-catalog.json'], (req, res) => {
+app.get(['/api/spells/catalog', '/data/spells-catalog.json', '/vtt/data/spells-catalog.json', '/5etools-src/data/spells-catalog.json'], (req, res) => {
   const campId = req.query.campaignId || extractSubdomain(req.headers.host);
   const disabledSet = getDisabledSourcesSet(campId);
   const customSpells = loadCustomEntities('spells');
@@ -464,7 +498,7 @@ function getSpellPartition(source) {
   if (spellPartitionCache.has(srcKey)) {
     return spellPartitionCache.get(srcKey);
   }
-  const partPath = path.join(__dirname, '5etools-src', 'data', 'spells-normalized', `spells-${srcKey}.json`);
+  const partPath = path.join(VTT_DATA_DIR, 'spells-normalized', `spells-${srcKey}.json`);
   if (fs.existsSync(partPath)) {
     try {
       const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
@@ -532,7 +566,7 @@ let rawItemsCatalogData = null;
 
 function getRawItemsCatalog() {
   if (rawItemsCatalogData) return rawItemsCatalogData;
-  const catPath = path.join(__dirname, '5etools-src', 'data', 'items-catalog.json');
+  const catPath = path.join(VTT_DATA_DIR, 'items-catalog.json');
   if (fs.existsSync(catPath)) {
     try {
       rawItemsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
@@ -544,7 +578,7 @@ function getRawItemsCatalog() {
 
 function loadGzippedItemsCatalog() {
   try {
-    const catPath = path.join(__dirname, '5etools-src', 'data', 'items-catalog.json');
+    const catPath = path.join(VTT_DATA_DIR, 'items-catalog.json');
     if (fs.existsSync(catPath)) {
       const raw = fs.readFileSync(catPath);
       gzippedItemsCatalogBuf = zlib.gzipSync(raw, { level: 9 });
@@ -556,7 +590,7 @@ function loadGzippedItemsCatalog() {
 }
 loadGzippedItemsCatalog();
 
-app.get(['/api/items/catalog', '/data/items-catalog.json', '/5etools-src/data/items-catalog.json'], (req, res) => {
+app.get(['/api/items/catalog', '/data/items-catalog.json', '/vtt/data/items-catalog.json', '/5etools-src/data/items-catalog.json'], (req, res) => {
   const campId = req.query.campaignId || extractSubdomain(req.headers.host);
   const disabledSet = getDisabledSourcesSet(campId);
   const customItems = loadCustomEntities('items');
@@ -603,7 +637,7 @@ function getItemPartition(source) {
   if (itemPartitionCache.has(srcKey)) {
     return itemPartitionCache.get(srcKey);
   }
-  const partPath = path.join(__dirname, '5etools-src', 'data', 'items-normalized', `items-${srcKey}.json`);
+  const partPath = path.join(VTT_DATA_DIR, 'items-normalized', `items-${srcKey}.json`);
   if (fs.existsSync(partPath)) {
     try {
       const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
@@ -662,7 +696,7 @@ function getCompendiumPartition(type, source) {
   if (compendiumPartitionCache.has(cacheKey)) {
     return compendiumPartitionCache.get(cacheKey);
   }
-  const partPath = path.join(__dirname, '5etools-src', 'data', `${cleanType}-normalized`, `${cleanType}-${srcKey}.json`);
+  const partPath = path.join(VTT_DATA_DIR, `${cleanType}-normalized`, `${cleanType}-${srcKey}.json`);
   if (fs.existsSync(partPath)) {
     try {
       const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
@@ -693,7 +727,7 @@ app.get(['/api/compendium/:type/catalog', '/data/:type-catalog.json', '/5etools-
   const disabledSet = getDisabledSourcesSet(campId);
   const customEntries = loadCustomEntities(type);
 
-  const catPath = path.join(__dirname, '5etools-src', 'data', `${type}-catalog.json`);
+  const catPath = path.join(VTT_DATA_DIR, `${type}-catalog.json`);
   if (!fs.existsSync(catPath) && customEntries.length === 0) {
     return res.status(404).json({ error: `Compendium catalog '${type}' not found` });
   }
@@ -746,6 +780,71 @@ app.get('/api/compendium/:type/:source/:id', (req, res) => {
   res.json(entry);
 });
 
+// --- Independent Handouts Database API ---
+const handoutPartitionCache = new Map();
+let rawHandoutsCatalogData = null;
+
+function getRawHandoutsCatalog() {
+  if (rawHandoutsCatalogData) return rawHandoutsCatalogData;
+  const catPath = path.join(VTT_DATA_DIR, 'handouts-catalog.json');
+  if (fs.existsSync(catPath)) {
+    try {
+      rawHandoutsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      return rawHandoutsCatalogData;
+    } catch (e) {
+      console.error('Error loading handouts catalog:', e);
+    }
+  }
+  return [];
+}
+
+function getHandoutPartition(source) {
+  const srcKey = (source || '').toLowerCase();
+  if (handoutPartitionCache.has(srcKey)) {
+    return handoutPartitionCache.get(srcKey);
+  }
+  const partPath = path.join(VTT_DATA_DIR, 'handouts-normalized', `handouts-${srcKey}.json`);
+  if (fs.existsSync(partPath)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
+      handoutPartitionCache.set(srcKey, data);
+      return data;
+    } catch (err) {
+      console.error(`Failed to load handout partition for ${srcKey}:`, err);
+    }
+  }
+  return null;
+}
+
+app.get(['/api/handouts/catalog', '/data/handouts-catalog.json', '/vtt/data/handouts-catalog.json'], (req, res) => {
+  const catalog = getRawHandoutsCatalog();
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.json(catalog);
+});
+
+app.get('/api/handouts/:source', (req, res) => {
+  const { source } = req.params;
+  const partition = getHandoutPartition(source);
+  if (!partition) {
+    return res.status(404).json({ error: `Handout source partition '${source}' not found` });
+  }
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  res.json(partition);
+});
+
+// Generic Compendium Catalogs (Classes, Races, Feats, Backgrounds)
+app.get('/api/:type(classes|races|feats|backgrounds)/catalog', (req, res) => {
+  const catPath = path.join(VTT_DATA_DIR, `${req.params.type}-catalog.json`);
+  if (fs.existsSync(catPath)) {
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    return res.sendFile(catPath);
+  }
+  res.status(404).json({ error: `${req.params.type} catalog not found` });
+});
+
 // Pre-compressed GZIP cache for bestiary-catalog.json
 let gzippedBestiaryCatalogBuf = null;
 let bestiaryCatalogEtag = null;
@@ -753,7 +852,7 @@ let rawBestiaryCatalogData = null;
 
 function getRawBestiaryCatalog() {
   if (rawBestiaryCatalogData) return rawBestiaryCatalogData;
-  const catPath = path.join(__dirname, '5etools-src', 'data', 'bestiary-catalog.json');
+  const catPath = path.join(VTT_DATA_DIR, 'bestiary-catalog.json');
   if (fs.existsSync(catPath)) {
     try {
       rawBestiaryCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
@@ -765,7 +864,7 @@ function getRawBestiaryCatalog() {
 
 function loadGzippedBestiaryCatalog() {
   try {
-    const catPath = path.join(__dirname, '5etools-src', 'data', 'bestiary-catalog.json');
+    const catPath = path.join(VTT_DATA_DIR, 'bestiary-catalog.json');
     if (fs.existsSync(catPath)) {
       const raw = fs.readFileSync(catPath);
       gzippedBestiaryCatalogBuf = zlib.gzipSync(raw, { level: 9 });
@@ -777,7 +876,7 @@ function loadGzippedBestiaryCatalog() {
 }
 loadGzippedBestiaryCatalog();
 
-app.get(['/api/bestiary/catalog', '/data/bestiary-catalog.json', '/5etools-src/data/bestiary-catalog.json'], (req, res) => {
+app.get(['/api/bestiary/catalog', '/data/bestiary-catalog.json', '/vtt/data/bestiary-catalog.json', '/5etools-src/data/bestiary-catalog.json'], (req, res) => {
   const campId = req.query.campaignId || extractSubdomain(req.headers.host);
   const disabledSet = getDisabledSourcesSet(campId);
   const customMonsters = loadCustomEntities('bestiary');
@@ -826,7 +925,7 @@ function getCreaturePartition(source) {
   if (creaturePartitionCache.has(srcKey)) {
     return creaturePartitionCache.get(srcKey);
   }
-  const partPath = path.join(__dirname, '5etools-src', 'data', 'bestiary-normalized', `bestiary-${srcKey}.json`);
+  const partPath = path.join(VTT_DATA_DIR, 'bestiary-normalized', `bestiary-${srcKey}.json`);
   if (fs.existsSync(partPath)) {
     try {
       const data = JSON.parse(fs.readFileSync(partPath, 'utf8'));
@@ -891,27 +990,45 @@ app.get('/', (req, res) => {
   if (sub) {
     getOrCreateCampaign(sub);
   }
-  return res.sendFile(path.join(__dirname, '5etools-src', 'vtt.html'));
+  return res.sendFile(path.join(__dirname, 'vtt', 'index.html'));
 });
 
-app.get('/vtt.html', (req, res, next) => {
+app.get('/vtt.html', (req, res) => {
   const sub = extractSubdomain(req.headers.host);
   if (sub) {
     getOrCreateCampaign(sub);
   }
-  return next();
+  return res.sendFile(path.join(__dirname, 'vtt', 'index.html'));
 });
 
-app.get(['/sheet', '/sheet.html'], (req, res) => {
+app.get(['/sheet', '/sheet.html', '/vtt/sheet', '/vtt/sheet.html'], (req, res) => {
   const sub = extractSubdomain(req.headers.host);
   if (sub) {
     getOrCreateCampaign(sub);
   }
-  return res.sendFile(path.join(__dirname, '5etools-src', 'sheet.html'));
+  return res.sendFile(path.join(__dirname, 'vtt', 'sheet.html'));
 });
 
-// Serve 5etools-src statically
-app.use(express.static(path.join(__dirname, '5etools-src')));
+// Serve standalone ForgeDVTT client statically
+app.use('/vtt/data', express.static(VTT_DATA_DIR));
+app.use('/vtt/data', (req, res, next) => {
+  const relPath = req.path.replace(/^[/\\]+/, '');
+  const target = path.join(VTT_DATA_DIR, relPath);
+  if (fs.existsSync(target) && fs.statSync(target).isFile()) {
+    return res.sendFile(target);
+  }
+  next();
+});
+
+app.use('/vtt', express.static(VTT_DIR));
+app.get(['/vtt', '/vtt/', '/vtt.html'], (req, res) => {
+  res.sendFile(path.join(VTT_DIR, 'index.html'));
+});
+
+// Serve 5etools-src statically as optional companion / compendium if present
+if (fs.existsSync(path.join(__dirname, '5etools-src'))) {
+  app.use(express.static(path.join(__dirname, '5etools-src')));
+}
 
 // In-memory campaign state backup
 let campaigns = {};
@@ -1062,13 +1179,29 @@ let campaignsSaveTimeout = null;
 let chatSaveTimeout = null;
 const DEBOUNCE_MS = 2000;
 
+async function atomicWriteFile(filePath, data) {
+  const tempPath = `${filePath}.${Date.now()}.${Math.random().toString(36).slice(2, 7)}.tmp`;
+  await fs.promises.writeFile(tempPath, data, 'utf8');
+  await fs.promises.rename(tempPath, filePath);
+}
+
+function atomicWriteFileSync(filePath, data) {
+  const tempPath = `${filePath}.${Date.now()}.${Math.random().toString(36).slice(2, 7)}.tmp`;
+  fs.writeFileSync(tempPath, data, 'utf8');
+  fs.renameSync(tempPath, filePath);
+}
+
 function saveCampaigns(sync = false) {
   if (sync) {
     if (campaignsSaveTimeout) {
       clearTimeout(campaignsSaveTimeout);
       campaignsSaveTimeout = null;
     }
-    fs.writeFileSync(CAMPAIGNS_FILE, JSON.stringify(campaigns, null, 2), 'utf8');
+    try {
+      atomicWriteFileSync(CAMPAIGNS_FILE, JSON.stringify(campaigns, null, 2));
+    } catch (err) {
+      console.error("Failed to save campaigns sync:", err);
+    }
     return;
   }
   
@@ -1076,7 +1209,7 @@ function saveCampaigns(sync = false) {
   campaignsSaveTimeout = setTimeout(async () => {
     campaignsSaveTimeout = null;
     try {
-      await fs.promises.writeFile(CAMPAIGNS_FILE, JSON.stringify(campaigns, null, 2), 'utf8');
+      await atomicWriteFile(CAMPAIGNS_FILE, JSON.stringify(campaigns, null, 2));
     } catch (err) {
       console.error("Failed to save campaigns async:", err);
     }
@@ -1089,7 +1222,11 @@ function saveChat(sync = false) {
       clearTimeout(chatSaveTimeout);
       chatSaveTimeout = null;
     }
-    fs.writeFileSync(CHAT_FILE, JSON.stringify(chatLogs, null, 2), 'utf8');
+    try {
+      atomicWriteFileSync(CHAT_FILE, JSON.stringify(chatLogs, null, 2));
+    } catch (err) {
+      console.error("Failed to save chat sync:", err);
+    }
     return;
   }
 
@@ -1097,7 +1234,7 @@ function saveChat(sync = false) {
   chatSaveTimeout = setTimeout(async () => {
     chatSaveTimeout = null;
     try {
-      await fs.promises.writeFile(CHAT_FILE, JSON.stringify(chatLogs, null, 2), 'utf8');
+      await atomicWriteFile(CHAT_FILE, JSON.stringify(chatLogs, null, 2));
     } catch (err) {
       console.error("Failed to save chat async:", err);
     }
@@ -1736,9 +1873,29 @@ function getSanitizedCampaignSync(camp, role, username) {
           lights: m.lights || [],
           shapes: {},
           drawings: {},
-          traps: m.traps || [],
-          portals: m.portals || []
+          traps: [],
+          portals: []
         };
+      } else if (role !== 'GM') {
+        // Active map for player view: strip GM secrets
+        const m = cloned.maps[mapId];
+        if (m.tokens) {
+          const safeTokens = {};
+          for (const tId in m.tokens) {
+            const tok = m.tokens[tId];
+            if (tok && tok.layer !== 'gm' && !tok.hidden) {
+              safeTokens[tId] = tok;
+            }
+          }
+          m.tokens = safeTokens;
+        }
+        m.traps = [];
+        if (Array.isArray(m.notes)) {
+          m.notes = m.notes.filter(n => n && (n.isPublic || n.author === username));
+        }
+        if (Array.isArray(m.portals)) {
+          m.portals = m.portals.filter(p => p && !p.isSecret);
+        }
       }
     }
   }
@@ -1853,11 +2010,16 @@ io.on('connection', (socket) => {
     console.log(`${username} joined campaign ${activeCampId} as ${finalRole}${socket.isSubWindow ? ' (Sub-Window)' : ''}`);
 
     // Welcome user and send current state (sanitized to avoid 1MB websocket limit)
+    const rawChat = (chatLogs[activeCampId] || []).slice(-50);
+    const sanitizedChat = finalRole === 'GM'
+      ? rawChat
+      : rawChat.filter(m => !m.whisperToGM || m.username === username);
+
     socket.emit('joined', {
       role: finalRole,
       userRole: finalRole,
       campaignState: getSanitizedCampaignSync(campaigns[activeCampId], finalRole, username),
-      chatHistory: (chatLogs[activeCampId] || []).slice(-50)
+      chatHistory: sanitizedChat
     });
 
     // Notify others only if it is a primary window connection
@@ -1947,6 +2109,16 @@ io.on('connection', (socket) => {
   socket.on('token:add', (data) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
+
+    // Security check: Players may only add player tokens assigned to themselves
+    if (socket.role !== 'GM') {
+      if (!data.token?.isPlayer) {
+        console.warn(`[Security] Player ${socket.username} attempted to add non-player token`);
+        return;
+      }
+      data.token.owner = socket.username;
+      data.token.playerOwner = socket.username;
+    }
     
     const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
@@ -1968,6 +2140,19 @@ io.on('connection', (socket) => {
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
       const existingToken = campaigns[campaignId].maps[mapId].tokens[data.tokenId];
       if (existingToken) {
+        // Security check: GM can update any token; Players can only update player tokens they control
+        if (socket.role !== 'GM') {
+          const isOwner = existingToken.isPlayer && (
+            existingToken.owner === socket.username ||
+            existingToken.playerOwner === socket.username ||
+            (Array.isArray(existingToken.players) && existingToken.players.includes(socket.username))
+          );
+          if (!isOwner) {
+            console.warn(`[Security] Unauthorized token delta update attempt by ${socket.username} for token ${data.tokenId}`);
+            return;
+          }
+        }
+
         Object.assign(existingToken, data.changes);
         if (existingToken._animReq) delete existingToken._animReq;
         saveCampaigns();
@@ -1984,6 +2169,22 @@ io.on('connection', (socket) => {
     
     const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
+      const existingToken = campaigns[campaignId].maps[mapId].tokens[data.tokenId];
+      if (!existingToken) return;
+
+      // Security check: GM can delete any token; Players can only delete player tokens they control
+      if (socket.role !== 'GM') {
+        const isOwner = existingToken.isPlayer && (
+          existingToken.owner === socket.username ||
+          existingToken.playerOwner === socket.username ||
+          (Array.isArray(existingToken.players) && existingToken.players.includes(socket.username))
+        );
+        if (!isOwner) {
+          console.warn(`[Security] Unauthorized token delete attempt by ${socket.username} for token ${data.tokenId}`);
+          return;
+        }
+      }
+
       delete campaigns[campaignId].maps[mapId].tokens[data.tokenId];
       saveCampaigns();
     }
@@ -2305,7 +2506,25 @@ io.on('connection', (socket) => {
     if (!campaignId || !campaigns[campaignId]) return;
     if (!campaigns[campaignId].characters) campaigns[campaignId].characters = {};
 
-    campaigns[campaignId].characters[data.character.id] = data.character;
+    const charId = data.character?.id;
+    if (!charId) return;
+
+    if (socket.role !== 'GM') {
+      const existing = campaigns[campaignId].characters[charId];
+      if (existing) {
+        const isOwner = existing.owner === socket.username ||
+          (Array.isArray(existing.players) && existing.players.includes(socket.username));
+        if (!isOwner) {
+          console.warn(`[Security] Unauthorized character update attempt by ${socket.username} for character ${charId}`);
+          return;
+        }
+      } else {
+        data.character.owner = socket.username;
+        if (!data.character.players) data.character.players = [socket.username];
+      }
+    }
+
+    campaigns[campaignId].characters[charId] = data.character;
     saveCampaigns();
 
     // Broadcast update to everyone
@@ -2317,10 +2536,20 @@ io.on('connection', (socket) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId] || !campaigns[campaignId].characters) return;
     
-    if (campaigns[campaignId].characters[data.id]) {
-      delete campaigns[campaignId].characters[data.id];
-      saveCampaigns();
+    const existing = campaigns[campaignId].characters[data.id];
+    if (!existing) return;
+
+    if (socket.role !== 'GM') {
+      const isOwner = existing.owner === socket.username ||
+        (Array.isArray(existing.players) && existing.players.includes(socket.username));
+      if (!isOwner) {
+        console.warn(`[Security] Unauthorized character delete attempt by ${socket.username} for character ${data.id}`);
+        return;
+      }
     }
+
+    delete campaigns[campaignId].characters[data.id];
+    saveCampaigns();
 
     // Broadcast delete to everyone (including sender)
     io.to(campaignId).emit('character:deleted', { id: data.id });
@@ -2495,9 +2724,21 @@ io.on('connection', (socket) => {
     chatLogs[campaignId].push(chatMsg);
     // Keep chat history capped
     if (chatLogs[campaignId].length > 500) chatLogs[campaignId].shift();
+    if (chatMsg.whisperToGM) {
+      socket.emit('chat:msg', chatMsg);
+      const room = io.sockets.adapter.rooms.get(campaignId);
+      if (room) {
+        for (const sId of room) {
+          const clientSocket = io.sockets.sockets.get(sId);
+          if (clientSocket && clientSocket.role === 'GM' && clientSocket.id !== socket.id) {
+            clientSocket.emit('chat:msg', chatMsg);
+          }
+        }
+      }
+    } else {
+      io.to(campaignId).emit('chat:msg', chatMsg);
+    }
     saveChat();
-
-    io.to(campaignId).emit('chat:msg', chatMsg);
   });
 
   // Delete chat message (GM only)
@@ -2566,6 +2807,16 @@ io.on('connection', (socket) => {
     });
   });
 
+  // Sync atmospheric theme broadcast (GM only)
+  socket.on('theme:broadcast', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || socket.role !== 'GM') return;
+    socket.to(campaignId).emit('theme:broadcasted', {
+      themeId: data.themeId,
+      gmName: socket.username || 'GM'
+    });
+  });
+
   // Sync real-time shape measurement drawing
   socket.on('measure:update', (data) => {
     const { campaignId } = socket;
@@ -2615,7 +2866,7 @@ io.on('connection', (socket) => {
 });
 
 // Boot the server
-const PORT = 5050;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5050;
 httpServer.listen(PORT, async () => {
   console.log(`\n======================================================`);
   console.log(`  ForgeD VTT Local Server running on port ${PORT}`);

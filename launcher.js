@@ -74,6 +74,31 @@ function isPortActive(port) {
   });
 }
 
+function isValidTunnelToken(str) {
+  if (!str || typeof str !== 'string') return false;
+  const trimmed = str.trim();
+  if (trimmed.length < 30) return false;
+  try {
+    const decoded = Buffer.from(trimmed, 'base64').toString('utf8');
+    const parsed = JSON.parse(decoded);
+    return !!(parsed && (parsed.t || parsed.a || parsed.s));
+  } catch (e) {
+    return false;
+  }
+}
+
+function getSavedAppConfig() {
+  const appData = process.env.APPDATA;
+  if (!appData) return null;
+  const cfgPath = path.join(appData, 'forgedvtt', 'forge-config.json');
+  try {
+    if (fs.existsSync(cfgPath)) {
+      return JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+    }
+  } catch (e) {}
+  return null;
+}
+
 async function main() {
   console.log('\n======================================================');
   console.log('   ⚔️   ForgeDVTT Online Game Launcher   ⚔️');
@@ -90,28 +115,46 @@ async function main() {
   const tokenFile = path.join(__dirname, '.dndforged-data', 'tunnel-token.txt');
   let savedToken = '';
   if (fs.existsSync(tokenFile)) {
-    savedToken = fs.readFileSync(tokenFile, 'utf8').trim();
+    const raw = fs.readFileSync(tokenFile, 'utf8').trim();
+    if (isValidTunnelToken(raw)) {
+      savedToken = raw;
+    }
+  }
+
+  const appConfig = getSavedAppConfig();
+  if (!savedToken && appConfig?.tunnelToken && isValidTunnelToken(appConfig.tunnelToken)) {
+    savedToken = appConfig.tunnelToken.trim();
+    try {
+      const dataDir = path.dirname(tokenFile);
+      if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+      fs.writeFileSync(tokenFile, savedToken, 'utf8');
+    } catch (e) {}
   }
 
   let token = savedToken;
   if (!token) {
     const inputToken = await prompt('👉 Paste Cloudflare Tunnel Token (Press ENTER for default config/quick tunnel): ');
     if (inputToken) {
-      token = inputToken;
-      const dataDir = path.join(__dirname, '.dndforged-data');
-      if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-      fs.writeFileSync(tokenFile, token, 'utf8');
-      console.log('✅ Tunnel Token saved for future launches.');
+      if (isValidTunnelToken(inputToken)) {
+        token = inputToken;
+        const dataDir = path.join(__dirname, '.dndforged-data');
+        if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+        fs.writeFileSync(tokenFile, token, 'utf8');
+        console.log('✅ Tunnel Token saved for future launches.');
+      } else {
+        console.log('⚠️ Input does not match Cloudflare Token format (skipping token flag).');
+      }
     }
   } else {
     console.log('🔑 Using saved Cloudflare Tunnel Token.');
   }
 
+  const defaultSubdomain = (appConfig?.subdomain || 'cosmic').toLowerCase().replace(/[^a-z0-9-]/g, '') || 'cosmic';
   let subdomain = '';
   while (!subdomain) {
-    const input = await prompt('👉 Enter subdomain slug for this session (e.g. mygame or tavern): ');
+    const input = await prompt(`👉 Enter subdomain slug for this session [default: ${defaultSubdomain}]: `);
     if (!input) {
-      subdomain = '@';
+      subdomain = defaultSubdomain;
       break;
     }
     const cleaned = input.toLowerCase().replace(/[^a-z0-9-]/g, '');
@@ -141,10 +184,10 @@ async function main() {
   }
 
   console.log('🌐 Launching Cloudflare Tunnel...');
-  const tunnelArgs = [];
+  const tunnelArgs = ['--protocol', 'http2', '--no-prechecks'];
 
   const localConfig = path.join(process.env.USERPROFILE || process.env.HOME || '', '.cloudflared', 'config.yml');
-  if (token) {
+  if (token && isValidTunnelToken(token)) {
     tunnelArgs.push('tunnel', 'run', '--token', token);
   } else if (fs.existsSync(localConfig)) {
     tunnelArgs.push('--config', localConfig, 'tunnel', 'run');

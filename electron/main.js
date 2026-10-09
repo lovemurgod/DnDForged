@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, shell, Tray, Menu, dialog } from 'electron
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { spawn, execFileSync } from 'child_process';
+import { spawn, execFileSync, execSync } from 'child_process';
 import net from 'net';
 import crypto from 'crypto';
 import { SourceManager } from './source-manager.js';
@@ -97,10 +97,27 @@ function hashPassword(password, salt = null) {
   return { hash, salt: generatedSalt };
 }
 
+function isValidTunnelToken(str) {
+  if (!str || typeof str !== 'string') return false;
+  const trimmed = str.trim();
+  if (trimmed.length < 30) return false;
+  try {
+    const decoded = Buffer.from(trimmed, 'base64').toString('utf8');
+    const parsed = JSON.parse(decoded);
+    return !!(parsed && (parsed.t || parsed.a || parsed.s));
+  } catch (e) {
+    return false;
+  }
+}
+
 // Locate bundled cloudflared binary
 function getCloudflaredPath() {
+  if (process.env.CLOUDFLARED_BIN && fs.existsSync(process.env.CLOUDFLARED_BIN)) {
+    return process.env.CLOUDFLARED_BIN;
+  }
+
   const binName = process.platform === 'win32' ? 'cloudflared.exe' : 'cloudflared';
-  const resourceBin = path.join(process.resourcesPath, 'bin', binName);
+  const resourceBin = path.join(process.resourcesPath || '', 'bin', binName);
   if (fs.existsSync(resourceBin)) return resourceBin;
 
   const localBin = path.join(rootDir, 'resources', 'bin', binName);
@@ -108,6 +125,24 @@ function getCloudflaredPath() {
 
   const rootBin = path.join(rootDir, binName);
   if (fs.existsSync(rootBin)) return rootBin;
+
+  // Common Windows installation paths
+  const winPaths = [
+    'C:\\Program Files (x86)\\cloudflared\\cloudflared.exe',
+    'C:\\Program Files\\cloudflared\\cloudflared.exe',
+    'C:\\PROGRA~2\\cloudflared\\cloudflared.exe'
+  ];
+
+  for (const winPath of winPaths) {
+    if (fs.existsSync(winPath)) return winPath;
+  }
+
+  // Check system PATH
+  try {
+    const whichCmd = process.platform === 'win32' ? 'where cloudflared' : 'which cloudflared';
+    const output = execSync(whichCmd, { stdio: ['pipe', 'pipe', 'ignore'] }).toString().trim();
+    if (output) return output.split('\r\n')[0].split('\n')[0];
+  } catch (e) {}
 
   return null;
 }
@@ -279,8 +314,8 @@ async function startTunnel(params = {}) {
     appendLog(`Launching Cloudflare Tunnel for subdomain: ${currentSubdomain}.forgedvtt.com`);
   }
 
-  const tunnelArgs = [];
-  if (currentTunnelToken) {
+  const tunnelArgs = ['--protocol', 'http2', '--no-prechecks'];
+  if (currentTunnelToken && isValidTunnelToken(currentTunnelToken)) {
     tunnelArgs.push('tunnel', 'run', '--token', currentTunnelToken);
   } else {
     const localConfig = path.join(process.env.USERPROFILE || process.env.HOME || '', '.cloudflared', 'config.yml');
@@ -401,6 +436,8 @@ function createTray() {
     const iconCandidates = [
       path.join(__dirname, 'icon.png'),
       path.join(rootDir, 'electron', 'icon.png'),
+      path.join(rootDir, 'img', 'logo.png'),
+      path.join(rootDir, 'vtt', 'img', 'logo.png'),
       path.join(rootDir, '5etools-src', 'img', 'logo.png')
     ];
     const iconPath = iconCandidates.find(p => fs.existsSync(p));
@@ -446,7 +483,7 @@ function updateTrayMenu() {
     {
       label: 'Open VTT in Default Browser',
       click: () => {
-        shell.openExternal(`http://localhost:${DEFAULT_PORT}/vtt.html`);
+        shell.openExternal(`http://localhost:${DEFAULT_PORT}/vtt/index.html`);
       }
     },
     { type: 'separator' },
@@ -504,7 +541,7 @@ function openVTTWindow() {
   });
 
   vttWin.setMenuBarVisibility(false);
-  vttWin.loadURL(`http://localhost:${DEFAULT_PORT}/vtt.html`);
+  vttWin.loadURL(`http://localhost:${DEFAULT_PORT}/vtt/index.html`);
 }
 
 // Register IPC Handlers
@@ -517,7 +554,7 @@ ipcMain.handle('start-tunnel', async (_, params = {}) => {
 });
 ipcMain.handle('stop-tunnel', () => stopTunnel());
 ipcMain.handle('open-vtt-app', () => openVTTWindow());
-ipcMain.handle('open-vtt-browser', (_, url) => shell.openExternal(url || `http://localhost:${DEFAULT_PORT}/vtt.html`));
+ipcMain.handle('open-vtt-browser', (_, url) => shell.openExternal(url || `http://localhost:${DEFAULT_PORT}/vtt/index.html`));
 ipcMain.handle('open-data-folder', () => shell.openPath(appConfig.campaignDataDir));
 ipcMain.handle('open-backups-folder', () => shell.openPath(appConfig.backupsDir));
 

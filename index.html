@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Master Website Theme Stylesheet -->
-    <link rel="stylesheet" href="5etools-src/css/website.css">
+    <link rel="stylesheet" href="css/website.css">
 
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -31,7 +31,7 @@
     <!-- Navigation Header -->
     <nav class="navbar-vtt">
         <a href="index.html" class="nav-brand" style="text-decoration: none;">
-            <img src="5etools-src/img/TextLogo.png" alt="ForgeD VTT" class="nav-brand-text-logo">
+            <img src="img/TextLogo.png" alt="ForgeD VTT" class="nav-brand-text-logo">
         </a>
 
         <!-- Desktop Navigation Tabs -->
@@ -62,7 +62,7 @@
     <aside class="mobile-drawer" id="mobile-drawer">
         <div class="mobile-drawer-header">
             <div class="nav-brand">
-                <img src="5etools-src/img/TextLogo.png" alt="ForgeD VTT" class="nav-brand-text-logo" style="height: 34px;">
+                <img src="img/TextLogo.png" alt="ForgeD VTT" class="nav-brand-text-logo" style="height: 34px;">
             </div>
             <button class="mobile-drawer-close" id="mobile-drawer-close" aria-label="Close Menu">
                 <i class="fa-solid fa-xmark"></i>
@@ -93,7 +93,7 @@
             <!-- Hero Header with High-Res Logo Centerpiece -->
             <div class="glass-panel hero-card">
                 <div class="hero-logo-wrapper">
-                    <img src="5etools-src/img/logo.png" alt="ForgeD VTT - Tabletop Freedom" class="hero-logo-img">
+                    <img src="img/logo.png" alt="ForgeD VTT - Tabletop Freedom" class="hero-logo-img">
                 </div>
                 <p class="hero-subtitle">
                     Self-hosted, high-performance Virtual Tabletop with real-time multiplayer token controls, 3D physics dice, dynamic fog of war, and native 5e compendium integration.
@@ -327,7 +327,7 @@
                         <input type="text" id="manual-search-input" placeholder="Search buttons, shortcuts, dice..." oninput="filterManualTopics()">
                     </div>
 
-                    <nav class="manual-toc" id="manual-toc-list">
+                                        <nav class="manual-toc" id="manual-toc-list">
                         <div class="manual-toc-group">
                             <div class="manual-toc-title">1. Getting Started</div>
                             <a href="#guide-hosting-setup" class="manual-toc-link active"><i class="fa-solid fa-server"></i> GM Setup & Hosting</a>
@@ -337,19 +337,32 @@
                         </div>
 
                         <div class="manual-toc-group">
-                            <div class="manual-toc-title">2. Combat & Core Panels</div>
+                            <div class="manual-toc-title">2. Combat & Dice</div>
                             <a href="#guide-initiative" class="manual-toc-link"><i class="fa-solid fa-list-ol"></i> Combat Initiative Tracker</a>
-                            <a href="#guide-chat-dice" class="manual-toc-link"><i class="fa-solid fa-comments"></i> Chat & Fast Dice Bar</a>
-                            <a href="#guide-player-sheets" class="manual-toc-link"><i class="fa-solid fa-user-shield"></i> Player Sheets & Inventory</a>
-                            <a href="#guide-bestiary" class="manual-toc-link"><i class="fa-solid fa-book-skull"></i> Bestiary, NPCs & Companions</a>
-                            <a href="#guide-asset-gallery" class="manual-toc-link"><i class="fa-solid fa-photo-film"></i> Asset Gallery & Media Hub</a>
-                            <a href="#guide-config-settings" class="manual-toc-link"><i class="fa-solid fa-gears"></i> GM Settings & Allowlist</a>
+                            <a href="#guide-chat-dice" class="manual-toc-link"><i class="fa-solid fa-dice-d20"></i> Chat & 3D WebGL Physics Dice</a>
+                            <a href="#guide-dice-engine" class="manual-toc-link"><i class="fa-solid fa-calculator"></i> Complete Dice Syntax Manual</a>
                         </div>
 
                         <div class="manual-toc-group">
-                            <div class="manual-toc-title">3. Modals & Dice Engine</div>
-                            <a href="#guide-modals" class="manual-toc-link"><i class="fa-solid fa-map-location-dot"></i> Map Manager & Modals</a>
-                            <a href="#guide-dice-engine" class="manual-toc-link"><i class="fa-solid fa-dice-d20"></i> Complete Dice Syntax Manual</a>
+                            <div class="manual-toc-title">3. Character Building & Sheet Setup</div>
+                            <a href="#guide-char-builder" class="manual-toc-link"><i class="fa-solid fa-wand-magic-sparkles"></i> Character Builder & Level Up</a>
+                            <a href="#guide-player-sheets" class="manual-toc-link"><i class="fa-solid fa-boxes-stacked"></i> Equipment, Armor & Carry Weight</a>
+                            <a href="#guide-spells-magic" class="manual-toc-link"><i class="fa-solid fa-hat-wizard"></i> Spellbook Setup & Upcasting</a>
+                            <a href="#guide-features-counters" class="manual-toc-link"><i class="fa-solid fa-award"></i> Class Features, Feats & Counters</a>
+                        </div>
+
+                        <div class="manual-toc-group">
+                            <div class="manual-toc-title">4. Bestiary, Dungeons & Maps</div>
+                            <a href="#guide-bestiary" class="manual-toc-link"><i class="fa-solid fa-book-skull"></i> Bestiary, NPCs & Companions</a>
+                            <a href="#guide-modals" class="manual-toc-link"><i class="fa-solid fa-map-location-dot"></i> Map Manager & Grid Calibration</a>
+                            <a href="#guide-map-tools" class="manual-toc-link"><i class="fa-solid fa-dungeon"></i> Dungeon Tools: Walls, Doors, Traps & Portals</a>
+                            <a href="#guide-source-control" class="manual-toc-link"><i class="fa-solid fa-book-bookmark"></i> 2024 vs 2014 Rules & Compendium</a>
+                            <a href="#guide-asset-gallery" class="manual-toc-link"><i class="fa-solid fa-photo-film"></i> Asset Gallery & Media Hub</a>
+                        </div>
+
+                        <div class="manual-toc-group">
+                            <div class="manual-toc-title">5. Settings & Master Shortcuts</div>
+                            <a href="#guide-config-settings" class="manual-toc-link"><i class="fa-solid fa-gears"></i> GM Settings & Sheet Popouts</a>
                             <a href="#guide-shortcuts" class="manual-toc-link"><i class="fa-solid fa-keyboard"></i> All Keyboard & Mouse Hotkeys</a>
                         </div>
                     </nav>
@@ -678,7 +691,7 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 5: COMBAT INITIATIVE CAROUSEL -->
+                    <!-- SECTION 2.1: COMBAT INITIATIVE CAROUSEL -->
                     <section class="manual-section" id="guide-initiative">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -747,22 +760,58 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 6: RIGHT SIDEBAR: CHAT & FAST DICE -->
+                    <!-- SECTION 2.2: CHAT & 3D WEBGL PHYSICS DICE -->
                     <section class="manual-section" id="guide-chat-dice">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
-                                <div class="manual-section-icon"><i class="fa-solid fa-comments"></i></div>
-                                <h3 class="manual-section-title">Right Sidebar: Chat & Fast Dice Engine</h3>
+                                <div class="manual-section-icon"><i class="fa-solid fa-dice-d20"></i></div>
+                                <h3 class="manual-section-title">Chat & 3D WebGL Physics Dice Engine</h3>
                             </div>
-                            <span class="manual-section-badge">Chat & Dice</span>
+                            <span class="manual-section-badge">3D Physics & Chat</span>
                         </div>
 
-                        <p style="color: var(--text-secondary); margin-bottom: 15px;">
-                            The right sidebar provides real-time tabletop communications, synchronized polyhedral rolls, whispered GM rolls, and 3D WebGL physics dice simulation.
+                        <p class="doc-section-lead">
+                            ForgeD VTT combines real-time multiplayer chat with a high-performance 3D WebGL physics dice simulation powered by Cannon.js. Enjoy authentic polyhedral tumbling, order-preserving physics lanes, isolated critical hit badges, and customizable dice skins.
                         </p>
 
                         <div class="btn-inspector-grid">
-                            <div class="btn-inspector-card" data-keywords="fast dice quick polyhedral d4 d6 d8 d10 d12 d20 d100">
+                            <div class="btn-inspector-card" data-keywords="3d dice physics webgl cannon simulation polyhedra skins crit badges natural 20 natural 1">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon gold"><i class="fa-solid fa-cubes"></i></div>
+                                        <span class="btn-inspector-name">3D WebGL Physics Simulation</span>
+                                    </div>
+                                    <span class="kbd-badge">WebGL + Cannon.js</span>
+                                </div>
+                                <p class="btn-inspector-desc">Authentic polyhedral dice (<code>d4</code>, <code>d6</code>, <code>d8</code>, <code>d10</code>, <code>d12</code>, <code>d20</code>, <code>d100</code>) rendered in real-time 3D with gravity, collision bounce, and bottom bumper containment rails. Dice roll into order-preserving lanes so multi-die attacks remain easy to read.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-cube"></i> True 3D Physics Simulation</div>
+                            </div>
+
+                            <div class="btn-inspector-card" data-keywords="dice skins obsidian cosmic frosted marble ruby customize textures">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-palette"></i></div>
+                                        <span class="btn-inspector-name">Custom Polyhedral Dice Skins</span>
+                                    </div>
+                                    <span class="kbd-badge">Settings Skin</span>
+                                </div>
+                                <p class="btn-inspector-desc">Customize your dice appearance in Settings. Choose from curated visual themes including <strong>Obsidian Gold</strong>, <strong>Cosmic Nebula</strong>, <strong>Frosted Marble</strong>, <strong>Celestial Blue</strong>, and <strong>Blood Ruby</strong> with zero-distortion face numerals.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-paintbrush"></i> Multi-Skin Selection</div>
+                            </div>
+
+                            <div class="btn-inspector-card" data-keywords="critical hit badge nat 20 nat 1 fumble isolated fadeout">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon red"><i class="fa-solid fa-burst"></i></div>
+                                        <span class="btn-inspector-name">Isolated Critical Hit Badges</span>
+                                    </div>
+                                    <span class="kbd-badge">Nat 20 / Nat 1</span>
+                                </div>
+                                <p class="btn-inspector-desc">Rolling a Natural 20 triggers a radiant gold Critical Hit banner, while a Natural 1 displays a crimson Fumble skull badge. Badges are isolated per individual die roll with synchronized fadeouts in both the 3D canvas and chat card.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-star"></i> Real-Time Crit Flare</div>
+                            </div>
+
+                            <div class="btn-inspector-card" data-keywords="fast dice quick polyhedral d4 d6 d8 d10 d12 d20 d100 quantity">
                                 <div class="btn-inspector-header">
                                     <div class="btn-inspector-title-wrap">
                                         <div class="btn-inspector-icon"><i class="fa-solid fa-dice-d20"></i></div>
@@ -770,7 +819,7 @@
                                     </div>
                                     <span class="kbd-badge">d4..d100</span>
                                 </div>
-                                <p class="btn-inspector-desc">1-click buttons to instantly roll standard polyhedral dice (<code>d4</code>, <code>d6</code>, <code>d8</code>, <code>d10</code>, <code>d12</code>, <code>d20</code>, <code>d100</code>). Right-click any die button to enter a custom quantity (e.g. 4d6, 8d6).</p>
+                                <p class="btn-inspector-desc">1-click buttons to instantly roll any standard polyhedral die. Right-click any die button to enter a custom quantity (e.g. <code>4d6</code>, <code>8d6</code>) or add flat modifiers directly without typing full commands.</p>
                                 <div class="btn-inspector-action"><i class="fa-solid fa-dice"></i> 1-Click Fast Polyhedral Bar</div>
                             </div>
 
@@ -786,579 +835,21 @@
                                 <div class="btn-inspector-action"><i class="fa-solid fa-eye-slash"></i> Roll Mode & Whisper Toggles</div>
                             </div>
 
-                            <div class="btn-inspector-card" data-keywords="3d dice physics webgl simulation realistic tumbling">
+                            <div class="btn-inspector-card" data-keywords="chat log whisper message broadcast narrative history markdown /w">
                                 <div class="btn-inspector-header">
                                     <div class="btn-inspector-title-wrap">
-                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-cubes"></i></div>
-                                        <span class="btn-inspector-name">3D Physics Dice Box</span>
-                                    </div>
-                                    <span class="kbd-badge">WebGL 3D</span>
-                                </div>
-                                <p class="btn-inspector-desc">Integrated 3D dice physics canvas renderer. Every roll triggers smooth 3D dice tumbling across the screen with authentic material reflections, gravity, and synchronized party results.</p>
-                                <div class="btn-inspector-action"><i class="fa-solid fa-cube"></i> Real-time Physics Simulation</div>
-                            </div>
-
-                            <div class="btn-inspector-card" data-keywords="chat log whisper message broadcast narrative history">
-                                <div class="btn-inspector-header">
-                                    <div class="btn-inspector-title-wrap">
-                                        <div class="btn-inspector-icon"><i class="fa-solid fa-message"></i></div>
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-message"></i></div>
                                         <span class="btn-inspector-name">Campaign Chat & Whispers</span>
                                     </div>
                                     <span class="kbd-badge">Live Chat</span>
                                 </div>
-                                <p class="btn-inspector-desc">Persistent message history with rich markdown formatting, clickable dice chips, spell cards, and private whispers (<code>/w [name] [msg]</code>) between players and GM.</p>
+                                <p class="btn-inspector-desc">Persistent message history with rich markdown formatting, clickable dice chips, spell cards, and private whispers (<code>/w [name] [message]</code>) between players and Game Master.</p>
                                 <div class="btn-inspector-action"><i class="fa-solid fa-paper-plane"></i> Synced Multiplayer Log</div>
                             </div>
                         </div>
                     </section>
 
-                    <!-- SECTION 7: PLAYER CHARACTER SHEETS & INVENTORY -->
-                    <section class="manual-section" id="guide-player-sheets">
-                        <div class="manual-section-header">
-                            <div class="manual-section-title-wrap">
-                                <div class="manual-section-icon"><i class="fa-solid fa-user-shield"></i></div>
-                                <h3 class="manual-section-title">Player Character Sheets & Inventory Engine</h3>
-                            </div>
-                            <span class="manual-section-badge player">Player & GM</span>
-                        </div>
-
-                        <p class="doc-section-lead">
-                            ForgeD VTT features a reactive 5-tab D&D 5e player sheet with real-time WebSocket party synchronization. Every stat change, item equipped, spell cast, and rest automatically updates across the canvas token, initiative tracker, and party view.
-                        </p>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-heart-pulse"></i> Core Vitals, Initiative & Resting
-                        </div>
-
-                        <div class="doc-feature-group">
-                            <div class="doc-feature-card" data-keywords="vitals hp temp armor class speed initiative decimal tiebreaker death saves">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-solid fa-shield-heart red"></i> Vitals, Initiative & Death Saves
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-arrows-rotate"></i> Real-Time Sync</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>Character health and core defenses are bound directly to canvas token rings and combat rosters:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>HP & Temporary HP:</strong> Adjust current, maximum, or temp HP directly on the sheet. Changes reflect immediately on canvas token health bars and party status widgets.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Deterministic Initiative:</strong> Clicking Initiative rolls <code>1d20 + Initiative Modifier + (Dex / 100)</code>. The decimal tiebreaker guarantees automatic, conflict-free turn sorting without manual dice-off resolutions.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Manual Death Saves:</strong> Features 3 success and 3 failure toggle bubbles. Clicking the <strong>Death Save</strong> button broadcasts a verified <code>1d20</code> roll directly into multiplayer chat; players or GMs manually click bubbles according to the roll outcome.</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="doc-feature-card" data-keywords="short rest long rest recovery warlock pact magic hit dice reset">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-solid fa-campground"></i> Short & Long Rest Automation
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-bed"></i> 1-Click Recovery</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>Dedicated rest buttons on the sheet header handle standard 5e resource refresh routines:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Short Rest:</strong> Prompts for spending available Hit Dice (rolled directly from the Hit Dice pill with Constitution modifier added to chat). Automatically recharges all abilities tagged with <code>SR</code> (such as Fighter Action Surge or Monk Ki) and refreshes Warlock Pact Magic slots.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Long Rest:</strong> Instantly resets current HP to maximum, clears all Temporary HP, restores spent Hit Dice up to half of total character level, and fully refreshes all spell slots and <code>LR</code> features.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-sack-dollar"></i> Inventory, Armor Calculation & Encumbrance
-                        </div>
-
-                        <div class="doc-feature-group">
-                            <div class="doc-feature-card" data-keywords="inventory currency weight coins 50 per pound armor equipped ac recalculation attunement">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-solid fa-boxes-stacked"></i> Dynamic Equipment & Armor Engine
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-calculator"></i> Auto Calculation</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>The inventory system enforces official D&D 5e equipment mechanics and weight thresholds:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>50 Coins = 1 lb Currency Weight:</strong> Platinum, Gold, Electrum, Silver, and Copper coin totals are summed and divided by 50, dynamically adding physical weight to the character's carry load.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Dynamic Armor Class:</strong> Equipping Light Armor adds full Dexterity modifier; Medium Armor caps Dexterity bonus at +2; Heavy Armor grants flat base AC without Dexterity bonus. Equipping a shield automatically adds +2 AC to sheet totals.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Attunement Tracking:</strong> 3 dedicated attunement slots track active magic items, providing quick visual validation during preparation and rests.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Encumbrance Support:</strong> Live weight bar monitors maximum capacity (Strength × 15 lbs) and highlights Variant Encumbrance thresholds (encumbered at Strength × 5 lbs, heavily encumbered at Strength × 10 lbs).</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="doc-feature-card" data-keywords="spells spellcasting upcasting slots prepared spell dc attack roll">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-solid fa-wand-magic-sparkles blue"></i> Spellbook & Upcast Scaling Engine
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-hat-wizard"></i> Leveled Magic</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>Comprehensive spell management organized by cantrips and spell levels 1 through 9:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Interactive Upcast Modal:</strong> When casting a leveled spell with scaling damage or effects (e.g. <em>Cure Wounds</em>, <em>Fireball</em>), clicking Cast opens a slot selector prompt allowing you to choose the expenditure level, automatically calculating and rolling the upscaled dice.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Spell DC & Modifiers:</strong> Automatically binds to the character's primary spellcasting ability (Intelligence, Wisdom, or Charisma) and proficiency bonus.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Prepared Spells Filter:</strong> Quickly filter between all known spells and currently prepared spells with active preparation limits.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-list-check"></i> Step-by-Step Character Workflows
-                        </div>
-
-                        <div class="doc-workflow-list">
-                            <div class="doc-workflow-item">
-                                <div class="doc-workflow-badge">1</div>
-                                <div class="doc-workflow-content">
-                                    <h4>Equipping Weapons and Armor</h4>
-                                    <p>Open the <strong>Inventory</strong> tab on your sheet. Find or create your armor or weapon item. Click the <strong>Equip</strong> checkbox. The system instantly recalculates your Armor Class based on 5e armor categories and updates your attacks in the core Actions list and chat roller.</p>
-                                </div>
-                            </div>
-                            <div class="doc-workflow-item">
-                                <div class="doc-workflow-badge">2</div>
-                                <div class="doc-workflow-content">
-                                    <h4>Casting and Upcasting Spells</h4>
-                                    <p>Navigate to the <strong>Spells</strong> tab. Locate your spell and click <strong>Cast</strong>. If casting a leveled spell with higher-slot scaling, select your desired spell slot level from the prompt. The spell card, attack roll or saving throw DC, and scaled damage dice will be posted to the multiplayer chat log, deducting one slot of that level.</p>
-                                </div>
-                            </div>
-                            <div class="doc-workflow-item">
-                                <div class="doc-workflow-badge">3</div>
-                                <div class="doc-workflow-content">
-                                    <h4>Assigning Character Ownership (GM)</h4>
-                                    <p>The GM opens the Character / Party Manager from the sidebar, locates the player character sheet, and assigns ownership to the connected player account. The player immediately gains sheet edit permissions, token control on the map, and synchronized initiative rolling.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-table"></i> Player Sheet Quick Reference
-                        </div>
-
-                        <div class="manual-table-wrap">
-                            <table class="manual-table">
-                                <thead>
-                                    <tr>
-                                        <th>Stat / Mechanic</th>
-                                        <th>Calculation or Rule</th>
-                                        <th>Sync & Output Destination</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Initiative Roll</strong></td>
-                                        <td><code>1d20 + Init Mod + (Dex / 100)</code> decimal tiebreaker</td>
-                                        <td>Combat Tracker & Multiplayer Chat</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Death Saves</strong></td>
-                                        <td><code>1d20</code> chat roll; manual 3-success / 3-failure toggle bubbles</td>
-                                        <td>Character Sheet & Chat Broadcast</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Currency Weight</strong></td>
-                                        <td><code>(PP + GP + EP + SP + CP) ÷ 50 = lbs</code> added to weight bar</td>
-                                        <td>Inventory Weight & Encumbrance Status</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Short Rest</strong></td>
-                                        <td>Restores <code>SR</code> features, Warlock Pact slots; Hit Dice spend dialog</td>
-                                        <td>Sheet Features & Resource Bubbles</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Long Rest</strong></td>
-                                        <td>Full HP heal, clears Temp HP, restores ½ Hit Dice, refreshes all slots & <code>LR</code></td>
-                                        <td>Canvas Token Bar, Sheet & Chat Log</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Spell Upcasting</strong></td>
-                                        <td>Interactive slot prompt; scales bonus damage dice per slot above base</td>
-                                        <td>Multiplayer Chat Card & Spell Slot Tracker</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-
-                    <!-- SECTION 8: BESTIARY, CUSTOM NPCS & COMPANIONS -->
-                    <section class="manual-section" id="guide-bestiary">
-                        <div class="manual-section-header">
-                            <div class="manual-section-title-wrap">
-                                <div class="manual-section-icon"><i class="fa-solid fa-book-skull"></i></div>
-                                <h3 class="manual-section-title">Bestiary, Custom NPCs & Companions</h3>
-                            </div>
-                            <span class="manual-section-badge gm">GM & Player</span>
-                        </div>
-
-                        <p class="doc-section-lead">
-                            ForgeD VTT integrates a comprehensive 5e monster compendium with interactive creature sheets, instant drag-to-canvas token spawning, homebrew NPC building, and linked companion/familiar ownership for players.
-                        </p>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-dragon"></i> Monster Compendium & Interactive Creature Sheets
-                        </div>
-
-                        <div class="doc-feature-group">
-                            <div class="doc-feature-card" data-keywords="creature sheet monster compendium stat block attacks multiattack condition markers">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-solid fa-paw red"></i> Interactive Stat Blocks & 1-Click Actions
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-bolt"></i> 1-Click Combat</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>Every monster in the compendium opens as an interactive creature sheet with live rolling:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>1-Click Attacks & Multiattack:</strong> Click any weapon, claw, bite, or breath weapon action to broadcast full attack bonuses, reach/range, and damage dice formulas directly to chat with clickable damage roll chips.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>In-Line Traits & Recharges:</strong> Special traits and recharge powers (e.g. <code>Recharge 5–6</code>) feature in-line clickable dice chips for fast resolution without opening external references.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Condition Ring Markers:</strong> Creature sheets allow toggling status condition rings (e.g. Blinded, Charmed, Paralyzed, Poisoned, Prone, Stunned) that render immediately on the token on the canvas grid.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Sensory & Defensive Traits:</strong> Darkvision, Blindsight, Tremorsense, Truesight, and damage resistances/immunities are clearly displayed on the header for quick tactical assessment.</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="doc-feature-card" data-keywords="custom npc homebrew monster builder clone edit cr stats actions">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-solid fa-pen-to-square"></i> Custom NPC & Homebrew Monster Builder
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-database"></i> Campaign Persistent</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>Forge your own bosses, unique campaign encounters, or non-player characters:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Clone Existing Monsters:</strong> Duplicate any existing SRD stat block with a single click to customize HP, Armor Class, Challenge Rating, or modify spell lists while keeping the foundation intact.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Custom Action Engine:</strong> Add custom melee attacks, ranged attacks, legendary actions, reactions, and lair actions with custom dice formulas and formatted descriptions.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Campaign Database Persistence:</strong> Custom NPCs and homebrew creations are stored directly in your campaign database and remain available across all sessions.</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="doc-feature-card" data-keywords="companions familiars wild shape linked character player token control amber badge">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-solid fa-shield-cat blue"></i> Companions, Familiars & Wild Shapes
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-users"></i> Dual Permissions</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>Seamlessly assign creature sheets to players for ranger beasts, wizard familiars, summoned mounts, or druid wild shapes:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Linked Character Dropdown:</strong> Select a player character from the creature sheet's Linked Character dropdown to delegate token ownership to that specific player.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Dual Canvas Movement & Rolling:</strong> Both the assigned player and the GM have full permission to move the companion token on the grid, view its sheet, and execute attack/ability rolls.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Amber Companion Badge:</strong> Companion tokens display a distinct amber badge on the canvas and in the sidebar roster, distinguishing them from enemy NPCs and regular party tokens.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-list-check"></i> Step-by-Step Bestiary Workflows
-                        </div>
-
-                        <div class="doc-workflow-list">
-                            <div class="doc-workflow-item">
-                                <div class="doc-workflow-badge">1</div>
-                                <div class="doc-workflow-content">
-                                    <h4>Spawning Monsters onto the Tactical Grid</h4>
-                                    <p>Open the <strong>Bestiary</strong> tab in the sidebar. Search for a monster by name or filter by Challenge Rating. Drag the monster card directly onto the canvas. A new token is created at the grid snap position, automatically bound to its creature sheet and ready for initiative tracking.</p>
-                                </div>
-                            </div>
-                            <div class="doc-workflow-item">
-                                <div class="doc-workflow-badge">2</div>
-                                <div class="doc-workflow-content">
-                                    <h4>Creating a Custom Boss or Homebrew NPC</h4>
-                                    <p>Click <strong>+ New Monster</strong> in the Bestiary or click the <strong>Duplicate</strong> icon on an existing monster. Edit the ability scores, HP dice formula, AC, and actions in the editor. Click <strong>Save to Bestiary</strong>. Your homebrew monster is immediately searchable and ready to spawn.</p>
-                                </div>
-                            </div>
-                            <div class="doc-workflow-item">
-                                <div class="doc-workflow-badge">3</div>
-                                <div class="doc-workflow-content">
-                                    <h4>Linking a Familiar or Companion to a Player</h4>
-                                    <p>Spawn the creature (e.g. Wolf, Owl) onto the map. Double-click the token to open its sheet. In the header, click the <strong>Linked Character</strong> dropdown and select the player character. The player can now move this token and roll its attacks directly from their view.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-table"></i> Bestiary & Creature Sheet Reference
-                        </div>
-
-                        <div class="manual-table-wrap">
-                            <table class="manual-table">
-                                <thead>
-                                    <tr>
-                                        <th>Feature</th>
-                                        <th>Behavior & Permission</th>
-                                        <th>Trigger / Location</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Drag to Canvas</strong></td>
-                                        <td>Spawns token on grid, generates creature instance and binds sheet</td>
-                                        <td>Drag card from Bestiary sidebar onto map</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>1-Click Attack</strong></td>
-                                        <td>Rolls attack roll and damage dice with damage type to multiplayer chat</td>
-                                        <td>Click action button on creature sheet</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Linked Companion</strong></td>
-                                        <td>Grants assigned player dual token movement and roll access</td>
-                                        <td>"Linked Character" dropdown in creature sheet header</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Condition Ring</strong></td>
-                                        <td>Toggles visual status effect ring directly on canvas token</td>
-                                        <td>Token radial menu or creature sheet conditions</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Clone Monster</strong></td>
-                                        <td>Copies entire SRD stat block into homebrew builder for quick tweaking</td>
-                                        <td>Duplicate icon in Bestiary card list</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-
-                    <!-- SECTION 9: ASSET GALLERY, YOUTUBE & PINTEREST STREAMING -->
-                    <section class="manual-section" id="guide-asset-gallery">
-                        <div class="manual-section-header">
-                            <div class="manual-section-title-wrap">
-                                <div class="manual-section-icon"><i class="fa-solid fa-photo-film"></i></div>
-                                <h3 class="manual-section-title">Asset Gallery, YouTube & Pinterest Streaming</h3>
-                            </div>
-                            <span class="manual-section-badge gm">GM Media Engine</span>
-                        </div>
-
-                        <p class="doc-section-lead">
-                            The ForgeD VTT Asset Gallery manages battlemaps, tokens, audio, and visual handouts. It features native, zero-friction streaming integrations for YouTube animated battlemaps and high-resolution Pinterest artwork without manual file downloading.
-                        </p>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-folder-tree"></i> Asset Organization & Canvas Placement
-                        </div>
-
-                        <div class="doc-feature-group">
-                            <div class="doc-feature-card" data-keywords="asset gallery organization folders maps tokens props audio formats mp4 webm webp gif png">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-solid fa-images"></i> Multi-Format Media Hub & Canvas Placement
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-layer-group"></i> Smart Layers</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>Manage campaign media across comprehensive categories with drag-and-drop placement:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Universal Format Support:</strong> Static images (PNG, JPG, WebP), animated assets (GIF, animated WebP), and seamless video backgrounds (MP4, WebM).</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Category Folders & Search:</strong> Organize assets into Maps, Tokens, Handouts, and Audio with instant tag and name filtering.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Contextual Canvas Dragging:</strong> Dragging an asset onto the canvas prompts placement as a <strong>Map Background</strong>, a <strong>Player/NPC Token</strong>, or a <strong>Layered Tactical Prop/Tile</strong>.</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="doc-feature-card" data-keywords="youtube streaming battlemaps zero-gap looping ping pong dual player 1.10 crop thumbnail">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-brands fa-youtube red"></i> YouTube Zero-Gap Looping Video Engine
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-infinity"></i> Ping-Pong Looping</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>Stream ambient animated battlemaps (rainy ruins, volcanic caverns, tavern hearths) directly from YouTube:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Seamless Ping-Pong Looping:</strong> Standard YouTube embeds freeze or stutter during replay. ForgeD VTT employs dual alternating players to deliver a <strong>zero-gap, stutter-free loop</strong> without black frames.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Automatic 1.10× Crop:</strong> Video battlemaps automatically scale by 1.10× to push YouTube interface overlays, video titles, and watermark badges outside the visible viewport edge for full immersion.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Instant Thumbnail Generation:</strong> Pasting a YouTube link automatically extracts high-resolution thumbnail artwork (<code>maxresdefault.jpg</code>) for gallery cards and scene selection.</li>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div class="doc-feature-card" data-keywords="pinterest pin share links pin.it originals upscaling server unshortening animated pins">
-                                <div class="doc-feature-card-header">
-                                    <div class="doc-feature-title">
-                                        <i class="fa-brands fa-pinterest red"></i> Pinterest Share Link & Master-Art Upscaling
-                                    </div>
-                                    <span class="btn-inspector-action"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Upscaling</span>
-                                </div>
-                                <div class="doc-feature-body">
-                                    <p>Import character portraits and fantasy tokens directly using share links from Pinterest:</p>
-                                    <ul>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Direct Share Links:</strong> Paste standard Pinterest URLs or mobile app shortlinks (e.g. <code>https://pin.it/xxxxx</code>) directly into the URL import box.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Server-Side Unshortening:</strong> The backend resolver endpoint (<code>/api/resolve-media-url</code>) follows redirect chains and extracts direct media sources, cleanly bypassing browser CORS restrictions.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Automatic <code>/originals/</code> Master Upscaling:</strong> Pinterest URLs containing downscaled thumbnails (such as <code>/236x/</code> or <code>/736x/</code>) are automatically converted into full-resolution <code>/originals/</code> master art.</li>
-                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Animated Pins & Video Support:</strong> Fully supports animated GIF and MP4 video pins with live loop playback on the canvas.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-list-check"></i> Step-by-Step Media Workflows
-                        </div>
-
-                        <div class="doc-workflow-list">
-                            <div class="doc-workflow-item">
-                                <div class="doc-workflow-badge">1</div>
-                                <div class="doc-workflow-content">
-                                    <h4>Streaming an Animated YouTube Battlemap</h4>
-                                    <p>Open the <strong>Asset Gallery</strong> tab and click <strong>+ Add Online URL</strong>. Paste your YouTube link (e.g. <code>https://www.youtube.com/watch?v=...</code>). Choose <strong>Set as Active Map</strong>. ForgeD VTT initializes the dual ping-pong video player with 1.10× auto-crop, streaming continuous animated ambiance across all connected player screens.</p>
-                                </div>
-                            </div>
-                            <div class="doc-workflow-item">
-                                <div class="doc-workflow-badge">2</div>
-                                <div class="doc-workflow-content">
-                                    <h4>Importing Character & NPC Art from Pinterest</h4>
-                                    <p>Find a character portrait on Pinterest (desktop or mobile app). Copy the pin link or <code>pin.it</code> share link. In the Asset Gallery, click <strong>+ Add Online URL</strong> and paste the link. The resolver automatically upscales to <code>/originals/</code> master resolution and creates a ready-to-use token in your gallery.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="doc-section-subtitle">
-                            <i class="fa-solid fa-table"></i> Supported Media & Streaming Reference
-                        </div>
-
-                        <div class="manual-table-wrap">
-                            <table class="manual-table">
-                                <thead>
-                                    <tr>
-                                        <th>Media Source</th>
-                                        <th>Supported URL Formats</th>
-                                        <th>Optimization & Playback Engine</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><i class="fa-brands fa-youtube" style="color:#f00;"></i> <strong>YouTube Video Map</strong></td>
-                                        <td><code>youtube.com/watch?v=...</code> or <code>youtu.be/...</code></td>
-                                        <td>Dual ping-pong zero-gap looping + 1.10× UI crop</td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="fa-brands fa-pinterest" style="color:#e60023;"></i> <strong>Pinterest Share Link</strong></td>
-                                        <td><code>pin.it/xxxxx</code> mobile shortlinks</td>
-                                        <td>Server-side redirect unshortening + auto-upscale to <code>/originals/</code></td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="fa-brands fa-pinterest" style="color:#e60023;"></i> <strong>Pinterest Direct Pin</strong></td>
-                                        <td><code>pinterest.com/pin/123456789/</code></td>
-                                        <td>Direct master-art extraction; animated GIF & MP4 pin support</td>
-                                    </tr>
-                                    <tr>
-                                        <td><i class="fa-solid fa-file-image" style="color:var(--color-gold-bright);"></i> <strong>Local Asset Uploads</strong></td>
-                                        <td>PNG, JPG, WebP, GIF, MP4, WebM</td>
-                                        <td>Direct canvas drag-and-drop; persistent campaign asset storage</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-
-                    <!-- SECTION 10: GM SETTINGS & CONFIG -->
-                    <section class="manual-section" id="guide-config-settings">
-                        <div class="manual-section-header">
-                            <div class="manual-section-title-wrap">
-                                <div class="manual-section-icon"><i class="fa-solid fa-gears"></i></div>
-                                <h3 class="manual-section-title">GM Connection, Setup & Campaign Rules</h3>
-                            </div>
-                            <span class="manual-section-badge gm">GM Setup</span>
-                        </div>
-
-                        <div class="manual-table-wrap">
-                            <table class="manual-table">
-                                <thead>
-                                    <tr>
-                                        <th>Setting Card</th>
-                                        <th>Option / Control</th>
-                                        <th>Function & Description</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Server Connection URLs</strong></td>
-                                        <td><code>Copy Remote / Local URL</code></td>
-                                        <td>1-click copy buttons for your HTTPS Cloudflare subdomain URL or local network IP address.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Player Allowlist</strong></td>
-                                        <td><code>Add / Remove Usernames</code></td>
-                                        <td>Restrict campaign access strictly to specified usernames. If list is empty, any player can join.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>GM Roll Visibility</strong></td>
-                                        <td><code>Public / Private (GM Only)</code></td>
-                                        <td>Choose whether monster attack and damage rolls are shown to everyone or hidden in secret.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>HP Bar Global Rules</strong></td>
-                                        <td><code>Always / Hover / Never</code></td>
-                                        <td>Configure monster and player HP bar and name visibility rules separately for GM and Players.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Temp HP Bar Style</strong></td>
-                                        <td><code>Stacked / Layered / Split</code></td>
-                                        <td>Choose how temporary hit points display visually above creature tokens on the map.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Encumbrance Rules</strong></td>
-                                        <td><code>Standard / Variant</code></td>
-                                        <td>Switch between standard (STR × 15) or variant encumbrance rules (STR × 5 encumbered, STR × 10 heavy).</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Initiative Dex Tiebreaker</strong></td>
-                                        <td><code>Checkbox (Checked by default)</code></td>
-                                        <td>Appends character Dexterity as decimal tiebreaker (e.g. roll 14 with 16 DEX becomes 14.16).</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Dynamic Sight Radius</strong></td>
-                                        <td><code>5ft to 120ft (Default 60ft)</code></td>
-                                        <td>Controls global player line-of-sight distance through the dynamic Fog of War overlay.</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
-
-                    <!-- SECTION 11: CAMPAIGN MAP MANAGER & MODALS -->
-                    <section class="manual-section" id="guide-modals">
-                        <div class="manual-section-header">
-                            <div class="manual-section-title-wrap">
-                                <div class="manual-section-icon"><i class="fa-solid fa-map-location-dot"></i></div>
-                                <h3 class="manual-section-title">Campaign Map Manager & Modals</h3>
-                            </div>
-                            <span class="manual-section-badge gm">GM Tool</span>
-                        </div>
-
-                        <div class="manual-subgrid">
-                            <div class="manual-subcard">
-                                <h4><i class="fa-solid fa-map"></i> Campaign Map Manager Modal</h4>
-                                <p>Click the map button on the left toolbar to open the Map Manager:</p>
-                                <ul>
-                                    <li><i class="fa-solid fa-check"></i> <strong>Blank Tactical Grid:</strong> Create a battlemap with customizable width, height, and cell size.</li>
-                                    <li><i class="fa-solid fa-check"></i> <strong>Import 5eTools Maps:</strong> Select any official D&D 5e adventure (e.g. Curse of Strahd, Phandelver) and import hi-res dungeon maps with 1 click.</li>
-                                    <li><i class="fa-solid fa-check"></i> <strong>Upload File:</strong> Upload local JPG/PNG/WEBP files directly to your server.</li>
-                                    <li><i class="fa-solid fa-check"></i> <strong>External URL:</strong> Paste any web link, GIF, or video stream.</li>
-                                </ul>
-                            </div>
-
-                            <div class="manual-subcard">
-                                <h4><i class="fa-solid fa-sliders"></i> Map Grid Calibration</h4>
-                                <p>Edit any map to calibrate its grid parameters:</p>
-                                <ul>
-                                    <li><i class="fa-solid fa-check"></i> <strong>Grid Type:</strong> Choose Square, Hex (Vertical), or Hex (Horizontal).</li>
-                                    <li><i class="fa-solid fa-check"></i> <strong>Cell Size:</strong> Adjust pixels per grid square (20px to 200px).</li>
-                                    <li><i class="fa-solid fa-check"></i> <strong>Grid Shift X & Y:</strong> Fine-tune grid alignment to align with artwork.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- SECTION 12: MASTER CHAT DICE FORMULA MANUAL -->
+                    <!-- SECTION 2.3: MASTER CHAT DICE FORMULA MANUAL -->
                     <section class="manual-section" id="guide-dice-engine">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -1508,7 +999,1024 @@
                         </div>
                     </section>
 
-                    <!-- SECTION 13: COMPLETE KEYBOARD & MOUSE SHORTCUTS -->
+                    <!-- SECTION 3.1: CHARACTER BUILDER & LEVEL UP ASSISTANT -->
+                    <section class="manual-section" id="guide-char-builder">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                                <h3 class="manual-section-title">Character Builder & Level Up Assistant</h3>
+                            </div>
+                            <span class="manual-section-badge player">1-Click Build</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT features an automated Character Builder and Level Up Assistant that scans the extensive 5e compendium database to build characters from scratch or advance their levels in seconds. Every class feature, archetype progression, hit die pool, and weapon macro is generated automatically.
+                        </p>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-list-check"></i> How to Build or Level Up a Character (Step-by-Step)
+                        </div>
+
+                        <div class="doc-workflow-list">
+                            <div class="doc-workflow-item" data-keywords="step build tab class subclass level ancestry background">
+                                <div class="doc-workflow-badge">1</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Set Your Core Class & Level in the Build Tab</h4>
+                                    <p>Open your character sheet and click the <strong>Build</strong> tab (or click the glowing <strong>Level Up</strong> button in the sheet header). Choose your class (e.g. Fighter, Rogue, Wizard), select your archetype subclass (e.g. Battle Master, Arcane Trickster, Evocation), pick your race/species, and set your target level (1 to 20). The VTT automatically updates your proficiency bonus, hit die total, and available spell slots.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="step 2 audit compendium 1-click feature scan checklist">
+                                <div class="doc-workflow-badge">2</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Run the 1-Click Character Feature Audit</h4>
+                                    <p>Click the <strong>Open Character Builder & Level Up Assistant</strong> button. The assistant instantly audits your character's current level against the official class feature trees. It presents a clean, organized checklist of all available features, archetype powers, racial traits, background items, and spell recommendations up to your level.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="step 3 select features apply import automated">
+                                <div class="doc-workflow-badge">3</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Select Features & Apply to Sheet</h4>
+                                    <p>Review the audited features with checkboxes pre-selected for your level. Click <strong>Apply & Import to Character</strong>. All selected abilities, counter trackers, and traits are automatically created in your sheet's Abilities tab—no manual copy-pasting required.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="step 4 weapon macros auto finesse ranged +1 +2 +3 damage dice actions">
+                                <div class="doc-workflow-badge">4</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Automatic Weapon Attack Macro Creation</h4>
+                                    <p>Whenever you import weapons or equip gear, ForgeD VTT automatically constructs attack macros for your <strong>Actions</strong> list. It intelligently detects weapon properties: choosing Dexterity over Strength for Finesse weapons if your DEX is higher, applying weapon enhancement bonuses (like +1, +2, or +3), and generating separate damage rows for versatile two-handed strikes or bonus damage dice!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-microchip"></i> Key Character Builder Features
+                        </div>
+
+                        <div class="doc-feature-group">
+                            <div class="doc-feature-card" data-keywords="builder weapon macros finesse ranged stat detection attack action">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-crosshairs red"></i> Intelligent Attack Macro Generator
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-bolt"></i> Auto-Calculated</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Eliminate complex roll math with fully automated attack and damage action generation:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Finesse & Ranged Auto-Pick:</strong> Ranged weapons automatically use Dexterity; finesse weapons automatically select whichever stat is higher between Strength and Dexterity.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Magic Weapon Bonuses:</strong> Recognizes <code>+1</code>, <code>+2</code>, or <code>+3</code> items in your inventory and automatically applies the enchantment bonus to both attack and damage rolls.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Multi-Row Damage Support:</strong> Weapons with versatile grips (e.g. Longsword 1d8 / 1d10) or elemental riders (e.g. Flame Tongue +2d6 fire) automatically build multiple clickable damage rows.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="multiclass class trees archetypes spell slot matrix point buy">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-layer-group blue"></i> Multiclassing & Point-Buy Support
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-diagram-project"></i> 5e Rules Compliant</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Flexible character progression for standard builds and advanced multiclass veterans:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Multiclass Level Tracking:</strong> Combine levels across multiple classes (e.g. Paladin 6 / Sorcerer 4) with automatic multiclass spell slot matrix calculations.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Reactive Stat Modifiers:</strong> Changing any base ability score (STR, DEX, CON, INT, WIS, CHA) instantly updates saving throws, passive perception, armor class, and skill checks across the entire party view.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Hit Dice Pools:</strong> Automatically tallies heterogeneous hit dice pools across multiple classes (e.g., 6d10 + 4d6) for spending during Short Rests.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 3.2: EQUIPMENT, ARMOR ENGINE & CARRY WEIGHT -->
+                    <section class="manual-section" id="guide-player-sheets">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                                <h3 class="manual-section-title">Equipment, Armor Engine & Carry Weight</h3>
+                            </div>
+                            <span class="manual-section-badge player">Inventory & Defense</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT provides a dynamic 5e equipment inventory with drag-and-drop compendium importing, automatic Armor Class calculation across all armor categories, coin weight simulation, and attunement management.
+                        </p>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-shield-halved"></i> Dynamic Armor Class (AC) Calculation Engine
+                        </div>
+
+                        <div class="doc-feature-group">
+                            <div class="doc-feature-card" data-keywords="armor class light medium heavy shield formula recalculation stealth disadvantage">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-shield-heart red"></i> 5e Armor Category Automation
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-calculator"></i> Real-Time AC</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Equipping armor from your inventory recalculates your sheet AC instantly according to official 5e rules:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Light Armor (Padded, Leather, Studded Leather):</strong> Base AC + character's full Dexterity modifier without any cap.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Medium Armor (Hide, Chain Shirt, Scale Mail, Breastplate, Half Plate):</strong> Base AC + Dexterity modifier, automatically capped at a maximum bonus of <code>+2</code>.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Heavy Armor (Ring Mail, Chain Mail, Splint, Plate):</strong> Flat base AC with zero Dexterity bonus. Flags stealth disadvantage indicator.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Shields:</strong> Checking the <strong>Equip</strong> box on a shield automatically stacks <code>+2 AC</code> onto your total defense.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="currency coins 50 per pound weight encumbrance variant capacity strength">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-coins gold"></i> 50 Coins = 1 lb Weight & Encumbrance
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-weight-hanging"></i> Physical Coin Weight</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Comprehensive physical weight tracking for all adventurer belongings and wealth:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Coin Weight Calculation:</strong> Platinum, Gold, Electrum, Silver, and Copper pieces are summed and divided by 50 (<code>(PP + GP + EP + SP + CP) ÷ 50 = lbs</code>), adding real physical weight to your gear.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Live Encumbrance Meter:</strong> Monitors total carried weight against maximum carry capacity (<code>STR × 15 lbs</code>).</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Variant Encumbrance Alerts:</strong> Automatically marks when your character is Encumbered (<code>STR × 5 lbs</code>) or Heavily Encumbered (<code>STR × 10 lbs</code>) with speed penalties.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-list-check"></i> How to Import & Manage Equipment
+                        </div>
+
+                        <div class="doc-workflow-list">
+                            <div class="doc-workflow-item" data-keywords="import items compendium drag drop search filter potions weapons">
+                                <div class="doc-workflow-badge">1</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Search & Drag-and-Drop Compendium Items</h4>
+                                    <p>In the <strong>Equipment</strong> tab, click <strong>Add Item</strong> or browse the Compendium drawer. Filter items by category (Weapons, Armor, Potions, Scrolls, Wondrous Items, Rings, Wands) or search by name. Click the <strong>+</strong> button or drag the item directly into your inventory.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="equip armor weapon recalculate ac attune 3 slots">
+                                <div class="doc-workflow-badge">2</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Equip Gear & Attune to Magic Items</h4>
+                                    <p>Click the <strong>Equip</strong> checkbox on your weapons and armor. Your AC updates instantly, and weapon attack rolls are placed in your Actions panel. For magic items requiring attunement, toggle one of the 3 dedicated attunement bubbles.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="manage currency track ammunition consumables charges">
+                                <div class="doc-workflow-badge">3</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Track Ammunition, Potions & Coin Purses</h4>
+                                    <p>Easily increment or decrement arrows, bolts, torches, and potion doses directly on the item row. Adjust your PP, GP, EP, SP, and CP coin purses, watching the live weight bar adjust automatically.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-table"></i> Armor & Equipment Quick Reference
+                        </div>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Armor Category</th>
+                                        <th>5e AC Calculation Formula</th>
+                                        <th>Dexterity Modifier Impact</th>
+                                        <th>Stealth & Shield Compatibility</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Light Armor</strong></td>
+                                        <td><code>Base AC (11–12) + DEX Mod</code></td>
+                                        <td>Full Dexterity bonus applied</td>
+                                        <td>No stealth penalty; +2 AC with equipped shield</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Medium Armor</strong></td>
+                                        <td><code>Base AC (12–15) + DEX Mod (Max +2)</code></td>
+                                        <td>Capped at maximum of +2 bonus</td>
+                                        <td>Disadvantage on Stealth for Scale & Half Plate; +2 with shield</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Heavy Armor</strong></td>
+                                        <td><code>Flat Base AC (14–18)</code></td>
+                                        <td>No Dexterity bonus applied</td>
+                                        <td>Disadvantage on Stealth checks; +2 AC with equipped shield</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Shield</strong></td>
+                                        <td><code>+2 AC Stacking Bonus</code></td>
+                                        <td>N/A</td>
+                                        <td>Equipping adds flat +2 to current armor calculation</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Currency Weight</strong></td>
+                                        <td><code>Total Coins ÷ 50 = lbs</code></td>
+                                        <td>N/A</td>
+                                        <td>Added directly to total weight bar and encumbrance limits</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 3.3: SPELLBOOK SETUP, IMPORT & UPCASTING -->
+                    <section class="manual-section" id="guide-spells-magic">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-hat-wizard"></i></div>
+                                <h3 class="manual-section-title">Spellbook Setup, Import & Dynamic Upcasting</h3>
+                            </div>
+                            <span class="manual-section-badge player">Magic Engine</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT delivers an intelligent 5e spellcasting manager organized across cantrips and 1st through 9th level spell slots. Featuring compendium search filters, prepared spells tracking, and interactive upcast prompts with per-row scaling drawers.
+                        </p>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-wand-sparkles"></i> Leveled Spellcasting & Upcasting Engine
+                        </div>
+
+                        <div class="doc-feature-group">
+                            <div class="doc-feature-card" data-keywords="upcast modal scaling formula drawers leveled spell slots cure wounds fireball">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-wand-magic-sparkles blue"></i> Interactive Upcast Prompt & Scaling Drawers
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-fire"></i> Dynamic Scaling</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Cast spells at higher slot levels with automatic bonus dice calculation:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Interactive Slot Prompt:</strong> Clicking <strong>Cast</strong> on any leveled spell with scaling (e.g. <em>Cure Wounds</em>, <em>Fireball</em>, <em>Spirit Guardians</em>) opens an upcast prompt showing available slots.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Formula Scaling Drawers:</strong> Expand any spell card to view its base formula and per-slot scaling rules (e.g. <code>+1d8 per slot level above 1st</code>).</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Automated Slot Deduction:</strong> Casting at a higher level automatically expends a slot of that chosen level and rolls the scaled dice in chat.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="cantrip scaling level 5 11 17 fire bolt eldritch blast spell dc attack roll">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-bolt-lightning gold"></i> Automatic Cantrip Scaling & Spell DC
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-sparkles"></i> Level Scaled</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Cantrips and casting statistics automatically grow as your character advances:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Tiered Cantrip Scaling:</strong> Damage cantrips automatically upgrade at levels 5, 11, and 17 (e.g., <em>Fire Bolt</em> automatically deals 1d10 at levels 1–4, 2d10 at 5–10, 3d10 at 11–16, and 4d10 at 17+).</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Spell Attack & DC Binding:</strong> Spell attack bonus (<code>Proficiency + Spellcasting Mod</code>) and Spell Save DC (<code>8 + Proficiency + Spellcasting Mod</code>) stay bound to your main casting ability.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Warlock Pact Magic Slots:</strong> Short rest Pact Magic slots are tracked independently from standard multi-class spell grids.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-list-check"></i> How to Add Spells & Prepare Your Spellbook
+                        </div>
+
+                        <div class="doc-workflow-list">
+                            <div class="doc-workflow-item" data-keywords="import spells compendium filter class school wizard cleric">
+                                <div class="doc-workflow-badge">1</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Search & Filter the Spell Compendium</h4>
+                                    <p>Open the <strong>Spells</strong> tab on your sheet and click <strong>Add Spell</strong>. Filter by class spell list (Wizard, Cleric, Druid, Bard, Sorcerer, Warlock, Paladin, Ranger, Artificer), spell level (Cantrips to 9th level), school of magic (Evocation, Abjuration, Necromancy, etc.), or ritual tag. Click <strong>+</strong> to import directly into your spellbook.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="prepare spells filter combat star prepared spells limit">
+                                <div class="doc-workflow-badge">2</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Prepare Spells & Toggle the Prepared Filter</h4>
+                                    <p>Click the <strong>Star</strong> icon next to spells you have prepared for the day. Use the <strong>Show Prepared Only</strong> toggle button to filter out inactive spells during combat, giving you a clean and rapid tactical interface.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="cast leveled spell chat upcast slot spend">
+                                <div class="doc-workflow-badge">3</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Cast Spells Directly to Multiplayer Chat</h4>
+                                    <p>Click <strong>Cast</strong> next to your spell. Choose your slot level if upcasting. The spell card broadcasts to everyone in the campaign, complete with spell description, range, components, saving throw DC prompt, and 3D physics dice rolls!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 3.4: CLASS FEATURES, FEATS & ACTIVE REST COUNTERS -->
+                    <section class="manual-section" id="guide-features-counters">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-award"></i></div>
+                                <h3 class="manual-section-title">Class Features, Feats & Active Rest Counters</h3>
+                            </div>
+                            <span class="manual-section-badge player">Abilities & Resources</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            The Abilities tab organizes your racial traits, class archetype features, feats, and custom resource counters. Features tagged for Short Rest or Long Rest automatically replenish during rest routines with one click.
+                        </p>
+
+                        <div class="doc-feature-group">
+                            <div class="doc-feature-card" data-keywords="short rest long rest recovery counters sr lr ki rage action surge">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-campground green"></i> Automated Short & Long Rest Recovery
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-bed"></i> 1-Click Rest</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Rest buttons in the sheet header handle standard 5e resource refresh routines:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Short Rest (SR):</strong> Prompts for spending available Hit Dice (rolled directly from the Hit Dice pill with CON modifier added to chat). Automatically replenishes all abilities tagged with <code>SR</code> (e.g. Fighter Action Surge, Monk Ki, Warlock Pact Slots, Bardic Inspiration).</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Long Rest (LR):</strong> Instantly resets current HP to maximum, clears Temporary HP, restores spent Hit Dice up to half of character level, and fully recharges all spell slots and <code>LR</code> features (e.g. Barbarian Rage, Paladin Lay on Hands, Spell Slots).</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="custom counters bubbles track resource lay on hands sorcery points superiority dice">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-circle-notch blue"></i> Interactive Resource Bubbles & Trackers
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-sliders"></i> Clickable Pips</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Create and monitor flexible resource pools for any official or custom ability:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Clickable Counter Bubbles:</strong> Click pips or use +/- stepper controls to expend charges (e.g., Sorcery Points, Superiority Dice, Luck points).</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Feats & Racial Traits:</strong> Import feats like <em>Sharpshooter</em>, <em>War Caster</em>, or <em>Fey Teleportation</em> with complete rule descriptions and passive benefits.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Custom Resource Pools:</strong> Add custom counters for homebrew powers, magic item charges, or survival tracking (rations, waterskins, exhaustion levels).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-table"></i> Rest Recovery Cheat Sheet
+                        </div>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Rest Type</th>
+                                        <th>Health & Hit Dice Effect</th>
+                                        <th>Recharged Features</th>
+                                        <th>Party Broadcast</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Short Rest (1 Hour)</strong></td>
+                                        <td>Spend available Hit Dice (<code>1dDie + CON</code>) to heal HP</td>
+                                        <td>All features tagged <code>SR</code>, Warlock Pact Magic slots, Channel Divinity</td>
+                                        <td>Logs Hit Dice roll totals & spent charges to multiplayer chat</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Long Rest (8 Hours)</strong></td>
+                                        <td>Restores HP to maximum, clears Temp HP, recovers ½ spent Hit Dice</td>
+                                        <td>All spell slots, all <code>LR</code> features (Rage, Lay on Hands, Wild Shape, Ki)</td>
+                                        <td>Synchronizes full health bar to canvas token and announces rest completion</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 4.1: BESTIARY, CUSTOM NPCS & COMPANIONS -->
+                    <section class="manual-section" id="guide-bestiary">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-book-skull"></i></div>
+                                <h3 class="manual-section-title">Bestiary, Custom NPCs & Companions</h3>
+                            </div>
+                            <span class="manual-section-badge gm">GM & Player</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT integrates a comprehensive 5e monster compendium with interactive creature sheets, instant drag-to-canvas token spawning, homebrew NPC building, and linked companion/familiar ownership for players.
+                        </p>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-dragon"></i> Monster Compendium & Interactive Creature Sheets
+                        </div>
+
+                        <div class="doc-feature-group">
+                            <div class="doc-feature-card" data-keywords="creature sheet monster compendium stat block attacks multiattack condition markers">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-paw red"></i> Interactive Stat Blocks & 1-Click Actions
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-bolt"></i> 1-Click Combat</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Every monster in the compendium opens as an interactive creature sheet with live rolling:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>1-Click Attacks & Multiattack:</strong> Click any weapon, claw, bite, or breath weapon action to broadcast full attack bonuses, reach/range, and damage dice formulas directly to chat with clickable damage roll chips.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>In-Line Traits & Recharges:</strong> Special traits and recharge powers (e.g. <code>Recharge 5–6</code>) feature in-line clickable dice chips for fast resolution without opening external references.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Condition Ring Markers:</strong> Creature sheets allow toggling status condition rings (e.g. Blinded, Charmed, Paralyzed, Poisoned, Prone, Stunned) that render immediately on the token on the canvas grid.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Sensory & Defensive Traits:</strong> Darkvision, Blindsight, Tremorsense, Truesight, and damage resistances/immunities are clearly displayed on the header for quick tactical assessment.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="custom npc homebrew monster builder clone edit cr stats actions">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-pen-to-square"></i> Custom NPC & Homebrew Monster Builder
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-database"></i> Campaign Persistent</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Forge your own bosses, unique campaign encounters, or non-player characters:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Clone Existing Monsters:</strong> Duplicate any existing SRD stat block with a single click to customize HP, Armor Class, Challenge Rating, or modify spell lists while keeping the foundation intact.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Custom Action Engine:</strong> Add custom melee attacks, ranged attacks, legendary actions, reactions, and lair actions with custom dice formulas and formatted descriptions.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Campaign Database Persistence:</strong> Custom NPCs and homebrew creations are stored directly in your campaign database and remain available across all sessions.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="companions familiars wild shape linked character player token control amber badge">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-shield-cat blue"></i> Companions, Familiars & Wild Shapes
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-users"></i> Dual Permissions</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Seamlessly assign creature sheets to players for ranger beasts, wizard familiars, summoned mounts, or druid wild shapes:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Linked Character Dropdown:</strong> Select a player character from the creature sheet's Linked Character dropdown to delegate token ownership to that specific player.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Dual Canvas Movement & Rolling:</strong> Both the assigned player and the GM have full permission to move the companion token on the grid, view its sheet, and execute attack/ability rolls.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Amber Companion Badge:</strong> Companion tokens display a distinct amber badge on the canvas and in the sidebar roster, distinguishing them from enemy NPCs and regular party tokens.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-list-check"></i> Step-by-Step Bestiary Workflows
+                        </div>
+
+                        <div class="doc-workflow-list">
+                            <div class="doc-workflow-item">
+                                <div class="doc-workflow-badge">1</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Spawning Monsters onto the Tactical Grid</h4>
+                                    <p>Open the <strong>Bestiary</strong> tab in the sidebar. Search for a monster by name or filter by Challenge Rating. Drag the monster card directly onto the canvas. A new token is created at the grid snap position, automatically bound to its creature sheet and ready for initiative tracking.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item">
+                                <div class="doc-workflow-badge">2</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Creating a Custom Boss or Homebrew NPC</h4>
+                                    <p>Click <strong>+ New Monster</strong> in the Bestiary or click the <strong>Duplicate</strong> icon on an existing monster. Edit the ability scores, HP dice formula, AC, and actions in the editor. Click <strong>Save to Bestiary</strong>. Your homebrew monster is immediately searchable and ready to spawn.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item">
+                                <div class="doc-workflow-badge">3</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Linking a Familiar or Companion to a Player</h4>
+                                    <p>Spawn the creature (e.g. Wolf, Owl) onto the map. Double-click the token to open its sheet. In the header, click the <strong>Linked Character</strong> dropdown and select the player character. The player can now move this token and roll its attacks directly from their view.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-table"></i> Bestiary & Creature Sheet Reference
+                        </div>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Feature</th>
+                                        <th>Behavior & Permission</th>
+                                        <th>Trigger / Location</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Drag to Canvas</strong></td>
+                                        <td>Spawns token on grid, generates creature instance and binds sheet</td>
+                                        <td>Drag card from Bestiary sidebar onto map</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>1-Click Attack</strong></td>
+                                        <td>Rolls attack roll and damage dice with damage type to multiplayer chat</td>
+                                        <td>Click action button on creature sheet</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Linked Companion</strong></td>
+                                        <td>Grants assigned player dual token movement and roll access</td>
+                                        <td>"Linked Character" dropdown in creature sheet header</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Condition Ring</strong></td>
+                                        <td>Toggles visual status effect ring directly on canvas token</td>
+                                        <td>Token radial menu or creature sheet conditions</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Clone Monster</strong></td>
+                                        <td>Copies entire SRD stat block into homebrew builder for quick tweaking</td>
+                                        <td>Duplicate icon in Bestiary card list</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 4.2: CAMPAIGN MAP MANAGER & MODALS -->
+                    <section class="manual-section" id="guide-modals">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                                <h3 class="manual-section-title">Campaign Map Manager & Modals</h3>
+                            </div>
+                            <span class="manual-section-badge gm">GM Tool</span>
+                        </div>
+
+                        <div class="manual-subgrid">
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-map"></i> Campaign Map Manager Modal</h4>
+                                <p>Click the map button on the left toolbar to open the Map Manager:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Blank Tactical Grid:</strong> Create a battlemap with customizable width, height, and cell size.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Import 5eTools Maps:</strong> Select any official D&D 5e adventure (e.g. Curse of Strahd, Phandelver) and import hi-res dungeon maps with 1 click.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Upload File:</strong> Upload local JPG/PNG/WEBP files directly to your server.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>External URL:</strong> Paste any web link, GIF, or video stream.</li>
+                                </ul>
+                            </div>
+
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-sliders"></i> Map Grid Calibration</h4>
+                                <p>Edit any map to calibrate its grid parameters:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Grid Type:</strong> Choose Square, Hex (Vertical), or Hex (Horizontal).</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Cell Size:</strong> Adjust pixels per grid square (20px to 200px).</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Grid Shift X & Y:</strong> Fine-tune grid alignment to align with artwork.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 4.3: DUNGEON MAP TOOLS: WALLS, DOORS, TRAPS & PORTALS -->
+                    <section class="manual-section" id="guide-map-tools">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-dungeon"></i></div>
+                                <h3 class="manual-section-title">Dungeon Map Tools: Walls, Doors, Traps & Portals</h3>
+                            </div>
+                            <span class="manual-section-badge gm">Interactive Map Tools</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT provides built-in tactical dungeon mechanics: interactive doors with swing hinges and locks, hidden proximity traps with saving throw prompts, spatial and inter-map teleportation portals, and 2D raycasted Fog of War with token lighting presets.
+                        </p>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-list-check"></i> How to Use Map Tools & Interactive Dungeons (Step-by-Step)
+                        </div>
+
+                        <div class="doc-workflow-list">
+                            <div class="doc-workflow-item" data-keywords="walls doors draw wall open close lock secret hinge swing angle">
+                                <div class="doc-workflow-badge">1</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Draw Walls & Configure Interactive Doors</h4>
+                                    <p>Select the <strong>Wall Tool</strong> from the left toolbar to draw occlusion segments. Right-click any wall to convert it into a <strong>Door</strong>, <strong>Window</strong>, or <strong>Secret Door</strong>. In the Door Settings popup, configure <strong>Locked</strong> state, <strong>Secret</strong> visibility, and toggle <strong>Hinges</strong> with customizable swing angles (15° to 180°). Closed doors block token vision and light rays; clicking an unlocked door swings it open!</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="traps place grid hidden trigger auto save dc damage prompt chat fx">
+                                <div class="doc-workflow-badge">2</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Arm Concealed Traps with Proximity Triggers & Save DCs</h4>
+                                    <p>Open the <strong>Map Tools</strong> drawer and select the <strong>Traps</strong> tab. Choose a shape (Rectangle, Circle, or Line) and place the trap on the canvas. Set its name, <strong>Save Ability</strong> (DEX, CON, WIS, etc.), <strong>Save DC</strong>, and <strong>Damage formula</strong> (e.g. <code>4d6 piercing</code>). When a token moves into the trap zone, it auto-springs with visual FX and posts an interactive chat card prompting targets to roll their saving throw!</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="portals teleporters inter-map spatial link pad non-euclidean">
+                                <div class="doc-workflow-badge">3</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Link Teleportation Portals Across Maps & Rooms</h4>
+                                    <p>In the <strong>Map Tools</strong> drawer, switch to the <strong>Portals</strong> tab. Place portal pads or line doorways with interactive rotation and resize handles. Link the portal to a <strong>Target Map</strong> and <strong>Target Portal ID</strong>. Moving a token into the portal instantly teleports it to the destination coordinates across campaign scenes or between rooms on the same map.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item" data-keywords="fog of war raycasting lighting presets torch lantern bullseye darkvision">
+                                <div class="doc-workflow-badge">4</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Dynamic 2D Raycast Fog of War & Lighting Presets</h4>
+                                    <p>Enable <strong>Fog of War</strong> to shroud unexplored areas in darkness. Tokens automatically clear visibility polygons around themselves up to their sight radius. Use the token lighting menu to equip realistic 5e light presets: <strong>Torch</strong> (20ft bright / 20ft dim, flicker), <strong>Lantern</strong> (30ft / 30ft, pulse), <strong>Bullseye Lantern</strong> (60ft 60° directional cone), <strong>Candle</strong> (5ft / 5ft), <strong>Campfire</strong>, or <strong>Darkvision (Self)</strong> (60ft dim light).</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-compass-drafting"></i> Map Tool Mechanics & Capabilities
+                        </div>
+
+                        <div class="btn-inspector-grid">
+                            <div class="btn-inspector-card" data-keywords="door swing hinge rotate secret locked window line of sight">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon gold"><i class="fa-solid fa-door-closed"></i></div>
+                                        <span class="btn-inspector-name">Wall & Door Engine</span>
+                                    </div>
+                                    <span class="kbd-badge">Wall Types</span>
+                                </div>
+                                <p class="btn-inspector-desc">Doors dynamically block dynamic light rays and token line-of-sight when closed. When clicked, hinged doors rotate along their endpoint axis and clear sightlines through the doorway.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-key"></i> Open / Lock / Hinge Angle</div>
+                            </div>
+
+                            <div class="btn-inspector-card" data-keywords="hidden trap trigger auto save dc spike pit spring fx chat card">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon red"><i class="fa-solid fa-skull-crossbones"></i></div>
+                                        <span class="btn-inspector-name">Concealed Map Traps</span>
+                                    </div>
+                                    <span class="kbd-badge">Auto-Trigger</span>
+                                </div>
+                                <p class="btn-inspector-desc">Draw rectangular, circular, or line trap hazards. Entering the boundary triggers automated chat announcements with damage rolls and clickable 1-click player saving throw prompts.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-triangle-exclamation"></i> Save DC & Chat Trigger</div>
+                            </div>
+
+                            <div class="btn-inspector-card" data-keywords="portal teleporter target map id destination spatial transit">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-archway"></i></div>
+                                        <span class="btn-inspector-name">Spatial & Inter-Map Portals</span>
+                                    </div>
+                                    <span class="kbd-badge">Teleporters</span>
+                                </div>
+                                <p class="btn-inspector-desc">Place paired portal gates that transport tokens between battlemap scenes or different chambers of a mega-dungeon, with automatic destination coordinate snapping and rotation handles.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-arrows-split-up-and-left"></i> Inter-Map Transit</div>
+                            </div>
+
+                            <div class="btn-inspector-card" data-keywords="fog of war raycast light presets torch lantern bullseye candle">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-eye"></i></div>
+                                        <span class="btn-inspector-name">Raycasted Fog & Light Presets</span>
+                                    </div>
+                                    <span class="kbd-badge">2D Raycasting</span>
+                                </div>
+                                <p class="btn-inspector-desc">Real-time line-of-sight polygon masking. Equip tokens with 5e lighting presets (Torch 20/20ft, Lantern 30/30ft, Bullseye 60ft cone, Candle 5/5ft, Darkvision 60ft) with color and flicker effects.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-fire"></i> Dynamic Token Lighting</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 4.4: 2024 VS 2014 RULESET & COMPENDIUM SOURCES -->
+                    <section class="manual-section" id="guide-source-control">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-book-bookmark"></i></div>
+                                <h3 class="manual-section-title">2024 vs 2014 Ruleset & Compendium Sources</h3>
+                            </div>
+                            <span class="manual-section-badge gm">Source Control</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT natively supports both the new **2024 Revised 5e Core Rules** and the classic **2014 Legacy Rules**, along with popular Partnered third-party publishers and Unearthed Arcana playtest material.
+                        </p>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-sliders"></i> Master Source Control Features
+                        </div>
+
+                        <div class="doc-feature-group">
+                            <div class="doc-feature-card" data-keywords="2024 2014 ruleset edition switch revised legacy spells classes">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-code-compare gold"></i> 2024 Revised vs 2014 Legacy Master Switch
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-toggle-on"></i> Dual Editions</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Run your campaign using your group's preferred edition with zero hassle:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>2024 Revised Rules:</strong> Full support for 2024 Player's Handbook (XPHB) classes, weapon masteries, updated spells, and revised monster stat blocks.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>2014 Legacy Mode:</strong> Prefer classic 5e? Flip the edition switch to lock compendium lookups to 2014 core rules (PHB, DMG, MM, Xanathar's, Tasha's).</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Search Filtering:</strong> When both editions are active, search results display visual badges (<code>2024</code> vs <code>2014</code>) so players never confuse versions.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="partnered third party heliana humblewood steinhardt kobold mcdm ua unearthed arcana">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-dragon blue"></i> Partnered Publishers & Unearthed Arcana (UA)
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-puzzle-piece"></i> Third-Party Sync</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Expand your campaign universe with pre-indexed partnered third-party content:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Partnered Books:</strong> 1-click toggles for <em>Heliana's Guide to Monster Hunting</em>, <em>Humblewood</em>, <em>Steinhardt's Guide to the Eldritch Hunt</em>, <em>Kobold Press</em>, and <em>MCDM</em>.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Unearthed Arcana Master Switch:</strong> Turn on UA playtest classes, subclasses, and spells for playtesting with your table.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>State Persistence:</strong> Your active source selections are stored in your campaign settings and persist across game restarts.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-table"></i> Supported Compendium Sources Overview
+                        </div>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Source Category</th>
+                                        <th>Included Content</th>
+                                        <th>Badge / Indicator</th>
+                                        <th>Default Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>2024 Core Rules</strong></td>
+                                        <td>Revised Player's Handbook, Monster Manual, updated spells & weapon masteries</td>
+                                        <td><span class="kbd-badge" style="background:rgba(223,160,30,0.2); color:var(--color-gold-bright);">2024</span></td>
+                                        <td>Active / Supported</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>2014 Legacy 5e</strong></td>
+                                        <td>Original 2014 PHB, Xanathar's Guide to Everything, Tasha's Cauldron of Everything</td>
+                                        <td><span class="kbd-badge" style="background:rgba(56,189,248,0.2); color:var(--color-vtt-blue-bright);">2014</span></td>
+                                        <td>Active / Supported</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Partnered 3rd-Party</strong></td>
+                                        <td>Heliana's Guide, Humblewood, Steinhardt's Guide, Kobold Press, MCDM</td>
+                                        <td><span class="kbd-badge" style="background:rgba(111,162,71,0.2); color:var(--color-green-bright);">Partnered</span></td>
+                                        <td>Toggleable per campaign</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Unearthed Arcana</strong></td>
+                                        <td>Playtest sub-classes, feats, and experimental magic options</td>
+                                        <td><span class="kbd-badge" style="background:rgba(220,38,38,0.2); color:#f87171;">UA Playtest</span></td>
+                                        <td>Toggleable per campaign</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 4.5: ASSET GALLERY, YOUTUBE & PINTEREST STREAMING -->
+                    <section class="manual-section" id="guide-asset-gallery">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-photo-film"></i></div>
+                                <h3 class="manual-section-title">Asset Gallery, YouTube & Pinterest Streaming</h3>
+                            </div>
+                            <span class="manual-section-badge gm">GM Media Engine</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            The ForgeD VTT Asset Gallery manages battlemaps, tokens, audio, and visual handouts. It features native, zero-friction streaming integrations for YouTube animated battlemaps and high-resolution Pinterest artwork without manual file downloading.
+                        </p>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-folder-tree"></i> Asset Organization & Canvas Placement
+                        </div>
+
+                        <div class="doc-feature-group">
+                            <div class="doc-feature-card" data-keywords="asset gallery organization folders maps tokens props audio formats mp4 webm webp gif png">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-images"></i> Multi-Format Media Hub & Canvas Placement
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-layer-group"></i> Smart Layers</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Manage campaign media across comprehensive categories with drag-and-drop placement:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Universal Format Support:</strong> Static images (PNG, JPG, WebP), animated assets (GIF, animated WebP), and seamless video backgrounds (MP4, WebM).</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Category Folders & Search:</strong> Organize assets into Maps, Tokens, Handouts, and Audio with instant tag and name filtering.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Contextual Canvas Dragging:</strong> Dragging an asset onto the canvas prompts placement as a <strong>Map Background</strong>, a <strong>Player/NPC Token</strong>, or a <strong>Layered Tactical Prop/Tile</strong>.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="youtube streaming battlemaps zero-gap looping ping pong dual player 1.10 crop thumbnail">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-brands fa-youtube red"></i> YouTube Zero-Gap Looping Video Engine
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-infinity"></i> Ping-Pong Looping</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Stream ambient animated battlemaps (rainy ruins, volcanic caverns, tavern hearths) directly from YouTube:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Seamless Ping-Pong Looping:</strong> Standard YouTube embeds freeze or stutter during replay. ForgeD VTT employs dual alternating players to deliver a <strong>zero-gap, stutter-free loop</strong> without black frames.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Automatic 1.10× Crop:</strong> Video battlemaps automatically scale by 1.10× to push YouTube interface overlays, video titles, and watermark badges outside the visible viewport edge for full immersion.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Instant Thumbnail Generation:</strong> Pasting a YouTube link automatically extracts high-resolution thumbnail artwork (<code>maxresdefault.jpg</code>) for gallery cards and scene selection.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="pinterest pin share links pin.it originals upscaling server unshortening animated pins">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-brands fa-pinterest red"></i> Pinterest Share Link & Master-Art Upscaling
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Upscaling</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Import character portraits and fantasy tokens directly using share links from Pinterest:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Direct Share Links:</strong> Paste standard Pinterest URLs or mobile app shortlinks (e.g. <code>https://pin.it/xxxxx</code>) directly into the URL import box.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Server-Side Unshortening:</strong> The backend resolver endpoint (<code>/api/resolve-media-url</code>) follows redirect chains and extracts direct media sources, cleanly bypassing browser CORS restrictions.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Automatic <code>/originals/</code> Master Upscaling:</strong> Pinterest URLs containing downscaled thumbnails (such as <code>/236x/</code> or <code>/736x/</code>) are automatically converted into full-resolution <code>/originals/</code> master art.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Animated Pins & Video Support:</strong> Fully supports animated GIF and MP4 video pins with live loop playback on the canvas.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-list-check"></i> Step-by-Step Media Workflows
+                        </div>
+
+                        <div class="doc-workflow-list">
+                            <div class="doc-workflow-item">
+                                <div class="doc-workflow-badge">1</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Streaming an Animated YouTube Battlemap</h4>
+                                    <p>Open the <strong>Asset Gallery</strong> tab and click <strong>+ Add Online URL</strong>. Paste your YouTube link (e.g. <code>https://www.youtube.com/watch?v=...</code>). Choose <strong>Set as Active Map</strong>. ForgeD VTT initializes the dual ping-pong video player with 1.10× auto-crop, streaming continuous animated ambiance across all connected player screens.</p>
+                                </div>
+                            </div>
+                            <div class="doc-workflow-item">
+                                <div class="doc-workflow-badge">2</div>
+                                <div class="doc-workflow-content">
+                                    <h4>Importing Character & NPC Art from Pinterest</h4>
+                                    <p>Find a character portrait on Pinterest (desktop or mobile app). Copy the pin link or <code>pin.it</code> share link. In the Asset Gallery, click <strong>+ Add Online URL</strong> and paste the link. The resolver automatically upscales to <code>/originals/</code> master resolution and creates a ready-to-use token in your gallery.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-table"></i> Supported Media & Streaming Reference
+                        </div>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Media Source</th>
+                                        <th>Supported URL Formats</th>
+                                        <th>Optimization & Playback Engine</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><i class="fa-brands fa-youtube" style="color:#f00;"></i> <strong>YouTube Video Map</strong></td>
+                                        <td><code>youtube.com/watch?v=...</code> or <code>youtu.be/...</code></td>
+                                        <td>Dual ping-pong zero-gap looping + 1.10× UI crop</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-brands fa-pinterest" style="color:#e60023;"></i> <strong>Pinterest Share Link</strong></td>
+                                        <td><code>pin.it/xxxxx</code> mobile shortlinks</td>
+                                        <td>Server-side redirect unshortening + auto-upscale to <code>/originals/</code></td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-brands fa-pinterest" style="color:#e60023;"></i> <strong>Pinterest Direct Pin</strong></td>
+                                        <td><code>pinterest.com/pin/123456789/</code></td>
+                                        <td>Direct master-art extraction; animated GIF & MP4 pin support</td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-file-image" style="color:var(--color-gold-bright);"></i> <strong>Local Asset Uploads</strong></td>
+                                        <td>PNG, JPG, WebP, GIF, MP4, WebM</td>
+                                        <td>Direct canvas drag-and-drop; persistent campaign asset storage</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 5.1: GM SETTINGS, SHEET POPOUTS & CONFIG -->
+                    <section class="manual-section" id="guide-config-settings">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-gears"></i></div>
+                                <h3 class="manual-section-title">GM Settings, Sheet Popouts & Campaign Rules</h3>
+                            </div>
+                            <span class="manual-section-badge gm">GM & Multi-Monitor</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            Configure campaign-wide rules, security allowlists, and multi-monitor workflows. Both players and Game Masters can pop out character sheets and monster stat blocks into independent native desktop windows.
+                        </p>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-window-restore"></i> Multi-Monitor Sheet Popout Engine
+                        </div>
+
+                        <div class="doc-feature-group">
+                            <div class="doc-feature-card" data-keywords="sheet popout window multi monitor dual display separate window detached">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-arrow-up-right-from-square blue"></i> Dual-Monitor Sheet Popouts
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-desktop"></i> Multi-Monitor</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Move sheets to a second monitor without obstructing the battlemap canvas:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>1-Click Detach:</strong> Click the <strong>Popout Icon <i class="fa-solid fa-arrow-up-right-from-square"></i></strong> in the top-right corner of any Player Character sheet or Bestiary creature sheet.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Real-Time Sync:</strong> Detached popout windows communicate over direct postMessage channels—every roll, item equip, spell cast, or HP adjustment synchronizes instantly back to the main tabletop canvas.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Full Screen Tabletop:</strong> Keep your main monitor 100% focused on the battlemap while managing character notes, spells, and monster stats on a side monitor or laptop screen.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="doc-feature-card" data-keywords="security allowlist usernames privacy lock private campaign">
+                                <div class="doc-feature-card-header">
+                                    <div class="doc-feature-title">
+                                        <i class="fa-solid fa-shield-halved gold"></i> Player Allowlist & Access Control
+                                    </div>
+                                    <span class="btn-inspector-action"><i class="fa-solid fa-lock"></i> Security</span>
+                                </div>
+                                <div class="doc-feature-body">
+                                    <p>Control exactly who can connect to your tabletop session:</p>
+                                    <ul>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Username Allowlist:</strong> Add your players' handles to restrict campaign entry strictly to authorized friends.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Open Table Mode:</strong> Leave the allowlist blank to let anyone with your campaign link join as a guest.</li>
+                                        <li><i class="fa-solid fa-circle-dot"></i> <strong>Instant Kick / Ban:</strong> Remove unauthorized players from the active connections roster with one click.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="doc-section-subtitle">
+                            <i class="fa-solid fa-table"></i> Campaign Settings Quick Reference
+                        </div>
+
+                        <div class="manual-table-wrap">
+                            <table class="manual-table">
+                                <thead>
+                                    <tr>
+                                        <th>Setting Card</th>
+                                        <th>Option / Control</th>
+                                        <th>Function & Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Sheet Popouts</strong></td>
+                                        <td><code>Popout Button ⧉ in Header</code></td>
+                                        <td>Opens Player Sheet or NPC Stat Block into a separate browser/desktop window for multi-monitor gameplay.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Server Connection URLs</strong></td>
+                                        <td><code>Copy Remote / Local URL</code></td>
+                                        <td>1-click copy buttons for your HTTPS Cloudflare subdomain URL or local network IP address.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Player Allowlist</strong></td>
+                                        <td><code>Add / Remove Usernames</code></td>
+                                        <td>Restrict campaign access strictly to specified usernames. If list is empty, any player can join.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>GM Roll Visibility</strong></td>
+                                        <td><code>Public / Private (GM Only)</code></td>
+                                        <td>Choose whether monster attack and damage rolls are shown to everyone or hidden in secret.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>HP Bar Global Rules</strong></td>
+                                        <td><code>Always / Hover / Never</code></td>
+                                        <td>Configure monster and player HP bar and name visibility rules separately for GM and Players.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Temp HP Bar Style</strong></td>
+                                        <td><code>Stacked / Layered / Split</code></td>
+                                        <td>Choose how temporary hit points display visually above creature tokens on the map.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Encumbrance Rules</strong></td>
+                                        <td><code>Standard / Variant</code></td>
+                                        <td>Switch between standard (STR × 15) or variant encumbrance rules (STR × 5 encumbered, STR × 10 heavy).</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Initiative Dex Tiebreaker</strong></td>
+                                        <td><code>Checkbox (Checked by default)</code></td>
+                                        <td>Appends character Dexterity as decimal tiebreaker (e.g. roll 14 with 16 DEX becomes 14.16).</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Dynamic Sight Radius</strong></td>
+                                        <td><code>5ft to 120ft (Default 60ft)</code></td>
+                                        <td>Controls global player line-of-sight distance through the dynamic Fog of War overlay.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 5.2: COMPLETE KEYBOARD & MOUSE SHORTCUTS -->
                     <section class="manual-section" id="guide-shortcuts">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -1542,6 +2050,18 @@
                                         <td>Zooms in / out centered at cursor position.</td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Ping Location on Map</strong></td>
+                                        <td><span class="kbd-badge">Click & Hold Left Mouse</span></td>
+                                        <td>Canvas</td>
+                                        <td>Broadcasts an expanding radial beacon to grab all players' attention.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Measure Distance Ruler</strong></td>
+                                        <td><span class="kbd-badge">Ctrl + Drag</span> or <span class="kbd-badge">R</span></td>
+                                        <td>Canvas</td>
+                                        <td>Draws a real-time distance ruler measuring feet along grid lines and diagonals.</td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Center on Token / Map</strong></td>
                                         <td><span class="kbd-badge">Numpad 5</span> or <span class="kbd-badge">5</span></td>
                                         <td>Canvas</td>
@@ -1561,9 +2081,21 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Token Movement Waypoint</strong></td>
-                                        <td><span class="kbd-badge">Spacebar</span> (while dragging)</td>
+                                        <td><span class="kbd-badge">Spacebar</span> (while dragging token)</td>
                                         <td>Tokens</td>
-                                        <td>Places a waypoint segment on path measurement ruler.</td>
+                                        <td>Places a waypoint segment on path measurement ruler to measure movement around corners.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Multi-Select Tokens</strong></td>
+                                        <td><span class="kbd-badge">Shift + Drag Box</span></td>
+                                        <td>Tokens</td>
+                                        <td>Drag a bounding box to select multiple tokens and move them in formation.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Token Radial Menu</strong></td>
+                                        <td><span class="kbd-badge">Right Click on Token</span></td>
+                                        <td>Tokens</td>
+                                        <td>Opens radial quick ring for HP adjustment, conditions, lighting, elevation, and delete.</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Token Rotation (45°)</strong></td>
@@ -1596,15 +2128,29 @@
                                         <td>1: Tokens, 2: GM Layer, 3: Lighting, 4: Notes, 5: Map.</td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Detached Sheet Popout</strong></td>
+                                        <td><span class="kbd-badge">Popout Button ⧉</span></td>
+                                        <td>Sheets</td>
+                                        <td>Opens character or creature sheet into separate native window for multi-monitor gaming.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Fast Dice Modifier</strong></td>
+                                        <td><span class="kbd-badge">Right Click Die Button</span></td>
+                                        <td>Fast Dice Bar</td>
+                                        <td>Opens custom dice quantity input (e.g. <code>4d6</code>, <code>8d6</code>).</td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Dismiss Menus</strong></td>
                                         <td><span class="kbd-badge">Escape</span></td>
                                         <td>UI Modals</td>
-                                        <td>Closes token radial context menus and mobile drawers.</td>
+                                        <td>Closes token radial context menus, open drawers, and dialogs.</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </section>
+
+                
 
                 </div>
             </div>
@@ -1724,12 +2270,14 @@
             const cards = document.querySelectorAll('.btn-inspector-card');
             const subcards = document.querySelectorAll('.manual-subcard');
             const docCards = document.querySelectorAll('.doc-feature-card');
+            const workflowItems = document.querySelectorAll('.doc-workflow-item');
             const sections = document.querySelectorAll('.manual-section');
 
             if (!query) {
                 cards.forEach(c => c.style.display = 'flex');
                 subcards.forEach(sc => sc.style.display = 'block');
                 docCards.forEach(dc => dc.style.display = 'flex');
+                workflowItems.forEach(wi => wi.style.display = 'flex');
                 sections.forEach(s => s.style.display = 'block');
                 return;
             }
@@ -1764,15 +2312,26 @@
                 }
             });
 
+            workflowItems.forEach(wf => {
+                const text = wf.textContent.toLowerCase();
+                const keywords = wf.getAttribute('data-keywords') || '';
+                if (text.includes(query) || keywords.includes(query)) {
+                    wf.style.display = 'flex';
+                } else {
+                    wf.style.display = 'none';
+                }
+            });
+
             // If a section has no matching cards and text doesn't match query, hide section
             sections.forEach(section => {
                 const text = section.textContent.toLowerCase();
                 const visibleCards = section.querySelectorAll('.btn-inspector-card[style*="display: flex"]');
                 const visibleSubcards = section.querySelectorAll('.manual-subcard[style*="display: block"]');
                 const visibleDocCards = section.querySelectorAll('.doc-feature-card[style*="display: flex"]');
+                const visibleWorkflows = section.querySelectorAll('.doc-workflow-item[style*="display: flex"]');
                 const hasMatchingTable = section.querySelector('table') && text.includes(query);
 
-                if (visibleCards.length > 0 || visibleSubcards.length > 0 || visibleDocCards.length > 0 || hasMatchingTable || text.includes(query)) {
+                if (visibleCards.length > 0 || visibleSubcards.length > 0 || visibleDocCards.length > 0 || visibleWorkflows.length > 0 || hasMatchingTable || text.includes(query)) {
                     section.style.display = 'block';
                 } else {
                     section.style.display = 'none';

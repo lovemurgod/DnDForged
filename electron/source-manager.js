@@ -19,7 +19,9 @@ export const SOURCE_CATEGORIES = [
 export class SourceManager {
   constructor(options = {}) {
     this.rootDir = options.rootDir || process.cwd();
-    this.dataDir = options.dataDir || path.join(this.rootDir, '5etools-src', 'data');
+    const vttData = path.join(this.rootDir, 'vtt', 'data');
+    const legacyData = path.join(this.rootDir, '5etools-src', 'data');
+    this.dataDir = options.dataDir || (fs.existsSync(vttData) ? vttData : legacyData);
     this.campaignDataDir = options.campaignDataDir || path.join(this.rootDir, '.dndforged-data');
     this.configFilePath = path.join(this.campaignDataDir, 'sources-config.json');
     this.bookTitlesCache = null;
