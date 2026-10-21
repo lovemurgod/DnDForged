@@ -327,13 +327,15 @@
                         <input type="text" id="manual-search-input" placeholder="Search buttons, shortcuts, dice..." oninput="filterManualTopics()">
                     </div>
 
-                                        <nav class="manual-toc" id="manual-toc-list">
+                    <nav class="manual-toc" id="manual-toc-list">
                         <div class="manual-toc-group">
                             <div class="manual-toc-title">1. Getting Started</div>
                             <a href="#guide-hosting-setup" class="manual-toc-link active"><i class="fa-solid fa-server"></i> GM Setup & Hosting</a>
                             <a href="#guide-toolbar" class="manual-toc-link"><i class="fa-solid fa-toolbox"></i> Left Toolbar Buttons</a>
+                            <a href="#guide-paint-drawings" class="manual-toc-link"><i class="fa-solid fa-palette"></i> Canvas Drawing & Paint</a>
                             <a href="#guide-canvas-tokens" class="manual-toc-link"><i class="fa-solid fa-gamepad"></i> Token Movement & Radial Menu</a>
                             <a href="#guide-hud" class="manual-toc-link"><i class="fa-solid fa-compass"></i> Canvas HUD & GM Preview</a>
+                            <a href="#guide-mobile-ui" class="manual-toc-link"><i class="fa-solid fa-mobile-screen-button"></i> Mobile & Tablet Controls</a>
                         </div>
 
                         <div class="manual-toc-group">
@@ -349,13 +351,16 @@
                             <a href="#guide-player-sheets" class="manual-toc-link"><i class="fa-solid fa-boxes-stacked"></i> Equipment, Armor & Carry Weight</a>
                             <a href="#guide-spells-magic" class="manual-toc-link"><i class="fa-solid fa-hat-wizard"></i> Spellbook Setup & Upcasting</a>
                             <a href="#guide-features-counters" class="manual-toc-link"><i class="fa-solid fa-award"></i> Class Features, Feats & Counters</a>
+                            <a href="#guide-sheet-dock" class="manual-toc-link"><i class="fa-solid fa-table-columns"></i> Multi-Tab Sheet Dock</a>
                         </div>
 
                         <div class="manual-toc-group">
                             <div class="manual-toc-title">4. Bestiary, Dungeons & Maps</div>
                             <a href="#guide-bestiary" class="manual-toc-link"><i class="fa-solid fa-book-skull"></i> Bestiary, NPCs & Companions</a>
                             <a href="#guide-modals" class="manual-toc-link"><i class="fa-solid fa-map-location-dot"></i> Map Manager & Grid Calibration</a>
+                            <a href="#guide-weather-engine" class="manual-toc-link"><i class="fa-solid fa-cloud-bolt"></i> Atmospheric Weather Engine</a>
                             <a href="#guide-map-tools" class="manual-toc-link"><i class="fa-solid fa-dungeon"></i> Dungeon Tools: Walls, Doors, Traps & Portals</a>
+                            <a href="#guide-handouts" class="manual-toc-link"><i class="fa-solid fa-note-sticky"></i> Campaign Handouts & Importer</a>
                             <a href="#guide-source-control" class="manual-toc-link"><i class="fa-solid fa-book-bookmark"></i> 2024 vs 2014 Rules & Compendium</a>
                             <a href="#guide-asset-gallery" class="manual-toc-link"><i class="fa-solid fa-photo-film"></i> Asset Gallery & Media Hub</a>
                         </div>
@@ -363,6 +368,7 @@
                         <div class="manual-toc-group">
                             <div class="manual-toc-title">5. Settings & Master Shortcuts</div>
                             <a href="#guide-config-settings" class="manual-toc-link"><i class="fa-solid fa-gears"></i> GM Settings & Sheet Popouts</a>
+                            <a href="#guide-themes-accessibility" class="manual-toc-link"><i class="fa-solid fa-palette"></i> Themes, Fonts & Accessibility</a>
                             <a href="#guide-shortcuts" class="manual-toc-link"><i class="fa-solid fa-keyboard"></i> All Keyboard & Mouse Hotkeys</a>
                         </div>
                     </nav>
@@ -520,17 +526,43 @@
                                 <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> Floating Combat HUD</div>
                             </div>
 
+                            <!-- Paint Tools Button -->
+                            <div class="btn-inspector-card" data-keywords="paint tools draw freehand pencil brush line arrow rect circle poly text eraser fill shortcut 6">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-palette"></i></div>
+                                        <span class="btn-inspector-name">Canvas Paint Tools</span>
+                                    </div>
+                                    <span class="kbd-badge">6</span>
+                                </div>
+                                <p class="btn-inspector-desc">Opens the floating Paint Tools ribbon. Draw freehand with pencil and brush, place tactical lines, arrows, rectangles, circles, multi-point polygons, text labels, and flood fills with grid snapping and undo/redo support.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-paint-brush"></i> Drawing Ribbon Overlay</div>
+                            </div>
+
+                            <!-- Map Tools Button -->
+                            <div class="btn-inspector-card" data-keywords="map tools traps portals teleport hazard trigger shortcut 7 gm only">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-dungeon"></i></div>
+                                        <span class="btn-inspector-name">Map Tools (Traps & Portals)</span>
+                                    </div>
+                                    <span class="kbd-badge">7 (GM)</span>
+                                </div>
+                                <p class="btn-inspector-desc">GM tool to design and place interactive dungeon hazards: proximity-triggered traps with saving throw prompts and DC checks, plus two-way spatial portals and inter-map teleportation gates.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> Traps & Portals Designer</div>
+                            </div>
+
                             <!-- Layers Switcher Button -->
-                            <div class="btn-inspector-card" data-keywords="layers switch gm token lighting notes map background shortcut ~+1 ~+2 ~+3 ~+4 ~+5">
+                            <div class="btn-inspector-card" data-keywords="layers switch gm token lighting notes map portals background shortcut ~+1 ~+2 ~+3 ~+4 ~+5 ~+6">
                                 <div class="btn-inspector-header">
                                     <div class="btn-inspector-title-wrap">
                                         <div class="btn-inspector-icon green"><i class="fa-solid fa-layer-group"></i></div>
                                         <span class="btn-inspector-name">Canvas Layer Switcher</span>
                                     </div>
-                                    <span class="kbd-badge">~ + 1..5</span>
+                                    <span class="kbd-badge">~ + 1..6</span>
                                 </div>
-                                <p class="btn-inspector-desc">Quickly isolate canvas layers: <span class="kbd-badge">~+1</span> Token Layer, <span class="kbd-badge">~+2</span> GM Secret Layer (invisible to players), <span class="kbd-badge">~+3</span> Lighting Layer, <span class="kbd-badge">~+4</span> Notes Layer, <span class="kbd-badge">~+5</span> Map Background Layer.</p>
-                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> 5-Layer Canvas Isolation</div>
+                                <p class="btn-inspector-desc">Quickly isolate canvas layers: <span class="kbd-badge">~+1</span> Token Layer, <span class="kbd-badge">~+2</span> GM Secret Layer (invisible to players), <span class="kbd-badge">~+3</span> Lighting Layer, <span class="kbd-badge">~+4</span> Notes Layer, <span class="kbd-badge">~+5</span> Map Background Layer, and <span class="kbd-badge">~+6</span> Portals Layer.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> 6-Layer Canvas Isolation</div>
                             </div>
 
                             <!-- Exit Game Button -->
@@ -544,6 +576,150 @@
                                 </div>
                                 <p class="btn-inspector-desc">Safely disconnects your WebSocket connection from the active campaign room and redirects back to the ForgeD VTT web portal homepage.</p>
                                 <div class="btn-inspector-action"><i class="fa-solid fa-right-from-bracket"></i> Return to Portal</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 1.3: CANVAS FREEHAND DRAWING & PAINT TOOLS -->
+                    <section class="manual-section" id="guide-paint-drawings">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-palette"></i></div>
+                                <h3 class="manual-section-title">Canvas Freehand Drawing & Paint Tools</h3>
+                            </div>
+                            <span class="manual-section-badge">Canvas Tools</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT includes a hardware-accelerated 2D canvas drawing engine. Sketch tactical plans, draw impromptu dungeon sketches, drop text labels, place geometric shapes, or erase annotations with real-time multiplayer synchronization and full history undo/redo stacks.
+                        </p>
+
+                        <div class="btn-inspector-grid">
+                            <!-- Pencil -->
+                            <div class="btn-inspector-card" data-keywords="paint pencil fine draw freehand sketch">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-pencil"></i></div>
+                                        <span class="btn-inspector-name">Fine Pencil</span>
+                                    </div>
+                                    <span class="kbd-badge">Freehand</span>
+                                </div>
+                                <p class="btn-inspector-desc">Crisp, precision freehand sketching. Ideal for writing handwriting notes, marking secret doors on the GM layer, or drawing detailed tactical symbols directly on the map.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> High-Precision Vector Stroke</div>
+                            </div>
+
+                            <!-- Brush -->
+                            <div class="btn-inspector-card" data-keywords="paint brush smooth anti-aliased broad stroke">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-paint-brush"></i></div>
+                                        <span class="btn-inspector-name">Smooth Paintbrush</span>
+                                    </div>
+                                    <span class="kbd-badge">Smooth</span>
+                                </div>
+                                <p class="btn-inspector-desc">Anti-aliased, rounded-cap paintbrush with dynamic velocity smoothing. Perfect for organic terrain contours, rivers, blood trails, and broad map painting.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Anti-Aliased Natural Brush</div>
+                            </div>
+
+                            <!-- Line & Arrow -->
+                            <div class="btn-inspector-card" data-keywords="paint straight line arrow vector direction marching order pointer">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-arrow-right"></i></div>
+                                        <span class="btn-inspector-name">Lines & Directional Arrows</span>
+                                    </div>
+                                    <span class="kbd-badge">Vector</span>
+                                </div>
+                                <p class="btn-inspector-desc">Click and drag to project straight tactical lines or directional arrowhead vectors. Essential for indicating line-of-fire, marching orders, and party exploration routes.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Directional Vector Guidance</div>
+                            </div>
+
+                            <!-- Rectangle & Circle -->
+                            <div class="btn-inspector-card" data-keywords="paint rectangle box square circle ellipse shape area zone">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-regular fa-square"></i></div>
+                                        <span class="btn-inspector-name">Boxes & Ellipses</span>
+                                    </div>
+                                    <span class="kbd-badge">Shapes</span>
+                                </div>
+                                <p class="btn-inspector-desc">Quickly drag out bounding rectangles or perfect circles. Support Outline Only, Fill Only, or Outline + Fill with semi-transparent tinted interiors for hazard zones and rooms.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Multi-Mode Shape Geometry</div>
+                            </div>
+
+                            <!-- Polygon -->
+                            <div class="btn-inspector-card" data-keywords="paint polygon multi-point path perimeter custom outline">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-draw-polygon"></i></div>
+                                        <span class="btn-inspector-name">Multi-Point Polygon</span>
+                                    </div>
+                                    <span class="kbd-badge">Poly</span>
+                                </div>
+                                <p class="btn-inspector-desc">Click successive points on the map to define complex irregular rooms, winding cave walls, or hazard zones. Double-click anywhere to automatically close the perimeter.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Click Points • Dbl-Click Close</div>
+                            </div>
+
+                            <!-- Flood Fill -->
+                            <div class="btn-inspector-card" data-keywords="paint fill bucket flood solid tint zone area layer">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-fill-drip"></i></div>
+                                        <span class="btn-inspector-name">Flood Fill Bucket</span>
+                                    </div>
+                                    <span class="kbd-badge">Fill</span>
+                                </div>
+                                <p class="btn-inspector-desc">Click any bounded drawing area or grid sector to flood it with the active theme color swatch. Perfect for quickly tinting deep water, acid pools, or consecrated ground.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Instant Layer Flood Fill</div>
+                            </div>
+
+                            <!-- Text Annotations -->
+                            <div class="btn-inspector-card" data-keywords="paint text label font type callout note caption">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-font"></i></div>
+                                        <span class="btn-inspector-name">Canvas Text Tool</span>
+                                    </div>
+                                    <span class="kbd-badge">Text</span>
+                                </div>
+                                <p class="btn-inspector-desc">Click anywhere on the battlemap to spawn an editable label. Type room numbers, puzzle clues, or trap hints directly into the scene with crystal-clear vector rendering.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Interactive Canvas Text</div>
+                            </div>
+
+                            <!-- Eraser Tool -->
+                            <div class="btn-inspector-card" data-keywords="paint eraser erase remove stroke rub delete">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon red"><i class="fa-solid fa-eraser"></i></div>
+                                        <span class="btn-inspector-name">Precision Eraser</span>
+                                    </div>
+                                    <span class="kbd-badge">Eraser</span>
+                                </div>
+                                <p class="btn-inspector-desc">Rub over existing drawings with precision alpha blending. Cleans away pencil marks, brush strokes, and shapes without affecting token sprites or map background art.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Alpha-Masked Erasing</div>
+                            </div>
+                        </div>
+
+                        <!-- Ribbon Controls & Palette Overview -->
+                        <div class="manual-subgrid" style="margin-top: 16px;">
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-sliders"></i> Stroke Weights & Grid Magnet</h4>
+                                <p>Fine-tune every stroke with five standardized weight presets and magnetic grid snapping:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>5 Stroke Widths:</strong> <code>2px</code> (Hairline), <code>4px</code> (Standard), <code>8px</code> (Bold), <code>16px</code> (Marker), and <code>24px</code> (Broad).</li>
+                                    <li><i class="fa-solid fa-magnet"></i> <strong>Grid Magnet Snapping:</strong> Click the magnet toggle in the ribbon to snap shape anchors, lines, and boxes directly to grid intersections and cell centers.</li>
+                                    <li><i class="fa-solid fa-rotate-left"></i> <strong>Undo & Redo History:</strong> Tap <span class="kbd-badge">Ctrl + Z</span> or click Undo to revert strokes; tap <span class="kbd-badge">Ctrl + Y</span> or click Redo to restore them.</li>
+                                </ul>
+                            </div>
+
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-palette"></i> Swatch Palette & Permissions</h4>
+                                <p>Vibrant colors tailored for tactical contrast with built-in player ownership security:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>10 Tactical Swatches:</strong> Gold (#eab308), Red (#ef4444), Blue (#3b82f6), Green (#22c55e), Purple (#a855f7), White, Silver, Orange, Cyan, and Deep Obsidian.</li>
+                                    <li><i class="fa-solid fa-eye-dropper"></i> <strong>Custom Color Picker:</strong> Click the custom color input in the ribbon for any hex code or RGB tone.</li>
+                                    <li><i class="fa-solid fa-shield-halved"></i> <strong>Layer Permissions:</strong> Players can freely draw on the Token Layer and edit their own drawings. The Game Master retains master permissions to erase or edit drawings across all 6 layers.</li>
+                                </ul>
                             </div>
                         </div>
                     </section>
@@ -628,9 +804,31 @@
                                 </table>
                             </div>
                         </div>
+
+                        <!-- Advanced Token Vision & Aura Customization -->
+                        <div class="manual-subgrid" style="margin-top: 16px;">
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-arrows-rotate"></i> Token Sight Sync & Senses</h4>
+                                <p>Eliminate manual vision calculations when dropping tokens:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>1-Click Sheet Senses Sync:</strong> In the Token Edit modal, tap <strong>Sync Sheet</strong> to automatically read the creature's Darkvision, Blindsight, Truesight, and Tremorsense directly into the token's raycast vision radius.</li>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>Light Emitting Torches:</strong> Configure bright and dim light emission radiuses with custom color tints (warm torchlight, cold faerie fire, abyssal green).</li>
+                                </ul>
+                            </div>
+
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-circle-radiation"></i> Token Auras & Blend Modes</h4>
+                                <p>Render persistent magical auras and spell fields surrounding tokens:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>Multiple Concurrent Auras:</strong> Add unlimited distinct auras per token with custom distance in feet (e.g. 10ft Paladin Aura of Protection, 15ft Spirit Guardians).</li>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>3 Blend Modes:</strong> Choose <strong>Overlay</strong> (vibrant glow), <strong>Vignette</strong> (soft gradient edges), or <strong>Shadow</strong> (darkness/obscurity fields) with custom hex color swatches.</li>
+                                    <li><i class="fa-solid fa-floppy-disk"></i> <strong>Save Token Defaults:</strong> Click <strong>Save Token Defaults</strong> to remember all auras, sight radiuses, and HUD preferences for that actor permanently.</li>
+                                </ul>
+                            </div>
+                        </div>
                     </section>
 
-                    <!-- SECTION 4: CANVAS HUD & GM PREVIEW -->
+                    <!-- SECTION 1.5: CANVAS HUD & TOKEN DISPLAY PRESETS -->
                     <section class="manual-section" id="guide-hud">
                         <div class="manual-section-header">
                             <div class="manual-section-title-wrap">
@@ -687,6 +885,130 @@
                                 </div>
                                 <p class="btn-inspector-desc">When previewing maps in secret without players, a top banner alerts the GM with a quick-action <strong>"Push to Players"</strong> button to reveal the battlemap to the party.</p>
                                 <div class="btn-inspector-action"><i class="fa-solid fa-bullhorn"></i> Push Players Modal</div>
+                            </div>
+                        </div>
+
+                        <!-- Token HUD Presets & Health Rules Subcard -->
+                        <div class="manual-subcard" style="margin-top: 16px;">
+                            <h4><i class="fa-solid fa-circle-user"></i> Canvas Token Display Presets (Settings)</h4>
+                            <p>Customize HUD bar positions, nameplate visibility, and status markers in <strong>Settings → Canvas Token Display</strong>:</p>
+                            <ul>
+                                <li><i class="fa-solid fa-crosshairs"></i> <strong>Tactical HUD:</strong> External health bars, permanent high-contrast nameplates, and clear status condition badges on token corners. Maximum combat legibility.</li>
+                                <li><i class="fa-solid fa-eye-slash"></i> <strong>Minimal HUD:</strong> Clean cinematic view. Health bars and nameplates only reveal when hovering over a token.</li>
+                                <li><i class="fa-solid fa-cube"></i> <strong>Classic HUD:</strong> Compact inside top/bottom bars with integrated temp HP shield markers.</li>
+                                <li><i class="fa-solid fa-shield-halved"></i> <strong>GM Monster Health Ceilings:</strong> GMs can enforce player visibility rules for monster health: full numeric HP, percentage health bar, bloodied/critical condition buckets, or totally concealed bars for intense boss encounters.</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 1.6: MOBILE & TABLET TOUCH EXPERIENCE -->
+                    <section class="manual-section" id="guide-mobile-ui">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                                <h3 class="manual-section-title">Mobile & Tablet Touch Controls</h3>
+                            </div>
+                            <span class="manual-section-badge">Mobile & Touch</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT is engineered from the ground up to be fully touch-responsive. Play from smartphones, iPad, Android tablets, or touch laptops with a dedicated Mobile UI layout, gesture navigation, slide-up drawers, and finger-friendly action bars.
+                        </p>
+
+                        <div class="btn-inspector-grid">
+                            <!-- Mobile FAB -->
+                            <div class="btn-inspector-card" data-keywords="mobile fab floating action button tools touch drawer">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                                        <span class="btn-inspector-name">Tabletop Tools FAB</span>
+                                    </div>
+                                    <span class="kbd-badge">Tap</span>
+                                </div>
+                                <p class="btn-inspector-desc">Floating Action Button docked on the bottom-right of mobile displays. Tapping opens the radial tool drawer to switch between Select, Measure, Shapes, Ping, Paint, and Lighting.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-hand-pointer"></i> 1-Tap Tool Drawer</div>
+                            </div>
+
+                            <!-- Mobile Drag Distance Pill -->
+                            <div class="btn-inspector-card" data-keywords="mobile drag distance pill feet walking touch waypoint">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-person-walking"></i></div>
+                                        <span class="btn-inspector-name">Live Drag Distance Pill</span>
+                                    </div>
+                                    <span class="kbd-badge">Auto HUD</span>
+                                </div>
+                                <p class="btn-inspector-desc">When dragging any token with a finger or stylus, a floating badge appears dynamically above your touch point, tracking exact walking distance in 5ft grid increments in real-time.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-ruler-horizontal"></i> Real-time Movement Tracking</div>
+                            </div>
+
+                            <!-- Mobile Token Action Bar -->
+                            <div class="btn-inspector-card" data-keywords="mobile token actions sheet status condition edit quick bar">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-user-shield"></i></div>
+                                        <span class="btn-inspector-name">Token Quick Action Bar</span>
+                                    </div>
+                                    <span class="kbd-badge">Bottom Bar</span>
+                                </div>
+                                <p class="btn-inspector-desc">Tapping any token on mobile docks a streamlined action bar at the screen base with 1-tap shortcuts to open the full character sheet, toggle status conditions, or edit token attributes.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-hand-pointer"></i> Instant Touch Actions</div>
+                            </div>
+
+                            <!-- Bottom Sheets -->
+                            <div class="btn-inspector-card" data-keywords="mobile bottom sheet shapes colors paint drawer gestures">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-shapes"></i></div>
+                                        <span class="btn-inspector-name">Gesture Bottom Sheets</span>
+                                    </div>
+                                    <span class="kbd-badge">Swipe / Tap</span>
+                                </div>
+                                <p class="btn-inspector-desc">Slide-up bottom sheets for AOE shapes, color swatch pickers, traps, and portals replace bulky desktop dialogs with gesture-friendly cards that tuck away effortlessly.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-arrows-up-down"></i> Mobile Slide Drawers</div>
+                            </div>
+                        </div>
+
+                        <!-- Touch Gestures Card -->
+                        <div class="manual-subcard" style="margin-top: 16px;">
+                            <h4><i class="fa-solid fa-fingerprint"></i> Complete Touch & Gesture Reference</h4>
+                            <div class="manual-table-wrap">
+                                <table class="manual-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Gesture</th>
+                                            <th>Action Scope</th>
+                                            <th>Resulting Tabletop Behavior</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>1-Finger Drag</strong></td>
+                                            <td>Canvas Background</td>
+                                            <td>Smooth panning across the dungeon battlemap.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>1-Finger Drag</strong></td>
+                                            <td>Token Sprite</td>
+                                            <td>Moves the token cell-by-cell with the live walking distance indicator pill.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Pinch to Zoom</strong></td>
+                                            <td>Canvas</td>
+                                            <td>Fluid pinch-in / pinch-out magnification scaling between 10% and 500%.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Long Press (500ms)</strong></td>
+                                            <td>Any Map Location</td>
+                                            <td>Drops a radar ping beacon to draw the party's attention to that spot.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Long Press (500ms)</strong></td>
+                                            <td>Token Sprite</td>
+                                            <td>Opens the radial context ring for HP, conditions, defense, and light sources.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </section>
@@ -1386,6 +1708,98 @@
                         </div>
                     </section>
 
+                    <!-- SECTION 3.5: MULTI-TAB SLIDEOUT SHEET DOCK -->
+                    <section class="manual-section" id="guide-sheet-dock">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-table-columns"></i></div>
+                                <h3 class="manual-section-title">Multi-Tab Slideout Sheet Dock</h3>
+                            </div>
+                            <span class="manual-section-badge">Sheet Dock</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT replaces legacy two-tab sheet limits with an unlimited, drag-and-drop slideout tab dock along the left screen border. Open multiple player character sheets, named companion sheets, and monster statblocks simultaneously without cluttering your tactical map.
+                        </p>
+
+                        <div class="btn-inspector-grid">
+                            <!-- Drag to Reorder -->
+                            <div class="btn-inspector-card" data-keywords="sheet dock drag reorder tabs tabs order persistence localstorage">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-grip-vertical"></i></div>
+                                        <span class="btn-inspector-name">Drag-to-Reorder Tabs</span>
+                                    </div>
+                                    <span class="kbd-badge">Drag & Drop</span>
+                                </div>
+                                <p class="btn-inspector-desc">Click and drag any sheet dock tab vertically along the left edge to reorder priority. Tab order automatically persists in your browser's local storage per campaign across restarts.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Persistent Campaign Tab Order</div>
+                            </div>
+
+                            <!-- Bidirectional Highlighting -->
+                            <div class="btn-inspector-card" data-keywords="sheet dock bidirectional highlight token map hover pulse">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-crosshairs"></i></div>
+                                        <span class="btn-inspector-name">Bidirectional Highlighting</span>
+                                    </div>
+                                    <span class="kbd-badge">Hover Sync</span>
+                                </div>
+                                <p class="btn-inspector-desc">Hovering over any dock tab highlights its matching token on the canvas with a radiant glow ring. Conversely, hovering a token on the battlemap highlights its docked sheet tab.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> 2-Way Canvas & Dock Highlighting</div>
+                            </div>
+
+                            <!-- Turn Tracker Pulse Ring -->
+                            <div class="btn-inspector-card" data-keywords="sheet dock combat initiative turn pulse ring gold active actor">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+                                        <span class="btn-inspector-name">Combat Turn Pulse Ring</span>
+                                    </div>
+                                    <span class="kbd-badge">Combat Sync</span>
+                                </div>
+                                <p class="btn-inspector-desc">During active combat initiative, the dock tab belonging to the current actor continuously radiates a smooth golden pulse ring, keeping the GM and players instantly oriented.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Active Initiative Synchronization</div>
+                            </div>
+
+                            <!-- Instance Switcher Chips -->
+                            <div class="btn-inspector-card" data-keywords="sheet dock monster generic instance switcher chips multi token">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-layer-group"></i></div>
+                                        <span class="btn-inspector-name">Multi-Token Instance Chips</span>
+                                    </div>
+                                    <span class="kbd-badge">Generic Mobs</span>
+                                </div>
+                                <p class="btn-inspector-desc">When managing multiple generic monsters (e.g. 5 Goblins or 3 Wolves), a single shared tab houses the statblock, while hover tooltips display interactive chips to switch focus between each placed token.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Clutter-Free Mob Management</div>
+                            </div>
+                        </div>
+
+                        <!-- Sheet Partitioning Architecture -->
+                        <div class="manual-subgrid" style="margin-top: 16px;">
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-users-gear"></i> Partitioning Architecture</h4>
+                                <p>How the Sheet Dock organizes actors automatically:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>Player Characters:</strong> Every player character opens into its own dedicated slideout tab with custom class crests, avatar portraits, and HP gauges.</li>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>Named NPCs & Companions:</strong> Important named allies, familiars, and villains receive individual tabs.</li>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>Popout Support:</strong> Click the <span class="kbd-badge">⧉</span> pop-out icon on any tab tooltip to detach the sheet into an independent OS window for multi-monitor gaming.</li>
+                                </ul>
+                            </div>
+
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-circle-info"></i> Interactive Tab Controls</h4>
+                                <p>Hovering over any slideout tab reveals an extended quick-control tooltip:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-id-badge"></i> <strong>Actor Name & Portrait:</strong> Full-resolution token artwork and creature designation.</li>
+                                    <li><i class="fa-solid fa-xmark"></i> <strong>Close Button:</strong> 1-click tab dismissal (<span class="kbd-badge">X</span>) to remove the sheet from the dock without deleting the actor or token.</li>
+                                    <li><i class="fa-solid fa-arrow-up-right-from-square"></i> <strong>Focus Token:</strong> Double-clicking any tab automatically pans and centers the battlemap camera onto that token.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- SECTION 4.1: BESTIARY, CUSTOM NPCS & COMPANIONS -->
                     <section class="manual-section" id="guide-bestiary">
                         <div class="manual-section-header">
@@ -1564,6 +1978,198 @@
                         </div>
                     </section>
 
+                    <!-- SECTION 4.3: ATMOSPHERIC WEATHER ENGINE & PARTICLE LAYERS -->
+                    <section class="manual-section" id="guide-weather-engine">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-cloud-bolt"></i></div>
+                                <h3 class="manual-section-title">Atmospheric Weather Engine & Particle Layers</h3>
+                            </div>
+                            <span class="manual-section-badge gm">Ambiance & Weather</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            Transform flat battlemaps into living, breathing tactical environments. ForgeD VTT features a zero-allocation, hardware-accelerated 2D canvas weather engine supporting up to 3 simultaneous particle layers, dynamic lightning flashes, particle impact splash ripples, and scene saturation filters.
+                        </p>
+
+                        <!-- Weather Engine Feature Cards -->
+                        <div class="btn-inspector-grid">
+                            <!-- Multi-Layer Particle Simulation -->
+                            <div class="btn-inspector-card" data-keywords="weather layers particles simulation multi layer rain snow storm fog">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-layer-group"></i></div>
+                                        <span class="btn-inspector-name">3 Simultaneous Layers</span>
+                                    </div>
+                                    <span class="kbd-badge">Up to 3 Layers</span>
+                                </div>
+                                <p class="btn-inspector-desc">Stack different atmospheric phenomena together on the same map (e.g. Fog + Rain, Ash + Embers, or Aurora + Arcane Motes) with independent speed, particle intensity, and wind angle.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Layered Atmospheric Composition</div>
+                            </div>
+
+                            <!-- Scene Saturation Filter -->
+                            <div class="btn-inspector-card" data-keywords="weather scene saturation black and white vivid mood tone filter">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-palette"></i></div>
+                                        <span class="btn-inspector-name">Scene Saturation Filter</span>
+                                    </div>
+                                    <span class="kbd-badge">0% to 200%</span>
+                                </div>
+                                <p class="btn-inspector-desc">Hardware-accelerated color grading slider. Desaturate to 0% for bleak Shadowfell dread and noir flashbacks, or boost to 200% for vivid high-fantasy Feywild blossoms.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Real-time Map Color Grading</div>
+                            </div>
+
+                            <!-- Dynamic Lightning & Splash Physics -->
+                            <div class="btn-inspector-card" data-keywords="weather lightning storm thunder flashes splash ripple rain hail">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-bolt"></i></div>
+                                        <span class="btn-inspector-name">Dynamic Storm Lightning</span>
+                                    </div>
+                                    <span class="kbd-badge">Physics FX</span>
+                                </div>
+                                <p class="btn-inspector-desc">When Storm is active, randomized double-burst lightning flashes illuminate the canvas with dramatic illumination shifts. Rain and hail produce expanding impact ripple splashes on ground contact.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Dynamic Flashes & Splash Pool</div>
+                            </div>
+
+                            <!-- Battery Saver & Quality Modes -->
+                            <div class="btn-inspector-card" data-keywords="weather performance quality high low battery saver fps integrated gpu">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-gauge-high"></i></div>
+                                        <span class="btn-inspector-name">Quality Modes (60 FPS)</span>
+                                    </div>
+                                    <span class="kbd-badge">Client Settings</span>
+                                </div>
+                                <p class="btn-inspector-desc">Each player controls local performance under <strong>Settings → Appearance & Themes</strong>: <strong>High</strong> (full particle density at 60 FPS), <strong>Low</strong> (particle budget reduction for laptops), or <strong>Off</strong>.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check"></i> Zero-Lag Low-End Optimization</div>
+                            </div>
+                        </div>
+
+                        <!-- Complete 16-Preset Reference Table -->
+                        <div class="manual-subcard" style="margin-top: 16px;">
+                            <h4><i class="fa-solid fa-cloud-meatball"></i> Complete 16-Preset Weather Reference Guide</h4>
+                            <p>Configure any combination of weather layers inside the <strong>Map Manager → Edit Map</strong> modal:</p>
+                            <div class="manual-table-wrap">
+                                <table class="manual-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Preset Name</th>
+                                            <th>Visual Particle Mechanics</th>
+                                            <th>Recommended Campaign Biome / Atmosphere</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-cloud-rain" style="color: #60a5fa;"></i> Rain</strong></td>
+                                            <td>Downward velocity streaks with dynamic expanding circular splash ripples upon ground contact.</td>
+                                            <td>Overcast temperate forests, drenched city streets, coastal squalls.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-cloud-bolt" style="color: #f59e0b;"></i> Storm</strong></td>
+                                            <td>Heavy wind-tilted deluge with randomized procedural lightning screen flashes and variable wind shears.</td>
+                                            <td>High seas tempest, mountain summits, apocalyptic boss confrontations.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-regular fa-snowflake" style="color: #93c5fd;"></i> Snow</strong></td>
+                                            <td>Gentle drifting crystalline snowflakes with horizontal sinusoidal sway and varying air resistance.</td>
+                                            <td>Arctic tundras, glacier passes, Icewind Dale frost zones.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-icicles" style="color: #e2e8f0;"></i> Hail</strong></td>
+                                            <td>High-speed frozen ice pellets striking the battlemap with sharp bounce physics and ripple sparks.</td>
+                                            <td>Severe mountain peaks, unnatural magical winter blizzards.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-smog" style="color: #cbd5e1;"></i> Fog</strong></td>
+                                            <td>Dense rolling banks of volumetric mist with slow horizontal drift and soft opacity breathing.</td>
+                                            <td>Cemeteries, Barovian swamps, haunted crypts, dense morning bogs.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-wind" style="color: #d97706;"></i> Sandstorm</strong></td>
+                                            <td>Fast-traveling horizontal dust motes and abrasive sand streaks reducing scene visibility.</td>
+                                            <td>Anauroch wastes, desert dunes, eroded canyon ravines.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-sun" style="color: #fbbf24;"></i> Sunlight</strong></td>
+                                            <td>Angled volumetric light shafts (God rays) with gently floating warm luminous dust motes.</td>
+                                            <td>Sunlit glades, celestial cathedrals, holy temples, forest clearings.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-leaf" style="color: #ea580c;"></i> Leaves</strong></td>
+                                            <td>Falling autumn foliage with dynamic 2D tumble rotation and gentle wind gusts.</td>
+                                            <td>Autumn woodlands, Elven sanctuaries, ancient groves.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-wand-magic" style="color: #34d399;"></i> Fireflies</strong></td>
+                                            <td>Wandering bioluminescent insects pulsing gentle warm green light in rhythmic nocturnal cycles.</td>
+                                            <td>Enchanted bayous, tranquil midnight campsites, fairy woods.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-circle-nodes" style="color: #a78bfa;"></i> Spores</strong></td>
+                                            <td>Drifting fungal mycelium motes with subtle vertical buoyancy oscillation and soft glow.</td>
+                                            <td>Underdark caverns, bioluminescent fungi forests, Zuggtmoy lairs.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-water" style="color: #38bdf8;"></i> Underwater</strong></td>
+                                            <td>Ascending buoyant bubble columns paired with shifting caustic sea floor light refractions.</td>
+                                            <td>Sunken shipwrecks, drowned aboleth ruins, elemental plane of water.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-fire" style="color: #ef4444;"></i> Embers</strong></td>
+                                            <td>Ascending incandescent volcanic cinders with thermal upward acceleration and fiery glow.</td>
+                                            <td>Dragon lairs, burning towns, forge foundries, volcanic calderas.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-volcano" style="color: #94a3b8;"></i> Ash</strong></td>
+                                            <td>Heavy grey volcanic ash flakes and soot particles drifting downward over scorched ground.</td>
+                                            <td>Post-battle ruins, scorched wastelands, active volcanic fissures.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-sparkles" style="color: #c084fc;"></i> Arcane</strong></td>
+                                            <td>Swirling mana sparks with erratic orbital drift and prismatic purple-blue glimmer.</td>
+                                            <td>Archmage laboratories, dimensional rifts, wild magic surges.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-ring" style="color: #2dd4bf;"></i> Aurora</strong></td>
+                                            <td>Shimmering celestial curtains of emerald, cyan, and violet waving across the upper atmosphere.</td>
+                                            <td>Astral Plane, northern skies, divine summits, polar nights.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong><i class="fa-solid fa-circle" style="color: #818cf8;"></i> Void</strong></td>
+                                            <td>Inward-spiraling abyssal darkness motes and miniature reality rips collapsing in silence.</td>
+                                            <td>Far Realm anomalies, Astral voids, Netheril shadow gates.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- How to Configure Workflow -->
+                        <div class="manual-subgrid" style="margin-top: 16px;">
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-gear"></i> How to Add Weather to a Map</h4>
+                                <ol style="padding-left: 20px; color: var(--text-secondary); line-height: 1.8;">
+                                    <li>Open the Left Toolbar and click <span class="kbd-badge">Map Manager</span>.</li>
+                                    <li>Find your active battlemap and click <strong>Edit</strong> (<i class="fa-solid fa-pen"></i>).</li>
+                                    <li>Scroll down to the <strong>Weather Effects</strong> section.</li>
+                                    <li>Click <strong>+ Add Weather Layer</strong> and select any of the 16 atmospheric presets.</li>
+                                    <li>Adjust the layer's <strong>Intensity Slider</strong> and <strong>Wind Angle</strong>, then click <strong>Done</strong>. Weather automatically initializes for all connected players!</li>
+                                </ol>
+                            </div>
+
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-floppy-disk"></i> Map State Persistence</h4>
+                                <p>Weather layers are strictly linked to each map's configuration in the campaign database:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Automatic Room Sync:</strong> When the GM switches maps or pushes a new scene to players, the active weather layers transition instantly with zero manual reconfiguration.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Zero Canvas Ghosting:</strong> Particle allocations and splash pools reset cleanly between maps without lingering memory or frame drops.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- SECTION 4.3: DUNGEON MAP TOOLS: WALLS, DOORS, TRAPS & PORTALS -->
                     <section class="manual-section" id="guide-map-tools">
                         <div class="manual-section-header">
@@ -1664,6 +2270,99 @@
                                 </div>
                                 <p class="btn-inspector-desc">Real-time line-of-sight polygon masking. Equip tokens with 5e lighting presets (Torch 20/20ft, Lantern 30/30ft, Bullseye 60ft cone, Candle 5/5ft, Darkvision 60ft) with color and flicker effects.</p>
                                 <div class="btn-inspector-action"><i class="fa-solid fa-fire"></i> Dynamic Token Lighting</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- SECTION 4.5: CAMPAIGN HANDOUTS, JOURNALS & ADVENTURE IMPORTER -->
+                    <section class="manual-section" id="guide-handouts">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-note-sticky"></i></div>
+                                <h3 class="manual-section-title">Campaign Handouts, Journals & Adventure Importer</h3>
+                            </div>
+                            <span class="manual-section-badge gm">Story & Lore</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT provides a full-featured Campaign Handouts & Journal system. Write custom lore entries, organize letters with collapsible folders, link high-resolution Pinterest or YouTube video assets, and bulk-import official illustrations and boxed text directly from official sourcebooks.
+                        </p>
+
+                        <div class="btn-inspector-grid">
+                            <!-- Handouts Sidebar Tab -->
+                            <div class="btn-inspector-card" data-keywords="handout campaign handouts tab sidebar right journal notes folder">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-note-sticky"></i></div>
+                                        <span class="btn-inspector-name">Dedicated Handouts Tab</span>
+                                    </div>
+                                    <span class="kbd-badge">Sidebar Tab</span>
+                                </div>
+                                <p class="btn-inspector-desc">Located in the right sidebar. Organizes campaign letters, quest clues, secret messages, and location maps into clean collapsible folders with instant search and filtering.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-folder-tree"></i> Collapsible Folder Tree</div>
+                            </div>
+
+                            <!-- Adventure Bulk Importer -->
+                            <div class="btn-inspector-card" data-keywords="handout import bulk adventure books official 5etools images boxed text insets">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-file-import"></i></div>
+                                        <span class="btn-inspector-name">Adventure Bulk Importer</span>
+                                    </div>
+                                    <span class="kbd-badge">1-Click Import</span>
+                                </div>
+                                <p class="btn-inspector-desc">1-click extract artwork, NPC portraits, maps, read-aloud boxed text, and story insets from official 5e modules (Curse of Strahd, Tomb of Annihilation, Phandelver, etc.) directly into your campaign.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> Bulk Extraction Wizard</div>
+                            </div>
+
+                            <!-- Real-Time Table Broadcast -->
+                            <div class="btn-inspector-card" data-keywords="handout broadcast table players share show popup modal reveal">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-tower-broadcast"></i></div>
+                                        <span class="btn-inspector-name">Broadcast to Table</span>
+                                    </div>
+                                    <span class="kbd-badge">Live Broadcast</span>
+                                </div>
+                                <p class="btn-inspector-desc">GM command to reveal any handout to all connected players simultaneously. Pops up the high-res image modal or journal text on everyone's screens with a dramatic flourish.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-bullhorn"></i> Instant Party Screen Popup</div>
+                            </div>
+
+                            <!-- Video & Media Integration -->
+                            <div class="btn-inspector-card" data-keywords="handout media youtube pinterest animated webm video url stream">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon red"><i class="fa-solid fa-photo-film"></i></div>
+                                        <span class="btn-inspector-name">Rich Media & Video URLs</span>
+                                    </div>
+                                    <span class="kbd-badge">Rich Media</span>
+                                </div>
+                                <p class="btn-inspector-desc">Handouts natively support image URLs (JPG, PNG, WEBP), animated WebM files, YouTube video streams, and Pinterest media links without requiring local asset uploads.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-play"></i> Streaming Media Support</div>
+                            </div>
+                        </div>
+
+                        <!-- Bulk Importer Workflow & Permissions -->
+                        <div class="manual-subgrid" style="margin-top: 16px;">
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-wand-magic-sparkles"></i> Using the Adventure Import Wizard</h4>
+                                <ol style="padding-left: 20px; color: var(--text-secondary); line-height: 1.8;">
+                                    <li>Navigate to the <strong>Campaign Handouts</strong> tab in the right sidebar.</li>
+                                    <li>Click the <strong>Import</strong> button (<i class="fa-solid fa-file-import"></i>) in the header.</li>
+                                    <li>Select your sourcebook from the <strong>Adventures</strong> or <strong>Books</strong> catalog tabs.</li>
+                                    <li>Filter items by <strong>Images & Maps</strong>, <strong>Story Insets</strong>, or <strong>Read-Aloud Boxed Text</strong>.</li>
+                                    <li>Check individual items (or tap <strong>Select All</strong>) and click <strong>Import Selected</strong> to generate organized handouts instantly!</li>
+                                </ol>
+                            </div>
+
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-user-lock"></i> Handout Permissions & Privacy</h4>
+                                <p>Control narrative pacing with granular permission settings:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-eye-slash"></i> <strong>GM Secret Handouts:</strong> Unshared handouts remain strictly invisible to players in the sidebar until you choose to reveal them.</li>
+                                    <li><i class="fa-solid fa-users"></i> <strong>Party Access:</strong> Once shared, players can open and reread handouts from their sidebar anytime during the campaign.</li>
+                                    <li><i class="fa-solid fa-pen-to-square"></i> <strong>GM Editing:</strong> GMs can modify handout titles, notes, and media URLs on the fly during gameplay.</li>
+                                </ul>
                             </div>
                         </div>
                     </section>
@@ -2016,6 +2715,193 @@
                         </div>
                     </section>
 
+                    <!-- SECTION 5.2: VISUAL THEMES, FONT SCALING & COLORBLIND MODES -->
+                    <section class="manual-section" id="guide-themes-accessibility">
+                        <div class="manual-section-header">
+                            <div class="manual-section-title-wrap">
+                                <div class="manual-section-icon"><i class="fa-solid fa-palette"></i></div>
+                                <h3 class="manual-section-title">Visual Themes, Font Scaling & Accessibility</h3>
+                            </div>
+                            <span class="manual-section-badge">Themes & Accessibility</span>
+                        </div>
+
+                        <p class="doc-section-lead">
+                            ForgeD VTT offers deep visual customization and scientific accessibility features. Tailor your table's ambiance with 11 curated dark-glassmorphism themes, broadcast mood palettes to your players with 1 click, resize typography across 70%–175%, and enable scientifically calibrated Okabe-Ito colorblind vision filters.
+                        </p>
+
+                        <div class="btn-inspector-grid">
+                            <!-- 11 Visual Themes -->
+                            <div class="btn-inspector-card" data-keywords="themes visual style ambiance glassmorphism colors fonts dark mode">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon"><i class="fa-solid fa-palette"></i></div>
+                                        <span class="btn-inspector-name">11 Atmospheric Themes</span>
+                                    </div>
+                                    <span class="kbd-badge">11 Themes</span>
+                                </div>
+                                <p class="btn-inspector-desc">Complete visual redesigns featuring curated typography, glowing accent borders, and glassmorphic backgrounds tailored for every campaign setting.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-paintbrush"></i> Dynamic Theme Engine</div>
+                            </div>
+
+                            <!-- GM Broadcast Theme -->
+                            <div class="btn-inspector-card" data-keywords="themes broadcast table gm players sync ambiance mood">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon blue"><i class="fa-solid fa-tower-broadcast"></i></div>
+                                        <span class="btn-inspector-name">Broadcast Theme to Table</span>
+                                    </div>
+                                    <span class="kbd-badge">GM 1-Click</span>
+                                </div>
+                                <p class="btn-inspector-desc">In <strong>Settings → Appearance & Themes</strong>, click <strong>Broadcast Theme to Table</strong> to instantly push the selected visual style to all connected player screens simultaneously.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-crown"></i> Synchronized Table Ambiance</div>
+                            </div>
+
+                            <!-- Colorblind Accessibility -->
+                            <div class="btn-inspector-card" data-keywords="colorblind accessibility cud okabe ito protanopia deuteranopia tritanopia achromatopsia hp bars">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon green"><i class="fa-solid fa-eye-low-vision"></i></div>
+                                        <span class="btn-inspector-name">5 Colorblind Modes</span>
+                                    </div>
+                                    <span class="kbd-badge">Okabe-Ito CUD</span>
+                                </div>
+                                <p class="btn-inspector-desc">Calibrated color gamuts for Protanopia, Deuteranopia, Tritanopia, and Achromatopsia, paired with dual-coded geometric hatching patterns across all token health bars.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-check-double"></i> Dual-Coded Visual Legibility</div>
+                            </div>
+
+                            <!-- UI & Font Scaling -->
+                            <div class="btn-inspector-card" data-keywords="font scale text size zoom legibility slider presets 75 100 125 150 175">
+                                <div class="btn-inspector-header">
+                                    <div class="btn-inspector-title-wrap">
+                                        <div class="btn-inspector-icon red"><i class="fa-solid fa-text-height"></i></div>
+                                        <span class="btn-inspector-name">UI & Font Scaling</span>
+                                    </div>
+                                    <span class="kbd-badge">70% to 175%</span>
+                                </div>
+                                <p class="btn-inspector-desc">Adjust UI text size smoothly across sidebars, character sheets, and chat with instant presets (75%, 100%, 125%, 150%, 175%) and a live preview card.</p>
+                                <div class="btn-inspector-action"><i class="fa-solid fa-magnifying-glass"></i> Continuous Scale Slider</div>
+                            </div>
+                        </div>
+
+                        <!-- 11 Theme Presets Table -->
+                        <div class="manual-subcard" style="margin-top: 16px;">
+                            <h4><i class="fa-solid fa-swatchbook"></i> Master Theme Catalog & Typography Guide</h4>
+                            <div class="manual-table-wrap">
+                                <table class="manual-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Theme Preset</th>
+                                            <th>Genre / Setting</th>
+                                            <th>Headline Font</th>
+                                            <th>Default 3D Dice Skin</th>
+                                            <th>Color Palette Highlights</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Classic Forge</strong></td>
+                                            <td>Core Fantasy</td>
+                                            <td><code>Open Sans</code></td>
+                                            <td>Obsidian & Gold</td>
+                                            <td>Obsidian Navy, Forged Gold (#d4af37), Glass Slate</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Jungle Canopy</strong></td>
+                                            <td>Wilderness / Chult</td>
+                                            <td><code>MedievalSharp</code></td>
+                                            <td>Jade Emerald</td>
+                                            <td>Deep Moss, Ancient Bark, Bioluminescent Emerald (#00e676)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Gothic Cathedral</strong></td>
+                                            <td>Dark Fantasy / Ravenloft</td>
+                                            <td><code>Cinzel Decorative</code></td>
+                                            <td>Amethyst Void</td>
+                                            <td>Cathedral Shadow, Dried Crimson Blood (#e53935), Silver</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Celestial Astral</strong></td>
+                                            <td>Cosmic / Planes</td>
+                                            <td><code>Orbitron</code></td>
+                                            <td>Sapphire Frost</td>
+                                            <td>Deep Astral Void, Cyan Starlight (#00e5ff), Pale Gold</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Hellscape Brimstone</strong></td>
+                                            <td>Infernal / Avernus</td>
+                                            <td><code>Rye</code></td>
+                                            <td>Ruby Ember</td>
+                                            <td>Scorched Basalt, Molten Lava Orange (#ff5722), Sulfur</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Cyberpunk Neon</strong></td>
+                                            <td>Sci-Fi / Modern</td>
+                                            <td><code>Rajdhani</code></td>
+                                            <td>Solar Flare</td>
+                                            <td>Midnight Chromium, Neon Pink (#ff007f), Laser Cyan</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Eldritch Abyssal</strong></td>
+                                            <td>Lovecraftian / Deep</td>
+                                            <td><code>Syne</code></td>
+                                            <td>Abyssal Trench</td>
+                                            <td>Abyssal Trench, Eerie Seafoam (#10b981), Bioluminescent Purple</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Desert Sun</strong></td>
+                                            <td>Wastes / Calimshan</td>
+                                            <td><code>Alegreya</code></td>
+                                            <td>Solar Flare</td>
+                                            <td>Warm Dune Ochre, Sunbaked Sand, Bright Amber (#f59e0b)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Steampunk Brass</strong></td>
+                                            <td>Industrial / Eberron</td>
+                                            <td><code>Exo 2</code></td>
+                                            <td>Obsidian & Gold</td>
+                                            <td>Smoked Charcoal, Polished Brass (#d97706), Copper Sheen</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Feywild Blossom</strong></td>
+                                            <td>Whimsical / Sylvan</td>
+                                            <td><code>Cinzel</code></td>
+                                            <td>Classic Ivory</td>
+                                            <td>Twilight Violet, Ethereal Rose, Fairy Blossom (#f472b6)</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Arctic Frost</strong></td>
+                                            <td>Tundra / Rime</td>
+                                            <td><code>Orbitron</code></td>
+                                            <td>Sapphire Frost</td>
+                                            <td>Glacier Blue, Frosted Permafrost, Crystalline Cyan (#38bdf8)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 3D Dice Auto-Sync & Colorblind Mechanics -->
+                        <div class="manual-subgrid" style="margin-top: 16px;">
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-dice-d20"></i> 3D WebGL Dice Auto-Sync</h4>
+                                <p>Harmonize physical rolls with your visual environment:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-arrows-rotate"></i> <strong>Auto-Sync Dice to Theme:</strong> Checking this setting automatically updates your 3D physics dice skin to match each theme (e.g. Hellscape triggers Ruby Ember; Jungle triggers Jade Emerald).</li>
+                                    <li><i class="fa-solid fa-circle-dot"></i> <strong>Manual Override:</strong> Select any of the 8 handcrafted chamfered dice materials whenever you prefer a personalized look.</li>
+                                </ul>
+                            </div>
+
+                            <div class="manual-subcard">
+                                <h4><i class="fa-solid fa-universal-access"></i> Scientific Accessibility</h4>
+                                <p>Engineered for full table inclusion without compromise:</p>
+                                <ul>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Okabe-Ito Color Scales:</strong> Uses peer-reviewed color contrast ratios tested across all forms of color deficiency.</li>
+                                    <li><i class="fa-solid fa-check"></i> <strong>Dual-Coded Token HP Bars:</strong> Health bars combine clear color shifts with unmistakable geometric stripe overlays, ensuring zero confusion during critical combat moments.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- SECTION 5.2: COMPLETE KEYBOARD & MOUSE SHORTCUTS -->
                     <section class="manual-section" id="guide-shortcuts">
                         <div class="manual-section-header">
@@ -2123,9 +3009,39 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Canvas Layer Switcher (GM)</strong></td>
-                                        <td><span class="kbd-badge">~ + 1</span> to <span class="kbd-badge">~ + 5</span></td>
+                                        <td><span class="kbd-badge">~ + 1</span> to <span class="kbd-badge">~ + 6</span></td>
                                         <td>Layers (GM)</td>
-                                        <td>1: Tokens, 2: GM Layer, 3: Lighting, 4: Notes, 5: Map.</td>
+                                        <td>1: Tokens, 2: GM Layer, 3: Lighting, 4: Notes, 5: Map, 6: Portals.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Canvas Paint Tool</strong></td>
+                                        <td><span class="kbd-badge">6</span></td>
+                                        <td>Canvas Tools</td>
+                                        <td>Opens the floating Paint Tools ribbon for freehand drawing, lines, boxes, and text annotations.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Paint Undo & Redo</strong></td>
+                                        <td><span class="kbd-badge">Ctrl + Z</span> / <span class="kbd-badge">Ctrl + Y</span></td>
+                                        <td>Drawing History</td>
+                                        <td>Reverts or restores the most recent canvas drawing strokes.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Map Tools (Traps & Portals)</strong></td>
+                                        <td><span class="kbd-badge">7</span></td>
+                                        <td>Canvas Tools (GM)</td>
+                                        <td>Opens the Map Tools panel to draw proximity traps or inter-map teleportation portals.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Reorder Sheet Tabs</strong></td>
+                                        <td><span class="kbd-badge">Click & Drag Tab</span></td>
+                                        <td>Sheet Dock</td>
+                                        <td>Reorders character and creature slideout tabs along the left screen border with local persistence.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Sync Senses to Sight</strong></td>
+                                        <td><span class="kbd-badge">Sync Sheet Button</span></td>
+                                        <td>Token Edit Modal</td>
+                                        <td>Auto-syncs token raycasted dynamic sight radius from character sheet darkvision and senses.</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Detached Sheet Popout</strong></td>
