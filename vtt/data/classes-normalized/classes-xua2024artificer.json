@@ -1,0 +1,1992 @@
+[
+  {
+    "id": "class_artificer_xua2024artificer",
+    "name": "Artificer",
+    "source": "XUA2024Artificer",
+    "page": 1,
+    "hitDie": "d8",
+    "primaryAbility": "0",
+    "features": [
+      {
+        "id": "cf_artificer_xua2024artificer_magical_tinkering_1",
+        "name": "Magical Tinkering",
+        "source": "XUA2024Artificer",
+        "page": 2,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 1,
+        "actionType": "action",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>As a Magic action while holding Tinker's Tools, you can create one item in an unoccupied space within 5 feet of yourself, choosing the item from the following list:</p>\n<ul><li>Ball Bearings</li><li>Basket</li><li>Bedroll</li><li>Bell</li><li>Blanket</li><li>Block and Tackle</li><li>Bucket</li><li>Caltrops</li><li>Candle</li><li>Crowbar</li><li>Flask</li><li>Jug</li><li>Lamp</li><li>Net</li><li>Oil</li><li>Paper</li><li>Parchment</li><li>Pole</li><li>Pouch</li><li>Rope</li><li>Sack</li><li>Shovel</li><li>String</li><li>Tinderbox</li><li>Torch</li><li>Vial</li></ul>\n<p>See the rules for the item in the Player's Handbook|XPHB. The item vanishes after 1 hour.</p>\n<p>You can use this feature a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a Long Rest|XPHB.</p>",
+        "rawEntries": [
+          "As a Magic action while holding {@item Tinker's Tools|XPHB}, you can create one item in an unoccupied space within 5 feet of yourself, choosing the item from the following list:",
+          {
+            "type": "list",
+            "style": "list-hang",
+            "columns": 4,
+            "page": 2,
+            "items": [
+              "{@item Ball Bearings|XPHB}",
+              "{@item Basket|XPHB}",
+              "{@item Bedroll|XPHB}",
+              "{@item Bell|XPHB}",
+              "{@item Blanket|XPHB}",
+              "{@item Block and Tackle|XPHB}",
+              "{@item Bucket|XPHB}",
+              "{@item Caltrops|XPHB}",
+              "{@item Candle|XPHB}",
+              "{@item Crowbar|XPHB}",
+              "{@item Flask|XPHB}",
+              "{@item Jug|XPHB}",
+              "{@item Lamp|XPHB}",
+              "{@item Net|XPHB}",
+              "{@item Oil|XPHB}",
+              "{@item Paper|XPHB}",
+              "{@item Parchment|XPHB}",
+              "{@item Pole|XPHB}",
+              "{@item Pouch|XPHB}",
+              "{@item Rope|XPHB}",
+              "{@item Sack|XPHB}",
+              "{@item Shovel|XPHB}",
+              "{@item String|XPHB}",
+              "{@item Tinderbox|XPHB}",
+              "{@item Torch|XPHB}",
+              "{@item Vial|XPHB}"
+            ]
+          },
+          "See the rules for the item in the {@book Player's Handbook|XPHB}. The item vanishes after 1 hour.",
+          "You can use this feature a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_spellcasting_1",
+        "name": "Spellcasting",
+        "source": "XUA2024Artificer",
+        "page": 2,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have learned how to channel magical energy through objects. See the Player's Handbook|XPHB for the rules on spellcasting. The information below details how you use those rules with Artificer spells, which appear in the Artificer spell list later in the class's description.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Tools Required.</strong> <p>You produce your Artificer spells through tools. You can use Thieves' Tools, Tinker's Tools, or another kind of Artisan's Tools with which you have proficiency as a Spellcasting Focus|XPHB, and you must have one of those focuses in hand when you cast an Artificer spell (meaning the spell has an \"M\" component when you cast it).</p></div>\n<div class=\"compendium-subentry\"><strong>Cantrips.</strong> <p>You know two Artificer cantrips of your choice. Acid Splash and Prestidigitation are recommended.</p>\n<p>Whenever you finish a Long Rest|XPHB, you can replace one of your cantrips from this feature with another Artificer cantrip of your choice.</p>\n<p>When you reach Artificer levels 10 and 14, you learn another Artificer cantrip of your choice, as shown in the Cantrips column of the Artificer Features table.</p></div>\n<div class=\"compendium-subentry\"><strong>Spell Slots.</strong> <p>The Artificer Features table shows how many spell slots you have to cast your level 1+ spells. You regain all expended spell slots when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Prepared Spells of Level 1+.</strong> <p>You prepare the list of level 1+ spells that are available for you to cast with this feature. To start, choose two level 1 Artificer spells. Cure Wounds and Grease are recommended.</p>\n<p>The number of spells on your list increases as you gain Artificer levels, as shown in the Prepared Spells column of the Artificer Features table. Whenever that number increases, choose additional Artificer spells until the number of spells on your list matches the number on the table. The chosen spells must be of a level for which you have spell slots. For example, if you're a level 5 Artificer, your list of prepared spells can include six Artificer spells of levels 1 and 2 in any combination.</p>\n<p>If another Artificer feature gives you spells that you always have prepared, those don't count against the number of spells you can prepare with this feature, but those spells otherwise count as Artificer spells for you.</p></div>\n<div class=\"compendium-subentry\"><strong>Changing Your Prepared Spells.</strong> <p>Whenever you finish a Long Rest|XPHB, you can change your list of prepared spells, replacing any of the spells there with other Artificer spells for which you have spell slots.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Ability.</strong> <p>Intelligence is your spellcasting ability for your Artificer spells.</p></div></div>",
+        "rawEntries": [
+          "You have learned how to channel magical energy through objects. See the {@book Player's Handbook|XPHB} for the rules on spellcasting. The information below details how you use those rules with Artificer spells, which appear in the {@table Artificer spell list|XUA2024Artificer} later in the class's description.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Tools Required",
+                "page": 2,
+                "entries": [
+                  "You produce your Artificer spells through tools. You can use {@item Thieves' Tools|XPHB}, {@item Tinker's Tools|XPHB}, or another kind of {@item Artisan's Tools|XPHB} with which you have proficiency as a {@variantrule Spellcasting Focus|XPHB}, and you must have one of those focuses in hand when you cast an Artificer spell (meaning the spell has an \"M\" component when you cast it)."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Cantrips",
+                "page": 2,
+                "entries": [
+                  "You know two Artificer cantrips of your choice. {@spell Acid Splash|XPHB} and {@spell Prestidigitation|XPHB} are recommended.",
+                  "Whenever you finish a {@variantrule Long Rest|XPHB}, you can replace one of your cantrips from this feature with another Artificer cantrip of your choice.",
+                  "When you reach Artificer levels 10 and 14, you learn another Artificer cantrip of your choice, as shown in the Cantrips column of the Artificer Features table."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spell Slots",
+                "page": 2,
+                "entries": [
+                  "The Artificer Features table shows how many spell slots you have to cast your level 1+ spells. You regain all expended spell slots when you finish a {@variantrule Long Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Prepared Spells of Level 1+",
+                "page": 2,
+                "entries": [
+                  "You prepare the list of level 1+ spells that are available for you to cast with this feature. To start, choose two level 1 Artificer spells. {@spell Cure Wounds|XPHB} and {@spell Grease|XPHB} are recommended.",
+                  "The number of spells on your list increases as you gain Artificer levels, as shown in the Prepared Spells column of the Artificer Features table. Whenever that number increases, choose additional Artificer spells until the number of spells on your list matches the number on the table. The chosen spells must be of a level for which you have spell slots. For example, if you're a level 5 Artificer, your list of prepared spells can include six Artificer spells of levels 1 and 2 in any combination.",
+                  "If another Artificer feature gives you spells that you always have prepared, those don't count against the number of spells you can prepare with this feature, but those spells otherwise count as Artificer spells for you."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Changing Your Prepared Spells",
+                "page": 3,
+                "entries": [
+                  "Whenever you finish a {@variantrule Long Rest|XPHB}, you can change your list of prepared spells, replacing any of the spells there with other Artificer spells for which you have spell slots."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spellcasting Ability",
+                "page": 3,
+                "entries": [
+                  "Intelligence is your spellcasting ability for your Artificer spells."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_replicate_magic_item_2",
+        "name": "Replicate Magic Item",
+        "source": "XUA2024Artificer",
+        "page": 3,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d4",
+        "formulaConfig": {
+          "baseDice": "1d4",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "entriesHtml": "<p>You have learned arcane plans that you use to make magic items.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Plans Known.</strong> <p>When you gain this feature, choose four plans to learn from the Magic Item Plans (Artificer Level 2+) table (see the Dungeon Master's Guide|XDMG for the items' descriptions). Bag of Holding, Cap of Water Breathing, Sending Stones, and +1 Wand of the War Mage are recommended. Whenever you gain an Artificer level, you can replace one of the plans you know with a new plan for which you qualify.</p>\n<p>You learn another plan of your choice when you reach certain Artificer levels, as shown in the Plans Known column of the Artificer Features table.</p></div>\n<div class=\"compendium-subentry\"><strong>Creating an Item.</strong> <p>When you finish a Long Rest|XPHB, you can create one or two different magic items if you have Tinker's Tools in hand. Each item is based on one of the plans you know for this feature.</p>\n<p>If a created item requires Attunement|XPHB, you can attune yourself to it the instant you create it. If you decide to attune to the item later, you must do so using the normal process for Attunement|XPHB.</p>\n<p>When you reach certain Artificer levels specified in the Magic Items column of the Artificer Features table, the number of magic items you can create at the end of a Long Rest increases. Each item you create must be based on a different plan you know.</p>\n<p>If you try to exceed your maximum number of magic items for this feature, the oldest item vanishes, and then the new item appears.</p></div>\n<div class=\"compendium-subentry\"><strong>Duration.</strong> <p>A magic item created by this feature functions exactly like the normal magic item, except its magic isn't permanent. When you die, the magic item vanishes after 1d4 of days.</p>\n<p>If an item that you created with this feature is a container, such as a Bag of Holding, and it vanishes, its contents harmlessly appear in and around its space.</p></div>\n<div class=\"compendium-subentry\"><strong>Magic Item Plans (Artificer Level 2+).</strong> </div>\n<div class=\"compendium-subentry\"><strong>Magic Item Plans (Artificer Level 6+).</strong> </div>\n<div class=\"compendium-subentry\"><strong>Magic Item Plans (Artificer Level 10+).</strong> </div>\n<div class=\"compendium-subentry\"><strong>Magic Item Plans (Artificer Level 14+).</strong> </div></div>",
+        "rawEntries": [
+          "You have learned arcane plans that you use to make magic items.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Plans Known",
+                "page": 3,
+                "entries": [
+                  "When you gain this feature, choose four plans to learn from the {@table Magic Item Plans (Artificer Level 2+)|XUA2024Artificer} table (see the {@book Dungeon Master's Guide|XDMG} for the items' descriptions). {@item Bag of Holding|XDMG}, {@item Cap of Water Breathing|XDMG}, {@item Sending Stones|XDMG}, and {@item +1 Wand of the War Mage|XDMG|Wand of the War Mage +1} are recommended. Whenever you gain an Artificer level, you can replace one of the plans you know with a new plan for which you qualify.",
+                  "You learn another plan of your choice when you reach certain Artificer levels, as shown in the Plans Known column of the Artificer Features table."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Creating an Item",
+                "page": 3,
+                "entries": [
+                  "When you finish a {@variantrule Long Rest|XPHB}, you can create one or two different magic items if you have {@item Tinker's Tools|XPHB} in hand. Each item is based on one of the plans you know for this feature.",
+                  "If a created item requires {@variantrule Attunement|XPHB}, you can attune yourself to it the instant you create it. If you decide to attune to the item later, you must do so using the normal process for {@variantrule Attunement|XPHB}.",
+                  "When you reach certain Artificer levels specified in the Magic Items column of the Artificer Features table, the number of magic items you can create at the end of a Long Rest increases. Each item you create must be based on a different plan you know.",
+                  "If you try to exceed your maximum number of magic items for this feature, the oldest item vanishes, and then the new item appears."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Duration",
+                "page": 3,
+                "entries": [
+                  "A magic item created by this feature functions exactly like the normal magic item, except its magic isn't permanent. When you die, the magic item vanishes after {@dice 1d4} of days.",
+                  "If an item that you created with this feature is a container, such as a {@item Bag of Holding|XDMG}, and it vanishes, its contents harmlessly appear in and around its space."
+                ]
+              },
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2024Artificer",
+                "name": "Magic Item Plans (Artificer Level 2+)",
+                "page": 4,
+                "collapsed": true
+              },
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2024Artificer",
+                "name": "Magic Item Plans (Artificer Level 6+)",
+                "page": 4,
+                "collapsed": true
+              },
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2024Artificer",
+                "name": "Magic Item Plans (Artificer Level 10+)",
+                "page": 4,
+                "collapsed": true
+              },
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2024Artificer",
+                "name": "Magic Item Plans (Artificer Level 14+)",
+                "page": 4,
+                "collapsed": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_artificer_subclass_3",
+        "name": "Artificer Subclass",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain an Artificer subclass of your choice. The Alchemist|Artificer|XUA2024Artificer|XUA2024Artificer, Armorer|Artificer|XUA2024Artificer|XUA2024Artificer, Artillerist|Artificer|XUA2024Artificer|XUA2024Artificer, and Battle Smith|Artificer|XUA2024Artificer|XUA2024Artificer subclasses are detailed after this class's description. A subclass is a specialization that grants you features at certain Artificer levels. For the rest of your career, you gain each of your subclass's features that are of your Artificer level or lower.</p>",
+        "rawEntries": [
+          "You gain an Artificer subclass of your choice. The {@subclass Alchemist|Artificer|XUA2024Artificer|XUA2024Artificer}, {@subclass Armorer|Artificer|XUA2024Artificer|XUA2024Artificer}, {@subclass Artillerist|Artificer|XUA2024Artificer|XUA2024Artificer}, and {@subclass Battle Smith|Artificer|XUA2024Artificer|XUA2024Artificer} subclasses are detailed after this class's description. A subclass is a specialization that grants you features at certain Artificer levels. For the rest of your career, you gain each of your subclass's features that are of your Artificer level or lower."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_right_tool_for_the_job_3",
+        "name": "Right Tool for the Job",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>The list of items you can create with Magical Tinkering now includes Artisan's Tools, which are described in the Player's Handbook|XPHB.</p>",
+        "rawEntries": [
+          "The list of items you can create with Magical Tinkering now includes {@item Artisan's Tools|XPHB}, which are described in the {@book Player's Handbook|XPHB}."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_ability_score_improvement_4",
+        "name": "Ability Score Improvement",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 4,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify. You gain this feature again at Artificer levels 8, 12, and 16.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another feat of your choice for which you qualify. You gain this feature again at Artificer levels 8, 12, and 16."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_subclass_feature_5",
+        "name": "Subclass feature",
+        "source": "XUA2024Artificer",
+        "page": 3,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Artificer Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Artificer Subclass."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_magic_item_tinker_6",
+        "name": "Magic Item Tinker",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 6,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Your Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer feature improves as follows:</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Drain Magic Item.</strong> <p>As a Bonus Action|XPHB, you can touch a magic item within 5 feet of yourself that you created with Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer and cause the item to vanish, converting its magical energy into a spell slot. The slot is level 1 if the item is Common or level 2 if the item is Uncommon or Rare. Once you use this feature, you can't do so again until you finish a Long Rest|XPHB. Any spell slot you create with this feature vanishes when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Expanded Replication.</strong> <p>When you learn a plan for your Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer feature, you can now also choose from the Magic Item Plans (Artificer Level 6+) table.</p></div></div>",
+        "rawEntries": [
+          "Your {@classFeature Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer} feature improves as follows:",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Drain Magic Item",
+                "page": 4,
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, you can touch a magic item within 5 feet of yourself that you created with {@classFeature Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer} and cause the item to vanish, converting its magical energy into a spell slot. The slot is level 1 if the item is Common or level 2 if the item is Uncommon or Rare. Once you use this feature, you can't do so again until you finish a {@variantrule Long Rest|XPHB}. Any spell slot you create with this feature vanishes when you finish a {@variantrule Long Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Expanded Replication",
+                "page": 4,
+                "entries": [
+                  "When you learn a plan for your {@classFeature Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer} feature, you can now also choose from the {@table Magic Item Plans (Artificer Level 6+)|XUA2024Artificer} table."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_flash_of_genius_7",
+        "name": "Flash of Genius",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 7,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you or a creature you can see within 30 feet of you fails an ability check or a saving throw, you can take a Reaction|XPHB to add a bonus to the roll, potentially causing it to succeed. The bonus equals your Intelligence modifier.</p>\n<p>You can take this Reaction|XPHB a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a Long Rest|XPHB.</p>",
+        "rawEntries": [
+          "When you or a creature you can see within 30 feet of you fails an ability check or a saving throw, you can take a {@variantrule Reaction|XPHB} to add a bonus to the roll, potentially causing it to succeed. The bonus equals your Intelligence modifier.",
+          "You can take this {@variantrule Reaction|XPHB} a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_ability_score_improvement_8",
+        "name": "Ability Score Improvement",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 8,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_subclass_feature_9",
+        "name": "Subclass feature",
+        "source": "XUA2024Artificer",
+        "page": 3,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 9,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Artificer Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Artificer Subclass."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_magic_item_adept_10",
+        "name": "Magic Item Adept",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You've achieved a profound understanding of how to use and make magic items, granting you the following benefits:</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Additional Attunement.</strong> <p>You can attune to up to four magic items at once rather than three.</p></div>\n<div class=\"compendium-subentry\"><strong>Expanded Replication.</strong> <p>When you learn a plan for your Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer feature, you can now also choose from the Magic Item Plans (Artificer Level 10+) table.</p></div></div>",
+        "rawEntries": [
+          "You've achieved a profound understanding of how to use and make magic items, granting you the following benefits:",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Additional Attunement",
+                "page": 5,
+                "entries": [
+                  "You can attune to up to four magic items at once rather than three."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Expanded Replication",
+                "page": 5,
+                "entries": [
+                  "When you learn a plan for your {@classFeature Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer} feature, you can now also choose from the {@table Magic Item Plans (Artificer Level 10+)|XUA2024Artificer} table."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_spell_storing_item_11",
+        "name": "Spell-Storing Item",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 11,
+        "actionType": "action",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Whenever you finish a Long Rest, you can touch one Simple or Martial weapon or one item that you can use as a Spellcasting Focus|XPHB, and you store a spell in it, choosing a level 1, 2, or 3 Artificer spell that has a casting time of an action (you needn't have the spell prepared).</p>\n<p>While holding the object, a creature can take an action to produce the spell's effect from it, using your spellcasting ability modifier. If the spell requires Concentration|XPHB, the creature must concentrate. The spell stays in the object until it's been used a number of times equal to twice your Intelligence modifier (minimum of twice) or until you use this feature again to store a spell in an object.</p>",
+        "rawEntries": [
+          "Whenever you finish a Long Rest, you can touch one Simple or Martial weapon or one item that you can use as a {@variantrule Spellcasting Focus|XPHB}, and you store a spell in it, choosing a level 1, 2, or 3 Artificer spell that has a casting time of an action (you needn't have the spell prepared).",
+          "While holding the object, a creature can take an action to produce the spell's effect from it, using your spellcasting ability modifier. If the spell requires {@status Concentration|XPHB}, the creature must concentrate. The spell stays in the object until it's been used a number of times equal to twice your Intelligence modifier (minimum of twice) or until you use this feature again to store a spell in an object."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_ability_score_improvement_12",
+        "name": "Ability Score Improvement",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 12,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_magic_item_savant_14",
+        "name": "Magic Item Savant",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 14,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Your skill with magic items deepens, granting you the following benefits:</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Additional Attunement.</strong> <p>You can attune to up to five magic items at once rather than three.</p></div>\n<div class=\"compendium-subentry\"><strong>Expanded Replication.</strong> <p>When you learn a plan for your Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer feature, you can now also choose from the Magic Item Plans (Artificer Level 14+) table. You can have no more than three Rare items created by Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer at a time.</p></div></div>",
+        "rawEntries": [
+          "Your skill with magic items deepens, granting you the following benefits:",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Additional Attunement",
+                "page": 5,
+                "entries": [
+                  "You can attune to up to five magic items at once rather than three."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Expanded Replication",
+                "page": 5,
+                "entries": [
+                  "When you learn a plan for your {@classFeature Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer} feature, you can now also choose from the {@table Magic Item Plans (Artificer Level 14+)|XUA2024Artificer} table. You can have no more than three Rare items created by {@classFeature Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer} at a time."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_subclass_feature_15",
+        "name": "Subclass feature",
+        "source": "XUA2024Artificer",
+        "page": 3,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 15,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Artificer Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Artificer Subclass."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_ability_score_improvement_16",
+        "name": "Ability Score Improvement",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 16,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_magic_item_master_18",
+        "name": "Magic Item Master",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 18,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can now attune to up to six magic items at once rather than three.</p>",
+        "rawEntries": [
+          "You can now attune to up to six magic items at once rather than three."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_epic_boon_19",
+        "name": "Epic Boon",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 19,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain an Epic Boon feat or another feat of your choice for which you qualify. Boon of Energy Resistance is recommended.</p>",
+        "rawEntries": [
+          "You gain an Epic Boon feat or another feat of your choice for which you qualify. {@feat Boon of Energy Resistance|XPHB} is recommended."
+        ]
+      },
+      {
+        "id": "cf_artificer_xua2024artificer_soul_of_artifice_20",
+        "name": "Soul of Artifice",
+        "source": "XUA2024Artificer",
+        "page": 4,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "level": 20,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "entriesHtml": "<p>You have developed a mystical connection to your magic items, which you can draw on for aid. You gain the following benefits:</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Cheat Death.</strong> <p>If you're reduced to 0 Hit Points|XPHB but not killed outright, you can disintegrate one Uncommon or Rare magic item created by your Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer feature, changing your Hit Points|XPHB to 20 instead of 0.</p></div>\n<div class=\"compendium-subentry\"><strong>Magical Guidance.</strong> <p>While you have Attunement|XPHB to at least one magic item, you can add 1d6 to any ability check you make. You decide to add the die after rolling the d20, and you can use this benefit only once per turn.</p></div></div>",
+        "rawEntries": [
+          "You have developed a mystical connection to your magic items, which you can draw on for aid. You gain the following benefits:",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Cheat Death",
+                "page": 5,
+                "entries": [
+                  "If you're reduced to 0 {@variantrule Hit Points|XPHB} but not killed outright, you can disintegrate one Uncommon or Rare magic item created by your {@classFeature Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer} feature, changing your {@variantrule Hit Points|XPHB} to 20 instead of 0."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Magical Guidance",
+                "page": 5,
+                "entries": [
+                  "While you have {@variantrule Attunement|XPHB} to at least one magic item, you can add {@dice 1d6} to any ability check you make. You decide to add the die after rolling the d20, and you can use this benefit only once per turn."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "subclass_artificer_alchemist_xua2024artificer",
+        "name": "Alchemist",
+        "shortName": "Alchemist",
+        "source": "XUA2024Artificer",
+        "page": 6,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "features": [
+          {
+            "id": "scf_artificer_alchemist_xua2024artificer_alchemist_3",
+            "name": "Alchemist",
+            "source": "XUA2024Artificer",
+            "page": 7,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Alchemist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>An Alchemist is an expert at combining reagents to produce magical effects. Alchemists use their creations to give life and to leech it away.</p>",
+            "rawEntries": [
+              "An Alchemist is an expert at combining reagents to produce magical effects. Alchemists use their creations to give life and to leech it away.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Tool Proficiency|Artificer|XUA2024Artificer|Alchemist|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Alchemist Spells|Artificer|XUA2024Artificer|Alchemist|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Experimental Elixir|Artificer|XUA2024Artificer|Alchemist|XUA2024Artificer|3|XUA2024Artificer"
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_alchemist_xua2024artificer_alchemist_spells_3",
+            "name": "Alchemist Spells",
+            "source": "XUA2024Artificer",
+            "page": 7,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Alchemist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you reach an Artificer level specified in the Alchemist Spells table, you thereafter always have the listed spells prepared.</p>\n<div class=\"compendium-subentry\"><strong>Alchemist Spells.</strong> </div>",
+            "rawEntries": [
+              "When you reach an Artificer level specified in the {@table Alchemist Spells|XUA2024Artificer} table, you thereafter always have the listed spells prepared.",
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2024Artificer",
+                "name": "Alchemist Spells",
+                "page": 7
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_alchemist_xua2024artificer_experimental_elixir_3",
+            "name": "Experimental Elixir",
+            "source": "XUA2024Artificer",
+            "page": 7,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Alchemist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Whenever you finish a Long Rest|XPHB while holding Alchemist's Supplies, you can use that tool to magically produce two elixirs. For each elixir, roll on the Experimental Elixir table for the elixir's effect, which is triggered when someone drinks the elixir. The elixir appears in a vial, and the vial vanishes when the elixir is drunk or poured out. If any elixir remains when you finish a Long Rest|XPHB, the elixir and its vial vanish.</p>\n<div class=\"compendium-subentry\"><strong>Drinking an Elixir.</strong> <p>As a Bonus Action|XPHB, a creature can drink the elixir or administer it to another creature within 5 feet of itself.</p></div>\n<div class=\"compendium-subentry\"><strong>Creating Additional Elixirs.</strong> <p>As a Magic action while holding Alchemist's Supplies, you can expend one spell slot to create another elixir. When you do so, you choose its effect from the Experimental Elixir table rather than rolling. When you reach certain Artificer levels, you can make an additional elixir at the end of each Long Rest|XPHB: a total of three at level 5, four at level 9, and 5 at level 15.</p></div>\n<div class=\"compendium-subentry\"><strong>Experimental Elixir.</strong> </div>",
+            "rawEntries": [
+              "Whenever you finish a {@variantrule Long Rest|XPHB} while holding {@item Alchemist's Supplies|XPHB}, you can use that tool to magically produce two elixirs. For each elixir, roll on the {@table Experimental Elixir|XUA2024Artificer} table for the elixir's effect, which is triggered when someone drinks the elixir. The elixir appears in a vial, and the vial vanishes when the elixir is drunk or poured out. If any elixir remains when you finish a {@variantrule Long Rest|XPHB}, the elixir and its vial vanish.",
+              {
+                "type": "entries",
+                "name": "Drinking an Elixir",
+                "page": 7,
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, a creature can drink the elixir or administer it to another creature within 5 feet of itself."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Creating Additional Elixirs",
+                "page": 7,
+                "entries": [
+                  "As a {@action Magic|XPHB} action while holding {@item Alchemist's Supplies|XPHB}, you can expend one spell slot to create another elixir. When you do so, you choose its effect from the {@table Experimental Elixir|XUA2024Artificer} table rather than rolling. When you reach certain Artificer levels, you can make an additional elixir at the end of each {@variantrule Long Rest|XPHB}: a total of three at level 5, four at level 9, and 5 at level 15."
+                ]
+              },
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2024Artificer",
+                "name": "Experimental Elixir",
+                "page": 7
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_alchemist_xua2024artificer_tool_proficiency_3",
+            "name": "Tool Proficiency",
+            "source": "XUA2024Artificer",
+            "page": 7,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Alchemist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You gain proficiency with Alchemist's Supplies. If you already have this proficiency, you gain proficiency with one other type of Artisan's Tools of your choice.</p>\n<p>In addition, when you brew a potion using the crafting rules in the Dungeon Master's Guide|XDMG, the amount of time required to craft it is halved.</p>",
+            "rawEntries": [
+              "You gain proficiency with {@item Alchemist's Supplies|XPHB}. If you already have this proficiency, you gain proficiency with one other type of {@item Artisan's Tools|XPHB} of your choice.",
+              "In addition, when you brew a potion using the crafting rules in the {@book Dungeon Master's Guide|XDMG}, the amount of time required to craft it is halved."
+            ]
+          },
+          {
+            "id": "scf_artificer_alchemist_xua2024artificer_alchemical_savant_5",
+            "name": "Alchemical Savant",
+            "source": "XUA2024Artificer",
+            "page": 7,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Alchemist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 5,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Whenever you cast a spell using your Alchemist's Supplies as the Spellcasting Focus|XPHB, you gain a bonus to one roll of the spell. That roll must restore Hit Points|XPHB or be a damage roll that deals Acid, Fire, Necrotic, or Poison damage. The bonus equals your Intelligence modifier (minimum bonus of +1).</p>",
+            "rawEntries": [
+              "Whenever you cast a spell using your {@item Alchemist's Supplies|XPHB} as the {@variantrule Spellcasting Focus|XPHB}, you gain a bonus to one roll of the spell. That roll must restore {@variantrule Hit Points|XPHB} or be a damage roll that deals Acid, Fire, Necrotic, or Poison damage. The bonus equals your Intelligence modifier (minimum bonus of +1)."
+            ]
+          },
+          {
+            "id": "scf_artificer_alchemist_xua2024artificer_restorative_reagents_9",
+            "name": "Restorative Reagents",
+            "source": "XUA2024Artificer",
+            "page": 7,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Alchemist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can incorporate restorative reagents into some of your works, granting the following benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Fortify.</strong> <p>Whenever a creature drinks an elixir you created with the Experimental Elixir feature, the creature gains Temporary Hit Points|XPHB equal to your Intelligence modifier plus your Artificer level.</p></div></li><li><div class=\"compendium-subentry\"><strong>Restore.</strong> <p>You can cast Lesser Restoration without expending a spell slot and without preparing the spell, provided you use Alchemist's Supplies as the Spellcasting Focus|XPHB. You can do so a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a Long Rest|XPHB.</p></div></li></ul>",
+            "rawEntries": [
+              "You can incorporate restorative reagents into some of your works, granting the following benefits:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 7,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Fortify",
+                    "entries": [
+                      "Whenever a creature drinks an elixir you created with the {@table Experimental Elixir|XUA2024Artificer} feature, the creature gains {@variantrule Temporary Hit Points|XPHB} equal to your Intelligence modifier plus your Artificer level."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Restore",
+                    "entries": [
+                      "You can cast {@spell Lesser Restoration|XPHB} without expending a spell slot and without preparing the spell, provided you use {@item Alchemist's Supplies|XPHB} as the {@variantrule Spellcasting Focus|XPHB}. You can do so a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_alchemist_xua2024artificer_chemical_mastery_15",
+            "name": "Chemical Mastery",
+            "source": "XUA2024Artificer",
+            "page": 8,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Alchemist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "2d8",
+            "formulaConfig": {
+              "baseDice": "2d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You gain the following benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Alchemical Eruption.</strong> <p>When you cast an Artificer spell that deals Acid, Fire, Necrotic, or Poison damage to a target, you can also deal 2d8 Force damage to that target. You can use this benefit only once on each of your turns.</p></div></li><li><div class=\"compendium-subentry\"><strong>Chemical Resistance.</strong> <p>You gain Resistance|XPHB to Acid damage and Poison damage.</p></div></li><li><div class=\"compendium-subentry\"><strong>Conjured Cauldron.</strong> <p>You can cast Tasha's Bubbling Cauldron without expending a spell slot, without preparing the spell, and without Material components, provided you use Alchemist's Supplies as the Spellcasting Focus|XPHB. Once you use this feature, you can't use it again until you finish a Long Rest|XPHB.</p></div></li></ul>",
+            "rawEntries": [
+              "You gain the following benefits:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 8,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Alchemical Eruption",
+                    "entries": [
+                      "When you cast an Artificer spell that deals Acid, Fire, Necrotic, or Poison damage to a target, you can also deal {@damage 2d8} Force damage to that target. You can use this benefit only once on each of your turns."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Chemical Resistance",
+                    "page": 8,
+                    "entries": [
+                      "You gain {@variantrule Resistance|XPHB} to Acid damage and Poison damage."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Conjured Cauldron",
+                    "page": 8,
+                    "entries": [
+                      "You can cast {@spell Tasha's Bubbling Cauldron|XPHB} without expending a spell slot, without preparing the spell, and without Material components, provided you use {@item Alchemist's Supplies|XPHB} as the {@variantrule Spellcasting Focus|XPHB}. Once you use this feature, you can't use it again until you finish a {@variantrule Long Rest|XPHB}."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_artificer_armorer_xua2024artificer",
+        "name": "Armorer",
+        "shortName": "Armorer",
+        "source": "XUA2024Artificer",
+        "page": 8,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "features": [
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_arcane_armor_3",
+            "name": "Arcane Armor",
+            "source": "XUA2024Artificer",
+            "page": 8,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>As a Magic action while you have Smith's Tools in hand, you can turn a suit of armor you are wearing into Arcane Armor. The armor continues to be Arcane Armor until you don another suit of armor or you die.</p>\n<p>You gain the following benefits while wearing your Arcane Armor:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>No Strength Requirement.</strong> <p>If the armor normally has a Strength requirement, the Arcane Armor lacks this requirement for you.</p></div></li><li><div class=\"compendium-subentry\"><strong>Quick Don and Doff.</strong> <p>You can don or doff the armor as a Utilize action.</p></div></li><li><div class=\"compendium-subentry\"><strong>Second Skin.</strong> <p>The armor attaches to you and can't be removed against your will. It also expands to cover your entire body, although you can retract or deploy the helmet as a Bonus Action|XPHB. The armor replaces missing limbs, functioning identically to a limb it replaces.</p></div></li><li><div class=\"compendium-subentry\"><strong>Spellcasting Focus.</strong> <p>You can use the Arcane Armor as a Spellcasting Focus for your Artificer spells.</p></div></li></ul>",
+            "rawEntries": [
+              "As a {@action Magic|XPHB} action while you have {@item Smith's Tools|XPHB} in hand, you can turn a suit of armor you are wearing into Arcane Armor. The armor continues to be Arcane Armor until you don another suit of armor or you die.",
+              "You gain the following benefits while wearing your Arcane Armor:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 8,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "No Strength Requirement",
+                    "entries": [
+                      "If the armor normally has a Strength requirement, the Arcane Armor lacks this requirement for you."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Quick Don and Doff",
+                    "entries": [
+                      "You can don or doff the armor as a {@action Utilize|XPHB} action."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Second Skin",
+                    "entries": [
+                      "The armor attaches to you and can't be removed against your will. It also expands to cover your entire body, although you can retract or deploy the helmet as a {@variantrule Bonus Action|XPHB}. The armor replaces missing limbs, functioning identically to a limb it replaces."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Spellcasting Focus",
+                    "entries": [
+                      "You can use the Arcane Armor as a Spellcasting Focus for your Artificer spells."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_armor_model_3",
+            "name": "Armor Model",
+            "source": "XUA2024Artificer",
+            "page": 8,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can customize your Arcane Armor. When you do so, choose one of the following armor models: Dreadnaught|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer, Guardian|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer, or Infiltrator|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer. The model you choose gives you special benefits while you wear it.</p>\n<p>Each model includes a special weapon. When you attack with that weapon, you can add your Intelligence modifier, instead of Strength or Dexterity modifier, to the attack and damage rolls.</p>\n<p>You can change the armor's model whenever you finish a Short Rest|XPHB|Short or Long Rest|XPHB if you have Smith's Tools in hand.</p>",
+            "rawEntries": [
+              "You can customize your Arcane Armor. When you do so, choose one of the following armor models: {@subclassFeature Dreadnaught|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer}, {@subclassFeature Guardian|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer}, or {@subclassFeature Infiltrator|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer}. The model you choose gives you special benefits while you wear it.",
+              "Each model includes a special weapon. When you attack with that weapon, you can add your Intelligence modifier, instead of Strength or Dexterity modifier, to the attack and damage rolls.",
+              "You can change the armor's model whenever you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB} if you have {@item Smith's Tools|XPHB} in hand.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Dreadnaught|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Guardian|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Infiltrator|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer"
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_armorer_3",
+            "name": "Armorer",
+            "source": "XUA2024Artificer",
+            "page": 8,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>An Artificer who specializes as an Armorer modifies armor to function almost like a second skin. The armor is enhanced to hone the Artificer's magic, unleash potent attacks, and generate a formidable defense.</p>",
+            "rawEntries": [
+              "An Artificer who specializes as an Armorer modifies armor to function almost like a second skin. The armor is enhanced to hone the Artificer's magic, unleash potent attacks, and generate a formidable defense.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Tools of the Trade|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Armorer Spells|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Arcane Armor|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Armor Model|Artificer|XUA2024Artificer|Armorer|XUA2024Artificer|3|XUA2024Artificer"
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_armorer_spells_3",
+            "name": "Armorer Spells",
+            "source": "XUA2024Artificer",
+            "page": 8,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you reach an Artificer level specified in the Armorer Spells table, you thereafter always have the listed spells prepared.</p>\n<div class=\"compendium-subentry\"><strong>Armorer Spells.</strong> </div>",
+            "rawEntries": [
+              "When you reach an Artificer level specified in the {@table Armorer Spells|XUA2024Artificer} table, you thereafter always have the listed spells prepared.",
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2024Artificer",
+                "name": "Armorer Spells",
+                "page": 8
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_dreadnaught_3",
+            "name": "Dreadnaught",
+            "source": "XUA2024Artificer",
+            "page": 9,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d10",
+            "formulaConfig": {
+              "baseDice": "1d10",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You design your armor to become a towering juggernaut in battle. It has the following features:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Armor Flail.</strong> <p>An iron ball on a chain appears on one of your armor's gauntlets and has the following traits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Weapon Category:.</strong> <p>Simple Melee</p></div></li><li><div class=\"compendium-subentry\"><strong>Damage on a Hit:.</strong> <p>1d10 Bludgeoning plus the ability modifier used for the attack roll</p></div></li><li><div class=\"compendium-subentry\"><strong>Properties:.</strong> <p>R|XPHB|Reach</p></div></li></ul></div></li><li><div class=\"compendium-subentry\"><strong>Giant Stature.</strong> <p>As a Bonus Action|XPHB, you transform and enlarge your armor for 1 minute. For the duration, your reach increases by 5 feet, and if you are smaller than Large, you become Large, along with anything you are wearing. If there isn't enough room for you to increase your size, your size doesn't change. You can use this Bonus Action|XPHB a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a Long Rest|XPHB.</p></div></li><li><div class=\"compendium-subentry\"><strong>Wrecking Ball.</strong> <p>If you hit a creature that is at least one size smaller than you with the flail, you can push the creature up to 10 feet straight away from yourself or pull the creature up to 10 feet toward yourself.</p></div></li></ul>",
+            "rawEntries": [
+              "You design your armor to become a towering juggernaut in battle. It has the following features:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 9,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Armor Flail",
+                    "entries": [
+                      "An iron ball on a chain appears on one of your armor's gauntlets and has the following traits:",
+                      {
+                        "type": "list",
+                        "style": "list-hang-notitle",
+                        "page": 9,
+                        "items": [
+                          {
+                            "type": "item",
+                            "name": "Weapon Category:",
+                            "entries": [
+                              "Simple Melee"
+                            ]
+                          },
+                          {
+                            "type": "item",
+                            "name": "Damage on a Hit:",
+                            "entries": [
+                              "{@damage 1d10} Bludgeoning plus the ability modifier used for the attack roll"
+                            ]
+                          },
+                          {
+                            "type": "item",
+                            "name": "Properties:",
+                            "entries": [
+                              "{@itemProperty R|XPHB|Reach}"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Giant Stature",
+                    "entries": [
+                      "As a {@variantrule Bonus Action|XPHB}, you transform and enlarge your armor for 1 minute. For the duration, your reach increases by 5 feet, and if you are smaller than Large, you become Large, along with anything you are wearing. If there isn't enough room for you to increase your size, your size doesn't change. You can use this {@variantrule Bonus Action|XPHB} a number of times equal to your Intelligence modifier (minimum of once). You regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Wrecking Ball",
+                    "entries": [
+                      "If you hit a creature that is at least one size smaller than you with the flail, you can push the creature up to 10 feet straight away from yourself or pull the creature up to 10 feet toward yourself."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_guardian_3",
+            "name": "Guardian",
+            "source": "XUA2024Artificer",
+            "page": 9,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d8",
+            "formulaConfig": {
+              "baseDice": "1d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You design your armor to be in the front line of conflict. It has the following features:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Thunder Gauntlets.</strong> <p>Each of the armor's gauntlets has the following traits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Weapon Category:.</strong> <p>Simple Melee</p></div></li><li><div class=\"compendium-subentry\"><strong>Damage on a Hit:.</strong> <p>1d8 Thunder plus the ability modifier used for the attack roll</p></div></li></ul></div></li><li><div class=\"compendium-subentry\"><strong>Distracting Pulse.</strong> <p>A creature hit by the gauntlet has Disadvantage|XPHB on attack rolls against targets other than you until the start of your next turn.</p></div></li><li><div class=\"compendium-subentry\"><strong>Defensive Field.</strong> <p>While you are Bloodied|XPHB, you can take a Bonus Action|XPHB to gain Temporary Hit Points|XPHB equal to your Artificer level. You lose these Temporary Hit Points|XPHB if you doff the armor.</p></div></li></ul>",
+            "rawEntries": [
+              "You design your armor to be in the front line of conflict. It has the following features:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 9,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Thunder Gauntlets",
+                    "entries": [
+                      "Each of the armor's gauntlets has the following traits:",
+                      {
+                        "type": "list",
+                        "style": "list-hang-notitle",
+                        "page": 9,
+                        "items": [
+                          {
+                            "type": "item",
+                            "name": "Weapon Category:",
+                            "entries": [
+                              "Simple Melee"
+                            ]
+                          },
+                          {
+                            "type": "item",
+                            "name": "Damage on a Hit:",
+                            "entries": [
+                              "{@damage 1d8} Thunder plus the ability modifier used for the attack roll"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Distracting Pulse",
+                    "entries": [
+                      "A creature hit by the gauntlet has {@variantrule Disadvantage|XPHB} on attack rolls against targets other than you until the start of your next turn."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Defensive Field",
+                    "entries": [
+                      "While you are {@status Bloodied|XPHB}, you can take a {@variantrule Bonus Action|XPHB} to gain {@variantrule Temporary Hit Points|XPHB} equal to your Artificer level. You lose these {@variantrule Temporary Hit Points|XPHB} if you doff the armor."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_infiltrator_3",
+            "name": "Infiltrator",
+            "source": "XUA2024Artificer",
+            "page": 9,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d6",
+            "formulaConfig": {
+              "baseDice": "1d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You customize your armor for subtle undertakings. It has the following features:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Lightning Launcher.</strong> <p>A gemlike node appears on one of the armor's gauntlets or on the armor's chest (your choice). It has the following traits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Weapon Category:.</strong> <p>Simple Ranged</p></div></li><li><div class=\"compendium-subentry\"><strong>Damage on a Hit:.</strong> <p>1d6 Lightning plus the ability modifier used for the attack roll</p></div></li><li><div class=\"compendium-subentry\"><strong>Properties:.</strong> <p>T|XPHB|Thrown (Range 90/300 feet)</p></div></li></ul></div></li><li><div class=\"compendium-subentry\"><strong>Lightning Jolt.</strong> <p>Once on each of your turns when you hit a creature with your Lightning Launcher, you can deal an extra 1d6 Lightning damage to that target.</p></div></li><li><div class=\"compendium-subentry\"><strong>Powered Steps.</strong> <p>Your Speed|XPHB increases by 5 feet.</p></div></li><li><div class=\"compendium-subentry\"><strong>Dampening Field.</strong> <p>You have Advantage|XPHB on Dexterity (Stealth) checks. If the armor normally imposes Disadvantage|XPHB on such checks, the Advantage|XPHB and Disadvantage|XPHB cancel each other, as normal.</p></div></li></ul>",
+            "rawEntries": [
+              "You customize your armor for subtle undertakings. It has the following features:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 9,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Lightning Launcher",
+                    "entries": [
+                      "A gemlike node appears on one of the armor's gauntlets or on the armor's chest (your choice). It has the following traits:",
+                      {
+                        "type": "list",
+                        "style": "list-hang-notitle",
+                        "page": 9,
+                        "items": [
+                          {
+                            "type": "item",
+                            "name": "Weapon Category:",
+                            "entries": [
+                              "Simple Ranged"
+                            ]
+                          },
+                          {
+                            "type": "item",
+                            "name": "Damage on a Hit:",
+                            "entries": [
+                              "{@damage 1d6} Lightning plus the ability modifier used for the attack roll"
+                            ]
+                          },
+                          {
+                            "type": "item",
+                            "name": "Properties:",
+                            "entries": [
+                              "{@itemProperty T|XPHB|Thrown} (Range 90/300 feet)"
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Lightning Jolt",
+                    "entries": [
+                      "Once on each of your turns when you hit a creature with your Lightning Launcher, you can deal an extra {@damage 1d6} Lightning damage to that target."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Powered Steps",
+                    "entries": [
+                      "Your {@variantrule Speed|XPHB} increases by 5 feet."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Dampening Field",
+                    "entries": [
+                      "You have {@variantrule Advantage|XPHB} on Dexterity ({@skill Stealth|XPHB}) checks. If the armor normally imposes {@variantrule Disadvantage|XPHB} on such checks, the {@variantrule Advantage|XPHB} and {@variantrule Disadvantage|XPHB} cancel each other, as normal."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_tools_of_the_trade_3",
+            "name": "Tools of the Trade",
+            "source": "XUA2024Artificer",
+            "page": 8,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You gain training with Heavy armor. You also gain proficiency with Smith's Tools. If you already have this tool proficiency, you gain proficiency with one other type of Artisan's Tools of your choice.</p>\n<p>In addition, when you craft nonmagical or magic armor, the amount of time required to craft it is halved.</p>",
+            "rawEntries": [
+              "You gain training with Heavy armor. You also gain proficiency with {@item Smith's Tools|XPHB}. If you already have this tool proficiency, you gain proficiency with one other type of {@item Artisan's Tools|XPHB} of your choice.",
+              "In addition, when you craft nonmagical or magic armor, the amount of time required to craft it is halved."
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_extra_attack_5",
+            "name": "Extra Attack",
+            "source": "XUA2024Artificer",
+            "page": 9,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 5,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can attack twice instead of once whenever you take the Attack action on your turn.</p>",
+            "rawEntries": [
+              "You can attack twice instead of once whenever you take the {@action Attack|XPHB} action on your turn."
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_armor_replication_9",
+            "name": "Armor Replication",
+            "source": "XUA2024Artificer",
+            "page": 9,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You learn an additional plan for your Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer feature, and it must be in the Armor category. If you replace that plan, you must replace it with another Armor plan.</p>\n<p>In addition, you can create an additional item with that feature, and the item must also be in the Armor category.</p>",
+            "rawEntries": [
+              "You learn an additional plan for your {@classFeature Replicate Magic Item|Artificer|XUA2024Artificer|2|XUA2024Artificer} feature, and it must be in the Armor category. If you replace that plan, you must replace it with another Armor plan.",
+              "In addition, you can create an additional item with that feature, and the item must also be in the Armor category."
+            ]
+          },
+          {
+            "id": "scf_artificer_armorer_xua2024artificer_perfected_armor_15",
+            "name": "Perfected Armor",
+            "source": "XUA2024Artificer",
+            "page": 9,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Armorer",
+            "subclassSource": "XUA2024Artificer",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "2d6",
+            "formulaConfig": {
+              "baseDice": "2d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your Arcane Armor gains additional benefits based on its model, as detailed below.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Dreadnaught.</strong> <p>The damage die of your Armor Flail increases to 2d6 Bludgeoning damage.</p>\n<p>In addition, when you use your Giant Stature, your reach increases by 10 feet, your size can increase to Large or Huge (your choice), and you gain a Fly Speed|XPHB equal to your Speed.</p></div>\n<div class=\"compendium-subentry\"><strong>Guardian.</strong> <p>The damage die of your Thunder Gauntlets increases to 1d10 Thunder damage.</p>\n<p>In addition, when a Huge or smaller creature you can see ends its turn within 30 feet of you, you can take a Reaction|XPHB to magically force that creature to make a Strength saving throw against {@dcYourSpellSave}. On a failed save, you pull the creature up to 25 feet directly to an unoccupied space. If you pull the target to a space within 5 feet of yourself, you can make a melee weapon attack against it as part of this Reaction|XPHB. You can take this Reaction|XPHB a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Infiltrator.</strong> <p>The damage die of your Lightning Launcher increases to 2d6. Any creature that takes Lightning damage from your Lightning Launcher glimmers with magical light until the start of your next turn. The glimmering creature sheds Dim Light|XPHB in a 5-foot radius, and it has Disadvantage|XPHB on attack rolls against you, as the light jolts it if it attacks you.</p></div></div>",
+            "rawEntries": [
+              "Your Arcane Armor gains additional benefits based on its model, as detailed below.",
+              {
+                "type": "entries",
+                "entries": [
+                  {
+                    "type": "entries",
+                    "name": "Dreadnaught",
+                    "page": 9,
+                    "entries": [
+                      "The damage die of your Armor Flail increases to {@damage 2d6} Bludgeoning damage.",
+                      "In addition, when you use your Giant Stature, your reach increases by 10 feet, your size can increase to Large or Huge (your choice), and you gain a {@variantrule Fly Speed|XPHB} equal to your Speed."
+                    ]
+                  },
+                  {
+                    "type": "entries",
+                    "name": "Guardian",
+                    "page": 9,
+                    "entries": [
+                      "The damage die of your Thunder Gauntlets increases to {@damage 1d10} Thunder damage.",
+                      "In addition, when a Huge or smaller creature you can see ends its turn within 30 feet of you, you can take a {@variantrule Reaction|XPHB} to magically force that creature to make a Strength saving throw against {@dcYourSpellSave}. On a failed save, you pull the creature up to 25 feet directly to an unoccupied space. If you pull the target to a space within 5 feet of yourself, you can make a melee weapon attack against it as part of this {@variantrule Reaction|XPHB}. You can take this {@variantrule Reaction|XPHB} a number of times equal to your Intelligence modifier (minimum of once), and you regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+                    ]
+                  },
+                  {
+                    "type": "entries",
+                    "name": "Infiltrator",
+                    "page": 10,
+                    "entries": [
+                      "The damage die of your Lightning Launcher increases to {@damage 2d6}. Any creature that takes Lightning damage from your Lightning Launcher glimmers with magical light until the start of your next turn. The glimmering creature sheds {@variantrule Dim Light|XPHB} in a 5-foot radius, and it has {@variantrule Disadvantage|XPHB} on attack rolls against you, as the light jolts it if it attacks you."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_artificer_artillerist_xua2024artificer",
+        "name": "Artillerist",
+        "shortName": "Artillerist",
+        "source": "XUA2024Artificer",
+        "page": 10,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "features": [
+          {
+            "id": "scf_artificer_artillerist_xua2024artificer_artillerist_3",
+            "name": "Artillerist",
+            "source": "XUA2024Artificer",
+            "page": 10,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Artillerist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>An Artillerist specializes in using magic to hurl energy, projectiles, and explosions on a battlefield.</p>",
+            "rawEntries": [
+              "An Artillerist specializes in using magic to hurl energy, projectiles, and explosions on a battlefield.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Tool Proficiency|Artificer|XUA2024Artificer|Artillerist|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Artillerist Spells|Artificer|XUA2024Artificer|Artillerist|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Eldritch Cannon|Artificer|XUA2024Artificer|Artillerist|XUA2024Artificer|3|XUA2024Artificer"
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_artillerist_xua2024artificer_artillerist_spells_3",
+            "name": "Artillerist Spells",
+            "source": "XUA2024Artificer",
+            "page": 10,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Artillerist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you reach an Artificer level specified in the Artillerist Spells table, you thereafter always have the listed spells prepared.</p>\n<div class=\"compendium-subentry\"><strong>Artillerist Spells.</strong> </div>",
+            "rawEntries": [
+              "When you reach an Artificer level specified in the {@table Artillerist Spells|XUA2024Artificer} table, you thereafter always have the listed spells prepared.",
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2024Artificer",
+                "name": "Artillerist Spells",
+                "page": 10
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_artillerist_xua2024artificer_eldritch_cannon_3",
+            "name": "Eldritch Cannon",
+            "source": "XUA2024Artificer",
+            "page": 10,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Artillerist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Using Woodcarver's Tools or Smith's Tools, you can take a Magic action to create a Small or Tiny Eldritch Cannon|XUA2024Artificer in an unoccupied space on a horizontal surface within 5 feet of yourself. The cannon's game statistics appear below. You determine its appearance, which includes your choice of legs or wheels. It disappears if it is reduced to 0 Hit Points or after 1 hour. You can dismiss it early as a Magic action.</p>\n<p>Once you create a cannon, you can't do so again until you finish a Long Rest|XPHB or expend a spell slot to create one. You can have only one cannon at a time and can't create one while your cannon is present.</p>\n<div class=\"compendium-subentry\"><strong>Eldritch Cannon.</strong> </div>",
+            "rawEntries": [
+              "Using {@item Woodcarver's Tools|XPHB} or {@item Smith's Tools|XPHB}, you can take a {@action Magic|XPHB} action to create a Small or Tiny {@object Eldritch Cannon|XUA2024Artificer} in an unoccupied space on a horizontal surface within 5 feet of yourself. The cannon's game statistics appear below. You determine its appearance, which includes your choice of legs or wheels. It disappears if it is reduced to 0 Hit Points or after 1 hour. You can dismiss it early as a {@action Magic|XPHB} action.",
+              "Once you create a cannon, you can't do so again until you finish a {@variantrule Long Rest|XPHB} or expend a spell slot to create one. You can have only one cannon at a time and can't create one while your cannon is present.",
+              {
+                "type": "statblock",
+                "tag": "object",
+                "source": "XUA2024Artificer",
+                "name": "Eldritch Cannon",
+                "page": 10,
+                "collapsed": true
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_artillerist_xua2024artificer_tool_proficiency_3",
+            "name": "Tool Proficiency",
+            "source": "XUA2024Artificer",
+            "page": 10,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Artillerist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You gain proficiency with Woodcarver's Tools. If you already have this proficiency, you gain proficiency with one other type of Artisan's Tools of your choice.</p>\n<p>In addition, when you craft a magic Wand, the amount of time required to craft it is halved.</p>",
+            "rawEntries": [
+              "You gain proficiency with {@item Woodcarver's Tools|XPHB}. If you already have this proficiency, you gain proficiency with one other type of {@item Artisan's Tools|XPHB} of your choice.",
+              "In addition, when you craft a magic {@item Wand|XPHB}, the amount of time required to craft it is halved."
+            ]
+          },
+          {
+            "id": "scf_artificer_artillerist_xua2024artificer_arcane_firearm_5",
+            "name": "Arcane Firearm",
+            "source": "XUA2024Artificer",
+            "page": 10,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Artillerist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 5,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d8",
+            "formulaConfig": {
+              "baseDice": "1d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>When you finish a Long Rest|XPHB, you can use Woodcarver's Tools to carve special sigils into a Rod, Staff, or Wand and thereby turn it into your arcane firearm. The sigils disappear from the object if you later carve them on a different item. The sigils otherwise last indefinitely.</p>\n<p>You can use your arcane firearm as a Spellcasting Focus|XPHB for your Artificer spells. When you cast an Artificer spell through the firearm, roll 1d8, and you gain a bonus to one of the spell's damage rolls equal to the number rolled.</p>",
+            "rawEntries": [
+              "When you finish a {@variantrule Long Rest|XPHB}, you can use {@item Woodcarver's Tools|XPHB} to carve special sigils into a {@item Rod|XPHB}, {@item Staff|XPHB}, or {@item Wand|XPHB} and thereby turn it into your arcane firearm. The sigils disappear from the object if you later carve them on a different item. The sigils otherwise last indefinitely.",
+              "You can use your arcane firearm as a {@variantrule Spellcasting Focus|XPHB} for your Artificer spells. When you cast an Artificer spell through the firearm, roll {@damage 1d8}, and you gain a bonus to one of the spell's damage rolls equal to the number rolled."
+            ]
+          },
+          {
+            "id": "scf_artificer_artillerist_xua2024artificer_explosive_cannon_9",
+            "name": "Explosive Cannon",
+            "source": "XUA2024Artificer",
+            "page": 11,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Artillerist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "3d10",
+            "formulaConfig": {
+              "baseDice": "3d10",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Every Eldritch Cannon|XUA2024Artificer you create is now more destructive. You gain the following benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Detonate.</strong> <p>When your cannon is reduced to 0 Hit Points, you can take a Reaction|XPHB to command the cannon to detonate if you are within 60 feet of it. Doing so destroys the cannon and forces each creature within 20 feet of it to make a Dexterity saving throw against {@dcYourSpellSave}, taking 3d10 Force damage on a failed save or half as much damage on a successful one.</p></div></li><li><div class=\"compendium-subentry\"><strong>Firepower.</strong> <p>The cannon's damage rolls increase by 1d8.</p></div></li></ul>",
+            "rawEntries": [
+              "Every {@object Eldritch Cannon|XUA2024Artificer} you create is now more destructive. You gain the following benefits:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 11,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Detonate",
+                    "entries": [
+                      "When your cannon is reduced to 0 Hit Points, you can take a {@variantrule Reaction|XPHB} to command the cannon to detonate if you are within 60 feet of it. Doing so destroys the cannon and forces each creature within 20 feet of it to make a Dexterity saving throw against {@dcYourSpellSave}, taking {@damage 3d10} Force damage on a failed save or half as much damage on a successful one."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Firepower",
+                    "entries": [
+                      "The cannon's damage rolls increase by {@damage 1d8}."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_artillerist_xua2024artificer_fortified_position_15",
+            "name": "Fortified Position",
+            "source": "XUA2024Artificer",
+            "page": 10,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Artillerist",
+            "subclassSource": "XUA2024Artificer",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You're a master at forming well-defended emplacements using your Eldritch Cannon|XUA2024Artificer. You gain the following benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Double Firepower.</strong> <p>You can now have two cannons at the same time. You can create two with the same Magic action (but not with the same spell slot), and you can activate both of them with the same Bonus Action|XPHB, ordering them to use the same activation option or different ones. You can't create a third cannon while you have two.</p></div></li><li><div class=\"compendium-subentry\"><strong>Shimmering Field Projection.</strong> <p>You and your allies have Cover|XPHB|Half Cover while within 10 feet of your Eldritch Cannon|XUA2024Artificer.</p></div></li></ul>",
+            "rawEntries": [
+              "You're a master at forming well-defended emplacements using your {@object Eldritch Cannon|XUA2024Artificer}. You gain the following benefits:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 11,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Double Firepower",
+                    "entries": [
+                      "You can now have two cannons at the same time. You can create two with the same {@action Magic|XPHB} action (but not with the same spell slot), and you can activate both of them with the same {@variantrule Bonus Action|XPHB}, ordering them to use the same activation option or different ones. You can't create a third cannon while you have two."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Shimmering Field Projection",
+                    "entries": [
+                      "You and your allies have {@variantrule Cover|XPHB|Half Cover} while within 10 feet of your {@object Eldritch Cannon|XUA2024Artificer}."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_artificer_battle_smith_xua2024artificer",
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "XUA2024Artificer",
+        "page": 11,
+        "className": "Artificer",
+        "classSource": "XUA2024Artificer",
+        "features": [
+          {
+            "id": "scf_artificer_battle_smith_xua2024artificer_battle_ready_3",
+            "name": "Battle Ready",
+            "source": "XUA2024Artificer",
+            "page": 11,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Battle Smith",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your combat training and your experiments with magic have paid off in two ways:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Arcane Empowerment.</strong> <p>When you attack with a magic weapon, you can use your Intelligence modifier, instead of Strength or Dexterity modifier, for the attack and damage rolls.</p></div></li><li><div class=\"compendium-subentry\"><strong>Weapon Knowledge.</strong> <p>You gain proficiency with Martial weapons.</p></div></li></ul>",
+            "rawEntries": [
+              "Your combat training and your experiments with magic have paid off in two ways:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 11,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Arcane Empowerment",
+                    "entries": [
+                      "When you attack with a magic weapon, you can use your Intelligence modifier, instead of Strength or Dexterity modifier, for the attack and damage rolls."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Weapon Knowledge",
+                    "entries": [
+                      "You gain proficiency with Martial weapons."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_battle_smith_xua2024artificer_battle_smith_3",
+            "name": "Battle Smith",
+            "source": "XUA2024Artificer",
+            "page": 11,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Battle Smith",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>An Battle Smith is an expert at combining reagents to produce magical effects. Battle Smiths use their creations to give life and to leech it away.</p>",
+            "rawEntries": [
+              "An Battle Smith is an expert at combining reagents to produce magical effects. Battle Smiths use their creations to give life and to leech it away.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Tool Proficiency|Artificer|XUA2024Artificer|Battle Smith|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Battle Smith Spells|Artificer|XUA2024Artificer|Battle Smith|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Battle Ready|Artificer|XUA2024Artificer|Battle Smith|XUA2024Artificer|3|XUA2024Artificer"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Steel Defender|Artificer|XUA2024Artificer|Battle Smith|XUA2024Artificer|3|XUA2024Artificer"
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_battle_smith_xua2024artificer_battle_smith_spells_3",
+            "name": "Battle Smith Spells",
+            "source": "XUA2024Artificer",
+            "page": 11,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Battle Smith",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>When you reach an Artificer level specified in the Battle Smith Spells table, you thereafter always have the listed spells prepared.</p>\n<div class=\"compendium-subentry\"><strong>Battle Smith Spells.</strong> </div>",
+            "rawEntries": [
+              "When you reach an Artificer level specified in the {@table Battle Smith Spells|XUA2024Artificer} table, you thereafter always have the listed spells prepared.",
+              {
+                "type": "statblock",
+                "tag": "table",
+                "source": "XUA2024Artificer",
+                "name": "Battle Smith Spells",
+                "page": 11
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_battle_smith_xua2024artificer_steel_defender_3",
+            "name": "Steel Defender",
+            "source": "XUA2024Artificer",
+            "page": 11,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Battle Smith",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "action",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your tinkering has borne you a companion, a Steel Defender (see the stat block). You determine the defender's appearance and whether it has two legs or four; your choices don't affect the defender's game statistics.</p>\n<p>The Steel Defender is Friendly to you and your allies and obeys you. It vanishes if you die.</p>\n<div class=\"compendium-subentry\"><strong>The Defender in Combat.</strong> <p>In combat, the defender acts during your turn. It can move and take its Reaction|XPHB on its own, but the only action it takes is the Dodge action unless you take a Bonus Action|XPHB to command it to take an action. If you have the Incapacitated condition, the defender acts on its own and isn't limited to the Dodge action.</p></div>\n<div class=\"compendium-subentry\"><strong>Restoring or Replacing the Defender.</strong> <p>If the defender has died within the last hour, you can take a Magic action to touch it and expend a spell slot. The defender returns to life after 1 minute with all its Hit Points restored.</p>\n<p>Whenever you finish a Long Rest|XPHB, you can create a new Steel Defender if you have Smith's Tools in hand. If you already have a defender from this feature, the first one vanishes.</p></div>\n<div class=\"compendium-subentry\"><strong>Steel Defender.</strong> </div>",
+            "rawEntries": [
+              "Your tinkering has borne you a companion, a {@creature Steel Defender|XUA2024Artificer} (see the stat block). You determine the defender's appearance and whether it has two legs or four; your choices don't affect the defender's game statistics.",
+              "The {@creature Steel Defender|XUA2024Artificer} is Friendly to you and your allies and obeys you. It vanishes if you die.",
+              {
+                "type": "entries",
+                "name": "The Defender in Combat",
+                "page": 11,
+                "entries": [
+                  "In combat, the defender acts during your turn. It can move and take its {@variantrule Reaction|XPHB} on its own, but the only action it takes is the {@action Dodge|XPHB} action unless you take a {@variantrule Bonus Action|XPHB} to command it to take an action. If you have the {@condition Incapacitated|XPHB} condition, the defender acts on its own and isn't limited to the {@action Dodge|XPHB} action."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Restoring or Replacing the Defender",
+                "page": 12,
+                "entries": [
+                  "If the defender has died within the last hour, you can take a {@action Magic|XPHB} action to touch it and expend a spell slot. The defender returns to life after 1 minute with all its Hit Points restored.",
+                  "Whenever you finish a {@variantrule Long Rest|XPHB}, you can create a new {@creature Steel Defender|XUA2024Artificer} if you have {@item Smith's Tools|XPHB} in hand. If you already have a defender from this feature, the first one vanishes."
+                ]
+              },
+              {
+                "type": "statblock",
+                "tag": "creature",
+                "source": "XUA2024Artificer",
+                "name": "Steel Defender",
+                "page": 12,
+                "collapsed": true
+              }
+            ]
+          },
+          {
+            "id": "scf_artificer_battle_smith_xua2024artificer_tool_proficiency_3",
+            "name": "Tool Proficiency",
+            "source": "XUA2024Artificer",
+            "page": 11,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Battle Smith",
+            "subclassSource": "XUA2024Artificer",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You gain proficiency with Smith's Tools. If you already have this proficiency, you gain proficiency with one other type of Artisan's Tools of your choice.</p>\n<p>In addition, when you craft an ordinary or magic weapon, the amount of time required to craft it is halved.</p>",
+            "rawEntries": [
+              "You gain proficiency with {@item Smith's Tools|XPHB}. If you already have this proficiency, you gain proficiency with one other type of {@item Artisan's Tools|PHB} of your choice.",
+              "In addition, when you craft an ordinary or magic weapon, the amount of time required to craft it is halved."
+            ]
+          },
+          {
+            "id": "scf_artificer_battle_smith_xua2024artificer_extra_attack_5",
+            "name": "Extra Attack",
+            "source": "XUA2024Artificer",
+            "page": 12,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Battle Smith",
+            "subclassSource": "XUA2024Artificer",
+            "level": 5,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can attack twice instead of once whenever you take the Attack action on your turn.</p>",
+            "rawEntries": [
+              "You can attack twice instead of once whenever you take the {@action Attack|XPHB} action on your turn."
+            ]
+          },
+          {
+            "id": "scf_artificer_battle_smith_xua2024artificer_arcane_jolt_9",
+            "name": "Arcane Jolt",
+            "source": "XUA2024Artificer",
+            "page": 12,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Battle Smith",
+            "subclassSource": "XUA2024Artificer",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "2d6",
+            "formulaConfig": {
+              "baseDice": "2d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>When either you hit a target with an attack roll using a magic weapon or your Steel Defender hits a target, you can channel magical energy through the strike to create one of the following effects:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Destructive Energy.</strong> <p>The target takes an extra 2d6 Force damage.</p></div></li><li><div class=\"compendium-subentry\"><strong>Restorative Energy.</strong> <p>Choose one creature or object you can see within 30 feet of the target. Healing energy flows into the chosen recipient, restoring 2d6 Hit Points to it.</p></div></li></ul>\n<p>You can use this energy a number of times equal to your Intelligence modifier (minimum of once), but you can do so no more than once a turn. You regain all expended uses when you finish a Long Rest|XPHB.</p>",
+            "rawEntries": [
+              "When either you hit a target with an attack roll using a magic weapon or your {@creature Steel Defender|XUA2024Artificer} hits a target, you can channel magical energy through the strike to create one of the following effects:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 12,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Destructive Energy",
+                    "entries": [
+                      "The target takes an extra {@damage 2d6} Force damage."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Restorative Energy",
+                    "entries": [
+                      "Choose one creature or object you can see within 30 feet of the target. Healing energy flows into the chosen recipient, restoring {@dice 2d6} Hit Points to it."
+                    ]
+                  }
+                ]
+              },
+              "You can use this energy a number of times equal to your Intelligence modifier (minimum of once), but you can do so no more than once a turn. You regain all expended uses when you finish a {@variantrule Long Rest|XPHB}."
+            ]
+          },
+          {
+            "id": "scf_artificer_battle_smith_xua2024artificer_improved_defender_15",
+            "name": "Improved Defender",
+            "source": "XUA2024Artificer",
+            "page": 12,
+            "className": "Artificer",
+            "classSource": "XUA2024Artificer",
+            "subclassShortName": "Battle Smith",
+            "subclassSource": "XUA2024Artificer",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d4 + @int",
+            "formulaConfig": {
+              "baseDice": "1d4",
+              "scalingMod": "INT",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your Arcane Jolt|Artificer|XUA2024Artificer|Battle Smith|XUA2024Artificer|9|XUA2024Artificer and Steel Defender have become more powerful, granting these benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Improved Jolt.</strong> <p>The extra damage and healing of your Arcane Jolt|Artificer|XUA2024Artificer|Battle Smith|XUA2024Artificer|9|XUA2024Artificer both increase to 4d6.</p></div></li><li><div class=\"compendium-subentry\"><strong>Fortified Defender.</strong> <p>Your Steel Defender gains a +2 bonus to Armor Class|XPHB.</p></div></li><li><div class=\"compendium-subentry\"><strong>Improved Deflection.</strong> <p>Whenever your Steel Defender uses its Deflect Attack, the attacker takes Force damage equal to 1d4 plus your Intelligence modifier.</p></div></li></ul>",
+            "rawEntries": [
+              "Your {@subclassFeature Arcane Jolt|Artificer|XUA2024Artificer|Battle Smith|XUA2024Artificer|9|XUA2024Artificer} and {@creature Steel Defender|XUA2024Artificer} have become more powerful, granting these benefits:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "page": 12,
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Improved Jolt",
+                    "entries": [
+                      "The extra damage and healing of your {@subclassFeature Arcane Jolt|Artificer|XUA2024Artificer|Battle Smith|XUA2024Artificer|9|XUA2024Artificer} both increase to {@dice 4d6}."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Fortified Defender",
+                    "entries": [
+                      "Your {@creature Steel Defender|XUA2024Artificer} gains a +2 bonus to {@variantrule Armor Class|XPHB}."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Improved Deflection",
+                    "entries": [
+                      "Whenever your {@creature Steel Defender|XUA2024Artificer} uses its Deflect Attack, the attacker takes Force damage equal to {@damage 1d4} plus your Intelligence modifier."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

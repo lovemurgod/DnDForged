@@ -1,4 +1,25 @@
 // DnDForged Map & Canvas Rendering Engine
+import { createRenderScheduler } from './canvas/vtt-canvas-scheduler.js';
+import {
+    closeAnyWallModal as closeAnyWallModalExt,
+    openWallSettingsModal as openWallSettingsModalExt,
+    showDoorSettingsModal as showDoorSettingsModalExt,
+    showWindowSettingsModal as showWindowSettingsModalExt,
+    showWallSettingsModal as showWallSettingsModalExt
+} from './canvas/vtt-canvas-wall-modals.js';
+import {
+    getGridDistanceSettings as getGridDistanceSettingsExt,
+    calcDistanceFormatted as calcDistanceFormattedExt,
+    calcDistanceFt as calcDistanceFtExt,
+    drawMeasurementTemplate as drawMeasurementTemplateExt
+} from './canvas/vtt-canvas-measure.js';
+import {
+    isDrawingControlledByPlayer as isDrawingControlledByPlayerExt,
+    getDrawingBoundingBox as getDrawingBoundingBoxExt,
+    getDrawingResizeHandles as getDrawingResizeHandlesExt,
+    drawDrawingObject as drawDrawingObjectExt,
+    renderDrawingsPass as renderDrawingsPassExt
+} from './canvas/vtt-canvas-drawings.js';
 
 export function initVttCanvas(vtt) {
     const viewport = document.getElementById('vtt-canvas-viewport');
@@ -19,13 +40,34 @@ export function initVttCanvas(vtt) {
     // Image preloader cache to prevent infinite loader instantiation loops
     const imageCache = {};
 
+    // Render coalescing scheduler (initialized early to avoid TDZ ReferenceError on early calls)
+    let renderScheduler = null;
+    try {
+        renderScheduler = createRenderScheduler(() => performRenderAll());
+    } catch (e) {
+        console.warn('[VTT] Render scheduler fallback:', e);
+    }
+    function requestRender() {
+        if (renderScheduler) renderScheduler.requestRender();
+        else performRenderAll();
+    }
+    function renderAll() {
+        if (renderScheduler) renderScheduler.requestRender();
+        else performRenderAll();
+    }
+
     function getSafeVttUrl(url) {
         if (!url || typeof url !== 'string') return url;
         if (url.includes('discordapp.com') || url.includes('discordapp.net')) {
             return '/api/proxy-discord?url=' + encodeURIComponent(url);
         }
+        if (url.startsWith('img/bestiary/tokens/') || url.startsWith('/img/bestiary/tokens/')) {
+            const sep = url.includes('?') ? '&' : '?';
+            return `${url}${sep}v=3`;
+        }
         return url;
     }
+    window.getSafeVttUrl = getSafeVttUrl;
 
     const CONDITION_ICONS = {
         'Advantage': 'fa-circle-up',
@@ -62,6 +104,10 @@ export function initVttCanvas(vtt) {
     let hasPanned = false;
     let startPanX = 0;
     let startPanY = 0;
+
+    function isHexGrid(type) {
+        return type === 'hex-v' || type === 'hex-v-even' || type === 'hex-h' || type === 'hex-h-even';
+    }
 
     // Canvas Active Tool State
     let activeTool = 'select'; // select, grid, lighting, ping, measure
@@ -140,6 +186,10 @@ export function initVttCanvas(vtt) {
     let drawingDragOriginalPositions = {}; // { id: { x, y, startPoint, endPoint, points } }
     let tokenAnimations = {};
     let tokenAnimFrame = null;
+    let visualFxAnimFrame = null;
+    let visualFxRequested = false;
+    let initiativeHoverTokenId = null;
+    let lastLightingTickTime = 0;
     let processedAnimKeys = new Set();
 
     let activeResizeTokenId = null;
@@ -720,437 +770,32 @@ export function initVttCanvas(vtt) {
         }, 100);
     }
 
+    function getWallModalContext() {
+        return {
+            walls,
+            currentMapId,
+            vtt,
+            onWallsUpdated: () => {
+                if (vtt.socket) vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+                requestRender();
+            },
+            onWallDeleted: () => {
+                selectedWallIdx = -1;
+                hoveredWallIdx = -1;
+                selectedWallIdxs.clear();
+                if (vtt.socket) vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
+                requestRender();
+            }
+        };
+    }
+
     function closeAnyWallModal() {
-        const oldPopup = document.getElementById('vtt-wall-settings-modal');
-        if (oldPopup) oldPopup.remove();
-        const oldContext = document.getElementById('vtt-wall-context-menu');
-        if (oldContext) oldContext.remove();
-    }
-
-    function createWallSettingsModalContainer(clientX, clientY, width = 280) {
-        closeAnyWallModal();
-        const popup = document.createElement('div');
-        popup.id = 'vtt-wall-settings-modal';
-        popup.className = 'glassmorphism floating-tool-panel';
-        popup.style.position = 'fixed';
-        popup.style.left = `${Math.min(window.innerWidth - width - 20, Math.max(10, clientX))}px`;
-        popup.style.top = `${Math.min(window.innerHeight - 380, Math.max(10, clientY))}px`;
-        popup.style.zIndex = '10000';
-        popup.style.padding = '14px 16px';
-        popup.style.borderRadius = '8px';
-        popup.style.width = `${width}px`;
-        popup.style.background = 'rgba(18, 22, 33, 0.98)';
-        popup.style.border = '1px solid var(--color-border-subtle)';
-        popup.style.boxShadow = '0 10px 36px rgba(0, 0, 0, 0.6)';
-        return popup;
-    }
-
-    function setupModalOutsideClick(popup) {
-        const closeOnOutside = (e) => {
-            if (!popup.contains(e.target)) {
-                popup.remove();
-                window.removeEventListener('mousedown', closeOnOutside);
-            }
-        };
-        setTimeout(() => {
-            window.addEventListener('mousedown', closeOnOutside);
-        }, 120);
-    }
-
-    function showDoorSettingsModal(wallIdx, clientX, clientY) {
-        const wall = walls[wallIdx];
-        if (!wall) return;
-        const popup = createWallSettingsModalContainer(clientX, clientY, 280);
-
-        popup.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
-                <h4 style="margin: 0; font-size: 0.95rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-door-closed text-gradient-gold"></i> Door Settings
-                </h4>
-                <button type="button" class="btn btn-secondary btn-xxs modal-close-btn" style="padding: 2px 6px;">✕</button>
-            </div>
-            
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer;">
-                    <span><i class="fa-solid fa-lock" style="width: 18px; color: ${wall.isLocked ? '#dc3545' : '#6c757d'};"></i> Locked Door</span>
-                    <input type="checkbox" id="modal-door-locked" ${wall.isLocked ? 'checked' : ''}>
-                </label>
-
-                <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer;">
-                    <span><i class="fa-solid fa-eye-slash" style="width: 18px; color: ${wall.isSecret ? '#ffc107' : '#28a745'};"></i> Secret (Hidden to Players)</span>
-                    <input type="checkbox" id="modal-door-secret" ${wall.isSecret ? 'checked' : ''}>
-                </label>
-
-                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                    <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer; margin-bottom: 6px;">
-                        <span><i class="fa-solid fa-arrows-spin" style="width: 18px; color: var(--color-gold-base);"></i> Rotating Hinge Pivot</span>
-                        <input type="checkbox" id="modal-door-hinge" ${wall.hasHinge ? 'checked' : ''}>
-                    </label>
-                    <div id="modal-door-hinge-details" class="${wall.hasHinge ? '' : 'vtt-hidden'}" style="display: flex; flex-direction: column; gap: 6px; padding-left: 20px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem;">
-                            <span>Pivot Endpoint:</span>
-                            <select id="modal-door-hinge-endpoint" style="font-size: 0.75rem; padding: 2px 6px;">
-                                <option value="1" ${(wall.hingeEndpoint || 1) === 1 ? 'selected' : ''}>Endpoint 1 (Start)</option>
-                                <option value="2" ${(wall.hingeEndpoint || 1) === 2 ? 'selected' : ''}>Endpoint 2 (End)</option>
-                            </select>
-                        </div>
-                        <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem;">
-                            <span>Swing Angle (°):</span>
-                            <input type="number" id="modal-door-swing-angle" min="15" max="180" step="15" value="${wall.swingAngle || 90}" style="width: 60px; font-size: 0.75rem; padding: 2px 4px;">
-                        </div>
-                    </div>
-                </div>
-
-                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                    <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px;">Convert to:</div>
-                    <div style="display: flex; gap: 6px;">
-                        <button type="button" id="modal-convert-to-wall" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-square-full"></i> Wall</button>
-                        <button type="button" id="modal-convert-to-window" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-border-all"></i> Window</button>
-                    </div>
-                </div>
-
-                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                    <button type="button" id="modal-door-delete" class="btn btn-danger btn-xs" style="width: 100%; text-align: center;">
-                        <i class="fa-solid fa-trash"></i> Delete Door
-                    </button>
-                </div>
-            </div>
-        `;
-
-        document.body.appendChild(popup);
-        setupModalOutsideClick(popup);
-
-        popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
-        
-        popup.querySelector('#modal-door-locked').onchange = (e) => {
-            wall.isLocked = e.target.checked;
-            if (wall.isLocked && wall.isOpen) wall.isOpen = false;
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        popup.querySelector('#modal-door-secret').onchange = (e) => {
-            wall.isSecret = e.target.checked;
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        const hingeCb = popup.querySelector('#modal-door-hinge');
-        const hingeDetails = popup.querySelector('#modal-door-hinge-details');
-        hingeCb.onchange = (e) => {
-            wall.hasHinge = e.target.checked;
-            if (wall.hasHinge && !wall.hingeEndpoint) wall.hingeEndpoint = 1;
-            hingeDetails.classList.toggle('vtt-hidden', !wall.hasHinge);
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        popup.querySelector('#modal-door-hinge-endpoint').onchange = (e) => {
-            wall.hingeEndpoint = parseInt(e.target.value) || 1;
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        popup.querySelector('#modal-door-swing-angle').onchange = (e) => {
-            wall.swingAngle = parseInt(e.target.value) || 90;
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        popup.querySelector('#modal-convert-to-wall').onclick = () => {
-            wall.type = 'wall';
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-            popup.remove();
-        };
-
-        popup.querySelector('#modal-convert-to-window').onclick = () => {
-            wall.type = 'window';
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-            popup.remove();
-        };
-
-        popup.querySelector('#modal-door-delete').onclick = () => {
-            walls.splice(wallIdx, 1);
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            hoveredWallIdx = -1;
-            selectedWallIdxs.clear();
-            renderAll();
-            popup.remove();
-        };
-    }
-
-    function showWindowSettingsModal(wallIdx, clientX, clientY) {
-        const wall = walls[wallIdx];
-        if (!wall) return;
-        const popup = createWallSettingsModalContainer(clientX, clientY, 290);
-
-        let initialVisionMode = 'both_blocked';
-        if (wall.oneWay && wall.oneWay !== 'none') {
-            initialVisionMode = 'one_way';
-        } else if (wall.isSeeThrough || wall.isDrawn === false) {
-            initialVisionMode = 'both_seethrough';
-        }
-
-        popup.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
-                <h4 style="margin: 0; font-size: 0.95rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-border-all text-gradient-gold"></i> Window Settings
-                </h4>
-                <button type="button" class="btn btn-secondary btn-xxs modal-close-btn" style="padding: 2px 6px;">✕</button>
-            </div>
-            
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer;">
-                    <span><i class="fa-solid fa-lock" style="width: 18px; color: ${wall.isLocked ? '#dc3545' : '#6c757d'};"></i> Locked (Blocks Pass-Through)</span>
-                    <input type="checkbox" id="modal-window-locked" ${wall.isLocked ? 'checked' : ''}>
-                </label>
-
-                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                    <div style="font-size: 0.78rem; font-weight: 500; margin-bottom: 6px; color: var(--color-gold-base);">Vision & Light Mode:</div>
-                    <select id="modal-window-vision-mode" style="width: 100%; font-size: 0.75rem; padding: 4px 8px; margin-bottom: 6px;">
-                        <option value="both_seethrough" ${initialVisionMode === 'both_seethrough' ? 'selected' : ''}>Both Sides See-Through (Transparent)</option>
-                        <option value="both_blocked" ${initialVisionMode === 'both_blocked' ? 'selected' : ''}>Both Sides Blocked (Opaque Glass)</option>
-                        <option value="one_way" ${initialVisionMode === 'one_way' ? 'selected' : ''}>One-Way Vision (Tinted / Mirrored)</option>
-                    </select>
-                    
-                    <div id="modal-window-oneway-controls" class="${initialVisionMode === 'one_way' ? '' : 'vtt-hidden'}" style="background: rgba(0,0,0,0.25); padding: 8px; border-radius: 4px; display: flex; flex-direction: column; gap: 6px;">
-                        <button type="button" id="modal-window-flip-direction" class="btn btn-secondary btn-xs" style="width: 100%;">
-                            <i class="fa-solid fa-arrows-rotate"></i> Flip Direction (Swap Sides)
-                        </button>
-                        <div style="font-size: 0.7rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 6px;">
-                            <span style="display:inline-block; width: 10px; height: 10px; background: #28a745; border-radius: 2px;"></span> Green Dashed: See-Through
-                        </div>
-                        <div style="font-size: 0.7rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 6px;">
-                            <span style="display:inline-block; width: 10px; height: 10px; background: #dc3545; border-radius: 2px;"></span> Red Solid: Blocked
-                        </div>
-                    </div>
-                </div>
-
-                <label style="display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; cursor: pointer; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                    <span><i class="fa-solid fa-eye-slash" style="width: 18px; color: ${wall.isSecret ? '#ffc107' : '#28a745'};"></i> Secret (Hidden to Players)</span>
-                    <input type="checkbox" id="modal-window-secret" ${wall.isSecret ? 'checked' : ''}>
-                </label>
-
-                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                    <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px;">Convert to:</div>
-                    <div style="display: flex; gap: 6px;">
-                        <button type="button" id="modal-convert-to-wall" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-square-full"></i> Wall</button>
-                        <button type="button" id="modal-convert-to-door" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-door-closed"></i> Door</button>
-                    </div>
-                </div>
-
-                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                    <button type="button" id="modal-window-delete" class="btn btn-danger btn-xs" style="width: 100%; text-align: center;">
-                        <i class="fa-solid fa-trash"></i> Delete Window
-                    </button>
-                </div>
-            </div>
-        `;
-
-        document.body.appendChild(popup);
-        setupModalOutsideClick(popup);
-
-        popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
-        
-        popup.querySelector('#modal-window-locked').onchange = (e) => {
-            wall.isLocked = e.target.checked;
-            if (wall.isLocked && wall.isOpen) wall.isOpen = false;
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        const visionModeSelect = popup.querySelector('#modal-window-vision-mode');
-        const onewayControls = popup.querySelector('#modal-window-oneway-controls');
-        visionModeSelect.onchange = (e) => {
-            const mode = e.target.value;
-            if (mode === 'both_seethrough') {
-                wall.isSeeThrough = true;
-                wall.isDrawn = false;
-                wall.oneWay = 'none';
-                onewayControls.classList.add('vtt-hidden');
-            } else if (mode === 'both_blocked') {
-                wall.isSeeThrough = false;
-                wall.isDrawn = true;
-                wall.oneWay = 'none';
-                onewayControls.classList.add('vtt-hidden');
-            } else if (mode === 'one_way') {
-                wall.isSeeThrough = false;
-                wall.isDrawn = true;
-                if (!wall.oneWay || wall.oneWay === 'none') wall.oneWay = 'left';
-                onewayControls.classList.remove('vtt-hidden');
-            }
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        popup.querySelector('#modal-window-flip-direction').onclick = () => {
-            wall.oneWay = wall.oneWay === 'left' ? 'right' : 'left';
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        popup.querySelector('#modal-window-secret').onchange = (e) => {
-            wall.isSecret = e.target.checked;
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        popup.querySelector('#modal-convert-to-wall').onclick = () => {
-            wall.type = 'wall';
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-            popup.remove();
-        };
-
-        popup.querySelector('#modal-convert-to-door').onclick = () => {
-            wall.type = 'door';
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-            popup.remove();
-        };
-
-        popup.querySelector('#modal-window-delete').onclick = () => {
-            walls.splice(wallIdx, 1);
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            hoveredWallIdx = -1;
-            selectedWallIdxs.clear();
-            renderAll();
-            popup.remove();
-        };
-    }
-
-    function showWallSettingsModal(wallIdx, clientX, clientY) {
-        const wall = walls[wallIdx];
-        if (!wall) return;
-        const popup = createWallSettingsModalContainer(clientX, clientY, 280);
-
-        const isOneWay = wall.oneWay && wall.oneWay !== 'none';
-
-        popup.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px;">
-                <h4 style="margin: 0; font-size: 0.95rem; color: var(--color-gold-base); font-family: var(--font-heading); display: flex; align-items: center; gap: 8px;">
-                    <i class="fa-solid fa-square-full text-gradient-gold"></i> Wall Settings
-                </h4>
-                <button type="button" class="btn btn-secondary btn-xxs modal-close-btn" style="padding: 2px 6px;">✕</button>
-            </div>
-            
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <div>
-                    <div style="font-size: 0.78rem; font-weight: 500; margin-bottom: 6px; color: var(--color-gold-base);">Vision & Light Blocking:</div>
-                    <select id="modal-wall-direction-mode" style="width: 100%; font-size: 0.75rem; padding: 4px 8px; margin-bottom: 6px;">
-                        <option value="none" ${!isOneWay ? 'selected' : ''}>Two-Way Wall (Normal / Blocks Both Sides)</option>
-                        <option value="one_way" ${isOneWay ? 'selected' : ''}>One-Way Wall (Parapet / Ledge / Cliff)</option>
-                    </select>
-                    
-                    <div id="modal-wall-oneway-controls" class="${isOneWay ? '' : 'vtt-hidden'}" style="background: rgba(0,0,0,0.25); padding: 8px; border-radius: 4px; display: flex; flex-direction: column; gap: 6px;">
-                        <button type="button" id="modal-wall-flip-direction" class="btn btn-secondary btn-xs" style="width: 100%;">
-                            <i class="fa-solid fa-arrows-rotate"></i> Flip Direction (Swap Sides)
-                        </button>
-                        <div style="font-size: 0.7rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 6px;">
-                            <span style="display:inline-block; width: 10px; height: 10px; background: #28a745; border-radius: 2px;"></span> Green Dashed: See-Through
-                        </div>
-                        <div style="font-size: 0.7rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 6px;">
-                            <span style="display:inline-block; width: 10px; height: 10px; background: #dc3545; border-radius: 2px;"></span> Red Solid: Blocked
-                        </div>
-                    </div>
-                </div>
-
-                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                    <div style="font-size: 0.75rem; color: var(--color-text-muted); margin-bottom: 6px;">Convert to:</div>
-                    <div style="display: flex; gap: 6px;">
-                        <button type="button" id="modal-convert-to-door" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-door-closed"></i> Door</button>
-                        <button type="button" id="modal-convert-to-window" class="btn btn-secondary btn-xxs" style="flex: 1;"><i class="fa-solid fa-border-all"></i> Window</button>
-                    </div>
-                </div>
-
-                <div style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 8px;">
-                    <button type="button" id="modal-wall-delete" class="btn btn-danger btn-xs" style="width: 100%; text-align: center;">
-                        <i class="fa-solid fa-trash"></i> Delete Wall
-                    </button>
-                </div>
-            </div>
-        `;
-
-        document.body.appendChild(popup);
-        setupModalOutsideClick(popup);
-
-        popup.querySelector('.modal-close-btn').onclick = () => popup.remove();
-
-        const dirModeSelect = popup.querySelector('#modal-wall-direction-mode');
-        const onewayControls = popup.querySelector('#modal-wall-oneway-controls');
-        dirModeSelect.onchange = (e) => {
-            const mode = e.target.value;
-            if (mode === 'none') {
-                wall.oneWay = 'none';
-                onewayControls.classList.add('vtt-hidden');
-            } else {
-                if (!wall.oneWay || wall.oneWay === 'none') wall.oneWay = 'left';
-                onewayControls.classList.remove('vtt-hidden');
-            }
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        popup.querySelector('#modal-wall-flip-direction').onclick = () => {
-            wall.oneWay = wall.oneWay === 'left' ? 'right' : 'left';
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-        };
-
-        popup.querySelector('#modal-convert-to-door').onclick = () => {
-            wall.type = 'door';
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-            popup.remove();
-        };
-
-        popup.querySelector('#modal-convert-to-window').onclick = () => {
-            wall.type = 'window';
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            renderAll();
-            popup.remove();
-        };
-
-        popup.querySelector('#modal-wall-delete').onclick = () => {
-            walls.splice(wallIdx, 1);
-            vtt.socket.emit('walls:update', { mapId: currentMapId, walls });
-            wallsVersion++;
-            hoveredWallIdx = -1;
-            selectedWallIdxs.clear();
-            renderAll();
-            popup.remove();
-        };
+        closeAnyWallModalExt();
     }
 
     function openWallSettingsModal(wallIdx, clientX, clientY) {
-        const wall = walls[wallIdx];
-        if (!wall) return;
-        if (wall.type === 'door') showDoorSettingsModal(wallIdx, clientX, clientY);
-        else if (wall.type === 'window') showWindowSettingsModal(wallIdx, clientX, clientY);
-        else showWallSettingsModal(wallIdx, clientX, clientY);
+        openWallSettingsModalExt(wallIdx, clientX, clientY, getWallModalContext());
     }
-
     function getInteractiveObjectAtCoord(x, y) {
         let found = null;
         let minDistance = 20; // 20px active radius for door clicking
@@ -1203,6 +848,16 @@ let isTokenMeasuring = false;
     let measureAnchorPoints = []; // Array of {x,y} for multi-segment polyline (line shape only)
     let otherMeasurements = {};
 
+    let lastMeasureEmitTime = 0;
+    function emitMeasureUpdateThrottled(payload) {
+        if (!vtt.socket) return;
+        const now = performance.now();
+        if (now - lastMeasureEmitTime >= 40) { // ~25 updates/sec cap
+            lastMeasureEmitTime = now;
+            vtt.socket.emit('measure:update', payload);
+        }
+    }
+
     // ═══════════════════════════════════════════════════════════════════════════
     // Paint Tools & Persistent Drawings System
     // ═══════════════════════════════════════════════════════════════════════════
@@ -1246,10 +901,7 @@ let isTokenMeasuring = false;
     }
 
     function isDrawingControlledByPlayer(drawing) {
-        if (!drawing) return false;
-        if (vtt.role === 'GM') return true;
-        if (drawing.ownerUsername && drawing.ownerUsername === vtt.username) return true;
-        return false;
+        return isDrawingControlledByPlayerExt(drawing, vtt.role, vtt.username);
     }
 
     function emitDrawingsUpdate() {
@@ -1259,68 +911,35 @@ let isTokenMeasuring = false;
         vtt.socket.emit('drawings:update', { mapId: currentMapId, drawings });
     }
 
+    // Viewport Frustum Culling Helpers
+    function getCameraViewportBounds(margin = 200) {
+        const viewW = viewport ? (viewport.clientWidth || window.innerWidth) : window.innerWidth;
+        const viewH = viewport ? (viewport.clientHeight || window.innerHeight) : window.innerHeight;
+        const currentZoom = Math.max(0.01, zoom || 1.0);
+        const minX = (-panX / currentZoom) - margin;
+        const minY = (-panY / currentZoom) - margin;
+        const maxX = ((viewW - panX) / currentZoom) + margin;
+        const maxY = ((viewH - panY) / currentZoom) + margin;
+        return { minX, minY, maxX, maxY };
+    }
+
+    function isRectInViewport(x, y, w, h, margin = 200) {
+        const b = getCameraViewportBounds(margin);
+        return (x + w >= b.minX && x <= b.maxX && y + h >= b.minY && y <= b.maxY);
+    }
+
+    function isSegmentInViewport(x1, y1, x2, y2, margin = 200) {
+        const b = getCameraViewportBounds(margin);
+        return Math.max(x1, x2) >= b.minX && Math.min(x1, x2) <= b.maxX &&
+               Math.max(y1, y2) >= b.minY && Math.min(y1, y2) <= b.maxY;
+    }
+
     function getDrawingBoundingBox(d) {
-        if (!d) return null;
-        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-        if (d.type === 'pencil' || d.type === 'brush' || d.type === 'eraser' || d.type === 'polygon') {
-            const pts = Array.isArray(d.points) ? d.points : [];
-            if (pts.length === 0) return null;
-            pts.forEach(p => {
-                if (p.x < minX) minX = p.x;
-                if (p.x > maxX) maxX = p.x;
-                if (p.y < minY) minY = p.y;
-                if (p.y > maxY) maxY = p.y;
-            });
-            const pad = Math.max(4, (d.strokeWidth || 4) / 2);
-            return { minX: minX - pad, minY: minY - pad, maxX: maxX + pad, maxY: maxY + pad, w: Math.max(1, (maxX - minX) + pad * 2), h: Math.max(1, (maxY - minY) + pad * 2) };
-        } else if (d.type === 'line' || d.type === 'arrow' || d.type === 'rect' || d.type === 'circle') {
-            const p1 = d.startPoint || { x: 0, y: 0 };
-            const p2 = d.endPoint || { x: 0, y: 0 };
-            minX = Math.min(p1.x, p2.x);
-            maxX = Math.max(p1.x, p2.x);
-            minY = Math.min(p1.y, p2.y);
-            maxY = Math.max(p1.y, p2.y);
-            const pad = Math.max(4, (d.strokeWidth || 4) / 2);
-            return { minX: minX - pad, minY: minY - pad, maxX: maxX + pad, maxY: maxY + pad, w: Math.max(1, (maxX - minX) + pad * 2), h: Math.max(1, (maxY - minY) + pad * 2) };
-        } else if (d.type === 'fill') {
-            return { minX: d.x, minY: d.y, maxX: d.x + (d.width || 0), maxY: d.y + (d.height || 0), w: Math.max(1, d.width || 0), h: Math.max(1, d.height || 0) };
-        } else if (d.type === 'text') {
-            const fs = d.fontSize || 16;
-            const lines = (d.text || '').split('\n');
-            let maxLineW = 30;
-            if (ctxInteraction) {
-                ctxInteraction.save();
-                ctxInteraction.font = `${fs}px ${d.fontFamily || 'Open Sans, sans-serif'}`;
-                lines.forEach(l => {
-                    const tw = ctxInteraction.measureText(l).width;
-                    if (tw > maxLineW) maxLineW = tw;
-                });
-                ctxInteraction.restore();
-            }
-            const textH = Math.max(fs, lines.length * (fs * 1.25));
-            return { minX: d.x, minY: d.y - fs, maxX: d.x + maxLineW + 8, maxY: d.y - fs + textH, w: maxLineW + 8, h: textH };
-        }
-        return null;
+        return getDrawingBoundingBoxExt(d, ctxInteraction);
     }
-
     function getDrawingResizeHandles(d) {
-        const bbox = getDrawingBoundingBox(d);
-        if (!bbox || bbox.w <= 0 || bbox.h <= 0) return {};
-        const { minX, minY, maxX, maxY, w, h } = bbox;
-        const midX = minX + w / 2;
-        const midY = minY + h / 2;
-        return {
-            nw: { x: minX, y: minY },
-            n:  { x: midX, y: minY },
-            ne: { x: maxX, y: minY },
-            e:  { x: maxX, y: midY },
-            se: { x: maxX, y: maxY },
-            s:  { x: midX, y: maxY },
-            sw: { x: minX, y: maxY },
-            w:  { x: minX, y: midY }
-        };
+        return getDrawingResizeHandlesExt(d, ctxInteraction);
     }
-
     function getDrawingResizeHandleAtPoint(d, pt) {
         if (!d) return null;
         const handles = getDrawingResizeHandles(d);
@@ -1398,252 +1017,27 @@ let isTokenMeasuring = false;
     }
 
     function drawDrawingObject(ctx, d, isSelected = false) {
-        if (!d) return;
-        ctx.save();
-        ctx.globalAlpha = d.opacity !== undefined ? d.opacity : 1.0;
-
-        if (isSelected) {
-            ctx.shadowColor = '#d4af37';
-            ctx.shadowBlur = 8;
-        }
-
-        const strokeCol = d.strokeColor || '#eab308';
-        const fillCol = d.fillColor || strokeCol;
-        const strokeW = d.strokeWidth || 4;
-        const isFilled = d.fillMode === 'fill' || d.fillMode === 'both';
-        const hasStroke = !d.fillMode || d.fillMode === 'stroke' || d.fillMode === 'both';
-
-        ctx.strokeStyle = strokeCol;
-        ctx.fillStyle = fillCol;
-        ctx.lineWidth = strokeW;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-
-        if (d.type === 'eraser') {
-            ctx.save();
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.strokeStyle = '#000000';
-            ctx.fillStyle = '#000000';
-            ctx.lineWidth = d.strokeWidth || 24;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            const pts = d.points || [];
-            if (pts.length > 1) {
-                ctx.beginPath();
-                ctx.moveTo(pts[0].x, pts[0].y);
-                for (let i = 1; i < pts.length - 1; i++) {
-                    const xc = (pts[i].x + pts[i + 1].x) / 2;
-                    const yc = (pts[i].y + pts[i + 1].y) / 2;
-                    ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
-                }
-                ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
-                ctx.stroke();
-            } else if (pts.length === 1) {
-                ctx.beginPath();
-                ctx.arc(pts[0].x, pts[0].y, (d.strokeWidth || 24) / 2, 0, Math.PI * 2);
-                ctx.fill();
-            }
-            ctx.restore();
-            return;
-        }
-
-        if (d.type === 'pencil' || d.type === 'brush') {
-            const pts = d.points || [];
-            if (pts.length > 1) {
-                ctx.beginPath();
-                ctx.moveTo(pts[0].x, pts[0].y);
-                for (let i = 1; i < pts.length - 1; i++) {
-                    const xc = (pts[i].x + pts[i + 1].x) / 2;
-                    const yc = (pts[i].y + pts[i + 1].y) / 2;
-                    ctx.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
-                }
-                ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
-                ctx.stroke();
-            } else if (pts.length === 1) {
-                ctx.beginPath();
-                ctx.arc(pts[0].x, pts[0].y, strokeW / 2, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        } else if (d.type === 'line') {
-            const p1 = d.startPoint || { x: 0, y: 0 };
-            const p2 = d.endPoint || { x: 0, y: 0 };
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
-        } else if (d.type === 'arrow') {
-            const p1 = d.startPoint || { x: 0, y: 0 };
-            const p2 = d.endPoint || { x: 0, y: 0 };
-            const dx = p2.x - p1.x;
-            const dy = p2.y - p1.y;
-            const dist = Math.hypot(dx, dy);
-            const angle = Math.atan2(dy, dx);
-            const headLen = Math.max(12, strokeW * 3);
-
-            // Draw line shaft stopping just inside arrowhead base so round caps never protrude beyond p2
-            const shaftEndDist = Math.max(0, dist - headLen * 0.75);
-            ctx.beginPath();
-            ctx.moveTo(p1.x, p1.y);
-            ctx.lineTo(p1.x + Math.cos(angle) * shaftEndDist, p1.y + Math.sin(angle) * shaftEndDist);
-            ctx.stroke();
-
-            // Solid triangular arrowhead with apex precisely at p2
-            ctx.beginPath();
-            ctx.moveTo(p2.x, p2.y);
-            ctx.lineTo(p2.x - headLen * Math.cos(angle - Math.PI / 6), p2.y - headLen * Math.sin(angle - Math.PI / 6));
-            ctx.lineTo(p2.x - headLen * Math.cos(angle + Math.PI / 6), p2.y - headLen * Math.sin(angle + Math.PI / 6));
-            ctx.closePath();
-            ctx.fillStyle = strokeCol;
-            ctx.fill();
-            ctx.stroke();
-        } else if (d.type === 'rect') {
-            const p1 = d.startPoint || { x: 0, y: 0 };
-            const p2 = d.endPoint || { x: 0, y: 0 };
-            const rx = Math.min(p1.x, p2.x);
-            const ry = Math.min(p1.y, p2.y);
-            const rw = Math.abs(p2.x - p1.x);
-            const rh = Math.abs(p2.y - p1.y);
-            if (isFilled) ctx.fillRect(rx, ry, rw, rh);
-            if (hasStroke) ctx.strokeRect(rx, ry, rw, rh);
-        } else if (d.type === 'circle') {
-            const p1 = d.startPoint || { x: 0, y: 0 };
-            const p2 = d.endPoint || { x: 0, y: 0 };
-            const cx = (p1.x + p2.x) / 2;
-            const cy = (p1.y + p2.y) / 2;
-            const rx = Math.abs(p2.x - p1.x) / 2;
-            const ry = Math.abs(p2.y - p1.y) / 2;
-            ctx.beginPath();
-            ctx.ellipse(cx, cy, Math.max(1, rx), Math.max(1, ry), 0, 0, Math.PI * 2);
-            if (isFilled) ctx.fill();
-            if (hasStroke) ctx.stroke();
-        } else if (d.type === 'polygon') {
-            const pts = d.points || [];
-            if (pts.length > 1) {
-                ctx.beginPath();
-                ctx.moveTo(pts[0].x, pts[0].y);
-                for (let i = 1; i < pts.length; i++) {
-                    ctx.lineTo(pts[i].x, pts[i].y);
-                }
-                if (d.isClosed !== false) ctx.closePath();
-                if (isFilled && d.isClosed !== false) ctx.fill();
-                if (hasStroke) ctx.stroke();
-            }
-        } else if (d.type === 'fill') {
-            if (d.imageData) {
-                let img = drawingImageCache.get(d.imageData);
-                if (!img) {
-                    img = new Image();
-                    img.src = d.imageData;
-                    img.onload = () => renderAll();
-                    drawingImageCache.set(d.imageData, img);
-                }
-                if (img.complete) {
-                    ctx.drawImage(img, d.x, d.y, d.width, d.height);
-                }
-            }
-        } else if (d.type === 'text') {
-            const fs = d.fontSize || 16;
-            ctx.font = `${fs}px ${d.fontFamily || 'Open Sans, sans-serif'}`;
-            ctx.fillStyle = strokeCol;
-            const lines = (d.text || '').split('\n');
-            lines.forEach((l, idx) => {
-                ctx.fillText(l, d.x, d.y + idx * (fs * 1.25));
-            });
-        }
-
-        ctx.restore();
-
-        if (isSelected && activeTool === 'select') {
-            drawDrawingSelectionHandles(ctx, d);
-        }
+        drawDrawingObjectExt(ctx, d, isSelected, activeTool, zoom, drawingImageCache, renderAll, ctxInteraction);
     }
-
-    function drawDrawingSelectionHandles(ctx, d) {
-        const bbox = getDrawingBoundingBox(d);
-        if (!bbox) return;
-
-        ctx.save();
-        ctx.strokeStyle = '#d4af37';
-        ctx.lineWidth = 1.5 / zoom;
-        ctx.setLineDash([4 / zoom, 3 / zoom]);
-        ctx.strokeRect(bbox.minX, bbox.minY, bbox.w, bbox.h);
-        ctx.setLineDash([]);
-
-        const handles = getDrawingResizeHandles(d);
-        const handleRadius = 4.5 / zoom;
-
-        for (const [key, pos] of Object.entries(handles)) {
-            ctx.beginPath();
-            ctx.arc(pos.x, pos.y, handleRadius, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff';
-            ctx.fill();
-            ctx.strokeStyle = '#d4af37';
-            ctx.lineWidth = 1.5 / zoom;
-            ctx.stroke();
-        }
-        ctx.restore();
-    }
-
     function renderDrawingsPass(targetLayer) {
-        const isGmViewing = vtt.role === 'GM';
-        const layerDrawings = Object.values(drawings)
-            .filter(d => (d.layer || 'token') === targetLayer)
-            .sort((a, b) => (a.zIndex || 0) - (b.zIndex || 0));
-
-        const hasEraser = layerDrawings.some(d => d.type === 'eraser') || 
-            (currentPaintStroke && currentPaintStroke.type === 'eraser' && (currentPaintStroke.layer || 'token') === targetLayer);
-
-        if (!hasEraser) {
-            layerDrawings.forEach(d => {
-                const drawingLayer = d.layer || 'token';
-                if (drawingLayer !== activeLayer && !isGmViewing) return;
-                const isControlled = isDrawingControlledByPlayer(d);
-                const isSelected = isControlled && (selectedDrawingId === d.id || selectedDrawingIds.has(d.id));
-
-                ctxInteraction.save();
-                if (vtt.role === 'GM' && activeLayer !== drawingLayer) {
-                    ctxInteraction.globalAlpha = 0.45;
-                }
-                drawDrawingObject(ctxInteraction, d, isSelected);
-                ctxInteraction.restore();
-            });
-            return;
-        }
-
-        const mapW = canvasInteraction.width;
-        const mapH = canvasInteraction.height;
-        if (offDrawingCanvas.width !== mapW || offDrawingCanvas.height !== mapH) {
-            offDrawingCanvas.width = mapW;
-            offDrawingCanvas.height = mapH;
-        } else {
-            offDrawingCtx.clearRect(0, 0, mapW, mapH);
-        }
-
-        layerDrawings.forEach(d => {
-            const drawingLayer = d.layer || 'token';
-            if (drawingLayer !== activeLayer && !isGmViewing) return;
-            const isControlled = isDrawingControlledByPlayer(d);
-            const isSelected = isControlled && (selectedDrawingId === d.id || selectedDrawingIds.has(d.id));
-
-            offDrawingCtx.save();
-            drawDrawingObject(offDrawingCtx, d, isSelected);
-            offDrawingCtx.restore();
-        });
-
-        if (currentPaintStroke && currentPaintStroke.type === 'eraser' && (currentPaintStroke.layer || 'token') === targetLayer) {
-            offDrawingCtx.save();
-            drawDrawingObject(offDrawingCtx, currentPaintStroke, false);
-            offDrawingCtx.restore();
-        }
-
-        ctxInteraction.save();
-        if (vtt.role === 'GM' && activeLayer !== targetLayer) {
-            ctxInteraction.globalAlpha = 0.45;
-        }
-        ctxInteraction.drawImage(offDrawingCanvas, 0, 0);
-        ctxInteraction.restore();
+        renderDrawingsPassExt(
+            targetLayer,
+            ctxInteraction,
+            drawings,
+            activeLayer,
+            vtt.role,
+            selectedDrawingId,
+            selectedDrawingIds,
+            currentPaintStroke,
+            offDrawingCanvas,
+            offDrawingCtx,
+            isRectInViewport,
+            drawingImageCache,
+            renderAll,
+            zoom,
+            activeTool
+        );
     }
-
     function performCanvasFloodFill(startX, startY) {
         const mapW = canvasInteraction.width;
         const mapH = canvasInteraction.height;
@@ -2792,7 +2186,7 @@ let isTokenMeasuring = false;
         }
 
         const { drawW, drawH } = token ? getTokenDrawDimensions(token) : { drawW: unitSize, drawH: unitSize };
-        if (targetGrid.type === 'hex-v' || targetGrid.type === 'hex-h') {
+        if (isHexGrid(targetGrid?.type)) {
             const hex = getNearestHexFeatures(targetCenterX, targetCenterY, targetGrid, unitSize);
             return { x: hex.cx - drawW / 2, y: hex.cy - drawH / 2 };
         }
@@ -4025,7 +3419,7 @@ let isTokenMeasuring = false;
             if (c.tokenUrl) return c.tokenUrl;
             if (c.monsterData?.tokenUrl) return c.monsterData.tokenUrl;
             if (c.monsterData?.source && c.name) {
-                const cleanName = c.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                const cleanName = typeof Parser !== 'undefined' ? Parser.nameToTokenName(c.name) : (c.name || '').replace(/"/g, '').trim();
                 return `img/bestiary/tokens/${c.monsterData.source}/${cleanName}.webp`;
             }
         }
@@ -4169,205 +3563,21 @@ let isTokenMeasuring = false;
         return segments.length > 0 ? segments : [{ points: polyPoints, length: currentLegLen, isTerminal: true }];
     }
 
-    function drawMeasurementTemplate(ctx, startPoint, endPoint, shapeType, squareAnchor, beamWidth, color, ownerUsername, _unused, points, showDistance, gridRef = null) {
-        if (!startPoint || !endPoint) return;
-        const fillColor = color || '#00ffff';
-        const strokeColor = fillColor;
-        const activeGrid = gridRef || grid;
-
-        ctx.save();
-        ctx.fillStyle = fillColor;
-        ctx.strokeStyle = strokeColor;
-        ctx.lineWidth = 2;
-        ctx.setLineDash([]);
-
-        const dx = endPoint.x - startPoint.x;
-        const dy = endPoint.y - startPoint.y;
-        const radius = Math.hypot(dx, dy);
-
-        // Track the pixel measurement relevant to each shape type for the distance label
-        let distancePx = radius;
-        let labelAtX = endPoint.x;
-        let labelAtY = endPoint.y;
-
-        if (shapeType === 'circle') {
-            ctx.beginPath();
-            ctx.arc(startPoint.x, startPoint.y, radius, 0, Math.PI * 2);
-            ctx.globalAlpha = 0.7;
-            ctx.fill();
-            ctx.globalAlpha = 1.0;
-            ctx.stroke();
-
-            // Draw radius line
-            ctx.setLineDash([4, 4]);
-            ctx.beginPath();
-            ctx.moveTo(startPoint.x, startPoint.y);
-            ctx.lineTo(endPoint.x, endPoint.y);
-            ctx.stroke();
-            ctx.setLineDash([]);
-
-            distancePx = radius; // radius in pixels
-
-        } else if (shapeType === 'square') {
-            const halfSide = radius;
-            let rx = startPoint.x, ry = startPoint.y;
-            if (squareAnchor === 'center') {
-                rx = startPoint.x - halfSide;
-                ry = startPoint.y - halfSide;
-            } else {
-                // corner anchor: draw from startPoint toward endPoint
-                rx = Math.min(startPoint.x, endPoint.x);
-                ry = Math.min(startPoint.y, endPoint.y);
-            }
-            const side = halfSide * 2;
-            ctx.beginPath();
-            ctx.rect(rx, ry, side, side);
-            ctx.globalAlpha = 0.7;
-            ctx.fill();
-            ctx.globalAlpha = 1.0;
-            ctx.stroke();
-
-            distancePx = side; // show the full side length
-
-        } else if (shapeType === 'cone') {
-            const angle = Math.atan2(dy, dx);
-            const halfAngle = Math.PI / 4; // 90 degree cone
-            ctx.beginPath();
-            ctx.moveTo(startPoint.x, startPoint.y);
-            ctx.arc(startPoint.x, startPoint.y, radius, angle - halfAngle, angle + halfAngle);
-            ctx.closePath();
-            ctx.globalAlpha = 0.7;
-            ctx.fill();
-            ctx.globalAlpha = 1.0;
-            ctx.stroke();
-
-            distancePx = radius; // cone length
-
-        } else if (shapeType === 'beam') {
-            const angle = Math.atan2(dy, dx);
-            const length = radius;
-            // beamWidth is in feet — convert to canvas pixels using the grid scale
-            const pxPerFt = (activeGrid.size * (activeGrid.scale || 1.0)) / (activeGrid.feetPerSquare || 5);
-            const halfWidth = ((beamWidth || 5) * pxPerFt) / 2;
-            const cos = Math.cos(angle);
-            const sin = Math.sin(angle);
-            const perpX = -sin * halfWidth;
-            const perpY = cos * halfWidth;
-
-            ctx.beginPath();
-            ctx.moveTo(startPoint.x + perpX, startPoint.y + perpY);
-            ctx.lineTo(startPoint.x + cos * length + perpX, startPoint.y + sin * length + perpY);
-            ctx.lineTo(startPoint.x + cos * length - perpX, startPoint.y + sin * length - perpY);
-            ctx.lineTo(startPoint.x - perpX, startPoint.y - perpY);
-            ctx.closePath();
-            ctx.globalAlpha = 0.7;
-            ctx.fill();
-            ctx.globalAlpha = 1.0;
-            ctx.stroke();
-
-            distancePx = length; // beam length
-
-        } else {
-            // Default: line (polyline if points array given, else simple line)
-            const polyPoints = (Array.isArray(points) && points.length >= 2) ? points : [startPoint, endPoint];
-            const bentSegments = resolveRulerPortalBending(polyPoints);
-
-            let totalLen = 0;
-            let lastPt = polyPoints[polyPoints.length - 1];
-
-            bentSegments.forEach(seg => {
-                ctx.beginPath();
-                ctx.moveTo(seg.points[0].x, seg.points[0].y);
-                for (let i = 1; i < seg.points.length; i++) {
-                    ctx.lineTo(seg.points[i].x, seg.points[i].y);
-                }
-                ctx.lineWidth = 8;
-                ctx.globalAlpha = 0.7;
-                ctx.stroke();
-
-                if (seg.isPortalJunction) {
-                    ctx.save();
-                    ctx.beginPath();
-                    const pt = seg.points[seg.points.length - 1];
-                    ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
-                    ctx.fillStyle = '#38bdf8';
-                    ctx.globalAlpha = 0.9;
-                    ctx.fill();
-                    ctx.restore();
-                }
-
-                if (seg.isTerminal) {
-                    ctx.beginPath();
-                    const pt = seg.points[seg.points.length - 1];
-                    ctx.arc(pt.x, pt.y, 6, 0, Math.PI * 2);
-                    ctx.fillStyle = strokeColor;
-                    ctx.globalAlpha = 1.0;
-                    ctx.fill();
-                    lastPt = pt;
-                }
-                totalLen += seg.length;
-            });
-
-            distancePx = totalLen;
-            labelAtX = lastPt.x;
-            labelAtY = lastPt.y;
-        }
-
-        // Distance label — shown only during live drawing (showDistance === true)
-        if (showDistance && distancePx > 0) {
-            const distFt = calcDistanceFt(distancePx);
-            const label = `${distFt} ft`;
-            ctx.save();
-            ctx.globalAlpha = 1.0;
-            ctx.font = 'bold 13px Inter, Arial, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            const tw = ctx.measureText(label).width;
-            const padX = 8;
-            const padY = 4;
-            const pillW = tw + padX * 2;
-            const pillH = 22;
-            // Position the pill above and slightly to the right of the endpoint
-            const pillX = labelAtX + 14;
-            const pillY = labelAtY - 22;
-            const r = pillH / 2;
-            // Draw pill background
-            ctx.fillStyle = 'rgba(15, 15, 20, 0.82)';
-            ctx.beginPath();
-            ctx.moveTo(pillX - pillW / 2 + r, pillY - pillH / 2);
-            ctx.arcTo(pillX + pillW / 2, pillY - pillH / 2, pillX + pillW / 2, pillY + pillH / 2, r);
-            ctx.arcTo(pillX + pillW / 2, pillY + pillH / 2, pillX - pillW / 2, pillY + pillH / 2, r);
-            ctx.arcTo(pillX - pillW / 2, pillY + pillH / 2, pillX - pillW / 2, pillY - pillH / 2, r);
-            ctx.arcTo(pillX - pillW / 2, pillY - pillH / 2, pillX + pillW / 2, pillY - pillH / 2, r);
-            ctx.closePath();
-            ctx.fill();
-            // Draw pill border in shape color
-            ctx.strokeStyle = fillColor;
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            // Draw text
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText(label, pillX, pillY);
-            ctx.restore();
-        }
-
-        // Owner label
-        if (ownerUsername) {
-            ctx.font = '11px Inter, Arial, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'bottom';
-            ctx.fillStyle = 'rgba(0,0,0,0.6)';
-            const lx = (startPoint.x + endPoint.x) / 2;
-            const ly = Math.min(startPoint.y, endPoint.y) - 2;
-            const tw = ctx.measureText(ownerUsername).width + 8;
-            ctx.fillRect(lx - tw / 2, ly - 13, tw, 14);
-            ctx.fillStyle = fillColor;
-            ctx.fillText(ownerUsername, lx, ly);
-        }
-
-        ctx.restore();
+    function getGridDistanceSettings(g = grid) {
+        return getGridDistanceSettingsExt(g);
     }
 
+    function calcDistanceFormatted(pixels, g = grid) {
+        return calcDistanceFormattedExt(pixels, g);
+    }
+
+    function calcDistanceFt(pixels, g = grid) {
+        return calcDistanceFtExt(pixels, g);
+    }
+
+    function drawMeasurementTemplate(ctx, startPoint, endPoint, shapeType, squareAnchor, beamWidth, color, ownerUsername, _unused, points, showDistance, gridRef = null) {
+        drawMeasurementTemplateExt(ctx, startPoint, endPoint, shapeType, squareAnchor, beamWidth, color, ownerUsername, _unused, points, showDistance, gridRef || grid, resolveRulerPortalBending);
+    }
     function drawTargetRoomContent(ctx, targetMap, targetMapId, targetW, targetH, targetTokens, targetWalls, centerA, centerB) {
         let bgDrawn = false;
         const currentMap = vtt.campaignState?.maps?.[currentMapId];
@@ -4529,17 +3739,18 @@ let isTokenMeasuring = false;
 
         // Collect all tokens that grant vision to this client
         let visionSources = Object.values(tokens).filter(token => {
+            const grantsVision = Boolean(token.isPlayer || token.isCompanion);
             if (isGM) {
                 if (gmTokenVisionMode) return selectedTokenIds.has(token.id);
                 if (selectedTokenIds.size > 0) return selectedTokenIds.has(token.id);
-                return token.isPlayer;
+                return grantsVision;
             }
-            return token.isPlayer && isTokenControlledByPlayer(token);
+            return grantsVision && isTokenControlledByPlayer(token);
         });
 
         // Fallback for players if no strictly owned token found: allow any player-assigned character or active player token
         if (!isGM && visionSources.length === 0) {
-            visionSources = Object.values(tokens).filter(token => token.isPlayer);
+            visionSources = Object.values(tokens).filter(token => token.isPlayer || token.isCompanion);
         }
 
         if (visionSources.length === 0) return;
@@ -6022,6 +5233,10 @@ let isTokenMeasuring = false;
     
     // Grid alignment settings
     let grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5 };
+    let isGridDirty = true;
+    function markGridDirty() {
+        isGridDirty = true;
+    }
     
     // Wall and Door Segment states
     let walls = [];
@@ -6396,7 +5611,7 @@ let lastBroadcastedTokens = {};
             if (!preserveCamera) {
                 let playerToken = null;
                 if (vtt.role !== 'GM') {
-                    playerToken = Object.values(tokens).find(t => t.isPlayer && isTokenControlledByPlayer(t));
+                    playerToken = Object.values(tokens).find(t => (t.isPlayer || t.isCompanion) && isTokenControlledByPlayer(t));
                 }
                 if (playerToken) {
                     const { drawW, drawH } = getTokenDrawDimensions(playerToken);
@@ -6423,47 +5638,29 @@ let lastBroadcastedTokens = {};
                 pendingFocusTokenId = null;
             }
         }
+
+        if (vtt.weatherEngine) {
+            vtt.weatherEngine.resize(mapW, mapH);
+            vtt.weatherEngine.setWeather(mapData.weather);
+        }
     }
 
     function updatePreviewBanner() {
-        const banner = document.getElementById('vtt-map-preview-banner');
-        if (!banner) return;
-
-        if (vtt.role === 'GM' && vtt.campaignState && vtt.campaignState.activeMapId && currentMapId !== vtt.campaignState.activeMapId) {
-            banner.classList.remove('vtt-hidden');
-            
-            const previewMapName = vtt.campaignState.maps[currentMapId]?.name || "Preview Map";
-            const defaultMapName = vtt.campaignState.maps[vtt.campaignState.activeMapId]?.name || "Active Map";
-            
-            // Build tooltip with map & player breakdown
-            const camp = vtt.campaignState;
-            const knownPlayers = camp.knownPlayers || [];
-            const allowedUsers = camp.allowedUsers || [];
-            const allPlayers = [...new Set([...knownPlayers, ...allowedUsers])];
-            
-            const tooltipLines = [`GM View: Currently previewing "${previewMapName}"`];
-            if (allPlayers.length > 0) {
-                tooltipLines.push('\nPlayer Locations:');
-                const mapToPlayers = {};
-                allPlayers.forEach(p => {
-                    const pMapId = camp.playerMapOverrides?.[p] || camp.activeMapId;
-                    const pMapName = camp.maps?.[pMapId]?.name || defaultMapName;
-                    if (!mapToPlayers[pMapName]) mapToPlayers[pMapName] = [];
-                    mapToPlayers[pMapName].push(p);
-                });
-                Object.entries(mapToPlayers).forEach(([mName, pList]) => {
-                    tooltipLines.push(`• ${mName}: ${pList.join(', ')}`);
-                });
+        const btnLocator = document.getElementById('btn-token-locator');
+        if (btnLocator) {
+            if (vtt.role === 'GM' && vtt.campaignState && vtt.campaignState.activeMapId && currentMapId !== vtt.campaignState.activeMapId) {
+                const previewMapName = vtt.campaignState.maps[currentMapId]?.name || "Preview Map";
+                btnLocator.title = `Token Locator and Map Switcher (GM Previewing: "${previewMapName}")`;
+                btnLocator.style.borderColor = 'var(--color-gold-base)';
+                btnLocator.style.boxShadow = '0 0 12px rgba(212, 175, 55, 0.4)';
             } else {
-                tooltipLines.push(`\nDefault Player Map: "${defaultMapName}" (No players connected)`);
+                btnLocator.title = 'Token Locator and Map Switcher';
+                btnLocator.style.borderColor = '';
+                btnLocator.style.boxShadow = '';
             }
-            
-            const badge = document.getElementById('banner-gm-view-badge');
-            if (badge) {
-                badge.title = tooltipLines.join('\n');
-            }
-        } else {
-            banner.classList.add('vtt-hidden');
+        }
+        if (typeof vtt.refreshLocatorPanel === 'function') {
+            vtt.refreshLocatorPanel();
         }
     }
 
@@ -6529,6 +5726,7 @@ let lastBroadcastedTokens = {};
     // Setup upload map background handling
     setupMapUploadControls();
     setupPushPlayersModal();
+    setupTokenLocatorPanel();
 
     // Setup token edit modal actions
     setupTokenEditModal();
@@ -6828,7 +6026,8 @@ let lastBroadcastedTokens = {};
         coordXEl.textContent = gridX;
         coordYEl.textContent = gridY;
     }
-    function renderAll() {
+
+    function performRenderAll() {
         const isGmViewing = vtt.role === 'GM';
         let width = 2000;
         let height = 1500;
@@ -6869,9 +6068,13 @@ let lastBroadcastedTokens = {};
             container.style.width = `${width}px`;
             container.style.height = `${height}px`;
         }
+        if (vtt.weatherEngine) {
+            vtt.weatherEngine.resize(width, height);
+        }
 
         // Size canvases to match map dimensions
         if (canvasGrid.width !== width || canvasGrid.height !== height) {
+            isGridDirty = true;
             canvasGrid.width = width;
             canvasGrid.height = height;
             canvasGrid.style.width = `${width}px`;
@@ -6886,8 +6089,16 @@ let lastBroadcastedTokens = {};
             canvasInteraction.height = height;
             canvasInteraction.style.width = `${width}px`;
             canvasInteraction.style.height = `${height}px`;
-            canvasFog.width = width;
-            canvasFog.height = height;
+        }
+
+        // Adaptive Fog LOD resolution: scale buffer to 0.5x if map > 2500px in either dimension
+        const useFogLod = (width > 2500 || height > 2500);
+        const fogScale = useFogLod ? 0.5 : 1.0;
+        const targetFogW = Math.round(width * fogScale);
+        const targetFogH = Math.round(height * fogScale);
+        if (canvasFog.width !== targetFogW || canvasFog.height !== targetFogH) {
+            canvasFog.width = targetFogW;
+            canvasFog.height = targetFogH;
             canvasFog.style.width = `${width}px`;
             canvasFog.style.height = `${height}px`;
         }
@@ -6903,6 +6114,9 @@ let lastBroadcastedTokens = {};
 
         // 3. Render Interaction & Visuals (Tokens, Walls overlays, etc.)
         renderInteractionLayer();
+
+        // 4. Update Visual FX overlays (initiative outline, offscreen indicator, hover glow)
+        requestVisualFxUpdate();
     }
 
     function renderPortalsLayer(width, height) {
@@ -6913,6 +6127,13 @@ let lastBroadcastedTokens = {};
     }
 
     function renderGridLayer(width, height) {
+        const gridKey = `${width}_${height}_${grid.type || 'square'}_${grid.size}_${grid.scale || 1.0}_${grid.offsetX || 0}_${grid.offsetY || 0}_${grid.opacity}_${grid.color || '#888888'}`;
+        if (!isGridDirty && canvasGrid._lastGridKey === gridKey) {
+            return;
+        }
+        isGridDirty = false;
+        canvasGrid._lastGridKey = gridKey;
+
         ctxGrid.clearRect(0, 0, width, height);
 
         // Draw tactical grid lines on top of background & map assets
@@ -6927,12 +6148,13 @@ let lastBroadcastedTokens = {};
         const offX = grid.offsetX || 0;
         const offY = grid.offsetY || 0;
 
-        if (grid.type === 'hex-v' || grid.type === 'hex-h') {
-            const isVert = grid.type === 'hex-v';
+        if (isHexGrid(grid.type)) {
+            const isVert = grid.type === 'hex-v' || grid.type === 'hex-v-even';
+            const isEven = grid.type === 'hex-v-even' || grid.type === 'hex-h-even';
             const R = size / Math.sqrt(3);
             
+            ctxGrid.beginPath();
             const drawHex = (cx, cy) => {
-                ctxGrid.beginPath();
                 for (let i = 0; i < 6; i++) {
                     const angle_deg = isVert ? (60 * i - 30) : (60 * i);
                     const angle_rad = Math.PI / 180 * angle_deg;
@@ -6941,8 +6163,8 @@ let lastBroadcastedTokens = {};
                     if (i === 0) ctxGrid.moveTo(hx, hy);
                     else ctxGrid.lineTo(hx, hy);
                 }
-                ctxGrid.closePath();
-                ctxGrid.stroke();
+                const firstAngle = isVert ? -30 * Math.PI / 180 : 0;
+                ctxGrid.lineTo(cx + R * Math.cos(firstAngle), cy + R * Math.sin(firstAngle));
             };
 
             if (isVert) {
@@ -6955,9 +6177,9 @@ let lastBroadcastedTokens = {};
                 let endRow = Math.ceil((height - offY) / ySpacing) + 1;
                 
                 for (let r = startRow; r <= endRow; r++) {
+                    const isShifted = isEven ? (Math.abs(r) % 2 === 0) : (Math.abs(r) % 2 === 1);
                     for (let c = startCol; c <= endCol; c++) {
-                        // For pointy top, odd rows are shifted right
-                        const cx = offX + c * W + (Math.abs(r) % 2 === 1 ? W / 2 : 0);
+                        const cx = offX + c * W + (isShifted ? W / 2 : 0);
                         const cy = offY + r * ySpacing;
                         drawHex(cx, cy);
                     }
@@ -6972,33 +6194,72 @@ let lastBroadcastedTokens = {};
                 let endRow = Math.ceil((height - offY) / H) + 1;
                 
                 for (let c = startCol; c <= endCol; c++) {
+                    const isShifted = isEven ? (Math.abs(c) % 2 === 0) : (Math.abs(c) % 2 === 1);
                     for (let r = startRow; r <= endRow; r++) {
-                        // For flat top, odd columns are shifted down
                         const cx = offX + c * xSpacing;
-                        const cy = offY + r * H + (Math.abs(c) % 2 === 1 ? H / 2 : 0);
+                        const cy = offY + r * H + (isShifted ? H / 2 : 0);
                         drawHex(cx, cy);
                     }
                 }
             }
+            ctxGrid.stroke();
         } else {
-            // Draw vertical grid lines
-            let startX = offX % size;
-            if (startX > 0) startX -= size;
-            for (let x = startX; x < width; x += size) {
-                ctxGrid.beginPath();
-                ctxGrid.moveTo(x, 0);
-                ctxGrid.lineTo(x, height);
-                ctxGrid.stroke();
+            // High-performance GPU pattern tile for square grid (single fillRect draw call)
+            const patternKey = `${size}_${strokeColor}`;
+            if (!canvasGrid._cachedPattern || canvasGrid._cachedPatternKey !== patternKey) {
+                const offCanvas = document.createElement('canvas');
+                offCanvas.width = size;
+                offCanvas.height = size;
+                const offCtx = offCanvas.getContext('2d');
+                offCtx.strokeStyle = strokeColor;
+                offCtx.lineWidth = 1;
+                offCtx.beginPath();
+                offCtx.moveTo(0, 0);
+                offCtx.lineTo(size, 0);
+                offCtx.moveTo(0, 0);
+                offCtx.lineTo(0, size);
+                offCtx.stroke();
+                canvasGrid._cachedPattern = ctxGrid.createPattern(offCanvas, 'repeat');
+                canvasGrid._cachedPatternKey = patternKey;
             }
 
-            // Draw horizontal grid lines
-            let startY = offY % size;
-            if (startY > 0) startY -= size;
-            for (let y = startY; y < height; y += size) {
-                ctxGrid.beginPath();
-                ctxGrid.moveTo(0, y);
-                ctxGrid.lineTo(width, y);
-                ctxGrid.stroke();
+            if (canvasGrid._cachedPattern) {
+                let startX = offX % size;
+                if (startX > 0) startX -= size;
+                let startY = offY % size;
+                if (startY > 0) startY -= size;
+
+                ctxGrid.save();
+                ctxGrid.globalAlpha = opacity;
+                if (canvasGrid._cachedPattern.setTransform) {
+                    canvasGrid._cachedPattern.setTransform(new DOMMatrix().translate(startX, startY));
+                    ctxGrid.fillStyle = canvasGrid._cachedPattern;
+                    ctxGrid.fillRect(0, 0, width, height);
+                } else {
+                    ctxGrid.translate(startX, startY);
+                    ctxGrid.fillStyle = canvasGrid._cachedPattern;
+                    ctxGrid.fillRect(-startX, -startY, width, height);
+                }
+                ctxGrid.restore();
+            } else {
+                // Fallback direct line strokes if pattern creation is unsupported
+                let startX = offX % size;
+                if (startX > 0) startX -= size;
+                for (let x = startX; x < width; x += size) {
+                    ctxGrid.beginPath();
+                    ctxGrid.moveTo(x, 0);
+                    ctxGrid.lineTo(x, height);
+                    ctxGrid.stroke();
+                }
+
+                let startY = offY % size;
+                if (startY > 0) startY -= size;
+                for (let y = startY; y < height; y += size) {
+                    ctxGrid.beginPath();
+                    ctxGrid.moveTo(0, y);
+                    ctxGrid.lineTo(width, y);
+                    ctxGrid.stroke();
+                }
             }
         }
         
@@ -7007,14 +6268,22 @@ let lastBroadcastedTokens = {};
 
     // Dynamic 2D Raycasting Fog of War
     function renderFogOfWarLayer(width, height) {
-        ctxFog.clearRect(0, 0, width, height);
+        const useFogLod = (width > 2500 || height > 2500);
+        const fogScale = useFogLod ? 0.5 : 1.0;
 
         const currentMap = vtt.campaignState?.maps?.[currentMapId];
         const isFogEnabled = currentMap?.lightingSettings?.fogOfWar !== false; // Defaults to true
         if (!isFogEnabled) {
+            ctxFog.clearRect(0, 0, canvasFog.width, canvasFog.height);
             visionPolygons = [];
             return;
         }
+
+        ctxFog.save();
+        if (useFogLod) {
+            ctxFog.scale(fogScale, fogScale);
+        }
+        ctxFog.clearRect(0, 0, width, height);
 
         if (vtt.role === 'GM' && gmTokenVisionMode && selectedTokenIds.size === 0) {
             gmTokenVisionMode = false; // Auto-exit if no tokens are selected
@@ -7033,17 +6302,18 @@ let lastBroadcastedTokens = {};
         // Reset vision polygons array
         visionPolygons = [];
 
-        // Collect all tokens that grant vision (Player tokens only for actual sight, or selected tokens in GM mode)
+        // Collect all tokens that grant vision (Player tokens and controlled Companions for actual sight, or selected tokens in GM mode)
         const visionSources = Object.values(tokens).filter(token => {
+            const grantsVision = Boolean(token.isPlayer || token.isCompanion);
             if (vtt.role === 'GM') {
                 if (gmTokenVisionMode) return selectedTokenIds.has(token.id);
                 // When GM has selected any token, grant vision to allow easy line-of-sight testing
                 if (selectedTokenIds.size > 0) return selectedTokenIds.has(token.id);
-                // When no token is selected by GM, default to showing what all player tokens see
-                return token.isPlayer;
+                // When no token is selected by GM, default to showing what all player and companion tokens see
+                return grantsVision;
             }
             // GM sees all player tokens, players only see tokens they control
-            return token.isPlayer && isTokenControlledByPlayer(token);
+            return grantsVision && isTokenControlledByPlayer(token);
         });
 
         // Create temporary visibility layer to clip
@@ -7076,10 +6346,17 @@ let lastBroadcastedTokens = {};
 
             if (radius <= 0) return;
 
-            // Compute the 2D visibility polygon using raycasting
-            const visibilityPolygon = computeVisibilityPolygon(cx, cy, radius, width, height);
+            // Compute the 2D visibility polygon using raycasting (with polygon caching for static tokens/walls)
+            const cacheKey = `${cx.toFixed(1)}_${cy.toFixed(1)}_${radius.toFixed(1)}_${wallsVersion}`;
+            let visibilityPolygon;
+            if (source._polyCache && source._polyCache.key === cacheKey) {
+                visibilityPolygon = source._polyCache.polygon;
+            } else {
+                visibilityPolygon = computeVisibilityPolygon(cx, cy, radius, width, height);
+                source._polyCache = { key: cacheKey, polygon: visibilityPolygon };
+            }
             
-            if (visibilityPolygon.length > 2) {
+            if (visibilityPolygon && visibilityPolygon.length > 2) {
                 visionPolygons.push(visibilityPolygon);
                 // Clear out Fog within the visibility polygon
                 ctxFog.beginPath();
@@ -7171,6 +6448,10 @@ let lastBroadcastedTokens = {};
             const nominalMaxRadius = Math.max(baseRadiusBright, baseRadiusDim);
 
             if (nominalMaxRadius <= 0) return;
+            // Frustum Culling: Skip raycasting & lighting polygons for lights outside visible viewport
+            if (!isRectInViewport(light.x - nominalMaxRadius, light.y - nominalMaxRadius, nominalMaxRadius * 2, nominalMaxRadius * 2, 200)) {
+                return;
+            }
 
             // Apply Animated Light FX (Flicker, Pulse, Color Shift)
             let effectiveColor = light.lightColor;
@@ -7347,6 +6628,7 @@ let lastBroadcastedTokens = {};
         }
 
         ctxFog.globalCompositeOperation = 'source-over';
+        ctxFog.restore();
     }
 
     function checkLightingAnimationLoop() {
@@ -7355,7 +6637,9 @@ let lastBroadcastedTokens = {};
         requestAnimationFrame(lightingAnimationTick);
     }
 
-    function lightingAnimationTick() {
+    const LIGHTING_FRAME_INTERVAL = 1000 / 30; // ~33ms, 30 FPS cap for torch flicker/pulse
+
+    function lightingAnimationTick(now) {
         if (!canvasFog || !ctxFog) {
             isLightingAnimationRunning = false;
             return;
@@ -7366,7 +6650,11 @@ let lastBroadcastedTokens = {};
             isLightingAnimationRunning = false;
             return;
         }
-        renderFogOfWarLayer(canvasFog.width, canvasFog.height);
+        const currentTime = (typeof now === 'number' && now > 0) ? now : performance.now();
+        if (currentTime - lastLightingTickTime >= LIGHTING_FRAME_INTERVAL) {
+            lastLightingTickTime = currentTime;
+            renderFogOfWarLayer(canvasInteraction.width, canvasInteraction.height);
+        }
         requestAnimationFrame(lightingAnimationTick);
     }
 
@@ -7637,6 +6925,14 @@ let lastBroadcastedTokens = {};
             walls.forEach((wall, idx) => {
                 const isSelected = selectedWallIdx === idx || selectedWallIdxs.has(idx);
                 const isHovered = hoveredWallIdx === idx;
+
+                const minWX = Math.min(wall.x1, wall.x2);
+                const maxWX = Math.max(wall.x1, wall.x2);
+                const minWY = Math.min(wall.y1, wall.y2);
+                const maxWY = Math.max(wall.y1, wall.y2);
+                if (!isSelected && !isHovered && !isRectInViewport(minWX, minWY, maxWX - minWX, maxWY - minWY, 200)) {
+                    return;
+                }
 
                 if (wall.type === 'door' || wall.type === 'window') {
                     // Draw Interactive Object for GM (rotated if open)
@@ -8030,6 +7326,7 @@ let lastBroadcastedTokens = {};
             lights.forEach(light => {
                 const isSelected = selectedLightId === light.id;
                 const isHovered = hoveredLightId === light.id;
+                if (!isSelected && !isHovered && !isRectInViewport(light.x - 20, light.y - 20, 40, 40, 100)) return;
                 
                 ctxInteraction.fillStyle = isSelected ? '#ffc107' : (light.lightColor || '#ffaa00');
                 ctxInteraction.strokeStyle = isHovered ? '#0dcaf0' : '#ffffff';
@@ -8170,6 +7467,19 @@ let lastBroadcastedTokens = {};
                 const { drawW, drawH, tokenRadius } = getTokenDrawDimensions(token);
                 const tx = token.x + drawW / 2;
                 const ty = token.y + drawH / 2;
+                
+                // Viewport Frustum Culling for Auras: Skip calculations & drawing if outside screen
+                let maxAuraFeet = 10;
+                auras.forEach(a => {
+                    if (a.enabled === false) return;
+                    const r = parseFloat(a.range) || 10;
+                    if (r > maxAuraFeet) maxAuraFeet = r;
+                });
+                const maxAuraPx = (maxAuraFeet / (grid.feetPerSquare || 5)) * (grid.size || 50) * (grid.scale || 1.0);
+                const totalRadius = tokenRadius + maxAuraPx;
+                if (!isRectInViewport(tx - totalRadius, ty - totalRadius, totalRadius * 2, totalRadius * 2, 100)) {
+                    return;
+                }
                 
                 // Respect Fog of War / Player Line of Sight
                 if (vtt.role === 'Player' && !isPointVisible(tx, ty)) {
@@ -8514,6 +7824,19 @@ let lastBroadcastedTokens = {};
         Object.entries(tokens)
             .sort((a, b) => (a[1].zIndex || 0) - (b[1].zIndex || 0))
             .forEach(([id, token], sortedIndex) => {
+            const renderPos = tokenAnimations[id]?.currentPos || { x: token.x, y: token.y };
+            const { drawW, drawH } = getTokenDrawDimensions(token);
+
+            // Viewport Frustum Culling: Skip off-screen tokens (~200px buffer) unless actively manipulated
+            const isInteracting = selectedTokenIds.has(id) || id === activeDragTokenId || id === dragTargetId || id === hoverTokenId;
+            if (!isInteracting && !isRectInViewport(renderPos.x, renderPos.y, drawW, drawH, 200)) {
+                const offNode = document.getElementById('asset_node_' + id);
+                if (offNode) offNode.style.display = 'none';
+                const offUiNode = document.getElementById('token_ui_' + id);
+                if (offUiNode) offUiNode.style.display = 'none';
+                return;
+            }
+
             const tokenLayer = token.layer || 'token';
             const cleanImgUrl = token.img ? token.img.split('?')[0].toLowerCase() : '';
             const isGif = token.isGif || cleanImgUrl.endsWith('.gif') || (token.img && token.img.includes('.gif'));
@@ -8576,13 +7899,29 @@ let lastBroadcastedTokens = {};
                         node = document.createElement('video');
                         node.setAttribute('src', getSafeVttUrl(token.img));
                         node.muted = true;
+                        node.defaultMuted = true;
                         node.autoplay = true;
                         node.loop = true;
                         node.playsInline = true;
+                        node.preload = 'auto';
                         node.setAttribute('muted', '');
                         node.setAttribute('autoplay', '');
                         node.setAttribute('loop', '');
                         node.setAttribute('playsinline', '');
+                        node.setAttribute('preload', 'auto');
+                        node.onerror = () => {
+                            if (node.dataset.failed) return;
+                            node.dataset.failed = 'true';
+                            console.warn('[VTT Video] Video failed to load, falling back to avatar/image:', token.img);
+                            const fallbackImg = document.createElement('img');
+                            fallbackImg.id = node.id;
+                            fallbackImg.style.position = 'absolute';
+                            fallbackImg.style.pointerEvents = 'none';
+                            const initial = (token.name || 'C').charAt(0).toUpperCase();
+                            const color = token.color || (token.isPlayer ? '#007bff' : '#dc3545');
+                            fallbackImg.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="${encodeURIComponent(color)}" stroke="%23ffffff" stroke-width="4"/><text x="50" y="65" font-size="44" font-family="sans-serif" font-weight="bold" fill="%23ffffff" text-anchor="middle">${initial}</text></svg>`;
+                            if (node.parentNode) node.parentNode.replaceChild(fallbackImg, node);
+                        };
                     } else {
                         node = document.createElement('div');
                     }
@@ -8613,6 +7952,8 @@ let lastBroadcastedTokens = {};
                     node.setAttribute('src', getSafeVttUrl(token.img));
                     if (node.tagName === 'VIDEO') {
                         node.muted = true;
+                        node.defaultMuted = true;
+                        node.preload = 'auto';
                         node.load();
                         node.play().catch(() => {});
                     }
@@ -8625,11 +7966,8 @@ let lastBroadcastedTokens = {};
                     node.style.backgroundColor = token.color || '#333333';
                 }
 
-                // Determine size
-                const { drawW, drawH } = getTokenDrawDimensions(token);
-                const renderPos = tokenAnimations[id]?.currentPos || { x: token.x, y: token.y };
-
-                // Sync position and size
+                // Sync position and size, ensuring display is restored if previously culled
+                node.style.display = 'block';
                 node.style.left = `${renderPos.x}px`;
                 node.style.top = `${renderPos.y}px`;
                 node.style.width = `${drawW}px`;
@@ -8722,8 +8060,7 @@ let lastBroadcastedTokens = {};
                 return;
             }
 
-            const renderPos = tokenAnimations[id]?.currentPos || { x: token.x, y: token.y };
-            const { drawW, drawH, tokenRadius } = getTokenDrawDimensions(token);
+            const { tokenRadius } = getTokenDrawDimensions(token);
             const tx = renderPos.x + drawW / 2;
             const ty = renderPos.y + drawH / 2;
 
@@ -9388,6 +8725,8 @@ let lastBroadcastedTokens = {};
                 const isPlayer = vtt.role !== 'GM';
                 if (isPlayer && !note.visibleToPlayers) return;
 
+                if (!isRectInViewport(note.x - 25, note.y - 25, 50, 50, 200)) return;
+
                 const isHovered = hoveredNoteId === note.id;
                 const isSelected = selectedNoteId === note.id;
                 const r = isHovered ? (isPlayer ? 15 : 17) : (isPlayer ? 12 : 14);
@@ -9970,9 +9309,6 @@ let lastBroadcastedTokens = {};
         }
     }
 
-    let visualFxAnimFrame = null;
-    let initiativeHoverTokenId = null;
-
     function getTokenCategory(token) {
         if (!token) return 'bestiary';
         let char = null;
@@ -10005,12 +9341,17 @@ let lastBroadcastedTokens = {};
         }
     }
 
-    function animateVisualFx() {
+    function requestVisualFxUpdate() {
+        if (visualFxRequested) return;
+        visualFxRequested = true;
+        visualFxAnimFrame = requestAnimationFrame(updateVisualFx);
+    }
+    window.requestVisualFxUpdate = requestVisualFxUpdate;
+
+    function updateVisualFx() {
+        visualFxRequested = false;
         const overlayContainer = document.getElementById('vtt-html-overlays');
-        if (!overlayContainer) {
-            visualFxAnimFrame = requestAnimationFrame(animateVisualFx);
-            return;
-        }
+        if (!overlayContainer) return;
 
         // =====================================================================
         // 1. ACTIVE INITIATIVE TOKEN SOLID OUTLINE (5% cell width, no glow/fade)
@@ -10165,8 +9506,6 @@ let lastBroadcastedTokens = {};
             if (hoverNode) hoverNode.style.display = 'none';
             if (offscreenIndicator) offscreenIndicator.style.display = 'none';
         }
-        
-        visualFxAnimFrame = requestAnimationFrame(animateVisualFx);
     }
 
     
@@ -10243,6 +9582,9 @@ window.emitTokenUpdates = function(currentTokens) {
                 // Already on the current map: non-destructive merge to protect active drags, selections & measurements
                 const mapData = camp?.maps?.[currentMapId];
                 if (mapData) {
+                    if (vtt.weatherEngine) {
+                        vtt.weatherEngine.setWeather(mapData.weather);
+                    }
                     traps = Array.isArray(mapData.traps) ? mapData.traps : [];
                     portals = Array.isArray(mapData.portals) ? mapData.portals : [];
                     lights = mapData.lights || [];
@@ -10291,6 +9633,11 @@ window.emitTokenUpdates = function(currentTokens) {
             if (isModalOpen) {
                 requestAnimationFrame(() => renderMapGrid());
             }
+
+            updatePreviewBanner();
+            if (typeof vtt.refreshLocatorPanel === 'function') {
+                vtt.refreshLocatorPanel();
+            }
         });
 
         socket.on('map:full_data', (data) => {
@@ -10306,7 +9653,18 @@ window.emitTokenUpdates = function(currentTokens) {
         socket.on('token:updated', (data) => {
             if (data.origin === vtt.socket.id) return;
             if (vtt.campaignState && vtt.campaignState.maps && vtt.campaignState.maps[data.mapId]) {
-                vtt.campaignState.maps[data.mapId].tokens = data.tokens;
+                if (vtt.role === 'GM') {
+                    const existingTokens = vtt.campaignState.maps[data.mapId].tokens || {};
+                    const merged = { ...data.tokens };
+                    for (const id in existingTokens) {
+                        if (existingTokens[id]?.layer === 'gm' && !(id in merged)) {
+                            merged[id] = existingTokens[id];
+                        }
+                    }
+                    vtt.campaignState.maps[data.mapId].tokens = merged;
+                } else {
+                    vtt.campaignState.maps[data.mapId].tokens = data.tokens;
+                }
             }
             if (data.mapId === currentMapId) {
                 const incoming = data.tokens || {};
@@ -10317,6 +9675,8 @@ window.emitTokenUpdates = function(currentTokens) {
                 for (const id in tokens) {
                     const t = tokens[id];
                     if (t && (t.layer === 'map' || t.isBackground) && t.isAsset) continue;
+                    // Guard: Never delete GM layer tokens for GM client on token:updated
+                    if (vtt.role === 'GM' && t && t.layer === 'gm') continue;
                     if (id === dragTargetId) continue;
                     if (!incoming[id]) {
                         delete tokens[id];
@@ -10343,6 +9703,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 renderAll();
                 if (window.VTT?.chatEngine?.refreshInitiative) window.VTT.chatEngine.refreshInitiative();
             }
+            if (typeof vtt.refreshLocatorPanel === 'function') vtt.refreshLocatorPanel();
         });
 
         socket.on('token:updated_delta', (data) => {
@@ -10373,6 +9734,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 renderAll();
                 if (window.VTT?.chatEngine?.refreshInitiative) window.VTT.chatEngine.refreshInitiative();
             }
+            if (typeof vtt.refreshLocatorPanel === 'function') vtt.refreshLocatorPanel();
         });
 
         socket.on('grid:updated', (data) => {
@@ -10476,12 +9838,12 @@ window.emitTokenUpdates = function(currentTokens) {
 
         socket.on('measure:updated', (data) => {
             otherMeasurements[data.socketId] = data;
-            renderAll();
+            renderInteractionLayer();
         });
 
         socket.on('measure:cleared', (data) => {
             delete otherMeasurements[data.socketId];
-            renderAll();
+            renderInteractionLayer();
         });
 
         socket.on('shapes:updated', (data) => {
@@ -10540,7 +9902,7 @@ window.emitTokenUpdates = function(currentTokens) {
             if (data.targetMapId === currentMapId) {
                 const targetTok = tokens[data.tokenId];
                 const isOwner = (data.username && data.username === vtt.username) || 
-                                (targetTok && targetTok.isPlayer && isTokenControlledByPlayer(targetTok));
+                                (targetTok && (targetTok.isPlayer || targetTok.isCompanion) && isTokenControlledByPlayer(targetTok));
                 if (isOwner) {
                     selectedTokenIds.clear();
                     selectedTokenIds.add(data.tokenId);
@@ -10551,7 +9913,7 @@ window.emitTokenUpdates = function(currentTokens) {
             } else if (vtt.role !== 'GM') {
                 const isOwner = (data.username && data.username === vtt.username);
                 const currentTok = tokens[data.tokenId];
-                const controlled = isOwner || (currentTok && currentTok.isPlayer && isTokenControlledByPlayer(currentTok));
+                const controlled = isOwner || (currentTok && (currentTok.isPlayer || currentTok.isCompanion) && isTokenControlledByPlayer(currentTok));
                 if (controlled) {
                     window._portalTransitInfo = {
                         tokenId: data.tokenId,
@@ -10583,7 +9945,7 @@ window.emitTokenUpdates = function(currentTokens) {
             if (data.targetMapId === currentMapId) {
                 const myTokens = data.tokens.filter(mt => {
                     const tok = tokens[mt.tokenId];
-                    return (mt.owner && mt.owner === vtt.username) || (tok && tok.isPlayer && isTokenControlledByPlayer(tok));
+                    return (mt.owner && mt.owner === vtt.username) || (tok && (tok.isPlayer || tok.isCompanion) && isTokenControlledByPlayer(tok));
                 });
                 if (myTokens.length > 0) {
                     selectedTokenIds.clear();
@@ -10595,7 +9957,7 @@ window.emitTokenUpdates = function(currentTokens) {
             } else if (vtt.role !== 'GM') {
                 const myTokens = data.tokens.filter(mt => {
                     const tok = tokens[mt.tokenId];
-                    return (mt.owner && mt.owner === vtt.username) || (tok && tok.isPlayer && isTokenControlledByPlayer(tok));
+                    return (mt.owner && mt.owner === vtt.username) || (tok && (tok.isPlayer || tok.isCompanion) && isTokenControlledByPlayer(tok));
                 });
                 if (myTokens.length > 0) {
                     const lead = myTokens[0];
@@ -10663,7 +10025,7 @@ window.emitTokenUpdates = function(currentTokens) {
                             token.img = char.tokenImages[idx].url;
                         }
                     } else if (char.monsterData && char.monsterData.hasToken) {
-                        const cleanName = typeof Parser !== 'undefined' ? Parser.nameToTokenName(char.monsterData.name) : char.monsterData.name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '_');
+                        const cleanName = typeof Parser !== 'undefined' ? Parser.nameToTokenName(char.monsterData.name) : (char.monsterData.name || '').replace(/"/g, '').trim();
                         token.img = `img/bestiary/tokens/${char.monsterData.source}/${cleanName}.webp`;
                     } else if (!char.monsterData && (!char.tokenImages || char.tokenImages.length === 0)) {
                         token.img = (window.VTT && window.VTT.generateArcaneToken) ? window.VTT.generateArcaneToken(char.name || 'Hero', char.isPlayer ? 'player' : 'npc') : 'favicon.svg';
@@ -10688,143 +10050,679 @@ window.emitTokenUpdates = function(currentTokens) {
         // Obsolete: Grid config moved to Edit Map modal
     }
 
+    // Map Manager Organization State
+    const collapsedMapFolders = new Set();
+    let mapSearchQuery = '';
+    let mapManagerControlsInitialized = false;
+
+    function escapeMapHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    function initMapManagerControls() {
+        if (mapManagerControlsInitialized) return;
+        const searchInput = document.getElementById('map-search-input');
+        const clearBtn = document.getElementById('btn-map-search-clear');
+        const btnExpandAll = document.getElementById('btn-map-expand-all');
+        const btnCollapseAll = document.getElementById('btn-map-collapse-all');
+
+        if (!btnExpandAll || !btnCollapseAll) return;
+        mapManagerControlsInitialized = true;
+
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                mapSearchQuery = (e.target.value || '').trim().toLowerCase();
+                if (clearBtn) {
+                    if (mapSearchQuery) clearBtn.classList.remove('vtt-hidden');
+                    else clearBtn.classList.add('vtt-hidden');
+                }
+                renderMapGrid();
+            });
+        }
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                if (searchInput) searchInput.value = '';
+                mapSearchQuery = '';
+                clearBtn.classList.add('vtt-hidden');
+                renderMapGrid();
+            });
+        }
+
+        if (btnExpandAll) {
+            btnExpandAll.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                collapsedMapFolders.clear();
+                renderMapGrid();
+            });
+        }
+
+        if (btnCollapseAll) {
+            btnCollapseAll.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (vtt.campaignState && vtt.campaignState.maps) {
+                    Object.values(vtt.campaignState.maps).forEach(m => {
+                        const f = (m.folder || '').trim();
+                        if (f) collapsedMapFolders.add(f);
+                    });
+                    collapsedMapFolders.add('__UNCATEGORIZED__');
+                }
+                renderMapGrid();
+            });
+        }
+    }
+
+    function createMapCard(map, allFolderNames) {
+        const camp = vtt.campaignState;
+        const isGlobalActive = camp.activeMapId === map.id;
+        const playersOnMap = Object.entries(camp.playerMapOverrides || {}).filter(([p, mId]) => mId === map.id).map(([p]) => p);
+        const isPlayerActive = isGlobalActive || playersOnMap.length > 0;
+        let activeText = "Live";
+        let activeClass = "var(--color-success-base)";
+        if (playersOnMap.length > 0 && !isGlobalActive) {
+            activeText = playersOnMap.length === 1 ? `Live (${playersOnMap[0]})` : `Live (${playersOnMap.length} Players)`;
+            activeClass = "var(--color-blue-base)";
+        } else if (isGlobalActive && Object.keys(camp.playerMapOverrides || {}).length > 0) {
+            activeText = `Live (Global - Overrides Active)`;
+            activeClass = "var(--color-orange-base)";
+        }
+
+        const isGmViewing = currentMapId === map.id;
+
+        const card = document.createElement('div');
+        card.className = 'glassmorphism map-card';
+        card.style.background = 'rgba(255, 255, 255, 0.02)';
+        card.style.border = isGmViewing ? '1px solid var(--color-gold-base)' : '1px solid var(--color-border-subtle)';
+        card.style.borderRadius = '10px';
+        card.style.overflow = 'hidden';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.minHeight = '290px';
+        card.style.flexShrink = '0';
+        card.style.position = 'relative';
+        card.style.minWidth = '0';
+        card.style.maxWidth = '100%';
+
+        // Image preview with lazy loading and YouTube fallback
+        let rawThumb = map.thumbnail || map.mapImage || (Object.values(map.tokens || {}).find(t => t.layer === 'map' && t.img)?.img) || '';
+        let thumbUrl = rawThumb;
+        const ytThumbMatch = rawThumb ? rawThumb.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i) : null;
+        if (ytThumbMatch && ytThumbMatch[1]) {
+            thumbUrl = `https://img.youtube.com/vi/${ytThumbMatch[1]}/hqdefault.jpg`;
+        }
+        const hasThumb = !!thumbUrl;
+
+        card.innerHTML = `
+            <div class="map-card-thumb" style="height: 120px; width: 100%; position: relative; border-bottom: 1px solid var(--color-border-subtle); overflow: hidden; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(13,15,22,1) 0%, rgba(26,30,43,1) 100%); flex-shrink: 0;">
+                ${hasThumb ? `<img src="${thumbUrl}" loading="lazy" alt="${escapeMapHtml(map.name)}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><i class="fa-solid fa-map" style="display:none; font-size: 2rem; color: rgba(212,175,55,0.2);"></i>` : '<i class="fa-solid fa-grip-both" style="font-size: 2rem; color: rgba(212,175,55,0.15)"></i>'}
+                <div style="position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 5;">
+                    ${isPlayerActive ? `<span style="font-size: 0.65rem; background: ${activeClass}; color: #fff; padding: 2px 8px; border-radius: 20px; font-weight: bold; box-shadow: var(--shadow-premium);"><i class="fa-solid fa-users"></i> ${activeText}</span>` : ''}
+                    ${isGmViewing ? '<span style="font-size: 0.65rem; background: var(--color-gold-base); color: #111; padding: 2px 8px; border-radius: 20px; font-weight: bold; box-shadow: var(--shadow-premium);"><i class="fa-solid fa-eye"></i> Viewing</span>' : ''}
+                </div>
+            </div>
+            
+            <div class="map-card-body" style="padding: 12px; display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; max-width: 100%; overflow: hidden;">
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; width: 100%;">
+                    <span class="map-name-txt" title="${escapeMapHtml(map.name)}" style="font-family: var(--font-heading); font-weight: 600; font-size: 0.9rem; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; flex: 1; min-width: 0;">${escapeMapHtml(map.name)}</span>
+                    <div style="display: flex; gap: 4px; flex-shrink: 0; margin-left: auto;">
+                        <button class="btn-duplicate-map btn btn-secondary btn-xxs" title="Duplicate / Copy Map" style="padding: 3px 6px;"><i class="fa-solid fa-clone"></i></button>
+                        <button class="btn-edit-map btn btn-secondary btn-xxs" title="Edit Map" style="padding: 3px 6px;"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-delete-map btn btn-danger btn-xxs" ${isPlayerActive ? 'disabled' : ''} title="${isPlayerActive ? 'Cannot delete active party map. Switch players to another map first.' : 'Delete Map'}" style="padding: 3px 6px; ${isPlayerActive ? 'opacity: 0.35; cursor: not-allowed;' : ''}"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <!-- Quick Move to Folder -->
+                <div style="display: flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--color-text-muted); background: rgba(0,0,0,0.2); padding: 3px 6px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.04); min-width: 0; max-width: 100%;">
+                    <i class="fa-solid fa-folder text-gradient-gold" style="font-size: 0.7rem; flex-shrink: 0;"></i>
+                    <select class="map-quick-folder-select" style="font-size: 0.72rem; background: transparent; border: none; color: var(--color-text-secondary); width: 100%; min-width: 0; max-width: 100%; cursor: pointer; outline: none; padding: 0; text-overflow: ellipsis;">
+                        <option value="" ${!map.folder ? 'selected' : ''}>Uncategorized</option>
+                        ${allFolderNames.map(f => `<option value="${escapeMapHtml(f)}" ${map.folder === f ? 'selected' : ''}>${escapeMapHtml(f)}</option>`).join('')}
+                        <option value="__NEW__">+ New Folder...</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; flex-direction: column; gap: 6px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 8px; flex-shrink: 0;">
+                    ${!isGmViewing ? `
+                        <button class="btn-view-map btn btn-secondary btn-xs" style="width: 100%; justify-content: center; font-size: 0.75rem;">
+                            <i class="fa-solid fa-eye"></i> GM View
+                        </button>
+                    ` : `
+                        <button class="btn btn-secondary btn-xs" disabled style="width: 100%; justify-content: center; font-size: 0.75rem; opacity: 0.5;">
+                            <i class="fa-solid fa-check"></i> Currently Viewing
+                        </button>
+                    `}
+                    
+                    ${!isPlayerActive ? `
+                        <button class="btn-activate-map btn btn-primary btn-xs" style="width: 100%; justify-content: center; font-size: 0.75rem;">
+                            <i class="fa-solid fa-bullhorn"></i> Push Players Here
+                        </button>
+                    ` : `
+                        <button class="btn-activate-map btn btn-primary btn-xs" style="width: 100%; justify-content: center; font-size: 0.75rem; background: ${activeClass}; color: #fff; border-color: transparent;">
+                            <i class="fa-solid fa-users"></i> Push More Players
+                        </button>
+                    `}
+                </div>
+            </div>
+        `;
+
+        // Actions
+        card.querySelector('.btn-duplicate-map').addEventListener('click', (e) => {
+            e.stopPropagation();
+            vtt.socket.emit('map:duplicate', { mapId: map.id });
+        });
+
+        card.querySelector('.btn-edit-map').addEventListener('click', (e) => {
+            e.stopPropagation();
+            openEditMapModal(map);
+        });
+
+        const quickSelect = card.querySelector('.map-quick-folder-select');
+        if (quickSelect) {
+            quickSelect.addEventListener('change', (e) => {
+                let chosen = e.target.value;
+                if (chosen === '__NEW__') {
+                    const newF = prompt("Enter new folder name:");
+                    if (!newF || !newF.trim()) {
+                        e.target.value = map.folder || "";
+                        return;
+                    }
+                    chosen = newF.trim();
+                }
+                map.folder = chosen;
+                vtt.socket.emit('map:edit', { mapId: map.id, updates: { folder: chosen } });
+                renderMapGrid();
+            });
+        }
+        
+        const btnDel = card.querySelector('.btn-delete-map');
+        if (btnDel) {
+            btnDel.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (isPlayerActive) {
+                    alert(`Cannot delete map "${map.name}" while it is the active party map or has live players. Move players to another map first.`);
+                    return;
+                }
+                if (confirm(`Are you absolutely sure you want to delete map "${map.name}"? This action is permanent.`)) {
+                    vtt.socket.emit('map:delete', { mapId: map.id });
+                }
+            });
+        }
+        
+        const btnView = card.querySelector('.btn-view-map');
+        if (btnView) {
+            btnView.addEventListener('click', () => {
+                vtt.socket.emit('map:switch-gm', { mapId: map.id });
+                loadMap(map.id);
+                renderMapGrid();
+            });
+        }
+        
+        const btnAct = card.querySelector('.btn-activate-map');
+        if (btnAct) {
+            btnAct.addEventListener('click', () => {
+                openPushPlayersModal(map.id);
+            });
+        }
+
+        return card;
+    }
+
     function renderMapGrid() {
         const container = document.getElementById('maps-list-container');
-        if (!container || !vtt.campaignState || !vtt.campaignState.maps) {
-            console.warn('[renderMapGrid] early return - container:', !!container, 'campaignState:', !!vtt.campaignState, 'maps:', !!(vtt.campaignState && vtt.campaignState.maps));
-            return;
-        }
+        if (!container || !vtt.campaignState || !vtt.campaignState.maps) return;
+
+        initMapManagerControls();
         
         container.innerHTML = '';
         const camp = vtt.campaignState;
-        const mapEntries = Object.values(camp.maps);
-        console.log('[renderMapGrid] rendering', mapEntries.length, 'maps, currentMapId:', currentMapId);
-        if (mapEntries.length === 0) {
+        const allMaps = Object.values(camp.maps);
+        const totalAll = allMaps.length;
+
+        // Collect all distinct folder names
+        const allFolderNames = [...new Set(allMaps.map(m => m.folder).filter(f => f && f.trim()))].sort();
+
+        // Filter maps by query
+        let filteredMaps = allMaps;
+        if (mapSearchQuery) {
+            filteredMaps = allMaps.filter(m => {
+                const nameMatch = (m.name || '').toLowerCase().includes(mapSearchQuery);
+                const folderMatch = (m.folder || '').toLowerCase().includes(mapSearchQuery);
+                return nameMatch || folderMatch;
+            });
+        }
+
+        // Update badge
+        const badge = document.getElementById('map-total-count-badge');
+        if (badge) {
+            if (mapSearchQuery) {
+                badge.textContent = `${filteredMaps.length} of ${totalAll} Maps`;
+            } else {
+                badge.textContent = `${totalAll} ${totalAll === 1 ? 'Map' : 'Maps'}`;
+            }
+        }
+
+        if (totalAll === 0) {
             container.innerHTML = `
-                <div style="grid-column: 1/-1; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; color: var(--color-text-muted); font-size: 0.85rem; gap: 12px; opacity: 0.6;">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; color: var(--color-text-muted); font-size: 0.85rem; gap: 12px; opacity: 0.6;">
                     <i class="fa-solid fa-map" style="font-size: 2.5rem; color: var(--color-gold-base); opacity: 0.4;"></i>
                     <span>No maps yet. Click <strong>+ Create New Map</strong> to get started.</span>
                 </div>
             `;
             return;
         }
-        
-        mapEntries.forEach(map => {
-            const camp = vtt.campaignState;
-            const isGlobalActive = camp.activeMapId === map.id;
-            const playersOnMap = Object.entries(camp.playerMapOverrides || {}).filter(([p, mId]) => mId === map.id).map(([p]) => p);
-            const isPlayerActive = isGlobalActive || playersOnMap.length > 0;
-            let activeText = "Live";
-            let activeClass = "var(--color-success-base)";
-            if (playersOnMap.length > 0 && !isGlobalActive) {
-                activeText = playersOnMap.length === 1 ? `Live (${playersOnMap[0]})` : `Live (${playersOnMap.length} Players)`;
-                activeClass = "var(--color-blue-base)";
-            } else if (isGlobalActive && Object.keys(camp.playerMapOverrides || {}).length > 0) {
-                activeText = `Live (Global - Overrides Active)`;
-                activeClass = "var(--color-orange-base)";
-            }
 
-            const isGmViewing = currentMapId === map.id;
-            
-            const card = document.createElement('div');
-            card.className = 'glassmorphism map-card';
-            card.style.background = 'rgba(255, 255, 255, 0.02)';
-            card.style.border = isGmViewing ? '1px solid var(--color-gold-base)' : '1px solid var(--color-border-subtle)';
-            card.style.borderRadius = '10px';
-            card.style.overflow = 'hidden';
-            card.style.display = 'flex';
-            card.style.flexDirection = 'column';
-            card.style.position = 'relative';
-            card.style.transition = 'var(--transition-smooth)';
-            
-            // Image preview
-            let rawThumb = map.thumbnail || map.mapImage || (Object.values(map.tokens || {}).find(t => t.layer === 'map' && t.img)?.img) || '';
-            let thumbUrl = rawThumb;
-            const ytThumbMatch = rawThumb ? rawThumb.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i) : null;
-            if (ytThumbMatch && ytThumbMatch[1]) {
-                thumbUrl = `https://img.youtube.com/vi/${ytThumbMatch[1]}/hqdefault.jpg`;
-            }
-            const hasThumb = !!thumbUrl;
-            
-            card.innerHTML = `
-                <div class="map-card-thumb" style="height: 120px; width: 100%; background: ${hasThumb ? `url('${thumbUrl}') center/cover no-repeat` : 'radial-gradient(circle, rgba(13,15,22,1) 0%, rgba(26,30,43,1) 100%)'}; position: relative; border-bottom: 1px solid var(--color-border-subtle); display: flex; align-items: center; justify-content: center;">
-                    ${!hasThumb ? '<i class="fa-solid fa-grip-both" style="font-size: 2rem; color: rgba(212,175,55,0.15)"></i>' : ''}
-                    <div style="position: absolute; top: 8px; left: 8px; display: flex; flex-direction: column; gap: 4px; z-index: 5;">
-                        ${isPlayerActive ? `<span style="font-size: 0.65rem; background: ${activeClass}; color: #fff; padding: 2px 8px; border-radius: 20px; font-weight: bold; box-shadow: var(--shadow-premium);"><i class="fa-solid fa-users"></i> ${activeText}</span>` : ''}
-                        ${isGmViewing ? '<span style="font-size: 0.65rem; background: var(--color-gold-base); color: #111; padding: 2px 8px; border-radius: 20px; font-weight: bold; box-shadow: var(--shadow-premium);"><i class="fa-solid fa-eye"></i> Viewing</span>' : ''}
-                    </div>
-                </div>
-                
-                <div class="map-card-body" style="padding: 12px; display: flex; flex-direction: column; gap: 8px; flex: 1;">
-                    <div style="display: flex; align-items: center; justify-content: space-between;">
-                        <span class="map-name-txt" style="font-family: var(--font-heading); font-weight: 600; font-size: 0.9rem; color: #fff; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; max-width: 140px;">${map.name}</span>
-                        <div style="display: flex; gap: 4px;">
-                            <button class="btn-edit-map btn btn-secondary btn-xxs" title="Edit Map" style="padding: 3px 6px;"><i class="fa-solid fa-pen"></i></button>
-                            ${!isPlayerActive ? `<button class="btn-delete-map btn btn-danger btn-xxs" title="Delete Map" style="padding: 3px 6px;"><i class="fa-solid fa-trash"></i></button>` : ''}
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 6px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 8px;">
-                        ${!isGmViewing ? `
-                            <button class="btn-view-map btn btn-secondary btn-xs" style="width: 100%; justify-content: center; font-size: 0.75rem;">
-                                <i class="fa-solid fa-eye"></i> GM View
-                            </button>
-                        ` : `
-                            <button class="btn btn-secondary btn-xs" disabled style="width: 100%; justify-content: center; font-size: 0.75rem; opacity: 0.5;">
-                                <i class="fa-solid fa-check"></i> Currently Viewing
-                            </button>
-                        `}
-                        
-                        ${!isPlayerActive ? `
-                            <button class="btn-activate-map btn btn-primary btn-xs" style="width: 100%; justify-content: center; font-size: 0.75rem;">
-                                <i class="fa-solid fa-bullhorn"></i> Push Players Here
-                            </button>
-                        ` : `
-                            <button class="btn-activate-map btn btn-primary btn-xs" style="width: 100%; justify-content: center; font-size: 0.75rem; background: ${activeClass}; color: #fff; border-color: transparent;">
-                                <i class="fa-solid fa-users"></i> Push More Players
-                            </button>
-                        `}
-                    </div>
+        if (filteredMaps.length === 0) {
+            container.innerHTML = `
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px; color: var(--color-text-muted); font-size: 0.85rem; gap: 10px;">
+                    <i class="fa-solid fa-magnifying-glass" style="font-size: 2rem; color: var(--color-text-muted); opacity: 0.4;"></i>
+                    <span>No maps found matching "<strong>${escapeMapHtml(mapSearchQuery)}</strong>"</span>
+                    <button type="button" class="btn btn-secondary btn-xs" onclick="const input = document.getElementById('map-search-input'); if(input) { input.value=''; input.dispatchEvent(new Event('input')); }">Clear Search</button>
                 </div>
             `;
-            
-            container.appendChild(card);
-            
-            // Actions
-            card.querySelector('.btn-edit-map').addEventListener('click', (e) => {
-                e.stopPropagation();
-                openEditMapModal(map);
-            });
-            
-            const btnDel = card.querySelector('.btn-delete-map');
-            if (btnDel) {
-                btnDel.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (confirm(`Are you absolutely sure you want to delete map "${map.name}"? This action is permanent.`)) {
-                        vtt.socket.emit('map:delete', { mapId: map.id });
-                    }
-                });
-            }
-            
-            const btnView = card.querySelector('.btn-view-map');
-            if (btnView) {
-                btnView.addEventListener('click', () => {
-                    vtt.socket.emit('map:switch-gm', { mapId: map.id });
-                    loadMap(map.id);
-                    renderMapGrid(); // refresh status highlights
-                });
-            }
-            
-            const btnAct = card.querySelector('.btn-activate-map');
-            if (btnAct) {
-                btnAct.addEventListener('click', () => {
-                    openPushPlayersModal(map.id);
-                });
+            return;
+        }
+
+        // Group into folder groups and root/uncategorized maps
+        const folderGroups = {};
+        const rootMaps = [];
+
+        filteredMaps.forEach(m => {
+            const f = (m.folder || '').trim();
+            if (f) {
+                if (!folderGroups[f]) folderGroups[f] = [];
+                folderGroups[f].push(m);
+            } else {
+                rootMaps.push(m);
             }
         });
+
+        // Helper to check if any map in a group has live players
+        const hasLivePlayers = (mapsList) => {
+            return mapsList.some(map => {
+                const isGlobalActive = camp.activeMapId === map.id;
+                const playersOnMap = Object.entries(camp.playerMapOverrides || {}).filter(([p, mId]) => mId === map.id).map(([p]) => p);
+                return isGlobalActive || playersOnMap.length > 0;
+            });
+        };
+
+        // Render Folder Groups
+        const sortedFolders = Object.keys(folderGroups).sort();
+        sortedFolders.forEach(folderName => {
+            const folderMaps = folderGroups[folderName];
+            const isCollapsed = collapsedMapFolders.has(folderName) && !mapSearchQuery;
+            const folderLive = hasLivePlayers(folderMaps);
+
+            const groupEl = document.createElement('div');
+            groupEl.className = `map-folder-group ${isCollapsed ? 'collapsed' : ''}`;
+
+            const headerEl = document.createElement('div');
+            headerEl.className = 'map-folder-header';
+
+            const titleWrap = document.createElement('div');
+            titleWrap.className = 'map-folder-title-wrap';
+            titleWrap.innerHTML = `
+                <i class="fa-solid fa-chevron-down map-folder-caret"></i>
+                <i class="fa-solid fa-folder text-gradient-gold"></i>
+                <span>${escapeMapHtml(folderName)}</span>
+                <span class="map-folder-count">${folderMaps.length}</span>
+                ${folderLive ? '<span style="font-size: 0.65rem; background: var(--color-success-base); color: #fff; padding: 2px 7px; border-radius: 10px; font-weight: bold; margin-left: 4px;"><i class="fa-solid fa-users"></i> Live</span>' : ''}
+            `;
+            headerEl.appendChild(titleWrap);
+
+            headerEl.addEventListener('click', (e) => {
+                if (e.target.closest('button')) return;
+                if (collapsedMapFolders.has(folderName)) {
+                    collapsedMapFolders.delete(folderName);
+                    groupEl.classList.remove('collapsed');
+                } else {
+                    collapsedMapFolders.add(folderName);
+                    groupEl.classList.add('collapsed');
+                }
+            });
+
+            const contentEl = document.createElement('div');
+            contentEl.className = 'map-folder-content scroll-styled';
+
+            const gridEl = document.createElement('div');
+            gridEl.className = 'map-folder-grid';
+            folderMaps.forEach(map => {
+                try {
+                    gridEl.appendChild(createMapCard(map, allFolderNames));
+                } catch (err) {
+                    console.error('Error rendering map card:', map, err);
+                }
+            });
+
+            contentEl.appendChild(gridEl);
+            groupEl.appendChild(headerEl);
+            groupEl.appendChild(contentEl);
+            container.appendChild(groupEl);
+        });
+
+        // Render Standalone / Uncategorized Maps in an Accordion Group
+        if (rootMaps.length > 0) {
+            const uncatKey = '__UNCATEGORIZED__';
+            const isCollapsed = collapsedMapFolders.has(uncatKey) && !mapSearchQuery;
+            const uncatLive = hasLivePlayers(rootMaps);
+
+            const groupEl = document.createElement('div');
+            groupEl.className = `map-folder-group ${isCollapsed ? 'collapsed' : ''}`;
+
+            const headerEl = document.createElement('div');
+            headerEl.className = 'map-folder-header';
+
+            const titleWrap = document.createElement('div');
+            titleWrap.className = 'map-folder-title-wrap';
+            titleWrap.innerHTML = `
+                <i class="fa-solid fa-chevron-down map-folder-caret"></i>
+                <i class="fa-solid fa-layer-group text-gradient-gold"></i>
+                <span>${sortedFolders.length > 0 ? 'Uncategorized Maps' : 'Standalone Maps'}</span>
+                <span class="map-folder-count">${rootMaps.length}</span>
+                ${uncatLive ? '<span style="font-size: 0.65rem; background: var(--color-success-base); color: #fff; padding: 2px 7px; border-radius: 10px; font-weight: bold; margin-left: 4px;"><i class="fa-solid fa-users"></i> Live</span>' : ''}
+            `;
+            headerEl.appendChild(titleWrap);
+
+            headerEl.addEventListener('click', (e) => {
+                if (e.target.closest('button')) return;
+                if (collapsedMapFolders.has(uncatKey)) {
+                    collapsedMapFolders.delete(uncatKey);
+                    groupEl.classList.remove('collapsed');
+                } else {
+                    collapsedMapFolders.add(uncatKey);
+                    groupEl.classList.add('collapsed');
+                }
+            });
+
+            const contentEl = document.createElement('div');
+            contentEl.className = 'map-folder-content scroll-styled';
+
+            const gridEl = document.createElement('div');
+            gridEl.className = 'map-folder-grid';
+            rootMaps.forEach(map => {
+                try {
+                    gridEl.appendChild(createMapCard(map, allFolderNames));
+                } catch (err) {
+                    console.error('Error rendering root map card:', map, err);
+                }
+            });
+
+            contentEl.appendChild(gridEl);
+            groupEl.appendChild(headerEl);
+            groupEl.appendChild(contentEl);
+            container.appendChild(groupEl);
+        }
     }
 
     let editingMapId = null;
+    let weatherEmitTimer = null;
+    let currentEditingWeatherLayers = [];
+    let currentEditingWeatherSaturation = 100;
+
+    const WEATHER_CATEGORIES = [
+        {
+            name: 'Atmospheric & Storms',
+            options: [
+                { id: 'rain', label: '🌧️ Rain (Drizzle to Downpour)' },
+                { id: 'storm', label: '⛈️ Thunderstorm (Rain & Lightning)' },
+                { id: 'snow', label: '❄️ Snow & Blizzard' },
+                { id: 'hail', label: '🧊 Hailstorm & Ice Pellets' },
+                { id: 'fog', label: '🌫️ Fog & Rolling Mist' },
+                { id: 'sandstorm', label: '🏜️ Sandstorm & Dust Haze' }
+            ]
+        },
+        {
+            name: 'Nature & Wilderness',
+            options: [
+                { id: 'sunlight', label: '☀️ Bright Sunlight & Sunbeams' },
+                { id: 'leaves', label: '🍂 Autumn Leaves & Petals' },
+                { id: 'fireflies', label: '💡 Night Fireflies & Will-o\'-Wisps' }
+            ]
+        },
+        {
+            name: 'Subterranean & Hazards',
+            options: [
+                { id: 'spores', label: '🍄 Underdark Fungal Spores' },
+                { id: 'underwater', label: '🫧 Underwater Bubbles & Spores' },
+                { id: 'embers', label: '🔥 Floating Embers & Ash' },
+                { id: 'ash', label: '🌋 Volcanic Ashfall & Cinders' }
+            ]
+        },
+        {
+            name: 'Arcane & Planar',
+            options: [
+                { id: 'arcane', label: '✨ Arcane Wisps & Leyline Motes' },
+                { id: 'aurora', label: '🌌 Aurora Borealis & Astral Ribbons' },
+                { id: 'void', label: '🌑 Void Tendrils & Shadowfell Gloom' }
+            ]
+        }
+    ];
+
+    const WEATHER_PRESET_OPTIONS = WEATHER_CATEGORIES.flatMap(c => c.options);
+
+    function emitWeatherUpdate(immediate = false) {
+        if (!editingMapId || !vtt.campaignState?.maps?.[editingMapId]) return;
+        const map = vtt.campaignState.maps[editingMapId];
+
+        map.weather = {
+            effects: currentEditingWeatherLayers.map(l => ({ ...l })),
+            saturation: currentEditingWeatherSaturation
+        };
+
+        // Update local weather immediately for instant, smooth visual response
+        if (currentMapId === editingMapId && vtt.weatherEngine) {
+            vtt.weatherEngine.setWeather(map.weather);
+        }
+
+        // Debounce socket emit to prevent network and disk write flooding during drag
+        if (weatherEmitTimer) clearTimeout(weatherEmitTimer);
+        if (immediate) {
+            vtt.socket.emit('map:edit', { mapId: editingMapId, updates: { weather: map.weather } });
+        } else {
+            weatherEmitTimer = setTimeout(() => {
+                vtt.socket.emit('map:edit', { mapId: editingMapId, updates: { weather: map.weather } });
+            }, 100);
+        }
+    }
+
+    function renderWeatherLayersUI() {
+        const badgeEl = document.getElementById('edit-map-weather-layers-badge');
+        if (badgeEl) {
+            badgeEl.textContent = `${currentEditingWeatherLayers.length} / 3 Active`;
+        }
+
+        const btnAdd = document.getElementById('btn-add-weather-layer');
+        const noteEl = document.getElementById('weather-layer-limit-note');
+        if (btnAdd) {
+            btnAdd.disabled = currentEditingWeatherLayers.length >= 3;
+        }
+        if (noteEl) {
+            noteEl.textContent = currentEditingWeatherLayers.length >= 3 ? 'Max 3 layers reached' : 'Max 3 simultaneous layers';
+        }
+
+        const listEl = document.getElementById('edit-map-weather-layers-list');
+        if (!listEl) return;
+        listEl.innerHTML = '';
+
+        if (currentEditingWeatherLayers.length === 0) {
+            listEl.innerHTML = `
+                <div style="text-align: center; padding: 18px 12px; color: var(--color-text-muted); font-size: 0.82rem; background: rgba(0,0,0,0.18); border: 1px dashed rgba(255,255,255,0.08); border-radius: 6px;">
+                    <i class="fa-solid fa-cloud-sun text-gradient-gold" style="font-size: 1.5rem; display: block; margin-bottom: 6px; opacity: 0.7;"></i>
+                    No active weather effects on this map.<br>Click <strong>+ Add Weather Layer</strong> to add rain, mist, storm, embers, etc.
+                </div>
+            `;
+            return;
+        }
+
+        currentEditingWeatherLayers.forEach((layer, idx) => {
+            const opt = WEATHER_PRESET_OPTIONS.find(o => o.id === layer.preset) || WEATHER_PRESET_OPTIONS[0];
+            const card = document.createElement('div');
+            card.className = 'weather-layer-card';
+
+            card.innerHTML = `
+                <div class="weather-layer-header">
+                    <div class="weather-layer-title">
+                        <i class="fa-solid fa-chevron-down weather-layer-caret"></i>
+                        <span>Layer ${idx + 1}: <strong class="layer-title-name">${opt.label.split(' ')[0]} ${opt.label.split(' ')[1] || ''}</strong></span>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-xxs btn-delete-layer" title="Delete Weather Layer" style="padding: 2px 7px; font-size: 0.7rem;">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+                <div class="weather-layer-body">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 0.78rem;">Preset Type</label>
+                        <select class="layer-preset-select" style="width: 100%; padding: 5px 8px; font-size: 0.8rem; background: var(--color-bg-card); color: var(--color-text-primary); border: 1px solid var(--color-gold-base); border-radius: 4px;">
+                            ${WEATHER_CATEGORIES.map(cat => `
+                                <optgroup label="${cat.name}">
+                                    ${cat.options.map(o => `<option value="${o.id}" ${o.id === layer.preset ? 'selected' : ''}>${o.label}</option>`).join('')}
+                                </optgroup>
+                            `).join('')}
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                            <label style="font-size: 0.75rem; display: flex; justify-content: space-between;">
+                                <span>Intensity:</span>
+                                <span class="layer-intensity-val" style="color: var(--color-gold-light); font-weight: 600;">${Math.round(layer.intensity * 100)}%</span>
+                            </label>
+                            <input type="range" class="layer-intensity-input" min="0.1" max="1.0" step="0.05" value="${layer.intensity}">
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                            <label style="font-size: 0.75rem; display: flex; justify-content: space-between;">
+                                <span>Speed:</span>
+                                <span class="layer-speed-val" style="color: var(--color-gold-light); font-weight: 600;">${layer.speed.toFixed(1)}x</span>
+                            </label>
+                            <input type="range" class="layer-speed-input" min="0.2" max="2.5" step="0.1" value="${layer.speed}">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                            <label style="font-size: 0.75rem; display: flex; justify-content: space-between;">
+                                <span>Particle Zoom:</span>
+                                <span class="layer-zoom-val" style="color: var(--color-gold-light); font-weight: 600;">${layer.zoom.toFixed(1)}x</span>
+                            </label>
+                            <input type="range" class="layer-zoom-input" min="0.5" max="3.0" step="0.1" value="${layer.zoom}">
+                        </div>
+                        <div class="form-group" style="flex: 1; min-width: 120px; margin-bottom: 0;">
+                            <label style="font-size: 0.75rem; display: flex; justify-content: space-between;">
+                                <span>Wind Angle:</span>
+                                <span class="layer-direction-val" style="color: var(--color-gold-light); font-weight: 600;">${layer.direction}°</span>
+                            </label>
+                            <input type="range" class="layer-direction-input" min="0" max="360" step="5" value="${layer.direction}">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <label style="font-size: 0.75rem; margin-bottom: 0;">
+                                Color Tint & Strength: <span class="layer-color-val" style="color: var(--color-gold-light); font-weight: 600;">${Math.round(layer.colorStrength * 100)}%</span>
+                            </label>
+                            <label class="weather-checkbox-label" title="Enable or disable the atmospheric background wash for this weather layer">
+                                <input type="checkbox" class="layer-ambient-wash-input" ${layer.ambientWash !== false ? 'checked' : ''}>
+                                <span>Ambient Wash</span>
+                            </label>
+                        </div>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <input type="color" class="layer-color-input" value="${layer.color || '#ffffff'}" style="width: 34px; height: 26px; padding: 1px; border: 1px solid var(--color-gold-base); border-radius: 4px; cursor: pointer;">
+                            <input type="range" class="layer-color-strength-input" min="0" max="1.0" step="0.05" value="${layer.colorStrength || 0}" style="flex: 1;">
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Wire Card Event Handlers
+            const header = card.querySelector('.weather-layer-header');
+            const btnDel = card.querySelector('.btn-delete-layer');
+            header.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-delete-layer')) return;
+                card.classList.toggle('collapsed');
+            });
+            btnDel.addEventListener('click', (e) => {
+                e.stopPropagation();
+                currentEditingWeatherLayers.splice(idx, 1);
+                renderWeatherLayersUI();
+                emitWeatherUpdate(true);
+            });
+
+            const presetSelect = card.querySelector('.layer-preset-select');
+            presetSelect.addEventListener('change', () => {
+                layer.preset = presetSelect.value;
+                const newOpt = WEATHER_PRESET_OPTIONS.find(o => o.id === layer.preset) || WEATHER_PRESET_OPTIONS[0];
+                const nameSpan = card.querySelector('.layer-title-name');
+                if (nameSpan) nameSpan.textContent = `${newOpt.label.split(' ')[0]} ${newOpt.label.split(' ')[1] || ''}`;
+                emitWeatherUpdate(true);
+            });
+
+            const intensityInput = card.querySelector('.layer-intensity-input');
+            const intensityVal = card.querySelector('.layer-intensity-val');
+            intensityInput.addEventListener('input', () => {
+                layer.intensity = parseFloat(intensityInput.value);
+                intensityVal.textContent = `${Math.round(layer.intensity * 100)}%`;
+                emitWeatherUpdate(false);
+            });
+            intensityInput.addEventListener('change', () => emitWeatherUpdate(true));
+
+            const speedInput = card.querySelector('.layer-speed-input');
+            const speedVal = card.querySelector('.layer-speed-val');
+            speedInput.addEventListener('input', () => {
+                layer.speed = parseFloat(speedInput.value);
+                speedVal.textContent = `${layer.speed.toFixed(1)}x`;
+                emitWeatherUpdate(false);
+            });
+            speedInput.addEventListener('change', () => emitWeatherUpdate(true));
+
+            const zoomInput = card.querySelector('.layer-zoom-input');
+            const zoomVal = card.querySelector('.layer-zoom-val');
+            zoomInput.addEventListener('input', () => {
+                layer.zoom = parseFloat(zoomInput.value);
+                zoomVal.textContent = `${layer.zoom.toFixed(1)}x`;
+                emitWeatherUpdate(false);
+            });
+            zoomInput.addEventListener('change', () => emitWeatherUpdate(true));
+
+            const dirInput = card.querySelector('.layer-direction-input');
+            const dirVal = card.querySelector('.layer-direction-val');
+            dirInput.addEventListener('input', () => {
+                layer.direction = parseInt(dirInput.value, 10);
+                dirVal.textContent = `${layer.direction}°`;
+                emitWeatherUpdate(false);
+            });
+            dirInput.addEventListener('change', () => emitWeatherUpdate(true));
+
+            const washInput = card.querySelector('.layer-ambient-wash-input');
+            if (washInput) {
+                washInput.addEventListener('change', () => {
+                    layer.ambientWash = washInput.checked;
+                    emitWeatherUpdate(true);
+                });
+            }
+
+            const colorInput = card.querySelector('.layer-color-input');
+            colorInput.addEventListener('input', () => {
+                layer.color = colorInput.value;
+                emitWeatherUpdate(false);
+            });
+            colorInput.addEventListener('change', () => emitWeatherUpdate(true));
+
+            const colorStrengthInput = card.querySelector('.layer-color-strength-input');
+            const colorVal = card.querySelector('.layer-color-val');
+            colorStrengthInput.addEventListener('input', () => {
+                layer.colorStrength = parseFloat(colorStrengthInput.value);
+                colorVal.textContent = `${Math.round(layer.colorStrength * 100)}%`;
+                emitWeatherUpdate(false);
+            });
+            colorStrengthInput.addEventListener('change', () => emitWeatherUpdate(true));
+
+            listEl.appendChild(card);
+        });
+    }
 
     function setupEditMapModal() {
         const modal = document.getElementById('modal-edit-map');
@@ -10849,9 +10747,37 @@ window.emitTokenUpdates = function(currentTokens) {
                 if (field === 'offset-x') map.grid.offsetX = finalVal || 0;
                 if (field === 'offset-y') map.grid.offsetY = finalVal || 0;
                 delta = { grid: map.grid };
+            } else if (field === 'dist-val') {
+                if (!map.grid) map.grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' };
+                const num = parseFloat(finalVal);
+                if (!isNaN(num) && num > 0) {
+                    map.grid.distancePerSquare = num;
+                    map.grid.feetPerSquare = num;
+                }
+                delta = { grid: map.grid };
+            } else if (field === 'dist-unit') {
+                if (!map.grid) map.grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' };
+                const customWrap = document.getElementById('edit-map-dist-unit-custom-wrap');
+                const customInput = document.getElementById('edit-map-dist-unit-custom');
+                if (finalVal === 'custom') {
+                    if (customWrap) customWrap.classList.remove('vtt-hidden');
+                    if (customInput) customInput.focus();
+                    map.grid.distanceUnit = customInput?.value?.trim() || 'custom';
+                } else {
+                    if (customWrap) customWrap.classList.add('vtt-hidden');
+                    map.grid.distanceUnit = finalVal || 'ft';
+                }
+                delta = { grid: map.grid };
+            } else if (field === 'dist-unit-custom') {
+                if (!map.grid) map.grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' };
+                map.grid.distanceUnit = (finalVal && finalVal.trim()) ? finalVal.trim() : 'custom';
+                delta = { grid: map.grid };
             } else if (field === 'name') {
                 map.name = finalVal;
                 delta = { name: finalVal };
+            } else if (field === 'folder') {
+                map.folder = finalVal;
+                delta = { folder: finalVal };
             } else if (field === 'url') {
                 if (finalVal && (finalVal.startsWith('http://') || finalVal.startsWith('https://'))) {
                     fetch('/api/player-token/url', {
@@ -10906,14 +10832,14 @@ window.emitTokenUpdates = function(currentTokens) {
             vtt.socket.emit('map:edit', { mapId: editingMapId, updates: delta });
         };
 
-        const inputs = ['name', 'url', 'grid-width', 'grid-height', 'grid-type', 'grid-size', 'offset-x', 'offset-y'];
+        const inputs = ['name', 'folder', 'url', 'grid-width', 'grid-height', 'grid-type', 'grid-size', 'offset-x', 'offset-y', 'dist-val', 'dist-unit', 'dist-unit-custom'];
         inputs.forEach(f => {
             const el = document.getElementById(`edit-map-${f}`);
             if(el) {
-                if (f === 'url' || f === 'grid-type') {
+                if (f === 'url' || f === 'grid-type' || f === 'dist-unit') {
                     el.addEventListener('change', () => updateMapField(f, 'string'));
                 } else {
-                    el.addEventListener('input', () => updateMapField(f, f.startsWith('grid-') || f.startsWith('offset-') ? 'number' : 'string'));
+                    el.addEventListener('input', () => updateMapField(f, f.startsWith('grid-') || f.startsWith('offset-') || f === 'dist-val' ? 'number' : 'string'));
                 }
             }
         });
@@ -10955,11 +10881,53 @@ window.emitTokenUpdates = function(currentTokens) {
                 if (currentMapId === editingMapId) renderAll();
             });
         });
+
+
+
+        const btnAddWeatherLayer = document.getElementById('btn-add-weather-layer');
+        if (btnAddWeatherLayer) {
+            btnAddWeatherLayer.addEventListener('click', () => {
+                if (currentEditingWeatherLayers.length >= 3) return;
+                const defaultPresets = ['rain', 'fog', 'storm', 'sunlight', 'arcane'];
+                const chosenPreset = defaultPresets[currentEditingWeatherLayers.length] || 'rain';
+                currentEditingWeatherLayers.push({
+                    id: `layer_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+                    preset: chosenPreset,
+                    intensity: 0.7,
+                    speed: 1.0,
+                    direction: 65,
+                    zoom: 1.0,
+                    color: '#ffffff',
+                    colorStrength: 0.0,
+                    ambientWash: true
+                });
+                renderWeatherLayersUI();
+                emitWeatherUpdate(true);
+            });
+        }
+
+        const weatherSatEl = document.getElementById('edit-map-weather-saturation');
+        if (weatherSatEl) {
+            weatherSatEl.addEventListener('input', () => {
+                currentEditingWeatherSaturation = parseInt(weatherSatEl.value, 10);
+                const valEl = document.getElementById('edit-map-weather-sat-val');
+                if (valEl) valEl.textContent = `${currentEditingWeatherSaturation}%`;
+                emitWeatherUpdate(false);
+            });
+            weatherSatEl.addEventListener('change', () => emitWeatherUpdate(true));
+        }
     }
 
     function openEditMapModal(map) {
         editingMapId = map.id;
         document.getElementById('edit-map-name').value = map.name || '';
+        const editFolderEl = document.getElementById('edit-map-folder');
+        if (editFolderEl) editFolderEl.value = map.folder || '';
+        const folderDatalist = document.getElementById('edit-map-existing-folders-datalist');
+        if (folderDatalist && vtt.campaignState?.maps) {
+            const folders = [...new Set(Object.values(vtt.campaignState.maps).map(m => m.folder).filter(f => f && f.trim()))].sort();
+            folderDatalist.innerHTML = folders.map(f => `<option value="${f}"></option>`).join('');
+        }
         document.getElementById('edit-map-url').value = map.thumbnail || map.mapImage || '';
         document.getElementById('edit-map-grid-width').value = map.gridWidth || '';
         document.getElementById('edit-map-grid-height').value = map.gridHeight || '';
@@ -10971,6 +10939,26 @@ window.emitTokenUpdates = function(currentTokens) {
         document.getElementById('edit-map-offset-y').value = g.offsetY || 0;
         document.getElementById('edit-map-grid-color').value = g.color || '#888888';
         document.getElementById('edit-map-grid-opacity').value = g.opacity || 0.3;
+
+        const distSettings = getGridDistanceSettings(g);
+        const editDistValEl = document.getElementById('edit-map-dist-val');
+        const editDistUnitEl = document.getElementById('edit-map-dist-unit');
+        const editCustomWrap = document.getElementById('edit-map-dist-unit-custom-wrap');
+        const editCustomInput = document.getElementById('edit-map-dist-unit-custom');
+
+        if (editDistValEl) editDistValEl.value = distSettings.val;
+        if (editDistUnitEl) {
+            const knownUnits = ['ft', 'mi', 'km', 'm', 'hex', 'yd'];
+            if (knownUnits.includes(distSettings.unit)) {
+                editDistUnitEl.value = distSettings.unit;
+                if (editCustomWrap) editCustomWrap.classList.add('vtt-hidden');
+                if (editCustomInput) editCustomInput.value = '';
+            } else {
+                editDistUnitEl.value = 'custom';
+                if (editCustomWrap) editCustomWrap.classList.remove('vtt-hidden');
+                if (editCustomInput) editCustomInput.value = distSettings.unit;
+            }
+        }
         
         const ls = map.lightingSettings || { fogOfWar: true, daylightMode: false, restrictMovement: false, updateOnDrop: true };
         const fogEl = document.getElementById('edit-map-fog-of-war');
@@ -10978,6 +10966,36 @@ window.emitTokenUpdates = function(currentTokens) {
         document.getElementById('edit-map-daylight-mode').checked = !!ls.daylightMode;
         document.getElementById('edit-map-restrict-movement').checked = !!ls.restrictMovement;
         document.getElementById('edit-map-update-on-drop').checked = ls.updateOnDrop !== false;
+
+        const ws = map.weather || {};
+        let initialEffects = [];
+        if (Array.isArray(ws.effects)) {
+            initialEffects = ws.effects.map(e => ({
+                ...e,
+                ambientWash: e.ambientWash !== false
+            }));
+        } else if (ws.preset && ws.preset !== 'none') {
+            initialEffects = [{
+                id: 'layer_0',
+                preset: ws.preset,
+                intensity: typeof ws.intensity === 'number' ? ws.intensity : 0.7,
+                speed: typeof ws.speed === 'number' ? ws.speed : 1.0,
+                direction: typeof ws.direction === 'number' ? ws.direction : 65,
+                zoom: typeof ws.zoom === 'number' ? ws.zoom : 1.0,
+                color: ws.color || ws.tint || '#ffffff',
+                colorStrength: typeof ws.colorStrength === 'number' ? ws.colorStrength : (typeof ws.tintOpacity === 'number' ? ws.tintOpacity : 0.0),
+                ambientWash: true
+            }];
+        }
+        currentEditingWeatherLayers = initialEffects;
+        currentEditingWeatherSaturation = typeof ws.saturation === 'number' ? ws.saturation : 100;
+
+        const satEl = document.getElementById('edit-map-weather-saturation');
+        const satValEl = document.getElementById('edit-map-weather-sat-val');
+        if (satEl) satEl.value = currentEditingWeatherSaturation;
+        if (satValEl) satValEl.textContent = `${currentEditingWeatherSaturation}%`;
+
+        renderWeatherLayersUI();
         
         document.getElementById('modal-edit-map').classList.remove('vtt-hidden');
     }
@@ -11009,11 +11027,36 @@ window.emitTokenUpdates = function(currentTokens) {
         const btnCreateSubmit = document.getElementById('btn-map-create-submit');
         const btnBulkImport = document.getElementById('btn-map-bulk-import');
         const newMapNameInput = document.getElementById('new-map-name');
+        const newMapFolderInput = document.getElementById('new-map-folder');
+        const newMapGridTypeSelect = document.getElementById('new-map-grid-type');
+        const newMapDistValInput = document.getElementById('new-map-dist-val');
+        const newMapDistUnitSelect = document.getElementById('new-map-dist-unit');
+        const newMapDistCustomWrap = document.getElementById('new-map-dist-unit-custom-wrap');
+        const newMapDistCustomInput = document.getElementById('new-map-dist-unit-custom');
+
+        if (newMapDistUnitSelect) {
+            newMapDistUnitSelect.addEventListener('change', () => {
+                if (newMapDistUnitSelect.value === 'custom') {
+                    if (newMapDistCustomWrap) newMapDistCustomWrap.classList.remove('vtt-hidden');
+                    if (newMapDistCustomInput) newMapDistCustomInput.focus();
+                } else {
+                    if (newMapDistCustomWrap) newMapDistCustomWrap.classList.add('vtt-hidden');
+                }
+            });
+        }
+
+        const updateFolderDatalist = () => {
+            const datalist = document.getElementById('map-existing-folders-datalist');
+            if (!datalist || !vtt.campaignState?.maps) return;
+            const folders = [...new Set(Object.values(vtt.campaignState.maps).map(m => m.folder).filter(f => f && f.trim()))].sort();
+            datalist.innerHTML = folders.map(f => `<option value="${f}"></option>`).join('');
+        };
 
         if (btnChangeMap) {
             btnChangeMap.addEventListener('click', () => {
                 if (modal) modal.classList.remove('vtt-hidden');
                 if (createPanel) createPanel.classList.add('vtt-hidden'); // hide creation panel on open
+                updateFolderDatalist();
                 renderMapGrid();
             });
         }
@@ -11024,9 +11067,18 @@ window.emitTokenUpdates = function(currentTokens) {
             btnOpenImport.addEventListener('click', () => {
                 if (createPanel) createPanel.classList.remove('vtt-hidden');
                 if (newMapNameInput) newMapNameInput.value = '';
+                if (newMapFolderInput) {
+                    newMapFolderInput.value = '';
+                    newMapFolderInput.dataset.autoFilled = 'false';
+                }
+                if (newMapDistValInput) newMapDistValInput.value = 5;
+                if (newMapDistUnitSelect) newMapDistUnitSelect.value = 'ft';
+                if (newMapDistCustomWrap) newMapDistCustomWrap.classList.add('vtt-hidden');
+                if (newMapDistCustomInput) newMapDistCustomInput.value = '';
                 if (urlInput) urlInput.value = '';
                 if (fileInput) fileInput.value = '';
                 if (fileNameSpan) fileNameSpan.textContent = 'No file selected.';
+                updateFolderDatalist();
                 
                 // Directly switch to 5eTools import view
                 if (mapSelect) mapSelect.value = '5etools';
@@ -11048,9 +11100,20 @@ window.emitTokenUpdates = function(currentTokens) {
             btnOpenCreate.addEventListener('click', () => {
                 if (createPanel) createPanel.classList.remove('vtt-hidden');
                 if (newMapNameInput) newMapNameInput.value = '';
+                if (newMapFolderInput) {
+                    newMapFolderInput.value = '';
+                    newMapFolderInput.dataset.autoFilled = 'false';
+                }
+                if (newMapGridTypeSelect) newMapGridTypeSelect.value = 'square';
+                if (newMapDistValInput) newMapDistValInput.value = 5;
+                if (newMapDistUnitSelect) newMapDistUnitSelect.value = 'ft';
+                if (newMapDistCustomWrap) newMapDistCustomWrap.classList.add('vtt-hidden');
+                if (newMapDistCustomInput) newMapDistCustomInput.value = '';
                 if (urlInput) urlInput.value = '';
                 if (fileInput) fileInput.value = '';
                 if (fileNameSpan) fileNameSpan.textContent = 'No file selected.';
+                updateFolderDatalist();
+
                 // Reset source selector to 'blank' (safest default — no file needed)
                 if (mapSelect) mapSelect.value = 'blank';
                 if (uploadPanel) uploadPanel.classList.add('vtt-hidden');
@@ -11067,6 +11130,13 @@ window.emitTokenUpdates = function(currentTokens) {
 
         if (advSelect) {
             advSelect.addEventListener('change', () => {
+                const advName = advSelect.options[advSelect.selectedIndex]?.textContent?.trim() || '';
+                if (newMapFolderInput && (!newMapFolderInput.value.trim() || newMapFolderInput.dataset.autoFilled === 'true')) {
+                    if (advName && advSelect.value) {
+                        newMapFolderInput.value = advName;
+                        newMapFolderInput.dataset.autoFilled = 'true';
+                    }
+                }
                 setTimeout(() => {
                     if (advSelect.value && mapDropdown && mapDropdown.options.length > 1) {
                         if (btnBulkImport) btnBulkImport.disabled = false;
@@ -11095,6 +11165,12 @@ window.emitTokenUpdates = function(currentTokens) {
             });
         }
 
+        if (newMapFolderInput) {
+            newMapFolderInput.addEventListener('input', () => {
+                newMapFolderInput.dataset.autoFilled = 'false';
+            });
+        }
+
         if (btnBulkImport) {
             btnBulkImport.addEventListener('click', async () => {
                 const advId = advSelect ? advSelect.value : null;
@@ -11103,7 +11179,11 @@ window.emitTokenUpdates = function(currentTokens) {
                 const mapOptions = mapDropdown ? Array.from(mapDropdown.options).filter(opt => opt.value) : [];
                 if (mapOptions.length === 0) return alert("No maps found for this adventure.");
 
-                if (!confirm(`This adventure has ${mapOptions.length} maps. Are you sure you want to bulk import all of them? This may take a minute.`)) {
+                const advName = advSelect.options[advSelect.selectedIndex]?.textContent?.trim() || advId;
+                const targetFolder = prompt(`Enter folder/category for these ${mapOptions.length} maps:`, advName);
+                if (targetFolder === null) return;
+
+                if (!confirm(`This adventure has ${mapOptions.length} maps. Are you sure you want to bulk import all of them into "${targetFolder.trim() || 'Uncategorized'}"? This may take a minute.`)) {
                     return;
                 }
 
@@ -11122,6 +11202,9 @@ window.emitTokenUpdates = function(currentTokens) {
                             const importedMap = await window.VTT.dataBridge.import5etoolsMap(advId, mapId);
                             if (importedMap) {
                                 importedMap.name = mapName;
+                                if (targetFolder.trim()) {
+                                    importedMap.folder = targetFolder.trim();
+                                }
                                 console.log(`[bulk-import] Emitting map:create for ${mapName}...`);
                                 vtt.socket.emit('map:create', importedMap);
                             }
@@ -11131,7 +11214,7 @@ window.emitTokenUpdates = function(currentTokens) {
                     }
 
                     // Delay to prevent server overload
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    await new Promise(resolve => setTimeout(resolve, 800));
                 }
 
                 btnBulkImport.innerHTML = originalText;
@@ -11182,18 +11265,26 @@ window.emitTokenUpdates = function(currentTokens) {
         if (btnCreateSubmit) {
             btnCreateSubmit.addEventListener('click', async () => {
             const name = newMapNameInput.value.trim();
-            console.log('[map:create] Submit clicked, name:', name, 'source:', mapSelect.value);
+            const folder = newMapFolderInput ? newMapFolderInput.value.trim() : '';
+            const chosenGridType = newMapGridTypeSelect ? newMapGridTypeSelect.value : 'square';
+            const rawDistVal = parseFloat(newMapDistValInput?.value);
+            const chosenDistVal = (!isNaN(rawDistVal) && rawDistVal > 0) ? rawDistVal : 5;
+            const chosenUnitSelect = newMapDistUnitSelect?.value || 'ft';
+            const customUnitVal = newMapDistCustomInput?.value?.trim();
+            const chosenDistanceUnit = chosenUnitSelect === 'custom' ? (customUnitVal || 'custom') : chosenUnitSelect;
+            console.log('[map:create] Submit clicked, name:', name, 'folder:', folder, 'gridType:', chosenGridType, 'distVal:', chosenDistVal, 'unit:', chosenDistanceUnit, 'source:', mapSelect.value);
             if (!name) return alert("Please enter a map name");
 
             if (mapSelect.value === 'blank') {
                 console.log('[map:create] Emitting map:create for blank map...');
                 vtt.socket.emit('map:create', {
                     name,
+                    folder,
                     mapImage: "",
                     thumbnail: "",
                     gridWidth: 40,
                     gridHeight: 30,
-                    grid: { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square', color: '#888888', opacity: 0.3 },
+                    grid: { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: chosenDistVal, distancePerSquare: chosenDistVal, distanceUnit: chosenDistanceUnit, type: chosenGridType, color: '#888888', opacity: 0.3 },
                     tokens: {},
                     walls: [],
                     notes: [],
@@ -11274,11 +11365,12 @@ window.emitTokenUpdates = function(currentTokens) {
                     console.log('[map:create] Emitting map:create for URL map as Freeform Asset...', isYt ? embedUrl : url);
                     vtt.socket.emit('map:create', {
                         name,
+                        folder,
                         mapImage: isYt ? "" : url,
                         thumbnail: thumbUrl,
                         gridWidth: gWidth,
                         gridHeight: gHeight,
-                        grid: { size: gSize, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' },
+                        grid: { size: gSize, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: chosenDistVal, distancePerSquare: chosenDistVal, distanceUnit: chosenDistanceUnit, type: chosenGridType, color: '#888888', opacity: 0.3 },
                         tokens: initialTokens,
                         walls: [],
                         notes: [],
@@ -11296,15 +11388,34 @@ window.emitTokenUpdates = function(currentTokens) {
             } else if (mapSelect.value === '5etools') {
                 const advId = advSelect.value;
                 const mapId = mapDropdown.value;
-                if(!advId || !mapId) return alert("Please select an adventure and a map to import.");
+                if (!advId || !mapId) return alert("Please select an adventure and a map to import.");
+
+                let targetFolder = folder;
+                if (!targetFolder) {
+                    const advName = advSelect.options[advSelect.selectedIndex]?.textContent?.trim() || advId;
+                    const prompted = prompt('Enter folder/category for this map:', advName);
+                    if (prompted === null) return; // User cancelled
+                    targetFolder = prompted.trim();
+                }
                 
                 try {
                     btnCreateSubmit.disabled = true;
                     btnCreateSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Importing Map...';
-                    if(window.VTT && window.VTT.dataBridge && window.VTT.dataBridge.import5etoolsMap) {
+                    if (window.VTT && window.VTT.dataBridge && window.VTT.dataBridge.import5etoolsMap) {
                         const importedMap = await window.VTT.dataBridge.import5etoolsMap(advId, mapId);
-                        if(importedMap) {
+                        if (importedMap) {
                             importedMap.name = name; // Override with user's name
+                            if (targetFolder) importedMap.folder = targetFolder;
+                            if (!importedMap.grid) {
+                                importedMap.grid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: chosenDistVal, distancePerSquare: chosenDistVal, distanceUnit: chosenDistanceUnit, type: chosenGridType, color: '#888888', opacity: 0.3 };
+                            } else {
+                                importedMap.grid.feetPerSquare = chosenDistVal;
+                                importedMap.grid.distancePerSquare = chosenDistVal;
+                                importedMap.grid.distanceUnit = chosenDistanceUnit;
+                                if (chosenGridType !== 'square' && (!importedMap.grid.type || importedMap.grid.type === 'square')) {
+                                    importedMap.grid.type = chosenGridType;
+                                }
+                            }
                             console.log('[map:create] Emitting map:create for 5etools map...', importedMap);
                             vtt.socket.emit('map:create', importedMap);
                             createPanel.classList.add('vtt-hidden');
@@ -11374,11 +11485,12 @@ window.emitTokenUpdates = function(currentTokens) {
 
                         vtt.socket.emit('map:create', {
                             name,
+                            folder,
                             mapImage: uploadedUrl,
                             thumbnail: uploadedUrl,
                             gridWidth: gWidth,
                             gridHeight: gHeight,
-                            grid: { size: gSize, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' },
+                            grid: { size: gSize, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: chosenDistVal, distancePerSquare: chosenDistVal, distanceUnit: chosenDistanceUnit, type: chosenGridType, color: '#888888', opacity: 0.3 },
                             tokens: initialTokens,
                             walls: [],
                             notes: [],
@@ -11388,11 +11500,13 @@ window.emitTokenUpdates = function(currentTokens) {
                         createPanel.classList.add('vtt-hidden');
                         renderMapGrid();
                     } else {
-                        alert("Upload failed.");
+                        alert("Image upload failed");
                     }
-                } catch(e) {
-                    alert("Error: " + e.message);
+                } catch (err) {
+                    console.error("Upload error:", err);
+                    alert("Image upload error: " + (err.message || err));
                 } finally {
+                    btnCreateSubmit.disabled = false;
                     btnCreateSubmit.innerHTML = 'Create Map';
                 }
             }
@@ -11491,6 +11605,385 @@ window.emitTokenUpdates = function(currentTokens) {
         document.getElementById('push-players-all').checked = true;
         
         modal.classList.remove('vtt-hidden');
+    }
+
+    function setupTokenLocatorPanel() {
+        const btnLocator = document.getElementById('btn-token-locator');
+        const panelLocator = document.getElementById('vtt-token-locator-panel');
+        if (!btnLocator || !panelLocator) return;
+
+        const tabsHeader = document.getElementById('vtt-locator-tabs-header');
+        const tabTokensBtn = document.getElementById('btn-locator-tab-tokens');
+        const tabMapsBtn = document.getElementById('btn-locator-tab-maps');
+        const tokensView = document.getElementById('vtt-locator-tokens-view');
+        const mapsView = document.getElementById('vtt-locator-maps-view');
+        const tokensList = document.getElementById('vtt-locator-tokens-list');
+        const mapsList = document.getElementById('vtt-locator-maps-list');
+        const tokensEmpty = document.getElementById('vtt-locator-tokens-empty');
+        const mapsEmpty = document.getElementById('vtt-locator-maps-empty');
+
+        let activeTab = 'tokens'; // 'tokens' | 'maps'
+        let activeConfirmTimer = null;
+
+        // Show tabs header if role is GM
+        if (vtt.role === 'GM' && tabsHeader) {
+            tabsHeader.classList.remove('vtt-hidden');
+        } else if (tabsHeader) {
+            tabsHeader.classList.add('vtt-hidden');
+        }
+
+        function openTokenLocatorPanel() {
+            panelLocator.classList.add('open');
+            btnLocator.classList.add('panel-open');
+            refreshLocatorActiveView();
+        }
+
+        function closeTokenLocatorPanel() {
+            panelLocator.classList.remove('open');
+            btnLocator.classList.remove('panel-open');
+            if (activeConfirmTimer) {
+                clearTimeout(activeConfirmTimer);
+                activeConfirmTimer = null;
+            }
+            if (tokensList) {
+                tokensList.querySelectorAll('.locator-btn-delete.confirming').forEach(btn => {
+                    btn.classList.remove('confirming');
+                    btn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                });
+            }
+        }
+
+        function isTokenLocatorOpen() {
+            return panelLocator.classList.contains('open');
+        }
+
+        // Toggle on button click
+        btnLocator.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isTokenLocatorOpen()) {
+                closeTokenLocatorPanel();
+            } else {
+                openTokenLocatorPanel();
+            }
+        });
+
+        // Click outside on window/canvas to auto-close
+        document.addEventListener('pointerdown', (e) => {
+            if (!isTokenLocatorOpen()) return;
+            if (panelLocator.contains(e.target) || btnLocator.contains(e.target)) return;
+            const modalPush = document.getElementById('modal-push-players');
+            if (modalPush && !modalPush.classList.contains('vtt-hidden') && modalPush.contains(e.target)) return;
+
+            closeTokenLocatorPanel();
+        });
+
+        // Tab buttons (GM only)
+        if (tabTokensBtn && tabMapsBtn) {
+            tabTokensBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                activeTab = 'tokens';
+                tabTokensBtn.classList.add('active');
+                tabMapsBtn.classList.remove('active');
+                if (tokensView) tokensView.classList.remove('vtt-hidden');
+                if (mapsView) mapsView.classList.add('vtt-hidden');
+                renderLocatorTokens();
+            });
+
+            tabMapsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                activeTab = 'maps';
+                tabMapsBtn.classList.add('active');
+                tabTokensBtn.classList.remove('active');
+                if (mapsView) mapsView.classList.remove('vtt-hidden');
+                if (tokensView) tokensView.classList.add('vtt-hidden');
+                renderLocatorMaps();
+            });
+        }
+
+        function refreshLocatorActiveView() {
+            if (activeTab === 'tokens' || vtt.role !== 'GM') {
+                renderLocatorTokens();
+            } else {
+                renderLocatorMaps();
+            }
+        }
+
+        function renderLocatorTokens() {
+            if (!tokensList) return;
+            tokensList.innerHTML = '';
+
+            const maps = vtt.campaignState?.maps || {};
+            const placedTokens = [];
+
+            for (const [mId, mapObj] of Object.entries(maps)) {
+                if (!mapObj || !mapObj.tokens) continue;
+                for (const [tId, tok] of Object.entries(mapObj.tokens)) {
+                    if (!tok) continue;
+                    if (tok.layer === 'map' || tok.isBackground || tok.isAsset) continue;
+
+                    // Must strictly be a Player Character or Companion token (exclude monsters, NPCs, etc.)
+                    const isCompanion = Boolean(tok.isCompanion);
+                    const isCustomNpc = Boolean(tok.isCustomNpc);
+                    const isPlayer = Boolean(!isCompanion && !isCustomNpc && (tok.isPlayer !== false && (tok.isPlayer || tok.characterId || tok.sourceCharacterId)));
+
+                    if (!isPlayer && !isCompanion) continue;
+
+                    // Non-GM players only see tokens they own / control
+                    if (vtt.role !== 'GM') {
+                        if (typeof isTokenControlledByPlayer === 'function' && !isTokenControlledByPlayer(tok)) continue;
+                    }
+
+                    placedTokens.push({
+                        mapId: mId,
+                        mapName: mapObj.name || 'Untitled Map',
+                        token: tok,
+                        tokenId: tId,
+                        isPlayer,
+                        isCompanion
+                    });
+                }
+            }
+
+            // Sort: current map tokens first, then alphabetical by name
+            placedTokens.sort((a, b) => {
+                const aCur = (a.mapId === currentMapId);
+                const bCur = (b.mapId === currentMapId);
+                if (aCur && !bCur) return -1;
+                if (!aCur && bCur) return 1;
+                return (a.token.name || '').localeCompare(b.token.name || '');
+            });
+
+            if (placedTokens.length === 0) {
+                if (tokensEmpty) tokensEmpty.classList.remove('vtt-hidden');
+                return;
+            } else {
+                if (tokensEmpty) tokensEmpty.classList.add('vtt-hidden');
+            }
+
+            placedTokens.forEach(item => {
+                const { mapId, mapName, token: tok, tokenId, isCompanion } = item;
+                const isCurrentMap = (mapId === currentMapId);
+                const avatarSrc = tok.img || 'favicon.svg';
+                const tokenDisplayName = tok.name || (isCompanion ? 'Companion' : 'Character');
+                const tooltipText = `${tokenDisplayName} (${mapName})`;
+
+                const row = document.createElement('div');
+                row.className = `locator-item-row ${isCurrentMap ? 'active-map-item' : ''}`;
+                row.dataset.tokenId = tokenId;
+                row.dataset.mapId = mapId;
+
+                const avatarWrap = document.createElement('div');
+                avatarWrap.className = 'locator-token-avatar-wrap';
+                avatarWrap.title = tooltipText;
+
+                const img = document.createElement('img');
+                img.className = `locator-token-avatar ${isCompanion ? 'companion' : ''}`;
+                img.src = avatarSrc;
+                img.alt = tokenDisplayName;
+                img.onerror = () => { img.src = 'favicon.svg'; };
+                avatarWrap.appendChild(img);
+
+                if (isCurrentMap) {
+                    const badge = document.createElement('span');
+                    badge.className = 'locator-current-map-badge';
+                    badge.title = 'Placed on currently viewed map';
+                    avatarWrap.appendChild(badge);
+                }
+
+                // Clicking the token avatar: center on token (switch map seamlessly if needed) & close panel
+                avatarWrap.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    closeTokenLocatorPanel();
+
+                    if (mapId === currentMapId) {
+                        // Same map: select and pan smoothly
+                        selectedTokenIds.clear();
+                        selectedTokenIds.add(tokenId);
+                        selectedTokenId = tokenId;
+                        const liveTok = tokens[tokenId];
+                        if (liveTok) {
+                            const { drawW, drawH } = getTokenDrawDimensions(liveTok);
+                            panTo(liveTok.x + drawW / 2, liveTok.y + drawH / 2, null, 350);
+                        }
+                        renderAll();
+                    } else {
+                        // Different map: queue focus and seamlessly switch maps
+                        pendingFocusTokenId = tokenId;
+                        pendingFocusTokenExpiry = Date.now() + 6000;
+
+                        if (vtt.role === 'GM') {
+                            vtt.socket.emit('map:switch-gm', { mapId });
+                            loadMap(mapId, false);
+                        } else {
+                            vtt.socket.emit('map:switch-player', { mapId });
+                            if (vtt.campaignState?.maps?.[mapId]) {
+                                loadMap(mapId, false);
+                            }
+                        }
+                    }
+                });
+
+                // Delete button with quick inline confirmation
+                const btnDelete = document.createElement('button');
+                btnDelete.className = 'locator-btn-delete';
+                btnDelete.title = `Delete from ${mapName}`;
+                btnDelete.setAttribute('aria-label', `Delete ${tokenDisplayName}`);
+                btnDelete.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+
+                let confirmTimer = null;
+                btnDelete.addEventListener('click', (e) => {
+                    e.stopPropagation();
+
+                    if (!btnDelete.classList.contains('confirming')) {
+                        // Switch other buttons out of confirming state first
+                        tokensList.querySelectorAll('.locator-btn-delete.confirming').forEach(b => {
+                            b.classList.remove('confirming');
+                            b.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                        });
+
+                        btnDelete.classList.add('confirming');
+                        btnDelete.innerHTML = '<i class="fa-solid fa-check"></i>';
+                        btnDelete.title = 'Click again to confirm delete';
+
+                        confirmTimer = setTimeout(() => {
+                            btnDelete.classList.remove('confirming');
+                            btnDelete.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                            btnDelete.title = `Delete from ${mapName}`;
+                            confirmTimer = null;
+                        }, 3500);
+                        activeConfirmTimer = confirmTimer;
+                    } else {
+                        if (confirmTimer) {
+                            clearTimeout(confirmTimer);
+                            confirmTimer = null;
+                        }
+
+                        vtt.socket.emit('token:delete', { mapId, tokenId });
+
+                        // If on current map, remove immediately from local canvas state
+                        if (mapId === currentMapId && tokens[tokenId]) {
+                            delete tokens[tokenId];
+                            selectedTokenIds.delete(tokenId);
+                            if (selectedTokenId === tokenId) selectedTokenId = null;
+                            renderAll();
+                        }
+
+                        // Remove row from panel list
+                        row.remove();
+                        if (tokensList.children.length === 0 && tokensEmpty) {
+                            tokensEmpty.classList.remove('vtt-hidden');
+                        }
+                    }
+                });
+
+                row.appendChild(avatarWrap);
+                row.appendChild(btnDelete);
+                tokensList.appendChild(row);
+            });
+        }
+
+        function renderLocatorMaps() {
+            if (!mapsList) return;
+            mapsList.innerHTML = '';
+
+            const maps = vtt.campaignState?.maps || {};
+            const mapEntries = Object.values(maps);
+
+            if (mapEntries.length === 0) {
+                if (mapsEmpty) mapsEmpty.classList.remove('vtt-hidden');
+                return;
+            } else {
+                if (mapsEmpty) mapsEmpty.classList.add('vtt-hidden');
+            }
+
+            // Sort maps alphabetically
+            mapEntries.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+
+            const camp = vtt.campaignState || {};
+            const activePlayerMapId = camp.activeMapId;
+            const overrides = camp.playerMapOverrides || {};
+
+            mapEntries.forEach(map => {
+                const isGmViewing = (currentMapId === map.id);
+                const isPartyActive = (activePlayerMapId === map.id);
+                const playersOnThisMap = Object.entries(overrides).filter(([p, mId]) => mId === map.id).map(([p]) => p);
+                const hasLivePlayers = isPartyActive || playersOnThisMap.length > 0;
+
+                let tooltipLines = [map.name || 'Untitled Map'];
+                if (isGmViewing) tooltipLines.push('(Current GM View)');
+                if (isPartyActive && playersOnThisMap.length === 0) tooltipLines.push('(Global Party Map)');
+                if (playersOnThisMap.length > 0) tooltipLines.push(`(Players: ${playersOnThisMap.join(', ')})`);
+
+                const tooltipText = tooltipLines.join(' ');
+
+                // Extract thumbnail
+                let rawThumb = map.thumbnail || map.mapImage || '';
+                let thumbUrl = rawThumb || 'favicon.svg';
+                const ytMatch = rawThumb ? rawThumb.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i) : null;
+                if (ytMatch && ytMatch[1]) {
+                    thumbUrl = `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
+                }
+
+                const row = document.createElement('div');
+                row.className = `locator-item-row ${isGmViewing ? 'active-map-item' : ''}`;
+                row.dataset.mapId = map.id;
+
+                const thumbWrap = document.createElement('div');
+                thumbWrap.className = 'locator-map-thumb-wrap';
+                thumbWrap.title = tooltipText;
+
+                const img = document.createElement('img');
+                img.className = `locator-map-thumb ${isGmViewing ? 'gm-viewing' : ''}`;
+                img.src = thumbUrl;
+                img.alt = map.name || 'Map';
+                img.onerror = () => { img.src = 'favicon.svg'; };
+                thumbWrap.appendChild(img);
+
+                if (hasLivePlayers) {
+                    const liveDot = document.createElement('span');
+                    liveDot.className = 'locator-map-live-dot';
+                    liveDot.title = 'Live players on this map';
+                    thumbWrap.appendChild(liveDot);
+                }
+
+                // Left-click map: switch GM view immediately & close panel
+                thumbWrap.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    closeTokenLocatorPanel();
+
+                    if (map.id !== currentMapId) {
+                        vtt.socket.emit('map:switch-gm', { mapId: map.id });
+                        loadMap(map.id, false);
+                    }
+                });
+
+                // Push to players button
+                const btnPush = document.createElement('button');
+                btnPush.className = 'locator-btn-push';
+                btnPush.title = `Push "${map.name || 'Map'}" to players`;
+                btnPush.setAttribute('aria-label', `Push ${map.name || 'Map'} to players`);
+                btnPush.innerHTML = '<i class="fa-solid fa-person-arrow-up-from-line"></i>';
+
+                btnPush.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    closeTokenLocatorPanel();
+                    if (typeof openPushPlayersModal === 'function') {
+                        openPushPlayersModal(map.id);
+                    }
+                });
+
+                row.appendChild(thumbWrap);
+                row.appendChild(btnPush);
+                mapsList.appendChild(row);
+            });
+        }
+
+        // Expose global refresh trigger for socket/sync events
+        vtt.refreshLocatorPanel = () => {
+            if (isTokenLocatorOpen()) {
+                refreshLocatorActiveView();
+            }
+        };
     }
 
     let selectedTokenIdForEdit = null;
@@ -11908,7 +12401,9 @@ window.emitTokenUpdates = function(currentTokens) {
             const hpBarVisibleOverride = document.getElementById('token-edit-hp-visible').value;
             const hpNumVisibleOverride = document.getElementById('token-edit-hp-num-visible').value;
             const sizeSelection = document.getElementById('token-edit-size').value;
-            const sightRange = parseInt(document.getElementById('token-edit-sight').value) || 60;
+            const rawSight = parseInt(document.getElementById('token-edit-sight').value);
+            const targetTok = tokens[selectedTokenIdForEdit];
+            const sightRange = !isNaN(rawSight) ? rawSight : (targetTok?.isPlayer ? 60 : 5);
 
             const lightEnabled = document.getElementById('token-edit-light-enabled').checked;
             const lightBright = parseInt(document.getElementById('token-edit-light-bright').value) || 0;
@@ -12127,22 +12622,29 @@ window.emitTokenUpdates = function(currentTokens) {
                 const t = tokens[selectedTokenIdForEdit];
                 if (!t) return;
                 let calculatedSight = 0;
-                if (t.characterId && vtt.campaignState?.characters?.[t.characterId]) {
-                    const char = vtt.campaignState.characters[t.characterId];
-                    if (char.senses && typeof char.senses === 'object' && !Array.isArray(char.senses)) {
+                const char = (t.characterId && vtt.campaignState?.characters?.[t.characterId]) ? vtt.campaignState.characters[t.characterId] : null;
+                const isPC = char && !char.isCompanion && !char.isCustomNpc && !char.monsterData;
+                const parseVision = window.parseMonsterVision || (typeof parseMonsterVision === 'function' ? parseMonsterVision : null);
+
+                if (char) {
+                    if (char.senses && typeof char.senses === 'object' && !Array.isArray(char.senses) && (char.senses.darkvision || char.senses.devilSight || char.senses.blindsight || char.senses.truesight)) {
                         calculatedSight = Math.max(
                             parseInt(char.senses.darkvision) || 0,
                             parseInt(char.senses.devilSight) || 0,
                             parseInt(char.senses.blindsight) || 0,
                             parseInt(char.senses.truesight) || 0
                         );
-                    } else if (char.monsterData) {
-                        calculatedSight = (window.parseMonsterVision || parseMonsterVision)(char.monsterData);
-                    } else if (char.tokenSight !== undefined) {
+                    } else if (char.monsterData && parseVision) {
+                        calculatedSight = parseVision(char.monsterData);
+                    } else if (char.tokenSight !== undefined && char.tokenSight > 0) {
                         calculatedSight = parseInt(char.tokenSight) || 0;
                     }
-                } else if (t.monsterData) {
-                    calculatedSight = (window.parseMonsterVision || parseMonsterVision)(t.monsterData);
+                } else if (t.monsterData && parseVision) {
+                    calculatedSight = parseVision(t.monsterData);
+                }
+
+                if (calculatedSight <= 0) {
+                    calculatedSight = isPC ? 60 : 5;
                 }
                 document.getElementById('token-edit-sight').value = calculatedSight;
             });
@@ -12190,7 +12692,7 @@ window.emitTokenUpdates = function(currentTokens) {
             document.getElementById('token-edit-custom-height').value = token.size || 1;
             document.getElementById('token-edit-custom-size-fields').classList.add('vtt-hidden');
         }
-        document.getElementById('token-edit-sight').value = token.sightRange !== undefined ? token.sightRange : 0;
+        document.getElementById('token-edit-sight').value = token.sightRange !== undefined ? token.sightRange : (token.isPlayer ? 60 : 5);
         document.getElementById('token-edit-sight').disabled = false;
         document.getElementById('token-edit-sight').title = "Sight distance in feet. Click 'Sync Sheet' to pull from sheet senses.";
         document.getElementById('token-edit-sight').style.opacity = "1";
@@ -12533,11 +13035,11 @@ window.emitTokenUpdates = function(currentTokens) {
                 }
             }
 
-            const distFeet = calcDistanceFt(Math.hypot(localMeasureEnd.x - localMeasureStart.x, localMeasureEnd.y - localMeasureStart.y));
+            const distInfo = calcDistanceFormatted(Math.hypot(localMeasureEnd.x - localMeasureStart.x, localMeasureEnd.y - localMeasureStart.y));
             const dragPill = document.getElementById('vtt-mobile-drag-pill');
             if (dragPill) {
                 const distSpan = document.getElementById('vtt-mobile-drag-dist');
-                if (distSpan) distSpan.textContent = `${distFeet} ft`;
+                if (distSpan) distSpan.textContent = distInfo.label;
                 dragPill.style.left = `${clientX || 0}px`;
                 dragPill.style.top = `${(clientY || 0) - 20}px`;
                 dragPill.classList.remove('vtt-hidden');
@@ -12604,6 +13106,9 @@ window.emitTokenUpdates = function(currentTokens) {
         syncCampaignState: (newCampaignState) => {
             if (newCampaignState) {
                 vtt.campaignState = newCampaignState;
+                if (currentMapId && newCampaignState.maps?.[currentMapId] && vtt.weatherEngine) {
+                    vtt.weatherEngine.setWeather(newCampaignState.maps[currentMapId].weather);
+                }
                 renderAll();
             }
         },
@@ -12616,6 +13121,14 @@ window.emitTokenUpdates = function(currentTokens) {
                 selectedTokenIds.add(tokenId);
                 selectedTokenId = tokenId;
             }
+            renderAll();
+        },
+        highlightTokenExternal: (tokenId, isHighlighted) => {
+            hoverTokenId = isHighlighted ? tokenId : null;
+            renderAll();
+        },
+        setHoverTokenId: (tokenId) => {
+            hoverTokenId = tokenId;
             renderAll();
         },
         getCanvasMouseCoords,
@@ -13223,7 +13736,8 @@ window.emitTokenUpdates = function(currentTokens) {
         `;
 
         // 3.6 Token Selector
-        const charSheet = (token.characterId && window.VTT?.campaignState?.characters) ? window.VTT.campaignState.characters[token.characterId] : null;
+        const charId = token.characterId || token.sourceCharacterId;
+        const charSheet = (charId && window.VTT?.campaignState?.characters) ? window.VTT.campaignState.characters[charId] : null;
         
         const availableTokens = [];
         const seenUrls = new Set();
@@ -13784,8 +14298,9 @@ window.emitTokenUpdates = function(currentTokens) {
                 t.isVideo = !isGif && (!!cleanUrl.match(/\.(mp4|webm|ogg)$/i) || url.includes('youtube.com') || url.includes('pinimg.com/videos'));
 
                 // Update default on sheet
-                if (t.characterId) {
-                    const char = window.VTT?.campaignState?.characters?.[t.characterId];
+                const charId = t.characterId || t.sourceCharacterId;
+                if (charId) {
+                    const char = window.VTT?.campaignState?.characters?.[charId];
                     if (char) {
                         if (idx >= 0 && Array.isArray(char.tokenImages) && idx < char.tokenImages.length) {
                             char.activeTokenIndex = idx;
@@ -13810,14 +14325,14 @@ window.emitTokenUpdates = function(currentTokens) {
                         char.tokenLightColor = t.lightColor;
 
                         if (vtt.socket) {
-                            vtt.socket.emit('character:update', { id: t.characterId, character: char });
+                            vtt.socket.emit('character:update', { id: charId, character: char });
                         }
                     }
                 }
 
                 // Synchronize with Initiative Tracker
                 if (window.VTT?.chatEngine?.updateCombatantTokenArt) {
-                    window.VTT.chatEngine.updateCombatantTokenArt(tokenId, url, t.characterId);
+                    window.VTT.chatEngine.updateCombatantTokenArt(tokenId, url, charId);
                 } else if (window.VTT?.chatEngine?.refreshInitiative) {
                     window.VTT.chatEngine.refreshInitiative();
                 }
@@ -17015,11 +17530,22 @@ window.emitTokenUpdates = function(currentTokens) {
     function isTokenControlledByPlayer(token) {
         if (!token) return false;
         if (vtt.role === 'GM') return true;
-        if (token.ownerUsername === vtt.username) return true;
-        if (token.characterId) {
-            const char = vtt.campaignState?.characters?.[token.characterId];
-            if (char && char.assignedPlayers) {
-                return char.assignedPlayers.includes(vtt.username) || char.assignedPlayers.includes('*');
+        const username = vtt.username;
+        if (!username) return false;
+
+        // Direct ownership on the token object
+        if (token.ownerUsername === username || token.owner === username || token.playerOwner === username) return true;
+        if (Array.isArray(token.players) && (token.players.includes(username) || token.players.includes('*'))) return true;
+        if (Array.isArray(token.assignedPlayers) && (token.assignedPlayers.includes(username) || token.assignedPlayers.includes('*'))) return true;
+
+        // Linked character or companion ownership
+        const charId = token.characterId || token.sourceCharacterId;
+        if (charId) {
+            const char = vtt.campaignState?.characters?.[charId];
+            if (char) {
+                if (Array.isArray(char.assignedPlayers) && (char.assignedPlayers.includes(username) || char.assignedPlayers.includes('*'))) return true;
+                if (char.owner === username || char.ownerUsername === username) return true;
+                if (Array.isArray(char.players) && (char.players.includes(username) || char.players.includes('*'))) return true;
             }
         }
         return false;
@@ -17096,7 +17622,9 @@ window.emitTokenUpdates = function(currentTokens) {
     function getNearestHexFeatures(x, y, grid, unitSize) {
         const offsetX = grid.offsetX || 0;
         const offsetY = grid.offsetY || 0;
-        const isVert = grid.type === 'hex-v';
+        const type = grid.type || 'square';
+        const isVert = type === 'hex-v' || type === 'hex-v-even';
+        const isEven = type === 'hex-v-even' || type === 'hex-h-even';
         const R = unitSize / Math.sqrt(3);
         
         let bestDistCenter = Infinity;
@@ -17135,7 +17663,8 @@ window.emitTokenUpdates = function(currentTokens) {
                 for (let dc = -2; dc <= 2; dc++) {
                     const r = estR + dr;
                     const c = estC + dc;
-                    const cx = offsetX + c * W + (Math.abs(r) % 2 === 1 ? W / 2 : 0);
+                    const isShifted = isEven ? (Math.abs(r) % 2 === 0) : (Math.abs(r) % 2 === 1);
+                    const cx = offsetX + c * W + (isShifted ? W / 2 : 0);
                     const cy = offsetY + r * ySpacing;
                     checkHex(cx, cy);
                 }
@@ -17149,8 +17678,9 @@ window.emitTokenUpdates = function(currentTokens) {
                 for (let dc = -2; dc <= 2; dc++) {
                     const r = estR + dr;
                     const c = estC + dc;
+                    const isShifted = isEven ? (Math.abs(c) % 2 === 0) : (Math.abs(c) % 2 === 1);
                     const cx = offsetX + c * xSpacing;
-                    const cy = offsetY + r * H + (Math.abs(c) % 2 === 1 ? H / 2 : 0);
+                    const cy = offsetY + r * H + (isShifted ? H / 2 : 0);
                     checkHex(cx, cy);
                 }
             }
@@ -17164,7 +17694,7 @@ window.emitTokenUpdates = function(currentTokens) {
         const offsetX = grid.offsetX || 0;
         const offsetY = grid.offsetY || 0;
 
-        if (grid.type === 'hex-v' || grid.type === 'hex-h') {
+        if (isHexGrid(grid.type)) {
             let px = x;
             let py = y;
             if (isToken) {
@@ -17191,7 +17721,7 @@ window.emitTokenUpdates = function(currentTokens) {
         const offsetX = grid.offsetX || 0;
         const offsetY = grid.offsetY || 0;
 
-        if (grid.type === 'hex-v' || grid.type === 'hex-h') {
+        if (isHexGrid(grid.type)) {
             const hex = getNearestHexFeatures(x, y, grid, unitSize);
             return { x: hex.cx, y: hex.cy };
         }
@@ -17206,7 +17736,7 @@ window.emitTokenUpdates = function(currentTokens) {
         if (!grid || !grid.size) return { x, y };
         const unitSize = (grid.size || 50) * (grid.scale || 1);
         
-        if (grid.type === 'hex-v' || grid.type === 'hex-h') {
+        if (isHexGrid(grid.type)) {
             const hex = getNearestHexFeatures(x, y, grid, unitSize);
             return { x: hex.cx, y: hex.cy };
         }
@@ -17220,12 +17750,6 @@ window.emitTokenUpdates = function(currentTokens) {
         };
     }
 
-    // Convert a pixel distance to feet, rounded to nearest 5 ft (D&D standard).
-    function calcDistanceFt(pixels) {
-        const pxPerCell = (grid.size || 50) * (grid.scale || 1.0);
-        const feet = (pixels / pxPerCell) * (grid.feetPerSquare || 5);
-        return Math.round(feet / 5) * 5;
-    }
 
     function hideAllToolPanels() {
         ['panel-lighting-config', 'panel-measure-config', 'panel-layers-config', 'panel-paint-ribbon', 'panel-map-tools'].forEach(id => {
@@ -18151,18 +18675,62 @@ window.emitTokenUpdates = function(currentTokens) {
                         charRef = window.VTT.campaignState.characters[token.characterId];
                     }
 
-                    if (charRef && (charRef.isCustomNpc || charRef.isCompanion)) {
-                        if (window.VTT?.creatureSheet?.openSheet) {
-                            window.VTT.creatureSheet.openSheet(charRef.monsterData, token.id, token.characterId);
+                    if (window.VTT?.sheetDock?.openSheet) {
+                        if (charRef && (charRef.isCustomNpc || charRef.isCompanion)) {
+                            window.VTT.sheetDock.openSheet({
+                                type: 'creature',
+                                monsterData: charRef.monsterData,
+                                tokenId: token.id,
+                                characterId: token.characterId,
+                                isCompanion: Boolean(charRef.isCompanion),
+                                isCustomNpc: Boolean(charRef.isCustomNpc),
+                                isGeneric: Boolean(charRef.isGeneric),
+                                isVideo: token.isVideo || charRef.isVideo || Boolean((token.img || charRef.avatar)?.match(/\.(mp4|webm|ogg)$/i)),
+                                name: charRef.name,
+                                avatar: charRef.avatar || token.img
+                            });
+                        } else if (token.characterId) {
+                            window.VTT.sheetDock.openSheet({
+                                type: 'player',
+                                id: token.characterId,
+                                tokenId: token.id,
+                                isVideo: token.isVideo || charRef?.isVideo || Boolean((token.img || charRef?.avatar)?.match(/\.(mp4|webm|ogg)$/i)),
+                                name: charRef?.name || token.name,
+                                avatar: charRef?.avatar || token.img
+                            });
+                        } else if (token.monsterData) {
+                            const isCustom = Boolean(token.isCustomNpc || token.monsterData?.isCustomNpc || charRef?.isCustomNpc);
+                            const isComp = Boolean(token.isCompanion || token.monsterData?.isCompanion || charRef?.isCompanion);
+                            const isGen = (token.isGeneric !== undefined) ? token.isGeneric : 
+                                          ((token.monsterData?.isGeneric !== undefined) ? token.monsterData.isGeneric : !(isCustom || isComp));
+                            window.VTT.sheetDock.openSheet({
+                                type: 'creature',
+                                monsterData: token.monsterData,
+                                tokenId: token.id,
+                                characterId: token.characterId || null,
+                                isCompanion: isComp,
+                                isCustomNpc: isCustom,
+                                isGeneric: isGen,
+                                isVideo: token.isVideo || Boolean(token.img?.match(/\.(mp4|webm|ogg)$/i)),
+                                name: token.name || token.monsterData?.name,
+                                avatar: token.img || token.monsterData?.tokenUrl || token.monsterData?.img
+                            });
                         }
-                    } else if (window.VTT?.playerSheet?.openSheet && token.characterId) {
-                        window.VTT.playerSheet.openSheet(token.characterId);
-                    } else if (window.VTT?.creatureSheet?.openSheet && token.monsterData) {
-                        if (token.isCustomNpc) {
-                            token.monsterData.isCustomNpc = true;
-                            if (token.isGeneric !== undefined) token.monsterData.isGeneric = token.isGeneric;
+                    } else {
+                        // Fallback to legacy single sheet
+                        if (charRef && (charRef.isCustomNpc || charRef.isCompanion)) {
+                            if (window.VTT?.creatureSheet?.openSheet) {
+                                window.VTT.creatureSheet.openSheet(charRef.monsterData, token.id, token.characterId);
+                            }
+                        } else if (window.VTT?.playerSheet?.openSheet && token.characterId) {
+                            window.VTT.playerSheet.openSheet(token.characterId);
+                        } else if (window.VTT?.creatureSheet?.openSheet && token.monsterData) {
+                            if (token.isCustomNpc) {
+                                token.monsterData.isCustomNpc = true;
+                                if (token.isGeneric !== undefined) token.monsterData.isGeneric = token.isGeneric;
+                            }
+                            window.VTT.creatureSheet.openSheet(token.monsterData, token.id, token.characterId || null);
                         }
-                        window.VTT.creatureSheet.openSheet(token.monsterData, token.id, token.characterId || null);
                     }
                     return;
                 }
@@ -18780,7 +19348,6 @@ window.emitTokenUpdates = function(currentTokens) {
                 panX = e.clientX - startPanX;
                 panY = e.clientY - startPanY;
                 updateContainerTransform();
-                renderAll();
                 return;
             }
             
@@ -19126,6 +19693,9 @@ window.emitTokenUpdates = function(currentTokens) {
                             hoverTokenId = newHoverTokenId;
                             if (hoverTokenId) canvasInteraction.style.cursor = 'pointer';
                             else if (!hoveredNoteId) canvasInteraction.style.cursor = '';
+                            if (window.VTT?.sheetDock?.highlightTabForToken) {
+                                window.VTT.sheetDock.highlightTabForToken(hoverTokenId);
+                            }
                             renderAll();
                         }
 
@@ -19223,7 +19793,7 @@ window.emitTokenUpdates = function(currentTokens) {
                         let nx = mouse.x - shapeDragOffsetX;
                         let ny = mouse.y - shapeDragOffsetY;
                         if (!e.altKey && grid) {
-                            const snapped = snapToGrid(nx, ny);
+                            const snapped = snapToHalfGrid(nx, ny);
                             nx = snapped.x;
                             ny = snapped.y;
                         }
@@ -19232,13 +19802,32 @@ window.emitTokenUpdates = function(currentTokens) {
                         const dx = nx - center.x;
                         const dy = ny - center.y;
                         
-                        s.startPoint.x += dx;
-                        s.startPoint.y += dy;
-                        s.endPoint.x += dx;
-                        s.endPoint.y += dy;
-                        
-                        if (s.points) {
-                            s.points.forEach(p => { p.x += dx; p.y += dy; });
+                        if (dx !== 0 || dy !== 0) {
+                            s.startPoint.x += dx;
+                            s.startPoint.y += dy;
+                            s.endPoint.x += dx;
+                            s.endPoint.y += dy;
+                            
+                            if (s.points) {
+                                s.points.forEach(p => { p.x += dx; p.y += dy; });
+                            }
+
+                            // If multiple shapes are selected, move them together by the same delta
+                            if (typeof selectedShapeIds !== 'undefined' && selectedShapeIds && selectedShapeIds.size > 1 && selectedShapeIds.has(activeDragShapeId)) {
+                                selectedShapeIds.forEach(id => {
+                                    if (id === activeDragShapeId) return;
+                                    const otherShape = shapes[id];
+                                    if (otherShape && isShapeControlledByPlayer(otherShape)) {
+                                        otherShape.startPoint.x += dx;
+                                        otherShape.startPoint.y += dy;
+                                        otherShape.endPoint.x += dx;
+                                        otherShape.endPoint.y += dy;
+                                        if (otherShape.points) {
+                                            otherShape.points.forEach(p => { p.x += dx; p.y += dy; });
+                                        }
+                                    }
+                                });
+                            }
                         }
                     } else if (activeDragShapeComponent.type === 'anchor') {
                         let nx = mouse.x;
@@ -19392,15 +19981,15 @@ window.emitTokenUpdates = function(currentTokens) {
                         const points = (measureAnchorPoints.length > 0) ? [...measureAnchorPoints, localMeasureEnd] : null;
                         const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
                         if (broadcast) {
-                            vtt.socket.emit('measure:update', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: 'line', color, squareAnchor: anchor, beamWidth: beamW, points });
+                            emitMeasureUpdateThrottled({ mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: 'line', color, squareAnchor: anchor, beamWidth: beamW, points });
                         }
 
                         if (isMobileViewport()) {
-                            const distFeet = calcDistanceFt(Math.hypot(localMeasureEnd.x - localMeasureStart.x, localMeasureEnd.y - localMeasureStart.y));
+                            const distInfo = calcDistanceFormatted(Math.hypot(localMeasureEnd.x - localMeasureStart.x, localMeasureEnd.y - localMeasureStart.y));
                             const dragPill = document.getElementById('vtt-mobile-drag-pill');
                             if (dragPill) {
                                 const distSpan = document.getElementById('vtt-mobile-drag-dist');
-                                if (distSpan) distSpan.textContent = `${distFeet} ft`;
+                                if (distSpan) distSpan.textContent = distInfo.label;
                                 dragPill.style.left = `${e.clientX || 0}px`;
                                 dragPill.style.top = `${(e.clientY || 0) - 20}px`;
                                 dragPill.classList.remove('vtt-hidden');
@@ -19419,7 +20008,7 @@ window.emitTokenUpdates = function(currentTokens) {
                 const points = (rawShape === 'line' && measureAnchorPoints.length > 0) ? [...measureAnchorPoints, localMeasureEnd] : null;
                 const broadcast = document.getElementById('measure-broadcast')?.checked ?? true;
                 if (broadcast) {
-                    vtt.socket.emit('measure:update', { mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: rawShape, color, squareAnchor: anchor, beamWidth: beamW, points });
+                    emitMeasureUpdateThrottled({ mapId: currentMapId, username: vtt.username, start: localMeasureStart, end: localMeasureEnd, shape: rawShape, color, squareAnchor: anchor, beamWidth: beamW, points });
                 }
                 renderAll();
             } else if (localIsShaping && activeTool === 'shape') {
@@ -19537,6 +20126,9 @@ window.emitTokenUpdates = function(currentTokens) {
             }
             if (isPanning) {
                 isPanning = false;
+                if (hasPanned) {
+                    renderAll();
+                }
                 return;
             }
             if (e.button !== 0) return;
@@ -20674,8 +21266,8 @@ window.emitTokenUpdates = function(currentTokens) {
         updateCoordinateDisplay(currentMouseCoords);
     }, 500);
     
-    // Start Visual FX continuous loop
-    animateVisualFx();
+    // Initial render & Visual FX trigger
+    requestVisualFxUpdate();
 
     return engine;
 }

@@ -1,0 +1,409 @@
+[
+  {
+    "id": "sp_aura_of_desecration_illriggerrevised",
+    "name": "Aura of Desecration",
+    "source": "IllriggerRevised",
+    "page": 32,
+    "level": 4,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "Self (30 feet emanation)",
+    "components": "V",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>Life-defiling energy radiates from you in an aura with a 30-foot radius. Until the spell ends, the aura moves with you, centered on you. Whenever creatures of your choice enter the area for the first time on a turn or start their turn there, they must make a Constitution saving throw. On a failed save, a creature takes 4d6 necrotic damage and can't regain hit points until the start of their next turn. On a successful save, a creature takes half as much damage and suffers no other effect.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Cleric",
+      "Paladin"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d6",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing"
+    ]
+  },
+  {
+    "id": "sp_hell_s_lash_illriggerrevised",
+    "name": "Hell's Lash",
+    "source": "IllriggerRevised",
+    "page": 32,
+    "level": 1,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "30 feet",
+    "components": "V, S, M (the forked tongue of a serpent)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You lash a whip of crimson energy at a creature you can see within range, creating a conduit between you and the target. The target must succeed on a Constitution saving throw or take 4d4 fire damage and be tethered. A tethered creature takes 2d4 fire damage at the beginning of each of their turns. A tethered creature can repeat the saving throw at the end of each of their turns, ending the effect on a success.</p><p>For the duration, if the target is an interdicted creature, you can use your reaction to burn one of your seals on the creature. When you do, the creature makes their next saving throw to end this spell with disadvantage.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 2nd level or higher, the initial damage increases by 2d4 for each slot level above 1st, and the subsequent damage increases by 1d4 for each slot level above 1st.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of 2nd level or higher, the initial damage increases by 2d4 for each slot level above 1st, and the subsequent damage increases by 1d4 for each slot level above 1st.</p></div>",
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d4",
+        "type": "Fire",
+        "label": "Damage 1",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "2d4",
+        "type": "Fire",
+        "label": "Damage 2",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_hellfire_illriggerrevised",
+    "name": "Hellfire",
+    "source": "IllriggerRevised",
+    "page": 33,
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You create an eruption of smoldering hellfire around a creature you can see within range. The target must succeed on a Charisma saving throw or take 1d4 fire damage plus 1d4 necrotic damage.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>Both of the spell's damage types increase by 1d4 when you reach 5th level (2d4 each), 11th level (3d4 each), and 17th level (4d4 each).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>Both of the spell's damage types increase by 1d4 when you reach 5th level (2d4 each), 11th level (3d4 each), and 17th level (4d4 each).</p></div>",
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d4",
+        "type": "Fire",
+        "label": "Normal",
+        "stat": "none",
+        "cantripScale": true
+      },
+      {
+        "formula": "1d4",
+        "type": "Necrotic",
+        "label": "Option 2",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "charisma",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Scaling Damage",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_infernal_challenge_illriggerrevised",
+    "name": "Infernal Challenge",
+    "source": "IllriggerRevised",
+    "page": 33,
+    "level": 2,
+    "school": "Enchantment",
+    "castingTime": "1 bonus action",
+    "range": "30 feet",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You offer a creature a compelling challenge. If you have no allies within 5 feet of you, choose one creature within range who can see and hear you. They must succeed on a Charisma saving throw or answer your challenge and fight you. For the duration, you gain a +2 bonus to AC, the target has disadvantage on attack rolls against creatures other than you, and the first time the target tries to move away from you on a turn, they must succeed on a Charisma saving throw or their speed becomes 0 until the start of their next turn.</p><p>This spell ends if you end your turn more than 30 feet away from the target.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "charisma",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Modifies AC"
+    ]
+  },
+  {
+    "id": "sp_maligned_weapon_illriggerrevised",
+    "name": "Maligned Weapon",
+    "source": "IllriggerRevised",
+    "page": 33,
+    "level": 4,
+    "school": "Evocation",
+    "castingTime": "1 bonus action",
+    "range": "touch",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You imbue a weapon you touch with an infernal blessing. Until the spell ends, the weapon extinguishes any mundane sources of light in a 30-foot radius. In addition, attacks made with the weapon deal an extra 2d6 necrotic damage on a hit. If the weapon isn't already a magic weapon, it becomes one for the duration.</p><p>As a bonus action on your turn while holding this weapon, you can end the spell early and cause the weapon to emit a burst of dark energy. Each creature of your choice who you can see within 30 feet of you must make a Wisdom saving throw. On a failed save, a creature takes 4d6 necrotic damage and is frightened for 1 minute. On a successful save, a creature takes half as much damage and isn't frightened. At the end of each of their turns, a frightened creature can make a Wisdom saving throw, ending the effect on themself on a success.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Necrotic",
+        "label": "Damage 1",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "4d6",
+        "type": "Necrotic",
+        "label": "Damage 2",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Frightened"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_mote_of_hell_illriggerrevised",
+    "name": "Mote of Hell",
+    "source": "IllriggerRevised",
+    "page": 33,
+    "level": 3,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "150 feet",
+    "components": "V, S, M (a piece of sulfur)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You manifest a pocket of Hell. A 15-foot-radius sphere of darkness, brimstone, and blasting heat appears, centered on a point within range and lasting for the duration. The cloud of hellfire echoes with the cries of damned souls that can be heard by creatures within 30 feet of it. No light, even magical light, can illuminate the cloud, and any creatures fully within that area are blinded.</p><p>The cloud warps the timescape, making the cloud's area difficult terrain. A creature who starts their turn in that area takes 3d6 fire damage. A creature who ends their turn in that area must succeed on a Wisdom saving throw or take 3d6 psychic damage as the voices of the damned crowd their mind.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d6",
+        "type": "Fire",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "3d6",
+        "type": "Psychic",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_vengeful_blade_illriggerrevised",
+    "name": "Vengeful Blade",
+    "source": "IllriggerRevised",
+    "page": 34,
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "S, M (a melee weapon worth at least 1 gp)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You brandish the weapon used in the spell's casting and make a melee attack with it against one creature within 5 feet of you. On a hit, the target suffers the weapon attack's normal effects and then radiates a dark aura of energy until the start of your next turn. If the target makes an attack or casts a spell before then, the target takes 1d8 necrotic damage and the spell ends.</p><p>This spell's damage increases when you reach certain levels. At 5th level, the melee attack deals an extra 1d8 necrotic damage to the target on a hit, and the damage the target takes for making an attack or casting a spell increases to 2d8. Both damage rolls increase by 1d8 at 11th level (2d8 and 3d8) and again at 17th level (3d8 and 4d8).</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d8",
+        "type": "Necrotic",
+        "label": "Normal",
+        "stat": "none",
+        "cantripScale": true
+      },
+      {
+        "formula": "1d8",
+        "type": "Necrotic",
+        "label": "Option 2",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD",
+      "Scaling Damage"
+    ]
+  },
+  {
+    "id": "sp_wall_of_death_illriggerrevised",
+    "name": "Wall of Death",
+    "source": "IllriggerRevised",
+    "page": 34,
+    "level": 4,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S, M (a chip of onyx)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You create a wall of necrotic energy on a surface within range. You can make a wall up to 60 feet long, 20 feet high, and 1 foot thick, or can make a ringed wall up to 20 feet in diameter, 20 feet high, and 1 foot thick. The wall is opaque and lasts for the duration. When the wall appears, each creature in its area must make a Constitution saving throw. A creature takes 4d8 necrotic damage on a failed save, or half as much damage on a successful one.</p><p>One side of the wall, selected by you when you cast this spell, deals 4d8 necrotic damage to each creature who ends their turn within 10 feet of that side or inside the wall. A creature takes the same damage when they enter the wall for the first time on a turn or end their turn there. The other side of the wall deals no damage.</p><p>Whenever a creature takes damage from the wall, you can use your reaction to gain temporary hit points equal to the amount of damage dealt.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Druid",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d8",
+        "type": "Necrotic",
+        "label": "Damage 1",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "4d8",
+        "type": "Necrotic",
+        "label": "Damage 2",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Temp HP"
+    ]
+  }
+]

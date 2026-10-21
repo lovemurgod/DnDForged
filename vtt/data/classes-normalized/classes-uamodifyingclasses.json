@@ -1,0 +1,741 @@
+[
+  {
+    "id": "class_ranger_spell_less_uamodifyingclasses",
+    "name": "Ranger (Spell-less)",
+    "source": "UAModifyingClasses",
+    "page": 5,
+    "hitDie": "d10",
+    "primaryAbility": "None",
+    "features": [
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_favored_enemy_1",
+        "name": "Favored Enemy",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy.</p>\n<p>Choose a type of favored enemy: aberrations|bestiary|type=aberration, beasts|bestiary|type=beast, celestials|bestiary|type=celestial, constructs|bestiary|type=construct, dragons|bestiary|type=dragon, elementals|bestiary|type=elemental, fey|bestiary|type=fey, fiends|bestiary|type=fiend, giants|bestiary|type=giant, monstrosities|bestiary|type=monstrosity, oozes|bestiary|type=ooze, plants|bestiary|type=plant, or undead|bestiary|type=undead. Alternatively, you can select two races of humanoid|bestiary|type=humanoid (such as gnoll and orc) as favored enemies.</p>\n<p>You have advantage on Wisdom (Survival) checks to track your favored enemies, as well as on Intelligence checks to recall information about them.</p>\n<p>When you gain this feature, you also learn one language of your choice that is spoken by your favored enemies, if they speak one at all.</p>\n<p>You choose one additional favored enemy, as well as an associated language, at 6th and 14th level. As you gain levels, your choices should reflect the types of monsters you have encountered on your adventures.</p>",
+        "rawEntries": [
+          "Beginning at 1st level, you have significant experience studying, tracking, hunting, and even talking to a certain type of enemy.",
+          "Choose a type of favored enemy: {@filter aberrations|bestiary|type=aberration}, {@filter beasts|bestiary|type=beast}, {@filter celestials|bestiary|type=celestial}, {@filter constructs|bestiary|type=construct}, {@filter dragons|bestiary|type=dragon}, {@filter elementals|bestiary|type=elemental}, {@filter fey|bestiary|type=fey}, {@filter fiends|bestiary|type=fiend}, {@filter giants|bestiary|type=giant}, {@filter monstrosities|bestiary|type=monstrosity}, {@filter oozes|bestiary|type=ooze}, {@filter plants|bestiary|type=plant}, or {@filter undead|bestiary|type=undead}. Alternatively, you can select two races of {@filter humanoid|bestiary|type=humanoid} (such as {@creature gnoll||gnolls} and {@creature orc||orcs}) as favored enemies.",
+          "You have advantage on Wisdom ({@skill Survival}) checks to track your favored enemies, as well as on Intelligence checks to recall information about them.",
+          "When you gain this feature, you also learn one language of your choice that is spoken by your favored enemies, if they speak one at all.",
+          "You choose one additional favored enemy, as well as an associated language, at 6th and 14th level. As you gain levels, your choices should reflect the types of monsters you have encountered on your adventures."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_natural_explorer_1",
+        "name": "Natural Explorer",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You are particularly familiar with one type of natural environment and are adept at traveling and surviving in such regions. Choose one type of favored terrain: arctic, coast, desert, forest, grassland, mountain, swamp, or the Underdark. When you make an Intelligence or Wisdom check related to your favored terrain, your proficiency bonus is doubled if you are using a skill that you're proficient in.</p>\n<p>While traveling for an hour or more in your favored terrain, you gain the following benefits:</p>\n<ul><li>Difficult terrain doesn't slow your group's travel.</li><li>Your group can't become lost except by magical means.</li><li>Even when you are engaged in another activity while traveling (such as foraging, navigating, or tracking), you remain alert to danger.</li><li>If you are traveling alone, you can move stealthily at a normal pace.</li><li>When you forage, you find twice as much food as you normally would.</li><li>While tracking other creatures, you also learn their exact number, their sizes, and how long ago they passed through the area.</li></ul>\n<p>You choose additional favored terrain types at 6th and 10th level.</p>",
+        "rawEntries": [
+          "You are particularly familiar with one type of natural environment and are adept at traveling and surviving in such regions. Choose one type of favored terrain: arctic, coast, desert, forest, grassland, mountain, swamp, or the Underdark. When you make an Intelligence or Wisdom check related to your favored terrain, your proficiency bonus is doubled if you are using a skill that you're proficient in.",
+          "While traveling for an hour or more in your favored terrain, you gain the following benefits:",
+          {
+            "type": "list",
+            "items": [
+              "Difficult terrain doesn't slow your group's travel.",
+              "Your group can't become lost except by magical means.",
+              "Even when you are engaged in another activity while traveling (such as foraging, navigating, or tracking), you remain alert to danger.",
+              "If you are traveling alone, you can move stealthily at a normal pace.",
+              "When you forage, you find twice as much food as you normally would.",
+              "While tracking other creatures, you also learn their exact number, their sizes, and how long ago they passed through the area."
+            ]
+          },
+          "You choose additional favored terrain types at 6th and 10th level."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_combat_superiority_2",
+        "name": "Combat Superiority",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": true,
+        "usesMax": 4,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 2nd level, you learn maneuvers that are fueled by special dice called superiority dice.</p>\n<div class=\"compendium-subentry\"><strong>Maneuvers.</strong> <p>You learn two maneuvers|optionalfeatures|feature type=mv:b of your choice, which are chosen from the list of maneuvers available to fighters with the Battle Master archetype. Many maneuvers enhance an attack in some way. You can use only one maneuver per attack.</p>\n<p>You learn one additional maneuver of your choice at 5th, 9th, 13th, and 17th levels. Each time you learn a new maneuver, you can also replace one maneuver you know with a different one.</p></div>\n<div class=\"compendium-subentry\"><strong>Superiority Dice.</strong> <p>You have four superiority dice, which are d8s. A superiority die is expended when you use it. You regain all of your expended superiority dice when you finish a short or long rest.</p>\n<p>You gain another superiority die at 9th level and one more at 17th level.</p></div>\n<div class=\"compendium-subentry\"><strong>Saving Throws.</strong> <p>Some of your maneuvers require your target to make a saving throw to resist the maneuver's effects. The saving throw DC is calculated as follows:</p>\n<div class=\"compendium-subentry\"><strong>Maneuver.</strong> </div></div>",
+        "rawEntries": [
+          "At 2nd level, you learn maneuvers that are fueled by special dice called superiority dice.",
+          {
+            "type": "entries",
+            "name": "Maneuvers",
+            "entries": [
+              "You learn two {@filter maneuvers|optionalfeatures|feature type=mv:b} of your choice, which are chosen from the list of maneuvers available to fighters with the Battle Master archetype. Many maneuvers enhance an attack in some way. You can use only one maneuver per attack.",
+              "You learn one additional maneuver of your choice at 5th, 9th, 13th, and 17th levels. Each time you learn a new maneuver, you can also replace one maneuver you know with a different one."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Superiority Dice",
+            "entries": [
+              "You have four superiority dice, which are {@dice d8}s. A superiority die is expended when you use it. You regain all of your expended superiority dice when you finish a short or long rest.",
+              "You gain another superiority die at 9th level and one more at 17th level."
+            ]
+          },
+          {
+            "type": "entries",
+            "name": "Saving Throws",
+            "entries": [
+              "Some of your maneuvers require your target to make a saving throw to resist the maneuver's effects. The saving throw DC is calculated as follows:",
+              {
+                "type": "abilityDc",
+                "name": "Maneuver",
+                "attributes": [
+                  "str",
+                  "dex"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_fighting_style_2",
+        "name": "Fighting Style",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.</p>",
+        "rawEntries": [
+          "At 2nd level, you adopt a particular style of fighting as your specialty. Choose one of the following options. You can't take a Fighting Style option more than once, even if you later get to choose again.",
+          {
+            "type": "options",
+            "entries": [
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Archery"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Close Quarters Shooter|UALightDarkUnderdark"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Defense"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Dueling"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Mariner|UAWaterborneAdventures"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Tunnel Fighter|UALightDarkUnderdark"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Two-Weapon Fighting"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Blind Fighting|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Interception|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Thrown Weapon Fighting|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Unarmed Fighting|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Druidic Warrior|UAClassFeatureVariants"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Blind Fighting|TCE"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Druidic Warrior|TCE"
+              },
+              {
+                "type": "refOptionalfeature",
+                "optionalfeature": "Thrown Weapon Fighting|TCE"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_poultices_3",
+        "name": "Poultices",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d6",
+        "formulaConfig": {
+          "baseDice": "1d6",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "entriesHtml": "<p>At 3rd level, you can create special herbal poultices that have healing power comparable to some potions. You can spend 1 hour gathering herbs and preparing herbal poultices using treated bandages to create a number of such poultices equal to your Wisdom modifier (minimum 1). You can carry a number of poultices at one time equal to your Wisdom modifier (minimum 1). The poultices you create cannot be applied by anyone but you. After 24 hours, any poultices that you have not used lose their potency.</p>\n<p>If you spend 1 minute applying one of your poultices to a wounded humanoid creature, thereby expending its use, that creature regains 1d6 hit points for every two ranger levels you have (rounded up).</p>",
+        "rawEntries": [
+          "At 3rd level, you can create special herbal poultices that have healing power comparable to some potions. You can spend 1 hour gathering herbs and preparing herbal poultices using treated bandages to create a number of such poultices equal to your Wisdom modifier (minimum 1). You can carry a number of poultices at one time equal to your Wisdom modifier (minimum 1). The poultices you create cannot be applied by anyone but you. After 24 hours, any poultices that you have not used lose their potency.",
+          "If you spend 1 minute applying one of your poultices to a wounded humanoid creature, thereby expending its use, that creature regains {@dice 1d6} hit points for every two ranger levels you have (rounded up)."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_primeval_awareness_3",
+        "name": "Primeval Awareness",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Beginning at 3rd level, you can use your action to focus your awareness on the region around you. For the next minute, you can sense whether the following types of creatures are present within 1 mile of you (or within up to 6 miles if you are in your favored terrain): aberrations, celestials, dragons, elementals, fey, fiends, and undead. This feature doesn't reveal the creatures' location or number.</p>\n<p>Once you use this feature, you must finish a short or long rest before you can use it again</p>",
+        "rawEntries": [
+          "Beginning at 3rd level, you can use your action to focus your awareness on the region around you. For the next minute, you can sense whether the following types of creatures are present within 1 mile of you (or within up to 6 miles if you are in your favored terrain): aberrations, celestials, dragons, elementals, fey, fiends, and undead. This feature doesn't reveal the creatures' location or number.",
+          "Once you use this feature, you must finish a short or long rest before you can use it again"
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_ranger_archetype_3",
+        "name": "Ranger Archetype",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 3rd level, you choose an archetype that you strive to emulate from the list of available archetypes. Your choice grants features at 3rd level, and again at 7th, 11th, and 15th level.</p>",
+        "rawEntries": [
+          "At 3rd level, you choose an archetype that you strive to emulate from the list of available archetypes. Your choice grants features at 3rd level, and again at 7th, 11th, and 15th level."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_ability_score_improvement_4",
+        "name": "Ability Score Improvement",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 4,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 4th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_additional_maneuvers_5",
+        "name": "Additional Maneuvers",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 5th level, you learn one additional maneuver of your choice, which is chosen from the list of maneuvers available to fighters with the Battle Master archetype.</p>",
+        "rawEntries": [
+          "At 5th level, you learn one additional maneuver of your choice, which is chosen from the list of maneuvers available to fighters with the Battle Master archetype."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_extra_attack_5",
+        "name": "Extra Attack",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Beginning at 5th level, you can attack twice, instead of once, whenever you take the Attack action on your turn.</p>",
+        "rawEntries": [
+          "Beginning at 5th level, you can attack twice, instead of once, whenever you take the {@action Attack} action on your turn."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_favored_enemy_and_natural_explorer_improvements_6",
+        "name": "Favored Enemy and Natural Explorer improvements",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 6,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 6th level, you gain an additional favored terrain.</p>\n<p>At 6th level, you choose one additional favored enemy, as well as an associated language. Your choice should reflect the types of monsters you have encountered on your adventures.</p>",
+        "rawEntries": [
+          "At 6th level, you gain an additional favored terrain.",
+          "At 6th level, you choose one additional favored enemy, as well as an associated language. Your choice should reflect the types of monsters you have encountered on your adventures."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_ranger_archetype_feature_7",
+        "name": "Ranger Archetype feature",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 7,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 7th level, you gain a feature granted to you by your Ranger Archetype.</p>",
+        "rawEntries": [
+          "At 7th level, you gain a feature granted to you by your Ranger Archetype."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_ability_score_improvement_8",
+        "name": "Ability Score Improvement",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 8,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 8th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_land_s_stride_8",
+        "name": "Land's Stride",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 8,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Starting at 8th level, moving through nonmagical difficult terrain||3 costs you no extra movement. You can also pass through nonmagical plants without being slowed by them and without taking damage from them if they have thorns, spines, or a similar hazard.</p>\n<p>In addition, you have advantage on saving throws against plants that are magically created or manipulated to impede movement, such as those created by the entangle spell.</p>",
+        "rawEntries": [
+          "Starting at 8th level, moving through nonmagical {@quickref difficult terrain||3} costs you no extra movement. You can also pass through nonmagical plants without being slowed by them and without taking damage from them if they have thorns, spines, or a similar hazard.",
+          "In addition, you have advantage on saving throws against plants that are magically created or manipulated to impede movement, such as those created by the {@spell entangle} spell."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_additional_maneuvers_9",
+        "name": "Additional Maneuvers",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 9,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 9th level, you learn one additional maneuver of your choice, which is chosen from the list of maneuvers available to fighters with the Battle Master archetype.</p>",
+        "rawEntries": [
+          "At 9th level, you learn one additional maneuver of your choice, which is chosen from the list of maneuvers available to fighters with the Battle Master archetype."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_natural_antivenom_9",
+        "name": "Natural Antivenom",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 9,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Starting at 9th level, you have advantage on saving throws against poison and have resistance to poison damage. Additionally, you can use one of your poultices to cure one poison effect on the creature you are applying it to, in addition to restoring hit points.</p>",
+        "rawEntries": [
+          "Starting at 9th level, you have advantage on saving throws against poison and have resistance to poison damage. Additionally, you can use one of your poultices to cure one poison effect on the creature you are applying it to, in addition to restoring hit points."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_hide_in_plain_sight_10",
+        "name": "Hide in Plain Sight",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 10,
+        "actionType": "action",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Starting at 10th level, you can spend 1 minute creating camouflage for yourself. You must have access to fresh mud, dirt, plants, soot, and other naturally occurring materials with which to create your camouflage.</p>\n<p>Once you are camouflaged in this way, you can try to hide by pressing yourself up against a solid surface, such as a tree or wall, that is at least as tall and wide as you are. You gain a +10 bonus to Dexterity (Stealth) checks as long as you remain there without moving or taking actions. Once you move or take an action or a reaction, you must camouflage yourself again to gain this benefit.</p>",
+        "rawEntries": [
+          "Starting at 10th level, you can spend 1 minute creating camouflage for yourself. You must have access to fresh mud, dirt, plants, soot, and other naturally occurring materials with which to create your camouflage.",
+          "Once you are camouflaged in this way, you can try to hide by pressing yourself up against a solid surface, such as a tree or wall, that is at least as tall and wide as you are. You gain a +10 bonus to Dexterity ({@skill Stealth}) checks as long as you remain there without moving or taking actions. Once you move or take an action or a reaction, you must camouflage yourself again to gain this benefit."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_natural_explorer_improvement_10",
+        "name": "Natural Explorer improvement",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain an additional favored terrain.</p>",
+        "rawEntries": [
+          "You gain an additional favored terrain."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_ranger_archetype_feature_11",
+        "name": "Ranger Archetype feature",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 11,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 11th level, you gain a feature granted to you by your Ranger Archetype.</p>",
+        "rawEntries": [
+          "At 11th level, you gain a feature granted to you by your Ranger Archetype."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_ability_score_improvement_12",
+        "name": "Ability Score Improvement",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 12,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 12th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_additional_maneuvers_13",
+        "name": "Additional Maneuvers",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 13,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 13th level, you learn one additional maneuver of your choice, which is chosen from the list of maneuvers available to fighters with the Battle Master archetype.</p>",
+        "rawEntries": [
+          "At 13th level, you learn one additional maneuver of your choice, which is chosen from the list of maneuvers available to fighters with the Battle Master archetype."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_call_natural_allies_13",
+        "name": "Call Natural Allies",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 13,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Starting at 13th level, when you are in an area of your favored terrain, you can call natural creatures from that terrain to fight on your behalf, using your attunement to the natural world to convince them to aid you. The DM chooses beasts appropriate to the terrain to come to your aid from among those that could hear you and that are within 1 mile of you, in one of the following groups:</p>\n<ul><li>One beast of challenge rating 2 or lower</li><li>Two beasts of challenge rating 1 or lower</li><li>Four beasts of challenge rating 1/2 or lower</li><li>Eight beasts of challenge rating 1/4 or lower</li></ul>\n<p>These beasts approach you from their current location, and will fight alongside you, attacking any creatures that are hostile to you. They are friendly to you and your comrades, and you roll initiative for the called creatures as a group, which takes its own turns. The DM has the creatures' statistics.</p>\n<p>After 1 hour, these beasts return to their previous location. Once you use this feature, you cannot use it again in the same general area for 24 hours, since the same animals will not repeatedly heed your call.</p>",
+        "rawEntries": [
+          "Starting at 13th level, when you are in an area of your favored terrain, you can call natural creatures from that terrain to fight on your behalf, using your attunement to the natural world to convince them to aid you. The DM chooses beasts appropriate to the terrain to come to your aid from among those that could hear you and that are within 1 mile of you, in one of the following groups:",
+          {
+            "type": "list",
+            "items": [
+              "One beast of challenge rating 2 or lower",
+              "Two beasts of challenge rating 1 or lower",
+              "Four beasts of challenge rating 1/2 or lower",
+              "Eight beasts of challenge rating 1/4 or lower"
+            ]
+          },
+          "These beasts approach you from their current location, and will fight alongside you, attacking any creatures that are hostile to you. They are friendly to you and your comrades, and you roll initiative for the called creatures as a group, which takes its own turns. The DM has the creatures' statistics.",
+          "After 1 hour, these beasts return to their previous location. Once you use this feature, you cannot use it again in the same general area for 24 hours, since the same animals will not repeatedly heed your call."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_favored_enemy_improvement_14",
+        "name": "Favored Enemy improvement",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 14,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 14th level, you choose one additional favored enemy, as well as an associated language. Your choice should reflect the types of monsters you have encountered on your adventures.</p>",
+        "rawEntries": [
+          "At 14th level, you choose one additional favored enemy, as well as an associated language. Your choice should reflect the types of monsters you have encountered on your adventures."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_vanish_14",
+        "name": "Vanish",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 14,
+        "actionType": "bonus",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Starting at 14th level, you can use the Hide action as a bonus action on your turn. Also, you can't be tracked by nonmagical means, unless you choose to leave a trail.</p>",
+        "rawEntries": [
+          "Starting at 14th level, you can use the {@action Hide} action as a bonus action on your turn. Also, you can't be tracked by nonmagical means, unless you choose to leave a trail."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_ranger_archetype_feature_15",
+        "name": "Ranger Archetype feature",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 15,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 15th level, you gain a feature granted to you by your Ranger Archetype.</p>",
+        "rawEntries": [
+          "At 15th level, you gain a feature granted to you by your Ranger Archetype."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_ability_score_improvement_16",
+        "name": "Ability Score Improvement",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 16,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 16th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_additional_maneuvers_17",
+        "name": "Additional Maneuvers",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 17,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 17th level, you learn one additional maneuver of your choice, which is chosen from the list of maneuvers available to fighters with the Battle Master archetype.</p>",
+        "rawEntries": [
+          "At 17th level, you learn one additional maneuver of your choice, which is chosen from the list of maneuvers available to fighters with the Battle Master archetype."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_relentless_17",
+        "name": "Relentless",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 17,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Starting at 17th level, when you roll initiative and have no superiority dice remaining, you regain 1 superiority die.</p>",
+        "rawEntries": [
+          "Starting at 17th level, when you roll initiative and have no superiority dice remaining, you regain 1 superiority die."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_feral_senses_18",
+        "name": "Feral Senses",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 18,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 18th level, you gain preternatural senses that help you fight creatures you can't see. When you attack a creature you can't see, your inability to see it doesn't impose disadvantage on your attack rolls against it. You are also aware of the location of any invisible creature within 30 feet of you, provided that the creature isn't hidden from you and you aren't blinded or deafened.</p>",
+        "rawEntries": [
+          "At 18th level, you gain preternatural senses that help you fight creatures you can't see. When you attack a creature you can't see, your inability to see it doesn't impose disadvantage on your attack rolls against it. You are also aware of the location of any {@condition invisible} creature within 30 feet of you, provided that the creature isn't hidden from you and you aren't {@condition blinded} or {@condition deafened}."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_ability_score_improvement_19",
+        "name": "Ability Score Improvement",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 19,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.</p>\n<p>If your DM allows the use of feats, you may instead take a feat.</p>",
+        "rawEntries": [
+          "When you reach 19th level, you can increase one ability score of your choice by 2, or you can increase two ability scores of your choice by 1. As normal, you can't increase an ability score above 20 using this feature.",
+          "If your DM allows the use of feats, you may instead take a {@5etools feat|feats.html}."
+        ]
+      },
+      {
+        "id": "cf_ranger_spell_less_uamodifyingclasses_foe_slayer_20",
+        "name": "Foe Slayer",
+        "source": "UAModifyingClasses",
+        "page": 5,
+        "className": "Ranger (Spell-less)",
+        "classSource": "UAModifyingClasses",
+        "level": 20,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>At 20th level, you become an unparalleled hunter of your enemies. Once on each of your turns, you can add your Wisdom modifier to the attack roll or the damage roll of an attack you make against one of your favored enemies. You can choose to use this feature before or after the roll, but before any effects of the roll are applied.</p>",
+        "rawEntries": [
+          "At 20th level, you become an unparalleled hunter of your enemies. Once on each of your turns, you can add your Wisdom modifier to the attack roll or the damage roll of an attack you make against one of your favored enemies. You can choose to use this feature before or after the roll, but before any effects of the roll are applied."
+        ]
+      }
+    ],
+    "subclasses": []
+  }
+]

@@ -16,6 +16,33 @@ export const SOURCE_CATEGORIES = [
   { id: 'adventures', name: 'Adventures & Lore', icon: '📖', description: 'Published Modules, Guides & Rulesets' }
 ];
 
+export function flatten5eEntries(entries) {
+  if (!entries) return '';
+  if (typeof entries === 'string') return entries;
+  if (typeof entries === 'number') return String(entries);
+  if (Array.isArray(entries)) {
+    return entries.map(flatten5eEntries).filter(Boolean).join('\n\n');
+  }
+  if (typeof entries === 'object') {
+    if (entries.type === 'list' && Array.isArray(entries.items)) {
+      return entries.items.map(i => `• ${flatten5eEntries(i)}`).join('\n');
+    }
+    if (entries.type === 'table' && Array.isArray(entries.rows)) {
+      const header = Array.isArray(entries.colLabels) ? entries.colLabels.join(' | ') + '\n' : '';
+      const rows = entries.rows.map(r => Array.isArray(r) ? r.map(flatten5eEntries).join(' | ') : flatten5eEntries(r)).join('\n');
+      return (entries.caption ? `**${entries.caption}**\n` : '') + header + rows;
+    }
+    if (entries.entries) {
+      const title = entries.name ? `**${entries.name}.** ` : '';
+      return title + flatten5eEntries(entries.entries);
+    }
+    if (entries.text) return entries.text;
+    if (entries.descriptionHtml) return entries.descriptionHtml.replace(/<[^>]*>/g, '');
+    return JSON.stringify(entries);
+  }
+  return String(entries);
+}
+
 export class SourceManager {
   constructor(options = {}) {
     this.rootDir = options.rootDir || process.cwd();
@@ -32,6 +59,7 @@ export class SourceManager {
         global: [],
         campaigns: {}
       },
+      campaignOverrides: {},
       customSources: [],
       uiState: {
         lastPreset: '2024-ruleset',
@@ -82,6 +110,7 @@ export class SourceManager {
             global: Array.isArray(parsed.disabledSources?.global) ? parsed.disabledSources.global : [],
             campaigns: parsed.disabledSources?.campaigns && typeof parsed.disabledSources.campaigns === 'object' ? parsed.disabledSources.campaigns : {}
           },
+          campaignOverrides: parsed.campaignOverrides && typeof parsed.campaignOverrides === 'object' ? parsed.campaignOverrides : {},
           customSources: Array.isArray(parsed.customSources) ? parsed.customSources : [],
           uiState: {
             lastPreset: parsed.uiState?.lastPreset || '2024-ruleset',
@@ -309,15 +338,13 @@ export class SourceManager {
 
   getAllSources(campaignId = null) {
     const titlesMap = this.getBookTitlesMap();
-    const disabledSet = new Set(
-      (this.config.disabledSources.global || []).map(s => String(s).toUpperCase())
-    );
+    const globalDisabled = this.config.disabledSources.global || [];
+    const globalDisabledSet = new Set(globalDisabled.map(s => String(s).toUpperCase()));
 
-    if (campaignId && this.config.disabledSources.campaigns?.[campaignId]) {
-      for (const s of this.config.disabledSources.campaigns[campaignId]) {
-        disabledSet.add(String(s).toUpperCase());
-      }
-    }
+    const campaignIdClean = campaignId ? String(campaignId).trim() : null;
+    const campaignOverrides = (campaignIdClean && this.config.campaignOverrides?.[campaignIdClean]) || {};
+    const campaignDisabledList = (campaignIdClean && this.config.disabledSources.campaigns?.[campaignIdClean]) || [];
+    const campaignDisabledSet = new Set(campaignDisabledList.map(s => String(s).toUpperCase()));
 
     // Cache built-in sources on first scan for instant subsequent renders
     if (!this.cachedBuiltinCategories) {
@@ -337,6 +364,8 @@ export class SourceManager {
 
     const countedPartnered = new Set();
     const countedUA = new Set();
+    let campaignOverrideCount = 0;
+    const seenCampaignOverrides = new Set();
 
     for (const cat of SOURCE_CATEGORIES) {
       const sourcesMap = new Map();
@@ -350,10 +379,26 @@ export class SourceManager {
       // 2. Scan Custom Sources in campaignDataDir
       this.scanCustomCategory(cat.id, sourcesMap);
 
-      // Convert map to array and assign enabled flag
+      // Convert map to array and assign enabled flag & scope inheritance
       const list = Array.from(sourcesMap.values()).map(src => {
         const upperCode = src.code.toUpperCase();
-        const enabled = !disabledSet.has(upperCode);
+        const globalEnabled = !globalDisabledSet.has(upperCode);
+        let enabled = globalEnabled;
+        let isOverridden = false;
+
+        if (campaignIdClean) {
+          if (campaignOverrides[upperCode] !== undefined) {
+            enabled = Boolean(campaignOverrides[upperCode]);
+            isOverridden = (enabled !== globalEnabled);
+          } else if (campaignDisabledSet.has(upperCode)) {
+            enabled = false;
+            isOverridden = (globalEnabled !== false);
+          }
+          if (isOverridden && !seenCampaignOverrides.has(upperCode)) {
+            seenCampaignOverrides.add(upperCode);
+            campaignOverrideCount++;
+          }
+        }
 
         if (src.isPartnered && !countedPartnered.has(upperCode)) {
           countedPartnered.add(upperCode);
@@ -368,7 +413,10 @@ export class SourceManager {
 
         return {
           ...src,
-          enabled
+          enabled,
+          globalEnabled,
+          isOverridden,
+          scopeState: isOverridden ? 'overridden' : 'inherited'
         };
       });
 
@@ -393,8 +441,11 @@ export class SourceManager {
     return {
       success: true,
       categories: categoriesResult,
-      globalDisabled: this.config.disabledSources.global || [],
-      campaignDisabled: campaignId ? (this.config.disabledSources.campaigns?.[campaignId] || []) : [],
+      globalDisabled,
+      campaignDisabled: campaignDisabledList,
+      campaignOverrideCount,
+      isCampaignScoped: Boolean(campaignIdClean),
+      activeCampaignId: campaignIdClean,
       partneredStats: { total: totalPartnered, enabled: enabledPartnered },
       uaStats: { total: totalUA, enabled: enabledUA },
       uiState: this.config.uiState || {
@@ -408,49 +459,36 @@ export class SourceManager {
 
   scanBuiltinCategory(categoryId, sourcesMap, titlesMap) {
     try {
-      let normalizedDirName = '';
-      let filePrefix = '';
-
-      switch (categoryId) {
-        case 'bestiary':
-          normalizedDirName = 'bestiary-normalized';
-          filePrefix = 'bestiary-';
-          break;
-        case 'spells':
-          normalizedDirName = 'spells-normalized';
-          filePrefix = 'spells-';
-          break;
-        case 'items':
-          normalizedDirName = 'items-normalized';
-          filePrefix = 'items-';
-          break;
-        case 'classes':
-          normalizedDirName = 'classes-normalized';
-          filePrefix = 'classes-';
-          break;
-        case 'races':
-          normalizedDirName = 'races-normalized';
-          filePrefix = 'races-';
-          break;
-        case 'feats':
-          normalizedDirName = 'feats-normalized';
-          filePrefix = 'feats-';
-          break;
-        case 'backgrounds':
-          normalizedDirName = 'backgrounds-normalized';
-          filePrefix = 'backgrounds-';
-          break;
-        case 'adventures':
-          this.scanAdventuresAndBooks(sourcesMap, titlesMap);
-          return;
+      if (categoryId === 'adventures') {
+        this.scanAdventuresAndBooks(sourcesMap, titlesMap);
+        return;
       }
 
-      const dirPath = path.join(this.dataDir, normalizedDirName);
-      if (fs.existsSync(dirPath)) {
+      const scanConfigs = [];
+      if (categoryId === 'feats') {
+        scanConfigs.push({ dir: 'feats-normalized', prefix: 'feats-' });
+        scanConfigs.push({ dir: 'optionalfeatures-normalized', prefix: 'optionalfeatures-' });
+      } else {
+        const dirMap = {
+          bestiary: 'bestiary-normalized',
+          spells: 'spells-normalized',
+          items: 'items-normalized',
+          classes: 'classes-normalized',
+          races: 'races-normalized',
+          backgrounds: 'backgrounds-normalized'
+        };
+        const folderName = dirMap[categoryId] || `${categoryId}-normalized`;
+        scanConfigs.push({ dir: folderName, prefix: `${categoryId}-` });
+      }
+
+      for (const cfg of scanConfigs) {
+        const dirPath = path.join(this.dataDir, cfg.dir);
+        if (!fs.existsSync(dirPath)) continue;
+
         const files = fs.readdirSync(dirPath);
         for (const file of files) {
-          if (!file.endsWith('.json') || !file.startsWith(filePrefix)) continue;
-          const srcCode = file.slice(filePrefix.length, -5).toUpperCase();
+          if (!file.endsWith('.json') || !file.startsWith(cfg.prefix)) continue;
+          const srcCode = file.slice(cfg.prefix.length, -5).toUpperCase();
           const filePath = path.join(dirPath, file);
           let entryCount = 0;
           let fileSize = 0;
@@ -474,23 +512,30 @@ export class SourceManager {
           const is2024 = this.is2024Source(srcCode, { category: categoryId });
           const edition = is2024 ? '2024' : '2014';
 
-          sourcesMap.set(srcCode, {
-            id: `${categoryId}-${srcCode.toLowerCase()}`,
-            code: srcCode,
-            name,
-            category: categoryId,
-            edition,
-            isPartnered,
-            isUA,
-            isCustom: false,
-            entryCount,
-            fileSize,
-            filePath,
-            fileName: file,
-            author: isPartnered ? 'Partnered Publisher' : (isUA ? 'WotC Unearthed Arcana' : 'Official / Published'),
-            version: is2024 ? '2024' : '2014',
-            description: `Core database partition containing ${entryCount} ${categoryId} records (${edition} Ruleset).`
-          });
+          if (sourcesMap.has(srcCode)) {
+            const existing = sourcesMap.get(srcCode);
+            existing.entryCount += entryCount;
+            existing.fileSize += fileSize;
+            existing.description = `Core database partition containing ${existing.entryCount} ${categoryId} records (${edition} Ruleset).`;
+          } else {
+            sourcesMap.set(srcCode, {
+              id: `${categoryId}-${srcCode.toLowerCase()}`,
+              code: srcCode,
+              name,
+              category: categoryId,
+              edition,
+              isPartnered,
+              isUA,
+              isCustom: false,
+              entryCount,
+              fileSize,
+              filePath,
+              fileName: file,
+              author: isPartnered ? 'Partnered Publisher' : (isUA ? 'WotC Unearthed Arcana' : 'Official / Published'),
+              version: is2024 ? '2024' : '2014',
+              description: `Core database partition containing ${entryCount} ${categoryId} records (${edition} Ruleset).`
+            });
+          }
         }
       }
     } catch (err) {
@@ -654,6 +699,10 @@ export class SourceManager {
   toggleSource(sourceCode, enabled, campaignId = null) {
     const code = String(sourceCode).trim().toUpperCase();
     if (campaignId) {
+      if (!this.config.campaignOverrides) this.config.campaignOverrides = {};
+      if (!this.config.campaignOverrides[campaignId]) this.config.campaignOverrides[campaignId] = {};
+      this.config.campaignOverrides[campaignId][code] = Boolean(enabled);
+
       if (!this.config.disabledSources.campaigns) {
         this.config.disabledSources.campaigns = {};
       }
@@ -685,12 +734,31 @@ export class SourceManager {
   }
 
   /**
+   * Reset campaign source overrides to match global defaults
+   */
+  resetCampaignSources(campaignId) {
+    if (!campaignId) return { success: false, error: 'No campaign ID provided' };
+    if (this.config.campaignOverrides?.[campaignId]) {
+      delete this.config.campaignOverrides[campaignId];
+    }
+    if (this.config.disabledSources.campaigns?.[campaignId]) {
+      delete this.config.disabledSources.campaigns[campaignId];
+    }
+    this.saveConfig();
+    return { success: true, campaignId };
+  }
+
+  /**
    * Bulk toggle an entire list of sources
    */
   batchToggle(sourceCodes, enabled, campaignId = null) {
     const codes = (sourceCodes || []).map(c => String(c).trim().toUpperCase());
     for (const code of codes) {
       if (campaignId) {
+        if (!this.config.campaignOverrides) this.config.campaignOverrides = {};
+        if (!this.config.campaignOverrides[campaignId]) this.config.campaignOverrides[campaignId] = {};
+        this.config.campaignOverrides[campaignId][code] = Boolean(enabled);
+
         if (!this.config.disabledSources.campaigns) this.config.disabledSources.campaigns = {};
         if (!this.config.disabledSources.campaigns[campaignId]) this.config.disabledSources.campaigns[campaignId] = [];
         const list = this.config.disabledSources.campaigns[campaignId];
@@ -1154,70 +1222,189 @@ export class SourceManager {
     return { success: true, code: cleanCode, category };
   }
 
-  searchCompendium(category, query = '', limit = 30) {
-    const cleanQuery = (query || '').toLowerCase().trim();
-    if (!this.catalogCache) this.catalogCache = {};
+  getVttDataDir() {
+    if (this.dataDir && fs.existsSync(this.dataDir)) return this.dataDir;
+    const candidates = [
+      path.join(this.rootDir, 'vtt', 'data'),
+      path.join(process.cwd(), 'vtt', 'data'),
+      path.join(this.rootDir, 'resources', 'app', 'vtt', 'data')
+    ];
+    for (const cand of candidates) {
+      if (cand && fs.existsSync(cand)) return cand;
+    }
+    return this.dataDir;
+  }
 
-    let list = this.catalogCache[category];
-    if (!list) {
-      try {
-        const catalogFileMap = {
-          bestiary: 'bestiary-catalog.json',
-          spells: 'spells-catalog.json',
-          items: 'items-catalog.json',
-          classes: 'classes-catalog.json',
-          races: 'races-catalog.json',
-          feats: 'feats-catalog.json',
-          backgrounds: 'backgrounds-catalog.json',
-          adventures: 'adventures.json'
-        };
+  searchCompendium(categoryOrParams, query = '', limit = 50) {
+    let category = categoryOrParams;
+    let rawQuery = query;
+    let maxLimit = limit;
 
-        const targetFile = catalogFileMap[category] || 'bestiary-catalog.json';
-        const fullPath = path.join(this.dataDir, targetFile);
-        if (fs.existsSync(fullPath)) {
-          const parsed = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
-          list = Array.isArray(parsed) ? parsed : (parsed.items || parsed[category] || Object.values(parsed).find(v => Array.isArray(v)) || []);
-          this.catalogCache[category] = list;
-        } else {
-          list = [];
-        }
-      } catch (err) {
-        console.error(`[SourceManager] Error loading catalog for search (${category}):`, err);
-        list = [];
-      }
+    if (typeof categoryOrParams === 'object' && categoryOrParams !== null) {
+      category = categoryOrParams.category;
+      rawQuery = categoryOrParams.query || '';
+      maxLimit = categoryOrParams.limit || 50;
     }
 
-    const matches = [];
-    for (const item of (list || [])) {
-      const name = item.name || item.id || '';
-      const source = item.source || '';
-      if (!cleanQuery || name.toLowerCase().includes(cleanQuery) || source.toLowerCase().includes(cleanQuery)) {
-        let summary = '';
-        if (category === 'bestiary') summary = `CR ${item.cr ?? '—'} • ${item.size || ''} ${item.type || ''}`.trim();
-        else if (category === 'spells') summary = `${item.level === 0 ? 'Cantrip' : 'Level ' + item.level} • ${item.school || ''}`.trim();
-        else if (category === 'items') summary = `${item.rarity || 'Mundane'} • ${item.type || 'Item'}`.trim();
-        else if (category === 'classes') summary = `Hit Die ${item.hitDie || 'd8'}`;
-        else if (category === 'races') summary = `Speed ${item.speed?.walk || item.speed || 30} ft`;
-        else summary = source;
+    const cleanQuery = (rawQuery || '').toLowerCase().trim();
+    if (!this.catalogCache) this.catalogCache = {};
 
-        matches.push({
-          id: item.id || `${name}_${source}`,
-          name,
-          source,
-          category,
-          summary,
-          item
-        });
-        if (matches.length >= limit) break;
+    const catalogFileMap = {
+      bestiary: 'bestiary-catalog.json',
+      spells: 'spells-catalog.json',
+      items: 'items-catalog.json',
+      classes: 'classes-catalog.json',
+      races: 'races-catalog.json',
+      feats: 'feats-catalog.json',
+      backgrounds: 'backgrounds-catalog.json',
+      adventures: 'adventures.json'
+    };
+
+    const targetCategories = (!category || category === 'all')
+      ? Object.keys(catalogFileMap)
+      : [category];
+
+    const vttDataDir = this.getVttDataDir();
+    const matches = [];
+
+    for (const cat of targetCategories) {
+      let list = this.catalogCache[cat];
+      if (!list) {
+        try {
+          const targetFile = catalogFileMap[cat] || 'bestiary-catalog.json';
+          const fullPath = path.join(vttDataDir, targetFile);
+          if (fs.existsSync(fullPath)) {
+            const parsed = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
+            list = Array.isArray(parsed) ? parsed : (parsed.items || parsed[cat] || Object.values(parsed).find(v => Array.isArray(v)) || []);
+            this.catalogCache[cat] = list;
+          } else {
+            list = [];
+          }
+        } catch (err) {
+          console.error(`[SourceManager] Error loading catalog for search (${cat}):`, err);
+          list = [];
+        }
       }
+
+      // If category is feats, merge in optionalfeatures-catalog.json so invocations, metamagic, maneuvers, fighting styles appear!
+      if (cat === 'feats') {
+        if (!this.catalogCache['optionalfeatures']) {
+          try {
+            const optPath = path.join(vttDataDir, 'optionalfeatures-catalog.json');
+            if (fs.existsSync(optPath)) {
+              const parsedOpt = JSON.parse(fs.readFileSync(optPath, 'utf8'));
+              this.catalogCache['optionalfeatures'] = Array.isArray(parsedOpt) ? parsedOpt : (parsedOpt.items || []);
+            } else {
+              this.catalogCache['optionalfeatures'] = [];
+            }
+          } catch (_) {
+            this.catalogCache['optionalfeatures'] = [];
+          }
+        }
+        if (this.catalogCache['optionalfeatures']?.length > 0) {
+          list = [...(list || []), ...this.catalogCache['optionalfeatures'].map(o => ({ ...o, isOptionalFeature: true }))];
+        }
+      }
+
+      // Also incorporate custom sources for this category
+      const customEntries = [];
+      try {
+        const customCatDir = path.join(this.campaignDataDir, 'sources', cat);
+        if (fs.existsSync(customCatDir)) {
+          const files = fs.readdirSync(customCatDir).filter(f => f.endsWith('.json'));
+          for (const file of files) {
+            try {
+              const content = JSON.parse(fs.readFileSync(path.join(customCatDir, file), 'utf8'));
+              const items = Array.isArray(content)
+                ? content
+                : (content[cat] || content.monster || content.monsters || content.spell || content.spells || content.item || content.items || Object.values(content).find(v => Array.isArray(v)) || []);
+              if (Array.isArray(items)) {
+                for (const it of items) {
+                  customEntries.push({ ...it, isCustom: true, source: it.source || file.replace('.json', '').toUpperCase() });
+                }
+              }
+            } catch (_) {}
+          }
+        }
+      } catch (_) {}
+
+      const combinedList = [...(list || []), ...customEntries];
+
+      for (const item of combinedList) {
+        const name = item.name || item.id || '';
+        const source = item.source || '';
+        if (!cleanQuery || name.toLowerCase().includes(cleanQuery) || source.toLowerCase().includes(cleanQuery)) {
+          let summary = '';
+          if (cat === 'bestiary') summary = `CR ${item.cr ?? '—'} • ${item.size || ''} ${item.type || ''}`.trim();
+          else if (cat === 'spells') summary = `${item.level === 0 ? 'Cantrip' : 'Level ' + item.level} • ${item.school || ''}`.trim();
+          else if (cat === 'items') summary = `${item.rarity || 'Mundane'} • ${item.type || 'Item'}`.trim();
+          else if (cat === 'classes') summary = item.isSubclass ? `${item.className || 'Class'} Subclass` : `Hit Die ${item.hitDie || 'd8'}`;
+          else if (cat === 'races') summary = `Speed ${item.speed?.walk || item.speed || 30} ft`;
+          else if (cat === 'feats') summary = item.isOptionalFeature ? `${item.featureTypeName || 'Optional Feature'} • ${item.prerequisite || 'General'}` : `Feat • ${item.prerequisite || 'General'}`;
+          else if (cat === 'backgrounds') summary = 'Background';
+          else summary = source;
+
+          matches.push({
+            id: item.id || `${name}_${source}`,
+            name,
+            source,
+            category: cat,
+            summary,
+            cr: item.cr,
+            level: item.level,
+            rarity: item.rarity,
+            isCustom: !!item.isCustom,
+            isSubclass: !!item.isSubclass,
+            className: item.className,
+            classSource: item.classSource,
+            item
+          });
+          if (matches.length >= maxLimit) break;
+        }
+
+        // If this is a class with subclasses, also surface each subclass in search results!
+        if (cat === 'classes' && Array.isArray(item.subclasses)) {
+          for (const sc of item.subclasses) {
+            const scName = sc.name || sc.shortName || '';
+            const scSource = sc.source || item.source || '';
+            if (!cleanQuery || scName.toLowerCase().includes(cleanQuery) || scSource.toLowerCase().includes(cleanQuery) || (name && name.toLowerCase().includes(cleanQuery))) {
+              matches.push({
+                id: sc.id || `subclass_${scName}_${scSource}`,
+                name: scName,
+                source: scSource,
+                category: 'classes',
+                summary: `${item.name} Subclass`,
+                isSubclass: true,
+                className: item.name,
+                classSource: item.source,
+                isCustom: !!item.isCustom,
+                item: { ...sc, className: item.name, classSource: item.source, isSubclass: true }
+              });
+              if (matches.length >= maxLimit) break;
+            }
+          }
+        }
+      }
+      if (matches.length >= maxLimit) break;
     }
 
     return { success: true, results: matches };
   }
 
-  getEntityFullData(category, name, source) {
-    const cleanName = (name || '').toLowerCase().trim();
-    const cleanSource = (source || '').toLowerCase().trim();
+  getEntityFullData(categoryOrParams, name = '', source = '') {
+    let category = categoryOrParams;
+    let rawName = name;
+    let rawSource = source;
+
+    if (typeof categoryOrParams === 'object' && categoryOrParams !== null) {
+      category = categoryOrParams.category;
+      rawName = categoryOrParams.name || '';
+      rawSource = categoryOrParams.source || '';
+    }
+
+    const cleanName = (rawName || '').toLowerCase().trim();
+    const cleanSource = (rawSource || '').toLowerCase().trim();
+    const vttDataDir = this.getVttDataDir();
 
     try {
       const normalizedDirMap = {
@@ -1232,21 +1419,123 @@ export class SourceManager {
 
       const folderName = normalizedDirMap[category];
       if (folderName) {
-        const partitionPath = path.join(this.dataDir, folderName, `${category}-${cleanSource}.json`);
-        if (fs.existsSync(partitionPath)) {
-          const content = JSON.parse(fs.readFileSync(partitionPath, 'utf8'));
-          const arr = Array.isArray(content) ? content : (content[category] || content.monster || content.spell || content.item || Object.values(content).find(v => Array.isArray(v)) || []);
-          const match = arr.find(e => (e.name || '').toLowerCase().trim() === cleanName);
-          if (match) return { success: true, data: match, entity: match };
+        // 1. Try exact partition file
+        if (cleanSource) {
+          const partitionPath = path.join(vttDataDir, folderName, `${category}-${cleanSource}.json`);
+          if (fs.existsSync(partitionPath)) {
+            const content = JSON.parse(fs.readFileSync(partitionPath, 'utf8'));
+            const arr = Array.isArray(content) ? content : (content[category] || content.monster || content.monsters || content.spell || content.spells || content.item || content.items || Object.values(content).find(v => Array.isArray(v)) || []);
+            const match = arr.find(e => (e.name || '').toLowerCase().trim() === cleanName);
+            if (match) return { success: true, data: match, entity: match };
+
+            // If category is classes, check if it's a subclass inside this partition
+            if (category === 'classes') {
+              for (const cls of arr) {
+                if (Array.isArray(cls.subclasses)) {
+                  const subMatch = cls.subclasses.find(sc =>
+                    (sc.name || '').toLowerCase().trim() === cleanName ||
+                    (sc.shortName || '').toLowerCase().trim() === cleanName ||
+                    (sc.id || '').toLowerCase().trim() === cleanName
+                  );
+                  if (subMatch) {
+                    const wrapped = { ...subMatch, className: cls.name, classSource: cls.source, isSubclass: true };
+                    return { success: true, data: wrapped, entity: wrapped };
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        // 2. Fallback: Search all partitions in folderName
+        const catDir = path.join(vttDataDir, folderName);
+        if (fs.existsSync(catDir)) {
+          const files = fs.readdirSync(catDir).filter(f => f.endsWith('.json'));
+          for (const f of files) {
+            try {
+              const content = JSON.parse(fs.readFileSync(path.join(catDir, f), 'utf8'));
+              const arr = Array.isArray(content) ? content : (content[category] || content.monster || content.monsters || content.spell || content.spells || content.item || content.items || Object.values(content).find(v => Array.isArray(v)) || []);
+              const match = arr.find(e => (e.name || '').toLowerCase().trim() === cleanName && (!cleanSource || (e.source || '').toLowerCase().trim() === cleanSource));
+              if (match) return { success: true, data: match, entity: match };
+
+              // If classes, check subclasses in all partitions
+              if (category === 'classes') {
+                for (const cls of arr) {
+                  if (Array.isArray(cls.subclasses)) {
+                    const subMatch = cls.subclasses.find(sc =>
+                      ((sc.name || '').toLowerCase().trim() === cleanName ||
+                       (sc.shortName || '').toLowerCase().trim() === cleanName ||
+                       (sc.id || '').toLowerCase().trim() === cleanName) &&
+                      (!cleanSource || (sc.source || cls.source || '').toLowerCase().trim() === cleanSource)
+                    );
+                    if (subMatch) {
+                      const wrapped = { ...subMatch, className: cls.name, classSource: cls.source, isSubclass: true };
+                      return { success: true, data: wrapped, entity: wrapped };
+                    }
+                  }
+                }
+              }
+            } catch (_) {}
+          }
         }
       }
 
+      // 3. For Feats: check optionalfeatures-normalized/
+      if (category === 'feats') {
+        const optDir = path.join(vttDataDir, 'optionalfeatures-normalized');
+        if (fs.existsSync(optDir)) {
+          if (cleanSource) {
+            const optPart = path.join(optDir, `optionalfeatures-${cleanSource}.json`);
+            if (fs.existsSync(optPart)) {
+              try {
+                const content = JSON.parse(fs.readFileSync(optPart, 'utf8'));
+                const arr = Array.isArray(content) ? content : Object.values(content).find(v => Array.isArray(v)) || [];
+                const match = arr.find(e => (e.name || '').toLowerCase().trim() === cleanName);
+                if (match) return { success: true, data: { ...match, isOptionalFeature: true }, entity: { ...match, isOptionalFeature: true } };
+              } catch (_) {}
+            }
+          }
+
+          const optFiles = fs.readdirSync(optDir).filter(f => f.endsWith('.json'));
+          for (const ofile of optFiles) {
+            try {
+              const content = JSON.parse(fs.readFileSync(path.join(optDir, ofile), 'utf8'));
+              const arr = Array.isArray(content) ? content : Object.values(content).find(v => Array.isArray(v)) || [];
+              const match = arr.find(e => (e.name || '').toLowerCase().trim() === cleanName && (!cleanSource || (e.source || '').toLowerCase().trim() === cleanSource));
+              if (match) return { success: true, data: { ...match, isOptionalFeature: true }, entity: { ...match, isOptionalFeature: true } };
+            } catch (_) {}
+          }
+        }
+      }
+
+      // 4. Check custom sources
+      const customCatDir = path.join(this.campaignDataDir, 'sources', category);
+      if (fs.existsSync(customCatDir)) {
+        const customFiles = fs.readdirSync(customCatDir).filter(f => f.endsWith('.json'));
+        for (const cf of customFiles) {
+          try {
+            const content = JSON.parse(fs.readFileSync(path.join(customCatDir, cf), 'utf8'));
+            const arr = Array.isArray(content) ? content : (content[category] || content.monster || content.monsters || content.spell || content.spells || content.item || content.items || Object.values(content).find(v => Array.isArray(v)) || []);
+            const match = arr.find(e => (e.name || '').toLowerCase().trim() === cleanName);
+            if (match) return { success: true, data: match, entity: match };
+          } catch (_) {}
+        }
+      }
+
+      // 5. Fallback to catalog caches
       if (this.catalogCache && this.catalogCache[category]) {
         const match = this.catalogCache[category].find(e =>
           (e.name || '').toLowerCase().trim() === cleanName &&
           (!cleanSource || (e.source || '').toLowerCase().trim() === cleanSource)
         );
         if (match) return { success: true, data: match, entity: match };
+      }
+      if (category === 'feats' && this.catalogCache && this.catalogCache['optionalfeatures']) {
+        const match = this.catalogCache['optionalfeatures'].find(e =>
+          (e.name || '').toLowerCase().trim() === cleanName &&
+          (!cleanSource || (e.source || '').toLowerCase().trim() === cleanSource)
+        );
+        if (match) return { success: true, data: { ...match, isOptionalFeature: true }, entity: { ...match, isOptionalFeature: true } };
       }
     } catch (e) {
       console.error(`[SourceManager] Error retrieving full entity data:`, e);
@@ -1370,7 +1659,7 @@ export class SourceManager {
         if (!Array.isArray(arr)) return [];
         return arr.map(item => ({
           name: item.name || 'Action',
-          text: item.text || item.descriptionHtml?.replace(/<[^>]*>/g, '') || (Array.isArray(item.entries) ? item.entries.join('\n') : '')
+          text: flatten5eEntries(item.entries || item.text || item.descriptionHtml || item)
         }));
       };
 
@@ -1395,10 +1684,10 @@ export class SourceManager {
         cha: entity.cha || (entity.abilities?.cha?.score) || 10,
         senses: Array.isArray(entity.senses) ? entity.senses.join(', ') : (entity.senses?.sensesString || entity.senses || ''),
         languages: Array.isArray(entity.languages) ? entity.languages.join(', ') : (entity.languages || ''),
-        traits: formatCardItems(entity.traits),
-        actions: formatCardItems(entity.actions),
-        reactions: formatCardItems(entity.reactions),
-        legendaryActions: formatCardItems(entity.legendaryActions?.entries || entity.legendaryActions)
+        traits: formatCardItems(entity.traits || entity.trait),
+        actions: formatCardItems(entity.actions || entity.action),
+        reactions: formatCardItems(entity.reactions || entity.reaction),
+        legendaryActions: formatCardItems(entity.legendaryActions?.entries || entity.legendaryActions || entity.legendary)
       };
     }
 
@@ -1624,5 +1913,67 @@ export class SourceManager {
       skippedCount: skipped,
       results
     };
+  }
+
+  /**
+   * Directly import homebrew from a 5eTools or GitHub JSON URL
+   */
+  async importFromUrl(url) {
+    if (!url || typeof url !== 'string') {
+      return { success: false, error: 'Invalid URL provided.' };
+    }
+    const cleanUrl = url.trim();
+    if (!cleanUrl.startsWith('http://') && !cleanUrl.startsWith('https://')) {
+      return { success: false, error: 'URL must begin with http:// or https://' };
+    }
+
+    const scratchDir = path.join(this.campaignDataDir, 'scratch', 'url-imports');
+    if (!fs.existsSync(scratchDir)) {
+      fs.mkdirSync(scratchDir, { recursive: true });
+    }
+
+    try {
+      const res = await fetch(cleanUrl);
+      if (!res.ok) {
+        return { success: false, error: `Failed to download file from URL (HTTP ${res.status}: ${res.statusText})` };
+      }
+      const text = await res.text();
+      let json = null;
+      try {
+        json = JSON.parse(text);
+      } catch (e) {
+        return { success: false, error: 'The URL did not return valid JSON content.' };
+      }
+
+      let parsedPathName = 'imported_compendium.json';
+      try {
+        const u = new URL(cleanUrl);
+        parsedPathName = path.basename(u.pathname) || 'imported_compendium.json';
+      } catch (_) {}
+
+      if (!parsedPathName.endsWith('.json')) parsedPathName += '.json';
+      const tempFilePath = path.join(scratchDir, `${Date.now()}_${parsedPathName}`);
+      fs.writeFileSync(tempFilePath, JSON.stringify(json, null, 2), 'utf8');
+
+      const inspected = this.inspectImportFiles([tempFilePath]);
+      if (!inspected.success || !inspected.candidates || inspected.candidates.length === 0) {
+        try { fs.unlinkSync(tempFilePath); } catch (_) {}
+        return { success: false, error: 'No recognizable 5eTools sourcebook entities found in downloaded JSON.' };
+      }
+
+      const importRes = this.bulkImportSources(inspected.candidates, { [tempFilePath]: 'overwrite' });
+      try { fs.unlinkSync(tempFilePath); } catch (_) {}
+
+      return {
+        success: true,
+        url: cleanUrl,
+        fileName: parsedPathName,
+        importedCount: importRes.importedCount,
+        candidates: inspected.candidates,
+        results: importRes.results
+      };
+    } catch (err) {
+      return { success: false, error: `Error importing from URL: ${err.message}` };
+    }
   }
 }

@@ -1,0 +1,2250 @@
+[
+  {
+    "id": "creature_homarid_psd",
+    "name": "Homarid",
+    "source": "PSD",
+    "edition": "2014",
+    "page": 15,
+    "isSrd": false,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Monstrosity",
+    "subtype": "",
+    "alignment": "C E",
+    "ac": [
+      {
+        "value": 14,
+        "condition": null
+      }
+    ],
+    "primaryAc": 14,
+    "acCondition": "",
+    "hp": {
+      "average": 44,
+      "formula": "8d8 + 8"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 30,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 13,
+        "mod": 1
+      },
+      "dex": {
+        "score": 8,
+        "mod": -1
+      },
+      "con": {
+        "score": 13,
+        "mod": 1
+      },
+      "int": {
+        "score": 9,
+        "mod": -1
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 10,
+        "mod": 0
+      }
+    },
+    "str": 13,
+    "dex": 8,
+    "con": 13,
+    "int": 9,
+    "wis": 14,
+    "cha": 10,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+4",
+      "stealth": "+3"
+    },
+    "skills": {
+      "perception": "+4",
+      "stealth": "+3"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "Homarid"
+    ],
+    "cr": "1",
+    "crNumeric": 1,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_amphibious_xm7t",
+        "name": "Amphibious",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The homarid can breathe air and water.</p>",
+        "entries": [
+          "The homarid can breathe air and water."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_7muv",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The homarid makes two claw attacks.</p>",
+        "entries": [
+          "The homarid makes two claw attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_q7re",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage, and the target is grappled (escape DC 11). The homarid has two claws, each of which can grapple only one target.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}5 ({@damage 1d8 + 1}) slashing damage, and the target is {@condition grappled} (escape {@dc 11}). The homarid has two claws, each of which can grapple only one target."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": {
+            "dc": 11,
+            "ability": null
+          },
+          "damages": [
+            {
+              "formula": "1d8 + 1",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/PSD/Homarid.webp",
+    "tokenImg": "img/bestiary/tokens/PSD/Homarid.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_kavu_predator_psd",
+    "name": "Kavu Predator",
+    "source": "PSD",
+    "edition": "2014",
+    "page": 24,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 15,
+        "condition": null
+      }
+    ],
+    "primaryAc": 15,
+    "acCondition": "",
+    "hp": {
+      "average": 75,
+      "formula": "10d10 + 20"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 0,
+      "swim": 0,
+      "climb": 30,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 15,
+        "mod": 2
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 18,
+    "dex": 12,
+    "con": 15,
+    "int": 6,
+    "wis": 14,
+    "cha": 8,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+4",
+      "stealth": "+5"
+    },
+    "skills": {
+      "perception": "+4",
+      "stealth": "+5"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands Elvish"
+    ],
+    "cr": "2",
+    "crNumeric": 2,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_pounce_mbpp",
+        "name": "Pounce",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the kavu moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the kavu can make one bite attack against it as a bonus action.</p>",
+        "entries": [
+          "If the kavu moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a {@dc 14} Strength saving throw or be knocked {@condition prone}. If the target is {@condition prone}, the kavu can make one bite attack against it as a bonus action."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 14,
+            "ability": "STR"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_krvu",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The kavu makes two claw attacks.</p>",
+        "entries": [
+          "The kavu makes two claw attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_bite_dfgg",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}9 ({@damage 1d10 + 4}) piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d10 + 4",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_claw_uznv",
+        "name": "Claw",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 6} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 6,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 4",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/PSD/Kavu Predator.webp",
+    "tokenImg": "img/bestiary/tokens/PSD/Kavu Predator.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_lyra_psd",
+    "name": "Lyra",
+    "source": "PSD",
+    "edition": "2014",
+    "page": 9,
+    "isSrd": true,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Celestial",
+    "subtype": "",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 19,
+        "condition": null
+      }
+    ],
+    "primaryAc": 19,
+    "acCondition": "",
+    "hp": {
+      "average": 200,
+      "formula": "16d10 + 112"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 120,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 24,
+        "mod": 7
+      },
+      "dex": {
+        "score": 20,
+        "mod": 5
+      },
+      "con": {
+        "score": 24,
+        "mod": 7
+      },
+      "int": {
+        "score": 19,
+        "mod": 4
+      },
+      "wis": {
+        "score": 22,
+        "mod": 6
+      },
+      "cha": {
+        "score": 25,
+        "mod": 7
+      }
+    },
+    "str": 24,
+    "dex": 20,
+    "con": 24,
+    "int": 19,
+    "wis": 22,
+    "cha": 25,
+    "proficiencyBonus": 5,
+    "save": {
+      "con": "+12",
+      "wis": "+11",
+      "cha": "+12"
+    },
+    "saves": {
+      "con": "+12",
+      "wis": "+11",
+      "cha": "+12"
+    },
+    "skill": {
+      "perception": "+11"
+    },
+    "skills": {
+      "perception": "+11"
+    },
+    "immune": [],
+    "resist": [
+      "radiant",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened"
+    ],
+    "passive": 21,
+    "senses": {
+      "passivePerception": 21,
+      "sensesString": "truesight 120 ft."
+    },
+    "languages": [
+      "all",
+      "telepathy 120 ft."
+    ],
+    "cr": "16",
+    "crNumeric": 16,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_lyra_0",
+        "name": "Innate Spellcasting",
+        "type": "innate",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 7,
+        "casterLevel": 0,
+        "dc": 20,
+        "atkMod": 12,
+        "header": "Lyra's spellcasting ability is Charisma (spell save DC 20). The planetar can innately cast the following spells, requiring no material components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_evil_and_good_phb",
+            "name": "Detect Evil and Good",
+            "source": "PHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_invisibility_phb",
+            "name": "Invisibility",
+            "source": "PHB",
+            "level": 2,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 hour",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (an eyelash encased in gum arabic)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_blade_barrier_phb",
+              "name": "Blade Barrier",
+              "source": "PHB",
+              "level": 6,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 20,
+              "damageList": [
+                {
+                  "formula": "6d10",
+                  "type": "Slashing",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_dispel_evil_and_good_phb",
+              "name": "Dispel Evil and Good",
+              "source": "PHB",
+              "level": 5,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "charisma",
+              "attackStat": "spell",
+              "atkMod": 12,
+              "dc": 20,
+              "damageList": [],
+              "components": "V, S, M (holy water or powdered silver and iron)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_flame_strike_phb",
+              "name": "Flame Strike",
+              "source": "PHB",
+              "level": 5,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "60 feet",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 20,
+              "damageList": [
+                {
+                  "formula": "4d6",
+                  "type": "Fire",
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
+                },
+                {
+                  "formula": "4d6",
+                  "type": "Radiant",
+                  "stat": "none",
+                  "upcastBonus": "1d6",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (pinch of sulfur)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_raise_dead_phb",
+              "name": "Raise Dead",
+              "source": "PHB",
+              "level": 5,
+              "school": "Necromancy",
+              "castingTime": "1 hour",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a diamond worth at least 500 gp, which the spell consumes)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_commune_phb",
+              "name": "Commune",
+              "source": "PHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "1 minute",
+              "range": "self",
+              "duration": "1 minute",
+              "concentration": false,
+              "ritual": true,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (incense and a vial of holy or unholy water)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_control_weather_phb",
+              "name": "Control Weather",
+              "source": "PHB",
+              "level": 8,
+              "school": "Transmutation",
+              "castingTime": "10 minutes",
+              "range": "Self (5 miles radius)",
+              "duration": "Concentration, up to 8 hours",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (burning incense and bits of earth and wood mixed in water)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_insect_plague_phb",
+              "name": "Insect Plague",
+              "source": "PHB",
+              "level": 5,
+              "school": "Conjuration",
+              "castingTime": "1 action",
+              "range": "300 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "constitution",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 20,
+              "damageList": [
+                {
+                  "formula": "4d10",
+                  "type": "Piercing",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "1d10",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S, M (a few grains of sugar, some kernels of grain, and a smear of fat)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Evil and Good",
+          "Invisibility"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_angelic_weapons_vawq",
+        "name": "Angelic Weapons",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Lyra's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "Lyra's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra {@damage 5d8} radiant damage (included in the attack)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "5d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_divine_awareness_x0e5",
+        "name": "Divine Awareness",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Lyra knows if it hears a lie.</p>",
+        "entries": [
+          "Lyra knows if it hears a lie."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_oswd",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Lyra has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "Lyra has advantage on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_654p",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Lyra makes two melee attacks.</p>",
+        "entries": [
+          "Lyra makes two melee attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_greatsword_csb2",
+        "name": "Greatsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 12} to hit, reach 5 ft., one target. {@h}21 ({@damage 4d6 + 7}) slashing damage plus 22 ({@damage 5d8}) radiant damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 12,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d6 + 7",
+              "type": "Slashing"
+            },
+            {
+              "formula": "5d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_healing_touch__4_day__bfyp",
+        "name": "Healing Touch (4/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Lyra touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "Lyra touches another creature. The target magically regains 30 ({@dice 6d8 + 3}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/PSD/Lyra.webp",
+    "tokenImg": "img/bestiary/tokens/PSD/Lyra.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_serra_angel_psd",
+    "name": "Serra Angel",
+    "source": "PSD",
+    "edition": "2014",
+    "page": 9,
+    "isSrd": true,
+    "size": "Medium",
+    "sizeCategory": "M",
+    "type": "Celestial",
+    "subtype": "",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 17,
+        "condition": null
+      }
+    ],
+    "primaryAc": 17,
+    "acCondition": "",
+    "hp": {
+      "average": 136,
+      "formula": "16d8 + 64"
+    },
+    "speed": {
+      "walk": 30,
+      "fly": 90,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 18,
+        "mod": 4
+      },
+      "dex": {
+        "score": 18,
+        "mod": 4
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 17,
+        "mod": 3
+      },
+      "wis": {
+        "score": 20,
+        "mod": 5
+      },
+      "cha": {
+        "score": 20,
+        "mod": 5
+      }
+    },
+    "str": 18,
+    "dex": 18,
+    "con": 18,
+    "int": 17,
+    "wis": 20,
+    "cha": 20,
+    "proficiencyBonus": 4,
+    "save": {
+      "wis": "+9",
+      "cha": "+9"
+    },
+    "saves": {
+      "wis": "+9",
+      "cha": "+9"
+    },
+    "skill": {
+      "insight": "+9",
+      "perception": "+9"
+    },
+    "skills": {
+      "insight": "+9",
+      "perception": "+9"
+    },
+    "immune": [],
+    "resist": [
+      "radiant",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened"
+    ],
+    "passive": 19,
+    "senses": {
+      "passivePerception": 19,
+      "sensesString": "darkvision 120 ft."
+    },
+    "languages": [
+      "all",
+      "telepathy 120 ft."
+    ],
+    "cr": "10",
+    "crNumeric": 10,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_serra_angel_0",
+        "name": "Innate Spellcasting",
+        "type": "innate",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 5,
+        "casterLevel": 0,
+        "dc": 17,
+        "atkMod": 9,
+        "header": "The angel's spellcasting ability is Charisma (spell save DC 17). The deva can innately cast the following spells, requiring only verbal components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_evil_and_good_phb",
+            "name": "Detect Evil and Good",
+            "source": "PHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "1e": [
+            {
+              "spellId": "sp_commune_phb",
+              "name": "Commune",
+              "source": "PHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "1 minute",
+              "range": "self",
+              "duration": "1 minute",
+              "concentration": false,
+              "ritual": true,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (incense and a vial of holy or unholy water)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_raise_dead_phb",
+              "name": "Raise Dead",
+              "source": "PHB",
+              "level": 5,
+              "school": "Necromancy",
+              "castingTime": "1 hour",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a diamond worth at least 500 gp, which the spell consumes)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Evil and Good"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_angelic_weapons_an11",
+        "name": "Angelic Weapons",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The angel's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "The angel's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra {@damage 4d8} radiant damage (included in the attack)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_2ggj",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "The angel has advantage on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_zf92",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
+        "entries": [
+          "The angel makes two melee attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_mace_8qxx",
+        "name": "Mace",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 8} to hit, reach 5 ft., one target. {@h}7 ({@damage 1d6 + 4}) bludgeoning damage plus 18 ({@damage 4d8}) radiant damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 8,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 4",
+              "type": "Bludgeoning"
+            },
+            {
+              "formula": "4d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_healing_touch__3_day__0ugv",
+        "name": "Healing Touch (3/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "The angel touches another creature. The target magically regains 20 ({@dice 4d8 + 2}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_change_shape_yd45",
+        "name": "Change Shape",
+        "actionType": "action",
+        "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
+        "entries": [
+          "The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).",
+          "In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/PSD/Serra Angel.webp",
+    "tokenImg": "img/bestiary/tokens/PSD/Serra Angel.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_shalai_psd",
+    "name": "Shalai",
+    "source": "PSD",
+    "edition": "2014",
+    "page": 9,
+    "isSrd": true,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Celestial",
+    "subtype": "",
+    "alignment": "L G",
+    "ac": [
+      {
+        "value": 21,
+        "condition": null
+      }
+    ],
+    "primaryAc": 21,
+    "acCondition": "",
+    "hp": {
+      "average": 243,
+      "formula": "18d10 + 144"
+    },
+    "speed": {
+      "walk": 50,
+      "fly": 150,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 26,
+        "mod": 8
+      },
+      "dex": {
+        "score": 22,
+        "mod": 6
+      },
+      "con": {
+        "score": 26,
+        "mod": 8
+      },
+      "int": {
+        "score": 25,
+        "mod": 7
+      },
+      "wis": {
+        "score": 25,
+        "mod": 7
+      },
+      "cha": {
+        "score": 30,
+        "mod": 10
+      }
+    },
+    "str": 26,
+    "dex": 22,
+    "con": 26,
+    "int": 25,
+    "wis": 25,
+    "cha": 30,
+    "proficiencyBonus": 7,
+    "save": {
+      "int": "+14",
+      "wis": "+14",
+      "cha": "+17"
+    },
+    "saves": {
+      "int": "+14",
+      "wis": "+14",
+      "cha": "+17"
+    },
+    "skill": {
+      "perception": "+14"
+    },
+    "skills": {
+      "perception": "+14"
+    },
+    "immune": [
+      "necrotic",
+      "poison"
+    ],
+    "resist": [
+      "radiant",
+      {
+        "resist": [
+          "bludgeoning",
+          "piercing",
+          "slashing"
+        ],
+        "note": "from nonmagical attacks",
+        "cond": true
+      }
+    ],
+    "vulnerable": [],
+    "conditionImmune": [
+      "charmed",
+      "exhaustion",
+      "frightened",
+      "poisoned"
+    ],
+    "passive": 24,
+    "senses": {
+      "passivePerception": 24,
+      "sensesString": "truesight 120 ft."
+    },
+    "languages": [
+      "all",
+      "telepathy 120 ft."
+    ],
+    "cr": "21",
+    "crNumeric": 21,
+    "hasSpellcasting": true,
+    "spellcasting": [
+      {
+        "id": "sc_shalai_0",
+        "name": "Innate Spellcasting",
+        "type": "innate",
+        "displayAs": "action",
+        "ability": "cha",
+        "abilityMod": 10,
+        "casterLevel": 0,
+        "dc": 25,
+        "atkMod": 17,
+        "header": "Shalai's spellcasting ability is Charisma (spell save DC 25). It can innately cast the following spells, requiring no material components:",
+        "footer": "",
+        "spellsByLevel": {},
+        "atWill": [
+          {
+            "spellId": "sp_detect_evil_and_good_phb",
+            "name": "Detect Evil and Good",
+            "source": "PHB",
+            "level": 1,
+            "school": "Divination",
+            "castingTime": "1 action",
+            "range": "self",
+            "duration": "Concentration, up to 10 minutes",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S",
+            "uses": "at_will",
+            "type": "at_will"
+          },
+          {
+            "spellId": "sp_invisibility_phb",
+            "name": "Invisibility",
+            "source": "PHB",
+            "level": 2,
+            "school": "Illusion",
+            "castingTime": "1 action",
+            "range": "touch",
+            "duration": "Concentration, up to 1 hour",
+            "concentration": true,
+            "ritual": false,
+            "saveAbility": "",
+            "attackStat": "none",
+            "atkMod": null,
+            "dc": null,
+            "damageList": [],
+            "components": "V, S, M (an eyelash encased in gum arabic)",
+            "uses": "at_will",
+            "type": "at_will"
+          }
+        ],
+        "daily": {
+          "3e": [
+            {
+              "spellId": "sp_blade_barrier_phb",
+              "name": "Blade Barrier",
+              "source": "PHB",
+              "level": 6,
+              "school": "Evocation",
+              "castingTime": "1 action",
+              "range": "90 feet",
+              "duration": "Concentration, up to 10 minutes",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "dexterity",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": 25,
+              "damageList": [
+                {
+                  "formula": "6d10",
+                  "type": "Slashing",
+                  "label": "",
+                  "stat": "none",
+                  "upcastBonus": "",
+                  "upcastScaleStep": 1
+                }
+              ],
+              "components": "V, S",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_dispel_evil_and_good_phb",
+              "name": "Dispel Evil and Good",
+              "source": "PHB",
+              "level": 5,
+              "school": "Abjuration",
+              "castingTime": "1 action",
+              "range": "self",
+              "duration": "Concentration, up to 1 minute",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "charisma",
+              "attackStat": "spell",
+              "atkMod": 17,
+              "dc": 25,
+              "damageList": [],
+              "components": "V, S, M (holy water or powdered silver and iron)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_resurrection_phb",
+              "name": "Resurrection",
+              "source": "PHB",
+              "level": 7,
+              "school": "Necromancy",
+              "castingTime": "1 hour",
+              "range": "touch",
+              "duration": "Instantaneous",
+              "concentration": false,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (a diamond worth at least 1,000 gp, which the spell consumes)",
+              "usesMax": 3,
+              "usesRemaining": 3,
+              "dailyKey": "3e",
+              "type": "daily"
+            }
+          ],
+          "1e": [
+            {
+              "spellId": "sp_commune_phb",
+              "name": "Commune",
+              "source": "PHB",
+              "level": 5,
+              "school": "Divination",
+              "castingTime": "1 minute",
+              "range": "self",
+              "duration": "1 minute",
+              "concentration": false,
+              "ritual": true,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (incense and a vial of holy or unholy water)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            },
+            {
+              "spellId": "sp_control_weather_phb",
+              "name": "Control Weather",
+              "source": "PHB",
+              "level": 8,
+              "school": "Transmutation",
+              "castingTime": "10 minutes",
+              "range": "Self (5 miles radius)",
+              "duration": "Concentration, up to 8 hours",
+              "concentration": true,
+              "ritual": false,
+              "saveAbility": "",
+              "attackStat": "none",
+              "atkMod": null,
+              "dc": null,
+              "damageList": [],
+              "components": "V, S, M (burning incense and bits of earth and wood mixed in water)",
+              "usesMax": 1,
+              "usesRemaining": 1,
+              "dailyKey": "1e",
+              "type": "daily"
+            }
+          ]
+        },
+        "will": [
+          "Detect Evil and Good",
+          "Invisibility"
+        ]
+      }
+    ],
+    "traits": [
+      {
+        "id": "act_angelic_weapons_jvce",
+        "name": "Angelic Weapons",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Shalai's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra 6d8 radiant damage (included in the attack).</p>",
+        "entries": [
+          "Shalai's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra {@damage 6d8} radiant damage (included in the attack)."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [
+            {
+              "formula": "6d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_divine_awareness_qac7",
+        "name": "Divine Awareness",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Shalai knows if it hears a lie.</p>",
+        "entries": [
+          "Shalai knows if it hears a lie."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_magic_resistance_apcu",
+        "name": "Magic Resistance",
+        "actionType": "trait",
+        "descriptionHtml": "<p>Shalai has advantage on saving throws against spells and other magical effects.</p>",
+        "entries": [
+          "Shalai has advantage on saving throws against spells and other magical effects."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_multiattack_kocm",
+        "name": "Multiattack",
+        "actionType": "action",
+        "descriptionHtml": "<p>Shalai makes two greatsword attacks.</p>",
+        "entries": [
+          "Shalai makes two greatsword attacks."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_greatsword_syv8",
+        "name": "Greatsword",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +15 to hit, reach 5 ft., one target. Hit: 22 (4d6 + 8) slashing damage plus 27 (6d8) radiant damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 15} to hit, reach 5 ft., one target. {@h}22 ({@damage 4d6 + 8}) slashing damage plus 27 ({@damage 6d8}) radiant damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 15,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d6 + 8",
+              "type": "Slashing"
+            },
+            {
+              "formula": "6d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_slaying_longbow_o8mm",
+        "name": "Slaying Longbow",
+        "actionType": "action",
+        "descriptionHtml": "<p>Ranged Weapon Attack: +13 to hit, range 150/600 ft., one target. Hit: 15 (2d8 + 6) piercing damage plus 27 (6d8) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a DC 15 Constitution saving throw or die.</p>",
+        "entries": [
+          "{@atk rw} {@hit 13} to hit, range 150/600 ft., one target. {@h}15 ({@damage 2d8 + 6}) piercing damage plus 27 ({@damage 6d8}) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a {@dc 15} Constitution saving throw or die."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 13,
+          "reach": null,
+          "range": "150/600 ft.",
+          "targets": "one target",
+          "save": {
+            "dc": 15,
+            "ability": "CON"
+          },
+          "damages": [
+            {
+              "formula": "2d8 + 6",
+              "type": "Piercing"
+            },
+            {
+              "formula": "6d8",
+              "type": "Radiant"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_flying_sword_v2rs",
+        "name": "Flying Sword",
+        "actionType": "action",
+        "descriptionHtml": "<p>Shalai releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies.</p>",
+        "entries": [
+          "Shalai releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_healing_touch__4_day__g8nn",
+        "name": "Healing Touch (4/Day)",
+        "actionType": "action",
+        "descriptionHtml": "<p>Shalai touches another creature. The target magically regains 40 (8d8 + 4) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
+        "entries": [
+          "Shalai touches another creature. The target magically regains 40 ({@dice 8d8 + 4}) hit points and is freed from any curse, disease, poison, blindness, or deafness."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 3,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": [
+        {
+          "id": "act_teleport_opzb",
+          "name": "Teleport",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Shalai magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
+          "entries": [
+            "Shalai magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": null,
+            "damages": [],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_searing_burst__costs_2_actions__zk1o",
+          "name": "Searing Burst (Costs 2 Actions)",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Shalai emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a DC 23 Dexterity saving throw, taking 14 (4d6) fire damage plus 14 (4d6) radiant damage on a failed save, or half as much damage on a successful one.</p>",
+          "entries": [
+            "Shalai emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a {@dc 23} Dexterity saving throw, taking 14 ({@damage 4d6}) fire damage plus 14 ({@damage 4d6}) radiant damage on a failed save, or half as much damage on a successful one."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 23,
+              "ability": "DEX"
+            },
+            "damages": [
+              {
+                "formula": "4d6",
+                "type": "Fire"
+              },
+              {
+                "formula": "4d6",
+                "type": "Radiant"
+              }
+            ],
+            "recharge": null
+          }
+        },
+        {
+          "id": "act_blinding_gaze__costs_3_actions__z2dl",
+          "name": "Blinding Gaze (Costs 3 Actions)",
+          "actionType": "legendary",
+          "descriptionHtml": "<p>Shalai targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a DC 15 Constitution saving throw or be blinded until magic such as the lesser restoration spell removes the blindness.</p>",
+          "entries": [
+            "Shalai targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a {@dc 15} Constitution saving throw or be {@condition blinded} until magic such as the {@spell lesser restoration} spell removes the blindness."
+          ],
+          "macro": {
+            "isAttack": false,
+            "attackType": null,
+            "attackBonus": null,
+            "reach": null,
+            "range": null,
+            "targets": null,
+            "save": {
+              "dc": 15,
+              "ability": "CON"
+            },
+            "damages": [],
+            "recharge": null
+          }
+        }
+      ]
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/PSD/Shalai.webp",
+    "tokenImg": "img/bestiary/tokens/PSD/Shalai.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_steel_leaf_kavu_psd",
+    "name": "Steel Leaf Kavu",
+    "source": "PSD",
+    "edition": "2014",
+    "page": 24,
+    "isSrd": false,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Beast",
+    "subtype": "",
+    "alignment": "U",
+    "ac": [
+      {
+        "value": 16,
+        "condition": null
+      }
+    ],
+    "primaryAc": 16,
+    "acCondition": "",
+    "hp": {
+      "average": 142,
+      "formula": "15d10 + 60"
+    },
+    "speed": {
+      "walk": 40,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 20,
+        "mod": 5
+      },
+      "dex": {
+        "score": 12,
+        "mod": 1
+      },
+      "con": {
+        "score": 18,
+        "mod": 4
+      },
+      "int": {
+        "score": 6,
+        "mod": -2
+      },
+      "wis": {
+        "score": 14,
+        "mod": 2
+      },
+      "cha": {
+        "score": 8,
+        "mod": -1
+      }
+    },
+    "str": 20,
+    "dex": 12,
+    "con": 18,
+    "int": 6,
+    "wis": 14,
+    "cha": 8,
+    "proficiencyBonus": 2,
+    "save": {},
+    "saves": {},
+    "skill": {
+      "perception": "+4"
+    },
+    "skills": {
+      "perception": "+4"
+    },
+    "immune": [],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [],
+    "passive": 14,
+    "senses": {
+      "passivePerception": 14,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands Elvish"
+    ],
+    "cr": "4",
+    "crNumeric": 4,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_raking_charge_e6ge",
+        "name": "Raking Charge",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If the kavu moves at least 20 feet straight toward a creature and then hits it with a bite attack on the same turn, that target must succeed on a DC 15 Strength saving throw or be knocked prone. If the target is prone, the kavu can make one rend attack against it as a bonus action.</p>",
+        "entries": [
+          "If the kavu moves at least 20 feet straight toward a creature and then hits it with a bite attack on the same turn, that target must succeed on a {@dc 15} Strength saving throw or be knocked {@condition prone}. If the target is {@condition prone}, the kavu can make one rend attack against it as a bonus action."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": {
+            "dc": 15,
+            "ability": "STR"
+          },
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_bite_0i09",
+        "name": "Bite",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) piercing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one target. {@h}14 ({@damage 2d8 + 5}) piercing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "2d8 + 5",
+              "type": "Piercing"
+            }
+          ],
+          "recharge": null
+        }
+      },
+      {
+        "id": "act_rend_qajo",
+        "name": "Rend",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one prone creature. Hit: 23 (4d8 + 5) slashing damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 7} to hit, reach 5 ft., one {@condition prone} creature. {@h}23 ({@damage 4d8 + 5}) slashing damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 7,
+          "reach": 5,
+          "range": null,
+          "targets": "one {@condition prone} creature",
+          "save": null,
+          "damages": [
+            {
+              "formula": "4d8 + 5",
+              "type": "Slashing"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/PSD/Steel Leaf Kavu.webp",
+    "tokenImg": "img/bestiary/tokens/PSD/Steel Leaf Kavu.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  },
+  {
+    "id": "creature_zombie_horse_psd",
+    "name": "Zombie Horse",
+    "source": "PSD",
+    "edition": "2014",
+    "page": 17,
+    "isSrd": true,
+    "size": "Large",
+    "sizeCategory": "L",
+    "type": "Undead",
+    "subtype": "",
+    "alignment": "N E",
+    "ac": [
+      {
+        "value": 8,
+        "condition": null
+      }
+    ],
+    "primaryAc": 8,
+    "acCondition": "",
+    "hp": {
+      "average": 22,
+      "formula": "3d8 + 9"
+    },
+    "speed": {
+      "walk": 20,
+      "fly": 0,
+      "swim": 0,
+      "climb": 0,
+      "burrow": 0,
+      "canHover": false
+    },
+    "abilities": {
+      "str": {
+        "score": 13,
+        "mod": 1
+      },
+      "dex": {
+        "score": 6,
+        "mod": -2
+      },
+      "con": {
+        "score": 16,
+        "mod": 3
+      },
+      "int": {
+        "score": 3,
+        "mod": -4
+      },
+      "wis": {
+        "score": 6,
+        "mod": -2
+      },
+      "cha": {
+        "score": 5,
+        "mod": -3
+      }
+    },
+    "str": 13,
+    "dex": 6,
+    "con": 16,
+    "int": 3,
+    "wis": 6,
+    "cha": 5,
+    "proficiencyBonus": 2,
+    "save": {
+      "wis": "+0"
+    },
+    "saves": {
+      "wis": "+0"
+    },
+    "skill": {},
+    "skills": {},
+    "immune": [
+      "poison"
+    ],
+    "resist": [],
+    "vulnerable": [],
+    "conditionImmune": [
+      "poisoned"
+    ],
+    "passive": 8,
+    "senses": {
+      "passivePerception": 8,
+      "sensesString": "darkvision 60 ft."
+    },
+    "languages": [
+      "understands all languages it spoke in life but can't speak"
+    ],
+    "cr": "1/4",
+    "crNumeric": 0.25,
+    "hasSpellcasting": false,
+    "spellcasting": [],
+    "traits": [
+      {
+        "id": "act_undead_fortitude_zeob",
+        "name": "Undead Fortitude",
+        "actionType": "trait",
+        "descriptionHtml": "<p>If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead.</p>",
+        "entries": [
+          "If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead."
+        ],
+        "macro": {
+          "isAttack": false,
+          "attackType": null,
+          "attackBonus": null,
+          "reach": null,
+          "range": null,
+          "targets": null,
+          "save": null,
+          "damages": [],
+          "recharge": null
+        }
+      }
+    ],
+    "actions": [
+      {
+        "id": "act_slam_c4i7",
+        "name": "Slam",
+        "actionType": "action",
+        "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
+        "entries": [
+          "{@atk mw} {@hit 3} to hit, reach 5 ft., one target. {@h}4 ({@damage 1d6 + 1}) bludgeoning damage."
+        ],
+        "macro": {
+          "isAttack": true,
+          "attackType": null,
+          "attackBonus": 3,
+          "reach": 5,
+          "range": null,
+          "targets": "one target",
+          "save": null,
+          "damages": [
+            {
+              "formula": "1d6 + 1",
+              "type": "Bludgeoning"
+            }
+          ],
+          "recharge": null
+        }
+      }
+    ],
+    "bonusActions": [],
+    "reactions": [],
+    "legendaryActions": {
+      "count": 0,
+      "description": "The creature can take 3 legendary actions, choosing from the options below.",
+      "entries": []
+    },
+    "legendaryActionsLair": null,
+    "lairActions": [],
+    "lairHeader": "",
+    "lairActionsDesc": "",
+    "regionalEffects": [],
+    "regionalEffectsHtml": "",
+    "mythicActions": {
+      "count": 0,
+      "description": "",
+      "entries": []
+    },
+    "variants": [],
+    "hasToken": true,
+    "tokenUrl": "img/bestiary/tokens/PSD/Zombie Horse.webp",
+    "tokenImg": "img/bestiary/tokens/PSD/Zombie Horse.webp",
+    "fluff": null,
+    "legendaryGroup": null
+  }
+]

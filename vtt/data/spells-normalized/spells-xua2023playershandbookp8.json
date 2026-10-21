@@ -1,0 +1,843 @@
+[
+  {
+    "id": "sp_conjure_animals_xua2023playershandbookp8",
+    "name": "Conjure Animals",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 18,
+    "level": 3,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You summon nature spirits that take the form of a Large swarm of spectral animals in an unoccupied space that you can see within range. The swarm lasts for the duration, and you choose the animal form of the spirits, such as wolves, serpents, or birds.</p><p>When a creature hostile to you enters a space within 10 feet of the swarm for the first time on a turn or starts its turn there, you can make a melee spell attack against that creature. On a hit, the target takes Radiant damage equal to 2d10 plus your spellcasting ability modifier.</p><p>You have Advantage on Strength saving throws while you're within 10 feet of the swarm, and when you Move on your turn, you can also move the swarm up to 30 feet to an unoccupied space you can see.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 4 or higher, the damage increases by 1d10 for each slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 4 or higher, the damage increases by 1d10 for each slot level above 3.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Circle of the Moon",
+        "shortName": "Moon",
+        "source": "XPHB",
+        "className": "Druid",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Gruul Anarch",
+        "source": "GGR"
+      }
+    ],
+    "feats": [
+      {
+        "name": "Conjuration Adept",
+        "source": "AU"
+      },
+      {
+        "name": "Mark of Handling",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "strength",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "ADV",
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_conjure_celestial_xua2023playershandbookp8",
+    "name": "Conjure Celestial",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 18,
+    "level": 7,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You summon the protective presence of a Celestial spirit, which manifests as a pillar of divine light that shines in a 10-foot-radius, 40-foot-high Cylinder centered on a point within range. Until the spell ends, Bright Light fills the Cylinder, and when you Move on your turn, you can also move the Cylinder up to 30 feet.</p><p>When a creature enters the Cylinder for the first time on a turn or starts its turn there, you can bathe that creature in one of the following lights:</p><ul><li><strong><em>Healing Light.</em></strong> <p>The creature that isn't an Undead or a Construct regains Hit Points equal to 4d12 plus your spellcasting modifier. A creature can be healed by this light only once per casting of this spell.</p></li><li><strong><em>Searing Radiance.</em></strong> <p>The creature must make a Dexterity saving throw, taking 8d12 Radiant damage on a failed save or half as much damage on a successful one.</p></li></ul><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 8 or higher, the healing and damage increase by 1d12 for each slot level above 7.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 8 or higher, the healing and damage increase by 1d12 for each slot level above 7.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "8d12",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing",
+      "LGT",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_conjure_elemental_xua2023playershandbookp8",
+    "name": "Conjure Elemental",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 19,
+    "level": 5,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You summon an Elemental spirit that fills a 10-foot Cube within range. The spirit lasts for the duration and is composed of air, earth, fire, or water (your choice) when you cast this spell.</p><p>When a creature hostile to you Move within 5 feet of the spirit, you can make a melee spell attack against that creature. On a hit, the target takes 8d8 damage of a type determined by the spirit's element: Bludgeoning (earth), Cold (water), Fire (fire), or Lightning (air). If the target is a Large or smaller creature, it is also pulled into the Cube and has the Restrained condition. At the start of each of its turns, the target must make a Strength saving throw against your spell save DC. On a success, the target frees itself. On a failure, the target takes 4d8 damage of the same type as the spell attack. The spirit can have only one creature restrained at a time.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 6 or higher, the damage increases by 2d8 for each slot level above 5.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 6 or higher, the damage increases by 2d8 for each slot level above 5.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Circle of the Land",
+        "shortName": "Land",
+        "source": "PHB",
+        "className": "Druid",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Circle of the Sea",
+        "shortName": "Sea",
+        "source": "XPHB",
+        "className": "Druid",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Izzet Engineer",
+        "source": "GGR"
+      },
+      {
+        "name": "Prismari Student",
+        "source": "SCC"
+      }
+    ],
+    "feats": [
+      {
+        "name": "Conjuration Adept",
+        "source": "AU"
+      },
+      {
+        "name": "Mark of Storm",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "strength",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Restrained"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_conjure_fey_xua2023playershandbookp8",
+    "name": "Conjure Fey",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 19,
+    "level": 6,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You summon the awesome presence of a Medium Fey spirit in an unoccupied space you can see within range. The spirit lasts for the duration, and it looks like a Fey creature of your choice. When the spirit appears, you can immediately make one melee spell attack against a creature within 5 feet of the spirit. On a hit, the target takes Psychic damage equal to 3d12 plus your spellcasting ability modifier, and the target must succeed on a Wisdom saving throw or have the Frightened condition until the start of your next turn.</p><p>As a Bonus Action on your later turns, you can teleport the spirit to an unoccupied space you can see within 30 feet of the space it left and repeat the attack against a creature within 5 feet of it.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 7 or higher, the damage increases by 2d12 for each slot level above 6.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 7 or higher, the damage increases by 2d12 for each slot level above 6.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_conjure_minor_elementals_xua2023playershandbookp8",
+    "name": "Conjure Minor Elementals",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 19,
+    "level": 4,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "Self (15 feet radius)",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You summon elemental spirits that a flit around you for the duration. Until the spell ends, any attack you make deals an extra 2d8 damage when you hit a creature within 15 feet of you. This damage is Bludgeoning, Cold, Fire, or Lightning (your choice when you make the attack).</p><p>In addition, the ground within 15 feet of you is Difficult Terrain for your enemies.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 5 or higher, the damage increases by 2d8 and the range of Difficult Terrain increases by 5 feet for each slot level above 4.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 5 or higher, the damage increases by 2d8 and the range of Difficult Terrain increases by 5 feet for each slot level above 4.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Oath of the Noble Genies",
+        "shortName": "Noble Genies",
+        "source": "FRHoF",
+        "className": "Paladin",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Izzet Engineer",
+        "source": "GGR"
+      },
+      {
+        "name": "Selesnya Initiate",
+        "source": "GGR"
+      }
+    ],
+    "feats": [
+      {
+        "name": "Mark of Storm",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "DFT",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_conjure_woodland_beings_xua2023playershandbookp8",
+    "name": "Conjure Woodland Beings",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 19,
+    "level": 5,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "Self (10 feet radius)",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You summon nature spirits that flit about you for the duration. Until the spell ends, each creature you choose that enters a space within 10 feet of you for the first time on a turn or starts its turn there must make a Wisdom saving throw, taking 5d8 Force damage on a failed save or half as much damage on a successful one.</p><p>In addition, you can take the Disengage action as a Bonus Action for the spell's duration.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 6 or higher, the damage increases by 1d8 for each slot level above 5.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 6 or higher, the damage increases by 1d8 for each slot level above 5.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "5d8",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Summoning",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_cure_wounds_xua2023playershandbookp8",
+    "name": "Cure Wounds",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 19,
+    "level": 1,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "touch",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>A creature you touch regains a number of Hit Points equal to 2d8 plus your spellcasting ability modifier. This spell has no effect on Constructs and Undead.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 2 or higher, the healing increases by 2d8 for each slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 2 or higher, the healing increases by 2d8 for each slot level above 1.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Life Domain",
+        "shortName": "Life",
+        "source": "PHB",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Life Domain",
+        "shortName": "Life",
+        "source": "XPHB",
+        "className": "Cleric",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Circle of Wildfire",
+        "shortName": "Wildfire",
+        "source": "TCE",
+        "className": "Druid",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Circle of the Moon",
+        "shortName": "Moon",
+        "source": "XPHB",
+        "className": "Druid",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Divine Soul",
+        "shortName": "Divine Soul",
+        "source": "XGE",
+        "className": "Sorcerer",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Spellfire Sorcery",
+        "shortName": "Spellfire",
+        "source": "FRHoF",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "The Celestial",
+        "shortName": "Celestial",
+        "source": "XGE",
+        "className": "Warlock",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Celestial Patron",
+        "shortName": "Celestial",
+        "source": "XPHB",
+        "className": "Warlock",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Vestige Patron",
+        "shortName": "Vestige",
+        "source": "AU",
+        "className": "Warlock",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Witherbloom Student",
+        "source": "SCC"
+      }
+    ],
+    "feats": [
+      {
+        "name": "Gift of the Metallic Dragon",
+        "source": "FTD"
+      },
+      {
+        "name": "Mark of Healing",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [
+      {
+        "formula": "2d8",
+        "type": "Healing",
+        "stat": "spell",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing"
+    ]
+  },
+  {
+    "id": "sp_fount_of_moonlight_xua2023playershandbookp8",
+    "name": "Fount of Moonlight",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 20,
+    "level": 4,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>A cool light wreathes your body for the duration, emitting Bright Light in a 20-foot radius and Dim Light for an additional 20 feet.</p><p>Until the spell ends, you have Resistance to Radiant damage, and your melee attacks deal an extra 2d6 Radiant damage on a hit.</p><p>In addition, immediately after you take damage from a creature you can see within 60 feet of yourself, you can use your Reaction to force the creature to make a Constitution saving throw. On a failed save, the creature has the Blinded condition until the end of your next turn.</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Circle of the Moon",
+        "shortName": "Moon",
+        "source": "XPHB",
+        "className": "Druid",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD",
+      "LGT",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_healing_word_xua2023playershandbookp8",
+    "name": "Healing Word",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 20,
+    "level": 1,
+    "school": "Abjuration",
+    "castingTime": "1 bonus action",
+    "range": "60 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>A creature of your choice that you can see within range regains Hit Points equal to 2d4 plus your spellcasting ability modifier. This spell has no effect on Constructs or Undead.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 2 or higher, the healing increases by 2d4 for each slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 2 or higher, the healing increases by 2d4 for each slot level above 1.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Alchemist",
+        "shortName": "Alchemist",
+        "source": "TCE",
+        "className": "Artificer",
+        "classSource": "TCE"
+      },
+      {
+        "name": "Alchemist",
+        "shortName": "Alchemist",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      },
+      {
+        "name": "Cartographer",
+        "shortName": "Cartographer",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Mark of Healing",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [
+      {
+        "formula": "2d4",
+        "type": "Healing",
+        "stat": "spell",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_mass_cure_wounds_xua2023playershandbookp8",
+    "name": "Mass Cure Wounds",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 20,
+    "level": 5,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>A wave of healing energy emanates from a point you can see within range. Choose up to six creatures in a 30-foot-radius Sphere centered on that point. Each target regains Hit Points equal to 5d8 plus your spellcasting ability modifier. This spell has no effect on Constructs or Undead.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 6 or higher, the healing increases by 1d8 for each slot level above 5.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 6 or higher, the healing increases by 1d8 for each slot level above 5.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "TCE",
+        "className": "Artificer",
+        "classSource": "TCE"
+      },
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      },
+      {
+        "name": "Life Domain",
+        "shortName": "Life",
+        "source": "PHB",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Solidarity Domain (PSA)",
+        "shortName": "Solidarity (PSA)",
+        "source": "PSA",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Life Domain",
+        "shortName": "Life",
+        "source": "XPHB",
+        "className": "Cleric",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Circle of Wildfire",
+        "shortName": "Wildfire",
+        "source": "TCE",
+        "className": "Druid",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Circle of the Moon",
+        "shortName": "Moon",
+        "source": "XPHB",
+        "className": "Druid",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Vestige Patron",
+        "shortName": "Vestige",
+        "source": "AU",
+        "className": "Warlock",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Abjuration Adept",
+        "source": "AU"
+      }
+    ],
+    "damageList": [
+      {
+        "formula": "5d8",
+        "type": "Healing",
+        "stat": "spell",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_mass_healing_word_xua2023playershandbookp8",
+    "name": "Mass Healing Word",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 20,
+    "level": 3,
+    "school": "Abjuration",
+    "castingTime": "1 bonus action",
+    "range": "60 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>As you call out words of restoration, up to six creatures of your choice that you can see within range regain Hit Points equal to 2d4 plus your spellcasting ability modifier. This spell has no effect on Constructs or Undead.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 4 or higher, the healing increases by 1d4 for each slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a spell slot of level 4 or higher, the healing increases by 1d4 for each slot level above 3.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Alchemist",
+        "shortName": "Alchemist",
+        "source": "TCE",
+        "className": "Artificer",
+        "classSource": "TCE"
+      },
+      {
+        "name": "Alchemist",
+        "shortName": "Alchemist",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      },
+      {
+        "name": "Order Domain",
+        "shortName": "Order",
+        "source": "TCE",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Life Domain",
+        "shortName": "Life",
+        "source": "XPHB",
+        "className": "Cleric",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Vestige Patron",
+        "shortName": "Vestige",
+        "source": "AU",
+        "className": "Warlock",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Mark of Healing",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [
+      {
+        "formula": "2d4",
+        "type": "Healing",
+        "stat": "spell",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_power_word_fortify_xua2023playershandbookp8",
+    "name": "Power Word Fortify",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 20,
+    "level": 7,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You speak a word of power that fortifies up to six creatures you can see within range. The spell bestows 120 Temporary Hit Points, which are divided equally among the spell's recipients.</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Temp HP"
+    ]
+  },
+  {
+    "id": "sp_starry_wisp_xua2023playershandbookp8",
+    "name": "Starry Wisp",
+    "source": "XUA2023PlayersHandbookP8",
+    "page": 20,
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You launch a mote of light at one creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d8 Radiant damage, and until the end of your next turn, it emits Dim Light in a 10-foot radius and can't benefit from the Invisible condition.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>This spell's damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>This spell's damage increases by 1d8 when you reach levels 5 (2d8), 11 (3d8), and 17 (4d8).</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Circle of the Moon",
+        "shortName": "Moon",
+        "source": "XPHB",
+        "className": "Druid",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [
+      {
+        "name": "Elf",
+        "source": "LFL"
+      }
+    ],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d8",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "1d8",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "Radiant damage",
+      "scaling": {
+        "1": "1d8",
+        "5": "2d8",
+        "11": "3d8",
+        "17": "4d8"
+      }
+    },
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "LGT",
+      "OBJ",
+      "Scaling Damage"
+    ]
+  }
+]

@@ -14,123 +14,168 @@ export class VTTDiceParser {
      */
     static roll(formula) {
         if (!formula || typeof formula !== 'string') {
-            return { total: 0, diceList: [], breakdownStr: '0', isCritSuccess: false, isCritFail: false };
+            return { total: 0, diceList: [], breakdownStr: '0', compactBreakdown: '0', isCritSuccess: false, isCritFail: false };
         }
 
-        const cleanFormula = formula.replace(/\[.*?\]/g, '').trim().toLowerCase();
+        let trimmedFormula = formula.trim();
+        if (trimmedFormula.startsWith('+')) trimmedFormula = trimmedFormula.slice(1).trim();
+
         const diceList = [];
-        const breakdownParts = [];
+        const detailedParts = [];
+        const compactParts = [];
         let isCritSuccess = false;
         let isCritFail = false;
 
-        // Tokenize into dice expressions and operators
-        // Match expressions like: 2d20kh1, 4d6dl1, 1d20!, 1d10ro<2, 2d6, 5
-        const parsedStr = cleanFormula.replace(/(\d*)d(\d+)(?:(kh|kl|dl|dh)(\d*))?(?:ro(<|<=|>|>=)?(\d+))?(!)?/gi, 
-            (match, countStr, facesStr, keepDropType, keepDropNumStr, roComp, roTargetStr, explode) => {
+        // Tokenize terms: sign, dice expression / number, and optional bracketed label [LABEL]
+        const termRegex = /([+\-*/]?)\s*([0-9]*d[0-9]+(?:(?:kh|kl|dl|dh)[0-9]*)?(?:ro(?:<=|>=|<|>|=)?[0-9]+)?!?|[0-9]+(?:\.[0-9]+)?)\s*(?:\[([^\]]*)\])?/gi;
+
+        let evalExpression = '';
+        let match;
+        let matchCount = 0;
+
+        while ((match = termRegex.exec(trimmedFormula)) !== null) {
+            if (match.index === termRegex.lastIndex) {
+                termRegex.lastIndex++;
+            }
+            matchCount++;
+            const op = match[1] || (matchCount === 1 ? '' : '+');
+            const token = match[2];
+            const label = match[3] ? match[3].trim() : '';
+
+            // Check if token is a dice expression
+            const diceMatch = token.match(/^(\d*)d(\d+)(?:(kh|kl|dl|dh)(\d*))?(?:ro(<=|>=|<|>|=)?(\d+))?(!)?$/i);
+            if (diceMatch) {
+                const countStr = diceMatch[1];
+                const facesStr = diceMatch[2];
+                const keepDropType = diceMatch[3];
+                const keepDropNumStr = diceMatch[4];
+                const roComp = diceMatch[5];
+                const roTargetStr = diceMatch[6];
+                const explode = diceMatch[7];
+
                 const count = parseInt(countStr || '1', 10);
                 const faces = parseInt(facesStr, 10);
-                if (faces <= 0 || count <= 0 || count > 100) return '0';
-
                 const rolled = [];
-                for (let i = 0; i < count; i++) {
-                    let val = Math.floor(Math.random() * faces) + 1;
-                    
-                    // Reroll logic
-                    if (roTargetStr) {
-                        const target = parseInt(roTargetStr, 10);
-                        const comp = roComp || '<=';
-                        let shouldReroll = false;
-                        if (comp === '<' && val < target) shouldReroll = true;
-                        else if (comp === '<=' && val <= target) shouldReroll = true;
-                        else if (comp === '>' && val > target) shouldReroll = true;
-                        else if (comp === '>=' && val >= target) shouldReroll = true;
-                        else if (val === target) shouldReroll = true;
 
-                        if (shouldReroll) {
-                            val = Math.floor(Math.random() * faces) + 1;
+                if (faces > 0 && count > 0 && count <= 100) {
+                    for (let i = 0; i < count; i++) {
+                        let val = Math.floor(Math.random() * faces) + 1;
+                        if (roTargetStr) {
+                            const target = parseInt(roTargetStr, 10);
+                            const comp = roComp || '<=';
+                            let shouldReroll = false;
+                            if (comp === '<' && val < target) shouldReroll = true;
+                            else if (comp === '<=' && val <= target) shouldReroll = true;
+                            else if (comp === '>' && val > target) shouldReroll = true;
+                            else if (comp === '>=' && val >= target) shouldReroll = true;
+                            else if (comp === '=' && val === target) shouldReroll = true;
+                            else if (val === target) shouldReroll = true;
+                            if (shouldReroll) val = Math.floor(Math.random() * faces) + 1;
                         }
-                    }
-
-                    // Exploding dice
-                    rolled.push(val);
-                    if (explode && val === faces) {
-                        let extra = Math.floor(Math.random() * faces) + 1;
-                        rolled.push(extra);
-                        if (extra === faces) {
-                            rolled.push(Math.floor(Math.random() * faces) + 1);
+                        rolled.push(val);
+                        if (explode && val === faces) {
+                            let currentVal = val;
+                            let safety = 50;
+                            while (currentVal === faces && safety-- > 0) {
+                                currentVal = Math.floor(Math.random() * faces) + 1;
+                                rolled.push(currentVal);
+                            }
                         }
                     }
                 }
 
                 // Keep / drop logic
-                let kept = [...rolled];
                 let droppedIndices = new Set();
-
                 if (keepDropType) {
                     const kNum = parseInt(keepDropNumStr || '1', 10);
                     const indexed = rolled.map((val, idx) => ({ val, idx }));
-                    indexed.sort((a, b) => b.val - a.val); // descending
-
-                    if (keepDropType === 'kh') {
-                        const keepSet = new Set(indexed.slice(0, kNum).map(x => x.idx));
-                        indexed.slice(kNum).forEach(x => droppedIndices.add(x.idx));
-                    } else if (keepDropType === 'kl') {
-                        const keepSet = new Set(indexed.slice(-kNum).map(x => x.idx));
-                        indexed.slice(0, -kNum).forEach(x => droppedIndices.add(x.idx));
-                    } else if (keepDropType === 'dl') {
-                        indexed.slice(-kNum).forEach(x => droppedIndices.add(x.idx));
-                    } else if (keepDropType === 'dh') {
-                        indexed.slice(0, kNum).forEach(x => droppedIndices.add(x.idx));
+                    indexed.sort((a, b) => b.val - a.val);
+                    if (kNum > 0) {
+                        if (keepDropType === 'kh') {
+                            indexed.slice(kNum).forEach(x => droppedIndices.add(x.idx));
+                        } else if (keepDropType === 'kl') {
+                            indexed.slice(0, -kNum).forEach(x => droppedIndices.add(x.idx));
+                        } else if (keepDropType === 'dl') {
+                            indexed.slice(-kNum).forEach(x => droppedIndices.add(x.idx));
+                        } else if (keepDropType === 'dh') {
+                            indexed.slice(0, kNum).forEach(x => droppedIndices.add(x.idx));
+                        }
                     }
                 }
 
-                // Add to diceList for 3D simulation
                 rolled.forEach((val, idx) => {
                     const isDropped = droppedIndices.has(idx);
                     diceList.push({ faces, val, isDropped });
                 });
 
-                // Detect crits on d20
                 if (faces === 20) {
                     const activeD20s = rolled.filter((_, idx) => !droppedIndices.has(idx));
-                    if (activeD20s.includes(20)) isCritSuccess = true;
-                    if (activeD20s.includes(1) && !activeD20s.includes(20)) isCritFail = true;
+                    if (activeD20s.includes(20)) {
+                        isCritSuccess = true;
+                        isCritFail = false;
+                    } else if (activeD20s.includes(1) && !isCritSuccess) {
+                        isCritFail = true;
+                    }
                 }
 
                 const subtotal = rolled.reduce((acc, val, idx) => droppedIndices.has(idx) ? acc : acc + val, 0);
-                
-                // Formatted breakdown string
+
                 const rollStrings = rolled.map((val, idx) => {
                     if (droppedIndices.has(idx)) return `<s>${val}</s>`;
                     return `${val}`;
                 });
-                breakdownParts.push(`[${rollStrings.join(', ')}]`);
 
-                return subtotal.toString();
+                const diceName = token.toLowerCase();
+                const diceRollVal = `[${rollStrings.join(', ')}]`;
+                let detailedTerm = `${diceName} ${diceRollVal}`;
+                if (label) detailedTerm += ` [${label}]`;
+
+                if (op && matchCount > 1) {
+                    detailedParts.push(`${op} ${detailedTerm}`);
+                    compactParts.push(`${op}[${subtotal}]`);
+                    evalExpression += ` ${op} ${subtotal}`;
+                } else {
+                    detailedParts.push(detailedTerm);
+                    compactParts.push(`[${subtotal}]`);
+                    evalExpression += `${subtotal}`;
+                }
+            } else {
+                // Flat number
+                const numVal = parseFloat(token) || 0;
+                let detailedTerm = `${numVal}`;
+                if (label) detailedTerm += ` [${label}]`;
+
+                if (op && matchCount > 1) {
+                    detailedParts.push(`${op} ${detailedTerm}`);
+                    compactParts.push(`${op}${numVal}`);
+                    evalExpression += ` ${op} ${numVal}`;
+                } else {
+                    const sign = (op === '-' ? '-' : '');
+                    detailedParts.push(`${sign}${detailedTerm}`);
+                    compactParts.push(`${sign}${numVal}`);
+                    evalExpression += `${sign}${numVal}`;
+                }
             }
-        );
+        }
 
-        // Safely evaluate remaining math expression (e.g. "15 + 4 - 2")
         let total = 0;
         try {
-            // Sanitize: only allow numbers, +, -, *, /, (, ), and whitespace
-            const safeMath = parsedStr.replace(/[^0-9+\-*/().\s]/g, '');
+            const safeMath = evalExpression.replace(/[^0-9+\-*/().\s]/g, '');
             if (safeMath) {
-                // Function-based arithmetic evaluator (safe without eval access to variables)
                 total = Math.round(new Function(`"use strict"; return (${safeMath})`)());
             }
         } catch (e) {
             total = 0;
         }
 
-        const breakdownStr = breakdownParts.length > 0 
-            ? `${breakdownParts.join(' + ')}${cleanFormula.includes('+') || cleanFormula.includes('-') ? ` = <strong>${total}</strong>` : ''}`
-            : `<strong>${total}</strong>`;
+        const breakdownStr = detailedParts.length > 0 ? detailedParts.join(' ') : `<strong>${total}</strong>`;
+        const compactBreakdown = compactParts.length > 0 ? compactParts.join('') : `${total}`;
 
         return {
             total,
             diceList,
             breakdownStr,
+            compactBreakdown,
             isCritSuccess,
             isCritFail
         };

@@ -1,4 +1,5 @@
 let sharedSpellCache = null;
+let spellCache = null;
 let pSpellPromise = null;
 let racesDataCache = null;
 
@@ -18,9 +19,12 @@ const AOE_LABEL_MAP = {
 async function fetchAllRaces() {
     if (racesDataCache) return racesDataCache;
     try {
-        const res = await fetch('/data/races.json');
+        let res = await fetch('/api/races/catalog');
+        if (!res.ok) res = await fetch('/data/races-catalog.json');
+        if (!res.ok) res = await fetch('data/races-catalog.json');
+        if (!res.ok) throw new Error('Races catalog not found');
         const json = await res.json();
-        racesDataCache = json.race || [];
+        racesDataCache = Array.isArray(json) ? json : (json.race || []);
         return racesDataCache;
     } catch(e) {
         return [];
@@ -105,23 +109,264 @@ export function scaleUpcastFormula(upcastFormula, extra) {
     return scaledParts.join(' ');
 }
 
+export function parseSpellToMacro(spData, newSpell) {
+    if (!spData || !newSpell) return;
+
+    if (!newSpell.source || newSpell.source.toUpperCase() === 'MM' || newSpell.source.toUpperCase() === 'XMM') {
+        newSpell.source = spData.source || '';
+    }
+    newSpell.school = spData.school || newSpell.school || '';
+    newSpell.castingTime = spData.castingTime || newSpell.castingTime || '';
+    newSpell.range = spData.range || newSpell.range || '';
+    newSpell.components = spData.components || newSpell.components || '';
+    newSpell.duration = spData.duration || newSpell.duration || '';
+
+    newSpell.description = spData.descriptionHtml || spData.description || (Array.isArray(spData.entries) ? spData.entries.map(e => typeof e === 'string' ? e : JSON.stringify(e)).join('<br>') : '') || newSpell.description || '';
+    if (spData.higherLevelHtml && !newSpell.description.includes(spData.higherLevelHtml)) {
+        newSpell.description += (newSpell.description ? '<br>' : '') + spData.higherLevelHtml;
+    }
+
+    if (spData.concentration !== undefined) newSpell.concentration = !!spData.concentration;
+    else if (spData.duration && Array.isArray(spData.duration) && spData.duration.some(d => d.concentration)) newSpell.concentration = true;
+    else if (spData.meta?.concentration) newSpell.concentration = true;
+    else if (newSpell.concentration === undefined) newSpell.concentration = false;
+
+    if (spData.ritual !== undefined) newSpell.ritual = !!spData.ritual;
+    const isCantrip = spData.level === 0 || newSpell.level === 0 || newSpell.cantripScale;
+    const isMultiAttackCantrip = /eldritch blast/i.test(newSpell.name || spData.name || '');
+    if (isCantrip) {
+        newSpell.cantripScale = isMultiAttackCantrip ? false : (spData.cantripScale !== undefined ? !!spData.cantripScale : true);
+    }
+
+    if (spData.damageList && Array.isArray(spData.damageList) && spData.damageList.length > 0) {
+        newSpell.damageList = JSON.parse(JSON.stringify(spData.damageList));
+        newSpell.damageList.forEach((d, rIdx) => {
+            if (isCantrip) {
+                if (d.cantripScale === undefined) {
+                    d.cantripScale = isMultiAttackCantrip ? false : (rIdx === 0 ? (spData.cantripScale !== undefined ? !!spData.cantripScale : true) : false);
+                }
+            } else {
+                if (d.upcastBonus === undefined) {
+                    d.upcastBonus = rIdx === 0 ? (spData.upcastBonus || '') : '';
+                }
+                if (d.upcastScaleStep === undefined) {
+                    d.upcastScaleStep = rIdx === 0 ? (spData.upcastScaleStep || 1) : 1;
+                }
+            }
+        });
+    }
+
+    if (spData.saveAbility) {
+        newSpell.saveAbility = spData.saveAbility.substring(0, 3).toUpperCase();
+        newSpell.saveDcStat = "spell";
+    }
+
+    if (spData.attackStat && spData.attackStat !== 'none') {
+        newSpell.attackStat = spData.attackStat;
+        newSpell.attackProf = spData.attackStat === 'spell';
+    }
+
+    if (spData.upcastBonus) {
+        newSpell.upcastBonus = spData.upcastBonus;
+    }
+    if (spData.upcastScaleStep) {
+        newSpell.upcastScaleStep = spData.upcastScaleStep;
+    }
+
+    if (!spData.entries && !spData.descriptionHtml && !spData.description) return;
+
+    const rawEntriesText = JSON.stringify(spData.entries || spData.descriptionHtml || spData.description || '').toLowerCase();
+
+    if (rawEntriesText.includes("spell attack") || rawEntriesText.includes("{@atk ms}") || rawEntriesText.includes("{@atk rs}") || rawEntriesText.includes("{@atk ms,rs}")) {
+        newSpell.attackStat = "spell";
+        newSpell.attackProf = true;
+        newSpell.attackExtra = 0;
+        newSpell.attackBonus = "";
+    } else if (newSpell.attackStat === undefined) {
+        newSpell.attackStat = "none";
+        newSpell.attackProf = false;
+    }
+
+    const saveMatch = rawEntriesText.match(/(strength|dexterity|constitution|intelligence|wisdom|charisma) saving throw/);
+    if (saveMatch && !newSpell.saveAbility) {
+        newSpell.saveDcStat = "spell";
+        newSpell.saveDcExtra = 0;
+        newSpell.saveDcCustom = null;
+        newSpell.saveAbility = saveMatch[1].substring(0, 3).toUpperCase();
+    } else if (newSpell.saveDcStat === undefined) {
+        newSpell.saveDcStat = "none";
+        newSpell.saveAbility = "";
+    }
+
+    // Parse damage / healing if not already set
+    if (!newSpell.damageList || newSpell.damageList.length === 0) {
+        const spName = (spData.name || '').toLowerCase();
+        const dmgInflict = Array.isArray(spData.damageInflict) ? spData.damageInflict : [];
+
+        // 1. Check scalingLevelDice first (common for cantrips like Toll the Dead, Eldritch Blast, etc.)
+        if (isCantrip && Array.isArray(spData.scalingLevelDice) && spData.scalingLevelDice.length > 0) {
+            const parsedList = [];
+            spData.scalingLevelDice.forEach((sld, idx) => {
+                const formula = sld.scaling?.['1'] || sld.scaling?.['cantrip'] || Object.values(sld.scaling || {})[0] || '1d8';
+                let type = 'Damage';
+                let label = '';
+                const rawLabel = (sld.label || '').toLowerCase();
+                
+                const knownTypes = ["slashing", "piercing", "bludgeoning", "fire", "cold", "lightning", "thunder", "poison", "acid", "necrotic", "radiant", "force", "psychic", "healing"];
+                for (const kt of knownTypes) {
+                    if (rawLabel.includes(kt)) {
+                        type = kt.charAt(0).toUpperCase() + kt.slice(1);
+                        break;
+                    }
+                }
+                if (type === 'Damage' && dmgInflict.length > 0) {
+                    const matchedInflict = dmgInflict[idx] || dmgInflict[0];
+                    type = matchedInflict.charAt(0).toUpperCase() + matchedInflict.slice(1);
+                }
+
+                if (rawLabel.includes('wounded') || rawLabel.includes('missing')) {
+                    label = 'Wounded Target';
+                } else if (spData.scalingLevelDice.length > 1) {
+                    label = idx === 0 ? 'Normal' : `Variant ${idx + 1}`;
+                }
+
+                parsedList.push({
+                    id: 'dmg_' + Date.now() + Math.random(),
+                    formula,
+                    type,
+                    label,
+                    stat: ''
+                });
+            });
+            if (parsedList.length > 0) {
+                newSpell.damageList = parsedList;
+            }
+        } else if (isCantrip) {
+            if (spName.includes('booming blade')) {
+                newSpell.damageList = [
+                    { formula: '0d8', type: 'Thunder', id: 'dmg_bb_hit', label: 'On Hit' },
+                    { formula: '1d8', type: 'Thunder', id: 'dmg_bb_move', label: 'On Move' }
+                ];
+            } else if (spName.includes('green-flame blade')) {
+                newSpell.damageList = [
+                    { formula: '0d8', type: 'Fire', id: 'dmg_gfb_hit', label: 'Primary Target' },
+                    { formula: '1d8', type: 'Fire', stat: 'spell', id: 'dmg_gfb_sec', label: 'Secondary Target' }
+                ];
+            } else {
+                const dmgMatches = [...rawEntriesText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
+                if (dmgMatches.length > 0) {
+                    newSpell.damageList = dmgMatches.map((m, idx) => {
+                        const formula = m[1].trim();
+                        let type = m[2] ? m[2].charAt(0).toUpperCase() + m[2].slice(1) : (dmgInflict[idx] ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1) : (dmgInflict[0] ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1) : 'Damage'));
+                        let label = '';
+                        if (dmgMatches.length > 1) {
+                            label = idx === 0 ? 'Normal' : `Option ${idx + 1}`;
+                        }
+                        return { formula, type, label, id: 'dmg_' + Date.now() + Math.random() };
+                    });
+                } else {
+                    const fallbackM = rawEntriesText.match(/(\d+d\d+)/i);
+                    if (fallbackM) {
+                        let type = dmgInflict.length > 0 ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1) : 'Damage';
+                        newSpell.damageList = [{ formula: fallbackM[1], type, label: '', id: 'dmg_' + Date.now() + Math.random() }];
+                    }
+                }
+            }
+        } else {
+            const isHealing = (spData.miscTags && spData.miscTags.includes('HL')) || /regain|restore/i.test(rawEntriesText);
+            const isTempHp = (spData.miscTags && spData.miscTags.includes('THP')) || /temporary hit point/i.test(rawEntriesText);
+            
+            if (isHealing || isTempHp) {
+                const type = isHealing ? 'Healing' : 'Temp HP';
+                const hasSpellMod = /plus your spellcasting ability modifier|\+\s*your spellcasting ability modifier/i.test(rawEntriesText);
+                const stat = hasSpellMod ? 'spell' : 'none';
+                const dm = rawEntriesText.match(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/i) || rawEntriesText.match(/(\d+d\d+(?:\s*[+-]\s*\d+)?)/i);
+                if (dm) {
+                    const formula = (dm[1] || dm[0]).replace(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/i, '$1').trim();
+                    newSpell.damageList = [{ formula, type, stat, label: '', id: 'dmg_' + Date.now() + Math.random() }];
+                } else {
+                    const flatMatch = rawEntriesText.match(/restoring\s+(\d+)/i) || rawEntriesText.match(/regains?\s+(\d+)/i);
+                    if (flatMatch) {
+                        newSpell.damageList = [{ formula: flatMatch[1], type, stat, label: '', id: 'dmg_' + Date.now() + Math.random() }];
+                    }
+                }
+            } else {
+                const dmgMatches = [...rawEntriesText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
+                if (dmgMatches.length > 0) {
+                    newSpell.damageList = dmgMatches.map((match, idx) => {
+                        let formula = match[1].trim();
+                        let type = match[2] ? match[2].charAt(0).toUpperCase() + match[2].slice(1) : (dmgInflict[idx] ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1) : (dmgInflict[0] ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1) : "Damage"));
+                        let label = '';
+                        if (dmgMatches.length > 1) {
+                            if (spName.includes('ice knife')) {
+                                label = idx === 0 ? 'On Hit' : 'Burst';
+                            } else {
+                                label = `Damage ${idx + 1}`;
+                            }
+                        }
+                        return { formula, type, label, id: 'dmg_' + Date.now() + Math.random() };
+                    });
+                }
+            }
+        }
+    }
+
+    if (window.Renderer && spData.entries) {
+        try {
+            const temp = document.createElement('div');
+            temp.innerHTML = window.Renderer.get().render({ entries: spData.entries });
+            newSpell.description = temp.textContent || temp.innerText || "";
+        } catch (e) { }
+    }
+
+    if (spData.entriesHigherLevel && !newSpell.upcastBonus) {
+        const hl = JSON.stringify(spData.entriesHigherLevel).toLowerCase();
+        let hlMatch = hl.match(/\{@scale(?:damage|dice)\s+[^|]+\|[^|]+\|([^}]+)\}/i);
+        if (hlMatch) {
+            newSpell.upcastBonus = hlMatch[1];
+        } else {
+            hlMatch = hl.match(/(?:increases by|gain (?:an additional )?)(?:\{@(?:damage|dice) )?(\d+d\d+|\d+)/i);
+            if (hlMatch) {
+                newSpell.upcastBonus = hlMatch[1];
+            }
+        }
+    }
+}
+
+
 if (typeof window !== 'undefined') {
     window.toSpellTitleCase = toSpellTitleCase;
     window.getDisambiguatedSpellName = getDisambiguatedSpellName;
     window.scaleUpcastFormula = scaleUpcastFormula;
+    window.parseSpellToMacro = parseSpellToMacro;
     window.VTTSpellManager = window.VTTSpellManager || {
+        init: (ctx) => {
+            if (ctx && ctx.spellCache) {
+                sharedSpellCache = ctx.spellCache;
+                spellCache = ctx.spellCache;
+            } else if (!spellCache && sharedSpellCache) {
+                spellCache = sharedSpellCache;
+            }
+        },
         toSpellTitleCase: toSpellTitleCase,
         getDisambiguatedSpellName: getDisambiguatedSpellName,
         scaleUpcastFormula: scaleUpcastFormula,
         loadSpells: () => loadSpells(),
         cleanSpellBodyHtml: (html) => cleanSpellBodyHtml(html),
-        getSpellCache: () => sharedSpellCache,
-        setSpellCache: (cache) => { sharedSpellCache = cache; },
+        getSpellCache: () => sharedSpellCache || spellCache,
+        setSpellCache: (cache) => { 
+            sharedSpellCache = cache; 
+            spellCache = cache;
+            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.setSpellCache) {
+                window.vttPlayerSheetAPI.setSpellCache(cache);
+            }
+        },
         invalidateSpellCache: () => invalidateSpellCache(),
         getSpellMetaStrings: (sp, slKey) => getSpellMetaStrings(sp, slKey),
-        renderAndInjectSpell: (spellName, containerEl, fallbackDesc, sp, slKey) => renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey),
+        renderAndInjectSpell: (spellName, containerEl, fallbackDesc, sp, slKey, options) => renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey, options),
         renderSpellRowHtml: (sp, slKey, idx, options) => renderSpellRowHtml(sp, slKey, idx, options),
-        ensureSpellIsParsed: (sp) => ensureSpellIsParsed(sp),
+        ensureSpellIsParsed: (sp, options) => ensureSpellIsParsed(sp, options),
+        parseSpellToMacro: parseSpellToMacro,
         postSpellToChat: (sp, slKey, creatureName, visibility) => postSpellToChat(sp, slKey, creatureName, visibility),
         promptUpcastLevel: (baseLvl, callback) => promptUpcastLevel(baseLvl, callback),
         rollSpell: (sp, slKey, casterObj, options) => rollSpell(sp, slKey, casterObj, options)
@@ -140,7 +385,7 @@ export function invalidateSpellCache() {
 export async function loadSpells(explicitCampId = null) {
     if (sharedSpellCache) return sharedSpellCache;
     if (pSpellPromise) return pSpellPromise;
-    const campId = explicitCampId || (typeof window !== 'undefined' ? (window.VTT?.campaignId || window.VTT?.campaignState?.id || (new URLSearchParams(window.location.search)).get('campaignId') || (new URLSearchParams(window.location.search)).get('campaign') || '') : '');
+    const campId = explicitCampId || (typeof window !== 'undefined' ? (window.VTT?.campaignId || window.VTT?.campaignState?.id || (new URLSearchParams(window.location?.search || '')).get('campaignId') || (new URLSearchParams(window.location?.search || '')).get('campaign') || '') : '');
     const qs = campId ? `?campaignId=${encodeURIComponent(campId)}&v=${Date.now()}` : `?v=${Date.now()}`;
     pSpellPromise = fetch(`/data/spells-catalog.json${qs}`)
         .then(res => {
@@ -197,13 +442,13 @@ export function cleanSpellBodyHtml(html) {
     // 2. Remove title header rows and source wrappers
     temp.querySelectorAll('.ve-stats__th-name, .rd-spell__name, h1.ve-stats__h-name, tr.text-sub-header, .ve-stats__wrp-h-source').forEach(el => {
         const row = el.closest('tr') || el;
-        if (temp.contains(row)) row.remove();
+        if (!temp.contains || temp.contains(row)) row.remove();
     });
 
     // 3. Remove divider rows and source footers
     temp.querySelectorAll('tr.ve-h-divider, tr.rd__b-divider, .vtt-spell-source-footer, .ve-rd__stats-name-page').forEach(el => {
         const row = el.closest('tr') || el;
-        if (temp.contains(row)) row.remove();
+        if (!temp.contains || temp.contains(row)) row.remove();
     });
 
     // 4. Target table rows (tr) containing level/school subtitle, metadata headers, or page source footers
@@ -301,55 +546,127 @@ export function getSpellMetaStrings(sp, slKey) {
     return { school, level, time, range, components, duration };
 }
 
-export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey) {
+export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey, options = {}) {
     if (!containerEl) return;
-    let meta = getSpellMetaStrings(sp || { name: spellName }, slKey);
     
+    const cache = sharedSpellCache || spellCache || (typeof window !== 'undefined' && window.VTTSpellManager?.getSpellCache?.());
+    let meta = getSpellMetaStrings(sp || { name: spellName }, slKey);
     let rawBody = sp?.description || fallbackDesc || '';
-    if ((sharedSpellCache || spellCache) && spellName) {
-        const cache = sharedSpellCache || spellCache;
-        const rawName = String(spellName).replace(/\s*\[.*?\]$/, '').toLowerCase().trim();
-        const spSrc = (sp?.source || '').toLowerCase().trim() || (String(spellName).match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
-        let found = cache.find(s => {
-            const sName = (s.name || '').toLowerCase().trim();
-            if (sName !== rawName) return false;
-            if (spSrc && (s.source || '').toLowerCase().trim() !== spSrc) return false;
-            return true;
+
+    // If description is missing and cache is not yet loaded, auto-load cache
+    if (!rawBody && !cache) {
+        containerEl.innerHTML = '<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic; padding:4px 0;"><i class="fa-solid fa-spinner fa-spin" style="margin-right:6px;"></i>Loading spell catalog...</div>';
+        loadSpells().then(() => {
+            renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey, options);
+        }).catch(() => {
+            containerEl.innerHTML = fallbackDesc ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>` : `<em>Could not find full text for ${spellName}</em>`;
         });
-        if (!found) {
-            found = cache.find(s => s.name && s.name.toLowerCase().trim() === rawName);
+        return;
+    }
+    if (!cache) {
+        loadSpells().catch(() => {});
+    }
+
+    if (cache && spellName) {
+        const rawName = String(spellName).replace(/\s*\[.*?\]$/, '').toLowerCase().trim();
+        let spSrc = (sp?.source || '').toLowerCase().trim() || (String(spellName).match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
+        if (spSrc === 'mm' || spSrc === 'xmm') spSrc = '';
+        
+        let is2024 = options.is2024;
+        if (is2024 === undefined) {
+            if (spSrc) {
+                is2024 = spSrc === 'xphb' || spSrc === 'xdmg' || spSrc === 'xmm';
+            } else if (options.caster) {
+                is2024 = (options.caster.classes && options.caster.classes.some(c => (c.name || '').includes('[XPHB]') || (c.source || '').toUpperCase() === 'XPHB')) ||
+                         options.caster.source === 'XMM' || options.caster.source === 'XPHB' || options.caster.ruleset === '2024' || !!options.caster.is2024;
+            } else {
+                is2024 = false;
+            }
         }
+
+        let found = null;
+        if (spSrc) {
+            found = cache.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toLowerCase().trim() === spSrc);
+        }
+        if (!found) {
+            if (is2024) {
+                found = cache.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'XPHB') ||
+                        cache.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'PHB') ||
+                        cache.find(s => (s.name || '').toLowerCase().trim() === rawName);
+            } else {
+                found = cache.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'PHB') ||
+                        cache.find(s => {
+                            const src = (s.source || '').toUpperCase();
+                            return (s.name || '').toLowerCase().trim() === rawName && src !== 'XPHB' && src !== 'XDMG' && src !== 'XMM';
+                        }) ||
+                        cache.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'XPHB') ||
+                        cache.find(s => (s.name || '').toLowerCase().trim() === rawName);
+            }
+        }
+
         if (found) {
-            if (!rawBody) {
-                rawBody = found.descriptionHtml || found.description || '';
-                if (found.higherLevelHtml && !rawBody.includes(found.higherLevelHtml)) {
-                    rawBody += (rawBody ? '<br>' : '') + found.higherLevelHtml;
+            // If rawBody is currently empty, check if catalog item or previously fetched cache has the description
+            if (!rawBody && (found.descriptionHtml || found.description)) {
+                let candidateDesc = found.descriptionHtml || found.description || '';
+                if (found.higherLevelHtml && !candidateDesc.includes(found.higherLevelHtml)) {
+                    candidateDesc += (candidateDesc ? '<br>' : '') + found.higherLevelHtml;
                 }
+                rawBody = candidateDesc;
             }
             if (sp && typeof sp === 'object') {
-                if (rawBody) sp.description = rawBody;
+                if (rawBody && !sp.description) sp.description = rawBody;
                 if (!sp.school && found.school) sp.school = found.school;
                 if (!sp.castingTime && found.castingTime) sp.castingTime = found.castingTime;
                 if (!sp.range && found.range) sp.range = found.range;
                 if (!sp.components && found.components) sp.components = found.components;
                 if (!sp.duration && found.duration) sp.duration = found.duration;
-                if (!sp.source && found.source) sp.source = found.source;
+                if (!sp.source || sp.source === 'MM' || sp.source === 'XMM') sp.source = found.source;
             }
             meta = getSpellMetaStrings(sp || found, slKey);
 
-            // If catalog item doesn't have full descriptionHtml yet, fetch asynchronously from source partition API
-            if ((!rawBody || rawBody === fallbackDesc) && found.source && found.id) {
+            // If catalog item doesn't have full descriptionHtml yet and rawBody is still empty, fetch asynchronously from source partition API
+            if (!rawBody && found.source && found.id) {
+                // Show metadata + loading spinner while fetch is ongoing
+                let interimMeta = '<div class="spell-meta" style="margin-bottom: 8px;">';
+                if (meta.level) interimMeta += `<div><i class="fa-solid fa-layer-group" style="width: 16px; text-align: center; margin-right: 4px;" title="Level"></i> <strong>Level:</strong> ${meta.level}</div>`;
+                if (meta.school) interimMeta += `<div><i class="fa-solid fa-graduation-cap" style="width: 16px; text-align: center; margin-right: 4px;" title="School"></i> <strong>School:</strong> ${meta.school}</div>`;
+                if (meta.time) interimMeta += `<div><i class="fa-solid fa-clock" style="width: 16px; text-align: center; margin-right: 4px;" title="Casting Time"></i> <strong>Casting Time:</strong> ${meta.time}</div>`;
+                if (meta.range) interimMeta += `<div><i class="fa-solid fa-ruler" style="width: 16px; text-align: center; margin-right: 4px;" title="Range"></i> <strong>Range:</strong> ${meta.range}</div>`;
+                if (meta.components) interimMeta += `<div><i class="fa-solid fa-hand-sparkles" style="width: 16px; text-align: center; margin-right: 4px;" title="Components"></i> <strong>Components:</strong> ${meta.components}</div>`;
+                if (meta.duration) interimMeta += `<div><i class="fa-solid fa-stopwatch" style="width: 16px; text-align: center; margin-right: 4px;" title="Duration"></i> <strong>Duration:</strong> ${meta.duration}</div>`;
+                interimMeta += '</div>';
+                containerEl.innerHTML = interimMeta + '<div class="spell-loading-desc" style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic; padding:4px 0;"><i class="fa-solid fa-spinner fa-spin" style="margin-right:6px;"></i>Loading full description...</div>';
+
                 fetch(`/api/spell/${encodeURIComponent(found.source)}/${encodeURIComponent(found.id)}`)
-                    .then(r => r.json())
+                    .then(r => {
+                        if (!r.ok) throw new Error(`Spell fetch error: ${r.status}`);
+                        return r.json();
+                    })
                     .then(full => {
+                        if (!full || full.error) throw new Error(full?.error || 'Spell data error');
                         Object.assign(found, full);
+                        let fullDesc = full.descriptionHtml || full.description || '';
+                        if (full.higherLevelHtml && !fullDesc.includes(full.higherLevelHtml)) {
+                            fullDesc += (fullDesc ? '<br>' : '') + full.higherLevelHtml;
+                        }
+                        found.descriptionHtml = fullDesc;
                         if (sp && typeof sp === 'object') {
-                            sp.description = full.descriptionHtml || full.description || '';
+                            sp.description = fullDesc;
+                            sp.source = found.source;
                         }
                         if (containerEl) {
-                            renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp || found, slKey);
+                            let bodyOut = fullDesc;
+                            if (typeof cleanSpellBodyHtml === 'function') bodyOut = cleanSpellBodyHtml(bodyOut);
+                            if (typeof window !== 'undefined' && typeof window.injectDiceChips === 'function') bodyOut = window.injectDiceChips(bodyOut);
+                            containerEl.innerHTML = interimMeta + (bodyOut || `<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic;">No description available for ${spellName}.</div>`);
                         }
-                    }).catch(() => {});
+                    }).catch(err => {
+                        console.warn('[VTTSpellManager] Failed to load full description for', spellName, err);
+                        if (containerEl) {
+                            containerEl.innerHTML = interimMeta + (fallbackDesc ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>` : `<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic;">No description available for ${spellName}.</div>`);
+                        }
+                    });
+                return;
             }
         }
     }
@@ -371,9 +688,9 @@ export function renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, s
     }
 
     if (!rawBody && !meta.school && !meta.time && !meta.range && !meta.components && !meta.duration) {
-        containerEl.innerHTML = fallbackDesc ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>` : `<em>Could not find full text for ${spellName}</em>`;
+        containerEl.innerHTML = fallbackDesc ? `<div>${fallbackDesc.replace(/\n/g, '<br>')}</div>` : `<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic;">No description available for ${spellName}.</div>`;
     } else {
-        containerEl.innerHTML = metaHtml + rawBody;
+        containerEl.innerHTML = metaHtml + (rawBody || `<div style="color:var(--color-text-muted); font-size:0.8rem; font-style:italic;">No description available for ${spellName}.</div>`);
     }
 }
 
@@ -442,8 +759,8 @@ export function renderSpellRowHtml(sp, slKey, idx, options = {}) {
                         <i class="fa-solid fa-chevron-right" style="transition:transform 0.2s;"></i>
                     </div>
                     <div style="display:flex; align-items:center; gap:6px;">
-                        <div class="${prefix}post-chat" data-level="${slKey}" data-idx="${idx}" style="cursor:pointer;" title="Post Spellcard to Chat">
-                            <i class="fa-solid fa-wand-magic-sparkles text-gradient-gold"></i>
+                        <div class="${prefix}post-chat" data-level="${slKey}" data-idx="${idx}" style="cursor:pointer;" title="Ping description to chat">
+                            <i class="fa-solid fa-comment-dots text-gradient-gold"></i>
                         </div>
                         <div class="${prefix}ping-macro" data-level="${slKey}" data-idx="${idx}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary);" title="Roll Spell">
                             <span class="${prefix}name">${cleanTitle}</span>${badges}
@@ -461,23 +778,48 @@ export function renderSpellRowHtml(sp, slKey, idx, options = {}) {
     `;
 }
 
-export async function ensureSpellIsParsed(sp) {
+export async function ensureSpellIsParsed(sp, options = {}) {
     if (!sp || typeof sp !== 'object') return null;
     if (sp.macroPopulated && sp.description && sp.description.length > 0) return sp;
     
     const spells = await loadSpells();
     if (spells && sp.name) {
         const rawName = String(sp.name).replace(/\s*\[.*?\]$/, '').toLowerCase().trim();
-        const spSrc = (sp.source || '').toLowerCase().trim() || (String(sp.name).match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
-        let spData = spells.find(s => {
-            const sName = (s.name || '').toLowerCase().trim();
-            if (sName !== rawName) return false;
-            if (spSrc && (s.source || '').toLowerCase().trim() !== spSrc) return false;
-            return true;
-        });
-        if (!spData) {
-            spData = spells.find(s => s.name && s.name.toLowerCase().trim() === rawName);
+        let spSrc = (sp.source || '').toLowerCase().trim() || (String(sp.name).match(/\[([a-zA-Z0-9_-]+)\]$/)?.[1] || '').toLowerCase().trim();
+        if (spSrc === 'mm' || spSrc === 'xmm') spSrc = '';
+        
+        let is2024 = options.is2024;
+        if (is2024 === undefined) {
+            if (spSrc) {
+                is2024 = spSrc === 'xphb' || spSrc === 'xdmg' || spSrc === 'xmm';
+            } else if (options.caster) {
+                is2024 = (options.caster.classes && options.caster.classes.some(c => (c.name || '').includes('[XPHB]') || (c.source || '').toUpperCase() === 'XPHB')) ||
+                         options.caster.source === 'XMM' || options.caster.source === 'XPHB' || options.caster.ruleset === '2024' || !!options.caster.is2024;
+            } else {
+                is2024 = false;
+            }
         }
+
+        let spData = null;
+        if (spSrc) {
+            spData = spells.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toLowerCase().trim() === spSrc);
+        }
+        if (!spData) {
+            if (is2024) {
+                spData = spells.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'XPHB') ||
+                         spells.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'PHB') ||
+                         spells.find(s => (s.name || '').toLowerCase().trim() === rawName);
+            } else {
+                spData = spells.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'PHB') ||
+                         spells.find(s => {
+                             const src = (s.source || '').toUpperCase();
+                             return (s.name || '').toLowerCase().trim() === rawName && src !== 'XPHB' && src !== 'XDMG' && src !== 'XMM';
+                         }) ||
+                         spells.find(s => (s.name || '').toLowerCase().trim() === rawName && (s.source || '').toUpperCase() === 'XPHB') ||
+                         spells.find(s => (s.name || '').toLowerCase().trim() === rawName);
+            }
+        }
+
         if (spData) {
             if (!spData.descriptionHtml && spData.source && spData.id) {
                 try {
@@ -485,13 +827,21 @@ export async function ensureSpellIsParsed(sp) {
                     if (res.ok) {
                         const full = await res.json();
                         Object.assign(spData, full);
+                        if (full.descriptionHtml) spData.descriptionHtml = full.descriptionHtml;
                     }
                 } catch(e) {}
             }
-            if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.parseSpellToMacro) {
-                window.vttPlayerSheetAPI.parseSpellToMacro(spData, sp);
-            } else {
-                parseSpellToMacro(spData, sp);
+            try {
+                if (window.vttPlayerSheetAPI && window.vttPlayerSheetAPI.parseSpellToMacro) {
+                    window.vttPlayerSheetAPI.parseSpellToMacro(spData, sp);
+                } else {
+                    parseSpellToMacro(spData, sp);
+                }
+            } catch (parseErr) {
+                console.warn('[VTTSpellManager] Error inside parseSpellToMacro:', parseErr);
+            }
+            if (!sp.source || sp.source.toUpperCase() === 'MM' || sp.source.toUpperCase() === 'XMM') {
+                sp.source = spData.source || sp.source;
             }
             sp.macroPopulated = true;
         }
@@ -960,7 +1310,7 @@ let activeVtt = null;
 
 export function initVttSpellManager(vtt) {
     activeVtt = vtt;
-    let spellCache = null;
+    if (!spellCache && sharedSpellCache) spellCache = sharedSpellCache;
     let activeSpellEditContext = { char: null, onSave: null };
     let spellBulkSelection = new Set();
     let activeSpellEditionFilter = 'all';
@@ -972,229 +1322,9 @@ export function initVttSpellManager(vtt) {
     let saveAndEmit = null;
     let renderSheetData = null;
 
-    function parseSpellToMacro(spData, newSpell) {
-        if (!spData) return;
+// parseSpellToMacro is defined at module scope
 
-        newSpell.source = spData.source || newSpell.source || '';
-        newSpell.school = spData.school || newSpell.school || '';
-        newSpell.castingTime = spData.castingTime || newSpell.castingTime || '';
-        newSpell.range = spData.range || newSpell.range || '';
-        newSpell.components = spData.components || newSpell.components || '';
-        newSpell.duration = spData.duration || newSpell.duration || '';
-
-        newSpell.description = spData.descriptionHtml || spData.description || (Array.isArray(spData.entries) ? spData.entries.map(e => typeof e === 'string' ? e : JSON.stringify(e)).join('<br>') : '') || newSpell.description || '';
-        if (spData.higherLevelHtml && !newSpell.description.includes(spData.higherLevelHtml)) {
-            newSpell.description += (newSpell.description ? '<br>' : '') + spData.higherLevelHtml;
-        }
-
-        if (spData.concentration !== undefined) newSpell.concentration = !!spData.concentration;
-        else if (spData.duration && Array.isArray(spData.duration) && spData.duration.some(d => d.concentration)) newSpell.concentration = true;
-        else if (spData.meta?.concentration) newSpell.concentration = true;
-        else if (newSpell.concentration === undefined) newSpell.concentration = false;
-
-        if (spData.ritual !== undefined) newSpell.ritual = !!spData.ritual;
-        const isCantrip = spData.level === 0 || newSpell.level === 0 || newSpell.cantripScale;
-        const isMultiAttackCantrip = /eldritch blast/i.test(newSpell.name || spData.name || '');
-        if (isCantrip) {
-            newSpell.cantripScale = isMultiAttackCantrip ? false : (spData.cantripScale !== undefined ? !!spData.cantripScale : true);
-        }
-
-        if (spData.damageList && Array.isArray(spData.damageList) && spData.damageList.length > 0) {
-            newSpell.damageList = JSON.parse(JSON.stringify(spData.damageList));
-            newSpell.damageList.forEach((d, rIdx) => {
-                if (isCantrip) {
-                    if (d.cantripScale === undefined) {
-                        d.cantripScale = isMultiAttackCantrip ? false : (rIdx === 0 ? (spData.cantripScale !== undefined ? !!spData.cantripScale : true) : false);
-                    }
-                } else {
-                    if (d.upcastBonus === undefined) {
-                        d.upcastBonus = rIdx === 0 ? (spData.upcastBonus || '') : '';
-                    }
-                    if (d.upcastScaleStep === undefined) {
-                        d.upcastScaleStep = rIdx === 0 ? (spData.upcastScaleStep || 1) : 1;
-                    }
-                }
-            });
-        }
-
-        if (spData.saveAbility) {
-            newSpell.saveAbility = spData.saveAbility.substring(0, 3).toUpperCase();
-            newSpell.saveDcStat = "spell";
-        }
-
-        if (spData.attackStat && spData.attackStat !== 'none') {
-            newSpell.attackStat = spData.attackStat;
-            newSpell.attackProf = spData.attackStat === 'spell';
-        }
-
-        if (spData.upcastBonus) {
-            newSpell.upcastBonus = spData.upcastBonus;
-        }
-        if (spData.upcastScaleStep) {
-            newSpell.upcastScaleStep = spData.upcastScaleStep;
-        }
-
-        if (!spData.entries && !spData.descriptionHtml && !spData.description) return;
-
-        const rawEntriesText = JSON.stringify(spData.entries || spData.descriptionHtml || spData.description || '').toLowerCase();
-
-        if (rawEntriesText.includes("spell attack") || rawEntriesText.includes("{@atk ms}") || rawEntriesText.includes("{@atk rs}") || rawEntriesText.includes("{@atk ms,rs}")) {
-            newSpell.attackStat = "spell";
-            newSpell.attackProf = true;
-            newSpell.attackExtra = 0;
-            newSpell.attackBonus = "";
-        } else if (newSpell.attackStat === undefined) {
-            newSpell.attackStat = "none";
-            newSpell.attackProf = false;
-        }
-
-        const saveMatch = rawEntriesText.match(/(strength|dexterity|constitution|intelligence|wisdom|charisma) saving throw/);
-        if (saveMatch && !newSpell.saveAbility) {
-            newSpell.saveDcStat = "spell";
-            newSpell.saveDcExtra = 0;
-            newSpell.saveDcCustom = null;
-            newSpell.saveAbility = saveMatch[1].substring(0, 3).toUpperCase();
-        } else if (newSpell.saveDcStat === undefined) {
-            newSpell.saveDcStat = "none";
-            newSpell.saveAbility = "";
-        }
-
-        // Parse damage / healing if not already set
-        if (!newSpell.damageList || newSpell.damageList.length === 0) {
-            const spName = (spData.name || '').toLowerCase();
-            const dmgInflict = Array.isArray(spData.damageInflict) ? spData.damageInflict : [];
-
-            // 1. Check scalingLevelDice first (common for cantrips like Toll the Dead, Eldritch Blast, etc.)
-            if (isCantrip && Array.isArray(spData.scalingLevelDice) && spData.scalingLevelDice.length > 0) {
-                const parsedList = [];
-                spData.scalingLevelDice.forEach((sld, idx) => {
-                    const formula = sld.scaling?.['1'] || sld.scaling?.['cantrip'] || Object.values(sld.scaling || {})[0] || '1d8';
-                    let type = 'Damage';
-                    let label = '';
-                    const rawLabel = (sld.label || '').toLowerCase();
-                    
-                    const knownTypes = ["slashing", "piercing", "bludgeoning", "fire", "cold", "lightning", "thunder", "poison", "acid", "necrotic", "radiant", "force", "psychic", "healing"];
-                    for (const kt of knownTypes) {
-                        if (rawLabel.includes(kt)) {
-                            type = kt.charAt(0).toUpperCase() + kt.slice(1);
-                            break;
-                        }
-                    }
-                    if (type === 'Damage' && dmgInflict.length > 0) {
-                        const matchedInflict = dmgInflict[idx] || dmgInflict[0];
-                        type = matchedInflict.charAt(0).toUpperCase() + matchedInflict.slice(1);
-                    }
-
-                    if (rawLabel.includes('wounded') || rawLabel.includes('missing')) {
-                        label = 'Wounded Target';
-                    } else if (spData.scalingLevelDice.length > 1) {
-                        label = idx === 0 ? 'Normal' : `Variant ${idx + 1}`;
-                    }
-
-                    parsedList.push({
-                        id: 'dmg_' + Date.now() + Math.random(),
-                        formula,
-                        type,
-                        label,
-                        stat: ''
-                    });
-                });
-                if (parsedList.length > 0) {
-                    newSpell.damageList = parsedList;
-                }
-            } else if (isCantrip) {
-                if (spName.includes('booming blade')) {
-                    newSpell.damageList = [
-                        { formula: '0d8', type: 'Thunder', id: 'dmg_bb_hit', label: 'On Hit' },
-                        { formula: '1d8', type: 'Thunder', id: 'dmg_bb_move', label: 'On Move' }
-                    ];
-                } else if (spName.includes('green-flame blade')) {
-                    newSpell.damageList = [
-                        { formula: '0d8', type: 'Fire', id: 'dmg_gfb_hit', label: 'Primary Target' },
-                        { formula: '1d8', type: 'Fire', stat: 'spell', id: 'dmg_gfb_sec', label: 'Secondary Target' }
-                    ];
-                } else {
-                    const dmgMatches = [...rawEntriesText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
-                    if (dmgMatches.length > 0) {
-                        newSpell.damageList = dmgMatches.map((m, idx) => {
-                            const formula = m[1].trim();
-                            let type = m[2] ? m[2].charAt(0).toUpperCase() + m[2].slice(1) : (dmgInflict[idx] ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1) : (dmgInflict[0] ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1) : 'Damage'));
-                            let label = '';
-                            if (dmgMatches.length > 1) {
-                                label = idx === 0 ? 'Normal' : `Option ${idx + 1}`;
-                            }
-                            return { formula, type, label, id: 'dmg_' + Date.now() + Math.random() };
-                        });
-                    } else {
-                        const fallbackM = rawEntriesText.match(/(\d+d\d+)/i);
-                        if (fallbackM) {
-                            let type = dmgInflict.length > 0 ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1) : 'Damage';
-                            newSpell.damageList = [{ formula: fallbackM[1], type, label: '', id: 'dmg_' + Date.now() + Math.random() }];
-                        }
-                    }
-                }
-            } else {
-                const isHealing = (spData.miscTags && spData.miscTags.includes('HL')) || /regain|restore/i.test(rawEntriesText);
-                const isTempHp = (spData.miscTags && spData.miscTags.includes('THP')) || /temporary hit point/i.test(rawEntriesText);
-                
-                if (isHealing || isTempHp) {
-                    const type = isHealing ? 'Healing' : 'Temp HP';
-                    const hasSpellMod = /plus your spellcasting ability modifier|\+\s*your spellcasting ability modifier/i.test(rawEntriesText);
-                    const stat = hasSpellMod ? 'spell' : 'none';
-                    const dm = rawEntriesText.match(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/i) || rawEntriesText.match(/(\d+d\d+(?:\s*[+-]\s*\d+)?)/i);
-                    if (dm) {
-                        const formula = (dm[1] || dm[0]).replace(/\{@(?:dice|damage)\s+([^}|]+)[^}]*\}/i, '$1').trim();
-                        newSpell.damageList = [{ formula, type, stat, label: '', id: 'dmg_' + Date.now() + Math.random() }];
-                    } else {
-                        const flatMatch = rawEntriesText.match(/restoring\s+(\d+)/i) || rawEntriesText.match(/regains?\s+(\d+)/i);
-                        if (flatMatch) {
-                            newSpell.damageList = [{ formula: flatMatch[1], type, stat, label: '', id: 'dmg_' + Date.now() + Math.random() }];
-                        }
-                    }
-                } else {
-                    const dmgMatches = [...rawEntriesText.matchAll(/\{@damage\s+([^}|]+)[^}]*\}(?:\s*([a-z]+)\s+damage)?/gi)];
-                    if (dmgMatches.length > 0) {
-                        newSpell.damageList = dmgMatches.map((match, idx) => {
-                            let formula = match[1].trim();
-                            let type = match[2] ? match[2].charAt(0).toUpperCase() + match[2].slice(1) : (dmgInflict[idx] ? dmgInflict[idx].charAt(0).toUpperCase() + dmgInflict[idx].slice(1) : (dmgInflict[0] ? dmgInflict[0].charAt(0).toUpperCase() + dmgInflict[0].slice(1) : "Damage"));
-                            let label = '';
-                            if (dmgMatches.length > 1) {
-                                if (spName.includes('ice knife')) {
-                                    label = idx === 0 ? 'On Hit' : 'Burst';
-                                } else {
-                                    label = `Damage ${idx + 1}`;
-                                }
-                            }
-                            return { formula, type, label, id: 'dmg_' + Date.now() + Math.random() };
-                        });
-                    }
-                }
-            }
-        }
-
-        if (window.Renderer && spData.entries) {
-            try {
-                const temp = document.createElement('div');
-                temp.innerHTML = window.Renderer.get().render({ entries: spData.entries });
-                newSpell.description = temp.textContent || temp.innerText || "";
-            } catch (e) { }
-        }
-
-        if (spData.entriesHigherLevel && !newSpell.upcastBonus) {
-            const hl = JSON.stringify(spData.entriesHigherLevel).toLowerCase();
-            let hlMatch = hl.match(/\{@scale(?:damage|dice)\s+[^|]+\|[^|]+\|([^}]+)\}/i);
-            if (hlMatch) {
-                newSpell.upcastBonus = hlMatch[1];
-            } else {
-                hlMatch = hl.match(/(?:increases by|gain (?:an additional )?)(?:\{@(?:damage|dice) )?(\d+d\d+|\d+)/i);
-                if (hlMatch) {
-                    newSpell.upcastBonus = hlMatch[1];
-                }
-            }
-        }
-    }
-
-    function ensureSpellModalsExist() {
+        function ensureSpellModalsExist() {
         if (document.getElementById('pc-spell-modal')) return;
 
         const container = document.createElement('div');
@@ -2014,8 +2144,11 @@ export function initVttSpellManager(vtt) {
 
         const char = activeSpellEditContext.char;
         let sp = opts.targetSpell || null;
-        if (!sp && idx >= 0 && char && char.spells && char.spells[level]) {
-            sp = char.spells[level][idx];
+        if (!sp && idx >= 0 && char && char.spells) {
+            sp = char.spells[level]?.[idx] || 
+                 (level && level.startsWith('level') ? char.spells[level.replace('level', '')]?.[idx] : null) ||
+                 (level === 'cantrip' ? char.spells['0']?.[idx] : null) ||
+                 (/^\d+$/.test(level) ? char.spells[level === '0' ? 'cantrip' : ('level' + level)]?.[idx] : null);
         }
         if (sp) {
             const rawSpName = (sp.name || '').replace(/\s*\[.*?\]$/, '').toLowerCase().trim();
@@ -2027,7 +2160,23 @@ export function initVttSpellManager(vtt) {
                 return true;
             }) : null;
             if (!spData && spellCache) {
-                spData = spellCache.find(s => (s.name || '').toLowerCase().trim() === rawSpName);
+                const is2024 = (opts.is2024 !== undefined) ? opts.is2024 : (
+                    (char?.classes && char.classes.some(c => (c.name || '').includes('[XPHB]') || (c.source || '').toUpperCase() === 'XPHB')) ||
+                    char?.source === 'XMM' || char?.source === 'XPHB' || char?.ruleset === '2024' || !!char?.is2024
+                );
+                if (is2024) {
+                    spData = spellCache.find(s => (s.name || '').toLowerCase().trim() === rawSpName && (s.source || '').toUpperCase() === 'XPHB') ||
+                             spellCache.find(s => (s.name || '').toLowerCase().trim() === rawSpName && (s.source || '').toUpperCase() === 'PHB') ||
+                             spellCache.find(s => (s.name || '').toLowerCase().trim() === rawSpName);
+                } else {
+                    spData = spellCache.find(s => (s.name || '').toLowerCase().trim() === rawSpName && (s.source || '').toUpperCase() === 'PHB') ||
+                             spellCache.find(s => {
+                                 const src = (s.source || '').toUpperCase();
+                                 return (s.name || '').toLowerCase().trim() === rawSpName && src !== 'XPHB' && src !== 'XDMG' && src !== 'XMM';
+                             }) ||
+                             spellCache.find(s => (s.name || '').toLowerCase().trim() === rawSpName && (s.source || '').toUpperCase() === 'XPHB') ||
+                             spellCache.find(s => (s.name || '').toLowerCase().trim() === rawSpName);
+                }
             }
 
             document.getElementById('pc-spell-modal-title').textContent = "Edit Spell";
@@ -2800,8 +2949,8 @@ export function initVttSpellManager(vtt) {
                     const newCustomSpell = { id: 'sp_' + Date.now() + Math.random(), name: toSpellTitleCase(name), description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true };
                     char.spells[level].push(newCustomSpell);
 
-                    if (activeSpellEditContext && activeSpellEditContext.blockId && char.spellcasting) {
-                        const sc = char.spellcasting.find(b => b.id === activeSpellEditContext.blockId);
+                    if (activeSpellEditContext && char.spellcasting && Array.isArray(char.spellcasting)) {
+                        const sc = (activeSpellEditContext.blockId ? char.spellcasting.find(b => b.id === activeSpellEditContext.blockId) : null) || char.spellcasting[0];
                         if (sc) {
                             if (activeSpellEditContext.sectionKey === 'will') {
                                 sc.innateObj = sc.innateObj || { will: [], daily: {} };
@@ -2825,6 +2974,25 @@ export function initVttSpellManager(vtt) {
                                 newCustomSpell.innate = true;
                                 sc.innateObj.daily[dayKey].push(newCustomSpell);
                                 sc.daily[dayKey].push(newCustomSpell);
+                            } else {
+                                // Slot-based spell or cantrip
+                                sc.spellsObj = sc.spellsObj || {};
+                                sc.spellsObj[level] = sc.spellsObj[level] || [];
+                                if (!sc.spellsObj[level].some(s => s.id === newCustomSpell.id || s.name.toLowerCase() === newCustomSpell.name.toLowerCase())) {
+                                    sc.spellsObj[level].push(newCustomSpell);
+                                }
+                                sc.spells = sc.spells || {};
+                                const lvlIdx = level === 'cantrip' ? '0' : level.replace('level', '');
+                                if (!sc.spells[lvlIdx]) {
+                                    sc.spells[lvlIdx] = { spells: [] };
+                                } else if (Array.isArray(sc.spells[lvlIdx])) {
+                                    sc.spells[lvlIdx] = { spells: sc.spells[lvlIdx] };
+                                } else if (!sc.spells[lvlIdx].spells) {
+                                    sc.spells[lvlIdx].spells = [];
+                                }
+                                if (!sc.spells[lvlIdx].spells.some(s => (typeof s === 'string' ? s.toLowerCase() : s.name?.toLowerCase()) === newCustomSpell.name.toLowerCase())) {
+                                    sc.spells[lvlIdx].spells.push(newCustomSpell.name);
+                                }
                             }
                         }
                     }
@@ -2856,8 +3024,8 @@ export function initVttSpellManager(vtt) {
                             newSpell.name = finalSpellName;
                             char.spells[levelKey].push(newSpell);
 
-                            if (activeSpellEditContext && activeSpellEditContext.blockId && char.spellcasting) {
-                                const sc = char.spellcasting.find(b => b.id === activeSpellEditContext.blockId);
+                            if (activeSpellEditContext && char.spellcasting && Array.isArray(char.spellcasting)) {
+                                const sc = (activeSpellEditContext.blockId ? char.spellcasting.find(b => b.id === activeSpellEditContext.blockId) : null) || char.spellcasting[0];
                                 if (sc) {
                                     if (activeSpellEditContext.sectionKey === 'will') {
                                         sc.innateObj = sc.innateObj || { will: [], daily: {} };
@@ -2888,6 +3056,25 @@ export function initVttSpellManager(vtt) {
                                         }
                                         if (!sc.daily[dayKey].some(s => (typeof s === 'string' ? s.toLowerCase() : s.name.toLowerCase()) === newSpell.name.toLowerCase())) {
                                             sc.daily[dayKey].push(newSpell);
+                                        }
+                                    } else {
+                                        // Slot-based spell or cantrip
+                                        sc.spellsObj = sc.spellsObj || {};
+                                        sc.spellsObj[levelKey] = sc.spellsObj[levelKey] || [];
+                                        if (!sc.spellsObj[levelKey].some(s => s.id === newSpell.id || s.name.toLowerCase() === newSpell.name.toLowerCase())) {
+                                            sc.spellsObj[levelKey].push(newSpell);
+                                        }
+                                        sc.spells = sc.spells || {};
+                                        const lvlIdx = levelKey === 'cantrip' ? '0' : levelKey.replace('level', '');
+                                        if (!sc.spells[lvlIdx]) {
+                                            sc.spells[lvlIdx] = { spells: [] };
+                                        } else if (Array.isArray(sc.spells[lvlIdx])) {
+                                            sc.spells[lvlIdx] = { spells: sc.spells[lvlIdx] };
+                                        } else if (!sc.spells[lvlIdx].spells) {
+                                            sc.spells[lvlIdx].spells = [];
+                                        }
+                                        if (!sc.spells[lvlIdx].spells.some(s => (typeof s === 'string' ? s.toLowerCase() : s.name?.toLowerCase()) === newSpell.name.toLowerCase())) {
+                                            sc.spells[lvlIdx].spells.push(newSpell.name);
                                         }
                                     }
                                 }
@@ -3140,8 +3327,12 @@ export function initVttSpellManager(vtt) {
             currentChar = ctx.currentChar;
             saveAndEmit = ctx.saveAndEmit;
             renderSheetData = ctx.renderSheetData;
-            spellCache = ctx.spellCache;
-            if (ctx.spellCache) sharedSpellCache = ctx.spellCache;
+            if (ctx.spellCache) {
+                spellCache = ctx.spellCache;
+                sharedSpellCache = ctx.spellCache;
+            } else if (!spellCache && sharedSpellCache) {
+                spellCache = sharedSpellCache;
+            }
         },
         openModal: (level, idx, customChar, onSaveCallback, options) => {
             openSpellModal(level, idx, customChar, onSaveCallback, options);
@@ -3161,9 +3352,9 @@ export function initVttSpellManager(vtt) {
         parseSpellToMacro: (spData, newSpell) => parseSpellToMacro(spData, newSpell),
         cleanSpellBodyHtml: (html) => cleanSpellBodyHtml(html),
         getSpellMetaStrings: (sp, slKey) => getSpellMetaStrings(sp, slKey),
-        renderAndInjectSpell: (spellName, containerEl, fallbackDesc, sp, slKey) => renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey),
+        renderAndInjectSpell: (spellName, containerEl, fallbackDesc, sp, slKey, options) => renderAndInjectSpell(spellName, containerEl, fallbackDesc, sp, slKey, options),
         renderSpellRowHtml: (sp, slKey, idx, options) => renderSpellRowHtml(sp, slKey, idx, options),
-        ensureSpellIsParsed: (sp) => ensureSpellIsParsed(sp),
+        ensureSpellIsParsed: (sp, options) => ensureSpellIsParsed(sp, options),
         postSpellToChat: (sp, slKey, creatureName, visibility) => postSpellToChat(sp, slKey, creatureName, visibility),
         promptUpcastLevel: (baseLvl, callback) => promptUpcastLevel(baseLvl, callback),
         scaleUpcastFormula: (formula, extra) => scaleUpcastFormula(formula, extra),

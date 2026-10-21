@@ -45,6 +45,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   sourcesRevealFile: (filePath) => ipcRenderer.invoke('sources-reveal-file', filePath),
   sourcesSearchCompendium: (params) => ipcRenderer.invoke('sources-search-compendium', params),
   sourcesGetEntityFull: (params) => ipcRenderer.invoke('sources-get-entity-full', params),
+  sourcesGetEntityFullData: (params) => ipcRenderer.invoke('sources-get-entity-full', params),
   sourcesExport: (params) => ipcRenderer.invoke('sources-export', params),
   sourcesSelectAsset: () => ipcRenderer.invoke('sources-select-asset'),
   sourcesSearchGlobal: (params) => ipcRenderer.invoke('sources-search-global', params),
@@ -53,6 +54,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
   sourcesSelectImportFolder: () => ipcRenderer.invoke('sources-select-import-folder'),
   sourcesInspectBulk: (params) => ipcRenderer.invoke('sources-inspect-bulk', params),
   sourcesExecuteBulkImport: (params) => ipcRenderer.invoke('sources-execute-bulk-import', params),
+  sourcesResetCampaign: (campaignId) => ipcRenderer.invoke('sources-reset-campaign', campaignId),
+  sourcesImportFromUrl: (params) => ipcRenderer.invoke('sources-import-from-url', params),
+  sourcesSyncToServer: () => ipcRenderer.invoke('sources-sync-to-server'),
 
   onStatusUpdate: (callback) => {
     const subscription = (_, data) => callback(data);

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell, Tray, Menu, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain, shell, Tray, Menu, dialog, session } from 'electron';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -16,6 +16,11 @@ const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 }
+
+// Hardware GPU Acceleration & Canvas Optimization Switches
+app.commandLine.appendSwitch('enable-gpu-rasterization');
+app.commandLine.appendSwitch('enable-zero-copy');
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
 
 const DEFAULT_PORT = 5050;
 
@@ -412,7 +417,8 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.cjs'),
       nodeIntegration: false,
-      contextIsolation: true
+      contextIsolation: true,
+      backgroundThrottling: false
     }
   });
 
@@ -529,6 +535,9 @@ function updateTrayMenu() {
 }
 
 function openVTTWindow() {
+  if (session.defaultSession) {
+    session.defaultSession.clearCache().catch(() => {});
+  }
   const vttWin = new BrowserWindow({
     width: 1400,
     height: 900,
@@ -536,7 +545,8 @@ function openVTTWindow() {
     backgroundColor: '#121212',
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: true
+      contextIsolation: true,
+      backgroundThrottling: false
     }
   });
 
@@ -1494,8 +1504,8 @@ ipcMain.handle('sources-reveal-file', (_, filePath) => {
   return { success: false, error: 'File path not found' };
 });
 
-ipcMain.handle('sources-search-compendium', (_, { category, query }) => {
-  return sourceManager.searchCompendium(category, query);
+ipcMain.handle('sources-search-compendium', (_, { category, query, limit }) => {
+  return sourceManager.searchCompendium(category, query, limit || 50);
 });
 
 ipcMain.handle('sources-get-entity-full', (_, { category, name, source }) => {
@@ -1590,6 +1600,28 @@ ipcMain.handle('sources-execute-bulk-import', async (_, { candidates, conflictDe
   return res;
 });
 
+ipcMain.handle('sources-reset-campaign', async (_, campaignId) => {
+  const result = sourceManager.resetCampaignSources(campaignId);
+  await syncSourcesToServer();
+  appendLog(`[Sources] Reset sourcebook overrides to global defaults for campaign ${campaignId}.`);
+  return result;
+});
+
+ipcMain.handle('sources-import-from-url', async (_, { url }) => {
+  const res = await sourceManager.importFromUrl(url);
+  if (res && res.success) {
+    await syncSourcesToServer();
+    appendLog(`[Sources] Successfully imported sourcebook from URL: ${url}`);
+  }
+  return res;
+});
+
+ipcMain.handle('sources-sync-to-server', async () => {
+  await syncSourcesToServer();
+  appendLog('[Sources] Explicitly synchronized source filters and custom homebrew with VTT.');
+  return { success: true };
+});
+
 // App Lifecycle
 app.on('second-instance', () => {
   if (mainWindow) {
@@ -1600,6 +1632,13 @@ app.on('second-instance', () => {
 });
 
 app.whenReady().then(async () => {
+  try {
+    if (session.defaultSession) {
+      await session.defaultSession.clearCache();
+    }
+  } catch (e) {
+    console.error('Failed to clear Electron cache on startup:', e);
+  }
   createWindow();
   createTray();
 

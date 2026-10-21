@@ -247,23 +247,38 @@ function loadSpellsLookup() {
     }
     const byId = new Map();
     const byNameSource = new Map();
+    const byName2014 = new Map();
+    const byName2024 = new Map();
     const byName = new Map();
 
     raw.forEach(sp => {
         byId.set(sp.id, sp);
         const nameLower = (sp.name || '').trim().toLowerCase();
         const srcLower = (sp.source || '').trim().toLowerCase();
+        const srcUpper = (sp.source || '').trim().toUpperCase();
         byNameSource.set(`${nameLower}|${srcLower}`, sp);
-        if (!byName.has(nameLower) || sp.source === 'PHB' || sp.source === 'XPHB') {
+
+        const is2024Src = srcUpper === 'XPHB' || srcUpper === 'XDMG' || srcUpper === 'XMM' || srcUpper.startsWith('XUA');
+        if (!is2024Src) {
+            if (!byName2014.has(nameLower) || srcUpper === 'PHB') {
+                byName2014.set(nameLower, sp);
+            }
+        } else {
+            if (!byName2024.has(nameLower) || srcUpper === 'XPHB') {
+                byName2024.set(nameLower, sp);
+            }
+        }
+
+        if (!byName.has(nameLower)) {
             byName.set(nameLower, sp);
         }
     });
 
     console.log(`✅ Loaded ${raw.length} spells into lookup cache.`);
-    return { byId, byNameSource, byName };
+    return { byId, byNameSource, byName2014, byName2024, byName };
 }
 
-function findSpell(spellRef, spellsLookup) {
+function findSpell(spellRef, spellsLookup, prefer2024 = false) {
     if (!spellRef) return null;
     let rawStr = typeof spellRef === 'string' ? spellRef : (spellRef.name || '');
     // Extract name and optional source from tag like {@spell magic missile|phb} or {@spell Fire Bolt|XPHB}
@@ -276,6 +291,21 @@ function findSpell(spellRef, spellsLookup) {
 
     if (srcLower && spellsLookup.byNameSource.has(`${nameLower}|${srcLower}`)) {
         return spellsLookup.byNameSource.get(`${nameLower}|${srcLower}`);
+    }
+    if (prefer2024) {
+        if (spellsLookup.byName2024 && spellsLookup.byName2024.has(nameLower)) {
+            return spellsLookup.byName2024.get(nameLower);
+        }
+        if (spellsLookup.byName2014 && spellsLookup.byName2014.has(nameLower)) {
+            return spellsLookup.byName2014.get(nameLower);
+        }
+    } else {
+        if (spellsLookup.byName2014 && spellsLookup.byName2014.has(nameLower)) {
+            return spellsLookup.byName2014.get(nameLower);
+        }
+        if (spellsLookup.byName2024 && spellsLookup.byName2024.has(nameLower)) {
+            return spellsLookup.byName2024.get(nameLower);
+        }
     }
     if (spellsLookup.byName.has(nameLower)) {
         return spellsLookup.byName.get(nameLower);
@@ -449,6 +479,7 @@ function normalizeAbilityEntry(entry, actionType, charName) {
 
 // Normalize spellcasting data
 function normalizeSpellcasting(monster, spellsLookup) {
+    const isMonster2024 = (monster.source === 'XMM' || monster.source === 'XPHB' || monster.source === 'XDMG' || (typeof monster.source === 'string' && monster.source.startsWith('XUA')) || !!monster.is2024);
     const spellcastingBlocks = [];
     const rawBlocks = [];
 
@@ -538,7 +569,7 @@ function normalizeSpellcasting(monster, spellsLookup) {
 
         // Build embedded spell object with quick-roll data
         function buildEmbeddedSpell(spellRef, usageMeta = {}) {
-            const normSpell = findSpell(spellRef, spellsLookup);
+            const normSpell = findSpell(spellRef, spellsLookup, isMonster2024);
             let rawName = typeof spellRef === 'string' ? spellRef : (spellRef.name || 'Unknown Spell');
             const cleanName = rawName.replace(/\{@spell\s+([^|}]+).*?\}/i, '$1').replace(/[*†‡]/g, '').trim();
 
@@ -1096,16 +1127,37 @@ function buildCreatureDatabase() {
         }
 
         // Speed parsing
+        function parseSpeedVal(val, defaultVal = 0) {
+            if (val === undefined || val === null || val === false) return defaultVal;
+            if (typeof val === 'number') return val;
+            if (typeof val === 'object' && val !== null) {
+                if (typeof val.number === 'number') return val.number;
+                if (val.number !== undefined) {
+                    const p = parseInt(val.number, 10);
+                    return !isNaN(p) ? p : defaultVal;
+                }
+            }
+            const parsed = parseInt(val, 10);
+            return !isNaN(parsed) ? parsed : defaultVal;
+        }
+
         const speedObj = { walk: 30, fly: 0, swim: 0, climb: 0, burrow: 0, canHover: false };
         if (m.speed) {
-            if (typeof m.speed === 'number') speedObj.walk = m.speed;
-            else if (typeof m.speed === 'object') {
-                if (m.speed.walk !== undefined) speedObj.walk = typeof m.speed.walk === 'number' ? m.speed.walk : (parseInt(m.speed.walk) || 30);
-                if (m.speed.fly !== undefined) speedObj.fly = typeof m.speed.fly === 'number' ? m.speed.fly : (parseInt(m.speed.fly) || 0);
-                if (m.speed.swim !== undefined) speedObj.swim = typeof m.speed.swim === 'number' ? m.speed.swim : (parseInt(m.speed.swim) || 0);
-                if (m.speed.climb !== undefined) speedObj.climb = typeof m.speed.climb === 'number' ? m.speed.climb : (parseInt(m.speed.climb) || 0);
-                if (m.speed.burrow !== undefined) speedObj.burrow = typeof m.speed.burrow === 'number' ? m.speed.burrow : (parseInt(m.speed.burrow) || 0);
-                if (m.speed.canHover) speedObj.canHover = true;
+            if (typeof m.speed === 'number') {
+                speedObj.walk = m.speed;
+            } else if (typeof m.speed === 'object' && m.speed !== null) {
+                if (m.speed.walk !== undefined) {
+                    speedObj.walk = parseSpeedVal(m.speed.walk, 0);
+                } else {
+                    speedObj.walk = (m.speed.fly || m.speed.swim || m.speed.burrow || m.speed.climb) ? 0 : 30;
+                }
+                if (m.speed.fly !== undefined) speedObj.fly = parseSpeedVal(m.speed.fly, 0);
+                if (m.speed.swim !== undefined) speedObj.swim = parseSpeedVal(m.speed.swim, 0);
+                if (m.speed.climb !== undefined) speedObj.climb = parseSpeedVal(m.speed.climb, 0);
+                if (m.speed.burrow !== undefined) speedObj.burrow = parseSpeedVal(m.speed.burrow, 0);
+                if (m.speed.canHover || (typeof m.speed.fly === 'object' && m.speed.fly?.condition && m.speed.fly.condition.includes('hover'))) {
+                    speedObj.canHover = true;
+                }
             }
         }
 

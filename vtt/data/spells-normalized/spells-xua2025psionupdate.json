@@ -1,0 +1,791 @@
+[
+  {
+    "id": "sp_abi_dalzim_s_horrid_wilting_xua2025psionupdate",
+    "name": "Abi-Dalzim's Horrid Wilting",
+    "source": "XUA2025PsionUpdate",
+    "page": 11,
+    "level": 8,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "150 feet",
+    "components": "V, S, M (a bit of sponge)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You draw the moisture from every creature in a 30- foot Cube [Area of Effect] centered on a point within range. Each creature in that area makes a Constitution saving throw, taking 12d8 Necrotic damage on a failed save or half as much damage on a successful one.</p><p>Constructs automatically succeed at the save, and Plant creatures automatically fail the save.</p><p>Nonmagical plants in the area that aren't creatures, such as trees and shrubs, wither and die instantly.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Psion",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "12d8",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_bleeding_darkness_xua2025psionupdate",
+    "name": "Bleeding Darkness",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 3,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S, M (a vial of rare ink worth 50+ GP)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You create an inky void in a 10-foot-radius Sphere [Area of Effect] at a point you can see above yourself within range.</p><p>When you cast the spell, magical Darkness pours from the sphere, filling a 10-foot-radius, 40-foot-tall Cylinder [Area of Effect] originating from the Sphere [Area of Effect] until the start of your next turn. The Cylinder [Area of Effect] is Difficult Terrain, and no light—magical or otherwise—can illuminate the area. When the Darkness appears, each creature in the area must succeed on a Constitution saving throw or take 3d8 Cold damage and have the Blinded condition until the end of its next turn. A creature also makes this save when it enters the spell's area for the first time on a turn or ends its turn there. A creature makes this save only once per turn.</p><p>Until the spell ends, you can take a Magic action to move the Sphere [Area of Effect] up to 20 feet horizontally and cause the Sphere [Area of Effect] to pour magical Darkness until the start of your next turn.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d8 for each spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d8 for each spell slot level above 3.</p></div>",
+    "classes": [
+      "Psion",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d8",
+        "type": "Cold",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Blinded"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "DFT",
+      "OBS",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_ectoplasmic_trail_xua2025psionupdate",
+    "name": "Ectoplasmic Trail",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 2,
+    "school": "Necromancy",
+    "castingTime": "1 bonus action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You cloak yourself in spirits that leave ectoplasm in your wake until the end of your turn. While cloaked, you can move through occupied spaces as if they were Difficult Terrain, and moving doesn't provoke Opportunity Attack. If you end your turn in such a space, you are returned to the last unoccupied space you were in.</p><p>While cloaked, whenever you enter the space of a creature, the creature becomes covered in ectoplasm until the end of your next turn. A creature covered in ectoplasm has its Speed reduced by 10 feet and takes 2d8 Necrotic damage at the start of its turn. A creature can be covered in ectoplasm only once during a turn.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>While cloaked, your Speed increases by 10 feet for each spell slot level above 2.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>While cloaked, your Speed increases by 10 feet for each spell slot level above 2.</p></div>",
+    "classes": [
+      "Psion",
+      "Warlock"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d8",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_ego_whip_xua2025psionupdate",
+    "name": "Ego Whip",
+    "source": "XUA2025PsionUpdate",
+    "page": 12,
+    "level": 2,
+    "school": "Enchantment",
+    "castingTime": "1 reaction (which you take when a creature you can see within 30 feet of yourself makes a Charisma-based ability check or saving throw)",
+    "range": "120 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>The creature makes Charisma saving throw. On a failed save, the target must subtract 1d8 from the ability check or saving throw.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Psion"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "charisma",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_enemies_abound_xua2025psionupdate",
+    "name": "Enemies Abound",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 3,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>Choose a creature you can see within range. The target must succeed on an Intelligence saving throw or have the Frightened condition for the duration.</p><p>While Frightened, the target loses the ability to distinguish friend from foe and is affected in the following ways:</p><ul><li>The target regards all creatures it can see as enemies.</li><li>Whenever the target chooses a creature other than itself for an attack, spell, or other ability, it must choose at random from among the creatures it can see within range of that attack, spell, or other ability.</li><li>The target must make an Opportunity Attack each time it is able to.</li></ul><p>Each time the target takes damage, it makes another Intelligence saving throw. On a successful save, the spell ends.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Psion",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Frightened"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_intellect_fortress_xua2025psionupdate",
+    "name": "Intellect Fortress",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 3,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "30 feet",
+    "components": "V",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>For the duration, one willing creature you can see within range has Resistance to Psychic damage as well as Advantage on Intelligence, Wisdom, and Charisma saving throws.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>You can target one additional creature for each spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>You can target one additional creature for each spell slot level above 3.</p></div>",
+    "classes": [
+      "Artificer",
+      "Bard",
+      "Psion",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "charisma",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "SCT",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_life_inversion_field_xua2025psionupdate",
+    "name": "Life Inversion Field",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 4,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>An aura radiates from you in a 30-foot Emanation [Area of Effect] for the duration. When you create the aura, you regain 4d8 Hit Points. Whenever you regain Hit Points, you can choose a creature you can see in the aura and force it to make a Constitution saving throw. On a failed save, the creature takes Necrotic damage equal to half the amount of Hit Points you regained (round up). A creature makes this save only once per turn.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The healing increase by 1d8 for each spell slot level above 4.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The healing increase by 1d8 for each spell slot level above 4.</p></div>",
+    "classes": [
+      "Cleric",
+      "Psion",
+      "Sorcerer"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d8",
+        "type": "Healing",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing",
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_life_siphon_xua2025psionupdate",
+    "name": "Life Siphon",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 1,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You fire an orb of psionic energy fueled by your life force at a creature you can see within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 Psychic damage and you can expend one Hit Points Die to increase the damage by 1d10.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d10 and the number of Hit Dice you can expend increases by one for each spell slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d10 and the number of Hit Dice you can expend increases by one for each spell slot level above 1.</p></div>",
+    "classes": [
+      "Psion"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d10",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_mental_prison_xua2025psionupdate",
+    "name": "Mental Prison",
+    "source": "XUA2025PsionUpdate",
+    "page": 13,
+    "level": 6,
+    "school": "Illusion",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You attempt to bind a creature within an illusory cell that only it perceives. One creature you can see within range must succeed on an Intelligence saving throw or take 8d10 Psychic damage and have the Charmed condition for the duration. On a successful save, the target takes half damage only and the spell ends.</p><p>While Charmed, the target has the Restrained condition and perceives the area around its space as dangerous to it in some way you create. You might cause the target to perceive itself as being surrounded by fire, floating razors, or hideous maws filled with dripping teeth. Whatever form the illusion takes, the target can't see or hear anything beyond it. If the target is moved from the illusion, makes a melee attack through it, or reaches any part of its body through it, the target takes 5d10 Psychic damage and the spell ends.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Psion",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "8d10",
+        "type": "Psychic",
+        "label": "Damage 1",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "5d10",
+        "type": "Psychic",
+        "label": "Damage 2",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Restrained"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_psionic_blast_xua2025psionupdate",
+    "name": "Psionic Blast",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 6,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You unleash a concussive burst of psionic energy.</p><p>Each creature in a 60-foot Cone [Area of Effect] originating from you makes an Intelligence saving throw. On a failed save, the creature takes 6d8 Psychic damage and has the Stunned condition until the start of your next turn.</p><p>On a successful save, the creature takes half as much damage only.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d8 for each spell slot level above 6.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d8 for each spell slot level above 6.</p></div>",
+    "classes": [
+      "Psion",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "6d8",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Stunned"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_psychic_scream_xua2025psionupdate",
+    "name": "Psychic Scream",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 9,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You unleash the power of your mind to blast the intellect of up to ten creatures of your choice that you can see within range. Creatures that have an Intelligence score of 2 or lower are unaffected.</p><p>Each target must make an Intelligence saving throw. On a failed save, the target takes 14d6 Psychic damage and has the Stunned condition. On a successful save, the target takes half as much damage only. If the target is reduced to 0 Hit Points by this damage, its head explodes if it has one.</p><p>At the end of each of its turns, the Stunned target repeats the save, ending the condition on itself on a success.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Psion",
+      "Sorcerer",
+      "Warlock"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "14d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Stunned"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_raulothim_s_psychic_lance_xua2025psionupdate",
+    "name": "Raulothim's Psychic Lance",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 4,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You unleash a shimmering lance of psychic power from your forehead at a creature that you can see within range. Alternatively, you can utter a creature's name (a pseudonym, title, or nickname doesn't work). If the named target is within range, it becomes the spell's target even if you can't see it. If the named target isn't within range or you use an invalid name, the lance dissipates without effect.</p><p>The target must make an Intelligence saving throw. On a failed save, the target takes 7d6 Psychic damage and has the Incapacitated condition until the start of your next turn. On a successful save, the target takes half as much damage only.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 4.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 4.</p></div>",
+    "classes": [
+      "Bard",
+      "Psion",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "7d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Incapacitated"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_summon_astral_entity_xua2025psionupdate",
+    "name": "Summon Astral Entity",
+    "source": "XUA2025PsionUpdate",
+    "page": 14,
+    "level": 3,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (a gem or crystal worth 300+ GP)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You call forth the spirit of a psionic entity. It manifests in an unoccupied space that you can see within range and uses the Psionic Spirit stat block.</p><p>When you cast the spell, choose Crystal Entity, Ectoplasmic Entity, or Ghostly Entity. The creature resembles an astral entity of that kind, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.</p><p>The creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you).</p><p>If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "classes": [
+      "Psion",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_tasha_s_mind_whip_xua2025psionupdate",
+    "name": "Tasha's Mind Whip",
+    "source": "XUA2025PsionUpdate",
+    "page": 15,
+    "level": 2,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You psychically lash out at one creature you can see within range. The target must make an Intelligence saving throw. On a failed save, the target takes 3d6 Psychic damage and can't make Opportunity Attack until the end of its next turn. On its next turn, it must choose whether it gets a move, an action, or a Bonus Action; it gets only one of the three. On a successful save, the target takes half as much damage only.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>You can target one additional creature for each spell slot level above 2.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>You can target one additional creature for each spell slot level above 2.</p></div>",
+    "classes": [
+      "Psion",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "SCT",
+      "Sight Required",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_telekinetic_crush_xua2025psionupdate",
+    "name": "Telekinetic Crush",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 3,
+    "school": "Transmutation",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You create a field of crushing telekinetic force in a 30-foot Cube [Area of Effect] within range. Each creature in the area makes a Strength saving throw. On a failed save, the target takes 5d6 Force damage and has the Prone condition. On a successful save, the target takes half as much damage only.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 3.</p></div>",
+    "classes": [
+      "Psion",
+      "Sorcerer",
+      "Warlock"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "5d6",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "strength",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Prone"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_telekinetic_fling_xua2025psionupdate",
+    "name": "Telekinetic Fling",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>Choose one nonmagical object weighing 1 to 5 pounds within 10 feet of you that isn't being worn or carried to wreathe in psionic energy and fire at a creature within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 Force damage. On a hit or miss, the object falls to the ground undamaged.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d10 when you reach levels 5 (2d10), 11 (3d10), and 17 (4d10).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d10 when you reach levels 5 (2d10), 11 (3d10), and 17 (4d10).</p></div>",
+    "classes": [
+      "Psion"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d10",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "1d10",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "Force damage",
+      "scaling": {
+        "1": "1d10",
+        "5": "2d10",
+        "11": "3d10",
+        "17": "4d10"
+      }
+    },
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "OBJ",
+      "Scaling Damage"
+    ]
+  },
+  {
+    "id": "sp_thought_form_xua2025psionupdate",
+    "name": "Thought Form",
+    "source": "XUA2025PsionUpdate",
+    "page": 0,
+    "level": 6,
+    "school": "Transmutation",
+    "castingTime": "1 bonus action",
+    "range": "self",
+    "components": "V, M (brain matter in a vessel worth 500+ GP)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You briefly transform into a psionic spirit. You gain the following benefits until the spell ends.</p><div><strong><em>Ghostly Form.</em></strong> <p>You have Immunity to Poison and Psychic damage, and you have Immunity to the Exhaustion condition.</p></div><div><strong><em>Incorporeal Movement.</em></strong> <p>You have a Fly Speed of 60 feet and can hover. You can move through occupied spaces as if they were Difficult Terrain. If you end your turn in such a space, you take 1d10 Force damage. If the spell ends in such a space, you are returned to the last unoccupied space you were in.</p></div><div><strong><em>Psionic Recharge.</em></strong> <p>As a Magic action, you can touch a creature (which can be yourself) and roll 1d6. The creature regains one expended spell slot, the level of which equals half the number rolled (round up) or lower. Once a creature regains a spell slot from this spell, that creature can't do so again until it finishes a Long Rest.</p></div>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Psion"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d10",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  }
+]

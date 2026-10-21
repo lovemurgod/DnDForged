@@ -2,7 +2,13 @@ import {
   calcAbilityModifier,
   createBlankEntity,
   entityToJson,
-  jsonToEntity
+  jsonToEntity,
+  ARCHETYPE_TEMPLATES,
+  createEntityFromArchetype,
+  parsePlaintextStatblock,
+  CR_BENCHMARKS,
+  VTTEntryResolver,
+  toCommaSeparatedString
 } from './builder-schemas.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -1064,6 +1070,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // DATABASE SOURCES & HOMEBREW DASHBOARD LOGIC
   // =========================================================================
   const btnRefreshSources = document.getElementById('btn-refresh-sources');
+  const btnSyncSourcesVtt = document.getElementById('btn-sync-sources-vtt');
   const sourcesCampaignScope = document.getElementById('sources-campaign-scope');
   const sourcesPresetSelect = document.getElementById('sources-preset-select');
   const btnApplyPreset = document.getElementById('btn-apply-preset');
@@ -1082,6 +1089,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   const badgeCountPartnered = document.getElementById('badge-count-partnered');
   const badgeCountUA = document.getElementById('badge-count-ua');
   const sourcesCategoriesAccordion = document.getElementById('sources-categories-accordion');
+  const btnResetCampaignSources = document.getElementById('btn-reset-campaign-sources');
+  const campaignOverrideIndicator = document.getElementById('campaign-override-indicator');
+  const campaignOverrideText = document.getElementById('campaign-override-text');
+  const btnOpenUrlImport = document.getElementById('btn-open-url-import');
+  const modalUrlImport = document.getElementById('modal-url-import');
+  const btnCloseUrlImport = document.getElementById('btn-close-url-import');
+  const btnCancelUrlImport = document.getElementById('btn-cancel-url-import');
+  const btnExecuteUrlImport = document.getElementById('btn-execute-url-import');
+  const inputSourceUrl = document.getElementById('input-source-url');
+  const urlImportStatusBox = document.getElementById('url-import-status-box');
+  const sourcesDropzoneOverlay = document.getElementById('sources-dropzone-overlay');
+  const viewSources = document.getElementById('view-sources');
 
   // Edit Source Modal & Visual Studio
   const modalEditSource = document.getElementById('modal-edit-source');
@@ -1133,6 +1152,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const entityJsonSyntaxStatus = document.getElementById('entity-json-syntax-status');
   const btnFormatEntityJson = document.getElementById('btn-format-entity-json');
 
+  // Live 5e Preview & Combat Tester
+  const liveCardRenderContainer = document.getElementById('live-card-render-container');
+  const previewEntityTypeBadge = document.getElementById('preview-entity-type-badge');
+  const interactiveTestRollTray = document.getElementById('interactive-test-roll-tray');
+  const testRollLog = document.getElementById('test-roll-log');
+  const btnClearTestRollTray = document.getElementById('btn-clear-test-roll-tray');
+  let livePreviewThrottleTimer = null;
+
   // Clone from Compendium Modal
   const modalCloneCompendium = document.getElementById('modal-clone-compendium');
   const btnCloseCloneModal = document.getElementById('btn-close-clone-modal');
@@ -1140,6 +1167,32 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cloneCategoryBadge = document.getElementById('clone-category-badge');
   const cloneCompendiumSearch = document.getElementById('clone-compendium-search');
   const cloneCompendiumResults = document.getElementById('clone-compendium-results');
+
+  // Archetype Monster Wizard Modal
+  const btnActionArchetypeWizard = document.getElementById('btn-action-archetype-wizard');
+  const modalArchetypeWizard = document.getElementById('modal-archetype-wizard');
+  const btnCloseArchetypeWizard = document.getElementById('btn-close-archetype-wizard');
+  const btnCancelArchetypeWizard = document.getElementById('btn-cancel-archetype-wizard');
+  const btnSubmitArchetypeWizard = document.getElementById('btn-submit-archetype-wizard');
+  const archetypeCardsContainer = document.getElementById('archetype-cards-container');
+  const wizardArchetypeName = document.getElementById('wizard-archetype-name');
+  const wizardArchetypeCr = document.getElementById('wizard-archetype-cr');
+  const wizardArchetypeType = document.getElementById('wizard-archetype-type');
+  const wizardArchetypeSize = document.getElementById('wizard-archetype-size');
+  const wizardBenchmarkPreview = document.getElementById('wizard-benchmark-preview');
+  let selectedArchetypeRole = 'brute';
+
+  // Plaintext Importer Modal
+  const btnActionPlaintextImport = document.getElementById('btn-action-plaintext-import');
+  const modalPlaintextImport = document.getElementById('modal-plaintext-import');
+  const btnClosePlaintextImport = document.getElementById('btn-close-plaintext-import');
+  const btnCancelPlaintextImport = document.getElementById('btn-cancel-plaintext-import');
+  const btnSubmitPlaintextImport = document.getElementById('btn-submit-plaintext-import');
+  const btnInsertSamplePlaintext = document.getElementById('btn-insert-sample-plaintext');
+  const plaintextImportTextarea = document.getElementById('plaintext-import-textarea');
+  const plaintextDetectionBox = document.getElementById('plaintext-detection-box');
+  const plaintextDetectionStatus = document.getElementById('plaintext-detection-status');
+  let currentParsedPlaintextResult = null;
 
   // Metadata tab fields
   const editSourceCode = document.getElementById('edit-source-code');
@@ -1227,7 +1280,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   let activeEntityIndex = -1;
   let activeStudioMode = 'visual'; // 'visual' | 'json'
   let activeClassLevel = 1;
-  let expandedCategories = new Set(['bestiary', 'spells']);
+  let expandedCategories = new Set();
+  let globalSearchResults = null;
+  let activeTableSort = { col: 'name', ascending: true };
   let activeSourceSearch = '';
   let activeStatusFilter = 'all';
   let activeCampaignScope = '';
@@ -1286,14 +1341,29 @@ document.addEventListener('DOMContentLoaded', async () => {
           toggleUASources.checked = res.uaStats.enabled > 0;
         }
 
+        // Update campaign scope override indicators
+        if (activeCampaignScope && res.isCampaignScoped) {
+          if (btnResetCampaignSources) btnResetCampaignSources.classList.remove('vtt-hidden');
+          if (campaignOverrideIndicator) {
+            campaignOverrideIndicator.classList.remove('vtt-hidden');
+            if (campaignOverrideText) {
+              const count = res.campaignOverrideCount || 0;
+              campaignOverrideText.textContent = count > 0 ? `${count} Custom Overrides` : '100% Inherited from Global';
+            }
+          }
+        } else {
+          if (btnResetCampaignSources) btnResetCampaignSources.classList.add('vtt-hidden');
+          if (campaignOverrideIndicator) campaignOverrideIndicator.classList.add('vtt-hidden');
+        }
+
         updateSourceStats(res.categories, res.partneredStats, res.uaStats);
-        renderCategoriesAccordion();
+        renderSourcesView();
       } else {
-        sourcesCategoriesAccordion.innerHTML = '<div class="loading-placeholder text-danger">Failed to load database sources.</div>';
+        if (sourcesCategoriesAccordion) sourcesCategoriesAccordion.innerHTML = '<div class="loading-placeholder text-danger">Failed to load database sources.</div>';
       }
     } catch (err) {
       console.error('Error loading sources:', err);
-      sourcesCategoriesAccordion.innerHTML = `<div class="loading-placeholder text-danger">Error: ${err.message}</div>`;
+      if (sourcesCategoriesAccordion) sourcesCategoriesAccordion.innerHTML = `<div class="loading-placeholder text-danger">Error: ${err.message}</div>`;
     }
   }
 
@@ -1336,8 +1406,170 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const term = activeSourceSearch.toLowerCase().trim();
 
+    // 1. If Global Compendium Search is active
+    if (globalSearchResults !== null) {
+      const activeCat = activeGlobalCatFilter;
+      const categoriesToDisplay = currentSourcesData.categories.filter(c => !activeCat || c.id === activeCat);
+
+      let totalResultsRendered = 0;
+
+      for (const cat of categoriesToDisplay) {
+        let catResults = globalSearchResults.filter(r => r.category === cat.id);
+        if (catResults.length === 0) continue;
+
+        totalResultsRendered += catResults.length;
+
+        // Apply sorting
+        catResults.sort((a, b) => {
+          let valA = '', valB = '';
+          if (activeTableSort.col === 'source') {
+            valA = (a.source || '').toLowerCase();
+            valB = (b.source || '').toLowerCase();
+          } else if (activeTableSort.col === 'details') {
+            valA = (a.summary || a.details || '').toLowerCase();
+            valB = (b.summary || b.details || '').toLowerCase();
+          } else {
+            valA = (a.name || '').toLowerCase();
+            valB = (b.name || '').toLowerCase();
+          }
+          const cmp = valA.localeCompare(valB, undefined, { numeric: true });
+          return activeTableSort.ascending ? cmp : -cmp;
+        });
+
+        const isExpanded = true;
+        const card = document.createElement('div');
+        card.className = `source-category-card ${isExpanded ? 'expanded' : ''}`;
+        card.id = `cat-card-${cat.id}`;
+
+        const sortIndicator = (col) => {
+          if (activeTableSort.col === col) {
+            return `<span class="sort-indicator">${activeTableSort.ascending ? '▲' : '▼'}</span>`;
+          }
+          return `<span class="sort-indicator">↕</span>`;
+        };
+
+        const sortClass = (col) => {
+          if (activeTableSort.col === col) {
+            return `sortable-th ${activeTableSort.ascending ? 'sorted-asc' : 'sorted-desc'}`;
+          }
+          return 'sortable-th';
+        };
+
+        card.innerHTML = `
+          <div class="category-header-wrap" data-cat-id="${cat.id}">
+            <div class="category-title-left">
+              <span class="category-icon">${cat.icon || '📁'}</span>
+              <div class="category-title-text">
+                <h3>
+                  ${cat.name}
+                  <span class="category-badge-count" id="cat-count-${cat.id}">
+                    ${catResults.length} Found
+                  </span>
+                </h3>
+              </div>
+            </div>
+            <div class="category-header-actions" onclick="event.stopPropagation();">
+              <button class="btn-cat-action btn-cat-custom" data-action="add-custom" data-cat="${cat.id}" title="Create new homebrew source in ${cat.name}">✨ Add Custom</button>
+              <span class="accordion-chevron">▼</span>
+            </div>
+          </div>
+          <div class="category-content-wrap">
+            <div class="sources-table-container">
+              <table class="sources-data-table">
+                <thead>
+                  <tr>
+                    <th class="${sortClass('name')}" data-sort="name">
+                      Entry Name ${sortIndicator('name')}
+                    </th>
+                    <th class="${sortClass('source')}" data-sort="source" style="width: 120px;">
+                      Source ${sortIndicator('source')}
+                    </th>
+                    <th class="${sortClass('details')}" data-sort="details" style="width: 170px;">
+                      Details / CR / Lvl ${sortIndicator('details')}
+                    </th>
+                    <th style="width: 150px; text-align: right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="search-rows-${cat.id}"></tbody>
+              </table>
+            </div>
+          </div>
+        `;
+
+        // Accordion toggle
+        const headerWrap = card.querySelector('.category-header-wrap');
+        headerWrap.addEventListener('click', () => {
+          card.classList.toggle('expanded');
+        });
+
+        // Add custom button
+        card.querySelector('[data-action="add-custom"]')?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openCreateCustomModal(cat.id);
+        });
+
+        // Table headers sort
+        card.querySelectorAll('th.sortable-th').forEach(th => {
+          th.addEventListener('click', () => {
+            const col = th.getAttribute('data-sort');
+            if (activeTableSort.col === col) {
+              activeTableSort.ascending = !activeTableSort.ascending;
+            } else {
+              activeTableSort.col = col;
+              activeTableSort.ascending = true;
+            }
+            renderCategoriesAccordion();
+          });
+        });
+
+        // Populate search rows
+        const tbody = card.querySelector(`#search-rows-${cat.id}`);
+        for (const item of catResults) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>
+              <strong style="color: var(--text-main); font-weight: 600;">${escapeHtml(item.name || 'Unknown')}</strong>
+            </td>
+            <td>
+              <span class="source-code-badge ${item.isCustom ? 'custom' : ''}">${escapeHtml(item.source || 'SRD')}</span>
+            </td>
+            <td>
+              <span class="text-muted" style="font-size: 12px;">${escapeHtml(item.summary || item.details || '—')}</span>
+            </td>
+            <td style="text-align: right; white-space: nowrap;">
+              <button type="button" class="btn btn-xs btn-outline btn-search-inspect" title="Quick 5e Preview">👁️ Inspect</button>
+              <button type="button" class="btn btn-xs btn-primary btn-search-edit" title="Edit in Studio">✏️ Edit</button>
+            </td>
+          `;
+
+          tr.querySelector('.btn-search-inspect').addEventListener('click', () => {
+            openInspectModal(cat.id, item.name, item.source);
+          });
+
+          tr.querySelector('.btn-search-edit').addEventListener('click', () => {
+            openEditSourceModal(cat.id, item.source);
+          });
+
+          tbody.appendChild(tr);
+        }
+
+        sourcesCategoriesAccordion.appendChild(card);
+      }
+
+      if (totalResultsRendered === 0) {
+        sourcesCategoriesAccordion.innerHTML = `
+          <div class="loading-placeholder" style="padding: 40px 20px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">🔍</div>
+            <div style="font-size: 15px; font-weight: 600; color: var(--text-main);">No matching compendium entries found.</div>
+            <div class="text-muted" style="margin-top: 4px;">Try searching with different keywords or switch category filter to "All Categories".</div>
+          </div>
+        `;
+      }
+      return;
+    }
+
+    // 2. Default state: Sourcebooks Table View
     for (const cat of currentSourcesData.categories) {
-      // Filter items according to search query and status filter
       const matchingSources = cat.sources.filter(src => {
         if (activeStatusFilter === 'active' && !src.enabled) return false;
         if (activeStatusFilter === 'inactive' && src.enabled) return false;
@@ -1353,8 +1585,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         );
       });
 
-      // If search or filter is active and category has no matches, omit it
       if ((term || activeStatusFilter !== 'all') && matchingSources.length === 0) continue;
+
+      // Apply sorting to sourcebooks
+      matchingSources.sort((a, b) => {
+        let valA = '', valB = '';
+        if (activeTableSort.col === 'code') {
+          valA = (a.code || '').toLowerCase();
+          valB = (b.code || '').toLowerCase();
+        } else if (activeTableSort.col === 'edition') {
+          valA = `${a.edition || ''} ${a.isCustom ? 'custom' : ''}`;
+          valB = `${b.edition || ''} ${b.isCustom ? 'custom' : ''}`;
+        } else if (activeTableSort.col === 'entries') {
+          const numA = a.entryCount || 0;
+          const numB = b.entryCount || 0;
+          return activeTableSort.ascending ? (numA - numB) : (numB - numA);
+        } else {
+          valA = (a.name || a.code || '').toLowerCase();
+          valB = (b.name || b.code || '').toLowerCase();
+        }
+        const cmp = valA.localeCompare(valB, undefined, { numeric: true });
+        return activeTableSort.ascending ? cmp : -cmp;
+      });
 
       const isExpanded = term ? true : expandedCategories.has(cat.id);
       const enabledInCat = cat.sources.filter(s => s.enabled).length;
@@ -1362,6 +1614,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       const card = document.createElement('div');
       card.className = `source-category-card ${isExpanded ? 'expanded' : ''}`;
       card.id = `cat-card-${cat.id}`;
+
+      const sortIndicator = (col) => {
+        if (activeTableSort.col === col) {
+          return `<span class="sort-indicator">${activeTableSort.ascending ? '▲' : '▼'}</span>`;
+        }
+        return `<span class="sort-indicator">↕</span>`;
+      };
+
+      const sortClass = (col) => {
+        if (activeTableSort.col === col) {
+          return `sortable-th ${activeTableSort.ascending ? 'sorted-asc' : 'sorted-desc'}`;
+        }
+        return 'sortable-th';
+      };
 
       card.innerHTML = `
         <div class="category-header-wrap" data-cat-id="${cat.id}">
@@ -1385,8 +1651,28 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </div>
         <div class="category-content-wrap">
-          <div class="source-items-grid" id="grid-${cat.id}">
-            <!-- Source items -->
+          <div class="sources-table-container">
+            <table class="sources-data-table">
+              <thead>
+                <tr>
+                  <th class="source-col-status">Status</th>
+                  <th class="${sortClass('name')}" data-sort="name">
+                    Sourcebook Title ${sortIndicator('name')}
+                  </th>
+                  <th class="${sortClass('code')} source-col-code" data-sort="code">
+                    Code ${sortIndicator('code')}
+                  </th>
+                  <th class="${sortClass('edition')} source-col-edition" data-sort="edition">
+                    Type / Edition ${sortIndicator('edition')}
+                  </th>
+                  <th class="${sortClass('entries')} source-col-entries" data-sort="entries">
+                    Entries ${sortIndicator('entries')}
+                  </th>
+                  <th class="source-col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="source-rows-${cat.id}"></tbody>
+            </table>
           </div>
         </div>
       `;
@@ -1435,18 +1721,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
       });
 
-      // Populate source items
-      const grid = card.querySelector(`#grid-${cat.id}`);
+      // Table headers sort
+      card.querySelectorAll('th.sortable-th').forEach(th => {
+        th.addEventListener('click', () => {
+          const col = th.getAttribute('data-sort');
+          if (activeTableSort.col === col) {
+            activeTableSort.ascending = !activeTableSort.ascending;
+          } else {
+            activeTableSort.col = col;
+            activeTableSort.ascending = true;
+          }
+          renderCategoriesAccordion();
+        });
+      });
+
+      // Populate source rows
+      const tbody = card.querySelector(`#source-rows-${cat.id}`);
       if (matchingSources.length === 0) {
-        grid.innerHTML = '<div class="loading-placeholder">No matching sources found in this category.</div>';
+        tbody.innerHTML = '<tr><td colspan="6" class="loading-placeholder">No matching sources found in this category.</td></tr>';
       } else {
         for (const src of matchingSources) {
-          const itemCard = document.createElement('div');
-          itemCard.className = `source-item-card ${src.enabled ? '' : 'disabled'}`;
-          itemCard.id = `src-card-${src.category}-${src.code}`;
+          const tr = document.createElement('tr');
+          tr.className = src.enabled ? '' : 'source-row-disabled';
+          tr.id = `src-row-${src.category}-${src.code}`;
 
           const sizeKb = src.fileSize ? `${Math.round(src.fileSize / 1024)} KB` : '';
-          const countLabel = src.entryCount !== undefined ? `${src.entryCount} entries` : '';
+          const countLabel = src.entryCount !== undefined ? `${src.entryCount} entries` : '—';
 
           const editionBadge = src.edition === '2024'
             ? '<span class="badge-edition badge-edition-2024" title="2024 Modern Ruleset">2024</span>'
@@ -1457,71 +1757,58 @@ document.addEventListener('DOMContentLoaded', async () => {
           const uaBadge = src.isUA
             ? '<span class="badge-content badge-ua" title="Unearthed Arcana (Playtest)">UA</span>'
             : '';
+          const customBadge = src.isCustom
+            ? '<span class="badge badge-accent" style="font-size: 9px; padding: 1px 5px;">Custom</span>'
+            : '';
 
-          itemCard.innerHTML = `
-            <div class="source-item-top">
-              <div class="source-item-info">
-                <div class="source-item-title-row">
-                  <span class="source-dot ${src.enabled ? 'active' : ''}"></span>
-                  <span class="source-item-title" title="${src.name || src.code}">${src.name || src.code}</span>
-                  <span class="source-code-badge ${src.isCustom ? 'custom' : ''}">${src.code}</span>
-                  ${editionBadge}
-                  ${partneredBadge}
-                  ${uaBadge}
-                  ${src.isCustom ? '<span class="badge badge-accent" style="font-size: 9px; padding: 1px 5px;">Custom</span>' : ''}
-                </div>
-                <div class="source-item-author">${src.author || 'Official Rulebook'}</div>
+          tr.innerHTML = `
+            <td class="source-col-status">
+              <label class="switch-label" title="${src.enabled ? 'Enabled in VTT' : 'Disabled in VTT'}">
+                <input type="checkbox" class="source-toggle-cb" data-cat="${src.category}" data-code="${src.code}" ${src.enabled ? 'checked' : ''} />
+                <span class="switch-slider"></span>
+              </label>
+            </td>
+            <td>
+              <div style="font-weight: 600; color: var(--text-main);">${escapeHtml(src.name || src.code)}</div>
+              <div class="source-item-author" style="font-size: 11px; color: var(--text-dim);">${escapeHtml(src.author || 'Official Rulebook')}</div>
+            </td>
+            <td class="source-col-code">
+              <span class="source-code-badge ${src.isCustom ? 'custom' : ''}">${escapeHtml(src.code)}</span>
+            </td>
+            <td class="source-col-edition">
+              <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+                ${editionBadge}
+                ${partneredBadge}
+                ${uaBadge}
+                ${customBadge}
               </div>
-            </div>
-
-            <div class="source-item-meta-row">
-              ${countLabel ? `<span>📊 ${countLabel}</span>` : ''}
-              ${sizeKb ? `<span>💾 ${sizeKb}</span>` : ''}
-              ${src.version ? `<span>v${src.version}</span>` : ''}
-            </div>
-
-            <div class="source-item-bottom">
-              <div class="source-actions-left">
-                <button class="btn-source-action" data-action="edit" data-cat="${src.category}" data-code="${src.code}" title="Edit metadata or JSON">
+            </td>
+            <td class="source-col-entries">
+              <div style="font-size: 12px; font-weight: 500;">${countLabel}</div>
+              ${sizeKb ? `<div style="font-size: 10px; color: var(--text-dim);">${sizeKb}</div>` : ''}
+            </td>
+            <td class="source-col-actions">
+              <div style="display: flex; gap: 6px; justify-content: flex-end;">
+                <button class="btn btn-xs btn-outline btn-source-edit" data-action="edit" data-cat="${src.category}" data-code="${src.code}" title="Edit metadata or entries">
                   ✏️ Edit
                 </button>
                 ${src.isCustom ? `
-                  <button class="btn-source-action btn-source-delete" data-action="delete" data-cat="${src.category}" data-code="${src.code}" title="Delete this custom source">
-                    🗑️ Delete
+                  <button class="btn btn-xs btn-outline btn-source-delete text-danger" data-action="delete" data-cat="${src.category}" data-code="${src.code}" title="Delete this custom source">
+                    🗑️
                   </button>
                 ` : ''}
               </div>
-
-              <div class="source-actions-right">
-                <label class="switch-label" title="${src.enabled ? 'Enabled in VTT' : 'Disabled in VTT'}">
-                  <span class="switch-text">${src.enabled ? 'On' : 'Off'}</span>
-                  <input type="checkbox" class="source-toggle-cb" data-cat="${src.category}" data-code="${src.code}" ${src.enabled ? 'checked' : ''} />
-                  <span class="switch-slider"></span>
-                </label>
-              </div>
-            </div>
+            </td>
           `;
 
           // Switch toggle event
-          const toggleCb = itemCard.querySelector('.source-toggle-cb');
-          const switchText = itemCard.querySelector('.switch-text');
-          const sourceDot = itemCard.querySelector('.source-dot');
-
+          const toggleCb = tr.querySelector('.source-toggle-cb');
           toggleCb.addEventListener('change', async () => {
             const isChecked = toggleCb.checked;
-            switchText.textContent = isChecked ? 'On' : 'Off';
-            if (isChecked) {
-              itemCard.classList.remove('disabled');
-              sourceDot.classList.add('active');
-            } else {
-              itemCard.classList.add('disabled');
-              sourceDot.classList.remove('active');
-            }
-
+            tr.classList.toggle('source-row-disabled', !isChecked);
             src.enabled = isChecked;
             updateSourceStats(currentSourcesData.categories);
 
-            // Update category active badge count
             const currentCat = currentSourcesData.categories.find(c => c.id === src.category);
             if (currentCat) {
               const activeCount = currentCat.sources.filter(s => s.enabled).length;
@@ -1537,12 +1824,12 @@ document.addEventListener('DOMContentLoaded', async () => {
           });
 
           // Edit button
-          itemCard.querySelector('[data-action="edit"]').addEventListener('click', () => {
+          tr.querySelector('.btn-source-edit').addEventListener('click', () => {
             openEditSourceModal(src.category, src.code);
           });
 
           // Delete button (if custom)
-          const delBtn = itemCard.querySelector('[data-action="delete"]');
+          const delBtn = tr.querySelector('.btn-source-delete');
           if (delBtn) {
             delBtn.addEventListener('click', async () => {
               if (confirm(`Are you sure you want to delete custom database source "${src.name || src.code}"?\nThis action cannot be undone.`)) {
@@ -1558,12 +1845,273 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
           }
 
-          grid.appendChild(itemCard);
+          tbody.appendChild(tr);
         }
       }
 
       sourcesCategoriesAccordion.appendChild(card);
     }
+  }
+
+  function renderSourcesView() {
+    renderCategoriesAccordion();
+  }
+
+  // =========================================================================
+  // GLOBAL COMPENDIUM SEARCH & SORT LOGIC
+  // =========================================================================
+  async function triggerGlobalSearch() {
+    const rawTerm = globalCompendiumSearchInput ? globalCompendiumSearchInput.value.trim() : '';
+    if (!rawTerm) {
+      globalSearchResults = null;
+      renderCategoriesAccordion();
+      return;
+    }
+
+    if (sourcesCategoriesAccordion) {
+      sourcesCategoriesAccordion.innerHTML = `
+        <div class="loading-placeholder" style="padding: 40px 20px;">
+          <div class="spinner-inline" style="margin-bottom: 8px;">⏳</div>
+          <div style="font-size: 15px; font-weight: 600; color: var(--text-main);">Searching active compendium for "${escapeHtml(rawTerm)}"...</div>
+        </div>
+      `;
+    }
+
+    try {
+      const res = await api.sourcesSearchCompendium({
+        query: rawTerm,
+        category: activeGlobalCatFilter || 'all',
+        campaignId: activeCampaignScope || null,
+        limit: 100
+      });
+
+      if (res && res.success) {
+        globalSearchResults = res.results || [];
+      } else {
+        globalSearchResults = [];
+      }
+    } catch (err) {
+      console.error('Error executing global compendium search:', err);
+      globalSearchResults = [];
+    }
+
+    renderCategoriesAccordion();
+  }
+
+  // Global search input events
+  if (globalCompendiumSearchInput) {
+    globalCompendiumSearchInput.addEventListener('input', () => {
+      clearTimeout(globalSearchDebounceTimer);
+      globalSearchDebounceTimer = setTimeout(triggerGlobalSearch, 220);
+    });
+    globalCompendiumSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        clearTimeout(globalSearchDebounceTimer);
+        triggerGlobalSearch();
+      }
+    });
+  }
+
+  if (btnClearGlobalSearch) {
+    btnClearGlobalSearch.addEventListener('click', () => {
+      if (globalCompendiumSearchInput) globalCompendiumSearchInput.value = '';
+      clearTimeout(globalSearchDebounceTimer);
+      globalSearchResults = null;
+      renderCategoriesAccordion();
+    });
+  }
+
+  if (globalSearchCategoryChips) {
+    globalSearchCategoryChips.querySelectorAll('.cat-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        globalSearchCategoryChips.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        activeGlobalCatFilter = chip.getAttribute('data-cat') || '';
+        triggerGlobalSearch();
+      });
+    });
+  }
+
+  // =========================================================================
+  // 5E COMPENDIUM INSPECT MODAL
+  // =========================================================================
+  async function openInspectModal(category, name, source) {
+    const modal = document.getElementById('modal-compendium-inspect');
+    const titleEl = document.getElementById('inspect-modal-title');
+    const badgeEl = document.getElementById('inspect-modal-badge');
+    const srcEl = document.getElementById('inspect-modal-source');
+    const bodyEl = document.getElementById('inspect-modal-body');
+    const footerInfo = document.getElementById('inspect-modal-footer-info');
+    const btnStudio = document.getElementById('btn-inspect-open-studio');
+
+    if (!modal) return;
+
+    modal.classList.remove('vtt-hidden');
+    if (titleEl) titleEl.textContent = name || 'Compendium Entry';
+    if (badgeEl) badgeEl.textContent = (category || 'Compendium').toUpperCase();
+    if (srcEl) srcEl.textContent = source || 'SRD';
+    if (footerInfo) footerInfo.textContent = `Sourcebook: ${source || 'Official Rulebook'}`;
+    if (bodyEl) bodyEl.innerHTML = '<div class="loading-placeholder"><div class="spinner-inline" style="margin-bottom: 8px;">⏳</div>Loading compendium entry...</div>';
+
+    if (btnStudio) {
+      btnStudio.onclick = () => {
+        modal.classList.add('vtt-hidden');
+        openEditSourceModal(category, source);
+      };
+    }
+
+    try {
+      const res = await api.sourcesGetEntityFullData({ category, name, source });
+      if (res && res.success && res.entity) {
+        bodyEl.innerHTML = generateEntityStatblockHtml(category, res.entity);
+        bodyEl.querySelectorAll('.rollable-pill, .dice-chip, .vtt-dc-badge').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const rollExpr = btn.getAttribute('data-formula') || btn.getAttribute('data-roll');
+            const dcVal = btn.getAttribute('data-dc');
+            const label = btn.getAttribute('data-label') || btn.textContent.trim() || 'Roll';
+            simulateDiceRoll(rollExpr, label, dcVal);
+          });
+        });
+      } else {
+        bodyEl.innerHTML = `
+          <div class="loading-placeholder">
+            Could not load full entry for "${escapeHtml(name)}".
+            <br/><span style="font-size: 11px; color: var(--text-dim);">${escapeHtml(res?.error || 'Source data not found')}</span>
+          </div>
+        `;
+      }
+    } catch (err) {
+      bodyEl.innerHTML = `<div class="loading-placeholder text-danger">Error loading entry: ${escapeHtml(err.message)}</div>`;
+    }
+  }
+
+  const btnCloseInspectModal = document.getElementById('btn-close-inspect-modal');
+  const btnInspectClose = document.getElementById('btn-inspect-close');
+  if (btnCloseInspectModal) {
+    btnCloseInspectModal.addEventListener('click', () => {
+      document.getElementById('modal-compendium-inspect')?.classList.add('vtt-hidden');
+    });
+  }
+  if (btnInspectClose) {
+    btnInspectClose.addEventListener('click', () => {
+      document.getElementById('modal-compendium-inspect')?.classList.add('vtt-hidden');
+    });
+  }
+
+  // Campaign Reset Button
+  if (btnResetCampaignSources) {
+    btnResetCampaignSources.addEventListener('click', async () => {
+      if (!activeCampaignScope) return;
+      if (confirm(`Reset this campaign's sourcebook selections to 100% match Global Defaults?`)) {
+        btnResetCampaignSources.disabled = true;
+        try {
+          await api.sourcesResetCampaign(activeCampaignScope);
+          await loadAllSources();
+        } finally {
+          btnResetCampaignSources.disabled = false;
+        }
+      }
+    });
+  }
+
+  // Drag and drop ingestion on Source Manager view
+  if (viewSources && sourcesDropzoneOverlay) {
+    let dragCounter = 0;
+    viewSources.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      dragCounter++;
+      sourcesDropzoneOverlay.classList.remove('vtt-hidden');
+    });
+    viewSources.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+    viewSources.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      dragCounter--;
+      if (dragCounter <= 0) {
+        dragCounter = 0;
+        sourcesDropzoneOverlay.classList.add('vtt-hidden');
+      }
+    });
+    viewSources.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      sourcesDropzoneOverlay.classList.add('vtt-hidden');
+      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        const filePaths = Array.from(e.dataTransfer.files).map(f => f.path).filter(Boolean);
+        if (filePaths.length > 0) {
+          openBulkImportWizard();
+          await processBulkPaths(filePaths);
+        }
+      }
+    });
+  }
+
+  // URL Import Modal handlers
+  if (btnOpenUrlImport && modalUrlImport) {
+    btnOpenUrlImport.addEventListener('click', () => {
+      modalUrlImport.classList.remove('vtt-hidden');
+      if (inputSourceUrl) inputSourceUrl.value = '';
+      if (urlImportStatusBox) {
+        urlImportStatusBox.classList.add('vtt-hidden');
+        urlImportStatusBox.textContent = '';
+      }
+    });
+  }
+  if (btnCloseUrlImport && modalUrlImport) {
+    btnCloseUrlImport.addEventListener('click', () => modalUrlImport.classList.add('vtt-hidden'));
+  }
+  if (btnCancelUrlImport && modalUrlImport) {
+    btnCancelUrlImport.addEventListener('click', () => modalUrlImport.classList.add('vtt-hidden'));
+  }
+  if (btnExecuteUrlImport && inputSourceUrl && modalUrlImport) {
+    btnExecuteUrlImport.addEventListener('click', async () => {
+      const url = inputSourceUrl.value.trim();
+      if (!url) {
+        if (urlImportStatusBox) {
+          urlImportStatusBox.textContent = 'Please enter a valid web URL.';
+          urlImportStatusBox.className = 'url-import-status text-danger';
+          urlImportStatusBox.classList.remove('vtt-hidden');
+        }
+        return;
+      }
+
+      btnExecuteUrlImport.disabled = true;
+      if (urlImportStatusBox) {
+        urlImportStatusBox.innerHTML = '⏳ Downloading, parsing, and integrating sourcebook...';
+        urlImportStatusBox.className = 'url-import-status text-warning';
+        urlImportStatusBox.classList.remove('vtt-hidden');
+      }
+
+      try {
+        const res = await api.sourcesImportFromUrl({ url });
+        if (res && res.success) {
+          if (urlImportStatusBox) {
+            urlImportStatusBox.textContent = `✅ Successfully imported ${res.importedCount || 1} sourcebook file(s)!`;
+            urlImportStatusBox.className = 'url-import-status text-success';
+          }
+          setTimeout(async () => {
+            modalUrlImport.classList.add('vtt-hidden');
+            btnExecuteUrlImport.disabled = false;
+            await loadAllSources();
+          }, 1200);
+        } else {
+          if (urlImportStatusBox) {
+            urlImportStatusBox.textContent = `❌ ${res?.error || 'Failed to import from URL'}`;
+            urlImportStatusBox.className = 'url-import-status text-danger';
+          }
+          btnExecuteUrlImport.disabled = false;
+        }
+      } catch (err) {
+        if (urlImportStatusBox) {
+          urlImportStatusBox.textContent = `❌ ${err.message}`;
+          urlImportStatusBox.className = 'url-import-status text-danger';
+        }
+        btnExecuteUrlImport.disabled = false;
+      }
+    });
   }
 
   // Search input handlers
@@ -1574,7 +2122,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (activeSourceSearch) btnClearSourceSearch.classList.remove('vtt-hidden');
         else btnClearSourceSearch.classList.add('vtt-hidden');
       }
-      renderCategoriesAccordion();
+      renderSourcesView();
     });
   }
 
@@ -1583,7 +2131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       sourcesSearchInput.value = '';
       activeSourceSearch = '';
       btnClearSourceSearch.classList.add('vtt-hidden');
-      renderCategoriesAccordion();
+      renderSourcesView();
     });
   }
 
@@ -1601,9 +2149,50 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  function showSystemToast(html, duration = 3000, extraClass = '') {
+    let toastContainer = document.getElementById('vtt-roll-toasts');
+    if (!toastContainer) {
+      toastContainer = document.createElement('div');
+      toastContainer.id = 'vtt-roll-toasts';
+      toastContainer.className = 'vtt-roll-toasts-container';
+      document.body.appendChild(toastContainer);
+    }
+    const toast = document.createElement('div');
+    toast.className = `vtt-roll-toast ${extraClass}`.trim();
+    toast.innerHTML = html;
+    toastContainer.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.add('fade-out');
+      setTimeout(() => toast.remove(), 400);
+    }, duration);
+  }
+
   if (btnRefreshSources) {
     btnRefreshSources.addEventListener('click', () => {
       loadAllSources();
+    });
+  }
+
+  if (btnSyncSourcesVtt) {
+    btnSyncSourcesVtt.addEventListener('click', async () => {
+      btnSyncSourcesVtt.disabled = true;
+      const originalText = btnSyncSourcesVtt.innerHTML;
+      btnSyncSourcesVtt.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Syncing...';
+      try {
+        if (api && api.sourcesSyncToServer) {
+          await api.sourcesSyncToServer();
+        } else {
+          await fetch('/api/server/sync-sources', { method: 'POST' }).catch(() => {});
+        }
+        await loadAllSources();
+        showSystemToast('<span style="font-size: 18px;">⚡</span> <div><strong>Database Sources Synced!</strong><div style="font-size: 12px; color: #a5b4fc;">Active VTT compendium and cache hot-reloaded successfully.</div></div>', 3500);
+      } catch (err) {
+        console.error('Failed to sync sources to VTT:', err);
+        showSystemToast(`<span style="font-size: 18px;">❌</span> <div><strong>Sync Failed</strong><div style="font-size: 12px; color: #fca5a5;">${err.message}</div></div>`, 4000);
+      } finally {
+        btnSyncSourcesVtt.disabled = false;
+        btnSyncSourcesVtt.innerHTML = originalText;
+      }
     });
   }
 
@@ -1696,7 +2285,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (sourcesStatusFilter) {
     sourcesStatusFilter.addEventListener('change', () => {
       activeStatusFilter = sourcesStatusFilter.value;
-      renderCategoriesAccordion();
+      renderSourcesView();
     });
   }
 
@@ -2024,6 +2613,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Update studio mode display (visual vs json)
     setStudioMode(activeStudioMode);
+
+    // Update Live 5e Preview
+    updateLivePreview();
   }
 
   function showCategoryForm(cat) {
@@ -2223,6 +2815,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
 
+    // Subtype
+    setVal('bf-beast-subtype', entity.subtype || '');
+
     // Dynamic cards
     renderCardBlockList('beast-traits-container', entity.traits || [], (arr) => { entity.traits = arr; });
     renderCardBlockList('beast-actions-container', entity.actions || [], (arr) => { entity.actions = arr; });
@@ -2230,15 +2825,37 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderCardBlockList('beast-legendary-container', entity.legendaryActions || [], (arr) => { entity.legendaryActions = arr; });
   }
 
+  function readCardBlockList(containerId, fallback = []) {
+    const container = document.getElementById(containerId);
+    if (!container) return fallback;
+    const blocks = container.querySelectorAll('.card-block-item');
+    if (blocks.length === 0) return [];
+    const items = [];
+    blocks.forEach(b => {
+      const title = b.querySelector('.card-block-title-input')?.value?.trim() || '';
+      const text = b.querySelector('.card-block-textarea')?.value?.trim() || '';
+      if (title || text) {
+        items.push({ name: title, text });
+      }
+    });
+    return items;
+  }
+
   function readBestiaryForm(current) {
     const getVal = (id, def = '') => document.getElementById(id)?.value ?? def;
     const getNum = (id, def = 0) => parseInt(document.getElementById(id)?.value, 10) || def;
+
+    const traits = readCardBlockList('beast-traits-container', current?.traits || []);
+    const actions = readCardBlockList('beast-actions-container', current?.actions || []);
+    const reactions = readCardBlockList('beast-reactions-container', current?.reactions || []);
+    const legendaryActions = readCardBlockList('beast-legendary-container', current?.legendaryActions || []);
 
     return {
       ...current,
       name: getVal('bf-beast-name', 'New Creature'),
       size: getVal('bf-beast-size', 'Medium'),
       type: getVal('bf-beast-type', 'Humanoid'),
+      subtype: getVal('bf-beast-subtype'),
       alignment: getVal('bf-beast-alignment', 'unaligned'),
       cr: getVal('bf-beast-cr', '1/4'),
       ac: getNum('bf-beast-ac', 10),
@@ -2261,7 +2878,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       resistances: getVal('bf-beast-resist'),
       immunities: getVal('bf-beast-immune'),
       conditionImmunities: getVal('bf-beast-cond-immune'),
-      tokenUrl: getVal('bf-beast-token-url')
+      tokenUrl: getVal('bf-beast-token-url'),
+      traits,
+      actions,
+      reactions,
+      legendaryActions
     };
   }
 
@@ -2449,6 +3070,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     const rawSaves = getVal('bf-class-saves');
     const savingThrows = rawSaves ? rawSaves.split(',').map(s => s.trim().toUpperCase()).filter(Boolean) : ['STR', 'CON'];
 
+    const scBlocks = readCardBlockList('class-subclasses-container');
+    const subclasses = scBlocks.length > 0 ? scBlocks.map(item => ({
+      name: item.name,
+      shortName: item.name,
+      source: current?.source || 'MYBREW',
+      features: [{ level: 3, name: item.name, text: item.text }]
+    })) : (current?.subclasses || []);
+
     return {
       ...current,
       name: getVal('bf-class-name', 'New Class'),
@@ -2456,7 +3085,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       savingThrows,
       armorProf: getVal('bf-class-armor'),
       weaponProf: getVal('bf-class-weapons'),
-      subclassUnlockLevel: getNum('bf-class-subclass-level', 3)
+      subclassUnlockLevel: getNum('bf-class-subclass-level', 3),
+      levels: current?.levels || {},
+      subclasses
     };
   }
 
@@ -2480,6 +3111,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   function readRacesForm(current) {
     const getVal = (id, def = '') => document.getElementById(id)?.value ?? def;
     const getNum = (id, def = 0) => parseInt(document.getElementById(id)?.value, 10) || def;
+    const traits = readCardBlockList('race-traits-container', current?.traits || []);
 
     return {
       ...current,
@@ -2495,7 +3127,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         int: getNum('bf-race-int', 0),
         wis: getNum('bf-race-wis', 0),
         cha: getNum('bf-race-cha', 0)
-      }
+      },
+      traits
     };
   }
 
@@ -2511,11 +3144,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function readFeatsForm(current) {
     const getVal = (id, def = '') => document.getElementById(id)?.value ?? def;
+    const benefits = readCardBlockList('feat-benefits-container', current?.benefits || []);
     return {
       ...current,
       name: getVal('bf-feat-name', 'New Feat'),
       prerequisiteText: getVal('bf-feat-prereq'),
-      description: getVal('bf-feat-desc')
+      description: getVal('bf-feat-desc'),
+      benefits
     };
   }
 
@@ -2564,6 +3199,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   // =========================================================================
   // CARD BLOCKS & QUICK-TAG INSERTION HELPER
   // =========================================================================
+  function autoTagText(text) {
+    if (!text) return '';
+    let res = String(text);
+    // Replace damage e.g. "2d6 fire damage" -> "{@damage 2d6} fire damage"
+    res = res.replace(/\b(\d+d\d+(?:\s*[\+\-]\s*\d+)?)\s+(fire|cold|lightning|acid|poison|radiant|necrotic|force|psychic|thunder|slashing|piercing|bludgeoning)\s+damage\b/gi, '{@damage $1} $2 damage');
+    // Replace DC saves e.g. "DC 14 Dexterity" -> "{@dc 14} Dexterity"
+    res = res.replace(/\b(?:DC|dc)\s*(\d+)\s*(Strength|Dexterity|Constitution|Intelligence|Wisdom|Charisma|Str|Dex|Con|Int|Wis|Cha)?\b/gi, '{@dc $1} $2');
+    // Replace plain attack bonuses e.g. "+5 to hit" -> "{@hit 5} to hit"
+    res = res.replace(/\+([0-9]+)\s+to\s+hit\b/gi, '{@hit $1} to hit');
+    return res;
+  }
+
   function renderCardBlockList(containerId, itemsArray, onUpdate) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -2585,6 +3232,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             <button type="button" class="tag-pill" data-tag="{@hit 4}">{@hit}</button>
             <button type="button" class="tag-pill" data-tag="{@dc 13}">{@dc}</button>
             <button type="button" class="tag-pill" data-tag="{@spell fireball}">{@spell}</button>
+            <button type="button" class="tag-pill" data-tag="{@condition poisoned}">{@condition}</button>
+            <button type="button" class="btn-auto-tag" title="Auto-convert plain dice & saves to 5e tags">⚡ Auto-Tag</button>
           </div>
         </div>
       `;
@@ -2592,21 +3241,34 @@ document.addEventListener('DOMContentLoaded', async () => {
       const titleInput = block.querySelector('.card-block-title-input');
       const textarea = block.querySelector('.card-block-textarea');
       const btnDelete = block.querySelector('.btn-card-block-delete');
+      const btnAutoTag = block.querySelector('.btn-auto-tag');
 
       titleInput.addEventListener('input', () => {
         itemsArray[idx].name = titleInput.value;
         onUpdate(itemsArray);
+        updateLivePreviewThrottled();
       });
 
       textarea.addEventListener('input', () => {
         itemsArray[idx].text = textarea.value;
         onUpdate(itemsArray);
+        updateLivePreviewThrottled();
       });
+
+      if (btnAutoTag) {
+        btnAutoTag.addEventListener('click', () => {
+          textarea.value = autoTagText(textarea.value);
+          itemsArray[idx].text = textarea.value;
+          onUpdate(itemsArray);
+          updateLivePreview();
+        });
+      }
 
       btnDelete.addEventListener('click', () => {
         itemsArray.splice(idx, 1);
         onUpdate(itemsArray);
         renderCardBlockList(containerId, itemsArray, onUpdate);
+        updateLivePreview();
       });
 
       // Quick tags insertion
@@ -2616,6 +3278,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           insertTextAtCursor(textarea, tagToInsert);
           itemsArray[idx].text = textarea.value;
           onUpdate(itemsArray);
+          updateLivePreview();
         });
       });
 
@@ -2634,7 +3297,51 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function escapeHtml(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function calcAbilityModifier(score) {
+    const val = parseInt(score, 10);
+    if (isNaN(val)) return '+0';
+    const mod = Math.floor((val - 10) / 2);
+    return mod >= 0 ? `+${mod}` : `${mod}`;
+  }
+
+  function calcAverageHp(formula, conScore = 10) {
+    if (!formula || typeof formula !== 'string') return 10;
+    const match = formula.trim().match(/^(\d+)d(\d+)(?:\s*([\+\-])\s*(\d+))?$/i);
+    if (!match) return 10;
+    const count = parseInt(match[1], 10) || 1;
+    const die = parseInt(match[2], 10) || 8;
+    const sign = match[3] || '+';
+    let bonus = match[4] ? parseInt(match[4], 10) : 0;
+    if (sign === '-') bonus = -bonus;
+
+    const avgDie = (die + 1) / 2;
+    return Math.max(1, Math.floor(count * avgDie + bonus));
+  }
+
+  function getProfBonusByCR(cr) {
+    let crVal = 0;
+    if (typeof cr === 'string') {
+      if (cr.includes('/')) {
+        const parts = cr.split('/');
+        crVal = parseFloat(parts[0]) / parseFloat(parts[1]);
+      } else {
+        crVal = parseFloat(cr) || 0;
+      }
+    } else {
+      crVal = Number(cr) || 0;
+    }
+
+    if (crVal <= 4) return 2;
+    if (crVal <= 8) return 3;
+    if (crVal <= 12) return 4;
+    if (crVal <= 16) return 5;
+    if (crVal <= 20) return 6;
+    if (crVal <= 24) return 7;
+    if (crVal <= 28) return 8;
+    return 9;
   }
 
   function updateAbilityModDisplay(inputId, modSpanId) {
@@ -2644,13 +3351,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     span.textContent = calcAbilityModifier(input.value);
   }
 
-  // Hook ability score changes
+  // Hook ability score changes & Auto-Math
   ['str', 'dex', 'con', 'int', 'wis', 'cha'].forEach(s => {
     const input = document.getElementById(`bf-beast-${s}`);
     if (input) {
-      input.addEventListener('input', () => updateAbilityModDisplay(`bf-beast-${s}`, `mod-beast-${s}`));
+      input.addEventListener('input', () => {
+        updateAbilityModDisplay(`bf-beast-${s}`, `mod-beast-${s}`);
+        updateLivePreviewThrottled();
+      });
     }
   });
+
+  // Auto-calculate HP average from Formula
+  const hpFormulaInput = document.getElementById('bf-beast-hp-formula');
+  const hpAvgInput = document.getElementById('bf-beast-hp-avg');
+  if (hpFormulaInput && hpAvgInput) {
+    hpFormulaInput.addEventListener('input', () => {
+      const conScore = parseInt(document.getElementById('bf-beast-con')?.value, 10) || 10;
+      const calcAvg = calcAverageHp(hpFormulaInput.value, conScore);
+      if (calcAvg > 0) {
+        hpAvgInput.value = calcAvg;
+      }
+      updateLivePreviewThrottled();
+    });
+  }
 
   // Card block Add buttons
   const addBlockMappings = [
@@ -2761,6 +3485,838 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (btnSaveActiveEntry) {
     btnSaveActiveEntry.addEventListener('click', () => saveActiveEntity(true));
+  }
+
+  // =========================================================================
+  // LIVE 5E PREVIEW & COMBAT TEST ROLLER ENGINE
+  // =========================================================================
+  function updateLivePreviewThrottled() {
+    clearTimeout(livePreviewThrottleTimer);
+    livePreviewThrottleTimer = setTimeout(() => {
+      updateLivePreview();
+    }, 80);
+  }
+
+  function updateLivePreview() {
+    if (!liveCardRenderContainer) return;
+    if (activeEntityIndex < 0 || !activeSourceEntities[activeEntityIndex]) {
+      renderLivePreviewEmpty();
+      return;
+    }
+
+    const cat = activeEditingSource?.category || 'bestiary';
+    let entity = null;
+    if (activeStudioMode === 'json') {
+      try {
+        const parsed = JSON.parse(entityEntryJsonTextarea.value);
+        entity = jsonToEntity(cat, parsed, activeEditingSource?.code || 'MYBREW');
+      } catch (_) {
+        return;
+      }
+    } else {
+      entity = readVisualForm(cat);
+    }
+
+    if (!entity) {
+      renderLivePreviewEmpty();
+      return;
+    }
+
+    renderLivePreviewForEntity(cat, entity);
+  }
+
+  function renderLivePreviewEmpty() {
+    if (!liveCardRenderContainer) return;
+    if (previewEntityTypeBadge) previewEntityTypeBadge.textContent = 'Preview';
+    liveCardRenderContainer.innerHTML = `
+      <div class="preview-placeholder">
+        Select an entry or build one with the form to preview the live 5e card.
+      </div>
+    `;
+  }
+
+  function formatPreviewTextWithRollables(rawText, sourceName = '') {
+    if (!rawText) return '';
+    if (typeof rawText === 'object') {
+      return VTTEntryResolver.render(rawText);
+    }
+    let html = VTTEntryResolver.resolveTags(String(rawText));
+
+    // Fallback regexes for plaintext dice expressions not wrapped in tags
+    html = html.replace(/\b(\d+d\d+(?:\s*[\+\-]\s*\d+)?)\s+([a-zA-Z]+)?\s*damage\b/gi, (match, formula, type) => {
+      const cleanForm = formula.replace(/\s+/g, '');
+      const typeStr = type ? ` ${type}` : '';
+      return `<button type="button" class="dice-chip dice-chip--damage" data-formula="${escapeHtml(cleanForm)}" title="Roll Damage: ${cleanForm}">${formula}${typeStr}</button> damage`;
+    });
+
+    html = html.replace(/\b(\+\d+)\s+to\s+hit\b/gi, (match, bonus) => {
+      return `<button type="button" class="dice-chip dice-chip--hit" data-formula="1d20${bonus}" title="Attack Roll: 1d20${bonus}">${bonus} to hit</button>`;
+    });
+
+    return html;
+  }
+
+  function formatSavesMap(savesObj) {
+    if (!savesObj) return '';
+    if (typeof savesObj === 'string') return savesObj;
+    if (typeof savesObj !== 'object') return '';
+    const parts = [];
+    for (const [k, v] of Object.entries(savesObj)) {
+      if (v !== undefined && v !== null && v !== false) {
+        const bonus = typeof v === 'number' ? (v >= 0 ? `+${v}` : `${v}`) : String(v);
+        parts.push(`${k.charAt(0).toUpperCase() + k.slice(1).toLowerCase()} ${bonus}`);
+      }
+    }
+    return parts.join(', ');
+  }
+
+  function formatSkillsMap(skillsObj) {
+    if (!skillsObj) return '';
+    if (typeof skillsObj === 'string') return skillsObj;
+    if (typeof skillsObj !== 'object') return '';
+    const parts = [];
+    for (const [k, v] of Object.entries(skillsObj)) {
+      if (v !== undefined && v !== null && v !== false) {
+        const bonus = typeof v === 'number' ? (v >= 0 ? `+${v}` : `${v}`) : String(v);
+        parts.push(`${k.charAt(0).toUpperCase() + k.slice(1).toLowerCase()} ${bonus}`);
+      }
+    }
+    return parts.join(', ');
+  }
+
+  function generateEntityStatblockHtml(cat, entity) {
+    if (!entity) return '<div class="preview-placeholder">No entry data.</div>';
+
+    // -----------------------------------------------------------------------
+    // 1. BESTIARY: Authentic Single-Column 5e Statblock
+    // -----------------------------------------------------------------------
+    if (cat === 'bestiary') {
+      const strMod = calcAbilityModifier(entity.str);
+      const dexMod = calcAbilityModifier(entity.dex);
+      const conMod = calcAbilityModifier(entity.con);
+      const intMod = calcAbilityModifier(entity.int);
+      const wisMod = calcAbilityModifier(entity.wis);
+      const chaMod = calcAbilityModifier(entity.cha);
+
+      const cr = entity.cr !== undefined ? String(entity.cr) : '1/4';
+      const pb = entity.proficiencyBonus || getProfBonusByCR(cr);
+
+      // Armor Class
+      const acVal = entity.primaryAc !== undefined
+        ? entity.primaryAc
+        : (Array.isArray(entity.ac)
+          ? (typeof entity.ac[0] === 'object' ? (entity.ac[0]?.value || entity.ac[0]?.ac || 10) : entity.ac[0])
+          : (entity.ac || 10));
+      const acCond = entity.acCondition || (Array.isArray(entity.ac) && entity.ac[0]?.condition ? entity.ac[0].condition : '');
+
+      // Hit Points
+      const hpAvg = entity.hpAvg !== undefined
+        ? entity.hpAvg
+        : (entity.hp && typeof entity.hp === 'object' ? (entity.hp.average || 10) : (typeof entity.hp === 'number' ? entity.hp : 10));
+      const hpFormula = entity.hpFormula || (entity.hp && typeof entity.hp === 'object' ? entity.hp.formula : '');
+
+      // Speeds
+      const speedObj = entity.speed || {};
+      const walkSpeed = entity.speedWalk !== undefined ? entity.speedWalk : (speedObj.walk !== undefined ? speedObj.walk : (typeof entity.speed === 'number' ? entity.speed : 30));
+      const flySpeed = entity.speedFly !== undefined ? entity.speedFly : (speedObj.fly || 0);
+      const swimSpeed = entity.speedSwim !== undefined ? entity.speedSwim : (speedObj.swim || 0);
+      const climbSpeed = entity.speedClimb !== undefined ? entity.speedClimb : (speedObj.climb || 0);
+      const burrowSpeed = entity.speedBurrow !== undefined ? entity.speedBurrow : (speedObj.burrow || 0);
+      const canHover = entity.canHover || !!speedObj.canHover;
+
+      const speeds = [];
+      if (walkSpeed) speeds.push(`${walkSpeed} ft.`);
+      if (flySpeed) speeds.push(`fly ${flySpeed} ft.${canHover ? ' (hover)' : ''}`);
+      if (swimSpeed) speeds.push(`swim ${swimSpeed} ft.`);
+      if (climbSpeed) speeds.push(`climb ${climbSpeed} ft.`);
+      if (burrowSpeed) speeds.push(`burrow ${burrowSpeed} ft.`);
+      const speedStr = speeds.join(', ') || '30 ft.';
+
+      // Saves, Skills, Senses, Languages
+      const savesStr = formatSavesMap(entity.saves || entity.save);
+      const skillsStr = formatSkillsMap(entity.skills || entity.skill);
+      const sensesStr = entity.senses ? (typeof entity.senses === 'string' ? entity.senses : toCommaSeparatedString(entity.senses)) : (entity.passivePerception ? `passive Perception ${entity.passivePerception}` : '');
+      const languagesStr = entity.languages ? (typeof entity.languages === 'string' ? entity.languages : toCommaSeparatedString(entity.languages)) : '—';
+      const resistStr = entity.resistances ? (typeof entity.resistances === 'string' ? entity.resistances : toCommaSeparatedString(entity.resistances)) : (toCommaSeparatedString(entity.resist));
+      const immuneStr = entity.immunities ? (typeof entity.immunities === 'string' ? entity.immunities : toCommaSeparatedString(entity.immunities)) : (toCommaSeparatedString(entity.immune));
+      const condImmuneStr = entity.conditionImmunities ? (typeof entity.conditionImmunities === 'string' ? entity.conditionImmunities : toCommaSeparatedString(entity.conditionImmunities)) : (toCommaSeparatedString(entity.conditionImmune));
+
+      const formatActionList = (arr) => {
+        if (!Array.isArray(arr) || arr.length === 0) return '';
+        return arr.map(item => {
+          const name = item.name ? `<strong><em>${VTTEntryResolver.resolveTags(item.name)}.</em></strong> ` : '';
+          let body = '';
+          if (item.entriesHtml) body = VTTEntryResolver.resolveTags(item.entriesHtml);
+          else if (item.entries) body = VTTEntryResolver.render(item.entries);
+          else if (item.text) body = formatPreviewTextWithRollables(item.text, item.name);
+          else if (item.descriptionHtml) body = VTTEntryResolver.resolveTags(item.descriptionHtml);
+          else body = VTTEntryResolver.render(item);
+          return `<div class="statblock-entry-item">${name}${body}</div>`;
+        }).join('');
+      };
+
+      const traitsHtml = formatActionList(entity.traits || entity.trait);
+      const actionsHtml = formatActionList(entity.actions || entity.action);
+      const bonusHtml = formatActionList(entity.bonusActions || entity.bonusAction);
+      const reactionsHtml = formatActionList(entity.reactions || entity.reaction);
+
+      // Legendary Actions
+      let legendaryHtml = '';
+      const legCount = entity.legendaryActions?.count || entity.legendaryCount || 3;
+      const legDesc = entity.legendaryActions?.description || entity.legendaryActionsDesc || `The creature can take ${legCount} legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The creature regains spent legendary actions at the start of its turn.`;
+      const legEntries = Array.isArray(entity.legendaryActions) ? entity.legendaryActions : (entity.legendaryActions?.entries || entity.legendary || []);
+      if (legEntries.length > 0) {
+        legendaryHtml = `
+          <div class="statblock-section-heading">Legendary Actions</div>
+          <div class="statblock-intro-text" style="font-size: 13px; line-height: 1.5; color: #cbd5e1; margin-bottom: 8px;">${VTTEntryResolver.resolveTags(legDesc)}</div>
+          ${formatActionList(legEntries)}
+        `;
+      }
+
+      // Spellcasting
+      let spellcastingHtml = '';
+      if (Array.isArray(entity.spellcasting) && entity.spellcasting.length > 0) {
+        spellcastingHtml = entity.spellcasting.map(sc => {
+          const scName = sc.name ? `<div class="statblock-section-heading" style="color: #c084fc;">${escapeHtml(sc.name)}</div>` : '';
+          const scHeader = sc.headerEntries ? `<div style="font-size: 13px; line-height: 1.5; color: #e2e8f0; margin-bottom: 6px;">${VTTEntryResolver.render(sc.headerEntries)}</div>` : '';
+          const scSpells = sc.spells ? Object.entries(sc.spells).map(([lvl, info]) => {
+            const lvlLabel = lvl === '0' ? 'Cantrips (at will)' : `Level ${lvl} (${info.slots || 1} slots)`;
+            const spellsList = Array.isArray(info.spells) ? info.spells.map(s => VTTEntryResolver.resolveTags(`{@spell ${s}}`)).join(', ') : '';
+            return `<div style="font-size: 13px; margin-bottom: 4px;"><strong>${lvlLabel}:</strong> ${spellsList}</div>`;
+          }).join('') : '';
+          return `<div class="statblock-spellcasting-block">${scName}${scHeader}${scSpells}</div>`;
+        }).join('');
+      }
+
+      // Mythic Actions
+      let mythicHtml = '';
+      const mythicEntries = Array.isArray(entity.mythicActions) ? entity.mythicActions : (entity.mythicActions?.entries || []);
+      if (mythicEntries.length > 0) {
+        mythicHtml = `
+          <div class="vtt-statblock-special-section vtt-mythic-actions" style="margin-top: 14px; border-left: 3px solid #f43f5e; padding-left: 10px;">
+            <div class="statblock-section-heading" style="color: #f43f5e;">Mythic Actions</div>
+            ${entity.mythicActions?.description ? `<div style="font-size: 13px; color: #fda4af; margin-bottom: 6px;">${VTTEntryResolver.resolveTags(entity.mythicActions.description)}</div>` : ''}
+            ${formatActionList(mythicEntries)}
+          </div>
+        `;
+      }
+
+      // Lair Actions
+      let lairHtml = '';
+      const lairActions = entity.lairActions || [];
+      if (Array.isArray(lairActions) && lairActions.length > 0) {
+        const lairHeader = entity.lairHeader || 'Lair Actions';
+        const lairDesc = entity.lairActionsDesc || 'On initiative count 20 (losing initiative ties), the creature can take one of the following lair actions:';
+        lairHtml = `
+          <div class="vtt-statblock-special-section vtt-lair-actions" style="margin-top: 16px; border: 1px solid rgba(255, 215, 0, 0.3); background: rgba(255, 215, 0, 0.04); border-radius: 6px; padding: 12px;">
+            <div class="statblock-section-heading" style="color: #ffd700; border-bottom: 1px solid rgba(255, 215, 0, 0.4); margin-top: 0; padding-bottom: 4px;">🏰 ${escapeHtml(lairHeader)}</div>
+            <div style="font-size: 13px; font-style: italic; color: #fef08a; margin: 6px 0 10px 0;">${VTTEntryResolver.resolveTags(lairDesc)}</div>
+            ${formatActionList(lairActions)}
+          </div>
+        `;
+      }
+
+      // Regional Effects
+      let regionalHtml = '';
+      const regionalEffects = entity.regionalEffects || [];
+      if (Array.isArray(regionalEffects) && regionalEffects.length > 0) {
+        regionalHtml = `
+          <div class="vtt-statblock-special-section vtt-regional-effects" style="margin-top: 14px; border: 1px solid rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.04); border-radius: 6px; padding: 12px;">
+            <div class="statblock-section-heading" style="color: #34d399; border-bottom: 1px solid rgba(52, 211, 153, 0.4); margin-top: 0; padding-bottom: 4px;">🌲 Regional Effects</div>
+            <div style="font-size: 13px; color: #a7f3d0; margin-top: 6px;">
+              ${entity.regionalEffectsHtml ? VTTEntryResolver.resolveTags(entity.regionalEffectsHtml) : formatActionList(regionalEffects)}
+            </div>
+          </div>
+        `;
+      }
+
+      // Variants
+      let variantsHtml = '';
+      const variants = entity.variants || [];
+      if (Array.isArray(variants) && variants.length > 0) {
+        variantsHtml = `
+          <div class="vtt-statblock-special-section vtt-variants-box" style="margin-top: 16px; border: 1px solid rgba(96, 165, 250, 0.3); background: rgba(96, 165, 250, 0.04); border-radius: 6px; padding: 12px;">
+            <div class="statblock-section-heading" style="color: #60a5fa; border-bottom: 1px solid rgba(96, 165, 250, 0.4); margin-top: 0; padding-bottom: 4px;">🔄 Variants & Customizations</div>
+            ${variants.map(v => `
+              <div style="margin-top: 10px;">
+                <div style="font-weight: 700; color: #93c5fd; font-size: 13px;">${escapeHtml(v.name || 'Variant')}</div>
+                <div style="font-size: 13px; line-height: 1.5; color: #e2e8f0; margin-top: 4px;">
+                  ${v.descriptionHtml ? VTTEntryResolver.resolveTags(v.descriptionHtml) : (v.entries ? VTTEntryResolver.render(v.entries) : VTTEntryResolver.resolveTags(v.text || ''))}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      return `
+        <div class="statblock-5e">
+          <div class="statblock-header">
+            <h2 class="statblock-name">${escapeHtml(entity.name || 'Creature')}</h2>
+            <div class="statblock-meta">${escapeHtml(entity.size || 'Medium')} ${escapeHtml(entity.type || 'Humanoid')}${entity.subtype ? ` (${escapeHtml(entity.subtype)})` : ''}, ${escapeHtml(entity.alignment || 'unaligned')} • ${escapeHtml(entity.source || '')}</div>
+          </div>
+          <hr class="tapered-rule" />
+          <div class="statblock-prop-row"><strong>Armor Class</strong> ${acVal} ${acCond ? `(${escapeHtml(acCond)})` : ''}</div>
+          <div class="statblock-prop-row"><strong>Hit Points</strong> ${hpAvg} ${hpFormula ? `(${hpFormula})` : ''}</div>
+          <div class="statblock-prop-row"><strong>Speed</strong> ${speedStr}</div>
+          <hr class="tapered-rule" />
+
+          <div class="statblock-abilities-grid">
+            <div class="statblock-ability-col"><span class="statblock-ability-label">STR</span><span class="statblock-ability-val">${entity.str || 10} (${strMod})</span></div>
+            <div class="statblock-ability-col"><span class="statblock-ability-label">DEX</span><span class="statblock-ability-val">${entity.dex || 10} (${dexMod})</span></div>
+            <div class="statblock-ability-col"><span class="statblock-ability-label">CON</span><span class="statblock-ability-val">${entity.con || 10} (${conMod})</span></div>
+            <div class="statblock-ability-col"><span class="statblock-ability-label">INT</span><span class="statblock-ability-val">${entity.int || 10} (${intMod})</span></div>
+            <div class="statblock-ability-col"><span class="statblock-ability-label">WIS</span><span class="statblock-ability-val">${entity.wis || 10} (${wisMod})</span></div>
+            <div class="statblock-ability-col"><span class="statblock-ability-label">CHA</span><span class="statblock-ability-val">${entity.cha || 10} (${chaMod})</span></div>
+          </div>
+
+          <hr class="tapered-rule" />
+          ${savesStr ? `<div class="statblock-prop-row"><strong>Saving Throws</strong> ${escapeHtml(savesStr)}</div>` : ''}
+          ${skillsStr ? `<div class="statblock-prop-row"><strong>Skills</strong> ${escapeHtml(skillsStr)}</div>` : ''}
+          ${resistStr ? `<div class="statblock-prop-row"><strong>Damage Resistances</strong> ${escapeHtml(resistStr)}</div>` : ''}
+          ${immuneStr ? `<div class="statblock-prop-row"><strong>Damage Immunities</strong> ${escapeHtml(immuneStr)}</div>` : ''}
+          ${condImmuneStr ? `<div class="statblock-prop-row"><strong>Condition Immunities</strong> ${escapeHtml(condImmuneStr)}</div>` : ''}
+          ${sensesStr ? `<div class="statblock-prop-row"><strong>Senses</strong> ${escapeHtml(sensesStr)}</div>` : ''}
+          <div class="statblock-prop-row"><strong>Languages</strong> ${escapeHtml(languagesStr)}</div>
+          <div class="statblock-prop-row"><strong>Challenge</strong> ${cr} (Proficiency Bonus +${pb})</div>
+          <hr class="tapered-rule" />
+
+          ${traitsHtml ? `<div class="statblock-section-heading">Traits</div>${traitsHtml}` : ''}
+          ${spellcastingHtml}
+          ${actionsHtml ? `<div class="statblock-section-heading">Actions</div>${actionsHtml}` : ''}
+          ${bonusHtml ? `<div class="statblock-section-heading">Bonus Actions</div>${bonusHtml}` : ''}
+          ${reactionsHtml ? `<div class="statblock-section-heading">Reactions</div>${reactionsHtml}` : ''}
+          ${legendaryHtml}
+          ${mythicHtml}
+          ${lairHtml}
+          ${regionalHtml}
+          ${variantsHtml}
+        </div>
+      `;
+    }
+
+    // -----------------------------------------------------------------------
+    // 2. SPELLS: Full Spell Card
+    // -----------------------------------------------------------------------
+    if (cat === 'spells') {
+      const lvl = entity.level !== undefined ? entity.level : 1;
+      const school = entity.school || 'Evocation';
+      const lvlText = lvl === 0 ? `${school} Cantrip` : `Level ${lvl} ${school}`;
+
+      const castingTime = entity.castingTime || `${entity.castingTimeNum || 1} ${entity.castingTimeUnit || 'action'}`;
+      const range = entity.range || `${entity.rangeDistance || 60} ${entity.rangeType || 'feet'}`;
+      const components = entity.components || (
+        [entity.componentV ? 'V' : '', entity.componentS ? 'S' : '', entity.componentM ? `M (${entity.materialsText || 'material'})` : ''].filter(Boolean).join(', ') || 'None'
+      );
+      const duration = entity.duration || `${entity.durationAmount || 1} ${entity.durationUnit || 'instant'}`;
+
+      const isConc = entity.concentration || entity.isConcentration;
+      const isRit = entity.ritual;
+
+      const classesArr = Array.isArray(entity.classes)
+        ? entity.classes.map(c => typeof c === 'string' ? c : c.name)
+        : (entity.classes ? [entity.classes] : []);
+
+      const subclassesArr = Array.isArray(entity.subclasses)
+        ? entity.subclasses.map(s => typeof s === 'string' ? s : (s.name || s.shortName))
+        : [];
+
+      // Damage / DC tags
+      let damageChipsHtml = '';
+      if (Array.isArray(entity.damageList) && entity.damageList.length > 0) {
+        damageChipsHtml = entity.damageList.map(d => `
+          <button type="button" class="dice-chip dice-chip--damage" data-formula="${escapeHtml(d.formula)}" title="Roll ${escapeHtml(d.type || 'Damage')}">💥 ${escapeHtml(d.formula)} ${escapeHtml(d.type || '')}</button>
+        `).join(' ');
+      } else if (entity.damageFormula) {
+        damageChipsHtml = `<button type="button" class="dice-chip dice-chip--damage" data-formula="${escapeHtml(entity.damageFormula)}" title="Roll Damage">💥 ${escapeHtml(entity.damageFormula)} ${escapeHtml(entity.damageType || '')}</button>`;
+      }
+
+      const saveAbility = entity.saveAbility || entity.savingThrow;
+      let saveBadgeHtml = '';
+      if (saveAbility) {
+        saveBadgeHtml = `<span class="vtt-dc-badge" style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5;">Save: ${escapeHtml(saveAbility.toUpperCase())}</span>`;
+      }
+
+      let descHtml = '';
+      if (entity.descriptionHtml) descHtml = VTTEntryResolver.resolveTags(entity.descriptionHtml);
+      else if (entity.entries) descHtml = VTTEntryResolver.render(entity.entries);
+      else if (entity.description) descHtml = formatPreviewTextWithRollables(entity.description, entity.name);
+
+      let higherHtml = '';
+      if (entity.higherLevelHtml) higherHtml = VTTEntryResolver.resolveTags(entity.higherLevelHtml);
+      else if (entity.entriesHigherLevel) higherHtml = VTTEntryResolver.render(entity.entriesHigherLevel);
+      else if (entity.higherLevelsDesc) higherHtml = formatPreviewTextWithRollables(entity.higherLevelsDesc, entity.name);
+
+      return `
+        <div class="spell-card-5e">
+          <div class="spell-card-header">
+            <h2 class="spell-card-title">${escapeHtml(entity.name || 'Spell Name')}</h2>
+            <div class="spell-card-meta">
+              ${lvlText}
+              ${isConc ? ' • <span style="color: #60a5fa; font-weight: 600;">Concentration</span>' : ''}
+              ${isRit ? ' • <span style="color: #34d399; font-weight: 600;">Ritual</span>' : ''}
+              • ${escapeHtml(entity.source || '')}
+            </div>
+          </div>
+          <hr class="tapered-rule" />
+          <div class="statblock-prop-row"><strong>Casting Time:</strong> ${escapeHtml(castingTime)}</div>
+          <div class="statblock-prop-row"><strong>Range:</strong> ${escapeHtml(range)}</div>
+          <div class="statblock-prop-row"><strong>Components:</strong> ${VTTEntryResolver.resolveTags(components)}</div>
+          <div class="statblock-prop-row"><strong>Duration:</strong> ${escapeHtml(duration)}</div>
+
+          ${damageChipsHtml || saveBadgeHtml ? `
+            <div class="statblock-prop-row" style="margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              ${damageChipsHtml} ${saveBadgeHtml}
+            </div>
+          ` : ''}
+
+          ${classesArr.length > 0 ? `
+            <div class="statblock-prop-row" style="margin-top: 4px;">
+              <strong>Classes:</strong> ${classesArr.map(c => `<span class="badge" style="background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.3); font-size: 11px; margin: 2px;">${escapeHtml(c)}</span>`).join(' ')}
+            </div>
+          ` : ''}
+
+          ${subclassesArr.length > 0 ? `
+            <div class="statblock-prop-row" style="font-size: 11px; color: #a5b4fc;">
+              <strong>Subclasses:</strong> ${escapeHtml(subclassesArr.join(', '))}
+            </div>
+          ` : ''}
+
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          <div style="font-size: 13px; line-height: 1.6; color: #e2e8f0;">
+            ${descHtml}
+          </div>
+          ${higherHtml ? `
+            <div style="margin-top: 14px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 13px; line-height: 1.5; color: #cbd5e1;">
+              <strong style="color: #ffd700;">At Higher Levels.</strong> ${higherHtml}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // -----------------------------------------------------------------------
+    // 3. ITEMS & EQUIPMENT: Rich Detail Card
+    // -----------------------------------------------------------------------
+    if (cat === 'items') {
+      const itemType = entity.itemType || entity.type || 'Adventuring Gear';
+      const rarity = entity.rarity && entity.rarity !== 'none' ? entity.rarity : 'common';
+      const attune = entity.reqAttune ? (typeof entity.reqAttune === 'string' ? `(requires attunement ${entity.reqAttune})` : '(requires attunement)') : '';
+
+      // Combat stats banner
+      let combatStatsHtml = '';
+      if (entity.dmg1 || entity.damageDice) {
+        const dmgFormula = entity.dmg1 || entity.damageDice;
+        const dmgType = entity.dmgType || entity.damageType || '';
+        const versatile = entity.dmg2 ? ` (versatile ${entity.dmg2})` : '';
+        combatStatsHtml += `
+          <div class="statblock-prop-row">
+            <strong>Damage:</strong>
+            <button type="button" class="dice-chip dice-chip--damage" data-formula="${escapeHtml(dmgFormula)}" title="Roll Damage">💥 ${escapeHtml(dmgFormula)}</button>
+            ${escapeHtml(dmgType)}${escapeHtml(versatile)}
+          </div>
+        `;
+      }
+      if (entity.ac || entity.baseAc) {
+        combatStatsHtml += `<div class="statblock-prop-row"><strong>Armor Class:</strong> ${entity.ac || entity.baseAc}${entity.acBonus ? ` (+${entity.acBonus})` : ''}</div>`;
+      }
+
+      const props = entity.properties || (entity.weaponProperties ? entity.weaponProperties.split(',').map(s => s.trim()) : []);
+      const valueStr = entity.value || (entity.valueGp ? `${entity.valueGp} gp` : '');
+      const weightStr = entity.weight !== undefined ? `${entity.weight} lbs.` : (entity.weightLbs ? `${entity.weightLbs} lbs.` : '');
+
+      let descHtml = '';
+      if (entity.descriptionHtml) descHtml = VTTEntryResolver.resolveTags(entity.descriptionHtml);
+      else if (entity.entries) descHtml = VTTEntryResolver.render(entity.entries);
+      else if (entity.description) descHtml = formatPreviewTextWithRollables(entity.description, entity.name);
+
+      return `
+        <div class="item-card-5e">
+          <div class="item-card-header">
+            <h2 class="item-card-title">${escapeHtml(entity.name || 'Magic Item')}</h2>
+            <div class="item-card-rarity">${escapeHtml(itemType)}, ${escapeHtml(rarity)} ${escapeHtml(attune)} • ${escapeHtml(entity.source || '')}</div>
+          </div>
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          ${combatStatsHtml}
+          ${props.length > 0 ? `<div class="statblock-prop-row"><strong>Properties:</strong> ${props.map(p => `<span class="badge" style="font-size: 11px;">${escapeHtml(p)}</span>`).join(' ')}</div>` : ''}
+          ${valueStr ? `<div class="statblock-prop-row"><strong>Value:</strong> ${escapeHtml(valueStr)}</div>` : ''}
+          ${weightStr ? `<div class="statblock-prop-row"><strong>Weight:</strong> ${escapeHtml(weightStr)}</div>` : ''}
+          ${entity.charges ? `<div class="statblock-prop-row"><strong>Charges:</strong> ${entity.charges} ${entity.rechargeText ? `(${escapeHtml(entity.rechargeText)})` : ''}</div>` : ''}
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          <div style="font-size: 13px; line-height: 1.6; color: #e2e8f0;">
+            ${descHtml || '<div class="text-muted">Standard equipment entry.</div>'}
+          </div>
+        </div>
+      `;
+    }
+
+    // -----------------------------------------------------------------------
+    // 4. CLASSES & SUBCLASSES
+    // -----------------------------------------------------------------------
+    if (cat === 'classes') {
+      // A. SUBCLASS CARD
+      if (entity.isSubclass) {
+        const features = Array.isArray(entity.features) ? entity.features : [];
+        return `
+          <div class="class-card-5e">
+            <h2 class="class-card-title">${escapeHtml(entity.name || 'Subclass')}</h2>
+            <div class="statblock-meta" style="color: #818cf8; font-weight: 600;">
+              Subclass for ${escapeHtml(entity.className || 'Class')} • ${escapeHtml(entity.source || '')}
+            </div>
+            <hr class="tapered-rule" style="margin: 12px 0;" />
+            <div class="statblock-section-heading" style="color: #818cf8;">Subclass Features</div>
+            ${features.length > 0 ? features.map(f => `
+              <div style="margin-top: 12px; padding: 10px 14px; background: rgba(99, 102, 241, 0.06); border-left: 3px solid #818cf8; border-radius: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                  <strong style="color: #c7d2fe; font-size: 14px;">${escapeHtml(f.name || 'Feature')}</strong>
+                  <span class="badge" style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; font-size: 11px;">Level ${f.level || 3}</span>
+                </div>
+                <div style="font-size: 13px; line-height: 1.5; color: #e2e8f0; margin-top: 6px;">
+                  ${f.entriesHtml ? VTTEntryResolver.resolveTags(f.entriesHtml) : (f.entries ? VTTEntryResolver.render(f.entries) : VTTEntryResolver.resolveTags(f.text || ''))}
+                </div>
+              </div>
+            `).join('') : '<div class="text-muted" style="margin-top: 8px;">No feature details defined.</div>'}
+          </div>
+        `;
+      }
+
+      // B. CORE CLASS CARD (With 20-level feature progression table!)
+      const hitDie = entity.hitDie || 'd8';
+      const saves = Array.isArray(entity.savingThrows) ? entity.savingThrows.join(', ') : (entity.savingThrows || (Array.isArray(entity.proficiency) ? entity.proficiency.map(p => p.toUpperCase()).join(', ') : 'None'));
+
+      // Aggregate features by level (1 to 20)
+      const featuresByLevel = {};
+      for (let i = 1; i <= 20; i++) featuresByLevel[i] = [];
+
+      if (Array.isArray(entity.features)) {
+        for (const f of entity.features) {
+          const lvl = f.level || 1;
+          if (featuresByLevel[lvl]) featuresByLevel[lvl].push(f.name);
+        }
+      }
+      if (entity.levels) {
+        for (const [lvl, flist] of Object.entries(entity.levels)) {
+          const lNum = parseInt(lvl, 10);
+          if (featuresByLevel[lNum] && featuresByLevel[lNum].length === 0) {
+            const arr = Array.isArray(flist) ? flist.map(f => f.name || f) : [flist];
+            featuresByLevel[lNum].push(...arr);
+          }
+        }
+      }
+
+      let tableRows = '';
+      for (let lvl = 1; lvl <= 20; lvl++) {
+        const pb = Math.floor((lvl - 1) / 4) + 2;
+        const featsList = featuresByLevel[lvl] || [];
+        const featNames = featsList.length > 0 ? featsList.join(', ') : '—';
+        tableRows += `
+          <tr>
+            <td style="font-weight: 600; color: #818cf8; text-align: center;">${lvl}</td>
+            <td style="color: #a5b4fc; text-align: center;">+${pb}</td>
+            <td style="color: #e2e8f0;">${escapeHtml(featNames)}</td>
+          </tr>
+        `;
+      }
+
+      let subclassesHtml = '';
+      if (Array.isArray(entity.subclasses) && entity.subclasses.length > 0) {
+        subclassesHtml = `
+          <div style="margin-top: 18px;">
+            <div class="statblock-section-heading" style="color: #818cf8;">Available Subclasses (${entity.subclasses.length})</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+              ${entity.subclasses.map(sc => `
+                <div style="padding: 6px 10px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 4px; font-size: 12px; color: #c7d2fe;">
+                  <strong>${escapeHtml(sc.name || sc.shortName)}</strong>
+                  <span style="font-size: 10px; color: #818cf8; margin-left: 4px;">(${escapeHtml(sc.source || entity.source || '')})</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="class-card-5e">
+          <h2 class="class-card-title">${escapeHtml(entity.name || 'Class')}</h2>
+          <div class="statblock-meta">Hit Die: 1${escapeHtml(hitDie)} per level • ${escapeHtml(entity.source || '')}</div>
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          <div class="statblock-prop-row"><strong>Saving Throws:</strong> ${escapeHtml(saves)}</div>
+          ${entity.armorProf ? `<div class="statblock-prop-row"><strong>Armor Proficiencies:</strong> ${escapeHtml(entity.armorProf)}</div>` : ''}
+          ${entity.weaponProf ? `<div class="statblock-prop-row"><strong>Weapon Proficiencies:</strong> ${escapeHtml(entity.weaponProf)}</div>` : ''}
+
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          <div style="font-weight: 700; font-size: 14px; color: #818cf8; margin-bottom: 8px;">The ${escapeHtml(entity.name || 'Class')} Progression Table</div>
+          <div style="max-height: 280px; overflow-y: auto; border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 6px;">
+            <table class="class-progression-table-5e" style="width: 100%; border-collapse: collapse; font-size: 12px;">
+              <thead>
+                <tr style="background: rgba(99, 102, 241, 0.15);">
+                  <th style="width: 50px; padding: 6px; text-align: center;">Lvl</th>
+                  <th style="width: 50px; padding: 6px; text-align: center;">PB</th>
+                  <th style="padding: 6px; text-align: left;">Features</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${tableRows}
+              </tbody>
+            </table>
+          </div>
+          ${subclassesHtml}
+        </div>
+      `;
+    }
+
+    // -----------------------------------------------------------------------
+    // 5. FEATS & OPTIONAL FEATURES
+    // -----------------------------------------------------------------------
+    if (cat === 'feats') {
+      const typeBadge = entity.featureTypeName || (entity.isOptionalFeature ? 'Optional Feature' : 'Feat');
+      const prereq = entity.prerequisite || entity.prerequisiteText || '';
+
+      let descHtml = '';
+      if (entity.descriptionHtml) descHtml = VTTEntryResolver.resolveTags(entity.descriptionHtml);
+      else if (entity.entriesHtml) descHtml = VTTEntryResolver.resolveTags(entity.entriesHtml);
+      else if (entity.entries) descHtml = VTTEntryResolver.render(entity.entries);
+      else if (entity.description) descHtml = formatPreviewTextWithRollables(entity.description, entity.name);
+
+      const benefitsHtml = Array.isArray(entity.benefits) && entity.benefits.length > 0 ? entity.benefits.map(b => `
+        <li style="margin-bottom: 6px; font-size: 13px; line-height: 1.5; color: #fef3c7;">
+          ${b.name ? `<strong style="color: #fbbf24;">${escapeHtml(b.name)}:</strong> ` : ''}
+          ${formatPreviewTextWithRollables(b.text || b, b.name)}
+        </li>
+      `).join('') : '';
+
+      return `
+        <div class="feat-card-5e">
+          <div class="spell-card-header">
+            <h2 class="feat-card-title">${escapeHtml(entity.name || 'Feat')}</h2>
+            <div class="statblock-meta" style="color: #fbbf24;">
+              ${escapeHtml(typeBadge)} • ${escapeHtml(entity.source || '')}
+            </div>
+          </div>
+          ${prereq ? `<div class="statblock-prop-row" style="color: #f59e0b; margin-top: 6px;"><strong>Prerequisite:</strong> ${VTTEntryResolver.resolveTags(prereq)}</div>` : ''}
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          <div style="font-size: 13px; line-height: 1.6; color: #fef3c7;">
+            ${descHtml}
+          </div>
+          ${benefitsHtml ? `<ul style="padding-left: 20px; margin-top: 10px;">${benefitsHtml}</ul>` : ''}
+        </div>
+      `;
+    }
+
+    // -----------------------------------------------------------------------
+    // 6. BACKGROUNDS
+    // -----------------------------------------------------------------------
+    if (cat === 'backgrounds') {
+      const skills = entity.skills || (Array.isArray(entity.skillProficiencies) ? entity.skillProficiencies.join(', ') : '');
+      const tools = entity.tools || (Array.isArray(entity.toolProficiencies) ? entity.toolProficiencies.join(', ') : '');
+      const languages = entity.languages || '—';
+
+      // Equipment
+      let equipStr = entity.equipment || '';
+      if (!equipStr && entity.equipmentData?.fixedItems) {
+        equipStr = entity.equipmentData.fixedItems.map(i => `${i.quantity > 1 ? i.quantity + ' ' : ''}${i.name}`).join(', ');
+        if (entity.equipmentData.fixedGold) equipStr += `, ${entity.equipmentData.fixedGold} gp`;
+      }
+
+      // Features list
+      let featuresHtml = '';
+      if (Array.isArray(entity.features) && entity.features.length > 0) {
+        featuresHtml = entity.features.map(f => `
+          <div style="margin-top: 12px;">
+            <div style="font-weight: 700; color: #22d3ee; font-size: 14px;">${escapeHtml(f.name || 'Background Feature')}</div>
+            <div style="font-size: 13px; line-height: 1.5; color: #cffafe; margin-top: 4px;">
+              ${VTTEntryResolver.resolveTags(f.description || f.entriesHtml || '')}
+            </div>
+          </div>
+        `).join('');
+      } else if (entity.featureName) {
+        featuresHtml = `
+          <div style="margin-top: 12px;">
+            <div style="font-weight: 700; color: #22d3ee; font-size: 14px;">${escapeHtml(entity.featureName)}</div>
+            <div style="font-size: 13px; line-height: 1.5; color: #cffafe; margin-top: 4px;">
+              ${VTTEntryResolver.resolveTags(entity.featureDescription || entity.featureDesc || '')}
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="bg-card-5e">
+          <h2 class="bg-card-title">${escapeHtml(entity.name || 'Background')}</h2>
+          <div class="statblock-meta">Character Origin Background • ${escapeHtml(entity.source || '')}</div>
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          ${skills ? `<div class="statblock-prop-row"><strong>Skill Proficiencies:</strong> ${escapeHtml(skills)}</div>` : ''}
+          ${tools && tools !== 'None' ? `<div class="statblock-prop-row"><strong>Tool Proficiencies:</strong> ${escapeHtml(tools)}</div>` : ''}
+          <div class="statblock-prop-row"><strong>Languages:</strong> ${escapeHtml(languages)}</div>
+          ${equipStr ? `<div class="statblock-prop-row"><strong>Starting Equipment:</strong> ${escapeHtml(equipStr)}</div>` : ''}
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          ${featuresHtml}
+        </div>
+      `;
+    }
+
+    // -----------------------------------------------------------------------
+    // 7. RACES & LINEAGES
+    // -----------------------------------------------------------------------
+    if (cat === 'races') {
+      const increases = [];
+      if (entity.abilityIncreases) {
+        for (const [k, v] of Object.entries(entity.abilityIncreases)) {
+          if (v) increases.push(`+${v} ${k.toUpperCase()}`);
+        }
+      }
+      const incStr = increases.join(', ') || 'None';
+
+      const traits = Array.isArray(entity.traits) ? entity.traits : (Array.isArray(entity.entries) ? entity.entries : []);
+      const traitsHtml = traits.length > 0 ? traits.map(t => `
+        <div class="statblock-entry-item" style="margin-top: 10px;">
+          <strong style="color: #34d399;"><em>${escapeHtml(t.name || 'Trait')}.</em></strong>
+          <div style="font-size: 13px; line-height: 1.5; color: #d1fae5; margin-top: 2px;">
+            ${t.entriesHtml ? VTTEntryResolver.resolveTags(t.entriesHtml) : (t.entries ? VTTEntryResolver.render(t.entries) : VTTEntryResolver.resolveTags(t.text || ''))}
+          </div>
+        </div>
+      `).join('') : '<div class="text-muted" style="font-size: 12px; margin-top: 6px;">No racial traits defined.</div>';
+
+      return `
+        <div class="race-card-5e">
+          <h2 class="race-card-title">${escapeHtml(entity.name || 'Race / Lineage')}</h2>
+          <div class="statblock-meta">${escapeHtml(entity.size || 'Medium')} Humanoid • Speed ${entity.speedWalk || (entity.speed?.walk || 30)} ft. • ${escapeHtml(entity.source || '')}</div>
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          <div class="statblock-prop-row"><strong>Ability Score Increase:</strong> ${incStr}</div>
+          ${entity.darkvision ? `<div class="statblock-prop-row"><strong>Darkvision:</strong> ${entity.darkvision} ft.</div>` : ''}
+          ${entity.languages ? `<div class="statblock-prop-row"><strong>Languages:</strong> ${escapeHtml(entity.languages)}</div>` : ''}
+          <hr class="tapered-rule" style="margin: 12px 0;" />
+          <div class="statblock-section-heading" style="color: #34d399;">Racial Traits</div>
+          ${traitsHtml}
+        </div>
+      `;
+    }
+
+    // Default / adventures / lore
+    return `
+      <div class="item-card-5e" style="border-color: #6366f1;">
+        <h2 class="item-card-title" style="color: #a5b4fc;">${escapeHtml(entity.name || 'Compendium Entry')}</h2>
+        <div class="item-card-rarity">${(cat || 'Compendium').toUpperCase()} Entry • ${escapeHtml(entity.source || '')}</div>
+        <hr class="tapered-rule" style="margin: 12px 0;" />
+        <div style="font-size: 13px; line-height: 1.6; color: #e2e8f0;">
+          ${VTTEntryResolver.render(entity.entries || entity.description || entity.text || 'No description provided.')}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderLivePreviewForEntity(cat, entity) {
+    if (!liveCardRenderContainer) return;
+    if (previewEntityTypeBadge) previewEntityTypeBadge.textContent = cat.toUpperCase();
+    liveCardRenderContainer.innerHTML = generateEntityStatblockHtml(cat, entity);
+    attachLivePreviewRollHandlers();
+  }
+
+  function attachLivePreviewRollHandlers() {
+    if (!liveCardRenderContainer) return;
+
+    liveCardRenderContainer.querySelectorAll('.rollable-pill, .dice-chip, .vtt-dc-badge').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const rollExpr = btn.getAttribute('data-formula') || btn.getAttribute('data-roll');
+        const dcVal = btn.getAttribute('data-dc');
+        const label = btn.getAttribute('data-label') || btn.textContent.trim() || 'Roll';
+        simulateDiceRoll(rollExpr, label, dcVal);
+      });
+    });
+  }
+
+  function simulateDiceRoll(rollExpr, label, dcVal) {
+    const now = new Date().toLocaleTimeString();
+
+    let entryHtml = '';
+    let isCrit = false;
+    let isFumble = false;
+
+    if (dcVal) {
+      // Simulate d20 saving throw vs DC
+      const d20 = Math.floor(Math.random() * 20) + 1;
+      const targetDc = parseInt(dcVal, 10);
+      const passed = d20 >= targetDc;
+      isCrit = (d20 === 20);
+      isFumble = (d20 === 1);
+
+      entryHtml = `
+        <span><strong>${label}</strong> vs <strong>DC ${targetDc}</strong>: Rolled [${d20}]</span>
+        <span style="font-weight: 700; color: ${passed ? '#10b981' : '#ef4444'};">${passed ? '✅ SUCCESS' : '❌ FAILED'}</span>
+      `;
+    } else if (rollExpr) {
+      // Parse roll expression like 1d20+5, 2d6+3, 1d8
+      const parsed = String(rollExpr).trim().match(/^(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?$/i);
+      if (parsed) {
+        const count = parseInt(parsed[1], 10);
+        const die = parseInt(parsed[2], 10);
+        const sign = parsed[3] || '+';
+        let mod = parsed[4] ? parseInt(parsed[4], 10) : 0;
+        if (sign === '-') mod = -mod;
+
+        const rolls = [];
+        let total = mod;
+        for (let i = 0; i < count; i++) {
+          const r = Math.floor(Math.random() * die) + 1;
+          rolls.push(r);
+          total += r;
+        }
+
+        if (count === 1 && die === 20) {
+          if (rolls[0] === 20) isCrit = true;
+          if (rolls[0] === 1) isFumble = true;
+        }
+
+        const rollsStr = rolls.length > 1 ? `[${rolls.join(', ')}]` : `[${rolls[0]}]`;
+        const modStr = mod !== 0 ? ` ${sign} ${Math.abs(mod)}` : '';
+        const critNotice = isCrit ? ' <strong style="color: #10b981;">(CRIT! 🌟)</strong>' : (isFumble ? ' <strong style="color: #ef4444;">(FUMBLE! 💀)</strong>' : '');
+
+        entryHtml = `
+          <span><strong>${label}</strong> (${rollExpr}): ${rollsStr}${modStr}${critNotice}</span>
+          <span style="font-size: 14px; font-weight: 800; color: #fff;">= ${total}</span>
+        `;
+      } else {
+        entryHtml = `<span>${label} (${rollExpr})</span>`;
+      }
+    }
+
+    if (testRollLog) {
+      const itemEl = document.createElement('div');
+      itemEl.className = `test-roll-entry ${isCrit ? 'crit' : ''} ${isFumble ? 'fumble' : ''}`;
+      itemEl.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="text-muted" style="font-size: 10px;">[${now}]</span>
+          ${entryHtml}
+        </div>
+      `;
+
+      // Remove hint if present
+      const hint = testRollLog.querySelector('.test-roll-hint');
+      if (hint) hint.remove();
+
+      testRollLog.prepend(itemEl);
+    }
+
+    // Also display floating toast notification on screen
+    showSystemToast(`<span style="font-size: 16px;">🎲</span> <div>${entryHtml}</div>`, 2800, `${isCrit ? 'crit' : ''} ${isFumble ? 'fumble' : ''}`);
+  }
+
+  // Clear test roll tray
+  if (btnClearTestRollTray && testRollLog) {
+    btnClearTestRollTray.addEventListener('click', () => {
+      testRollLog.innerHTML = '<div class="test-roll-hint">Click any attack roll (+X to hit), damage formula, or save DC in the preview above to test rolls!</div>';
+    });
+  }
+
+  // Hook live preview updating to all visual inputs and JSON textarea
+  if (entityVisualFormsWrap) {
+    entityVisualFormsWrap.addEventListener('input', () => updateLivePreviewThrottled());
+    entityVisualFormsWrap.addEventListener('change', () => updateLivePreviewThrottled());
+  }
+  if (entityEntryJsonTextarea) {
+    entityEntryJsonTextarea.addEventListener('input', () => updateLivePreviewThrottled());
   }
 
   function addNewBlankEntity() {
@@ -2945,6 +4501,252 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (err) {
       cloneCompendiumResults.innerHTML = `<div class="loading-placeholder text-danger">Search error: ${err.message}</div>`;
     }
+  }
+
+  // =========================================================================
+  // ARCHETYPE MONSTER WIZARD MODAL
+  // =========================================================================
+  if (btnActionArchetypeWizard) {
+    btnActionArchetypeWizard.addEventListener('click', () => {
+      menuAddEntryOptions?.classList.add('vtt-hidden');
+      openArchetypeWizardModal();
+    });
+  }
+
+  function openArchetypeWizardModal() {
+    if (!modalArchetypeWizard || !activeEditingSource) return;
+    modalArchetypeWizard.classList.remove('vtt-hidden');
+    updateWizardBenchmarkPreview();
+  }
+
+  if (btnCloseArchetypeWizard) {
+    btnCloseArchetypeWizard.addEventListener('click', () => modalArchetypeWizard.classList.add('vtt-hidden'));
+  }
+  if (btnCancelArchetypeWizard) {
+    btnCancelArchetypeWizard.addEventListener('click', () => modalArchetypeWizard.classList.add('vtt-hidden'));
+  }
+
+  // Archetype card selection
+  if (archetypeCardsContainer) {
+    archetypeCardsContainer.querySelectorAll('.archetype-choice-card').forEach(card => {
+      card.addEventListener('click', () => {
+        archetypeCardsContainer.querySelectorAll('.archetype-choice-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedArchetypeRole = card.getAttribute('data-archetype') || 'brute';
+        updateWizardBenchmarkPreview();
+      });
+    });
+  }
+
+  if (wizardArchetypeCr) {
+    wizardArchetypeCr.addEventListener('change', () => updateWizardBenchmarkPreview());
+  }
+
+  function updateWizardBenchmarkPreview() {
+    if (!wizardBenchmarkPreview || !wizardArchetypeCr) return;
+    const cr = wizardArchetypeCr.value || '1';
+    const benchmark = CR_BENCHMARKS[cr] || CR_BENCHMARKS['1'];
+    const pb = benchmark.pb || 2;
+
+    let ac = benchmark.ac;
+    let hp = benchmark.hp;
+    let atk = benchmark.atk;
+    let dmg = benchmark.dmg;
+    let dc = benchmark.dc;
+
+    switch (selectedArchetypeRole) {
+      case 'brute':
+        ac = Math.max(10, benchmark.ac - 1);
+        hp = Math.round(benchmark.hp * 1.25);
+        break;
+      case 'skirmisher':
+        ac = benchmark.ac + 1;
+        hp = Math.max(5, Math.round(benchmark.hp * 0.85));
+        break;
+      case 'spellcaster':
+        ac = Math.max(10, benchmark.ac - 1);
+        hp = Math.max(5, Math.round(benchmark.hp * 0.75));
+        break;
+      case 'minion':
+        ac = benchmark.ac;
+        hp = 1;
+        dmg = Math.max(2, Math.round(benchmark.dmg * 0.4));
+        break;
+      case 'boss':
+        ac = benchmark.ac + 2;
+        hp = Math.round(benchmark.hp * 1.5);
+        atk = benchmark.atk + 1;
+        break;
+    }
+
+    wizardBenchmarkPreview.innerHTML = `
+      <div class="stat-item"><span class="stat-label">Armor Class</span><span class="stat-val">${ac}</span></div>
+      <div class="stat-item"><span class="stat-label">Hit Points</span><span class="stat-val">${hp}</span></div>
+      <div class="stat-item"><span class="stat-label">Attack Bonus</span><span class="stat-val">+${atk} to hit</span></div>
+      <div class="stat-item"><span class="stat-label">Avg Damage</span><span class="stat-val">~${dmg} / turn</span></div>
+      <div class="stat-item"><span class="stat-label">Save DC</span><span class="stat-val">DC ${dc}</span></div>
+      <div class="stat-item"><span class="stat-label">Proficiency</span><span class="stat-val">+${pb}</span></div>
+    `;
+  }
+
+  if (btnSubmitArchetypeWizard) {
+    btnSubmitArchetypeWizard.addEventListener('click', () => {
+      if (!activeEditingSource) return;
+
+      const cr = wizardArchetypeCr?.value || '1';
+      const name = wizardArchetypeName?.value?.trim() || '';
+      const type = wizardArchetypeType?.value || 'Humanoid';
+      const size = wizardArchetypeSize?.value || 'Medium';
+
+      const created = createEntityFromArchetype({
+        archetypeId: selectedArchetypeRole,
+        cr,
+        name,
+        type,
+        size,
+        sourceCode: activeEditingSource.code
+      });
+
+      activeSourceEntities.push(created);
+      modalArchetypeWizard.classList.add('vtt-hidden');
+      renderEntitySidebarList();
+      selectActiveEntity(activeSourceEntities.length - 1);
+
+      // Reset name input for next time
+      if (wizardArchetypeName) wizardArchetypeName.value = '';
+    });
+  }
+
+  // =========================================================================
+  // PLAINTEXT STATBLOCK & SPELL IMPORTER MODAL
+  // =========================================================================
+  if (btnActionPlaintextImport) {
+    btnActionPlaintextImport.addEventListener('click', () => {
+      menuAddEntryOptions?.classList.add('vtt-hidden');
+      openPlaintextImportModal();
+    });
+  }
+
+  function openPlaintextImportModal() {
+    if (!modalPlaintextImport || !activeEditingSource) return;
+    modalPlaintextImport.classList.remove('vtt-hidden');
+    handlePlaintextInput();
+  }
+
+  if (btnClosePlaintextImport) {
+    btnClosePlaintextImport.addEventListener('click', () => modalPlaintextImport.classList.add('vtt-hidden'));
+  }
+  if (btnCancelPlaintextImport) {
+    btnCancelPlaintextImport.addEventListener('click', () => modalPlaintextImport.classList.add('vtt-hidden'));
+  }
+
+  if (plaintextImportTextarea) {
+    plaintextImportTextarea.addEventListener('input', () => handlePlaintextInput());
+  }
+
+  function handlePlaintextInput() {
+    if (!plaintextImportTextarea || !plaintextDetectionBox || !plaintextDetectionStatus) return;
+    const raw = plaintextImportTextarea.value.trim();
+
+    if (!raw) {
+      currentParsedPlaintextResult = null;
+      btnSubmitPlaintextImport.disabled = true;
+      plaintextDetectionBox.className = 'plaintext-detection-box mt-12';
+      plaintextDetectionStatus.textContent = 'Paste text above to auto-detect 5e format...';
+      return;
+    }
+
+    try {
+      const parsed = parsePlaintextStatblock(raw, activeEditingSource?.category || 'bestiary', activeEditingSource?.code || 'MYBREW');
+      if (parsed && parsed.entity && parsed.entity.name) {
+        currentParsedPlaintextResult = parsed;
+        btnSubmitPlaintextImport.disabled = false;
+        plaintextDetectionBox.className = 'plaintext-detection-box mt-12 detected-success';
+
+        if (parsed.category === 'bestiary') {
+          const e = parsed.entity;
+          plaintextDetectionStatus.textContent = `✅ Detected 5e Creature "${e.name}" (CR ${e.cr}, AC ${e.ac}, HP ${e.hpAvg}, ${e.traits.length} Traits, ${e.actions.length} Actions)`;
+        } else if (parsed.category === 'spells') {
+          const s = parsed.entity;
+          plaintextDetectionStatus.textContent = `✅ Detected 5e Spell "${s.name}" (Level ${s.level} ${s.school}, Casting Time: ${s.castingTimeNum} ${s.castingTimeUnit})`;
+        } else if (parsed.category === 'items') {
+          const i = parsed.entity;
+          plaintextDetectionStatus.textContent = `✅ Detected 5e Item "${i.name}" (${i.itemType}, ${i.rarity})`;
+        } else {
+          plaintextDetectionStatus.textContent = `✅ Detected entry "${parsed.entity.name}"`;
+        }
+      } else {
+        currentParsedPlaintextResult = null;
+        btnSubmitPlaintextImport.disabled = true;
+        plaintextDetectionBox.className = 'plaintext-detection-box mt-12 detected-warning';
+        plaintextDetectionStatus.textContent = '⚠️ Could not clearly identify a 5e statblock, spell, or item. Ensure a name and properties are present.';
+      }
+    } catch (err) {
+      currentParsedPlaintextResult = null;
+      btnSubmitPlaintextImport.disabled = true;
+      plaintextDetectionBox.className = 'plaintext-detection-box mt-12 detected-warning';
+      plaintextDetectionStatus.textContent = `⚠️ Parser error: ${err.message}`;
+    }
+  }
+
+  if (btnInsertSamplePlaintext) {
+    btnInsertSamplePlaintext.addEventListener('click', () => {
+      if (!plaintextImportTextarea || !activeEditingSource) return;
+      const cat = activeEditingSource.category;
+
+      if (cat === 'spells') {
+        plaintextImportTextarea.value = `Fireball
+3rd-level evocation
+Casting Time: 1 action
+Range: 150 feet
+Components: V, S, M (a tiny ball of bat guano and sulfur)
+Duration: Instantaneous
+A bright streak flashes from your pointing finger to a point you choose within range and then blossoms with a low roar into an explosion of flame. Each creature in a 20-foot-radius sphere centered on that point must make a Dexterity saving throw. A target takes 8d6 fire damage on a failed save, or half as much damage on a successful one.
+At Higher Levels. When you cast this spell using a spell slot of 4th level or higher, the damage increases by 1d6 for each slot level above 3rd.`;
+      } else if (cat === 'items') {
+        plaintextImportTextarea.value = `Cloak of Elvenkind
+Wondrous Item, uncommon (requires attunement)
+While you wear this cloak with its hood up, Wisdom (Perception) checks made to see you have disadvantage, and you have advantage on Dexterity (Stealth) checks made to hide, as the cloak's color shifts to camouflage you. Pulling the hood up or down requires an action.`;
+      } else {
+        plaintextImportTextarea.value = `Goblin Raider
+Small humanoid (goblinoid), neutral evil
+Armor Class 15 (leather armor, shield)
+Hit Points 7 (2d6)
+Speed 30 ft.
+STR DEX CON INT WIS CHA
+8 (-1) 14 (+2) 10 (+0) 10 (+0) 8 (-1) 8 (-1)
+Skills Stealth +6
+Senses darkvision 60 ft., passive Perception 9
+Languages Common, Goblin
+Challenge 1/4 (50 XP) Proficiency Bonus +2
+Nimble Escape. The goblin can take the Disengage or Hide action as a bonus action on each of its turns.
+ACTIONS
+Scimitar. Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage.
+Shortbow. Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.`;
+      }
+
+      handlePlaintextInput();
+    });
+  }
+
+  if (btnSubmitPlaintextImport) {
+    btnSubmitPlaintextImport.addEventListener('click', () => {
+      if (!currentParsedPlaintextResult || !activeEditingSource) return;
+
+      if (currentParsedPlaintextResult.category !== activeEditingSource.category) {
+        const proceed = confirm(`Detected entry is formatted for "${currentParsedPlaintextResult.category.toUpperCase()}", but this sourcebook is for "${activeEditingSource.category.toUpperCase()}". Do you wish to import anyway?`);
+        if (!proceed) return;
+      }
+
+      const entity = currentParsedPlaintextResult.entity;
+      entity.source = activeEditingSource.code;
+      activeSourceEntities.push(entity);
+      modalPlaintextImport.classList.add('vtt-hidden');
+      renderEntitySidebarList();
+      selectActiveEntity(activeSourceEntities.length - 1);
+
+      if (plaintextImportTextarea) plaintextImportTextarea.value = '';
+    });
   }
 
   // =========================================================================

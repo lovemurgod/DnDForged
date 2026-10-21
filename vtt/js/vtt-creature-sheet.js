@@ -8,6 +8,78 @@ export function initVttCreatureSheet(vtt) {
         console.warn('[CreatureSheet] Panel elements not found in DOM.');
     }
 
+    // ─── Draggable Border Resizing for Creature Sheet Panel ─────────────────
+    if (panel) {
+        const savedWidth = localStorage.getItem('vtt_cs_panel_width');
+        if (savedWidth) {
+            const parsed = parseInt(savedWidth, 10);
+            if (!isNaN(parsed) && parsed >= 280) {
+                panel.style.setProperty('--cs-panel-width', `${parsed}px`);
+            }
+        }
+
+        let resizeHandle = panel.querySelector('.cs-resize-handle');
+        if (!resizeHandle) {
+            resizeHandle = document.createElement('div');
+            resizeHandle.className = 'cs-resize-handle';
+            resizeHandle.title = 'Drag border to resize creature sheet (double-click to reset)';
+            panel.appendChild(resizeHandle);
+        }
+
+        let isResizing = false;
+        let startX = 0;
+        let startWidth = 320;
+
+        resizeHandle.addEventListener('pointerdown', (e) => {
+            if (e.button !== 0) return;
+            isResizing = true;
+            startX = e.clientX;
+            const currentComputed = panel.getBoundingClientRect().width;
+            startWidth = currentComputed || 320;
+            panel.classList.add('is-resizing');
+            resizeHandle.setPointerCapture(e.pointerId);
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        resizeHandle.addEventListener('pointermove', (e) => {
+            if (!isResizing) return;
+            const deltaX = e.clientX - startX;
+            let newWidth = startWidth + deltaX;
+            const maxWidth = Math.min(window.innerWidth * 0.85, 1000);
+            newWidth = Math.max(280, Math.min(newWidth, maxWidth));
+            panel.style.setProperty('--cs-panel-width', `${Math.round(newWidth)}px`);
+            if (window.VTT?.sheetDock?.updatePosition) window.VTT.sheetDock.updatePosition();
+        });
+
+        const stopResizing = (e) => {
+            if (!isResizing) return;
+            isResizing = false;
+            panel.classList.remove('is-resizing');
+            try {
+                if (resizeHandle.hasPointerCapture(e.pointerId)) {
+                    resizeHandle.releasePointerCapture(e.pointerId);
+                }
+            } catch (err) {}
+            const currentComputed = Math.round(panel.getBoundingClientRect().width);
+            if (currentComputed >= 280) {
+                localStorage.setItem('vtt_cs_panel_width', currentComputed);
+            }
+            if (window.VTT?.sheetDock?.updatePosition) window.VTT.sheetDock.updatePosition();
+        };
+
+        resizeHandle.addEventListener('pointerup', stopResizing);
+        resizeHandle.addEventListener('pointercancel', stopResizing);
+
+        resizeHandle.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            panel.style.setProperty('--cs-panel-width', '320px');
+            localStorage.removeItem('vtt_cs_panel_width');
+            if (window.VTT?.sheetDock?.updatePosition) window.VTT.sheetDock.updatePosition();
+        });
+    }
+
     let currentMonster = null;
     let linkedTokenId = null;
     let linkedCharacterId = null;
@@ -257,10 +329,61 @@ export function initVttCreatureSheet(vtt) {
         }
     });
 
+    const STANDARD_DAMAGE_TYPES = ['Slashing', 'Piercing', 'Bludgeoning', 'Fire', 'Cold', 'Lightning', 'Thunder', 'Poison', 'Acid', 'Psychic', 'Necrotic', 'Radiant', 'Force', 'Healing'];
+
+    function normalizeMonsterDamages(m) {
+        if (!m) return;
+        const norm = (type) => {
+            if (!type) return 'Slashing';
+            const t = type.trim();
+            return STANDARD_DAMAGE_TYPES.find(dt => dt.toLowerCase() === t.toLowerCase()) || (t.charAt(0).toUpperCase() + t.slice(1).toLowerCase());
+        };
+        const checkList = (arr) => {
+            if (!Array.isArray(arr)) return;
+            arr.forEach(item => {
+                if (item?.macro?.damages && Array.isArray(item.macro.damages)) {
+                    item.macro.damages.forEach(d => {
+                        if (d.type) d.type = norm(d.type);
+                    });
+                }
+            });
+        };
+        checkList(m.actions);
+        checkList(m.bonusActions);
+        checkList(m.reactions);
+        checkList(m.traits);
+        if (m.legendaryActions?.entries) checkList(m.legendaryActions.entries);
+        if (Array.isArray(m.lairActions)) checkList(m.lairActions);
+    }
+
     // ─── Main entry: open a creature sheet ───────────────────────────────────
     async function openSheet(monsterData, tokenId, characterId) {
         console.log('[vtt-creature-sheet] openSheet called', { monsterData, tokenId, characterId });
         if (!monsterData) return;
+
+        const activeCharId = characterId || (tokenId && window.VTT?.canvasEngine?.getTokens()?.[tokenId]?.characterId) || (tokenId && window.VTT?.canvasEngine?.getTokens()?.[tokenId]?.sourceCharacterId);
+        const linkedChar = (activeCharId && window.VTT?.campaignState?.characters) ? window.VTT.campaignState.characters[activeCharId] : null;
+        if (linkedChar && monsterData) {
+            if (linkedChar.name && monsterData.name !== linkedChar.name) {
+                monsterData.name = linkedChar.name;
+            }
+            normalizeMonsterDamages(monsterData);
+        }
+
+        if (window.VTT?.sheetDock && !window.VTT.sheetDock._internalCall) {
+            window.VTT.sheetDock.openSheet({
+                type: 'creature',
+                monsterData,
+                tokenId,
+                characterId: activeCharId || characterId,
+                name: monsterData.name,
+                avatar: monsterData.tokenUrl || monsterData.img,
+                isCompanion: Boolean(monsterData.isCompanion || linkedChar?.isCompanion),
+                isCustomNpc: Boolean(monsterData.isCustomNpc || linkedChar?.isCustomNpc),
+                isGeneric: monsterData.isGeneric !== undefined ? monsterData.isGeneric : !(monsterData.isCompanion || monsterData.isCustomNpc || linkedChar?.isCompanion || linkedChar?.isCustomNpc)
+            });
+            return;
+        }
 
         // Hydrate from single-creature API only if monsterData is an un-hydrated catalog summary and NOT a custom companion/NPC
         const lookupId = monsterData.id || monsterData.name;
@@ -285,7 +408,8 @@ export function initVttCreatureSheet(vtt) {
                 }
                 if (!full) {
                     try {
-                        const partRes = await fetch(`/data/bestiary-normalized/bestiary-${monsterData.source.toLowerCase()}.json`);
+                        let partRes = await fetch(`/data/bestiary-normalized/bestiary-${monsterData.source.toLowerCase()}.json`);
+                        if (!partRes.ok) partRes = await fetch(`/vtt/data/bestiary-normalized/bestiary-${monsterData.source.toLowerCase()}.json`);
                         if (partRes.ok) {
                             const partData = await partRes.json();
                             const cleanLookup = lookupId.toLowerCase();
@@ -442,6 +566,12 @@ export function initVttCreatureSheet(vtt) {
         let editBtnHtml = '';
         const activeCharId = linkedCharacterId || (linkedTokenId && window.VTT?.canvasEngine?.getTokens()?.[linkedTokenId]?.sourceCharacterId);
         const char = (activeCharId && window.VTT?.campaignState?.characters) ? window.VTT.campaignState.characters[activeCharId] : null;
+        if (char && char.name && m.name !== char.name) {
+            m.name = char.name;
+        }
+        if (char) {
+            normalizeMonsterDamages(m);
+        }
         if (char && (window.VTT.role === 'GM' || (char.assignedPlayers && (char.assignedPlayers.includes(window.VTT.username) || char.assignedPlayers.includes('*'))))) {
             editBtnHtml = `<button class="btn btn-xs btn-secondary cs-edit-btn" title="Edit ${char.isCompanion ? 'Companion' : 'NPC'}"><i class="fa-solid fa-pen"></i> <span>Edit</span></button>`;
         }
@@ -485,7 +615,8 @@ export function initVttCreatureSheet(vtt) {
             portraitMediaHtml = `<iframe src="${ytUrl}" frameborder="0" allow="autoplay; encrypted-media" style="width:100%; height:100%; pointer-events:none; border:none;"></iframe>`;
         } else {
             const safeName = (m.name || 'Creature').replace(/'/g, "\\'");
-            portraitMediaHtml = `<img src="${tokenUrl}" alt="${m.name}" onerror="if (window.VTT?.generateArcaneToken) { this.src = window.VTT.generateArcaneToken('${safeName}', 'monster'); } else { this.src = 'favicon.svg'; }" style="width:100%; height:100%; object-fit:cover; display:block;">`;
+            const safeTokenUrl = typeof getSafeVttUrl === 'function' ? getSafeVttUrl(tokenUrl) : tokenUrl;
+            portraitMediaHtml = `<img src="${safeTokenUrl}" alt="${m.name}" onerror="if (window.VTT?.generateArcaneToken) { this.src = window.VTT.generateArcaneToken('${safeName}', 'monster'); } else { this.src = 'favicon.svg'; }" style="width:100%; height:100%; object-fit:cover; display:block;">`;
         }
 
         contentEl.innerHTML = `
@@ -880,39 +1011,6 @@ export function initVttCreatureSheet(vtt) {
             });
         });
 
-        function syncSlotsState(level, curVal, maxVal) {
-            if (currentMonster) {
-                currentMonster.slots = currentMonster.slots || {};
-                currentMonster.slots[level] = { current: curVal, max: maxVal };
-                currentMonster.spellSlots = currentMonster.spellSlots || {};
-                currentMonster.spellSlots[level] = { current: curVal, max: maxVal };
-            }
-            if (linkedTokenId && window.VTT && window.VTT.socket) {
-                const canvasEngine = window.VTT.canvasEngine;
-                if (canvasEngine) {
-                    const allTokens = canvasEngine.getTokens();
-                    const currentMapId = (canvasEngine.currentMap && canvasEngine.currentMap.id) || (typeof canvasEngine.getCurrentMapId === 'function' ? canvasEngine.getCurrentMapId() : null);
-                    if (allTokens[linkedTokenId]) {
-                        allTokens[linkedTokenId].spellSlots = allTokens[linkedTokenId].spellSlots || {};
-                        allTokens[linkedTokenId].spellSlots[level] = { current: curVal, max: maxVal };
-                        window.VTT.socket.emit('token:update', { mapId: currentMapId, tokens: allTokens });
-                    }
-                }
-            }
-            if (linkedCharacterId && window.VTT?.campaignState?.characters) {
-                const char = window.VTT.campaignState.characters[linkedCharacterId];
-                if (char) {
-                    char.spellSlots = char.spellSlots || {};
-                    char.spellSlots[level] = { current: curVal, max: maxVal };
-                    if (char.monsterData) {
-                        char.monsterData.slots = char.monsterData.slots || {};
-                        char.monsterData.slots[level] = { current: curVal, max: maxVal };
-                    }
-                    window.VTT.socket.emit('character:update', { character: char });
-                }
-            }
-        }
-
         // Listen for external token slot updates
         if (vtt.socket) {
             vtt.socket.on('token:updated', (data) => {
@@ -941,6 +1039,39 @@ export function initVttCreatureSheet(vtt) {
                     }
                 }
             });
+        }
+    }
+
+    function syncSlotsState(level, curVal, maxVal) {
+        if (currentMonster) {
+            currentMonster.slots = currentMonster.slots || {};
+            currentMonster.slots[level] = { current: curVal, max: maxVal };
+            currentMonster.spellSlots = currentMonster.spellSlots || {};
+            currentMonster.spellSlots[level] = { current: curVal, max: maxVal };
+        }
+        if (linkedTokenId && window.VTT && window.VTT.socket) {
+            const canvasEngine = window.VTT.canvasEngine;
+            if (canvasEngine) {
+                const allTokens = canvasEngine.getTokens();
+                const currentMapId = (canvasEngine.currentMap && canvasEngine.currentMap.id) || (typeof canvasEngine.getCurrentMapId === 'function' ? canvasEngine.getCurrentMapId() : null);
+                if (allTokens[linkedTokenId]) {
+                    allTokens[linkedTokenId].spellSlots = allTokens[linkedTokenId].spellSlots || {};
+                    allTokens[linkedTokenId].spellSlots[level] = { current: curVal, max: maxVal };
+                    window.VTT.socket.emit('token:update', { mapId: currentMapId, token: allTokens[linkedTokenId] });
+                }
+            }
+        }
+        if (linkedCharacterId && window.VTT?.campaignState?.characters) {
+            const char = window.VTT.campaignState.characters[linkedCharacterId];
+            if (char) {
+                char.spellSlots = char.spellSlots || {};
+                char.spellSlots[level] = { current: curVal, max: maxVal };
+                if (char.monsterData) {
+                    char.monsterData.slots = char.monsterData.slots || {};
+                    char.monsterData.slots[level] = { current: curVal, max: maxVal };
+                }
+                window.VTT.socket.emit('character:update', { character: char });
+            }
         }
     }
 
@@ -997,7 +1128,7 @@ export function initVttCreatureSheet(vtt) {
                     const currentMapId = canvasEngine.getCurrentMapId();
                     if (allTokens[linkedTokenId]) {
                         allTokens[linkedTokenId].hp = current;
-                        window.VTT.socket.emit('token:update', { mapId: currentMapId, tokens: allTokens });
+                        window.VTT.socket.emit('token:update', { mapId: currentMapId, token: allTokens[linkedTokenId] });
                         canvasEngine.renderAll();
                     }
                 }
@@ -1669,6 +1800,23 @@ export function initVttCreatureSheet(vtt) {
                     }
                 }
 
+                // Preserve any user-added spells from sc.spellsObj
+                if (sc.spellsObj) {
+                    for (let lk in sc.spellsObj) {
+                        if (Array.isArray(sc.spellsObj[lk])) {
+                            scSpells[lk] = scSpells[lk] || [];
+                            sc.spellsObj[lk].forEach(sp => {
+                                if (!scSpells[lk].some(s => s.id === sp.id || (s.name && sp.name && s.name.toLowerCase().trim() === sp.name.toLowerCase().trim()))) {
+                                    scSpells[lk].push(sp);
+                                }
+                                if (spells[lk] && !spells[lk].some(s => s.id === sp.id || (s.name && sp.name && s.name.toLowerCase().trim() === sp.name.toLowerCase().trim()))) {
+                                    spells[lk].push(sp);
+                                }
+                            });
+                        }
+                    }
+                }
+
                 sc.spellsObj = scSpells;
                 sc.innateObj = scInnate;
                 sc.will = scInnate.will;
@@ -1689,6 +1837,23 @@ export function initVttCreatureSheet(vtt) {
                             }
                         } else {
                             spells[lk].push(spObj);
+                        }
+
+                        // Also ensure it is present in the target block's spellsObj so it renders on the sheet
+                        if (m.spellcasting && m.spellcasting.length > 0) {
+                            const targetSc = (spObj.spellcastingBlockId ? m.spellcasting.find(b => b.id === spObj.spellcastingBlockId) : null) || m.spellcasting[0];
+                            if (targetSc) {
+                                targetSc.spellsObj = targetSc.spellsObj || {};
+                                targetSc.spellsObj[lk] = targetSc.spellsObj[lk] || [];
+                                const scExistingIdx = targetSc.spellsObj[lk].findIndex(s => (s.id && spObj.id && s.id === spObj.id) || (s.name && spObj.name && s.name.toLowerCase().trim() === spObj.name.toLowerCase().trim()));
+                                if (scExistingIdx >= 0) {
+                                    if (spObj.macroPopulated) {
+                                        targetSc.spellsObj[lk][scExistingIdx] = Object.assign({}, targetSc.spellsObj[lk][scExistingIdx], spObj);
+                                    }
+                                } else {
+                                    targetSc.spellsObj[lk].push(spObj);
+                                }
+                            }
                         }
                     });
                 }
@@ -1718,9 +1883,30 @@ export function initVttCreatureSheet(vtt) {
         if (window.VTTSpellManager && window.VTTSpellManager.getSpellCache) {
             const cache = window.VTTSpellManager.getSpellCache();
             if (cache && window.vttPlayerSheetAPI?.parseSpellToMacro) {
+                const isMonster2024 = m.source === 'XMM' || m.source === 'XPHB' || m.source === 'XDMG' || !!m.is2024 || (typeof m.source === 'string' && m.source.startsWith('X'));
                 const populateSpell = (spObj) => {
                     if (!spObj || spObj.macroPopulated || !spObj.name) return;
-                    const spData = cache.find(s => s.name.toLowerCase().trim() === spObj.name.toLowerCase().trim());
+                    const cleanName = spObj.name.toLowerCase().replace(/\[.*?\]$/, '').trim();
+                    const spSrc = (spObj.source || '').toLowerCase().trim();
+                    let spData = null;
+                    if (spSrc) {
+                        spData = cache.find(s => (s.name || '').toLowerCase().trim() === cleanName && (s.source || '').toLowerCase().trim() === spSrc);
+                    }
+                    if (!spData) {
+                        if (isMonster2024) {
+                            spData = cache.find(s => (s.name || '').toLowerCase().trim() === cleanName && (s.source || '').toUpperCase() === 'XPHB') ||
+                                     cache.find(s => (s.name || '').toLowerCase().trim() === cleanName && (s.source || '').toUpperCase() === 'PHB') ||
+                                     cache.find(s => (s.name || '').toLowerCase().trim() === cleanName);
+                        } else {
+                            spData = cache.find(s => (s.name || '').toLowerCase().trim() === cleanName && (s.source || '').toUpperCase() === 'PHB') ||
+                                     cache.find(s => {
+                                         const src = (s.source || '').toUpperCase();
+                                         return (s.name || '').toLowerCase().trim() === cleanName && src !== 'XPHB' && src !== 'XDMG' && src !== 'XMM';
+                                     }) ||
+                                     cache.find(s => (s.name || '').toLowerCase().trim() === cleanName && (s.source || '').toUpperCase() === 'XPHB') ||
+                                     cache.find(s => (s.name || '').toLowerCase().trim() === cleanName);
+                        }
+                    }
                     if (spData) {
                         window.vttPlayerSheetAPI.parseSpellToMacro(spData, spObj, true);
                         spObj.macroPopulated = true;
@@ -1802,31 +1988,59 @@ export function initVttCreatureSheet(vtt) {
         return 0;
     }
 
-    function getSpellFromMonster(m, level, idx, spellId = null, blockId = null, sectionKey = null) {
+    function getSpellFromMonster(m, level, idx, spellId = null, blockId = null, sectionKey = null, spellName = null) {
         if (!m) return null;
+        const cleanName = spellName ? String(spellName).replace(/\{@spell ([^|}]+).*?\}/gi, '$1').replace(/\s*\[.*?\]$/, '').toLowerCase().trim() : '';
+
+        // 1. Match by spellId / s.spellId across all spellcasting blocks
         if (spellId && m.spellcasting) {
             for (const sc of m.spellcasting) {
                 if (sc.innateObj) {
-                    const foundWill = (sc.innateObj.will || []).find(s => s.id === spellId);
+                    const foundWill = (sc.innateObj.will || []).find(s => s.id === spellId || s.spellId === spellId);
                     if (foundWill) return foundWill;
                     for (const k in sc.innateObj.daily) {
-                        const foundDaily = (sc.innateObj.daily[k] || []).find(s => s.id === spellId);
+                        const foundDaily = (sc.innateObj.daily[k] || []).find(s => s.id === spellId || s.spellId === spellId);
                         if (foundDaily) return foundDaily;
                     }
                 }
                 if (sc.spellsObj) {
                     for (const k in sc.spellsObj) {
-                        const foundSlot = (sc.spellsObj[k] || []).find(s => s.id === spellId);
+                        const foundSlot = (sc.spellsObj[k] || []).find(s => s.id === spellId || s.spellId === spellId);
                         if (foundSlot) return foundSlot;
+                    }
+                }
+                if (sc.spellsByLevel) {
+                    for (const k in sc.spellsByLevel) {
+                        const foundSbl = (sc.spellsByLevel[k]?.spells || []).find(s => s.id === spellId || s.spellId === spellId);
+                        if (foundSbl) return foundSbl;
+                    }
+                }
+                if (sc.atWill) {
+                    const foundAtWill = (sc.atWill || []).find(s => s.id === spellId || s.spellId === spellId);
+                    if (foundAtWill) return foundAtWill;
+                }
+                if (sc.daily) {
+                    for (const k in sc.daily) {
+                        const foundDaily = (sc.daily[k] || []).find(s => typeof s === 'object' && (s.id === spellId || s.spellId === spellId));
+                        if (foundDaily) return foundDaily;
                     }
                 }
             }
         }
+
+        // 2. Match by blockId + sectionKey / level + idx
         if (blockId && m.spellcasting) {
             const sc = m.spellcasting.find(b => b.id === blockId);
             if (sc) {
-                if (sectionKey === 'will' && sc.innateObj?.will?.[idx]) return sc.innateObj.will[idx];
-                if (sectionKey && sc.innateObj?.daily?.[sectionKey]?.[idx]) return sc.innateObj.daily[sectionKey][idx];
+                if (sectionKey === 'will') {
+                    if (sc.innateObj?.will?.[idx]) return sc.innateObj.will[idx];
+                    if (sc.atWill?.[idx]) return sc.atWill[idx];
+                    if (sc.will?.[idx]) return sc.will[idx];
+                }
+                if (sectionKey) {
+                    if (sc.innateObj?.daily?.[sectionKey]?.[idx]) return sc.innateObj.daily[sectionKey][idx];
+                    if (sc.daily?.[sectionKey]?.[idx]) return sc.daily[sectionKey][idx];
+                }
                 if (sc.innateObj) {
                     if (level === 'cantrip' && sc.innateObj?.will?.[idx]) return sc.innateObj.will[idx];
                     if (sc.innateObj?.daily) {
@@ -1835,10 +2049,84 @@ export function initVttCreatureSheet(vtt) {
                         }
                     }
                 }
-                if (sc.spellsObj?.[level]?.[idx]) return sc.spellsObj[level][idx];
+                if (level) {
+                    if (sc.spellsObj?.[level]?.[idx]) return sc.spellsObj[level][idx];
+                    const lvlNum = level.replace('level', '');
+                    if (sc.spellsByLevel?.[lvlNum]?.spells?.[idx]) return sc.spellsByLevel[lvlNum].spells[idx];
+                    if (sc.spellsByLevel?.[level]?.spells?.[idx]) return sc.spellsByLevel[level].spells[idx];
+                    if (sc.spells?.[lvlNum]?.[idx]) return sc.spells[lvlNum][idx];
+                }
             }
         }
-        if (m.spells?.[level]?.[idx]) return m.spells[level][idx];
+
+        // 3. Match across m.spells by level + idx
+        if (level && idx !== null && idx !== undefined && idx >= 0) {
+            if (m.spells?.[level]?.[idx]) return m.spells[level][idx];
+            const lvlNum = level.replace('level', '');
+            if (m.spells?.[lvlNum]?.[idx]) return m.spells[lvlNum][idx];
+            if (level === 'cantrip' && m.spells?.['0']?.[idx]) return m.spells['0'][idx];
+        }
+
+        // 4. Match across any spellcasting block by level + idx
+        if (m.spellcasting && idx !== null && idx !== undefined && idx >= 0) {
+            for (const sc of m.spellcasting) {
+                if (level && sc.spellsObj?.[level]?.[idx]) return sc.spellsObj[level][idx];
+                const lvlNum = level ? level.replace('level', '') : null;
+                if (lvlNum && sc.spellsByLevel?.[lvlNum]?.spells?.[idx]) return sc.spellsByLevel[lvlNum].spells[idx];
+                if (level === 'cantrip') {
+                    if (sc.innateObj?.will?.[idx]) return sc.innateObj.will[idx];
+                    if (sc.atWill?.[idx]) return sc.atWill[idx];
+                }
+            }
+        }
+
+        // 5. Match by cleanName across all blocks and spells
+        if (cleanName) {
+            if (m.spellcasting) {
+                for (const sc of m.spellcasting) {
+                    if (sc.innateObj?.will) {
+                        const found = sc.innateObj.will.find(s => (s.name || '').toLowerCase().trim() === cleanName);
+                        if (found) return found;
+                    }
+                    if (sc.innateObj?.daily) {
+                        for (const k in sc.innateObj.daily) {
+                            const found = (sc.innateObj.daily[k] || []).find(s => (s.name || '').toLowerCase().trim() === cleanName);
+                            if (found) return found;
+                        }
+                    }
+                    if (sc.spellsObj) {
+                        for (const k in sc.spellsObj) {
+                            const found = (sc.spellsObj[k] || []).find(s => (s.name || '').toLowerCase().trim() === cleanName);
+                            if (found) return found;
+                        }
+                    }
+                    if (sc.spellsByLevel) {
+                        for (const k in sc.spellsByLevel) {
+                            const found = (sc.spellsByLevel[k]?.spells || []).find(s => (s.name || '').toLowerCase().trim() === cleanName);
+                            if (found) return found;
+                        }
+                    }
+                    if (sc.atWill) {
+                        const found = (sc.atWill || []).find(s => (s.name || '').toLowerCase().trim() === cleanName);
+                        if (found) return found;
+                    }
+                    if (sc.daily) {
+                        for (const k in sc.daily) {
+                            const found = (sc.daily[k] || []).find(s => typeof s === 'object' && (s.name || '').toLowerCase().trim() === cleanName);
+                            if (found) return found;
+                        }
+                    }
+                }
+            }
+            if (m.spells) {
+                for (const k in m.spells) {
+                    if (Array.isArray(m.spells[k])) {
+                        const found = m.spells[k].find(s => (s.name || '').toLowerCase().trim() === cleanName);
+                        if (found) return found;
+                    }
+                }
+            }
+        }
         return null;
     }
 
@@ -2021,7 +2309,7 @@ export function initVttCreatureSheet(vtt) {
                                     ${allowEdit ? `<button class="btn btn-secondary btn-xxs cs-btn-add-spell" data-level="${sl.key}" data-block-id="${sc.id}"><i class="fa-solid fa-plus"></i> Add Spell</button>` : ''}
                                 </div>
                                 <div style="display:flex; flex-direction:column; gap:8px;">
-                                    ${list.length > 0 ? list.map((sp, idx) => renderSingleSpellRowHtml(sp, sl.key, idx, allowEdit, sc.id, sp.id)).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No spells added.</div>'}
+                                    ${list.length > 0 ? list.map((sp, idx) => renderSingleSpellRowHtml(sp, sl.key, idx, allowEdit, sc.id, sp.id || sp.spellId)).join('') : '<div style="font-size:0.75rem; color:var(--color-text-muted); font-style:italic; padding:2px 0;">No spells added.</div>'}
                                 </div>
                             </div>
                         `;
@@ -2065,7 +2353,7 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function renderSingleSpellRowHtml(sp, slKey, idx, allowEdit = false, blockId = '', spellId = '', sectionKey = '') {
-        const spId = spellId || sp?.id || '';
+        const spId = spellId || sp?.id || sp?.spellId || '';
         let rawHtml = '';
         if (window.VTTSpellManager && window.VTTSpellManager.renderSpellRowHtml) {
             rawHtml = window.VTTSpellManager.renderSpellRowHtml(sp, slKey, idx, { allowEdit, classPrefix: 'cs-spell-' });
@@ -2090,13 +2378,34 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function formatRawEntry(e) {
-        if (typeof e === 'string') return e;
         if (!e) return '';
+        if (typeof e === 'string') {
+            const trimmed = e.trim();
+            if (trimmed.startsWith('{"type":') || trimmed.startsWith('{"name":') || trimmed.startsWith('{"items":')) {
+                try {
+                    const parsed = JSON.parse(trimmed);
+                    if (parsed && typeof parsed === 'object') return formatRawEntry(parsed);
+                } catch (err) {}
+            }
+            if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+                return `<li style="margin-bottom: 4px;">${trimmed.substring(2)}</li>`;
+            }
+            return e;
+        }
         if (Array.isArray(e)) return e.map(item => formatRawEntry(item)).join(' ');
         
         if (e.type === 'list') {
             const itemsHtml = (e.items || []).map(item => {
-                if (typeof item === 'string') return `<li style="margin-bottom: 4px;">${item}</li>`;
+                if (typeof item === 'string') {
+                    const t = item.trim();
+                    if (t.startsWith('{"type":') || t.startsWith('{"name":')) {
+                        try {
+                            const parsed = JSON.parse(t);
+                            if (parsed && typeof parsed === 'object') return formatRawEntry(parsed);
+                        } catch (err) {}
+                    }
+                    return `<li style="margin-bottom: 4px;">${item}</li>`;
+                }
                 if (item.type === 'itemSub' || item.type === 'item') {
                     const nameStr = item.name ? `<strong><em>${item.name}.</em></strong> ` : '';
                     const entryStr = item.entry ? formatRawEntry(item.entry) : (item.entries ? formatRawEntry(item.entries) : '');
@@ -2195,8 +2504,8 @@ export function initVttCreatureSheet(vtt) {
                 <div class="cs-ability-header">
                     <i class="cs-card-chevron fa-solid fa-chevron-right"></i>
                     ${nameSectionHtml}
-                    <div class="cs-ability-info-btn" title="Click to post description to chat" style="cursor: pointer; color: var(--color-text-muted); display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; transition: background 0.2s, color 0.2s; margin-left: auto;">
-                        <i class="fa-solid fa-circle-info"></i>
+                    <div class="cs-ability-info-btn" title="Ping description to chat" style="cursor: pointer; color: var(--color-text-muted); display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 4px; transition: background 0.2s, color 0.2s; margin-left: auto;">
+                        <i class="fa-solid fa-comment-dots"></i>
                     </div>
                 </div>
                 <div class="cs-ability-text">${displayText}</div>
@@ -2295,26 +2604,49 @@ export function initVttCreatureSheet(vtt) {
     }
 
     // ─── Dice chip injector ───────────────────────────────────────────────────
-    function injectDiceChips(text) {
-        if (!text) return '';
-        let result = text;
+    function injectDiceChips(html) {
+        if (!html) return '';
+        let clean = html;
 
-        result = result.replace(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?(?![^<]*>)/gi, (match, count, faces, sign, mod) => {
-            let formula = `${count}d${faces}`;
-            if (sign && mod) formula += `${sign}${mod}`;
-            return `<button class="dice-chip" data-formula="${formula}" title="Roll: ${formula}">${match.trim()}</button>`;
-        });
+        // Strip any existing dice-chips back to their inner content to prevent nested buttons
+        clean = clean.replace(/<button class="dice-chip[^"]*"[^>]*>([\s\S]*?)<\/button>/gi, '$1');
+        clean = clean.replace(/<button class="dice-chip[^"]*"[^>]*>([\s\S]*?)<\/button>/gi, '$1');
 
-        result = result.replace(/\+(\d+)\s+to\s+hit(?![^<]*>)/gi, (match, bonus) => {
-            const formula = `1d20+${bonus}`;
-            return `<button class="dice-chip" data-formula="${formula}" title="Roll attack: ${formula}">+${bonus} to hit</button>`;
-        });
+        const parts = clean.split(/(<[^>]*>)/g);
+        let inButton = false;
+        let inAnchor = false;
 
-        result = result.replace(/DC\s+(\d+)(?![^<]*>)/gi, (match, dcVal) => {
-            return `<button class="dice-chip dc-chip" data-dc="${dcVal}" style="border-color: var(--color-gold-base);" title="Ping DC ${dcVal} to Chat">DC ${dcVal}</button>`;
-        });
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            if (!part) continue;
 
-        return result;
+            if (part.startsWith('<') && part.endsWith('>')) {
+                const tagLower = part.toLowerCase();
+                if (tagLower.startsWith('<button')) inButton = true;
+                else if (tagLower.startsWith('</button')) inButton = false;
+                else if (tagLower.startsWith('<a')) inAnchor = true;
+                else if (tagLower.startsWith('</a')) inAnchor = false;
+                continue;
+            }
+
+            if (!inButton && !inAnchor) {
+                let text = part;
+                text = text.replace(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?/gi, (match, count, faces, sign, mod) => {
+                    let formula = `${count}d${faces}`;
+                    if (sign && mod) formula += `${sign}${mod}`;
+                    return `<button class="dice-chip" data-formula="${formula}" title="Roll: ${formula}">${match.trim()}</button>`;
+                });
+                text = text.replace(/\+(\d+)\s+to\s+hit/gi, (match, bonus) => {
+                    const formula = `1d20+${bonus}`;
+                    return `<button class="dice-chip" data-formula="${formula}" title="Roll attack: ${formula}">+${bonus} to hit</button>`;
+                });
+                text = text.replace(/DC\s+(\d+)/gi, (match, dcVal) => {
+                    return `<button class="dice-chip dc-chip" data-dc="${dcVal}" style="border-color: var(--color-gold-base);" title="Ping DC ${dcVal} to Chat">DC ${dcVal}</button>`;
+                });
+                parts[i] = text;
+            }
+        }
+        return parts.join('');
     }
 
     // ─── Builders for sub-sections ────────────────────────────────────────────
@@ -2347,14 +2679,65 @@ export function initVttCreatureSheet(vtt) {
     }
 
     function buildSpeedString(speed) {
-        if (!speed) return '—';
-        const parts = [];
-        if (speed.walk) parts.push(`${speed.walk} ft.`);
-        if (speed.fly) parts.push(`Fly ${speed.fly} ft.`);
-        if (speed.swim) parts.push(`Swim ${speed.swim} ft.`);
-        if (speed.burrow) parts.push(`Burrow ${speed.burrow} ft.`);
-        if (speed.climb) parts.push(`Climb ${speed.climb} ft.`);
-        return parts.length ? parts.join(', ') : `${speed} ft.`;
+        if (!speed && speed !== 0) return '—';
+        if (typeof speed === 'number') return `${speed} ft.`;
+        if (typeof speed === 'string') {
+            const s = speed.trim();
+            if (!s) return '—';
+            return /ft\.?$/i.test(s) ? s : `${s} ft.`;
+        }
+        if (typeof speed === 'object' && speed !== null) {
+            const parts = [];
+            
+            const getSpeedVal = (v) => {
+                if (v === undefined || v === null || v === false) return null;
+                if (typeof v === 'number') return { val: v, cond: '' };
+                if (typeof v === 'object' && v !== null) {
+                    const num = typeof v.number === 'number' ? v.number : parseInt(v.number, 10);
+                    return { val: !isNaN(num) ? num : null, cond: v.condition ? ` ${v.condition}` : '' };
+                }
+                const parsed = parseInt(v, 10);
+                return { val: !isNaN(parsed) ? parsed : null, cond: '' };
+            };
+
+            const walkObj = getSpeedVal(speed.walk);
+            const flyObj = getSpeedVal(speed.fly);
+            const swimObj = getSpeedVal(speed.swim);
+            const burrowObj = getSpeedVal(speed.burrow);
+            const climbObj = getSpeedVal(speed.climb);
+            const canHover = !!(speed.canHover || (flyObj && flyObj.cond && flyObj.cond.includes('hover')));
+
+            if (walkObj && walkObj.val !== null) {
+                if (walkObj.val > 0 || (!flyObj && !swimObj && !burrowObj && !climbObj)) {
+                    parts.push(`${walkObj.val} ft.${walkObj.cond}`);
+                } else if (walkObj.val === 0 && (flyObj || swimObj || burrowObj || climbObj)) {
+                    parts.push(`0 ft.${walkObj.cond}`);
+                }
+            }
+            if (flyObj && flyObj.val !== null && flyObj.val > 0) {
+                let flyStr = `Fly ${flyObj.val} ft.`;
+                if (canHover && !flyObj.cond.includes('hover')) {
+                    flyStr += ' (hover)';
+                } else if (flyObj.cond) {
+                    flyStr += flyObj.cond;
+                }
+                parts.push(flyStr);
+            }
+            if (swimObj && swimObj.val !== null && swimObj.val > 0) {
+                parts.push(`Swim ${swimObj.val} ft.${swimObj.cond}`);
+            }
+            if (burrowObj && burrowObj.val !== null && burrowObj.val > 0) {
+                parts.push(`Burrow ${burrowObj.val} ft.${burrowObj.cond}`);
+            }
+            if (climbObj && climbObj.val !== null && climbObj.val > 0) {
+                parts.push(`Climb ${climbObj.val} ft.${climbObj.cond}`);
+            }
+
+            if (parts.length > 0) return parts.join(', ');
+            if (speed.choose) return `Choose: ${speed.choose}`;
+            return '0 ft.';
+        }
+        return String(speed);
     }
 
     function formatSkillName(str) {
@@ -2802,13 +3185,29 @@ export function initVttCreatureSheet(vtt) {
             if (!item) return;
             const details = item.querySelector('.cs-spell-details');
             const nameEl = item.querySelector('.cs-spell-name');
-            const spellName = nameEl ? nameEl.textContent.trim() : 'Spell';
+            const spellName = nameEl ? nameEl.textContent.trim() : (item.dataset.spellName || 'Spell');
             const descEl = details ? details.querySelector('.cs-spell-desc') : null;
             const btnEl = item.querySelector('.cs-spell-expand-btn');
             
             const level = item.dataset.level || item.querySelector('[data-level]')?.dataset.level;
             const idx = item.dataset.idx !== undefined ? parseInt(item.dataset.idx) : null;
-            const sp = (level && idx !== null && idx >= 0 && currentMonster?.spells?.[level]) ? currentMonster.spells[level][idx] : null;
+            const blockId = item.dataset.blockId;
+            const spellId = item.dataset.spellId;
+            const sectionKey = item.dataset.sectionKey;
+            
+            const isMonster2024 = currentMonster?.source === 'XMM' || 
+                                  currentMonster?.source === 'XPHB' || 
+                                  currentMonster?.source === 'XDMG' || 
+                                  !!currentMonster?.is2024 ||
+                                  (typeof currentMonster?.source === 'string' && currentMonster.source.startsWith('X'));
+            const spellOptions = { is2024: isMonster2024, caster: currentMonster };
+
+            let sp = getSpellFromMonster(currentMonster, level, idx, spellId, blockId, sectionKey, spellName);
+            if (!sp) {
+                sp = { name: spellName, level: level, source: isMonster2024 ? 'XPHB' : 'PHB' };
+            } else if (!sp.source || sp.source === 'MM' || sp.source === 'XMM') {
+                sp.source = isMonster2024 ? 'XPHB' : 'PHB';
+            }
 
             if (details) {
                 const chevron = btnEl ? btnEl.querySelector('.fa-chevron-right') : null;
@@ -2818,10 +3217,16 @@ export function initVttCreatureSheet(vtt) {
                     if (chevron) chevron.style.transform = 'rotate(90deg)';
                     
                     if (sp && window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
-                        await window.VTTSpellManager.ensureSpellIsParsed(sp);
+                        try {
+                            await window.VTTSpellManager.ensureSpellIsParsed(sp, spellOptions);
+                        } catch (err) {
+                            console.warn('[VTTSpellManager] Error parsing spell:', err);
+                        }
                     }
                     if (window.VTTSpellManager && window.VTTSpellManager.renderAndInjectSpell) {
-                        window.VTTSpellManager.renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level);
+                        window.VTTSpellManager.renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level, spellOptions);
+                    } else if (typeof renderAndInjectSpell === 'function') {
+                        renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level, spellOptions);
                     }
                 } else {
                     details.style.display = 'none';
@@ -2939,7 +3344,9 @@ export function initVttCreatureSheet(vtt) {
         }
 
         const acObj = Array.isArray(m.ac) ? m.ac[0] : m.ac;
-        const ac = (typeof acObj === 'object' && acObj !== null) ? acObj.ac : (acObj || 10);
+        const ac = (typeof acObj === 'object' && acObj !== null) 
+            ? (acObj.value ?? acObj.ac ?? m.primaryAc ?? 10) 
+            : (acObj || m.primaryAc || 10);
         const hpAvg = m.hp?.average || 0;
         const hpForm = m.hp?.formula || '';
 
@@ -3021,6 +3428,38 @@ export function initVttCreatureSheet(vtt) {
             }
         }
         
+        let sensesValue = '';
+        if (m.senses) {
+            if (typeof m.senses === 'string') {
+                sensesValue = m.senses;
+            } else if (Array.isArray(m.senses)) {
+                sensesValue = m.senses.join(', ');
+            } else if (typeof m.senses === 'object') {
+                const parts = [];
+                if (m.senses.sensesString) parts.push(m.senses.sensesString);
+                ['darkvision', 'blindsight', 'truesight', 'tremorsense', 'devilSight'].forEach(k => {
+                    if (m.senses[k] && !m.senses.sensesString?.toLowerCase().includes(k.toLowerCase())) {
+                        const name = k === 'devilSight' ? "devil's sight" : k;
+                        parts.push(`${name} ${m.senses[k]} ft.`);
+                    }
+                });
+                const passive = m.senses.passivePerception || m.senses.passive || m.passive;
+                if (passive !== undefined && passive !== null && passive !== '') {
+                    parts.push(`passive Perception ${passive}`);
+                }
+                if (parts.length > 0) {
+                    sensesValue = parts.join(', ');
+                } else {
+                    sensesValue = Object.entries(m.senses)
+                        .filter(([k]) => k !== 'sensesString' && k !== 'passivePerception' && k !== 'passive')
+                        .map(([k, v]) => `${k} ${v}`)
+                        .join(', ');
+                }
+            }
+        } else if (m.passive) {
+            sensesValue = `passive Perception ${m.passive}`;
+        }
+
         let html = `
             <div style="display:flex; flex-direction:column; gap:16px;">
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
@@ -3139,6 +3578,37 @@ export function initVttCreatureSheet(vtt) {
                 </div>
 
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
+                    <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Speeds (ft.)</h4>
+                    <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:8px;">
+                        <div>
+                            <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Walk</label>
+                            <input type="number" id="cs-edit-speed-walk" class="vtt-input" style="width:100%;" value="${typeof m.speed === 'number' ? m.speed : (typeof m.speed?.walk === 'number' ? m.speed.walk : (parseInt(m.speed?.walk?.number ?? m.speed?.walk) ?? (m.speed?.walk === 0 ? 0 : 30)))}">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Fly</label>
+                            <input type="number" id="cs-edit-speed-fly" class="vtt-input" style="width:100%;" value="${typeof m.speed?.fly === 'number' ? m.speed.fly : (parseInt(m.speed?.fly?.number ?? m.speed?.fly) || 0)}">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Swim</label>
+                            <input type="number" id="cs-edit-speed-swim" class="vtt-input" style="width:100%;" value="${typeof m.speed?.swim === 'number' ? m.speed.swim : (parseInt(m.speed?.swim?.number ?? m.speed?.swim) || 0)}">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Climb</label>
+                            <input type="number" id="cs-edit-speed-climb" class="vtt-input" style="width:100%;" value="${typeof m.speed?.climb === 'number' ? m.speed.climb : (parseInt(m.speed?.climb?.number ?? m.speed?.climb) || 0)}">
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Burrow</label>
+                            <input type="number" id="cs-edit-speed-burrow" class="vtt-input" style="width:100%;" value="${typeof m.speed?.burrow === 'number' ? m.speed.burrow : (parseInt(m.speed?.burrow?.number ?? m.speed?.burrow) || 0)}">
+                        </div>
+                    </div>
+                    <div style="margin-top:6px;">
+                        <label style="font-size:0.8rem; display:inline-flex; align-items:center; gap:6px; cursor:pointer;">
+                            <input type="checkbox" id="cs-edit-speed-hover" ${!!(m.speed?.canHover || m.speed?.fly?.condition?.includes('hover')) ? 'checked' : ''}> Fly (hover)
+                        </label>
+                    </div>
+                </div>
+
+                <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
                     <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Defenses & Info</h4>
                     <div style="display:flex; flex-direction:column; gap:8px;">
                         <div>
@@ -3159,7 +3629,7 @@ export function initVttCreatureSheet(vtt) {
                         </div>
                         <div>
                             <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Senses</label>
-                            <input type="text" id="cs-edit-senses" class="vtt-input" style="width:100%;" value="${typeof m.senses === 'object' && m.senses !== null && !Array.isArray(m.senses) ? Object.entries(m.senses).map(([k,v])=>k+' '+v).join(', ') : (Array.isArray(m.senses) ? m.senses.join(', ') : m.senses || '')}" placeholder="e.g. darkvision 60 ft., passive Perception 15">
+                            <input type="text" id="cs-edit-senses" class="vtt-input" style="width:100%;" value="${sensesValue.replace(/"/g, '&quot;')}" placeholder="e.g. darkvision 60 ft., passive Perception 15">
                         </div>
                         <div>
                             <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Languages</label>
@@ -3254,9 +3724,47 @@ export function initVttCreatureSheet(vtt) {
             row.className = 'cs-edit-ability-row';
             row.style.cssText = "display:flex; flex-direction:column; gap:6px; margin-bottom:10px; padding:10px; background:var(--color-bg-dark); border-radius:6px; border:1px solid var(--color-border);";
 
+            function entryToPlainText(e) {
+                if (!e) return '';
+                if (typeof e === 'string') {
+                    const trimmed = e.trim();
+                    if (trimmed.startsWith('{"type":') || trimmed.startsWith('{"name":') || trimmed.startsWith('{"items":')) {
+                        try {
+                            const parsed = JSON.parse(trimmed);
+                            if (parsed && typeof parsed === 'object') return entryToPlainText(parsed);
+                        } catch (err) {}
+                    }
+                    return e;
+                }
+                if (Array.isArray(e)) {
+                    return e.map(item => entryToPlainText(item)).join('\n');
+                }
+                if (e.type === 'list') {
+                    return (e.items || []).map(item => {
+                        if (typeof item === 'string') return `- ${item}`;
+                        if (item && typeof item === 'object') {
+                            const name = item.name ? `${item.name}: ` : '';
+                            const text = item.entries ? (Array.isArray(item.entries) ? item.entries.map(x => entryToPlainText(x)).join(' ') : entryToPlainText(item.entries)) : (item.entry ? entryToPlainText(item.entry) : '');
+                            return `- ${name}${text}`;
+                        }
+                        return `- ${item}`;
+                    }).join('\n');
+                }
+                if (e.type === 'item' || e.type === 'itemSub') {
+                    const name = e.name ? `${e.name}: ` : '';
+                    const text = e.entries ? (Array.isArray(e.entries) ? e.entries.map(x => entryToPlainText(x)).join(' ') : entryToPlainText(e.entries)) : (e.entry ? entryToPlainText(e.entry) : '');
+                    return `${name}${text}`;
+                }
+                if (e.entries) {
+                    return (Array.isArray(e.entries) ? e.entries.map(x => entryToPlainText(x)).join('\n') : entryToPlainText(e.entries));
+                }
+                if (e.entry) return entryToPlainText(e.entry);
+                return '';
+            }
+
             let desc = '';
             if (item.entries && Array.isArray(item.entries)) {
-                desc = item.entries.map(e => typeof e === 'string' ? e : (e.entries ? e.entries.join('\n') : JSON.stringify(e))).join('\n');
+                desc = item.entries.map(e => entryToPlainText(e)).filter(Boolean).join('\n');
             } else if (item.descriptionHtml) {
                 desc = item.descriptionHtml;
             }
@@ -3276,7 +3784,11 @@ export function initVttCreatureSheet(vtt) {
                     if (item.macro.save.ability) initSaveAb = item.macro.save.ability.toLowerCase();
                 }
                 if (item.macro.damages && Array.isArray(item.macro.damages)) {
-                    initDamages = item.macro.damages.map(d => ({ formula: d.formula || '', type: d.type || 'slashing' }));
+                    initDamages = item.macro.damages.map(d => {
+                        const rawType = (d.type || 'Slashing').trim();
+                        const matched = STANDARD_DAMAGE_TYPES.find(dt => dt.toLowerCase() === rawType.toLowerCase()) || (rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase());
+                        return { formula: d.formula || '', type: matched };
+                    });
                 }
             } else if (desc) {
                 const atkMatch = desc.match(/(?:\{@hit\s+([+-]?\d+)\}|([+-]?\d+)\s+to\s+hit)/i);
@@ -3294,7 +3806,8 @@ export function initVttCreatureSheet(vtt) {
                 const dmgMatches = [...desc.matchAll(/(?:\{@damage\s+([^}]+)\}|(?:(?:(\d+)\s*\(([^)]+)\))|([1-9]\d*d\d+(?:\s*[+-]\s*\d+)?))\s*([a-zA-Z]+)?\s*damage)/gi)];
                 dmgMatches.forEach(dm => {
                     const formula = (dm[1] || dm[3] || dm[4] || '').trim();
-                    const type = (dm[5] || 'slashing').toLowerCase().trim();
+                    const rawType = (dm[5] || 'Slashing').trim();
+                    const type = STANDARD_DAMAGE_TYPES.find(dt => dt.toLowerCase() === rawType.toLowerCase()) || 'Slashing';
                     if (formula) {
                         initDamages.push({ formula, type });
                     }
@@ -3337,16 +3850,18 @@ export function initVttCreatureSheet(vtt) {
             const dcInput = row.querySelector('.edit-ab-dc');
             const saveAbSelect = row.querySelector('.edit-ab-save-ab');
 
-            const damageTypes = ['slashing', 'piercing', 'bludgeoning', 'fire', 'cold', 'lightning', 'thunder', 'poison', 'acid', 'psychic', 'necrotic', 'radiant', 'force', 'healing'];
+            const damageTypes = STANDARD_DAMAGE_TYPES;
 
-            function createDmgRow(formula = '', type = 'slashing') {
+            function createDmgRow(formula = '', type = 'Slashing') {
+                const rawType = (type || 'Slashing').trim();
+                const matchedType = damageTypes.find(t => t.toLowerCase() === rawType.toLowerCase()) || (rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase());
                 const dRow = document.createElement('div');
                 dRow.className = 'edit-ab-dmg-row';
                 dRow.style.cssText = "display:flex; align-items:center; gap:4px;";
                 dRow.innerHTML = `
                     <input type="text" class="vtt-input edit-ab-dmg-formula" value="${formula}" placeholder="e.g. 2d6 + 3" style="flex:1; min-width:70px; padding:2px 4px; font-size:0.8rem;">
                     <select class="vtt-input edit-ab-dmg-type" style="padding:2px 4px; font-size:0.8rem;">
-                        ${damageTypes.map(t => `<option value="${t}" ${t === type ? 'selected' : ''}>${t.charAt(0).toUpperCase() + t.slice(1)}</option>`).join('')}
+                        ${damageTypes.map(t => `<option value="${t}" ${t.toLowerCase() === matchedType.toLowerCase() ? 'selected' : ''}>${t}</option>`).join('')}
                     </select>
                     <button type="button" class="btn btn-xxs btn-danger edit-ab-del-dmg" style="padding:2px 5px;"><i class="fa-solid fa-times"></i></button>
                 `;
@@ -3364,7 +3879,7 @@ export function initVttCreatureSheet(vtt) {
             }
 
             row.querySelector('.edit-ab-add-dmg').addEventListener('click', () => {
-                dmgList.appendChild(createDmgRow('1d6', 'slashing'));
+                dmgList.appendChild(createDmgRow('1d6', 'Slashing'));
                 syncDescFromInputs();
             });
 
@@ -3415,7 +3930,8 @@ export function initVttCreatureSheet(vtt) {
                         const dmgParts = [];
                         currentDmgRows.forEach(dr => {
                             const form = dr.querySelector('.edit-ab-dmg-formula').value.trim();
-                            const typ = dr.querySelector('.edit-ab-dmg-type').value.trim();
+                            const rawTyp = dr.querySelector('.edit-ab-dmg-type').value.trim();
+                            const typ = damageTypes.find(t => t.toLowerCase() === rawTyp.toLowerCase()) || rawTyp;
                             if (form) {
                                 const avg = calcDiceAverage(form);
                                 dmgParts.push({ form, typ, avg });
@@ -3424,10 +3940,10 @@ export function initVttCreatureSheet(vtt) {
 
                         if (dmgParts.length > 0) {
                             const primary = dmgParts[0];
-                            const formattedPrimary = `${primary.avg} (${primary.form}) ${primary.typ} damage`;
+                            const formattedPrimary = `${primary.avg} (${primary.form}) ${primary.typ.toLowerCase()} damage`;
                             let formattedAll = formattedPrimary;
                             if (dmgParts.length > 1) {
-                                const extra = dmgParts.slice(1).map(p => `${p.avg} (${p.form}) ${p.typ} damage`).join(' plus ');
+                                const extra = dmgParts.slice(1).map(p => `${p.avg} (${p.form}) ${p.typ.toLowerCase()} damage`).join(' plus ');
                                 formattedAll += ` plus ${extra}`;
                             }
 
@@ -3476,8 +3992,8 @@ export function initVttCreatureSheet(vtt) {
                     const dmgMatches = [...text.matchAll(/(?:\{@damage\s+([^}]+)\}|(?:(?:(\d+)\s*\(([^)]+)\))|([1-9]\d*d\d+(?:\s*[+-]\s*[^,.]+)?))\s*([a-zA-Z]+)?\s*damage)/gi)];
                     dmgMatches.forEach(dm => {
                         const formula = (dm[1] || dm[3] || dm[4] || '').trim();
-                        let type = (dm[5] || 'slashing').toLowerCase().trim();
-                        if (!damageTypes.includes(type)) type = 'slashing';
+                        let rawType = (dm[5] || 'Slashing').trim();
+                        let type = damageTypes.find(t => t.toLowerCase() === rawType.toLowerCase()) || 'Slashing';
                         if (formula && !parsedDamages.some(pd => pd.formula === formula)) {
                             parsedDamages.push({ formula, type });
                         }
@@ -3754,10 +4270,11 @@ export function initVttCreatureSheet(vtt) {
                 const wrapper = document.createElement('div');
                 wrapper.style.cssText = `position:relative; width:64px; height:64px; border-radius:4px; overflow:hidden; border:2px solid ${isActive ? 'var(--color-success-base)' : 'transparent'}; cursor:pointer;`;
                 
+                const safeUrl = typeof window.getSafeVttUrl === 'function' ? window.getSafeVttUrl(url) : ((url && (url.includes('discordapp.com') || url.includes('discordapp.net'))) ? ('/api/proxy-discord?url=' + encodeURIComponent(url)) : url);
                 let mediaEl;
                 if (isVideo) {
                     mediaEl = document.createElement('video');
-                    mediaEl.src = url;
+                    mediaEl.src = safeUrl;
                     mediaEl.muted = true;
                     mediaEl.loop = true;
                     mediaEl.autoplay = true;
@@ -3765,7 +4282,7 @@ export function initVttCreatureSheet(vtt) {
                     mediaEl.style.cssText = 'width:100%; height:100%; object-fit:cover; display:block;';
                 } else {
                     mediaEl = document.createElement('img');
-                    mediaEl.src = url;
+                    mediaEl.src = safeUrl;
                     mediaEl.title = imgObj.name || 'Token';
                     mediaEl.style.cssText = 'width:100%; height:100%; object-fit:cover; display:block;';
                 }
@@ -3960,11 +4477,20 @@ export function initVttCreatureSheet(vtt) {
         // tokenImages and activeTokenIndex are already directly modified on 'char' via the gallery UI.
 
         char.ac = newAc;
+        char.primaryAc = newAc;
+        m.primaryAc = newAc;
         if (Array.isArray(m.ac)) {
-            if (typeof m.ac[0] === 'object' && m.ac[0] !== null) m.ac[0].ac = newAc;
-            else m.ac[0] = newAc;
+            if (typeof m.ac[0] === 'object' && m.ac[0] !== null) {
+                m.ac[0].value = newAc;
+                m.ac[0].ac = newAc;
+            } else {
+                m.ac = [{ value: newAc, ac: newAc }];
+            }
+        } else if (typeof m.ac === 'object' && m.ac !== null) {
+            m.ac.value = newAc;
+            m.ac.ac = newAc;
         } else {
-            m.ac = newAc;
+            m.ac = [{ value: newAc, ac: newAc }];
         }
 
         m.hp = m.hp || {};
@@ -3988,6 +4514,35 @@ export function initVttCreatureSheet(vtt) {
             m[stat] = parseInt(input.value) || 10;
         });
 
+        // Speeds
+        const walkInput = content.querySelector('#cs-edit-speed-walk');
+        const flyInput = content.querySelector('#cs-edit-speed-fly');
+        const swimInput = content.querySelector('#cs-edit-speed-swim');
+        const climbInput = content.querySelector('#cs-edit-speed-climb');
+        const burrowInput = content.querySelector('#cs-edit-speed-burrow');
+        const hoverInput = content.querySelector('#cs-edit-speed-hover');
+
+        if (walkInput || flyInput || swimInput || climbInput || burrowInput) {
+            const walkVal = walkInput ? parseInt(walkInput.value) : 30;
+            const flyVal = flyInput ? parseInt(flyInput.value) : 0;
+            const swimVal = swimInput ? parseInt(swimInput.value) : 0;
+            const climbVal = climbInput ? parseInt(climbInput.value) : 0;
+            const burrowVal = burrowInput ? parseInt(burrowInput.value) : 0;
+            const canHover = hoverInput ? hoverInput.checked : false;
+
+            const newSpeed = {
+                walk: isNaN(walkVal) ? 30 : walkVal
+            };
+            if (!isNaN(flyVal) && flyVal > 0) newSpeed.fly = flyVal;
+            if (!isNaN(swimVal) && swimVal > 0) newSpeed.swim = swimVal;
+            if (!isNaN(climbVal) && climbVal > 0) newSpeed.climb = climbVal;
+            if (!isNaN(burrowVal) && burrowVal > 0) newSpeed.burrow = burrowVal;
+            if (canHover) newSpeed.canHover = true;
+
+            m.speed = newSpeed;
+            char.speed = newSpeed;
+        }
+
         // Defenses & Info
         const immuneStr = content.querySelector('#cs-edit-immune').value.trim();
         if (immuneStr) m.immune = immuneStr.split(',').map(s => s.trim()); else delete m.immune;
@@ -4010,7 +4565,7 @@ export function initVttCreatureSheet(vtt) {
             if (window.parseMonsterVision) {
                 maxSight = window.parseMonsterVision({ senses: m.senses });
             } else {
-                const sightMatches = sensesStr.match(/(?:darkvision|blindsight|truesight|tremorsense)\s*(\d+)/ig);
+                const sightMatches = sensesStr.match(/(?:darkvision|blindsight|truesight|tremorsense|devil(?:'s)?\s*sight)\s*(\d+)/ig);
                 if (sightMatches) {
                     sightMatches.forEach(sm => {
                         const num = parseInt(sm.match(/\d+/)?.[0] || 0);
@@ -4018,10 +4573,10 @@ export function initVttCreatureSheet(vtt) {
                     });
                 }
             }
-            char.tokenSight = maxSight;
+            char.tokenSight = maxSight > 0 ? maxSight : 5;
         } else {
             delete m.senses;
-            char.tokenSight = 0;
+            char.tokenSight = 5;
         }
 
         const langStr = content.querySelector('#cs-edit-lang').value.trim();
@@ -4055,7 +4610,8 @@ export function initVttCreatureSheet(vtt) {
                 const damages = [];
                 dmgRows.forEach(dr => {
                     const formula = dr.querySelector('.edit-ab-dmg-formula')?.value.trim();
-                    const type = dr.querySelector('.edit-ab-dmg-type')?.value.trim() || 'slashing';
+                    const rawType = dr.querySelector('.edit-ab-dmg-type')?.value.trim() || 'Slashing';
+                    const type = STANDARD_DAMAGE_TYPES.find(dt => dt.toLowerCase() === rawType.toLowerCase()) || (rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase());
                     if (formula) {
                         damages.push({ formula, type });
                     }
@@ -4283,7 +4839,11 @@ export function initVttCreatureSheet(vtt) {
             if (changed) {
                 const curMapId = window.VTT.canvasEngine.getCurrentMapId();
                 if (curMapId && window.VTT.socket) {
-                    window.VTT.socket.emit('token:update', { mapId: curMapId, tokens });
+                    Object.values(tokens).forEach(t => {
+                        if (t.characterId === char.id || (t.name === char.name && !t.isPlayer)) {
+                            window.VTT.socket.emit('token:update', { mapId: curMapId, token: t });
+                        }
+                    });
                 }
                 window.VTT.canvasEngine.renderAll();
             }
@@ -4678,8 +5238,10 @@ export function initVttCreatureSheet(vtt) {
             if (preParsedMacro.damages && Array.isArray(preParsedMacro.damages) && preParsedMacro.damages.length > 0) {
                 preParsedMacro.damages.forEach(d => {
                     const evalRoll = evaluateDiceHelper(d.formula, isCrit);
+                    const rawType = (d.type || 'Slashing').trim();
+                    const type = STANDARD_DAMAGE_TYPES.find(dt => dt.toLowerCase() === rawType.toLowerCase()) || (rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase());
                     mc.dmgRolls.push({
-                        type: d.type || 'Slashing',
+                        type: type,
                         formula: evalRoll.formula || d.formula,
                         roll: {
                             total: evalRoll.total,
@@ -4847,8 +5409,14 @@ export function initVttCreatureSheet(vtt) {
 
         async function ensureSpellIsParsed(sp) {
             if (!sp) return null;
+            const isMonster2024 = currentMonster?.source === 'XMM' || 
+                                  currentMonster?.source === 'XPHB' || 
+                                  currentMonster?.source === 'XDMG' || 
+                                  !!currentMonster?.is2024 ||
+                                  (typeof currentMonster?.source === 'string' && currentMonster.source.startsWith('X'));
+            const spellOptions = { is2024: isMonster2024, caster: currentMonster };
             if (window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
-                return await window.VTTSpellManager.ensureSpellIsParsed(sp);
+                return await window.VTTSpellManager.ensureSpellIsParsed(sp, spellOptions);
             }
             return sp;
         }
@@ -4860,9 +5428,73 @@ export function initVttCreatureSheet(vtt) {
             const blockId = row?.dataset.blockId || el.dataset.blockId;
             const spellId = row?.dataset.spellId || el.dataset.spellId;
             const sectionKey = row?.dataset.sectionKey || el.dataset.sectionKey;
-            const sp = getSpellFromMonster(currentMonster, level, idx, spellId, blockId, sectionKey);
-            return { level, idx, blockId, spellId, sectionKey, sp, row };
+            const nameEl = row?.querySelector('.cs-spell-name');
+            const spellName = nameEl ? nameEl.textContent.trim() : (row?.dataset.spellName || '');
+            let sp = getSpellFromMonster(currentMonster, level, idx, spellId, blockId, sectionKey, spellName);
+            if (!sp && spellName) {
+                sp = { name: spellName, level: level, source: currentMonster?.source };
+            }
+            return { level, idx, blockId, spellId, sectionKey, sp, row, spellName };
         }
+
+        // Expand Spell Details
+        contentEl.querySelectorAll('.cs-spell-expand-btn').forEach(btn => btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const item = e.currentTarget.closest('.cs-spell-item');
+            if (!item) return;
+            const details = item.querySelector('.cs-spell-details');
+            const nameEl = item.querySelector('.cs-spell-name');
+            const spellName = nameEl ? nameEl.textContent.trim() : (item.dataset.spellName || 'Spell');
+            const descEl = details ? details.querySelector('.cs-spell-desc') : null;
+            const btnEl = e.currentTarget;
+            
+            const level = item.dataset.level || item.querySelector('[data-level]')?.dataset.level;
+            const idx = item.dataset.idx !== undefined ? parseInt(item.dataset.idx) : null;
+            const blockId = item.dataset.blockId;
+            const spellId = item.dataset.spellId;
+            const sectionKey = item.dataset.sectionKey;
+            
+            const isMonster2024 = currentMonster?.source === 'XMM' || 
+                                  currentMonster?.source === 'XPHB' || 
+                                  currentMonster?.source === 'XDMG' || 
+                                  !!currentMonster?.is2024 ||
+                                  (typeof currentMonster?.source === 'string' && currentMonster.source.startsWith('X'));
+            const spellOptions = { is2024: isMonster2024, caster: currentMonster };
+
+            let sp = getSpellFromMonster(currentMonster, level, idx, spellId, blockId, sectionKey, spellName);
+            if (!sp) {
+                sp = { name: spellName, level: level, source: isMonster2024 ? 'XPHB' : 'PHB' };
+            } else if (!sp.source || sp.source === 'MM' || sp.source === 'XMM') {
+                sp.source = isMonster2024 ? 'XPHB' : 'PHB';
+            }
+
+            if (details) {
+                const chevron = btnEl ? btnEl.querySelector('.fa-chevron-right') : null;
+                if (details.style.display === 'none') {
+                    details.style.display = 'block';
+                    if (btnEl) btnEl.classList.add('expanded');
+                    if (chevron) chevron.style.transform = 'rotate(90deg)';
+                    
+                    if (sp && window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
+                        try {
+                            await window.VTTSpellManager.ensureSpellIsParsed(sp, spellOptions);
+                        } catch (err) {
+                            console.warn('[VTTSpellManager] Error parsing spell:', err);
+                        }
+                    }
+                    if (window.VTTSpellManager && window.VTTSpellManager.renderAndInjectSpell) {
+                        window.VTTSpellManager.renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level, spellOptions);
+                    } else if (typeof renderAndInjectSpell === 'function') {
+                        renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level, spellOptions);
+                    }
+                } else {
+                    details.style.display = 'none';
+                    if (btnEl) btnEl.classList.remove('expanded');
+                    if (chevron) chevron.style.transform = 'rotate(0deg)';
+                }
+            }
+        }));
 
         // Ping Macro / Post Chat
         contentEl.querySelectorAll('.cs-spell-ping-macro').forEach(btn => btn.addEventListener('click', async (e) => {
@@ -4918,19 +5550,20 @@ export function initVttCreatureSheet(vtt) {
         contentEl.querySelectorAll('.cs-spell-post-chat').forEach(btn => btn.addEventListener('click', async (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const { level, sp } = extractSpellContext(e.currentTarget);
-            if (!sp) return;
+            const { level, sp, spellName } = extractSpellContext(e.currentTarget);
+            if (!sp && !spellName) return;
+            const spellObj = sp || { name: spellName, level: level, source: currentMonster?.source };
 
-            await ensureSpellIsParsed(sp);
+            await ensureSpellIsParsed(spellObj);
 
             const visibility = typeof getVisibilitySetting === 'function' ? getVisibilitySetting() : 'public';
             if (window.VTTSpellManager && window.VTTSpellManager.postSpellToChat) {
-                window.VTTSpellManager.postSpellToChat(sp, level, currentMonster?.name || 'Creature', visibility);
+                window.VTTSpellManager.postSpellToChat(spellObj, level, currentMonster?.name || 'Creature', visibility);
             } else {
-                const meta = window.vttPlayerSheetAPI ? window.vttPlayerSheetAPI.getSpellMetaStrings(sp, level) : {};
-                let bodyText = sp.description || '';
+                const meta = window.vttPlayerSheetAPI ? window.vttPlayerSheetAPI.getSpellMetaStrings(spellObj, level) : {};
+                let bodyText = spellObj.description || '';
                 if (typeof injectDiceChips === 'function') bodyText = injectDiceChips(bodyText);
-                const msgObj = { text: `pings ${sp.name}`, abilityCard: { creatureName: currentMonster?.name || 'Creature', abilityName: sp.name, text: bodyText, ...meta } };
+                const msgObj = { text: `pings ${spellObj.name}`, abilityCard: { creatureName: currentMonster?.name || 'Creature', abilityName: spellObj.name, text: bodyText, ...meta } };
                 if (visibility === 'private' || visibility === 'gm') { msgObj.to = vtt.username; vtt.socket.emit('chat:whisper', msgObj); }
                 else { vtt.socket.emit('chat:msg', msgObj); }
             }
@@ -5098,6 +5731,7 @@ export function initVttCreatureSheet(vtt) {
 
     function expendNpcSpellResource(m, sp, castLvl) {
         if (!m || !sp) return;
+        const panel = document.getElementById('vtt-creature-sheet-panel') || document;
         // 1. Daily usage (innate spell)
         if (sp.dailyKey || sp.usesMax || (sp.id && m.dailyUsages && m.dailyUsages[sp.id] !== undefined)) {
             const usesMax = sp.usesMax || 1;
@@ -5105,7 +5739,7 @@ export function initVttCreatureSheet(vtt) {
             const cur = m.dailyUsages[sp.id] !== undefined ? m.dailyUsages[sp.id] : usesMax;
             if (cur > 0) {
                 m.dailyUsages[sp.id] = cur - 1;
-                contentEl.querySelectorAll(`.cs-innate-use-checkbox[data-spell-id="${sp.id}"]`).forEach((box, bIdx) => {
+                panel.querySelectorAll(`.cs-innate-use-checkbox[data-spell-id="${sp.id}"]`).forEach((box, bIdx) => {
                     const checked = bIdx < m.dailyUsages[sp.id];
                     box.className = `cs-innate-use-checkbox ${checked ? 'fa-solid fa-square-check' : 'fa-regular fa-square'}`;
                 });
@@ -5122,9 +5756,9 @@ export function initVttCreatureSheet(vtt) {
 
         if (lvlNum && lvlNum >= 1 && lvlNum <= 9) {
             const lvlKey = 'level' + lvlNum;
-            const curInput = contentEl.querySelector(`.cs-spell-slot-input[data-type="current"][data-level="${lvlKey}"]`);
-            const maxInput = contentEl.querySelector(`.cs-spell-slot-input[data-type="max"][data-level="${lvlKey}"]`);
-            const defaultMax = maxInput ? (parseInt(maxInput.value) || 0) : 0;
+            const curInput = panel.querySelector(`.cs-spell-slot-input[data-type="current"][data-level="${lvlKey}"]`);
+            const maxInput = panel.querySelector(`.cs-spell-slot-input[data-type="max"][data-level="${lvlKey}"]`);
+            const defaultMax = maxInput ? (parseInt(maxInput.value) || 0) : (parseInt(curInput?.dataset?.max) || 0);
             let curVal = curInput ? (parseInt(curInput.value) || 0) : ((m.spellSlots && m.spellSlots[lvlKey]?.current) || 0);
             if (curVal > 0) {
                 curVal -= 1;

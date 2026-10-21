@@ -60,6 +60,16 @@ export function initVttHandouts(vtt) {
         vtt.campaignState.handouts = [];
     }
 
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     function generateId() {
         return 'ho_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
     }
@@ -259,7 +269,7 @@ export function initVttHandouts(vtt) {
             <div style="display:flex; align-items:center; gap:8px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
                 <i class="fa-solid ${typeIcon} text-gradient-gold" style="font-size:0.85rem; flex-shrink:0;"></i>
                 <i class="fa-solid ${ho.isVisible ? 'fa-eye' : 'fa-eye-slash'} ${ho.isVisible ? 'text-gradient-gold' : ''}" style="font-size:0.75rem; flex-shrink:0;"></i>
-                <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${ho.title}</span>
+                <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(ho.title || '')}</span>
             </div>
         `;
         
@@ -367,7 +377,7 @@ export function initVttHandouts(vtt) {
             titleWrap.innerHTML = `
                 <i class="fa-solid fa-chevron-down handout-folder-caret"></i>
                 <i class="fa-solid fa-folder text-gradient-gold"></i>
-                <span>${folderName}</span>
+                <span>${escapeHtml(folderName || '')}</span>
                 <span class="handout-folder-count">${folderItems.length}</span>
             `;
             headerEl.appendChild(titleWrap);
@@ -887,10 +897,11 @@ export function initVttHandouts(vtt) {
             });
         });
 
-        // Ensure newly imported folder is expanded
-        if (itemsToImport[0].folder) {
-            collapsedFolders.delete(itemsToImport[0].folder);
-        }
+        // Ensure all newly imported folders are expanded
+        itemsToImport.forEach(it => {
+            const folderName = it.folder || 'Imported Handouts';
+            collapsedFolders.delete(folderName);
+        });
 
         syncAndRender();
         if (modalImport) modalImport.classList.add('vtt-hidden');

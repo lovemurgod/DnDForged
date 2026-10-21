@@ -983,7 +983,6 @@
         window.addEventListener('resize', onWindowResize);
 
         isInitialized = true;
-        startAnimationLoop();
         return true;
     }
 
@@ -1233,6 +1232,7 @@
 
         // Run fast-forward physics emulation to find naturally landed face and shift geometry
         emulateAndShiftOutcome(spawnedEntities);
+        startAnimationLoop();
         return true;
     }
 
@@ -1286,15 +1286,13 @@
         return match ? parseInt(match[0], 10) : 1;
     }
 
-    // Animation & Physics Loop
+    // Animation & Physics Loop (Auto-sleeps when idle to preserve GPU/CPU)
     function startAnimationLoop() {
         if (animFrameId) return;
 
         let lastTime = performance.now();
 
         function animate(now) {
-            animFrameId = requestAnimationFrame(animate);
-
             const dt = Math.min((now - lastTime) / 1000, 0.05);
             lastTime = now;
 
@@ -1305,16 +1303,35 @@
             if (renderer && scene && camera) {
                 renderer.render(scene, camera);
             }
+
+            // Auto-Sleep Check: Put 3D engine to sleep if there are no active dice, particles, or banners
+            if (activeDice.length === 0 && activeParticles.length === 0 && activeBadges.length === 0) {
+                if (animFrameId) {
+                    cancelAnimationFrame(animFrameId);
+                    animFrameId = null;
+                }
+                return;
+            }
+
+            animFrameId = requestAnimationFrame(animate);
         }
 
         animFrameId = requestAnimationFrame(animate);
     }
 
+    let physicsAccumulator = 0;
+    const FIXED_PHYSICS_STEP = 1 / 60;
+
     function updatePhysics(dt) {
         if (!physicsWorld) return;
 
-        // Step Cannon.js Physics
-        physicsWorld.step(1 / 60);
+        // Step Cannon.js Physics capped at 60 FPS
+        physicsAccumulator += dt;
+        if (physicsAccumulator > 0.1) physicsAccumulator = 0.1;
+        while (physicsAccumulator >= FIXED_PHYSICS_STEP) {
+            physicsWorld.step(FIXED_PHYSICS_STEP);
+            physicsAccumulator -= FIXED_PHYSICS_STEP;
+        }
 
         activeDice.forEach(d => {
             if (d.isDone) return;
@@ -1363,7 +1380,8 @@
                 if (d.alpha <= 0) {
                     d.isDone = true;
                     scene.remove(d.mesh);
-                    if (d.body) physicsWorld.remove(d.body);
+                    if (d.mesh && d.mesh.geometry) d.mesh.geometry.dispose();
+                    if (d.body && physicsWorld) physicsWorld.remove(d.body);
                     if (d.badge) {
                         if (d.badge.el) d.badge.el.remove();
                         d.badge.isDone = true;
@@ -1425,11 +1443,22 @@
     }
 
     function clear() {
+        if (animFrameId) {
+            cancelAnimationFrame(animFrameId);
+            animFrameId = null;
+        }
         activeDice.forEach(d => {
             scene.remove(d.mesh);
+            if (d.mesh && d.mesh.geometry) d.mesh.geometry.dispose();
             if (d.body && physicsWorld) physicsWorld.remove(d.body);
+            if (d.badge && d.badge.el) d.badge.el.remove();
         });
         activeDice = [];
+
+        if (physicsWorld && activeWalls.length > 0) {
+            activeWalls.forEach(w => physicsWorld.remove(w));
+            activeWalls = [];
+        }
 
         activeParticles.forEach(p => {
             scene.remove(p.mesh);
@@ -1438,7 +1467,9 @@
         });
         activeParticles = [];
 
-        activeBadges.forEach(b => b.el.remove());
+        activeBadges.forEach(b => {
+            if (b.el) b.el.remove();
+        });
         activeBadges = [];
     }
 

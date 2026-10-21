@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <base href="/vtt/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ForgeD VTT - Self-Hosted Virtual Tabletop</title>
     
@@ -38,7 +39,7 @@
     </script>
 
     <!-- ForgeD VTT Custom Premium Stylesheet -->
-    <link rel="stylesheet" href="css/vtt.css?v=9">
+    <link rel="stylesheet" href="css/vtt.css?v=11">
     <link rel="stylesheet" href="css/vtt-mobile.css?v=1">
     
     <!-- 3D WebGL Dice Engine Stylesheet -->
@@ -80,6 +81,11 @@
                     </div>
                     
                     <div class="login-body">
+                        <div id="login-error-banner" class="vtt-login-error vtt-hidden">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span id="login-error-text"></span>
+                        </div>
+
                         <div class="form-group">
                             <label for="login-username"><i class="fa-solid fa-user"></i> Player Name</label>
                             <input type="text" id="login-username" placeholder="Enter player name..." value="">
@@ -105,14 +111,17 @@
                             </div>
                         </div>
                         
-                        <div class="form-group" style="display:flex; align-items:center; gap:8px; margin-top:10px; margin-bottom:14px; user-select:none;">
-                            <input type="checkbox" id="login-remember" style="cursor:pointer;" checked>
-                            <label for="login-remember" style="margin:0; font-size:0.85rem; cursor:pointer; color:var(--color-text-muted, #aaa);">
-                                <i class="fa-solid fa-bookmark" style="margin-right:4px; color:var(--color-gold-base, #d4af37);"></i> Remember my login credentials
+                        <div class="form-group login-remember-group">
+                            <label class="custom-checkbox-label" for="login-remember">
+                                <input type="checkbox" id="login-remember" checked>
+                                <span class="custom-checkbox-box"></span>
+                                <span class="custom-checkbox-text">
+                                    <i class="fa-solid fa-bookmark"></i> Remember my login credentials
+                                </span>
                             </label>
                         </div>
 
-                        <button id="btn-join-game" class="btn btn-primary btn-block">
+                        <button id="btn-join-game" class="btn btn-primary btn-block btn-enter-tabletop">
                             <i class="fa-solid fa-door-open"></i> Enter Tabletop
                         </button>
                     </div>
@@ -131,9 +140,9 @@
             <div class="login-header">
                 <i class="fa-solid fa-shield-halved" style="font-size: 2.2rem; color: var(--color-gold-base, #d4af37); margin-bottom: 8px;"></i>
                 <h2 class="login-title" style="font-size: 1.4rem;">
-                    <span class="title-gold">Password?</span>
+                    <span class="title-gold">GM Verification</span>
                 </h2>
-                <p style="font-size: 0.85rem; color: var(--color-text-muted, #aaa);">Enter Game Master security password to continue</p>
+                <p style="font-size: 0.85rem; color: var(--color-text-secondary, #94a3b8);">Enter Game Master security password to continue</p>
             </div>
             <div class="login-body">
                 <div class="form-group">
@@ -375,9 +384,6 @@
             </div>
 
             <div class="control-divider"></div>
-            <button id="btn-legal-notices" class="control-btn" title="Legal Notices & Open Game Content (SRD)" onclick="document.getElementById('modal-legal-notices').classList.remove('vtt-hidden')">
-                <i class="fa-solid fa-scale-balanced"></i>
-            </button>
             <button id="btn-logout" class="control-btn" title="Exit Game" style="color: var(--color-danger);">
                 <i class="fa-solid fa-right-from-bracket"></i>
             </button>
@@ -438,16 +444,48 @@
 
         <!-- Map Canvas Viewport Area -->
         <main id="vtt-canvas-viewport">
-            <!-- GM Map Preview Banner (GM Only) -->
-            <div id="vtt-map-preview-banner" class="glassmorphism vtt-hidden" style="position: absolute; top: 16px; left: 16px; z-index: 1000; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--color-border-active); box-shadow: 0 4px 20px rgba(0,0,0,0.5); background: rgba(18, 22, 33, 0.95); animation: fadeIn 0.3s ease;">
-                <div id="banner-gm-view-badge" class="gm-view-badge" style="cursor: help; display: flex; align-items: center; gap: 6px; font-family: var(--font-heading); font-size: 0.8rem; font-weight: 600; color: var(--color-gold-light);" title="GM View">
-                    <i class="fa-solid fa-eye text-gradient-gold"></i> GM View
+            <!-- Token Locator & Map Switcher Trigger Button -->
+            <button id="btn-token-locator" class="glassmorphism" title="Token Locator and Map Switcher" aria-label="Token Locator and Map Switcher">
+                <i class="fa-solid fa-arrows-to-eye"></i>
+            </button>
+
+            <!-- Token Locator & Map Switcher Slim Slide-Out Panel -->
+            <aside id="vtt-token-locator-panel" class="glassmorphism" aria-label="Token Locator and Map Switcher Panel">
+                <!-- GM Tabs Header (Hidden for players) -->
+                <div id="vtt-locator-tabs-header" class="locator-tabs-header vtt-hidden">
+                    <button id="btn-locator-tab-tokens" class="locator-tab-btn active" title="Player Tracker (Characters & Companions)" aria-label="Player Tracker">
+                        <i class="fa-solid fa-users"></i>
+                    </button>
+                    <button id="btn-locator-tab-maps" class="locator-tab-btn" title="Quick Map Switcher" aria-label="Map Switcher">
+                        <i class="fa-solid fa-map"></i>
+                    </button>
                 </div>
-                <span class="coord-divider" style="color: rgba(255,255,255,0.15)">|</span>
-                <button id="btn-banner-push-players" class="btn btn-primary btn-xxs" style="padding: 4px 10px; border-radius: 20px;">
-                    <i class="fa-solid fa-bullhorn"></i> Push to Players
-                </button>
-            </div>
+
+                <!-- Panel Body Area -->
+                <div class="locator-panel-body scroll-styled">
+                    <!-- Tokens View (Players & Companions) -->
+                    <div id="vtt-locator-tokens-view" class="locator-view-section active">
+                        <div id="vtt-locator-tokens-list" class="locator-items-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                        <div id="vtt-locator-tokens-empty" class="locator-empty-msg vtt-hidden">
+                            <i class="fa-solid fa-ghost"></i>
+                            <span>No placed tokens</span>
+                        </div>
+                    </div>
+
+                    <!-- Maps View (GM Only) -->
+                    <div id="vtt-locator-maps-view" class="locator-view-section vtt-hidden">
+                        <div id="vtt-locator-maps-list" class="locator-items-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                        <div id="vtt-locator-maps-empty" class="locator-empty-msg vtt-hidden">
+                            <i class="fa-solid fa-map"></i>
+                            <span>No maps available</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
 
             <div id="canvas-container" style="position: relative; overflow: hidden; width: 100%; height: 100%;">
                 <!-- Map Background Image -->
@@ -465,6 +503,9 @@
                 
                 <!-- HTML Asset Overlays Layer (for Videos & Embeds) -->
                 <div id="vtt-html-overlays" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; transform-origin: 0 0; z-index: 5;"></div>
+
+                <!-- Weather Effects Canvas Layer (Directly beneath Fog of War) -->
+                <canvas id="vtt-canvas-weather" style="z-index: 12; pointer-events: none;"></canvas>
 
                 <canvas id="vtt-canvas-fog"></canvas>
                 <canvas id="vtt-canvas-interaction"></canvas>
@@ -872,6 +913,21 @@
                                             <div style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-primary);">Preview: Goblin Shaman casts Lightning Bolt!</div>
                                             <div style="font-size: 0.72rem; color: var(--color-text-muted);">DC 14 Dexterity saving throw • 28 lightning damage</div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- Weather Effects Quality Card -->
+                                <div class="config-card">
+                                    <h4><i class="fa-solid fa-cloud-showers-heavy text-gradient-gold"></i> Weather Effects Quality</h4>
+                                    <p class="config-desc text-muted">Configure local atmospheric particle density or disable weather rendering for battery saving and low-end devices.</p>
+                                    
+                                    <div class="config-setting">
+                                        <label for="config-weather-quality-select">Rendering Quality</label>
+                                        <select id="config-weather-quality-select" style="width: 175px; padding: 4px 8px; font-size: 0.8rem; background: var(--color-bg-card); color: var(--color-text-primary); border: 1px solid var(--color-gold-base); border-radius: 4px;">
+                                            <option value="high" selected>High (Full 60 FPS)</option>
+                                            <option value="low">Low (Battery Saver)</option>
+                                            <option value="off">Disabled (Off)</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -1550,6 +1606,12 @@
                                     <p class="text-muted">Self-hosted virtual tabletop and compendium system.</p>
                                     <p class="text-muted">Developers: DeepMind Antigravity AI Team.</p>
                                 </div>
+                                <div class="config-card" style="margin-top: 10px;">
+                                    <button type="button" id="btn-settings-legal-notices" class="btn btn-secondary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 12px; font-size: 0.85rem;" onclick="document.getElementById('modal-legal-notices').classList.remove('vtt-hidden')">
+                                        <i class="fa-solid fa-scale-balanced text-gradient-gold"></i>
+                                        <span>Legal Notices &amp; Open Game Content</span>
+                                    </button>
+                                </div>
                             </div>
                         </details>
                 </div>
@@ -1577,7 +1639,7 @@
 
     <!-- Map Manager Modal -->
     <div id="modal-upload-map" class="vtt-modal vtt-hidden">
-        <div class="modal-content glassmorphism" style="width: 780px; max-width: 95vw;">
+        <div class="modal-content glassmorphism" style="width: 840px; max-width: 95vw;">
             <div class="modal-header-row" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 12px;">
                 <h3 style="margin: 0;"><i class="fa-solid fa-map text-gradient-gold"></i> Campaign Map Manager</h3>
                 <div style="display: flex; gap: 8px;">
@@ -1593,19 +1655,62 @@
             <!-- Create Map Panel (Collapsible/Hidden by default) -->
             <div id="map-create-panel" class="vtt-hidden" style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--color-border-subtle); border-radius: 8px; padding: 16px; margin-bottom: 20px; animation: fadeIn 0.3s ease;">
                 <h4 style="margin-top: 0; margin-bottom: 12px; color: var(--color-gold-light); font-size: 0.9rem; font-family: var(--font-heading);"><i class="fa-solid fa-circle-plus"></i> Create New Map</h4>
-                <div class="form-group">
-                    <label for="new-map-name">Map Name</label>
-                    <input type="text" id="new-map-name" placeholder="e.g. Goblin Lair, Tavern Ground Floor...">
-                </div>
                 
-                <div class="form-group">
-                    <label>Select Background Option</label>
-                    <select id="map-select-source">
-                        <option value="5etools">Import from Module Compendium</option>
-                        <option value="upload">Upload Custom File</option>
-                        <option value="url">External Image URL</option>
-                        <option value="blank" selected>Blank Tactical Grid (No Image)</option>
-                    </select>
+                <div class="flex-row" style="gap: 12px;">
+                    <div class="form-group" style="flex: 1.2;">
+                        <label for="new-map-name">Map Name</label>
+                        <input type="text" id="new-map-name" placeholder="e.g. Goblin Lair, Tavern Ground Floor...">
+                    </div>
+                    <div class="form-group" style="flex: 0.8;">
+                        <label for="new-map-folder">Folder / Category</label>
+                        <input type="text" id="new-map-folder" list="map-existing-folders-datalist" placeholder="e.g. Lost Mine, Dungeons (Optional)">
+                        <datalist id="map-existing-folders-datalist"></datalist>
+                    </div>
+                </div>
+
+                <div class="flex-row" style="gap: 12px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Select Background Option</label>
+                        <select id="map-select-source">
+                            <option value="5etools">Import from Module Compendium</option>
+                            <option value="upload">Upload Custom File</option>
+                            <option value="url">External Image URL</option>
+                            <option value="blank" selected>Blank Tactical Grid (No Image)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="new-map-grid-type">Grid Type</label>
+                        <select id="new-map-grid-type">
+                            <option value="square" selected>Square Grid</option>
+                            <option value="hex-v">Hex Vertical - Odd (Pointy-top)</option>
+                            <option value="hex-v-even">Hex Vertical - Even (Pointy-top)</option>
+                            <option value="hex-h">Hex Horizontal - Odd (Flat-top)</option>
+                            <option value="hex-h-even">Hex Horizontal - Even (Flat-top)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex-row" style="gap: 12px; margin-bottom: 12px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="new-map-dist-val">Distance per Cell</label>
+                        <input type="number" id="new-map-dist-val" value="5" min="0.01" step="any" placeholder="e.g. 5, 1, 10">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="new-map-dist-unit">Distance Unit</label>
+                        <select id="new-map-dist-unit">
+                            <option value="ft" selected>Feet (ft)</option>
+                            <option value="mi">Miles (mi)</option>
+                            <option value="km">Kilometers (km)</option>
+                            <option value="m">Meters (m)</option>
+                            <option value="hex">Hexes (hex)</option>
+                            <option value="yd">Yards (yd)</option>
+                            <option value="custom">Custom Unit...</option>
+                        </select>
+                    </div>
+                    <div class="form-group vtt-hidden" id="new-map-dist-unit-custom-wrap" style="flex: 1;">
+                        <label for="new-map-dist-unit-custom">Custom Unit</label>
+                        <input type="text" id="new-map-dist-unit-custom" placeholder="e.g. leagues, paces">
+                    </div>
                 </div>
                 
                 <!-- Module Maps Import Panel -->
@@ -1650,9 +1755,29 @@
                 </div>
             </div>
             
+            <!-- Map Search & Folder Controls Bar -->
+            <div class="map-manager-toolbar" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap;">
+                <div class="search-box-wrapper" style="position: relative; flex: 1; min-width: 220px;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: var(--color-text-muted); pointer-events: none;"></i>
+                    <input type="text" id="map-search-input" placeholder="Search maps or folders..." style="width: 100%; padding: 6px 30px 6px 30px; font-size: 0.85rem; border-radius: 6px; background: rgba(0,0,0,0.3); border: 1px solid var(--color-border-subtle); color: var(--color-text-primary);">
+                    <button type="button" id="btn-map-search-clear" class="btn btn-icon btn-xxs vtt-hidden" style="position: absolute; right: 6px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); background: none; border: none; cursor: pointer;" title="Clear search">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span id="map-total-count-badge" class="badge" style="font-size: 0.75rem; color: var(--color-gold-base); background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.25); padding: 4px 10px; border-radius: 12px; font-weight: 600;">0 Maps</span>
+                    <button type="button" id="btn-map-expand-all" class="btn btn-secondary btn-xxs" title="Expand all folders" style="padding: 5px 9px; font-size: 0.75rem;">
+                        <i class="fa-solid fa-angles-down"></i> Expand All
+                    </button>
+                    <button type="button" id="btn-map-collapse-all" class="btn btn-secondary btn-xxs" title="Collapse all folders" style="padding: 5px 9px; font-size: 0.75rem;">
+                        <i class="fa-solid fa-angles-up"></i> Collapse All
+                    </button>
+                </div>
+            </div>
+
             <!-- Map List Area -->
-            <div id="maps-list-container" class="scroll-styled" style="min-height: 260px; max-height: 480px; overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; padding-right: 4px; width: 100%;">
-                <!-- Cards will be populated here dynamically -->
+            <div id="maps-list-container" class="scroll-styled" style="min-height: 280px; max-height: 65vh; overflow-y: auto; overflow-x: hidden; padding-right: 4px; width: 100%; display: flex; flex-direction: column; gap: 12px;">
+                <!-- Folders and cards will be populated here dynamically -->
             </div>
             
             <div class="modal-buttons" style="border-top: 1px solid var(--color-border-subtle); padding-top: 16px; margin-top: 20px;">
@@ -1810,10 +1935,16 @@
     <!-- Edit Map Modal -->
     <div id="modal-edit-map" class="vtt-modal vtt-hidden">
         <div class="modal-content glassmorphism">
-            <h3>Edit Map</h3>
-            <div class="form-group">
-                <label for="edit-map-name">Map Name</label>
-                <input type="text" id="edit-map-name">
+            <div class="flex-row" style="gap: 12px;">
+                <div class="form-group" style="flex: 1.2;">
+                    <label for="edit-map-name">Map Name</label>
+                    <input type="text" id="edit-map-name">
+                </div>
+                <div class="form-group" style="flex: 0.8;">
+                    <label for="edit-map-folder">Folder / Category</label>
+                    <input type="text" id="edit-map-folder" list="edit-map-existing-folders-datalist" placeholder="e.g. Lost Mine, Dungeons">
+                    <datalist id="edit-map-existing-folders-datalist"></datalist>
+                </div>
             </div>
             <div class="form-group">
                 <label for="edit-map-url">Media URL (Image, Video, YouTube, GIF)</label>
@@ -1834,13 +1965,37 @@
                     <label for="edit-map-grid-type">Grid Type</label>
                     <select id="edit-map-grid-type">
                         <option value="square" selected>Square</option>
-                        <option value="hex-v">Hex (Vertical)</option>
-                        <option value="hex-h">Hex (Horizontal)</option>
+                        <option value="hex-v">Hex Vertical - Odd (Pointy-top)</option>
+                        <option value="hex-v-even">Hex Vertical - Even (Pointy-top)</option>
+                        <option value="hex-h">Hex Horizontal - Odd (Flat-top)</option>
+                        <option value="hex-h-even">Hex Horizontal - Even (Flat-top)</option>
                     </select>
                 </div>
                 <div class="form-group" style="flex: 1; min-width: 120px;">
                     <label for="edit-map-grid-size">Cell Size (px)</label>
                     <input type="number" id="edit-map-grid-size" value="50" min="20" max="200">
+                </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="edit-map-dist-val">Distance per Cell</label>
+                    <input type="number" id="edit-map-dist-val" value="5" min="0.01" step="any" placeholder="e.g. 5, 1, 10">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 120px;">
+                    <label for="edit-map-dist-unit">Distance Unit</label>
+                    <select id="edit-map-dist-unit">
+                        <option value="ft" selected>Feet (ft)</option>
+                        <option value="mi">Miles (mi)</option>
+                        <option value="km">Kilometers (km)</option>
+                        <option value="m">Meters (m)</option>
+                        <option value="hex">Hexes (hex)</option>
+                        <option value="yd">Yards (yd)</option>
+                        <option value="custom">Custom Unit...</option>
+                    </select>
+                </div>
+                <div class="form-group vtt-hidden" id="edit-map-dist-unit-custom-wrap" style="flex: 1; min-width: 120px;">
+                    <label for="edit-map-dist-unit-custom">Custom Unit</label>
+                    <input type="text" id="edit-map-dist-unit-custom" placeholder="e.g. leagues, paces">
                 </div>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -1878,6 +2033,33 @@
             <div class="form-group" style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
                 <input type="checkbox" id="edit-map-update-on-drop" checked>
                 <label for="edit-map-update-on-drop" style="margin: 0;">Update Vision Only on Token Drop</label>
+            </div>
+
+            <h4 style="margin-top: 16px; margin-bottom: 8px; color: var(--color-gold-base); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
+                <span><i class="fa-solid fa-cloud-bolt text-gradient-gold"></i> Weather Effects</span>
+                <span id="edit-map-weather-layers-badge" style="font-size: 0.72rem; color: var(--color-gold-light); font-weight: 600;">0 / 3 Active</span>
+            </h4>
+
+            <!-- Global Scene Saturation -->
+            <div class="form-group" style="margin-bottom: 12px; background: rgba(0,0,0,0.22); padding: 8px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+                <label for="edit-map-weather-saturation" style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span><i class="fa-solid fa-palette text-gradient-gold"></i> Scene Saturation:</span>
+                    <span id="edit-map-weather-sat-val" style="color: var(--color-gold-light); font-weight: 600;">100%</span>
+                </label>
+                <input type="range" id="edit-map-weather-saturation" min="0" max="200" step="5" value="100">
+            </div>
+
+            <!-- Dynamic Weather Layers List -->
+            <div id="edit-map-weather-layers-list" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px;">
+                <!-- Weather layer cards rendered dynamically by vtt-canvas.js -->
+            </div>
+
+            <!-- Add Layer Button Bar -->
+            <div style="display: flex; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+                <button type="button" id="btn-add-weather-layer" class="btn btn-secondary btn-xs" style="padding: 6px 12px; font-weight: 600;">
+                    <i class="fa-solid fa-plus"></i> Add Weather Layer
+                </button>
+                <span id="weather-layer-limit-note" style="font-size: 0.75rem; color: var(--color-text-muted);">Max 3 simultaneous layers</span>
             </div>
 
             <div class="modal-buttons">
@@ -2761,14 +2943,16 @@
             chatEngine: null,
             creatureSheet: null,
             playerSheet: null,
+            sheetDock: null,
+            weatherEngine: null,
             dataBridge: null
         };
 
         // Module preloader promise - loads all VTT ES modules concurrently in the background
         const moduleInitPromise = (async () => {
             try {
-                const _v = Date.now(); // cache-bust: forces fresh module load on every page load
-                const [canvasMod, creatureMod, spellMod, playerMod, chatMod, dataMod, handoutsMod, popoutMod, mobileMod, themesMod] = await Promise.all([
+                const _v = '1.0.4'; // Versioned cache key: allows browser caching while maintaining release invalidation
+                const [canvasMod, creatureMod, spellMod, playerMod, chatMod, dataMod, handoutsMod, popoutMod, mobileMod, themesMod, dockMod, weatherMod] = await Promise.all([
                     import(`./js/vtt-canvas.js?v=${_v}`),
                     import(`./js/vtt-creature-sheet.js?v=${_v}`),
                     import(`./js/vtt-spell-manager.js?v=${_v}`),
@@ -2778,7 +2962,9 @@
                     import(`./js/vtt-handouts.js?v=${_v}`),
                     import(`./js/vtt-sheet-popout.js?v=${_v}`),
                     import(`./js/vtt-mobile-adapter.js?v=${_v}`),
-                    import(`./js/vtt-themes.js?v=${_v}`)
+                    import(`./js/vtt-themes.js?v=${_v}`),
+                    import(`./js/vtt-sheet-dock.js?v=${_v}`),
+                    import(`./js/vtt-weather.js?v=${_v}`)
                 ]);
                 
                 return {
@@ -2791,7 +2977,9 @@
                     initVttHandouts: handoutsMod.initVttHandouts,
                     SheetWindowManager: popoutMod.SheetWindowManager,
                     initVttMobileAdapter: mobileMod.initVttMobileAdapter,
-                    initVttThemes: themesMod.initVttThemes
+                    initVttThemes: themesMod.initVttThemes,
+                    initVttSheetDock: dockMod.initVttSheetDock,
+                    initVttWeather: weatherMod.initVttWeather
                 };
             } catch (err) {
                 console.error("VTT Module Import Error:", err);
@@ -2818,6 +3006,27 @@
             const campaignSelect = document.getElementById('login-campaign');
             const btnCreateCamp = document.getElementById('btn-create-campaign');
             const rememberCb = document.getElementById('login-remember');
+            const loginErrorBanner = document.getElementById('login-error-banner');
+            const loginErrorText = document.getElementById('login-error-text');
+
+            function showLoginError(msg) {
+                if (loginErrorBanner && loginErrorText) {
+                    loginErrorText.textContent = msg;
+                    loginErrorBanner.classList.remove('vtt-hidden');
+                } else {
+                    alert(msg);
+                }
+            }
+
+            function clearLoginError() {
+                if (loginErrorBanner) {
+                    loginErrorBanner.classList.add('vtt-hidden');
+                }
+            }
+
+            usernameInput?.addEventListener('input', clearLoginError);
+            roleSelect?.addEventListener('change', clearLoginError);
+            campaignSelect?.addEventListener('change', clearLoginError);
 
             // Restore saved login details if Remember Me was enabled
             const savedRemember = localStorage.getItem('vtt_remember');
@@ -3051,12 +3260,7 @@
                     if (!hasJoinedSession) {
                         clearTimeout(connTimeout);
                         resetBtnJoin();
-                        if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
-                            JqueryUtil.doToast({
-                                type: 'error',
-                                content: `Connection error: ${err.message || 'Server offline'}. Retrying...`
-                            });
-                        }
+                        showLoginError(`Connection error: ${err.message || 'Server offline'}. Retrying...`);
                     } else {
                         updateConnectionStatus('reconnecting', 'Reconnecting...');
                     }
@@ -3064,6 +3268,7 @@
 
                 socket.on('connect', () => {
                     clearTimeout(connTimeout);
+                    clearLoginError();
                     console.log("Connected to VTT backend!");
                     socket.emit('join', { campaignId, username, role, gmPassword });
                 });
@@ -3081,7 +3286,7 @@
                             inputGmPassword.focus();
                         }
                     } else {
-                        alert(`Connection Rejected: ${reason}`);
+                        showLoginError(`Connection Rejected: ${reason || 'Unauthorized'}`);
                     }
                 });
 
@@ -3141,6 +3346,16 @@
                     // Boot VTT Modules (awaiting promise guarantees all 7 modules finish importing)
                     try {
                         const mods = await moduleInitPromise;
+                        if (mods.initVttWeather) {
+                            window.VTT.weatherEngine = mods.initVttWeather(window.VTT);
+                            const weatherQualityEl = document.getElementById('config-weather-quality-select');
+                            if (weatherQualityEl) {
+                                weatherQualityEl.value = window.VTT.weatherEngine.getQuality();
+                                weatherQualityEl.addEventListener('change', (e) => {
+                                    window.VTT.weatherEngine.setQuality(e.target.value);
+                                });
+                            }
+                        }
                         if (mods.initVttCanvas) window.VTT.canvasEngine = mods.initVttCanvas(window.VTT);
                         if (mods.initVttChat) window.VTT.chatEngine = mods.initVttChat(window.VTT, chatHistory);
                         if (mods.initVttSpellManager) window.VTT.spellManager = mods.initVttSpellManager(window.VTT);
@@ -3151,13 +3366,26 @@
                         if (mods.SheetWindowManager) window.VTT.sheetWindowManager = mods.SheetWindowManager;
                         if (mods.initVttMobileAdapter) window.VTT.mobileAdapter = mods.initVttMobileAdapter(window.VTT);
                         if (mods.initVttThemes) window.VTT.themesEngine = mods.initVttThemes(window.VTT);
+                        if (mods.initVttSheetDock) window.VTT.sheetDock = mods.initVttSheetDock(window.VTT);
+
+                        // Fail-safe initial sync of weather in case map was already loaded
+                        if (window.VTT.weatherEngine && window.VTT.campaignState?.maps) {
+                            const curMapId = (window.VTT.canvasEngine?.getCurrentMapId && window.VTT.canvasEngine.getCurrentMapId()) ||
+                                ((window.VTT.role === 'GM') ? (window.VTT.campaignState.activeGMMapId || window.VTT.campaignState.activeMapId) : (window.VTT.campaignState.playerMapOverrides?.[window.VTT.username] || window.VTT.campaignState.activeMapId));
+                            const curMap = window.VTT.campaignState.maps[curMapId];
+                            if (curMap?.weather) {
+                                window.VTT.weatherEngine.setWeather(curMap.weather);
+                            }
+                        }
 
                         // Setup dock callback: when an external tab asks to dock back into tabletop
                         if (window.SheetWindowManager) {
                             window.SheetWindowManager.onDock((sheetData) => {
                                 console.log('[vtt.html] Docking sheet into main VTT:', sheetData);
                                 if (!sheetData) return;
-                                if (sheetData.type === 'player' && sheetData.id && window.VTT.playerSheet) {
+                                if (window.VTT.sheetDock?.openSheet) {
+                                    window.VTT.sheetDock.openSheet(sheetData);
+                                } else if (sheetData.type === 'player' && sheetData.id && window.VTT.playerSheet) {
                                     window.VTT.playerSheet.openSheet(sheetData.id);
                                 } else if (window.VTT.creatureSheet) {
                                     window.VTT.creatureSheet.openSheet(sheetData.monsterData, sheetData.tokenId, sheetData.characterId);
@@ -3216,6 +3444,7 @@
 
             // Join Game handler
             const executeJoinGame = async () => {
+                clearLoginError();
                 let username = usernameInput.value.trim();
                 const role = roleSelect.value;
                 const campaignId = campaignSelect.value || 'default';
@@ -3626,13 +3855,13 @@
     </div>
 
     <!-- Legal Notices & Open Game Content Modal -->
-    <div id="modal-legal-notices" class="vtt-modal vtt-hidden" style="position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center;">
+    <div id="modal-legal-notices" class="vtt-modal vtt-hidden">
         <div class="glassmorphism" style="width:90%; max-width:680px; max-height:85vh; display:flex; flex-direction:column; padding:24px; border-radius:12px; border:1px solid rgba(212,175,55,0.3); background:#0f172a; color:#f8fafc; box-shadow:0 20px 40px rgba(0,0,0,0.8);">
             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px; margin-bottom:16px;">
                 <h3 style="margin:0; font-family:'Cinzel', serif; color:#f1c40f; display:flex; align-items:center; gap:8px;">
                     <i class="fa-solid fa-scale-balanced"></i> Open Game Content & Legal Notices
                 </h3>
-                <button type="button" class="btn btn-secondary btn-xxs" onclick="document.getElementById('modal-legal-notices').classList.add('vtt-hidden')" style="padding:4px 8px; cursor:pointer;">
+                <button type="button" class="btn btn-secondary btn-xxs vtt-modal-close" onclick="document.getElementById('modal-legal-notices').classList.add('vtt-hidden')" style="padding:4px 8px; cursor:pointer;" title="Close Legal Notices">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
@@ -3651,7 +3880,7 @@
                 <p>Bundled SRD creature tokens are sourced from open-license / CC0 public domain collections or procedurally rendered by ForgeDVTT's arcane token engine. No copyrighted commercial artwork, book covers, or adventure modules are distributed in this release.</p>
             </div>
             <div style="display:flex; justify-content:flex-end; margin-top:16px; border-top:1px solid rgba(255,255,255,0.1); padding-top:12px;">
-                <button type="button" class="btn btn-primary" onclick="document.getElementById('modal-legal-notices').classList.add('vtt-hidden')" style="padding:6px 16px;">
+                <button type="button" class="btn btn-primary vtt-modal-close" onclick="document.getElementById('modal-legal-notices').classList.add('vtt-hidden')" style="padding:6px 16px;">
                     Close
                 </button>
             </div>

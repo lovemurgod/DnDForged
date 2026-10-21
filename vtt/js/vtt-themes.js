@@ -539,9 +539,23 @@ export function initVttThemes(vtt) {
         });
     }
 
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     function showBroadcastPrompt(theme, gmName) {
         // Remove existing prompt if any
         document.getElementById('vtt-theme-broadcast-banner')?.remove();
+
+        const safeGmName = escapeHtml(gmName || 'The GM');
+        const safeThemeName = escapeHtml(theme?.name || 'Theme');
+        const safeAccentColor = (theme?.accentColor || '#d4af37').replace(/[^#a-zA-Z0-9(),. -]/g, '');
 
         const banner = document.createElement('div');
         banner.id = 'vtt-theme-broadcast-banner';
@@ -551,8 +565,8 @@ export function initVttThemes(vtt) {
                 <i class="fa-solid fa-wand-magic-sparkles text-gradient-gold"></i>
             </div>
             <div class="banner-body">
-                <strong>${gmName} shifted the tabletop atmosphere:</strong>
-                <p>New theme: <strong style="color: ${theme.accentColor}">${theme.name}</strong></p>
+                <strong>${safeGmName} shifted the tabletop atmosphere:</strong>
+                <p>New theme: <strong style="color: ${safeAccentColor}">${safeThemeName}</strong></p>
             </div>
             <div class="banner-actions">
                 <button id="btn-theme-banner-apply" class="btn btn-xs btn-primary">

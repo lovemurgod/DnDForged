@@ -946,6 +946,48 @@
     ]
   },
   {
+    "id": "sp_arcane_gate_xphb",
+    "name": "Arcane Gate",
+    "source": "XPHB",
+    "page": 242,
+    "level": 6,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "500 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You create linked teleportation portals. Choose two Large, unoccupied spaces on the ground that you can see, one space within range and the other one within 10 feet of you. A circular portal opens in each of those spaces and remains for the duration.</p><p>The portals are two-dimensional glowing rings filled with mist that blocks sight. They hover inches from the ground and are perpendicular to it.</p><p>A portal is open on only one side (you choose which). Anything entering the open side of a portal exits from the open side of the other portal as if the two were adjacent to each other. As a Bonus Action, you can change the facing of the open sides.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "OBJ",
+      "Sight Required",
+      "Teleportation",
+      "UA",
+      "UBA"
+    ]
+  },
+  {
     "id": "sp_arcane_lock_xphb",
     "name": "Arcane Lock",
     "source": "XPHB",
@@ -991,6 +1033,162 @@
     "miscTags": [
       "OBJ"
     ]
+  },
+  {
+    "id": "sp_arcane_vigor_xphb",
+    "name": "Arcane Vigor",
+    "source": "XPHB",
+    "page": 242,
+    "level": 2,
+    "school": "Abjuration",
+    "castingTime": "1 bonus action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You tap into your life force to heal yourself. Roll one or two of your unexpended Hit Point Dice, and regain a number of Hit Points equal to the roll's total plus your spellcasting ability modifier. Those dice are then expended.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The number of unexpended Hit Dice you can roll increases by one for each spell slot level above 2.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The number of unexpended Hit Dice you can roll increases by one for each spell slot level above 2.</p></div>",
+    "classes": [
+      "Artificer",
+      "Sorcerer",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Mark of Healing",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing"
+    ]
+  },
+  {
+    "id": "sp_armor_of_agathys_xphb",
+    "name": "Armor of Agathys",
+    "source": "XPHB",
+    "page": 243,
+    "level": 1,
+    "school": "Abjuration",
+    "castingTime": "1 bonus action",
+    "range": "self",
+    "components": "V, S, M (a shard of blue glass)",
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>Protective magical frost surrounds you. You gain 5 Temporary Hit Points. If a creature hits you with a melee attack roll before the spell ends, the creature takes 5 Cold damage. The spell ends early if you have no Temporary Hit Points.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The Temporary Hit Points and the Cold damage both increase by 5 for each spell slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The Temporary Hit Points and the Cold damage both increase by 5 for each spell slot level above 1.</p></div>",
+    "classes": [
+      "Warlock"
+    ],
+    "subclasses": [
+      {
+        "name": "Oath of Conquest",
+        "shortName": "Conquest",
+        "source": "XGE",
+        "className": "Paladin",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Mark of Warding",
+        "source": "EFA"
+      },
+      {
+        "name": "Rune Shaper",
+        "source": "BGG"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Temp HP"
+    ]
+  },
+  {
+    "id": "sp_arms_of_hadar_xphb",
+    "name": "Arms of Hadar",
+    "source": "XPHB",
+    "page": 243,
+    "level": 1,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "Self (10 feet emanation)",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>Invoking Hadar, you cause tendrils to erupt from yourself. Each creature in a 10-foot Emanation [Area of Effect] originating from you makes a Strength saving throw. On a failed save, a target takes 2d6 Necrotic damage and can't take Reactions until the start of its next turn. On a successful save, a target takes half as much damage only.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 1.</p></div>",
+    "classes": [
+      "Warlock"
+    ],
+    "subclasses": [
+      {
+        "name": "Aberrant Mind",
+        "shortName": "Aberrant Mind",
+        "source": "TCE",
+        "className": "Sorcerer",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Aberrant Sorcery",
+        "shortName": "Aberrant",
+        "source": "XPHB",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "1d6",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "strength",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": []
   },
   {
     "id": "sp_astral_projection_xphb",
@@ -1208,6 +1406,177 @@
     ]
   },
   {
+    "id": "sp_aura_of_purity_xphb",
+    "name": "Aura of Purity",
+    "source": "XPHB",
+    "page": 244,
+    "level": 4,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "Self (30 feet emanation)",
+    "components": "V",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>An aura radiates from you in a 30-foot Emanation [Area of Effect] for the duration. While in the aura, you and your allies have Resistance to Poison damage and Advantage on saving throws to avoid or end effects that include the Blinded, Charmed, Deafened, Frightened, Paralyzed, Poisoned, or Stunned condition.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Cleric",
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "TCE",
+        "className": "Artificer",
+        "classSource": "TCE"
+      },
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      },
+      {
+        "name": "Peace Domain",
+        "shortName": "Peace",
+        "source": "TCE",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Oath of the Watchers",
+        "shortName": "Watchers",
+        "source": "TCE",
+        "className": "Paladin",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Mark of Healing",
+        "source": "EFA"
+      },
+      {
+        "name": "Mark of Hospitality",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "ADV"
+    ]
+  },
+  {
+    "id": "sp_aura_of_vitality_xphb",
+    "name": "Aura of Vitality",
+    "source": "XPHB",
+    "page": 244,
+    "level": 3,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "Self (30 feet emanation)",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>An aura radiates from you in a 30-foot Emanation [Area of Effect] for the duration. When you create the aura and at the start of each of your turns while it persists, you can restore 2d6 Hit Points to one creature in it.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Cleric",
+      "Druid",
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "TCE",
+        "className": "Artificer",
+        "classSource": "TCE"
+      },
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      },
+      {
+        "name": "Twilight Domain",
+        "shortName": "Twilight",
+        "source": "TCE",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Oath of the Crown",
+        "shortName": "Crown",
+        "source": "SCAG",
+        "className": "Paladin",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Spellfire Sorcery",
+        "shortName": "Spellfire",
+        "source": "FRHoF",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Quandrix Student",
+        "source": "SCC"
+      }
+    ],
+    "feats": [
+      {
+        "name": "Mark of Healing",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Healing",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "Healing"
+    ]
+  },
+  {
     "id": "sp_awaken_xphb",
     "name": "Awaken",
     "source": "XPHB",
@@ -1357,6 +1726,82 @@
     "miscTags": [
       "SCT",
       "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_banishing_smite_xphb",
+    "name": "Banishing Smite",
+    "source": "XPHB",
+    "page": 245,
+    "level": 5,
+    "school": "Conjuration",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a Melee weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>The target hit by the attack roll takes an extra 5d10 Force damage from the attack. If the attack reduces the target to 50 Hit Points or fewer, the target must succeed on a Charisma saving throw or be transported to a harmless demiplane for the duration. While there, the target has the Incapacitated condition. When the spell ends, the target reappears in the space it left or in the nearest unoccupied space if that space is occupied.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "TCE",
+        "className": "Artificer",
+        "classSource": "TCE"
+      },
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      },
+      {
+        "name": "Oath of the Noble Genies",
+        "shortName": "Noble Genies",
+        "source": "FRHoF",
+        "className": "Paladin",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "The Hexblade",
+        "shortName": "Hexblade",
+        "source": "XGE",
+        "className": "Warlock",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "5d10",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Incapacitated"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD"
     ]
   },
   {
@@ -1608,6 +2053,76 @@
       "ADV",
       "Healing"
     ]
+  },
+  {
+    "id": "sp_beast_sense_xphb",
+    "name": "Beast Sense",
+    "source": "XPHB",
+    "page": 245,
+    "level": 2,
+    "school": "Divination",
+    "castingTime": "1 action",
+    "range": "touch",
+    "components": "S",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": true,
+    "descriptionHtml": "<p>You touch a willing Beast. For the duration, you can perceive through the Beast's senses as well as your own. When perceiving through the Beast's senses, you benefit from any special senses it has.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Druid",
+      "Ranger"
+    ],
+    "subclasses": [
+      {
+        "name": "Path of the Totem Warrior",
+        "shortName": "Totem Warrior",
+        "source": "PHB",
+        "className": "Barbarian",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Path of the Wild Heart",
+        "shortName": "Wild Heart",
+        "source": "XPHB",
+        "className": "Barbarian",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Gruul Anarch",
+        "source": "GGR"
+      }
+    ],
+    "feats": [
+      {
+        "name": "Enclave Magic",
+        "source": "FRHoF"
+      },
+      {
+        "name": "Mark of Handling",
+        "source": "EFA"
+      },
+      {
+        "name": "Watchers",
+        "source": "RHW"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": []
   },
   {
     "id": "sp_befuddlement_xphb",
@@ -1863,6 +2378,51 @@
     ]
   },
   {
+    "id": "sp_blade_ward_xphb",
+    "name": "Blade Ward",
+    "source": "XPHB",
+    "page": 247,
+    "level": 0,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>Whenever a creature makes an attack roll against you before the spell ends, the attacker subtracts 1d4 from the attack roll.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Scion of the Three",
+        "shortName": "Scion of the Three",
+        "source": "FRHoF",
+        "className": "Rogue",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
     "id": "sp_bless_xphb",
     "name": "Bless",
     "source": "XPHB",
@@ -2063,6 +2623,58 @@
     ],
     "miscTags": [
       "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_blinding_smite_xphb",
+    "name": "Blinding Smite",
+    "source": "XPHB",
+    "page": 247,
+    "level": 3,
+    "school": "Evocation",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a Melee weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "1 minute",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>The target hit by the strike takes an extra 3d8 Radiant damage from the attack, and the target has the Blinded condition until the spell ends. At the end of each of its turns, the Blinded target makes a Constitution saving throw, ending the spell on itself on a success.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The extra damage increases by 1d8 for each spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The extra damage increases by 1d8 for each spell slot level above 3.</p></div>",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Boros Legionnaire",
+        "source": "GGR"
+      }
+    ],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d8",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "1d8",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d8",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Blinded"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD"
     ]
   },
   {
@@ -3036,6 +3648,74 @@
     "miscTags": []
   },
   {
+    "id": "sp_circle_of_power_xphb",
+    "name": "Circle of Power",
+    "source": "XPHB",
+    "page": 250,
+    "level": 5,
+    "school": "Abjuration",
+    "castingTime": "1 action",
+    "range": "Self (30 feet emanation)",
+    "components": "V",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>An aura radiates from you in a 30-foot Emanation [Area of Effect] for the duration. While in the aura, you and your allies have Advantage on saving throws against spells and other magical effects. When an affected creature makes a saving throw against a spell or magical effect that allows a save to take only half damage, it takes no damage if it succeeds on the save.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Artificer",
+      "Cleric",
+      "Paladin",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Solidarity Domain (PSA)",
+        "shortName": "Solidarity (PSA)",
+        "source": "PSA",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Twilight Domain",
+        "shortName": "Twilight",
+        "source": "TCE",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Oath of the Crown",
+        "shortName": "Crown",
+        "source": "SCAG",
+        "className": "Paladin",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Quandrix Student",
+        "source": "SCC"
+      }
+    ],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "ADV"
+    ]
+  },
+  {
     "id": "sp_clairvoyance_xphb",
     "name": "Clairvoyance",
     "source": "XPHB",
@@ -3160,6 +3840,56 @@
     "areaTags": [],
     "miscTags": [
       "Permanent"
+    ]
+  },
+  {
+    "id": "sp_cloud_of_daggers_xphb",
+    "name": "Cloud of Daggers",
+    "source": "XPHB",
+    "page": 251,
+    "level": 2,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S, M (a sliver of glass)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You conjure spinning daggers in a 5-foot Cube [Area of Effect] centered on a point within range. Each creature in that area takes 4d4 Slashing damage. A creature also takes this damage if it enters the Cube [Area of Effect] or ends its turn there or if the Cube [Area of Effect] moves into its space. A creature takes this damage only once per turn.</p><p>On your later turns, you can take a Magic action to teleport the Cube [Area of Effect] up to 30 feet.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 2d4 for each spell slot level above 2.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 2d4 for each spell slot level above 2.</p></div>",
+    "classes": [
+      "Bard",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d4",
+        "type": "Slashing",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "2d4",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "2d4",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Cone"
+    ],
+    "miscTags": [
+      "UA"
     ]
   },
   {
@@ -3618,6 +4348,62 @@
     "miscTags": []
   },
   {
+    "id": "sp_compelled_duel_xphb",
+    "name": "Compelled Duel",
+    "source": "XPHB",
+    "page": 252,
+    "level": 1,
+    "school": "Enchantment",
+    "castingTime": "1 bonus action",
+    "range": "30 feet",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You try to compel a creature into a duel. One creature that you can see within range makes a Wisdom saving throw. On a failed save, the target has Disadvantage on attack rolls against creatures other than you, and it can't willingly move to a space that is more than 30 feet away from you.</p><p>The spell ends if you make an attack roll against a creature other than the target, if you cast a spell on an enemy other than the target, if an ally of yours damages the target, or if you end your turn more than 30 feet away from the target.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "Oath of the Crown",
+        "shortName": "Crown",
+        "source": "SCAG",
+        "className": "Paladin",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Gruul Anarch",
+        "source": "GGR"
+      }
+    ],
+    "feats": [
+      {
+        "name": "Mark of Sentinel",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
     "id": "sp_comprehend_languages_xphb",
     "name": "Comprehend Languages",
     "source": "XPHB",
@@ -4060,6 +4846,78 @@
     ]
   },
   {
+    "id": "sp_conjure_barrage_xphb",
+    "name": "Conjure Barrage",
+    "source": "XPHB",
+    "page": 254,
+    "level": 3,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "Self (60 feet cone)",
+    "components": "V, S, M (a Melee or Ranged weapon worth at least 1 CP)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You brandish the weapon used to cast the spell and conjure similar spectral weapons (or ammunition appropriate to the weapon) that launch forward and then disappear. Each creature of your choice that you can see in a 60-foot Cone [Area of Effect] makes a Dexterity saving throw, taking 5d8 Force damage on a failed save or half as much damage on a successful one.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d8 for each spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d8 for each spell slot level above 3.</p></div>",
+    "classes": [
+      "Ranger"
+    ],
+    "subclasses": [
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "TCE",
+        "className": "Artificer",
+        "classSource": "TCE"
+      },
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Gruul Anarch",
+        "source": "GGR"
+      }
+    ],
+    "feats": [
+      {
+        "name": "Mark of Making",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [
+      {
+        "formula": "5d8",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "1d8",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "1d8",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Cylinder"
+    ],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
     "id": "sp_conjure_celestial_xphb",
     "name": "Conjure Celestial",
     "source": "XPHB",
@@ -4313,6 +5171,53 @@
     "miscTags": [
       "AAD",
       "DFT"
+    ]
+  },
+  {
+    "id": "sp_conjure_volley_xphb",
+    "name": "Conjure Volley",
+    "source": "XPHB",
+    "page": 255,
+    "level": 5,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "150 feet",
+    "components": "V, S, M (a Melee or Ranged weapon worth at least 1 CP)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You brandish the weapon used to cast the spell and choose a point within range. Hundreds of similar spectral weapons (or ammunition appropriate to the weapon) fall in a volley and then disappear. Each creature of your choice that you can see in a 40-foot-radius, 20-foot-high Cylinder [Area of Effect] centered on that point makes a Dexterity saving throw. A creature takes 8d8 Force damage on a failed save or half as much damage on a successful one.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Ranger"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "8d8",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Y"
+    ],
+    "miscTags": [
+      "Sight Required"
     ]
   },
   {
@@ -4708,6 +5613,51 @@
     "miscTags": []
   },
   {
+    "id": "sp_cordon_of_arrows_xphb",
+    "name": "Cordon of Arrows",
+    "source": "XPHB",
+    "page": 258,
+    "level": 2,
+    "school": "Transmutation",
+    "castingTime": "1 action",
+    "range": "touch",
+    "components": "V, S, M (four or more arrows or bolts)",
+    "duration": "8 hours",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You touch up to four nonmagical Arrows or Bolts and plant them in the ground in your space. Until the spell ends, the ammunition can't be physically uprooted, and whenever a creature other than you enters a space within 30 feet of the ammunition for the first time on a turn or ends its turn there, one piece of ammunition flies up to strike it. The creature must succeed on a Dexterity saving throw or take 2d4 Piercing damage. The piece of ammunition is then destroyed. The spell ends when none of the ammunition remains planted in the ground.</p><p>When you cast this spell, you can designate any creatures you choose, and the spell ignores them.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The amount of ammunition that can be affected increases by two for each spell slot level above 2.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The amount of ammunition that can be affected increases by two for each spell slot level above 2.</p></div>",
+    "classes": [
+      "Ranger"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d4",
+        "type": "Piercing",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": []
+  },
+  {
     "id": "sp_counterspell_xphb",
     "name": "Counterspell",
     "source": "XPHB",
@@ -5008,6 +5958,140 @@
     "affectsCreatureType": [],
     "areaTags": [],
     "miscTags": []
+  },
+  {
+    "id": "sp_crown_of_madness_xphb",
+    "name": "Crown of Madness",
+    "source": "XPHB",
+    "page": 259,
+    "level": 2,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>One creature that you can see within range must succeed on a Wisdom saving throw or have the Charmed condition for the duration. The creature succeeds automatically if it isn't Humanoid.</p><p>A spectral crown appears on the Charmed target's head, and it must use its action before moving on each of its turns to make a melee attack against a creature other than itself that you mentally choose. The target can act normally on its turn if you choose no creature or if no creature is within its reach. The target repeats the save at the end of each of its turns, ending the spell on itself on a success.</p><p>On your later turns, you must take the Magic action to maintain control of the target, or the spell ends.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Oathbreaker",
+        "shortName": "Oathbreaker",
+        "source": "DMG",
+        "className": "Paladin",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Rakdos Cultist",
+        "source": "GGR"
+      }
+    ],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Charmed"
+    ],
+    "affectsCreatureType": [
+      "Humanoid"
+    ],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_crusader_s_mantle_xphb",
+    "name": "Crusader's Mantle",
+    "source": "XPHB",
+    "page": 259,
+    "level": 3,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (30 feet emanation)",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You radiate a magical aura in a 30-foot Emanation [Area of Effect]. While in the aura, you and your allies each deal an extra 1d4 Radiant damage when hitting with a weapon or an Unarmed Strike.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "War Domain",
+        "shortName": "War",
+        "source": "PHB",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Solidarity Domain (PSA)",
+        "shortName": "Solidarity (PSA)",
+        "source": "PSA",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "War Domain",
+        "shortName": "War",
+        "source": "XPHB",
+        "className": "Cleric",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Vestige Patron",
+        "shortName": "Vestige",
+        "source": "AU",
+        "className": "Warlock",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d4",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "AAD"
+    ]
   },
   {
     "id": "sp_cure_wounds_xphb",
@@ -5684,6 +6768,87 @@
       "Permanent",
       "Sight Required"
     ]
+  },
+  {
+    "id": "sp_destructive_wave_xphb",
+    "name": "Destructive Wave",
+    "source": "XPHB",
+    "page": 261,
+    "level": 5,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (30 feet emanation)",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>Destructive energy ripples outward from you in a 30-foot Emanation [Area of Effect]. Each creature you choose in the Emanation [Area of Effect] makes a Constitution saving throw. On a failed save, a target takes 5d6 Thunder damage and 5d6 Radiant or Necrotic damage (your choice) and has the Prone condition. On a successful save, a target takes half as much damage only.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "Tempest Domain",
+        "shortName": "Tempest",
+        "source": "PHB",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Strength Domain (PSA)",
+        "shortName": "Strength (PSA)",
+        "source": "PSA",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Zeal Domain (PSA)",
+        "shortName": "Zeal (PSA)",
+        "source": "PSA",
+        "className": "Cleric",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Gruul Anarch",
+        "source": "GGR"
+      }
+    ],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "5d6",
+        "type": "Necrotic",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "5d6",
+        "type": "Thunder",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Prone"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Multiple Targets",
+      "Sphere"
+    ],
+    "miscTags": []
   },
   {
     "id": "sp_detect_evil_and_good_xphb",
@@ -7364,6 +8529,79 @@
     ]
   },
   {
+    "id": "sp_elemental_weapon_xphb",
+    "name": "Elemental Weapon",
+    "source": "XPHB",
+    "page": 267,
+    "level": 3,
+    "school": "Transmutation",
+    "castingTime": "1 action",
+    "range": "touch",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>A nonmagical weapon you touch becomes a magic weapon. Choose one of the following damage types: Acid, Cold, Fire, Lightning, or Thunder. For the duration, the weapon has a +1 bonus to attack rolls and deals an extra 1d4 damage of the chosen type when it hits.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>If you use a level 5-6 spell slot, the bonus to attack rolls increases to +2, and the extra damage increases to 2d4. If you use a level 7+ spell slot, the bonus increases to +3, and the extra damage increases to 3d4.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>If you use a level 5-6 spell slot, the bonus to attack rolls increases to +2, and the extra damage increases to 2d4. If you use a level 7+ spell slot, the bonus increases to +3, and the extra damage increases to 3d4.</p></div>",
+    "classes": [
+      "Artificer",
+      "Druid",
+      "Paladin",
+      "Ranger"
+    ],
+    "subclasses": [
+      {
+        "name": "Forge Domain",
+        "shortName": "Forge",
+        "source": "XGE",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "The Hexblade",
+        "shortName": "Hexblade",
+        "source": "XGE",
+        "className": "Warlock",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Izzet Engineer",
+        "source": "GGR"
+      }
+    ],
+    "feats": [
+      {
+        "name": "Mark of Making",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [
+      {
+        "formula": "1d4",
+        "type": "Acid",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD"
+    ]
+  },
+  {
     "id": "sp_elementalism_xphb",
     "name": "Elementalism",
     "source": "XPHB",
@@ -8357,6 +9595,56 @@
     "affectsCreatureType": [],
     "areaTags": [
       "Multiple Targets"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_feign_death_xphb",
+    "name": "Feign Death",
+    "source": "XPHB",
+    "page": 271,
+    "level": 3,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "touch",
+    "components": "V, S, M (a pinch of graveyard dirt)",
+    "duration": "1 hour",
+    "concentration": false,
+    "ritual": true,
+    "descriptionHtml": "<p>You touch a willing creature and put it into a cataleptic state that is indistinguishable from death.</p><p>For the duration, the target appears dead to outward inspection and to spells used to determine the target's status. The target has the Blinded and Incapacitated conditions, and its Speed is 0.</p><p>The target also has Resistance to all damage except Psychic damage, and it has Immunity to the Poisoned condition.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Cleric",
+      "Druid",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "The Undying",
+        "shortName": "Undying",
+        "source": "SCAG",
+        "className": "Warlock",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Blinded",
+      "Incapacitated"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
     ],
     "miscTags": []
   },
@@ -9617,6 +10905,64 @@
     ]
   },
   {
+    "id": "sp_fount_of_moonlight_xphb",
+    "name": "Fount of Moonlight",
+    "source": "XPHB",
+    "page": 277,
+    "level": 4,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Concentration, up to 10 minutes",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>A cool light wreathes your body for the duration, emitting Bright Light in a 20-foot radius and Dim Light for an additional 20 feet.</p><p>Until the spell ends, you have Resistance to Radiant damage, and your melee attacks deal an extra 2d6 Radiant damage on a hit.</p><p>In addition, immediately after you take damage from a creature you can see within 60 feet of yourself, you can take a Reaction to force the creature to make a Constitution saving throw. On a failed save, the creature has the Blinded condition until the end of your next turn.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Druid"
+    ],
+    "subclasses": [
+      {
+        "name": "Circle of the Moon",
+        "shortName": "Moon",
+        "source": "XPHB",
+        "className": "Druid",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Blinded"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD",
+      "LGT",
+      "Sight Required"
+    ]
+  },
+  {
     "id": "sp_freedom_of_movement_xphb",
     "name": "Freedom of Movement",
     "source": "XPHB",
@@ -9764,6 +11110,54 @@
     "miscTags": [
       "SCT"
     ]
+  },
+  {
+    "id": "sp_friends_xphb",
+    "name": "Friends",
+    "source": "XPHB",
+    "page": 277,
+    "level": 0,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "10 feet",
+    "components": "S, M (some makeup)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You magically emanate a sense of friendship toward one creature you can see within range. The target must succeed on a Wisdom saving throw or have the Charmed condition for the duration. The target succeeds automatically if it isn't a Humanoid, if you're fighting it, or if you have cast this spell on it within the past 24 hours.</p><p>The spell ends early if the target takes damage or if you make an attack roll, deal damage, or force anyone to make a saving throw. When the spell ends, the target knows it was Charmed by you.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Arcane Infiltrator",
+        "source": "AU"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Charmed"
+    ],
+    "affectsCreatureType": [
+      "Humanoid"
+    ],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": []
   },
   {
     "id": "sp_gaseous_form_xphb",
@@ -10255,6 +11649,71 @@
     "areaTags": [],
     "miscTags": [
       "Healing"
+    ]
+  },
+  {
+    "id": "sp_grasping_vine_xphb",
+    "name": "Grasping Vine",
+    "source": "XPHB",
+    "page": 280,
+    "level": 4,
+    "school": "Conjuration",
+    "castingTime": "1 bonus action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You conjure a vine that sprouts from a surface in an unoccupied space that you can see within range. The vine lasts for the duration.</p><p>Make a melee spell attack against a creature within 30 feet of the vine. On a hit, the target takes 4d8 Bludgeoning damage and is pulled up to 30 feet toward the vine; if the target is Huge or smaller, it has the Grappled condition (escape DC equal to your spell save DC). The vine can grapple only one creature at a time, and you can cause the vine to release a Grappled creature (no action required).</p><p>As a Bonus Action on your later turns, you can repeat the attack against a creature within 30 feet of the vine.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The number of creatures the vine can grapple increases by one for each spell slot level above 4.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The number of creatures the vine can grapple increases by one for each spell slot level above 4.</p></div>",
+    "classes": [
+      "Druid",
+      "Ranger"
+    ],
+    "subclasses": [
+      {
+        "name": "Nature Domain",
+        "shortName": "Nature",
+        "source": "PHB",
+        "className": "Cleric",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Golgari Agent",
+        "source": "GGR"
+      }
+    ],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d8",
+        "type": "Bludgeoning",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Grappled"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "FMV",
+      "Sight Required",
+      "UBA"
     ]
   },
   {
@@ -10949,6 +12408,51 @@
       "FMV",
       "UBA"
     ]
+  },
+  {
+    "id": "sp_hail_of_thorns_xphb",
+    "name": "Hail of Thorns",
+    "source": "XPHB",
+    "page": 283,
+    "level": 1,
+    "school": "Conjuration",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a Ranged weapon)",
+    "range": "self",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>As you hit the creature, this spell creates a rain of thorns that sprouts from your Ranged weapon or ammunition. The target of the attack and each creature within 5 feet of it make a Dexterity saving throw, taking 1d10 Piercing damage on a failed save or half as much damage on a successful one.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d10 for each spell slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d10 for each spell slot level above 1.</p></div>",
+    "classes": [
+      "Ranger"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d10",
+        "type": "Piercing",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "1d10",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "1d10",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": []
   },
   {
     "id": "sp_hallow_xphb",
@@ -11984,6 +13488,91 @@
     ]
   },
   {
+    "id": "sp_hunger_of_hadar_xphb",
+    "name": "Hunger of Hadar",
+    "source": "XPHB",
+    "page": 286,
+    "level": 3,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "150 feet",
+    "components": "V, S, M (a pickled tentacle)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You open a gateway to the Far Realm, a region infested with unspeakable horrors. A 20-foot-radius Sphere [Area of Effect] of Darkness appears, centered on a point within range and lasting for the duration. The Sphere [Area of Effect] is Difficult Terrain, and it is filled with strange whispers and slurping noises, which can be heard up to 30 feet away. No light, magical or otherwise, can illuminate the area, and creatures fully within it have the Blinded condition.</p><p>Any creature that starts its turn in the area takes 2d6 Cold damage. Any creature that ends its turn there must succeed on a Dexterity saving throw or take 2d6 Acid damage from otherworldly tentacles.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The Cold or Acid damage (your choice) increases by 1d6 for each spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The Cold or Acid damage (your choice) increases by 1d6 for each spell slot level above 3.</p></div>",
+    "classes": [
+      "Warlock"
+    ],
+    "subclasses": [
+      {
+        "name": "Aberrant Mind",
+        "shortName": "Aberrant Mind",
+        "source": "TCE",
+        "className": "Sorcerer",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Aberrant Sorcery",
+        "shortName": "Aberrant",
+        "source": "XPHB",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Shadow Sorcery",
+        "shortName": "Shadow",
+        "source": "RHW",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Great Old One Patron",
+        "shortName": "Great Old One",
+        "source": "XPHB",
+        "className": "Warlock",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Acid",
+        "stat": "none",
+        "upcastBonus": "1d6",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "2d6",
+        "type": "Cold",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Blinded"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "DFT",
+      "OBS"
+    ]
+  },
+  {
     "id": "sp_hunter_s_mark_xphb",
     "name": "Hunter's Mark",
     "source": "XPHB",
@@ -12808,6 +14397,63 @@
     ]
   },
   {
+    "id": "sp_jallarzi_s_storm_of_radiance_xphb",
+    "name": "Jallarzi's Storm of Radiance",
+    "source": "XPHB",
+    "page": 289,
+    "level": 5,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S, M (a pinch of phosphorus)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You unleash a storm of flashing light and raging thunder in a 10-foot-radius, 40-foot-high Cylinder [Area of Effect] centered on a point you can see within range. While in this area, creatures have the Blinded and Deafened conditions, and they can't cast spells with a Verbal component.</p><p>When the storm appears, each creature in it makes a Constitution saving throw, taking 2d10 Radiant damage and 2d10 Thunder damage on a failed save or half as much damage on a successful one. A creature also makes this save when it enters the spell's area for the first time on a turn or ends its turn there. A creature makes this save only once per turn.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The Radiant and Thunder damage increase by 1d10 for each spell slot level above 5.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The Radiant and Thunder damage increase by 1d10 for each spell slot level above 5.</p></div>",
+    "classes": [
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d10",
+        "type": "Radiant",
+        "stat": "none",
+        "upcastBonus": "1d10",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "2d10",
+        "type": "Thunder",
+        "stat": "none",
+        "upcastBonus": "1d10",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d10",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Blinded",
+      "Deafened"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Y"
+    ],
+    "miscTags": [
+      "Sight Required"
+    ]
+  },
+  {
     "id": "sp_jump_xphb",
     "name": "Jump",
     "source": "XPHB",
@@ -13366,6 +15012,59 @@
       "LGT",
       "OBJ"
     ]
+  },
+  {
+    "id": "sp_lightning_arrow_xphb",
+    "name": "Lightning Arrow",
+    "source": "XPHB",
+    "page": 292,
+    "level": 3,
+    "school": "Transmutation",
+    "castingTime": "1 bonus action (which you take immediately after hitting or missing a target with a ranged attack using a weapon)",
+    "range": "self",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>As your attack hits or misses the target, the weapon or ammunition you're using transforms into a lightning bolt. Instead of taking any damage or other effects from the attack, the target takes 4d8 Lightning damage on a hit or half as much damage on a miss. Each creature within 10 feet of the target then makes a Dexterity saving throw, taking 2d8 Lightning damage on a failed save or half as much damage on a successful one.</p><p>The weapon or ammunition then returns to its normal form.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage for both effects of the spell increases by 1d8 for each spell slot level above 3.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage for both effects of the spell increases by 1d8 for each spell slot level above 3.</p></div>",
+    "classes": [
+      "Ranger"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d8",
+        "type": "Lightning",
+        "label": "Damage 1",
+        "stat": "none",
+        "upcastBonus": "1d8",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "2d8",
+        "type": "Lightning",
+        "label": "Damage 2",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "dexterity",
+    "attackStat": "none",
+    "upcastBonus": "1d8",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": []
   },
   {
     "id": "sp_lightning_bolt_xphb",
@@ -14841,6 +16540,78 @@
       "Single Target"
     ],
     "miscTags": []
+  },
+  {
+    "id": "sp_mind_sliver_xphb",
+    "name": "Mind Sliver",
+    "source": "XPHB",
+    "page": 298,
+    "level": 0,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You try to temporarily sliver the mind of one creature you can see within range. The target must succeed on an Intelligence saving throw or take 1d6 Psychic damage and subtract 1d4 from the next saving throw it makes before the end of your next turn.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).</p></div>",
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Aberrant Mind",
+        "shortName": "Aberrant Mind",
+        "source": "TCE",
+        "className": "Sorcerer",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Aberrant Sorcery",
+        "shortName": "Aberrant",
+        "source": "XPHB",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "Psychic damage",
+      "scaling": {
+        "1": "1d6",
+        "5": "2d6",
+        "11": "3d6",
+        "17": "4d6"
+      }
+    },
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Scaling Damage",
+      "Sight Required"
+    ]
   },
   {
     "id": "sp_mind_spike_xphb",
@@ -16837,6 +18608,46 @@
     ],
     "miscTags": [
       "Sight Required"
+    ]
+  },
+  {
+    "id": "sp_power_word_fortify_xphb",
+    "name": "Power Word Fortify",
+    "source": "XPHB",
+    "page": 306,
+    "level": 7,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You fortify up to six creatures you can see within range. The spell bestows 120 Temporary Hit Points, which you divide among the spell's recipients.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Cleric"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Multiple Targets"
+    ],
+    "miscTags": [
+      "Sight Required",
+      "Temp HP"
     ]
   },
   {
@@ -20903,6 +22714,61 @@
     ]
   },
   {
+    "id": "sp_staggering_smite_xphb",
+    "name": "Staggering Smite",
+    "source": "XPHB",
+    "page": 320,
+    "level": 4,
+    "school": "Enchantment",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a Melee weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>The target takes an extra 4d6 Psychic damage from the attack, and the target must succeed on a Wisdom saving throw or have the Stunned condition until the end of your next turn.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The extra damage increases by 1d6 for each spell slot level above 4.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The extra damage increases by 1d6 for each spell slot level above 4.</p></div>",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "The Hexblade",
+        "shortName": "Hexblade",
+        "source": "XGE",
+        "className": "Warlock",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "1d6",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Stunned"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD"
+    ]
+  },
+  {
     "id": "sp_starry_wisp_xphb",
     "name": "Starry Wisp",
     "source": "XPHB",
@@ -20970,6 +22836,77 @@
       "LGT",
       "OBJ",
       "Scaling Damage"
+    ]
+  },
+  {
+    "id": "sp_steel_wind_strike_xphb",
+    "name": "Steel Wind Strike",
+    "source": "XPHB",
+    "page": 320,
+    "level": 5,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "30 feet",
+    "components": "S, M (a Melee weapon worth 1+ SP)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You flourish the weapon used in the casting and then vanish to strike like the wind. Choose up to five creatures you can see within range. Make a melee spell attack against each target. On a hit, a target takes 6d10 Force damage.</p><p>You then teleport to an unoccupied space you can see within 5 feet of one of the targets.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Ranger",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "War Domain",
+        "shortName": "War",
+        "source": "XPHB",
+        "className": "Cleric",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Hollow Warden",
+        "shortName": "Hollow Warden",
+        "source": "RHW",
+        "className": "Ranger",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Vestige Patron",
+        "shortName": "Vestige",
+        "source": "AU",
+        "className": "Warlock",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "6d10",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Multiple Targets"
+    ],
+    "miscTags": [
+      "Sight Required",
+      "Teleportation"
     ]
   },
   {
@@ -21355,6 +23292,218 @@
     ]
   },
   {
+    "id": "sp_summon_aberration_xphb",
+    "name": "Summon Aberration",
+    "source": "XPHB",
+    "page": 322,
+    "level": 4,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (a pickled tentacle and an eyeball in a platinum-inlaid vial worth 400+ GP)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You call forth an aberrant spirit. It manifests in an unoccupied space that you can see within range and uses the Aberrant Spirit stat block. When you cast the spell, choose Beholderkin, Mind Flayer, or Slaad. The creature resembles an Aberration of that kind, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.</p><p>The creature is an ally to you and your allies. In combat, it shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "classes": [
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Aberrant Mind",
+        "shortName": "Aberrant Mind",
+        "source": "TCE",
+        "className": "Sorcerer",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Aberrant Sorcery",
+        "shortName": "Aberrant",
+        "source": "XPHB",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Great Old One Patron",
+        "shortName": "Great Old One",
+        "source": "XPHB",
+        "className": "Warlock",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_summon_beast_xphb",
+    "name": "Summon Beast",
+    "source": "XPHB",
+    "page": 322,
+    "level": 2,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (a feather, tuft of fur, and fish tail inside a gilded acorn worth 200+ GP)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You call forth a bestial spirit. It manifests in an unoccupied space that you can see within range and uses the Bestial Spirit stat block. When you cast the spell, choose an environment: Air, Land, or Water. The creature resembles an animal of your choice that is native to the chosen environment, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.</p><p>The creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "classes": [
+      "Druid",
+      "Ranger"
+    ],
+    "subclasses": [
+      {
+        "name": "Shadow Sorcery",
+        "shortName": "Shadow",
+        "source": "RHW",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Illusionist",
+        "shortName": "Illusionist",
+        "source": "XPHB",
+        "className": "Wizard",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_summon_celestial_xphb",
+    "name": "Summon Celestial",
+    "source": "XPHB",
+    "page": 323,
+    "level": 5,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (a reliquary worth 500+ GP)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You call forth a Celestial spirit. It manifests in an angelic form in an unoccupied space that you can see within range and uses the Celestial Spirit stat block. When you cast the spell, choose Avenger or Defender. Your choice determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.</p><p>The creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "classes": [
+      "Cleric",
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "Celestial Patron",
+        "shortName": "Celestial",
+        "source": "XPHB",
+        "className": "Warlock",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_summon_construct_xphb",
+    "name": "Summon Construct",
+    "source": "XPHB",
+    "page": 324,
+    "level": 4,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (a lockbox worth 400+ GP)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You call forth the spirit of a Construct. It manifests in an unoccupied space that you can see within range and uses the Construct Spirit stat block. When you cast the spell, choose a material: Clay, Metal, or Stone. The creature resembles an animate statue (you determine the appearance) made of the chosen material, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.</p><p>The creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "classes": [
+      "Artificer",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Clockwork Soul",
+        "shortName": "Clockwork Soul",
+        "source": "TCE",
+        "className": "Sorcerer",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Clockwork Sorcery",
+        "shortName": "Clockwork",
+        "source": "XPHB",
+        "className": "Sorcerer",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
     "id": "sp_summon_dragon_xphb",
     "name": "Summon Dragon",
     "source": "XPHB",
@@ -21378,6 +23527,199 @@
         "shortName": "Draconic",
         "source": "XPHB",
         "className": "Sorcerer",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_summon_elemental_xphb",
+    "name": "Summon Elemental",
+    "source": "XPHB",
+    "page": 325,
+    "level": 4,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (air, a pebble, ash, and water inside a gold-inlaid vial worth 400+ GP)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You call forth an Elemental spirit. It manifests in an unoccupied space that you can see within range and uses the Elemental Spirit stat block. When you cast the spell, choose an element: Air, Earth, Fire, or Water. The creature resembles a bipedal form wreathed in the chosen element, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.</p><p>The creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "classes": [
+      "Druid",
+      "Ranger",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Oath of the Noble Genies",
+        "shortName": "Noble Genies",
+        "source": "FRHoF",
+        "className": "Paladin",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "The Fathomless",
+        "shortName": "Fathomless",
+        "source": "TCE",
+        "className": "Warlock",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_summon_fey_xphb",
+    "name": "Summon Fey",
+    "source": "XPHB",
+    "page": 326,
+    "level": 3,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (a gilded flower worth 300+ GP)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You call forth a Fey spirit. It manifests in an unoccupied space that you can see within range and uses the Fey Spirit stat block. When you cast the spell, choose a mood: Fuming, Mirthful, or Tricksy. The creature resembles a Fey creature of your choice marked by the chosen mood, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.</p><p>The creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "classes": [
+      "Druid",
+      "Ranger",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Fey Wanderer",
+        "shortName": "Fey Wanderer",
+        "source": "XPHB",
+        "className": "Ranger",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "Illusionist",
+        "shortName": "Illusionist",
+        "source": "XPHB",
+        "className": "Wizard",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_summon_fiend_xphb",
+    "name": "Summon Fiend",
+    "source": "XPHB",
+    "page": 326,
+    "level": 6,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (a bloody vial worth 600+ GP)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You call forth a fiendish spirit. It manifests in an unoccupied space that you can see within range and uses the Fiendish Spirit stat block. When you cast the spell, choose Demon, Devil, or Yugoloth. The creature resembles a Fiend of the chosen type, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.</p><p>The creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "classes": [
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning"
+    ]
+  },
+  {
+    "id": "sp_summon_undead_xphb",
+    "name": "Summon Undead",
+    "source": "XPHB",
+    "page": 328,
+    "level": 3,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "90 feet",
+    "components": "V, S, M (a gilded skull worth 300+ GP)",
+    "duration": "Concentration, up to 1 hour",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You call forth an Undead spirit. It manifests in an unoccupied space that you can see within range and uses the Undead Spirit stat block. When you cast the spell, choose the creature's form: Ghostly, Putrid, or Skeletal. The spirit resembles an Undead creature with the chosen form, which determines certain details in its stat block. The creature disappears when it drops to 0 Hit Points or when the spell ends.</p><p>The creature is an ally to you and your allies. In combat, the creature shares your Initiative count, but it takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any, it takes the Dodge action and uses its movement to avoid danger.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>Use the spell slot's level for the spell's level in the stat block.</p></div>",
+    "classes": [
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Undead Patron",
+        "shortName": "Undead",
+        "source": "RHW",
+        "className": "Warlock",
         "classSource": "XPHB"
       }
     ],
@@ -21506,6 +23848,42 @@
     ]
   },
   {
+    "id": "sp_swift_quiver_xphb",
+    "name": "Swift Quiver",
+    "source": "XPHB",
+    "page": 329,
+    "level": 5,
+    "school": "Transmutation",
+    "castingTime": "1 bonus action",
+    "range": "self",
+    "components": "V, S, M (a Quiver worth 1+ GP)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>When you cast the spell and as a Bonus Action until it ends, you can make two attacks with a weapon that fires Arrows or Bolts, such as a Longbow or a Light Crossbow. The spell magically creates the ammunition needed for each attack. Each Arrow or Bolt created by the spell deals damage like a nonmagical piece of ammunition of its kind and disintegrates immediately after it hits or misses.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Ranger"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "UBA"
+    ]
+  },
+  {
     "id": "sp_symbol_xphb",
     "name": "Symbol",
     "source": "XPHB",
@@ -21564,6 +23942,109 @@
     "miscTags": [
       "LGT",
       "OBJ"
+    ]
+  },
+  {
+    "id": "sp_synaptic_static_xphb",
+    "name": "Synaptic Static",
+    "source": "XPHB",
+    "page": 330,
+    "level": 5,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "120 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You cause psychic energy to erupt at a point within range. Each creature in a 20-foot-radius Sphere [Area of Effect] centered on that point makes an Intelligence saving throw, taking 8d6 Psychic damage on a failed save or half as much damage on a successful one.</p><p>On a failed save, a target also has muddled thoughts for 1 minute. During that time, it subtracts 1d6 from all its attack rolls and ability checks, as well as any Constitution saving throws to maintain Concentration. The target makes an Intelligence saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Knowledge Domain",
+        "shortName": "Knowledge",
+        "source": "FRHoF",
+        "className": "Cleric",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "8d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "intelligence",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": []
+  },
+  {
+    "id": "sp_tasha_s_bubbling_cauldron_xphb",
+    "name": "Tasha's Bubbling Cauldron",
+    "source": "XPHB",
+    "page": 330,
+    "level": 6,
+    "school": "Conjuration",
+    "castingTime": "1 action",
+    "range": "5 feet",
+    "components": "V, S, M (a gilded ladle worth 500 + GP)",
+    "duration": "10 minutes",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You conjure a claw-footed cauldron filled with bubbling liquid. The cauldron appears in an unoccupied space on the ground within 5 feet of you and lasts for the duration. The cauldron can't be moved and disappears when the spell ends, along with the bubbling liquid inside it.</p><p>The liquid in the cauldron duplicates the properties of a Common or an Uncommon potion of your choice (such as a Potion of Healing). As a Bonus Action, you or an ally can reach into the cauldron and withdraw one potion of that kind. The potion is contained in a vial that disappears when the potion is consumed. The cauldron can produce a number of these potions equal to your spellcasting ability modifier (minimum 1). When the last of these potions is withdrawn from the cauldron, the cauldron disappears, and the spell ends.</p><p>Potions obtained from the cauldron that aren't consumed disappear when you cast this spell again.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Alchemist",
+        "shortName": "Alchemist",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing",
+      "UA",
+      "UBA"
     ]
   },
   {
@@ -21710,6 +24191,42 @@
       "OBJ",
       "Sight Required"
     ]
+  },
+  {
+    "id": "sp_telepathy_xphb",
+    "name": "Telepathy",
+    "source": "XPHB",
+    "page": 331,
+    "level": 8,
+    "school": "Divination",
+    "castingTime": "1 action",
+    "range": "unlimited",
+    "components": "V, S, M (a pair of linked silver rings)",
+    "duration": "24 hours",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You create a telepathic link between yourself and a willing creature with which you are familiar. The creature can be anywhere on the same plane of existence as you. The spell ends if you or the target are no longer on the same plane.</p><p>Until the spell ends, you and the target can instantly share words, images, sounds, and other sensory messages with each other through the link, and the target recognizes you as the creature it is communicating with. The spell enables a creature to understand the meaning of your words and any sensory messages you send to it.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": []
   },
   {
     "id": "sp_teleport_xphb",
@@ -21926,6 +24443,189 @@
     ]
   },
   {
+    "id": "sp_thorn_whip_xphb",
+    "name": "Thorn Whip",
+    "source": "XPHB",
+    "page": 333,
+    "level": 0,
+    "school": "Transmutation",
+    "castingTime": "1 action",
+    "range": "30 feet",
+    "components": "V, S, M (the stem of a plant with thorns)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You create a vine-like whip covered in thorns that lashes out at your command toward a creature in range. Make a melee spell attack against the target. On a hit, the target takes 1d6 Piercing damage, and if it is Large or smaller, you can pull it up to 10 feet closer to you.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).</p></div>",
+    "classes": [
+      "Artificer",
+      "Druid"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Piercing",
+        "label": "",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "Piercing damage",
+      "scaling": {
+        "1": "1d6",
+        "5": "2d6",
+        "11": "3d6",
+        "17": "4d6"
+      }
+    },
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "FMV",
+      "Scaling Damage"
+    ]
+  },
+  {
+    "id": "sp_thunderclap_xphb",
+    "name": "Thunderclap",
+    "source": "XPHB",
+    "page": 333,
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (5 feet emanation)",
+    "components": "S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>Each creature in a 5-foot Emanation [Area of Effect] originating from you must succeed on a Constitution saving throw or take 1d6 Thunder damage. The spell's thunderous sound can be heard up to 100 feet away.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).</p></div>",
+    "classes": [
+      "Artificer",
+      "Bard",
+      "Druid",
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Mark of Storm",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Thunder",
+        "label": "",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "Thunder damage",
+      "scaling": {
+        "1": "1d6",
+        "5": "2d6",
+        "11": "3d6",
+        "17": "4d6"
+      }
+    },
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "Scaling Damage"
+    ]
+  },
+  {
+    "id": "sp_thunderous_smite_xphb",
+    "name": "Thunderous Smite",
+    "source": "XPHB",
+    "page": 334,
+    "level": 1,
+    "school": "Evocation",
+    "castingTime": "1 bonus action (which you take immediately after hitting a target with a Melee weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>Your strike rings with thunder that is audible within 300 feet of you, and the target takes an extra 2d6 Thunder damage from the attack. Additionally, if the target is a creature, it must succeed on a Strength saving throw or be pushed 10 feet away from you and have the Prone condition.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 1.</p></div>",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "Zeal Domain (PSA)",
+        "shortName": "Zeal (PSA)",
+        "source": "PSA",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Oath of the Noble Genies",
+        "shortName": "Noble Genies",
+        "source": "FRHoF",
+        "className": "Paladin",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Thunder",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "1d6",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "strength",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Prone"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD",
+      "FMV"
+    ]
+  },
+  {
     "id": "sp_thunderwave_xphb",
     "name": "Thunderwave",
     "source": "XPHB",
@@ -22081,6 +24781,81 @@
     "affectsCreatureType": [],
     "areaTags": [],
     "miscTags": []
+  },
+  {
+    "id": "sp_toll_the_dead_xphb",
+    "name": "Toll the Dead",
+    "source": "XPHB",
+    "page": 334,
+    "level": 0,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You point at one creature you can see within range, and the single chime of a dolorous bell is audible within 10 feet of the target. The target must succeed on a Wisdom saving throw or take 1d8 Necrotic damage. If the target is missing any of its Hit Points, it instead takes 1d12 Necrotic damage.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by one die when you reach levels 5 (2d8 or 2d12), 11 (3d8 or 3d12), and 17 (4d8 or 4d12).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by one die when you reach levels 5 (2d8 or 2d12), 11 (3d8 or 3d12), and 17 (4d8 or 4d12).</p></div>",
+    "classes": [
+      "Cleric",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d8",
+        "type": "Necrotic",
+        "label": "Normal",
+        "stat": "none",
+        "cantripScale": true
+      },
+      {
+        "formula": "1d12",
+        "type": "Necrotic",
+        "label": "Wounded Target",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": [
+      {
+        "label": "Necrotic damage",
+        "scaling": {
+          "1": "1d8",
+          "5": "2d8",
+          "11": "3d8",
+          "17": "4d8"
+        }
+      },
+      {
+        "label": "Necrotic damage to wounded creature",
+        "scaling": {
+          "1": "1d12",
+          "5": "2d12",
+          "11": "3d12",
+          "17": "4d12"
+        }
+      }
+    ],
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "Scaling Damage",
+      "Sight Required"
+    ]
   },
   {
     "id": "sp_tongues_xphb",
@@ -23676,6 +26451,127 @@
     ]
   },
   {
+    "id": "sp_witch_bolt_xphb",
+    "name": "Witch Bolt",
+    "source": "XPHB",
+    "page": 343,
+    "level": 1,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "60 feet",
+    "components": "V, S, M (a twig struck by lightning)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>A beam of crackling energy lances toward a creature within range, forming a sustained arc of lightning between you and the target. Make a ranged spell attack against it. On a hit, the target takes 2d12 Lightning damage.</p><p>On each of your subsequent turns, you can take a Bonus Action to deal 1d12 Lightning damage to the target automatically, even if the first attack missed.</p><p>The spell ends if the target is ever outside the spell's range or if it has Total Cover from you.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The initial damage increases by 1d12 for each spell slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The initial damage increases by 1d12 for each spell slot level above 1.</p></div>",
+    "classes": [
+      "Sorcerer",
+      "Warlock",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Reanimator",
+        "shortName": "Reanimator",
+        "source": "RHW",
+        "className": "Artificer",
+        "classSource": "EFA"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d12",
+        "type": "Lightning",
+        "label": "Damage 1",
+        "stat": "none",
+        "upcastBonus": "1d12",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "1d12",
+        "type": "Lightning",
+        "label": "Damage 2",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "spell",
+    "upcastBonus": "1d12",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Single Target"
+    ],
+    "miscTags": [
+      "UA",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_word_of_radiance_xphb",
+    "name": "Word of Radiance",
+    "source": "XPHB",
+    "page": 343,
+    "level": 0,
+    "school": "Evocation",
+    "castingTime": "1 action",
+    "range": "Self (5 feet emanation)",
+    "components": "V, M (a sunburst token)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>Burning radiance erupts from you in a 5-foot Emanation [Area of Effect]. Each creature of your choice that you can see in it must succeed on a Constitution saving throw or take 1d6 Radiant damage.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Cantrip Upgrade.</em></strong> <p>The damage increases by 1d6 when you reach levels 5 (2d6), 11 (3d6), and 17 (4d6).</p></div>",
+    "classes": [
+      "Cleric"
+    ],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": {
+      "label": "Radiant damage",
+      "scaling": {
+        "1": "1d6",
+        "5": "2d6",
+        "11": "3d6",
+        "17": "4d6"
+      }
+    },
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Multiple Targets"
+    ],
+    "miscTags": [
+      "Scaling Damage",
+      "Sight Required"
+    ]
+  },
+  {
     "id": "sp_word_of_recall_xphb",
     "name": "Word of Recall",
     "source": "XPHB",
@@ -23710,6 +26606,127 @@
     "miscTags": [
       "PS",
       "Teleportation"
+    ]
+  },
+  {
+    "id": "sp_wrathful_smite_xphb",
+    "name": "Wrathful Smite",
+    "source": "XPHB",
+    "page": 343,
+    "level": 1,
+    "school": "Necromancy",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a Melee weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "1 minute",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>The target takes an extra 1d6 Necrotic damage from the attack, and it must succeed on a Wisdom saving throw or have the Frightened condition until the spell ends. At the end of each of its turns, the Frightened target repeats the save, ending the spell on itself on a success.</p><br><div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 1.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>Using a Higher-Level Spell Slot.</em></strong> <p>The damage increases by 1d6 for each spell slot level above 1.</p></div>",
+    "classes": [
+      "Paladin"
+    ],
+    "subclasses": [
+      {
+        "name": "Hollow Warden",
+        "shortName": "Hollow Warden",
+        "source": "RHW",
+        "className": "Ranger",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "The Hexblade",
+        "shortName": "Hexblade",
+        "source": "XGE",
+        "className": "Warlock",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Necrotic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "1d6",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "1d6",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Frightened"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "AAD"
+    ]
+  },
+  {
+    "id": "sp_yolande_s_regal_presence_xphb",
+    "name": "Yolande's Regal Presence",
+    "source": "XPHB",
+    "page": 343,
+    "level": 5,
+    "school": "Enchantment",
+    "castingTime": "1 action",
+    "range": "Self (10 feet emanation)",
+    "components": "V, S, M (a miniature tiara)",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>You surround yourself with unearthly majesty in a 10-foot Emanation [Area of Effect]. Whenever the Emanation [Area of Effect] enters the space of a creature you can see and whenever a creature you can see enters the Emanation [Area of Effect] or ends its turn there, you can force that creature to make a Wisdom saving throw. On a failed save, the target takes 4d6 Psychic damage and has the Prone condition, and you can push it up to 10 feet away. On a successful save, the target takes half as much damage only. A creature makes this save only once per turn.</p>",
+    "higherLevelHtml": "",
+    "classes": [
+      "Bard",
+      "Wizard"
+    ],
+    "subclasses": [
+      {
+        "name": "Oath of Glory",
+        "shortName": "Glory",
+        "source": "XPHB",
+        "className": "Paladin",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [
+      "Prone"
+    ],
+    "affectsCreatureType": [],
+    "areaTags": [
+      "Sphere"
+    ],
+    "miscTags": [
+      "FMV",
+      "Sight Required"
     ]
   },
   {

@@ -322,6 +322,8 @@
             }
         });
 
+        let hasEarlyRendered = false;
+
         async function bootEarly() {
             if (sheetType !== 'player') {
                 let monster = null;
@@ -329,6 +331,8 @@
                 try {
                     const raw = localStorage.getItem(storageKey) || sessionStorage.getItem(storageKey);
                     if (raw) monster = JSON.parse(raw);
+                    localStorage.removeItem(storageKey);
+                    sessionStorage.removeItem(storageKey);
                 } catch (e) {}
 
                 if (!monster && monsterName) {
@@ -341,6 +345,7 @@
                     document.title = `${displayName} - ForgeD VTT`;
                     if (titleEl) titleEl.textContent = displayName;
                     window.VTT.creatureSheet.openSheet(monster, tokenId, characterId);
+                    hasEarlyRendered = true;
                     SheetWindowManager.registerStandalone(sheetKey, {
                         type: sheetType,
                         monsterData: monster,
@@ -354,6 +359,9 @@
         }
 
         async function bootSheet() {
+            if (sheetType !== 'player' && hasEarlyRendered) {
+                return;
+            }
             let loadedData = null;
             let displayName = 'Sheet';
 

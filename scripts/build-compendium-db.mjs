@@ -470,6 +470,65 @@ function unpackSubraceTraits(subrace, allSubraces) {
     return { traits, generalDesc };
 }
 
+function parseSpeeds(speedRaw, fallbackSpeed) {
+    const res = { walk: 30, fly: 0, swim: 0, climb: 0, burrow: 0 };
+    if (typeof speedRaw === 'number') {
+        res.walk = speedRaw;
+    } else if (typeof speedRaw === 'object' && speedRaw !== null) {
+        if (typeof speedRaw.walk === 'number') res.walk = speedRaw.walk;
+        else if (speedRaw.walk === true) res.walk = 30;
+        if (typeof speedRaw.fly === 'number') res.fly = speedRaw.fly;
+        else if (speedRaw.fly === true) res.fly = res.walk || 30;
+        if (typeof speedRaw.swim === 'number') res.swim = speedRaw.swim;
+        else if (speedRaw.swim === true) res.swim = res.walk || 30;
+        if (typeof speedRaw.climb === 'number') res.climb = speedRaw.climb;
+        else if (speedRaw.climb === true) res.climb = res.walk || 30;
+        if (typeof speedRaw.burrow === 'number') res.burrow = speedRaw.burrow;
+    } else if (fallbackSpeed) {
+        return parseSpeeds(fallbackSpeed, null);
+    }
+    return res;
+}
+
+function parseSenses(sensesRaw, traits, entries) {
+    const res = { darkvision: 0, blindsight: 0, truesight: 0, devilSight: 0 };
+    if (Array.isArray(sensesRaw)) {
+        for (const s of sensesRaw) {
+            if (typeof s === 'string') {
+                const dv = s.match(/darkvision\s*(\d+)/i);
+                if (dv) res.darkvision = Math.max(res.darkvision, parseInt(dv[1]) || 60);
+                const bs = s.match(/blindsight\s*(\d+)/i);
+                if (bs) res.blindsight = Math.max(res.blindsight, parseInt(bs[1]) || 0);
+                const ts = s.match(/truesight\s*(\d+)/i);
+                if (ts) res.truesight = Math.max(res.truesight, parseInt(ts[1]) || 0);
+            }
+        }
+    }
+    const scanItems = [...(traits || []), ...(entries || [])];
+    for (const item of scanItems) {
+        const title = (item.name || '').toLowerCase();
+        const text = renderEntriesToText(item.entries || item.rawEntries || item.description || item).toLowerCase();
+        if (title.includes('darkvision') || text.includes('darkvision')) {
+            const m = text.match(/darkvision(?:.*?to a distance of| of)?\s*(\d+)\s*ft/i) || text.match(/within\s*(\d+)\s*feet.*?dark/i);
+            if (m) {
+                res.darkvision = Math.max(res.darkvision, parseInt(m[1]) || 60);
+            } else if (title.includes('superior darkvision')) {
+                res.darkvision = Math.max(res.darkvision, 120);
+            } else if (res.darkvision === 0) {
+                res.darkvision = 60;
+            }
+        }
+        if (title.includes("devil's sight") || title.includes('devilsight')) {
+            res.devilSight = 120;
+        }
+        if (title.includes('blindsight') || text.includes('blindsight')) {
+            const m = text.match(/blindsight\s*(?:of\s*)?(\d+)\s*ft/i);
+            if (m) res.blindsight = Math.max(res.blindsight, parseInt(m[1]) || 30);
+        }
+    }
+    return res;
+}
+
 function buildRaces() {
     console.log('📦 Normalizing Races & Species with Unpacked Traits...');
     const racesFile = path.join(dataDir, 'races.json');
@@ -506,16 +565,23 @@ function buildRaces() {
             else if (typeof r.speed === 'object' && r.speed !== null) {
                 speed = Object.entries(r.speed).map(([k, v]) => `${k !== 'walk' ? k + ' ' : ''}${v} ft`).join(', ');
             }
+            const speeds = parseSpeeds(r.speed, null);
+            const senses = parseSenses(r.senses, traits, r.entries);
 
             const traitsHtml = renderEntriesToHtml(r.entries || []);
 
             allRaces.push({
                 id: `race_${cleanId(name)}_${cleanId(source)}`,
                 name,
+                raceName: name,
+                subraceName: null,
                 source,
                 page: r.page || 0,
                 size,
                 speed,
+                speeds,
+                senses,
+                ability: r.ability || null,
                 traitsHtml,
                 traits,
                 description: r.description
@@ -567,6 +633,8 @@ function buildRaces() {
             } else if (baseRace?.speed) {
                 speed = typeof baseRace.speed === 'number' ? `${baseRace.speed} ft` : '30 ft';
             }
+            const speeds = parseSpeeds(s.speed, baseRace?.speed);
+            const senses = parseSenses(s.senses, combinedTraits, s.entries || baseRace?.entries);
 
             allRaces.push({
                 id: `race_${cleanId(raceName)}_${cleanId(subName)}_${cleanId(source)}`,
@@ -577,6 +645,9 @@ function buildRaces() {
                 page: s.page || baseRace?.page || 0,
                 size,
                 speed,
+                speeds,
+                senses,
+                ability: s.ability || baseRace?.ability || null,
                 traitsHtml: renderEntriesToHtml(s.entries || []),
                 traits: combinedTraits,
                 description: s.description
@@ -591,17 +662,22 @@ function buildRaces() {
 
     allRaces.sort((a, b) => a.name.localeCompare(b.name));
 
-    // Catalog with pre-unpacked traits and descriptions
+    // Catalog with pre-unpacked traits, speeds, senses, and descriptions
     if (!fs.existsSync(targetDataDir)) {
         fs.mkdirSync(targetDataDir, { recursive: true });
     }
     const catalog = allRaces.map(r => ({ 
         id: r.id, 
         name: r.name, 
+        raceName: r.raceName || r.name,
+        subraceName: r.subraceName || null,
         source: r.source, 
         page: r.page, 
         size: r.size, 
         speed: r.speed,
+        speeds: r.speeds,
+        senses: r.senses,
+        ability: r.ability,
         traits: r.traits,
         description: r.description
     }));
@@ -650,6 +726,40 @@ function buildFeats() {
         const cnt = detectCounter(plain, f.name, 1);
         const fmla = detectFormula(f.entries, f.name, '', 1);
 
+        let isHalfFeat = false;
+        let abilityBonus = null;
+        let linkedSaveProficiency = false;
+
+        if (Array.isArray(f.ability) && name.toLowerCase() !== 'ability score improvement') {
+            for (const abItem of f.ability) {
+                if (abItem.choose) {
+                    const from = Array.isArray(abItem.choose.from) ? abItem.choose.from : [];
+                    const amount = parseInt(abItem.choose.amount) || 1;
+                    if (from.length > 0) {
+                        isHalfFeat = true;
+                        abilityBonus = { choose: from, amount };
+                        break;
+                    }
+                } else if (typeof abItem === 'object' && abItem !== null) {
+                    const fixed = {};
+                    for (const [k, v] of Object.entries(abItem)) {
+                        if (['str', 'dex', 'con', 'int', 'wis', 'cha'].includes(k) && typeof v === 'number') {
+                            fixed[k] = v;
+                            isHalfFeat = true;
+                        }
+                    }
+                    if (isHalfFeat) {
+                        abilityBonus = { fixed };
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (name.toLowerCase() === 'resilient' || desc.toLowerCase().includes('saving throw proficiency with the chosen ability')) {
+            linkedSaveProficiency = true;
+        }
+
         f.description = desc;
         f.actionType = actionType;
         f.hasCounter = cnt.hasCounter;
@@ -690,7 +800,10 @@ function buildFeats() {
             usesMax: cnt.usesMax,
             resetType: cnt.resetType,
             formula: fmla.formula || '',
-            formulaConfig: fmla.formulaConfig || null
+            formulaConfig: fmla.formulaConfig || null,
+            isHalfFeat,
+            abilityBonus,
+            linkedSaveProficiency
         });
     }
 
@@ -711,7 +824,10 @@ function buildFeats() {
         usesMax: f.usesMax,
         resetType: f.resetType,
         formula: f.formula,
-        formulaConfig: f.formulaConfig
+        formulaConfig: f.formulaConfig,
+        isHalfFeat: f.isHalfFeat,
+        abilityBonus: f.abilityBonus,
+        linkedSaveProficiency: f.linkedSaveProficiency
     }));
     fs.writeFileSync(path.join(targetDataDir, 'feats-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
 
@@ -1365,9 +1481,301 @@ function buildClasses() {
     console.log(`✅ Classes catalog: ${catalog.length} classes across ${grouped.size} partitions.`);
 }
 
+// ─── 5. Optional Features ─────────────────────────────────────────────────────
+const OPT_FEATURE_TYPE_MAP = {
+    'EI': 'Eldritch Invocation',
+    'AI': 'Artificer Infusion',
+    'MM': 'Metamagic',
+    'MV': 'Maneuver',
+    'MV:B': 'Maneuver (Battle Master)',
+    'MV:C2-UA': 'Maneuver (Cavalier)',
+    'MV:CR': 'Maneuver',
+    'MV:BB': 'Maneuver',
+    'MV:G': 'Maneuver',
+    'AS': 'Arcane Shot',
+    'AS:V1-UA': 'Arcane Shot',
+    'AS:V2-UA': 'Arcane Shot',
+    'FS': 'Fighting Style',
+    'FS:F': 'Fighting Style (Fighter)',
+    'FS:B': 'Fighting Style (Bard)',
+    'FS:P': 'Fighting Style (Paladin)',
+    'FS:R': 'Fighting Style (Ranger)',
+    'FS:C': 'Fighting Style',
+    'ED': 'Elemental Discipline',
+    'PB': 'Pact Boon',
+    'RN': 'Rune Knight Rune',
+    'AF': 'Alchemical Formula',
+    'TT': "Traveler's Trick",
+    'RP': 'Renown Perk',
+    'OR': 'Onomancy Resonant',
+    'HT': 'Heritage Trait',
+    'DG': 'Dark Gift',
+    'SG': 'Supernatural Gift',
+    'OTH': 'Other'
+};
+
+function resolveOptFeatureType(types) {
+    if (!types || !Array.isArray(types) || types.length === 0) {
+        return { typeName: 'Optional Feature', category: 'Optional Feature', categoryKey: 'other', defaultClass: null, defaultSubclass: null };
+    }
+    const primary = types[0];
+    let typeName = OPT_FEATURE_TYPE_MAP[primary];
+    if (!typeName) {
+        if (primary.startsWith('FS:')) typeName = `Fighting Style (${primary.slice(3)})`;
+        else if (primary.startsWith('MV:')) typeName = `Maneuver (${primary.slice(3)})`;
+        else if (primary.startsWith('AS:')) typeName = `Arcane Shot (${primary.slice(3)})`;
+        else typeName = primary;
+    }
+    let category = 'Optional Feature';
+    let categoryKey = 'other';
+    let defaultClass = null;
+    let defaultSubclass = null;
+
+    if (primary === 'EI') {
+        category = 'Eldritch Invocations';
+        categoryKey = 'invocation';
+        defaultClass = 'Warlock';
+    } else if (primary === 'AI') {
+        category = 'Artificer Infusions';
+        categoryKey = 'infusion';
+        defaultClass = 'Artificer';
+    } else if (primary === 'MM') {
+        category = 'Metamagic';
+        categoryKey = 'metamagic';
+        defaultClass = 'Sorcerer';
+    } else if (primary.startsWith('MV')) {
+        category = 'Battle Master Maneuvers';
+        categoryKey = 'maneuver';
+        defaultClass = 'Fighter';
+        defaultSubclass = 'Battle Master';
+    } else if (primary.startsWith('AS')) {
+        category = 'Arcane Shot Options';
+        categoryKey = 'arcane_shot';
+        defaultClass = 'Fighter';
+        defaultSubclass = 'Arcane Archer';
+    } else if (primary.startsWith('FS')) {
+        category = 'Fighting Styles';
+        categoryKey = 'fighting_style';
+        if (primary === 'FS:F') defaultClass = 'Fighter';
+        else if (primary === 'FS:P') defaultClass = 'Paladin';
+        else if (primary === 'FS:R') defaultClass = 'Ranger';
+        else if (primary === 'FS:B') defaultClass = 'Bard';
+    } else if (primary === 'ED') {
+        category = 'Elemental Disciplines';
+        categoryKey = 'discipline';
+        defaultClass = 'Monk';
+        defaultSubclass = 'Way of the Four Elements';
+    } else if (primary === 'PB') {
+        category = 'Pact Boons';
+        categoryKey = 'pact_boon';
+        defaultClass = 'Warlock';
+    } else if (primary === 'RN') {
+        category = 'Rune Knight Runes';
+        categoryKey = 'rune';
+        defaultClass = 'Fighter';
+        defaultSubclass = 'Rune Knight';
+    } else if (primary === 'AF') {
+        category = 'Alchemical Formulas';
+        categoryKey = 'alchemical_formula';
+    } else if (primary === 'HT') {
+        category = 'Heritage Traits';
+        categoryKey = 'heritage_trait';
+    } else if (primary === 'DG') {
+        category = 'Dark Gifts';
+        categoryKey = 'dark_gift';
+    } else if (primary === 'SG') {
+        category = 'Supernatural Gifts';
+        categoryKey = 'supernatural_gift';
+    } else {
+        category = typeName;
+    }
+
+    return { typeName, category, categoryKey, defaultClass, defaultSubclass };
+}
+
+function extractOptFeaturePrereqDetails(prereqList, defaultClass, defaultSubclass) {
+    let classPrereq = defaultClass || null;
+    let subclassPrereq = defaultSubclass || null;
+    let levelPrereq = 1;
+
+    if (Array.isArray(prereqList)) {
+        for (const p of prereqList) {
+            if (p.level) {
+                if (typeof p.level === 'object') {
+                    if (p.level.level) levelPrereq = Math.max(levelPrereq, parseInt(p.level.level) || 1);
+                    if (p.level.class?.name) classPrereq = p.level.class.name;
+                    if (p.level.subclass?.name) subclassPrereq = p.level.subclass.name;
+                } else if (typeof p.level === 'number') {
+                    levelPrereq = Math.max(levelPrereq, p.level);
+                }
+            }
+        }
+    }
+
+    return { classPrereq, subclassPrereq, levelPrereq };
+}
+
+function parseOptFeaturePrereq(prereqList) {
+    if (!Array.isArray(prereqList) || prereqList.length === 0) return 'None';
+    return prereqList.map(p => {
+        const parts = [];
+        if (p.level) {
+            if (typeof p.level === 'object') {
+                const lvlStr = p.level.level ? `Level ${p.level.level}` : '';
+                const clsStr = p.level.class?.name ? ` ${p.level.class.name}` : '';
+                if (lvlStr || clsStr) parts.push((lvlStr + clsStr).trim());
+            } else {
+                parts.push(`Level ${p.level}`);
+            }
+        }
+        if (p.pact) parts.push(`Pact of the ${p.pact}`);
+        if (p.patron) parts.push(`${p.patron} patron`);
+        if (p.spell) {
+            const sps = p.spell.map(sp => typeof sp === 'string' ? cleanTagsPlain(sp.replace(/#c$/, '')) : (sp.entrySummary || cleanTagsPlain(sp.entry) || 'Spell'));
+            parts.push(sps.join(' or '));
+        }
+        if (p.feature) {
+            const fts = p.feature.map(ft => cleanTagsPlain(ft));
+            parts.push(fts.join(', '));
+        }
+        if (p.item) parts.push(p.item.join(', '));
+        if (p.ability) parts.push(...p.ability.map(a => Object.entries(a).map(([k, v]) => `${k.toUpperCase()} ${v}`).join(' or ')));
+        if (p.spellcasting) parts.push('Spellcasting ability');
+        if (p.proficiency) parts.push(...p.proficiency.map(pr => Object.entries(pr).map(([k, v]) => `${v} proficiency`).join(' ')));
+        if (p.race) parts.push(p.race.map(rc => rc.name).join(' or '));
+        if (p.other) parts.push(cleanTagsPlain(p.other));
+        return parts.join(', ');
+    }).filter(Boolean).join('; ') || 'None';
+}
+
+function buildOptionalFeatures() {
+    console.log('📦 Normalizing Optional Features...');
+    const optFile = path.join(dataDir, 'optionalfeatures.json');
+    let rawList = [];
+    if (fs.existsSync(optFile)) {
+        try {
+            const data = JSON.parse(fs.readFileSync(optFile, 'utf8'));
+            rawList.push(...(data.optionalfeature || []));
+        } catch (e) {
+            console.warn('Failed to parse optionalfeatures.json:', e);
+        }
+    }
+    if (!isSrdOnly) {
+        rawList.push(...getBrewEntities('optionalfeature'));
+    }
+
+    const allFeatures = [];
+    const seen = new Set();
+
+    for (const f of rawList) {
+        if (isSrdOnly) {
+            const isSrd = f.srd !== undefined || f.srd52 !== undefined;
+            if (!isSrd) continue;
+        }
+
+        const name = (f.name || '').trim();
+        const source = (f.source || 'PHB').trim();
+        if (!name) continue;
+
+        const fTypes = Array.isArray(f.featureType) ? f.featureType : (f.featureType ? [f.featureType] : []);
+        const { typeName, category, categoryKey, defaultClass, defaultSubclass } = resolveOptFeatureType(fTypes);
+        const { classPrereq, subclassPrereq, levelPrereq } = extractOptFeaturePrereqDetails(f.prerequisite, defaultClass, defaultSubclass);
+
+        const desc = renderEntriesToText(f.entries || []);
+        const plain = (f.name || '') + ' ' + desc;
+        let actionType = detectActionType(plain, f.name);
+        const cnt = detectCounter(plain, f.name, 1);
+        let fmla = detectFormula(f.entries, f.name, '', 1);
+
+        if (categoryKey === 'maneuver' && !fmla.formula) {
+            fmla = {
+                formula: '1d8',
+                formulaConfig: {
+                    baseDice: '1d8',
+                    scalingMod: 'none',
+                    modClass: 'Fighter',
+                    extraBonus: 0
+                }
+            };
+        }
+
+        const key = `${name.toLowerCase()}|${source.toLowerCase()}|${(fTypes[0] || '').toLowerCase()}`;
+        if (seen.has(key)) continue;
+        seen.add(key);
+
+        const prereq = parseOptFeaturePrereq(f.prerequisite);
+        const entriesHtml = renderEntriesToHtml(f.entries || []);
+
+        allFeatures.push({
+            id: `optfeat_${cleanId(name)}_${cleanId(source)}`,
+            name,
+            source,
+            page: f.page || 0,
+            featureType: fTypes,
+            featureTypeName: typeName,
+            featureCategory: category,
+            categoryKey,
+            classPrereq,
+            subclassPrereq,
+            levelPrereq,
+            prerequisite: prereq,
+            entriesHtml,
+            description: desc,
+            actionType,
+            hasCounter: cnt.hasCounter,
+            usesMax: cnt.usesMax,
+            resetType: cnt.resetType || (categoryKey === 'maneuver' ? 'short' : null),
+            formula: fmla.formula || '',
+            formulaConfig: fmla.formulaConfig || null
+        });
+    }
+
+    allFeatures.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Catalog
+    const catalog = allFeatures.map(f => ({
+        id: f.id,
+        name: f.name,
+        source: f.source,
+        page: f.page,
+        featureType: f.featureType,
+        featureTypeName: f.featureTypeName,
+        featureCategory: f.featureCategory,
+        categoryKey: f.categoryKey,
+        classPrereq: f.classPrereq,
+        subclassPrereq: f.subclassPrereq,
+        levelPrereq: f.levelPrereq,
+        prerequisite: f.prerequisite,
+        description: f.description,
+        actionType: f.actionType,
+        hasCounter: f.hasCounter,
+        usesMax: f.usesMax,
+        resetType: f.resetType,
+        formula: f.formula,
+        formulaConfig: f.formulaConfig
+    }));
+    fs.writeFileSync(path.join(targetDataDir, 'optionalfeatures-catalog.json'), JSON.stringify(catalog, null, 2), 'utf8');
+
+    // Partitions
+    const partDir = path.join(targetDataDir, 'optionalfeatures-normalized');
+    if (!fs.existsSync(partDir)) fs.mkdirSync(partDir, { recursive: true });
+
+    const grouped = new Map();
+    for (const f of allFeatures) {
+        const srcKey = f.source.toLowerCase();
+        if (!grouped.has(srcKey)) grouped.set(srcKey, []);
+        grouped.get(srcKey).push(f);
+    }
+    for (const [srcKey, list] of grouped.entries()) {
+        fs.writeFileSync(path.join(partDir, `optionalfeatures-${srcKey}.json`), JSON.stringify(list, null, 2), 'utf8');
+    }
+    console.log(`✅ Optional Features catalog: ${catalog.length} entries across ${grouped.size} partitions.`);
+}
+
 console.log('🚀 Starting Compendium Compilers...');
 buildRaces();
 buildFeats();
 buildBackgrounds();
 buildClasses();
+buildOptionalFeatures();
 console.log('🎉 All compendium databases successfully compiled!');

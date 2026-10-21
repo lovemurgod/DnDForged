@@ -93,6 +93,10 @@ class SheetWindowManagerClass {
         for (const [key, ts] of this.remoteActiveSheets.entries()) {
             if (now - ts > 3000) {
                 this.remoteActiveSheets.delete(key);
+                try {
+                    localStorage.removeItem(`forgedvtt_popout_data_${key}`);
+                    sessionStorage.removeItem(`forgedvtt_popout_data_${key}`);
+                } catch (e) {}
             }
         }
         // Also ping active sheets
@@ -232,6 +236,13 @@ class SheetWindowManagerClass {
     }
 
     /**
+     * Alias for openPopout to maintain compatibility across dock and sheet callers
+     */
+    popOutSheet(options) {
+        return this.openPopout(options);
+    }
+
+    /**
      * Mark this current window as a standalone sheet instance
      */
     registerStandalone(sheetKey, sheetData) {
@@ -239,10 +250,20 @@ class SheetWindowManagerClass {
         this.currentSheetKey = sheetKey;
         this.sheetData = sheetData;
 
+        // Clean up temporary popout storage immediately upon consumption
+        try {
+            const tempStorageKey = `forgedvtt_popout_data_${sheetKey}`;
+            localStorage.removeItem(tempStorageKey);
+            sessionStorage.removeItem(tempStorageKey);
+        } catch (e) {}
+
         this.broadcast({
             action: 'SHEET_OPENED',
             sheetKey: sheetKey
         });
+
+        if (this._registered) return;
+        this._registered = true;
 
         // Continuous heartbeat pulse every 1.5s
         if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);

@@ -1,0 +1,545 @@
+[
+  {
+    "id": "sp_banishing_smite_xua2023druidandpaladin",
+    "name": "Banishing Smite",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 18,
+    "level": 5,
+    "school": "Conjuration",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "1 minute",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>The target hit by the strike takes an extra 5d10 Force damage, and the target must succeed on a Charisma saving throw or be transported to a harmless demiplane for the duration.</p><p>While in the demiplane, the target has the Incapacitated condition. At the end of each of its turns, the target repeats the save, ending the spell on itself on a success. When the spell ends on the target, it reappears in the space it left or in the nearest unoccupied space if that space is occupied.</p><p>If the spell lasts on the target for 1 minute and the target is an Aberration, a Celestial, an Elemental, a Fey, or a Fiend, the target doesn't return. It is instead transported to a random location on a plane associated with its creature type.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 6th level or higher, the extra damage increases by 1d10 for each slot level above 5th.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 6th level or higher, the extra damage increases by 1d10 for each slot level above 5th.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "TCE",
+        "className": "Artificer",
+        "classSource": "TCE"
+      },
+      {
+        "name": "Battle Smith",
+        "shortName": "Battle Smith",
+        "source": "EFA",
+        "className": "Artificer",
+        "classSource": "EFA"
+      },
+      {
+        "name": "Oath of the Noble Genies",
+        "shortName": "Noble Genies",
+        "source": "FRHoF",
+        "className": "Paladin",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "The Hexblade",
+        "shortName": "Hexblade",
+        "source": "XGE",
+        "className": "Warlock",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "5d10",
+        "type": "Force",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "charisma",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_blinding_smite_xua2023druidandpaladin",
+    "name": "Blinding Smite",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 18,
+    "level": 3,
+    "school": "Transmutation",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "1 minute",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>The target hit by the strike takes an extra 3d8 Radiant damage, and the target must succeed on a Constitution saving throw or have the Blinded condition until the spell ends. At the end of each of its turns, the Blinded target repeats the saving throw, ending the spell on itself on a success.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 4th level or higher, the extra damage increases by 1d8 for each slot level above 3rd.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 4th level or higher, the extra damage increases by 1d8 for each slot level above 3rd.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [
+      {
+        "name": "Boros Legionnaire",
+        "source": "GGR"
+      }
+    ],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "3d8",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_find_familiar_xua2023druidandpaladin",
+    "name": "Find Familiar",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 18,
+    "level": 1,
+    "school": "Conjuration",
+    "castingTime": "1 hour",
+    "range": "10 feet",
+    "components": "V, S, M (10 GP worth of charcoal, incense, and herbs that must be consumed by fire in a brass brazier)",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": true,
+    "descriptionHtml": "<p>You gain the service of an otherworldly spirit, which manifests as a little animal in an unoccupied space of your choice within range.</p><p>This creature uses the Otherworldly Familiar stat block. If you already have a familiar from this spell, that familiar transforms into the new one but retains its memories; you don't get a second familiar.</p><p>Whenever you cast the spell, choose the familiar's creature type: Celestial, Fey, or Fiend.</p><p>Also choose an environment: Air, Land, or Water.</p><p>The familiar resembles a Tiny animal of your choice—such as an owl, a cat, or a frog—that is native to the chosen environment. Both choices—creature type and environment—determine certain traits in the stat block.</p><div><strong><em>Combat.</em></strong> <p>The familiar is an ally to you and your companions. In combat, it shares your initiative count, but it takes its turn immediately after yours. It obeys your commands (no action required by you), but the familiar can't attack unless you use your Reaction on its turn to command it do so.</p><p>If you don't issue any commands, the familiar takes the Dodge action and uses its Move to avoid danger.</p></div><div><strong><em>Disappearance of the Familiar.</em></strong> <p>The familiar disappears if it drops to 0 Hit Points, if you dismiss it as a Bonus Action, or if you die. When it disappears, it leaves behind anything it was wearing or carrying. If you cast this spell again, you decide whether you summon the familiar that disappeared or a different one.</p></div><div><strong><em>Remote Viewing.</em></strong> <p>As a Magic action, you can see what your familiar sees and hear what it hears until the end of your next turn.</p></div><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 2nd level or higher, use the higher level wherever the spell's level appears in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 2nd level or higher, use the higher level wherever the spell's level appears in the stat block.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Necromancer",
+        "shortName": "Necromancer",
+        "source": "AU",
+        "className": "Wizard",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Familiar Friend",
+        "source": "AU"
+      },
+      {
+        "name": "Mark of Handling",
+        "source": "EFA"
+      },
+      {
+        "name": "Servo Crafting",
+        "source": "PSK"
+      },
+      {
+        "name": "Strixhaven Mascot",
+        "source": "SCC"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Sight Required",
+      "Summoning",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_find_steed_xua2023druidandpaladin",
+    "name": "Find Steed",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 19,
+    "level": 2,
+    "school": "Conjuration",
+    "castingTime": "10 minutes",
+    "range": "30 feet",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You gain the service of an otherworldly being, which manifests as a loyal steed in an unoccupied space of your choice within range.</p><p>This creature uses the Otherworldly Steed stat block. If you already have a steed from this spell, your steed is replaced by the new one.</p><p>The steed resembles a Large, rideable animal of your choice, such as a horse, a camel, a dire wolf, or an elk. Whenever you cast the spell, choose the steed's creature type—Celestial, Fey, or Fiend—which determines certain traits in the stat block.</p><div><strong><em>Combat.</em></strong> <p>The steed is an ally to you and your companions. In combat, it shares your initiative count, and it functions as a controlled mount (as defined in the rules on mounted combat). If you have the Incapacitated condition,  it takes its turn immediately after yours and acts independently, focusing on protecting you.</p></div><div><strong><em>Disappearance of the Steed.</em></strong> <p>The steed disappears if it drops to 0 Hit Points, if you dismiss it as a Bonus Action, or if you die. When it disappears, it leaves behind anything it was wearing or carrying. If you cast this spell again, you decide whether you summon the steed that disappeared or a different one.</p></div><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 3rd level or higher, use the higher level wherever the spell's level appears in the stat block.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 3rd level or higher, use the higher level wherever the spell's level appears in the stat block.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [
+      {
+        "name": "Mark of Passage",
+        "source": "EFA"
+      }
+    ],
+    "damageList": [],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Summoning",
+      "UBA"
+    ]
+  },
+  {
+    "id": "sp_glimmering_smite_xua2023druidandpaladin",
+    "name": "Glimmering Smite",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 20,
+    "level": 2,
+    "school": "Transmutation",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>The target hit by the strike takes an extra 2d6 Radiant damage, and if has the Invisible condition, that condition ends on it. In addition, until the spell ends, the target sheds bright light in a 5-foot radius, and attack rolls against it have Advantage.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 3rd level or higher, the extra damage increases by 1d6 for each slot level above 2nd.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 3rd level or higher, the extra damage increases by 1d6 for each slot level above 2nd.</p></div>",
+    "classes": [],
+    "subclasses": [],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Radiant",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "LGT"
+    ]
+  },
+  {
+    "id": "sp_searing_smite_xua2023druidandpaladin",
+    "name": "Searing Smite",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 20,
+    "level": 1,
+    "school": "Evocation",
+    "castingTime": "1 bonus action (which you take immediately after hitting a target with a weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>As you hit the target, your strike flares with white-hot intensity, and the target takes an extra 1d6 Fire damage and ignites with magical fire. At the start of each of its turns until the spell ends, the target must make a Constitution saving throw. On a failed save, it takes 1d6 Fire damage.</p><p>On a successful save, the spell ends.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Zeal Domain (PSA)",
+        "shortName": "Zeal (PSA)",
+        "source": "PSA",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Forge Domain",
+        "shortName": "Forge",
+        "source": "XGE",
+        "className": "Cleric",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Fire",
+        "label": "Damage 1",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      },
+      {
+        "formula": "1d6",
+        "type": "Fire",
+        "label": "Damage 2",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "constitution",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_spare_the_dying_xua2023druidandpaladin",
+    "name": "Spare the Dying",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 20,
+    "level": 0,
+    "school": "Necromancy",
+    "castingTime": "1 action",
+    "range": "touch",
+    "components": "V, S",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>You touch a creature that has the Dying condition. The creature regains 1 Hit Point.</p>",
+    "higherLevelHtml": "",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Reanimator",
+        "shortName": "Reanimator",
+        "source": "RHW",
+        "className": "Artificer",
+        "classSource": "EFA"
+      },
+      {
+        "name": "Grave Domain",
+        "shortName": "Grave",
+        "source": "RHW",
+        "className": "Cleric",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1",
+        "type": "Healing",
+        "stat": "none",
+        "cantripScale": true
+      }
+    ],
+    "cantripScale": true,
+    "saveAbility": "",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "Healing"
+    ]
+  },
+  {
+    "id": "sp_staggering_smite_xua2023druidandpaladin",
+    "name": "Staggering Smite",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 20,
+    "level": 4,
+    "school": "Enchantment",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>As you hit the creature, your strike pierces both body and mind. The target takes an extra 4d6 Psychic damage, and the target must succeed on a Wisdom saving throw or have the Stunned condition until the end of your next turn.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 5th level or higher, the extra damage increases by 1d6 for each slot level above 4th.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 5th level or higher, the extra damage increases by 1d6 for each slot level above 4th.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "The Hexblade",
+        "shortName": "Hexblade",
+        "source": "XGE",
+        "className": "Warlock",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "4d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  },
+  {
+    "id": "sp_thunderous_smite_xua2023druidandpaladin",
+    "name": "Thunderous Smite",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 21,
+    "level": 1,
+    "school": "Transmutation",
+    "castingTime": "1 bonus action (which you take immediately after hitting a target with a weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "Instantaneous",
+    "concentration": false,
+    "ritual": false,
+    "descriptionHtml": "<p>As you hit the target, your strike rings with thunder that is audible within 300 feet of you, and the target takes an extra 2d6 Thunder damage. Additionally, if the target is a creature, it must succeed on a Strength saving throw or be pushed 10 feet away from you and have the Prone condition.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Zeal Domain (PSA)",
+        "shortName": "Zeal (PSA)",
+        "source": "PSA",
+        "className": "Cleric",
+        "classSource": "PHB"
+      },
+      {
+        "name": "Oath of the Noble Genies",
+        "shortName": "Noble Genies",
+        "source": "FRHoF",
+        "className": "Paladin",
+        "classSource": "XPHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "2d6",
+        "type": "Thunder",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "strength",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": [
+      "FMV"
+    ]
+  },
+  {
+    "id": "sp_wrathful_smite_xua2023druidandpaladin",
+    "name": "Wrathful Smite",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 21,
+    "level": 1,
+    "school": "Enchantment",
+    "castingTime": "1 bonus action (which you take immediately after hitting a creature with a weapon or an Unarmed Strike)",
+    "range": "self",
+    "components": "V",
+    "duration": "Concentration, up to 1 minute",
+    "concentration": true,
+    "ritual": false,
+    "descriptionHtml": "<p>As you hit the creature, it takes an extra 1d6 Psychic damage, and it must succeed on a Wisdom saving throw or have the Frightened condition until the spell ends. At the end of each of its turns, the Frightened target repeats the saving throw, ending the spell on itself on a success.</p><br><div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.</p></div>",
+    "higherLevelHtml": "<div class=\"spell-entries-higher-level\"><strong><em>At Higher Levels.</em></strong> <p>When you cast this spell using a Spell Slot of 2nd level or higher, the damage increases by 1d6 for each slot level above 1st.</p></div>",
+    "classes": [],
+    "subclasses": [
+      {
+        "name": "Hollow Warden",
+        "shortName": "Hollow Warden",
+        "source": "RHW",
+        "className": "Ranger",
+        "classSource": "XPHB"
+      },
+      {
+        "name": "The Hexblade",
+        "shortName": "Hexblade",
+        "source": "XGE",
+        "className": "Warlock",
+        "classSource": "PHB"
+      }
+    ],
+    "races": [],
+    "backgrounds": [],
+    "feats": [],
+    "damageList": [
+      {
+        "formula": "1d6",
+        "type": "Psychic",
+        "label": "",
+        "stat": "none",
+        "upcastBonus": "",
+        "upcastScaleStep": 1
+      }
+    ],
+    "cantripScale": false,
+    "saveAbility": "wisdom",
+    "attackStat": "none",
+    "upcastBonus": "",
+    "upcastScaleStep": 1,
+    "scalingLevelDice": null,
+    "conditionInflict": [],
+    "affectsCreatureType": [],
+    "areaTags": [],
+    "miscTags": []
+  }
+]

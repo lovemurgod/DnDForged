@@ -1,5 +1,38 @@
 // ForgeDVTT Player Sheet Module
 import { VTTDiceParser } from './vtt-dice-parser.js';
+import {
+    cleanId,
+    resolveCharClassLevel,
+    injectDiceChips,
+    simulateRoll,
+    evaluateAbilityFormula,
+    evaluateAbilityMaxUses,
+    extractTextFromEntries,
+    getFeatureDescriptionText,
+    detectFeatureCounter,
+    getFeatureKey
+} from './player-sheet/vtt-sheet-rolls.js';
+import {
+    ALL_SKILLS,
+    STANDARD_TOOLS,
+    SKILL_NAMES_MASTER,
+    ensureAssignPlayersModalExists,
+    openAssignPlayersModal as openAssignPlayersModalExt,
+    closeAssignPlayersModal,
+    saveAssignPlayers as saveAssignPlayersExt,
+    getMacroModalSnapshot
+} from './player-sheet/vtt-sheet-modals.js';
+import {
+    normalizeSkill,
+    normalizeTool,
+    expandToolOptions,
+    ensureBackgroundImportModalExists as ensureBackgroundImportModalExistsExt,
+    promptBackgroundImportModal as promptBackgroundImportModalExt,
+    switchModalTab,
+    getSuggestedCategoryName,
+    populateOptFeatureTypeDropdown
+} from './player-sheet/vtt-sheet-importers.js';
+
 export function initVttPlayerSheet(vtt) {
     const panel = document.getElementById('player-sheet-panel');
     const minimizeBtn = document.getElementById('player-sheet-minimize-btn');
@@ -12,6 +45,84 @@ export function initVttPlayerSheet(vtt) {
 
     if (!panel || !minimizeBtn || !contentEl) {
         console.warn('[PlayerSheet] Panel elements not found in DOM.');
+    }
+
+    if (panel) {
+        // Restore saved panel width if previously stored
+        const savedWidth = localStorage.getItem('vtt_ps_panel_width');
+        if (savedWidth) {
+            const parsed = parseInt(savedWidth, 10);
+            if (!isNaN(parsed) && parsed >= 360) {
+                panel.style.setProperty('--ps-panel-width', `${parsed}px`);
+            }
+        }
+
+        let resizeHandle = panel.querySelector('.ps-resize-handle');
+        if (!resizeHandle) {
+            resizeHandle = document.createElement('div');
+            resizeHandle.className = 'ps-resize-handle';
+            resizeHandle.title = 'Drag border to resize player sheet (double-click to reset)';
+            panel.appendChild(resizeHandle);
+        }
+
+        let isResizing = false;
+        let startX = 0;
+        let startWidth = 450;
+
+        resizeHandle.addEventListener('pointerdown', (e) => {
+            if (e.button !== 0) return;
+            isResizing = true;
+            startX = e.clientX;
+            const currentComputed = panel.getBoundingClientRect().width;
+            startWidth = currentComputed || 450;
+            panel.classList.add('is-resizing');
+            resizeHandle.setPointerCapture(e.pointerId);
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+        resizeHandle.addEventListener('pointermove', (e) => {
+            if (!isResizing) return;
+            const deltaX = e.clientX - startX;
+            let newWidth = startWidth + deltaX;
+            const maxWidth = Math.min(window.innerWidth * 0.85, 1200);
+            newWidth = Math.max(360, Math.min(newWidth, maxWidth));
+            panel.style.setProperty('--ps-panel-width', `${Math.round(newWidth)}px`);
+            if (window.VTT?.sheetDock?.updatePosition) {
+                window.VTT.sheetDock.updatePosition();
+            }
+        });
+
+        const stopResizing = (e) => {
+            if (!isResizing) return;
+            isResizing = false;
+            panel.classList.remove('is-resizing');
+            try {
+                if (resizeHandle.hasPointerCapture(e.pointerId)) {
+                    resizeHandle.releasePointerCapture(e.pointerId);
+                }
+            } catch (err) {}
+            const currentComputed = Math.round(panel.getBoundingClientRect().width);
+            if (currentComputed >= 360) {
+                localStorage.setItem('vtt_ps_panel_width', currentComputed);
+            }
+            if (window.VTT?.sheetDock?.updatePosition) {
+                window.VTT.sheetDock.updatePosition();
+            }
+        };
+
+        resizeHandle.addEventListener('pointerup', stopResizing);
+        resizeHandle.addEventListener('pointercancel', stopResizing);
+
+        resizeHandle.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            panel.style.setProperty('--ps-panel-width', '450px');
+            localStorage.removeItem('vtt_ps_panel_width');
+            if (window.VTT?.sheetDock?.updatePosition) {
+                window.VTT.sheetDock.updatePosition();
+            }
+        });
     }
 
     let isMinimized = false;
@@ -42,6 +153,29 @@ export function initVttPlayerSheet(vtt) {
         return s.length > 6 ? s.slice(0, 5) : s;
     }
 
+    const GENERIC_EQUIPMENT_OPTIONS = {
+        weaponMartial: [
+            'Battleaxe', 'Flail', 'Glaive', 'Greataxe', 'Greatsword', 'Halberd', 'Lance', 'Longsword', 'Maul', 'Morningstar', 'Pike', 'Rapier', 'Scimitar', 'Shortsword', 'Trident', 'War Pick', 'Warhammer', 'Whip', 'Blowgun', 'Hand Crossbow', 'Heavy Crossbow', 'Longbow', 'Net'
+        ],
+        weaponMartialMelee: [
+            'Battleaxe', 'Flail', 'Glaive', 'Greataxe', 'Greatsword', 'Halberd', 'Lance', 'Longsword', 'Maul', 'Morningstar', 'Pike', 'Rapier', 'Scimitar', 'Shortsword', 'Trident', 'War Pick', 'Warhammer', 'Whip'
+        ],
+        weaponSimple: [
+            'Club', 'Dagger', 'Greatclub', 'Handaxe', 'Javelin', 'Light Hammer', 'Mace', 'Quarterstaff', 'Sickle', 'Spear', 'Light Crossbow', 'Dart', 'Shortbow', 'Sling'
+        ],
+        weaponSimpleMelee: [
+            'Club', 'Dagger', 'Greatclub', 'Handaxe', 'Javelin', 'Light Hammer', 'Mace', 'Quarterstaff', 'Sickle', 'Spear'
+        ],
+        focusHoly: ['Amulet', 'Emblem', 'Reliquary'],
+        focusArcane: ['Crystal', 'Orb', 'Rod', 'Staff', 'Wand'],
+        focusDruidic: ['Sprig of Mistletoe', 'Totem', 'Wooden Staff', 'Yew Wand'],
+        instrumentMusical: ['Bagpipes', 'Drum', 'Dulcimer', 'Flute', 'Lute', 'Lyre', 'Horn', 'Pan Flute', 'Shawm', 'Viol'],
+        gamingSet: ['Dice Set', 'Dragonchess Set', 'Playing Card Set', 'Three-Dragon Ante Set'],
+        artisanTools: [
+            "Alchemist's Supplies", "Brewer's Supplies", "Calligrapher's Supplies", "Carpenter's Tools", "Cartographer's Tools", "Cobbler's Tools", "Cook's Utensils", "Glassblower's Tools", "Jeweler's Tools", "Leatherworker's Tools", "Mason's Tools", "Painter's Supplies", "Potter's Tools", "Smith's Tools", "Tinker's Tools", "Weaver's Tools", "Woodcarver's Tools"
+        ]
+    };
+
     let builderPromise = null;
     function ensureBuilderCache() {
         if (builderCache) return Promise.resolve(builderCache);
@@ -51,14 +185,16 @@ export function initVttPlayerSheet(vtt) {
             fetch('data/backgrounds-catalog.json').then(r => r.json()).catch(() => fetch('data/backgrounds.json').then(r => r.json()).catch(() => ({}))),
             fetch('data/classes-catalog.json').then(r => r.json()).catch(() => fetch('data/class/index.json').then(res => res.json()).catch(() => ({}))),
             fetch('data/class/index.json').then(r => r.json()).catch(() => ({})),
-            fetch('data/feats-catalog.json').then(r => r.json()).catch(() => fetch('/data/feats-catalog.json').then(r => r.json()).catch(() => ({})))
-        ]).then(([raceData, bgData, classCatalog, classIndex, featsData]) => {
+            fetch('data/feats-catalog.json').then(r => r.json()).catch(() => fetch('/data/feats-catalog.json').then(r => r.json()).catch(() => ({}))),
+            fetch('data/optionalfeatures-catalog.json').then(r => r.json()).catch(() => fetch('/data/optionalfeatures-catalog.json').then(r => r.json()).catch(() => ([])))
+        ]).then(([raceData, bgData, classCatalog, classIndex, featsData, optFeaturesData]) => {
             builderCache = {
                 races: Array.isArray(raceData) ? raceData : (raceData.race || []),
                 bgs: Array.isArray(bgData) ? bgData : (bgData.background || []),
                 classes: Array.isArray(classCatalog) ? classCatalog : null,
                 classIndex: classIndex || {},
-                feats: Array.isArray(featsData) ? featsData : (featsData.feat || [])
+                feats: Array.isArray(featsData) ? featsData : (featsData.feat || []),
+                optionalFeatures: Array.isArray(optFeaturesData) ? optFeaturesData : []
             };
             return builderCache;
         }).catch(err => {
@@ -87,22 +223,49 @@ export function initVttPlayerSheet(vtt) {
         return 'd8';
     }
 
-    function injectDiceChips(text) {
-        if (!text) return '';
-        let result = text;
-        result = result.replace(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?(?![^<]*>)/gi, (match, count, faces, sign, mod) => {
-            let formula = `${count}d${faces}`;
-            if (sign && mod) formula += `${sign}${mod}`;
-            return `<button class="dice-chip" data-formula="${formula}" title="Roll: ${formula}">${match.trim()}</button>`;
-        });
-        result = result.replace(/\+(\d+)\s+to\s+hit(?![^<]*>)/gi, (match, bonus) => {
-            const formula = `1d20+${bonus}`;
-            return `<button class="dice-chip" data-formula="${formula}" title="Roll attack: ${formula}">+${bonus} to hit</button>`;
-        });
-        result = result.replace(/DC\s+(\d+)(?![^<]*>)/gi, (match, dcVal) => {
-            return `<button class="dice-chip dc-chip" data-dc="${dcVal}" style="border-color: var(--color-gold-base);" title="Ping DC ${dcVal} to Chat">DC ${dcVal}</button>`;
-        });
-        return result;
+    function injectDiceChips(html) {
+        if (!html) return '';
+        let clean = html;
+
+        // Strip any existing dice-chips back to their inner content to prevent nested buttons
+        clean = clean.replace(/<button class="dice-chip[^"]*"[^>]*>([\s\S]*?)<\/button>/gi, '$1');
+        clean = clean.replace(/<button class="dice-chip[^"]*"[^>]*>([\s\S]*?)<\/button>/gi, '$1');
+
+        const parts = clean.split(/(<[^>]*>)/g);
+        let inButton = false;
+        let inAnchor = false;
+
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            if (!part) continue;
+
+            if (part.startsWith('<') && part.endsWith('>')) {
+                const tagLower = part.toLowerCase();
+                if (tagLower.startsWith('<button')) inButton = true;
+                else if (tagLower.startsWith('</button')) inButton = false;
+                else if (tagLower.startsWith('<a')) inAnchor = true;
+                else if (tagLower.startsWith('</a')) inAnchor = false;
+                continue;
+            }
+
+            if (!inButton && !inAnchor) {
+                let text = part;
+                text = text.replace(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?/gi, (match, count, faces, sign, mod) => {
+                    let formula = `${count}d${faces}`;
+                    if (sign && mod) formula += `${sign}${mod}`;
+                    return `<button class="dice-chip" data-formula="${formula}" title="Roll: ${formula}">${match.trim()}</button>`;
+                });
+                text = text.replace(/\+(\d+)\s+to\s+hit/gi, (match, bonus) => {
+                    const formula = `1d20+${bonus}`;
+                    return `<button class="dice-chip" data-formula="${formula}" title="Roll attack: ${formula}">+${bonus} to hit</button>`;
+                });
+                text = text.replace(/DC\s+(\d+)/gi, (match, dcVal) => {
+                    return `<button class="dice-chip dc-chip" data-dc="${dcVal}" style="border-color: var(--color-gold-base);" title="Ping DC ${dcVal} to Chat">DC ${dcVal}</button>`;
+                });
+                parts[i] = text;
+            }
+        }
+        return parts.join('');
     }
 
     function getSpellMetaStrings(sp, slKey) {
@@ -230,17 +393,17 @@ if (typeof window !== 'undefined' && !window._vttKeyTrackerBound) {
 
 function simulateRoll(formula, critRange = 20, optEvent = null) {
     if (!formula || typeof formula !== 'string') {
-        return { formula: formula || '0', diceList: [], total: 0, breakdownStr: '0', isCritSuccess: false, isCritFail: false };
+        return { formula: formula || '0', diceList: [], total: 0, breakdownStr: '0', compactBreakdown: '0', isCritSuccess: false, isCritFail: false };
     }
 
-    let strippedFormula = formula.replace(/\[.*?\]/g, '').trim();
-    if (strippedFormula.startsWith('+')) strippedFormula = strippedFormula.slice(1).trim();
+    let activeFormula = formula.trim();
+    if (activeFormula.startsWith('+')) activeFormula = activeFormula.slice(1).trim();
 
     // Advantage / Disadvantage handling
     let isAdvantage = false;
     let isDisadvantage = false;
     
-    if (strippedFormula.match(/(?:^|[^0-9])(?:1)?d20/i)) {
+    if (activeFormula.match(/(?:^|[^0-9])(?:1)?d20/i)) {
         let rollMode = 'normal';
         try {
             rollMode = (window.VTT && window.VTT.currentRollMode) || localStorage.getItem('vtt_current_roll_mode') || 'normal';
@@ -259,15 +422,16 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         if (rollMode === 'dis') isDisadvantage = true;
     }
 
-    if (isAdvantage) strippedFormula = strippedFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kh1');
-    if (isDisadvantage) strippedFormula = strippedFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kl1');
+    if (isAdvantage) activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kh1');
+    if (isDisadvantage) activeFormula = activeFormula.replace(/(^|[^0-9])(?:1)?d20/gi, '$12d20kl1');
 
-    if (!strippedFormula) {
+    if (!activeFormula) {
         return {
             formula,
             diceList: [],
             total: 0,
             breakdownStr: '',
+            compactBreakdown: '',
             isCritSuccess: false,
             isCritFail: false
         };
@@ -278,11 +442,13 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
 
     if (parser && typeof parser.roll === 'function') {
         try {
-            rollResult = parser.roll(strippedFormula);
+            rollResult = parser.roll(activeFormula);
         } catch (e) {
             console.warn('[simulateRoll] VTTDiceParser.roll failed:', e);
         }
     }
+
+    const strippedFormula = activeFormula.replace(/\[.*?\]/g, '').trim();
 
     if (!rollResult && window.Renderer?.dice?.lang?.getTree3) {
         try {
@@ -294,6 +460,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     total,
                     diceList: meta.diceList || [],
                     breakdownStr: (meta.html || []).join("") || `<strong>${total}</strong>`,
+                    compactBreakdown: `${total}`,
                     isCritSuccess: meta.isCritSuccess || false,
                     isCritFail: meta.isCritFail || false
                 };
@@ -383,6 +550,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         diceList,
         total: rollResult.total,
         breakdownStr: rollResult.breakdownStr || `<strong>${rollResult.total}</strong>`,
+        compactBreakdown: rollResult.compactBreakdown || `${rollResult.total}`,
         isCritSuccess,
         isCritFail
     };
@@ -391,6 +559,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
     window.vttPlayerSheetAPI = {
         getSpellCache: () => spellCache || (window.VTTSpellManager?.getSpellCache ? window.VTTSpellManager.getSpellCache() : null),
         setSpellCache: (cache) => { spellCache = cache; },
+        invalidateItemCache: () => { itemCache = null; },
         getSpellMetaStrings: (sp) => getSpellMetaStrings(sp),
         simulateRoll: (formula, crit, optEvent) => simulateRoll(formula, crit, optEvent),
         parseSpellToMacro: (spData, newSpell) => window.VTTSpellManager?.parseSpellToMacro(spData, newSpell),
@@ -449,8 +618,8 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                                 <i class="fa-solid fa-chevron-right" style="transition:transform 0.2s;"></i>
                             </div>
                             <div style="display:flex; align-items:center; gap:6px;">
-                                <div class="pc-spell-post-chat" data-level="${slKey}" data-idx="${idx}" style="cursor:pointer;" title="Post Spellcard to Chat">
-                                    <i class="fa-solid fa-wand-magic-sparkles text-gradient-gold"></i>
+                                <div class="pc-spell-post-chat" data-level="${slKey}" data-idx="${idx}" style="cursor:pointer;" title="Ping description to chat">
+                                    <i class="fa-solid fa-comment-dots text-gradient-gold"></i>
                                 </div>
                                 <div class="pc-spell-ping-macro" data-level="${slKey}" data-idx="${idx}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary);" title="Roll Spell">
                                     <span class="pc-spell-name">${spName}</span>${badges}
@@ -559,90 +728,8 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         });
     }
 
-    function ensureAssignPlayersModalExists() {
-        if (document.getElementById('pc-assign-players-modal')) return;
-
-        const container = document.createElement('div');
-        container.innerHTML = `
-            <div id="pc-assign-players-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
-            <div id="pc-assign-players-modal" class="vtt-sheet-submodal vtt-hidden" style="width:400px;">
-                <div style="padding:16px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center;">
-                    <h3 style="margin:0; color:var(--color-gold-base);">Assign Players</h3>
-                    <button id="modal-assign-players-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <div id="modal-assign-players-list" style="padding:16px; display:flex; flex-direction:column; gap:8px; max-height:60vh; overflow-y:auto;">
-                </div>
-                <div style="padding:12px 16px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:flex-end; gap:8px; background:rgba(0,0,0,0.2);">
-                    <button class="btn btn-secondary btn-sm" id="modal-assign-players-cancel">Cancel</button>
-                    <button class="btn btn-primary btn-sm" id="modal-assign-players-save">Save Assignments</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(container);
-
-        document.getElementById('pc-assign-players-overlay').addEventListener('click', closeAssignPlayersModal);
-        document.getElementById('modal-assign-players-close').addEventListener('click', closeAssignPlayersModal);
-        document.getElementById('modal-assign-players-cancel').addEventListener('click', closeAssignPlayersModal);
-        document.getElementById('modal-assign-players-save').addEventListener('click', saveAssignPlayers);
-    }
-
-    let activeAssignChar = null;
-
     function openAssignPlayersModal(char) {
-        ensureAssignPlayersModalExists();
-        activeAssignChar = char;
-        const listEl = document.getElementById('modal-assign-players-list');
-        listEl.innerHTML = '';
-
-        const knownPlayers = (vtt.campaignState && vtt.campaignState.knownPlayers) ? vtt.campaignState.knownPlayers : [];
-        const allowedUsers = (vtt.campaignState && vtt.campaignState.allowedUsers) ? vtt.campaignState.allowedUsers : [];
-        const allPotentialPlayers = [...new Set([...knownPlayers, ...allowedUsers])];
-        const assigned = char.assignedPlayers || [];
-
-        let html = '';
-        const allIsChecked = assigned.includes('*') ? 'checked' : '';
-        html += `
-            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; margin-bottom: 8px;">
-                <input type="checkbox" class="pc-assign-cb" value="*" ${allIsChecked}>
-                <span style="font-weight:bold; color:var(--color-gold-light);">All Players</span>
-            </label>
-        `;
-
-        if (allPotentialPlayers.length === 0) {
-            html += '<div style="color:var(--color-text-muted);">No other players have joined or been allowlisted yet.</div>';
-        } else {
-            allPotentialPlayers.forEach(p => {
-                const isChecked = assigned.includes(p) ? 'checked' : '';
-                html += `
-                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-                        <input type="checkbox" class="pc-assign-cb" value="${p}" ${isChecked}>
-                        <span>${p}</span>
-                    </label>
-                `;
-            });
-        }
-        listEl.innerHTML = html;
-
-        document.getElementById('pc-assign-players-overlay').classList.remove('vtt-hidden');
-        document.getElementById('pc-assign-players-modal').classList.remove('vtt-hidden');
-    }
-
-    function closeAssignPlayersModal() {
-        document.getElementById('pc-assign-players-overlay').classList.add('vtt-hidden');
-        document.getElementById('pc-assign-players-modal').classList.add('vtt-hidden');
-        activeAssignChar = null;
-    }
-
-    function saveAssignPlayers() {
-        if (!activeAssignChar) return;
-        const cbs = document.querySelectorAll('.pc-assign-cb');
-        const assigned = [];
-        cbs.forEach(cb => {
-            if (cb.checked) assigned.push(cb.value);
-        });
-        activeAssignChar.assignedPlayers = assigned;
-        saveAndEmit(activeAssignChar);
-        closeAssignPlayersModal();
+        openAssignPlayersModalExt(char, vtt, (updatedChar) => saveAndEmit(updatedChar));
     }
 
 
@@ -953,7 +1040,18 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             return (features && features.length === 1) ? `Background - ${features[0].name}` : 'Background Features';
         }
         if (currentCategory === 'charoption') return 'Character Options';
-        if (currentCategory === 'optionalfeature') return 'Optional Features';
+        if (currentCategory === 'optionalfeature') {
+            if (features && features.length > 0) {
+                const first = features[0];
+                const cat = first.featureCategory || first.featureTypeName;
+                if (cat && cat !== 'Optional Feature') {
+                    if (cat.endsWith('y')) return cat.slice(0, -1) + 'ies';
+                    if (!cat.endsWith('s')) return cat + 's';
+                    return cat;
+                }
+            }
+            return 'Optional Features';
+        }
         return 'Special Features';
     }
 
@@ -971,6 +1069,24 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         if (selectAll) {
             selectAll.checked = (allChks.length > 0 && checkedVisible.length === allChks.length);
         }
+    }
+
+    function populateOptFeatureTypeDropdown(data) {
+        const sel = document.getElementById('import-optfeat-type-sel');
+        if (!sel) return;
+        const typeCounts = new Map();
+        (data || []).forEach(f => {
+            const cat = f.featureCategory || f.featureTypeName || 'Other';
+            typeCounts.set(cat, (typeCounts.get(cat) || 0) + 1);
+        });
+
+        let opts = '<option value="">-- All Feature Types --</option>';
+        const sortedTypes = Array.from(typeCounts.keys()).sort((a, b) => a.localeCompare(b));
+        sortedTypes.forEach(t => {
+            opts += `<option value="${t}">${t} (${typeCounts.get(t)})</option>`;
+        });
+        sel.innerHTML = opts;
+        sel.value = '';
     }
 
     function promptImportDestinationCategory(features, defaultCatName) {
@@ -1022,7 +1138,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             desc = f.traits.map(t => `**${t.name}**: ${t.description}`).join('\n\n');
         }
         if (!desc && f.source && f.id) {
-            let cType = currentCategory === 'feat' ? 'feats' : (currentCategory === 'race' ? 'races' : (currentCategory === 'background' ? 'backgrounds' : ''));
+            let cType = currentCategory === 'feat' ? 'feats' : (currentCategory === 'race' ? 'races' : (currentCategory === 'background' ? 'backgrounds' : (currentCategory === 'optionalfeature' ? 'optionalfeatures' : '')));
             if (cType) {
                 try {
                     const res = await fetch(`/api/compendium/${cType}/${encodeURIComponent(f.source)}/${encodeURIComponent(f.id)}`);
@@ -1124,6 +1240,13 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     if (f.subclassShortName !== subSel) return;
                 }
             }
+            if (currentCategory === 'optionalfeature') {
+                const optType = document.getElementById('import-optfeat-type-sel')?.value || '';
+                if (optType) {
+                    const matchesCategory = (f.featureCategory === optType || f.featureTypeName === optType || (f.featureType && f.featureType.includes(optType)));
+                    if (!matchesCategory) return;
+                }
+            }
             if (activeEdition !== 'all') {
                 const src = (f.source || '').toUpperCase();
                 if (activeEdition === 'phb' && src !== 'PHB') return;
@@ -1146,6 +1269,12 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             const source = f.source ? `[${f.source}]` : '';
             const isSubclass = f.subclassShortName ? `<span style="color:#d4af37; font-weight:600;">[${f.subclassShortName}]</span> ` : '';
             let levelText = f.level !== undefined ? `Lvl ${f.level} • ` : '';
+
+            // Feature Type badge if optional feature
+            let optTypeBadge = '';
+            if (f.featureTypeName) {
+                optTypeBadge = `<span style="font-size:0.65rem; background:rgba(155,89,182,0.25); color:#af7ac5; border:1px solid rgba(155,89,182,0.4); padding:1px 5px; border-radius:3px;">${f.featureTypeName}</span>`;
+            }
 
             // Action badge
             let actionBadge = '';
@@ -1178,6 +1307,33 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 traitsBadge = `<span style="font-size:0.65rem; background:rgba(41,128,185,0.2); color:#5dade2; border:1px solid rgba(41,128,185,0.4); padding:1px 5px; border-radius:3px;"><i class="fa-solid fa-dna" style="font-size:0.6rem;"></i> ${f.traits.length} Traits</span>`;
             }
 
+            let prereqText = (f.prerequisite && f.prerequisite !== 'None') ? `Prereq: ${f.prerequisite} • ` : '';
+
+            // Prerequisite validation against current character
+            let prereqBadge = '';
+            if (currentChar && (f.classPrereq || f.levelPrereq || (f.level && currentCategory === 'class'))) {
+                const curClasses = (currentChar.classes && currentChar.classes.length > 0) ? currentChar.classes : [{ name: currentChar.class || '', level: currentChar.level || 1 }];
+                const totalCharLevel = curClasses.reduce((sum, c) => sum + (parseInt(c.level) || 1), 0);
+                let meetsPrereq = true;
+
+                if (f.classPrereq) {
+                    const matchedClass = curClasses.find(c => (c.name || '').toLowerCase().includes(f.classPrereq.toLowerCase()));
+                    if (!matchedClass) {
+                        meetsPrereq = false;
+                    } else if (f.levelPrereq && (parseInt(matchedClass.level) || 1) < f.levelPrereq) {
+                        meetsPrereq = false;
+                    }
+                } else if (f.levelPrereq && totalCharLevel < f.levelPrereq) {
+                    meetsPrereq = false;
+                } else if (currentCategory === 'class' && f.level && totalCharLevel < f.level) {
+                    meetsPrereq = false;
+                }
+
+                if (!meetsPrereq) {
+                    prereqBadge = `<span style="font-size:0.65rem; background:rgba(231,76,60,0.2); color:#e74c3c; border:1px solid rgba(231,76,60,0.4); padding:1px 5px; border-radius:3px;" title="Prerequisites not yet met by character"><i class="fa-solid fa-triangle-exclamation"></i> Prereq Unmet</span>`;
+                }
+            }
+
             html += `
                 <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); padding:6px 8px; border-radius:4px; gap:8px; border:1px solid rgba(255,255,255,0.04);">
                     <div style="display:flex; align-items:center; gap:8px; flex:1; min-width:0;">
@@ -1185,12 +1341,14 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         <div style="display:flex; flex-direction:column; overflow:hidden;">
                             <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
                                 <span style="font-size:0.85rem; font-weight:bold; color:var(--color-text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${displayName}</span>
+                                ${optTypeBadge}
+                                ${prereqBadge}
                                 ${actionBadge}
                                 ${formulaBadge}
                                 ${counterBadge}
                                 ${traitsBadge}
                             </div>
-                            <span style="font-size:0.7rem; color:var(--color-text-muted);">${levelText}${isSubclass}${source}</span>
+                            <span style="font-size:0.7rem; color:var(--color-text-muted);">${levelText}${isSubclass}${prereqText}${source}</span>
                         </div>
                     </div>
                     <div style="display:flex; align-items:center; gap:4px; flex-shrink:0;">
@@ -1545,6 +1703,11 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                             <option value="">-- All Subclasses --</option>
                         </select>
                     </div>
+                    <div id="import-optfeat-filters" style="display:none; gap:8px;">
+                        <select id="import-optfeat-type-sel" style="flex:1; padding:4px; font-size:0.8rem; background:#2a2a2a; color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
+                            <option value="">-- All Feature Types --</option>
+                        </select>
+                    </div>
                     <div style="display:flex; gap:6px; align-items:center;">
                         <input type="text" id="import-search" placeholder="Search features..." style="flex:1; padding:4px; font-size:0.8rem; background:#2a2a2a; color:var(--color-text-primary); border:1px solid var(--color-border-subtle); border-radius:4px;">
                         <div class="btn-group" id="import-edition-filter-group" style="display:inline-flex; border-radius:4px; overflow:hidden; border:1px solid var(--color-border-subtle); flex-shrink:0;">
@@ -1725,18 +1888,21 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         // Import filters
         document.getElementById('import-search')?.addEventListener('input', renderImportFeatureList);
         document.getElementById('import-subclass-sel')?.addEventListener('change', renderImportFeatureList);
+        document.getElementById('import-optfeat-type-sel')?.addEventListener('change', renderImportFeatureList);
 
         document.getElementById('import-category-sel')?.addEventListener('change', (e) => {
             currentCategory = e.target.value;
             selectedImportFeatures.clear();
             updateImportBatchButton();
             const classFilters = document.getElementById('import-class-filters');
+            const optfeatFilters = document.getElementById('import-optfeat-filters');
             currentImportData = [];
             const searchInput = document.getElementById('import-search');
             if (searchInput) searchInput.value = '';
             
             if (currentCategory === 'class') {
                 if (classFilters) classFilters.style.display = 'flex';
+                if (optfeatFilters) optfeatFilters.style.display = 'none';
                 const classSel = document.getElementById('import-class-sel');
                 if (classSel) classSel.value = '';
                 const subSel = document.getElementById('import-subclass-sel');
@@ -1747,6 +1913,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 renderImportFeatureList();
             } else {
                 if (classFilters) classFilters.style.display = 'none';
+                if (optfeatFilters) optfeatFilters.style.display = (currentCategory === 'optionalfeature') ? 'flex' : 'none';
                 let file = '';
                 let key = '';
                 let fallback = '';
@@ -1754,7 +1921,11 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 if (currentCategory === 'race') { file = 'data/races-catalog.json'; key = 'race'; fallback = 'data/races.json'; }
                 if (currentCategory === 'background') { file = 'data/backgrounds-catalog.json'; key = 'background'; fallback = 'data/backgrounds.json'; }
                 if (currentCategory === 'charoption') { file = 'data/charcreationoptions.json'; key = 'charoption'; }
-                if (currentCategory === 'optionalfeature') { file = 'data/optionalfeatures.json'; key = 'optionalfeature'; }
+                if (currentCategory === 'optionalfeature') {
+                    file = '/api/compendium/optionalfeatures/catalog';
+                    key = 'optionalfeature';
+                    fallback = 'data/optionalfeatures-catalog.json';
+                }
                 
                 const listEl = document.getElementById('import-feature-list');
                 if (listEl) listEl.innerHTML = '<div style="text-align:center; color:var(--color-text-muted); font-size:0.8rem; margin-top:20px;">Loading...</div>';
@@ -1764,11 +1935,17 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     return r.json();
                 }).then(data => {
                     currentImportData = Array.isArray(data) ? data : (data[key] || []);
+                    if (currentCategory === 'optionalfeature') {
+                        populateOptFeatureTypeDropdown(currentImportData);
+                    }
                     renderImportFeatureList();
                 }).catch(() => {
                     if (fallback) {
                         fetch(fallback).then(r => r.json()).then(data => {
                             currentImportData = Array.isArray(data) ? data : (data[key] || []);
+                            if (currentCategory === 'optionalfeature') {
+                                populateOptFeatureTypeDropdown(currentImportData);
+                            }
                             renderImportFeatureList();
                         }).catch(() => {
                             if (listEl) listEl.innerHTML = '<div style="text-align:center; color:var(--color-error); font-size:0.8rem; margin-top:20px;">Failed to load data</div>';
@@ -1890,6 +2067,26 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             pendingImportFeatures.forEach((f, i) => {
                 // If item is a Species with pre-unpacked traits in database, unpack into separate cards
                 if (Array.isArray(f.traits) && f.traits.length > 0) {
+                    if (f.speeds) {
+                        char.speed = {
+                            walk: f.speeds.walk !== undefined ? f.speeds.walk : 30,
+                            fly: f.speeds.fly || 0,
+                            swim: f.speeds.swim || 0,
+                            climb: f.speeds.climb || 0,
+                            burrow: f.speeds.burrow || 0
+                        };
+                    }
+                    if (f.senses) {
+                        char.senses = {
+                            darkvision: f.senses.darkvision || 0,
+                            blindsight: f.senses.blindsight || 0,
+                            truesight: f.senses.truesight || 0,
+                            devilSight: f.senses.devilSight || 0
+                        };
+                    }
+                    if (f.size) char.size = f.size;
+                    char.race = f.name;
+
                     f.traits.forEach((t, ti) => {
                         const desc = (t.description || '').trim();
                         const actionType = t.actionType || 'passive';
@@ -2037,6 +2234,25 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
 
                     let formula = f.formula || '';
                     let formulaConfig = f.formulaConfig || null;
+
+                    // Handle Half-Feat Ability Score Increases & Saving Throws
+                    if (f.isHalfFeat && f.abilityBonus) {
+                        let statKey = '';
+                        const chooseList = f.abilityBonus.chooseFrom || f.abilityBonus.choose;
+                        if (Array.isArray(chooseList) && chooseList.length > 0) {
+                            statKey = chooseList[0];
+                        } else if (f.abilityBonus.fixed) {
+                            statKey = Object.keys(f.abilityBonus.fixed)[0];
+                        }
+                        if (statKey) {
+                            char.stats = char.stats || { str: 10, dex: 10, con: 10, int: 10, wis: 10, cha: 10 };
+                            char.stats[statKey] = (parseInt(char.stats[statKey]) || 10) + 1;
+                            if (f.linkedSaveProficiency) {
+                                char.saves = char.saves || {};
+                                char.saves[f.linkedSaveProficiency] = true;
+                            }
+                        }
+                    }
 
                     const rawName = f.name || 'Untitled Ability';
                     const badge = getDisplaySourceBadge(f.source);
@@ -2857,305 +3073,14 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
     }
 
     function ensureBackgroundImportModalExists() {
-        if (document.getElementById('pc-bg-import-modal')) return;
-
-        const container = document.createElement('div');
-        container.innerHTML = `
-            <div id="pc-bg-import-overlay" class="vtt-sheet-submodal-overlay vtt-hidden"></div>
-            <div id="pc-bg-import-modal" class="vtt-sheet-submodal vtt-hidden" style="width:580px;">
-                <div style="padding:14px 18px; border-bottom:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.35);">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <i class="fa-solid fa-scroll text-gradient-gold" style="font-size:1.3rem;"></i>
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <h3 style="margin:0; color:var(--color-gold-base); font-size:1.05rem;" id="bg-import-modal-title">
-                                Import Background
-                            </h3>
-                            <span id="bg-import-modal-source" class="badge" style="background:rgba(212,175,55,0.15); color:var(--color-gold-light); font-size:0.7rem; border:1px solid rgba(212,175,55,0.3); padding:1px 6px; border-radius:4px;">PHB</span>
-                        </div>
-                    </div>
-                    <button id="bg-import-modal-close" style="background:transparent; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.2rem;" title="Close"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-
-                <div style="padding:16px 18px; overflow-y:auto; display:flex; flex-direction:column; gap:14px; flex:1;" class="scroll-styled" id="bg-import-modal-body">
-                </div>
-
-                <div style="padding:12px 18px; border-top:1px solid var(--color-border-subtle); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.35);">
-                    <button id="bg-import-modal-cancel" class="btn btn-secondary btn-sm">Cancel</button>
-                    <button id="bg-import-modal-apply" class="btn btn-primary btn-sm" style="display:inline-flex; align-items:center; gap:6px;"><i class="fa-solid fa-check"></i> Apply to Character</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(container);
+        ensureBackgroundImportModalExistsExt();
     }
 
     function promptBackgroundImportModal(bgData, char, onCancel, onApplied) {
-        if (!bgData || !char) return;
-        ensureBackgroundImportModalExists();
-
-        const modal = document.getElementById('pc-bg-import-modal');
-        const overlay = document.getElementById('pc-bg-import-overlay');
-        const titleEl = document.getElementById('bg-import-modal-title');
-        const sourceEl = document.getElementById('bg-import-modal-source');
-        const bodyEl = document.getElementById('bg-import-modal-body');
-
-        if (!modal || !overlay || !bodyEl) return;
-
-        titleEl.innerText = bgData.name || 'Background';
-        if (sourceEl) sourceEl.innerText = bgData.source || 'PHB';
-
-        const skillsData = bgData.skillsData || { fixed: [], choose: null };
-        const toolsData = bgData.toolsData || { fixed: [], choose: null };
-        const equipData = bgData.equipmentData || { fixedItems: [], fixedGold: 0, choiceSets: [] };
-        const features = bgData.features || [];
-
-        // 1. Overview description snippet
-        let descSnippet = '';
-        if (bgData.description) {
-            const clean = bgData.description.replace(/^#+\s+/gm, '').trim();
-            const firstPara = clean.split('\n\n')[0] || '';
-            if (firstPara) {
-                descSnippet = `<div style="font-size:0.8rem; color:var(--color-text-secondary); line-height:1.4; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); padding:8px 12px; border-radius:6px;">${firstPara.slice(0, 300)}${firstPara.length > 300 ? '...' : ''}</div>`;
-            }
-        }
-
-        // 2. Skill Proficiencies HTML
-        const fixedSkills = (skillsData.fixed || []).map(normalizeSkill);
-        const skillBadges = fixedSkills.map(s => `
-            <span style="background:rgba(46,204,113,0.15); border:1px solid rgba(46,204,113,0.4); color:#2ecc71; padding:3px 8px; border-radius:4px; font-size:0.8rem; display:inline-flex; align-items:center; gap:5px;">
-                <i class="fa-solid fa-check"></i> ${s}
-            </span>
-        `).join('');
-
-        let chooseSkillHtml = '';
-        if (skillsData.choose && Array.isArray(skillsData.choose.from)) {
-            const count = skillsData.choose.count || 1;
-            const fromSkills = skillsData.choose.from.map(normalizeSkill);
-            chooseSkillHtml = `
-                <div style="margin-top:6px;">
-                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:4px;">
-                        Choose <strong style="color:var(--color-gold-base);">${count}</strong> skill${count > 1 ? 's' : ''}:
-                    </div>
-                    <div style="display:flex; flex-wrap:wrap; gap:6px;" class="bg-skill-choice-group" data-count="${count}">
-                        ${fromSkills.map((s, idx) => `
-                            <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:4px 8px; border-radius:4px; margin:0;">
-                                <input type="checkbox" class="bg-skill-choice-chk" value="${s}" ${idx < count ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base);">
-                                <span>${s}</span>
-                            </label>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        const skillsHtml = `
-            <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px;">
-                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                    <i class="fa-solid fa-graduation-cap"></i> Skill Proficiencies
-                </div>
-                <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                    ${skillBadges || (skillsData.choose ? '' : '<span style="font-size:0.8rem; color:var(--color-text-muted);">None</span>')}
-                </div>
-                ${chooseSkillHtml}
-            </div>
-        `;
-
-        // 3. Tool Proficiencies HTML
-        const fixedTools = (toolsData.fixed || []).map(normalizeTool);
-        const toolBadges = fixedTools.map(t => `
-            <span style="background:rgba(52,152,219,0.15); border:1px solid rgba(52,152,219,0.4); color:#3498db; padding:3px 8px; border-radius:4px; font-size:0.8rem; display:inline-flex; align-items:center; gap:5px;">
-                <i class="fa-solid fa-wrench"></i> ${t}
-            </span>
-        `).join('');
-
-        let chooseToolHtml = '';
-        if (toolsData.choose && Array.isArray(toolsData.choose.from)) {
-            const count = toolsData.choose.count || 1;
-            const expandedTools = expandToolOptions(toolsData.choose.from);
-            chooseToolHtml = `
-                <div style="margin-top:6px;">
-                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:4px;">
-                        Choose <strong style="color:var(--color-gold-base);">${count}</strong> tool${count > 1 ? 's' : ''}:
-                    </div>
-                    <div style="display:flex; flex-direction:column; gap:6px;">
-                        ${Array.from({ length: count }).map((_, idx) => `
-                            <select class="bg-tool-choice-sel" style="width:100%; padding:5px 8px; font-size:0.8rem; background:#222; color:#fff; border:1px solid var(--color-border-subtle); border-radius:4px;">
-                                ${expandedTools.map(t => `<option value="${t}">${t}</option>`).join('')}
-                            </select>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-
-        const toolsHtml = `
-            <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px;">
-                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                    <i class="fa-solid fa-toolbox"></i> Tool Proficiencies
-                </div>
-                <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                    ${toolBadges || (toolsData.choose ? '' : '<span style="font-size:0.8rem; color:var(--color-text-muted);">None</span>')}
-                </div>
-                ${chooseToolHtml}
-            </div>
-        `;
-
-        // 4. Starting Equipment & Gold HTML
-        const fixedItems = equipData.fixedItems || [];
-        const fixedGold = equipData.fixedGold || 0;
-        const choiceSets = equipData.choiceSets || [];
-
-        let fixedEquipSummary = [];
-        fixedItems.forEach(it => {
-            fixedEquipSummary.push((it.quantity > 1 ? `${it.quantity}x ` : '') + (it.name || 'item'));
-        });
-        if (fixedGold > 0) fixedEquipSummary.push(`${fixedGold} gp`);
-
-        let choiceSetsHtml = '';
-        if (choiceSets.length > 0) {
-            choiceSetsHtml = choiceSets.map((set, si) => `
-                <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
-                    <div style="font-size:0.75rem; color:var(--color-text-muted);">Equipment Package:</div>
-                    ${set.options.map((opt, oi) => {
-                        const optLabel = opt.label || (opt.items.map(it => (it.quantity > 1 ? `${it.quantity}x ` : '') + it.name).join(', ') + (opt.gold ? ` + ${opt.gold} gp` : ''));
-                        return `
-                            <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.8rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid var(--color-border-subtle); padding:6px 10px; border-radius:4px; margin:0;">
-                                <input type="radio" name="bg-equip-set-${si}" value="${oi}" ${oi === 0 ? 'checked' : ''} style="cursor:pointer; accent-color:var(--color-gold-base); margin-top:2px;">
-                                <div style="flex:1;">
-                                    <strong style="color:var(--color-gold-light);">Option ${opt.key || String.fromCharCode(65 + oi)}:</strong>
-                                    <span style="color:var(--color-text-primary); margin-left:4px;">${optLabel}</span>
-                                </div>
-                            </label>
-                        `;
-                    }).join('')}
-                </div>
-            `).join('');
-        }
-
-        const equipHtml = `
-            <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px;">
-                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                    <i class="fa-solid fa-sack-dollar"></i> Starting Equipment & Gold
-                </div>
-                ${fixedEquipSummary.length > 0 ? `
-                    <div style="font-size:0.8rem; color:var(--color-text-secondary); margin-bottom:6px;">
-                        <strong>Standard Gear:</strong> ${fixedEquipSummary.join(', ')}
-                    </div>
-                ` : ''}
-                ${choiceSetsHtml}
-
-                <div style="margin-top:10px; padding:8px 10px; background:rgba(0,0,0,0.35); border-radius:4px; border:1px solid rgba(255,255,255,0.05);">
-                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:4px; font-weight:600;">Inventory Handling:</div>
-                    <div style="display:flex; flex-direction:column; gap:4px;">
-                        <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; margin:0;">
-                            <input type="radio" name="bg-inv-handling" value="append" checked style="cursor:pointer; accent-color:var(--color-gold-base);">
-                            <span><strong>Append to Inventory</strong> (Keep existing items & add background equipment)</span>
-                        </label>
-                        <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; margin:0;">
-                            <input type="radio" name="bg-inv-handling" value="replace" style="cursor:pointer; accent-color:var(--color-gold-base);">
-                            <span><strong>Replace Inventory</strong> (Clear current items & replace with background equipment)</span>
-                        </label>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // 5. Ability Cards & Feature HTML
-        const featureNames = features.map(f => f.name).join(', ') || 'Background Feature';
-        const cardsHtml = `
-            <div style="background:rgba(0,0,0,0.25); border:1px solid var(--color-border-subtle); border-radius:6px; padding:10px 12px;">
-                <div style="font-size:0.85rem; font-weight:600; color:var(--color-gold-base); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
-                    <i class="fa-solid fa-address-card"></i> Ability Cards
-                </div>
-                <label style="display:flex; align-items:center; gap:6px; font-size:0.8rem; cursor:pointer; margin:0;">
-                    <input type="checkbox" id="bg-import-create-cards" checked style="cursor:pointer; accent-color:var(--color-gold-base);">
-                    <span>Create Ability Cards in <strong>"Background Features"</strong> category</span>
-                </label>
-                <div style="font-size:0.72rem; color:var(--color-text-muted); margin-left:20px; margin-top:3px; line-height:1.3;">
-                    Creates rules card for <em>${featureNames}</em> plus a complete Background Summary card.
-                </div>
-            </div>
-        `;
-
-        bodyEl.innerHTML = descSnippet + skillsHtml + toolsHtml + equipHtml + cardsHtml;
-
-        // Interactive limit on skill choice checkboxes
-        bodyEl.querySelectorAll('.bg-skill-choice-group').forEach(group => {
-            const count = parseInt(group.dataset.count) || 1;
-            const chks = group.querySelectorAll('.bg-skill-choice-chk');
-            const updateSkillLimit = () => {
-                const checked = Array.from(chks).filter(c => c.checked);
-                if (checked.length >= count) {
-                    chks.forEach(c => { if (!c.checked) c.disabled = true; });
-                } else {
-                    chks.forEach(c => { c.disabled = false; });
-                }
-            };
-            chks.forEach(c => c.addEventListener('change', updateSkillLimit));
-            updateSkillLimit();
-        });
-
-        // Close / Cancel wiring
-        const closeModal = () => {
-            modal.classList.add('vtt-hidden');
-            overlay.classList.add('vtt-hidden');
-        };
-
-        const cancelBtn = document.getElementById('bg-import-modal-cancel');
-        const closeBtn = document.getElementById('bg-import-modal-close');
-        const applyBtn = document.getElementById('bg-import-modal-apply');
-
-        const onCancelHandler = () => {
-            closeModal();
-            if (onCancel) onCancel();
-        };
-
-        cancelBtn.onclick = onCancelHandler;
-        closeBtn.onclick = onCancelHandler;
-        overlay.onclick = onCancelHandler;
-
-        // Apply wiring
-        applyBtn.onclick = () => {
-            const selectedSkills = [...fixedSkills];
-            bodyEl.querySelectorAll('.bg-skill-choice-chk:checked').forEach(c => {
-                selectedSkills.push(c.value);
-            });
-
-            const selectedTools = [...fixedTools];
-            bodyEl.querySelectorAll('.bg-tool-choice-sel').forEach(s => {
-                if (s.value) selectedTools.push(s.value);
-            });
-
-            const selectedItems = [...fixedItems];
-            let totalGold = fixedGold;
-
-            choiceSets.forEach((set, si) => {
-                const checkedRadio = bodyEl.querySelector(`input[name="bg-equip-set-${si}"]:checked`);
-                const optIdx = checkedRadio ? parseInt(checkedRadio.value) : 0;
-                const opt = set.options[optIdx];
-                if (opt) {
-                    if (Array.isArray(opt.items)) selectedItems.push(...opt.items);
-                    if (opt.gold) totalGold += opt.gold;
-                }
-            });
-
-            const invHandling = bodyEl.querySelector('input[name="bg-inv-handling"]:checked')?.value || 'append';
-            const createCards = !!document.getElementById('bg-import-create-cards')?.checked;
-
-            applyBackgroundToCharacter(char, bgData, {
-                skills: selectedSkills,
-                tools: selectedTools,
-                items: selectedItems,
-                gold: totalGold,
-                invHandling,
-                createCards
-            });
-
-            closeModal();
+        promptBackgroundImportModalExt(bgData, char, onCancel, (choices) => {
+            applyBackgroundToCharacter(char, bgData, choices);
             if (onApplied) onApplied();
-        };
-
-        modal.classList.remove('vtt-hidden');
-        overlay.classList.remove('vtt-hidden');
+        });
     }
 
     function applyBackgroundToCharacter(char, bgData, choices) {
@@ -3453,7 +3378,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             });
         }
 
-        // 2. Compute Character Stats
+        // 2. Compute Character Stats & Multiclass Level Diff
         const classes = (char.classes && char.classes.length > 0) ? char.classes : [{ name: char.class || 'Fighter', subclass: '', level: char.level || 1 }];
         const totalLevel = classes.reduce((acc, c) => acc + (parseInt(c.level) || 1), 0);
         const conMod = getMod(getTotalStat(char, 'con'));
@@ -3461,20 +3386,38 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         const wisMod = getMod(getTotalStat(char, 'wis'));
         const existingHp = parseInt(char.hpMax) || 0;
         const existingAc = parseInt(char.ac) || 10;
-        const prevLevel = parseInt(char.previousLevel) || (totalLevel > 1 ? totalLevel - 1 : 1);
-        const detectedNewLevels = Math.max(1, totalLevel - prevLevel);
+
+        // Accurate Multiclass Level Diffing against persistent snapshot
+        const prevClasses = Array.isArray(char.previousClasses) ? char.previousClasses : null;
+        const leveledClassesDiff = [];
+        if (prevClasses && prevClasses.length > 0) {
+            classes.forEach(c => {
+                const prevC = prevClasses.find(p => (p.name || '').toLowerCase() === (c.name || '').toLowerCase());
+                const prevL = prevC ? (parseInt(prevC.level) || 0) : 0;
+                const curL = parseInt(c.level) || 1;
+                if (curL > prevL) {
+                    leveledClassesDiff.push({
+                        name: c.name,
+                        hitDie: parseInt(getClassHitDie(c.name).replace('d', '')) || 8,
+                        newLevels: curL - prevL
+                    });
+                }
+            });
+        } else {
+            const prevLevel = parseInt(char.previousLevel) || 0;
+            if (prevLevel > 0 && totalLevel > prevLevel) {
+                leveledClassesDiff.push({
+                    name: classes[0]?.name || 'Fighter',
+                    hitDie: parseInt(getClassHitDie(classes[0]?.name).replace('d', '')) || 8,
+                    newLevels: totalLevel - prevLevel
+                });
+            }
+        }
+        const detectedNewLevels = leveledClassesDiff.reduce((sum, d) => sum + d.newLevels, 0);
 
         const classLabel = classes.map(c => `${c.name}${c.subclass ? ` (${c.subclass})` : ''} Lv ${c.level}`).join(' / ');
         const raceLabel = char.race || 'Unknown Species';
         const bgLabel = char.background || 'Unknown Background';
-
-        summaryEl.innerHTML = `
-            <span class="builder-pill"><i class="fa-solid fa-shield"></i> ${classLabel}</span>
-            <span class="builder-pill"><i class="fa-solid fa-dna"></i> ${raceLabel}</span>
-            <span class="builder-pill"><i class="fa-solid fa-scroll"></i> ${bgLabel}</span>
-            <span class="builder-pill" style="color:#4fc3f7;"><i class="fa-solid fa-heart"></i> CON ${conMod >= 0 ? `+${conMod}` : conMod}</span>
-            <span class="builder-pill" style="color:#81c784;"><i class="fa-solid fa-shield-halved"></i> DEX ${dexMod >= 0 ? `+${dexMod}` : dexMod}</span>
-        `;
 
         // 3. Existing Item/Ability Sets for Deduplication
         const existingAbilities = new Set((char.abilityCards || []).map(a => (a.name || '').toLowerCase().trim()));
@@ -3488,13 +3431,20 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             });
         }
 
-        // 4. Fetch Racial Traits
+        // 4. Fetch Racial Traits, Movement Speeds & Senses (exact and subrace matching)
         const rawRaceName = (char.race || '').replace(/\s*\[.*?\]$/, '').trim().toLowerCase();
-        const matchedRace = builderCache?.races?.find(r => 
+        let matchedRace = builderCache?.races?.find(r => 
             (r.name && r.name.toLowerCase() === rawRaceName) ||
-            (r.id && r.id.toLowerCase() === rawRaceName) ||
-            (rawRaceName && r.name && rawRaceName.includes(r.name.toLowerCase()))
+            (r.id && r.id.toLowerCase() === rawRaceName)
         );
+        if (!matchedRace && rawRaceName) {
+            matchedRace = builderCache?.races?.find(r => 
+                (r.name && rawRaceName.startsWith(r.name.toLowerCase())) ||
+                (r.name && r.name.toLowerCase().startsWith(rawRaceName)) ||
+                (r.name && rawRaceName.includes(r.name.toLowerCase()))
+            );
+        }
+
         let candidateRacialTraits = [];
         if (matchedRace) {
             if (Array.isArray(matchedRace.traits)) {
@@ -3514,6 +3464,20 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 }));
             }
         }
+
+        const displaySpeed = matchedRace?.speeds?.walk || char.speed?.walk || char.speed || 30;
+        const displayDV = matchedRace?.senses?.darkvision || char.senses?.darkvision || 0;
+
+        summaryEl.innerHTML = `
+            <span class="builder-pill"><i class="fa-solid fa-shield"></i> ${classLabel}</span>
+            <span class="builder-pill"><i class="fa-solid fa-dna"></i> ${raceLabel}</span>
+            <span class="builder-pill"><i class="fa-solid fa-scroll"></i> ${bgLabel}</span>
+            <span class="builder-pill" style="color:#80cbc4;"><i class="fa-solid fa-person-running"></i> ${displaySpeed} ft</span>
+            ${displayDV > 0 ? `<span class="builder-pill" style="color:#ce93d8;"><i class="fa-solid fa-eye"></i> DV ${displayDV} ft</span>` : ''}
+            <span class="builder-pill" style="color:#4fc3f7;"><i class="fa-solid fa-heart"></i> CON ${conMod >= 0 ? `+${conMod}` : conMod}</span>
+            <span class="builder-pill" style="color:#81c784;"><i class="fa-solid fa-shield-halved"></i> DEX ${dexMod >= 0 ? `+${dexMod}` : dexMod}</span>
+            ${existingHp > 0 ? `<span class="builder-pill" style="color:${detectedNewLevels > 0 ? '#ffb74d' : '#a5d6a7'};"><i class="fa-solid fa-arrow-trend-up"></i> ${detectedNewLevels > 0 ? `+${detectedNewLevels} New Level${detectedNewLevels > 1 ? 's' : ''}` : 'Level Current'}</span>` : ''}
+        `;
 
         // 5. Fetch Background Features, Skills, Tools & Starting Equipment
         const rawBgName = (char.background || '').replace(/\s*\[.*?\]$/, '').trim().toLowerCase();
@@ -3693,7 +3657,24 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             const clean = rawName.replace(/\s*\(\d+\)/, '').trim();
             const displayName = clean.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
             if (!displayName) return null;
-            return { name: displayName, qty: qty };
+
+            // Check if generic option in GENERIC_EQUIPMENT_OPTIONS
+            const normClean = displayName.toLowerCase().replace(/[^a-z0-9]/g, '');
+            for (const [gKey, optionsList] of Object.entries(GENERIC_EQUIPMENT_OPTIONS)) {
+                const normGKey = gKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+                if (normClean === normGKey || normClean.includes(normGKey) || normGKey.includes(normClean)) {
+                    return {
+                        name: displayName,
+                        qty: qty,
+                        isGeneric: true,
+                        genericKey: gKey,
+                        genericOptions: optionsList,
+                        chosenItemName: optionsList[0] || displayName
+                    };
+                }
+            }
+
+            return { name: displayName, qty: qty, isGeneric: false, chosenItemName: displayName };
         }
 
         for (let cIdx = 0; cIdx < classes.length; cIdx++) {
@@ -3821,7 +3802,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         if (keys.length > 1) {
                             const options = keys.map(k => {
                                 const parsedItems = group[k].map(entry => parseStartingEquipEntry(entry)).filter(Boolean);
-                                const label = parsedItems.map(p => (p.qty > 1 ? `${p.qty}x ` : '') + p.name).join(', ');
+                                const label = parsedItems.map(p => (p.qty > 1 ? `${p.qty}x ` : '') + (p.chosenItemName || p.name)).join(', ');
                                 return {
                                     key: k.toLowerCase(),
                                     displayKey: k.toUpperCase(),
@@ -3837,10 +3818,11 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         } else if (keys.length === 1) {
                             group[keys[0]].forEach(entry => {
                                 const parsed = parseStartingEquipEntry(entry);
-                                if (parsed && parsed.name) {
+                                const actualFixedName = parsed ? (parsed.chosenItemName || parsed.name) : '';
+                                if (actualFixedName) {
                                     classFixedItems.push({
                                         id: 'cls_it_' + Math.random().toString(36).substr(2, 6),
-                                        name: parsed.name,
+                                        name: actualFixedName,
                                         qty: parsed.qty || 1,
                                         weight: 0,
                                         type: 'Gear',
@@ -4006,9 +3988,10 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 const opt = set.options.find(o => o.key === set.selectedOption) || set.options[0];
                 if (opt && Array.isArray(opt.items)) {
                     opt.items.forEach((p, pIdx) => {
+                        const actualName = p.chosenItemName || p.name;
                         const itemObj = {
-                            id: `cls_opt_${sIdx}_${pIdx}_` + p.name.replace(/\W+/g, '_'),
-                            name: p.name,
+                            id: `cls_opt_${sIdx}_${pIdx}_` + actualName.replace(/\W+/g, '_'),
+                            name: actualName,
                             qty: p.qty || 1,
                             weight: 0,
                             type: 'Gear',
@@ -4017,7 +4000,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                             isShield: false,
                             ac: null,
                             rawType: '',
-                            checked: !existingEquip.has(p.name.toLowerCase().trim())
+                            checked: !existingEquip.has(actualName.toLowerCase().trim())
                         };
                         enrichItem(itemObj);
                         res.push(itemObj);
@@ -4182,6 +4165,12 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
 
             milestones.forEach(m => {
                 if (l >= m) {
+                    const firstFeat = catalogFeats[0];
+                    let initialHalfStat = 'str';
+                    const chooseList = firstFeat?.abilityBonus?.chooseFrom || firstFeat?.abilityBonus?.choose;
+                    if (Array.isArray(chooseList) && chooseList.length > 0) {
+                        initialHalfStat = chooseList[0];
+                    }
                     asiTiers.push({
                         id: `asi_${raw}_${m}_${cIdx}`,
                         className: c.name,
@@ -4193,8 +4182,107 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         stat1: 'str',
                         stat2: 'dex',
                         allowOver20: true,
-                        featName: catalogFeats[0]?.name || ''
+                        featName: firstFeat?.name || '',
+                        halfFeatStat: initialHalfStat
                     });
+                }
+            });
+        });
+
+        // 10B. Optional Class Features (Invocations, Maneuvers, Infusions, Metamagic, Fighting Styles)
+        const optFeatureSections = [];
+        const optFeaturesCatalog = builderCache?.optionalFeatures || [];
+
+        classes.forEach((c, cIdx) => {
+            const raw = (c.name || '').toLowerCase().replace(/\s*\[.*?\]$/, '').trim();
+            const sub = (c.subclass || '').toLowerCase();
+            const l = parseInt(c.level) || 1;
+
+            // Warlock Invocations
+            if (raw === 'warlock' && l >= 2) {
+                const invSlots = [0, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8][l - 1] || 2;
+                const pool = optFeaturesCatalog.filter(f => f.categoryKey === 'invocation' && (f.levelPrereq || 1) <= l);
+                optFeatureSections.push({
+                    id: `opt_warlock_inv_${cIdx}`,
+                    title: 'Eldritch Invocations',
+                    className: c.name,
+                    categoryKey: 'invocation',
+                    slotLimit: invSlots,
+                    pool: pool,
+                    selected: new Set()
+                });
+            }
+
+            // Battle Master Maneuvers
+            if (raw === 'fighter' && sub.includes('battle master') && l >= 3) {
+                const mSlots = l >= 15 ? 9 : (l >= 10 ? 7 : (l >= 7 ? 5 : 3));
+                const pool = optFeaturesCatalog.filter(f => f.categoryKey === 'maneuver' && (f.levelPrereq || 1) <= l);
+                optFeatureSections.push({
+                    id: `opt_bm_maneuvers_${cIdx}`,
+                    title: 'Battle Master Maneuvers',
+                    className: `${c.name} (${c.subclass})`,
+                    categoryKey: 'maneuver',
+                    slotLimit: mSlots,
+                    pool: pool,
+                    selected: new Set(),
+                    isBattleMaster: true,
+                    dieSize: l >= 15 ? '1d12' : (l >= 10 ? '1d10' : '1d8'),
+                    dieCount: l >= 15 ? 6 : (l >= 7 ? 5 : 4)
+                });
+            }
+
+            // Artificer Infusions
+            if (raw === 'artificer' && l >= 2) {
+                const infSlots = l >= 18 ? 12 : (l >= 14 ? 10 : (l >= 10 ? 8 : (l >= 6 ? 6 : 4)));
+                const pool = optFeaturesCatalog.filter(f => f.categoryKey === 'infusion' && (f.levelPrereq || 1) <= l);
+                optFeatureSections.push({
+                    id: `opt_artificer_inf_${cIdx}`,
+                    title: 'Artificer Infusions Known',
+                    className: c.name,
+                    categoryKey: 'infusion',
+                    slotLimit: infSlots,
+                    pool: pool,
+                    selected: new Set()
+                });
+            }
+
+            // Sorcerer Metamagic
+            if (raw === 'sorcerer' && l >= 3) {
+                const mmSlots = l >= 17 ? 4 : (l >= 10 ? 3 : 2);
+                const pool = optFeaturesCatalog.filter(f => f.categoryKey === 'metamagic' && (f.levelPrereq || 1) <= l);
+                optFeatureSections.push({
+                    id: `opt_sorc_mm_${cIdx}`,
+                    title: 'Metamagic Options',
+                    className: c.name,
+                    categoryKey: 'metamagic',
+                    slotLimit: mmSlots,
+                    pool: pool,
+                    selected: new Set()
+                });
+            }
+
+            // Fighting Styles
+            const hasFS = (raw === 'fighter' && l >= 1) || ((raw === 'paladin' || raw === 'ranger') && l >= 2);
+            if (hasFS) {
+                const fsSlots = (raw === 'fighter' && sub.includes('champion') && l >= 10) ? 2 : 1;
+                const pool = optFeaturesCatalog.filter(f => f.categoryKey === 'fighting_style' && (!f.classPrereq || f.classPrereq.toLowerCase() === raw));
+                optFeatureSections.push({
+                    id: `opt_fs_${raw}_${cIdx}`,
+                    title: `${c.name} Fighting Style`,
+                    className: c.name,
+                    categoryKey: 'fighting_style',
+                    slotLimit: fsSlots,
+                    pool: pool.length > 0 ? pool : optFeaturesCatalog.filter(f => f.categoryKey === 'fighting_style'),
+                    selected: new Set()
+                });
+            }
+        });
+
+        // Pre-select already existing optional features on character
+        optFeatureSections.forEach(sec => {
+            sec.pool.forEach(f => {
+                if (existingAbilities.has(f.name.toLowerCase().trim())) {
+                    sec.selected.add(f.id);
                 }
             });
         });
@@ -4203,7 +4291,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         const builderState = {
             hpMode: 'average',
             hpScope: existingHp > 0 ? 'new_levels' : 'all',
-            hpNewLevelsCount: detectedNewLevels,
+            hpNewLevelsCount: existingHp > 0 ? detectedNewLevels : totalLevel,
             calculatedHp: existingHp > 0 ? existingHp : Math.max(1, (parseInt(getClassHitDie(classes[0]?.name).replace('d','')) || 8) + conMod),
             hpRolls: [],
             hpChatBroadcast: true,
@@ -4249,23 +4337,47 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         function runHpCalculation() {
             const rolls = [];
             let total = 0;
-            const primaryDie = parseInt(getClassHitDie(classes[0]?.name).replace('d', '')) || 8;
-            const avgPrimary = Math.floor(primaryDie / 2) + 1;
 
             if (builderState.hpScope === 'new_levels' && existingHp > 0) {
                 total = existingHp;
-                const levelsToRoll = Math.max(1, builderState.hpNewLevelsCount);
-                for (let i = 0; i < levelsToRoll; i++) {
-                    const currentLvl = (totalLevel - levelsToRoll + 1) + i;
-                    let roll = 0;
-                    if (builderState.hpMode === 'max') roll = primaryDie;
-                    else if (builderState.hpMode === 'average') roll = avgPrimary;
-                    else if (builderState.hpMode === 'roll') roll = Math.floor(Math.random() * primaryDie) + 1;
-                    else if (builderState.hpMode === 'roll_avg_min') roll = Math.max(avgPrimary, Math.floor(Math.random() * primaryDie) + 1);
-                    const gain = Math.max(1, roll + conMod);
-                    rolls.push({ level: currentLvl, roll, con: conMod, total: gain, hd: primaryDie, val: roll });
-                    total += gain;
+                if (builderState.hpNewLevelsCount === 0) {
+                    builderState.addedHp = 0;
+                    builderState.calculatedHp = existingHp;
+                    builderState.hpRolls = [];
+                    return;
                 }
+                const levelsToRoll = builderState.hpNewLevelsCount;
+                const diffList = [];
+                leveledClassesDiff.forEach(d => {
+                    diffList.push({ name: d.name, hitDie: d.hitDie, newLevels: d.newLevels });
+                });
+                const totalDiff = diffList.reduce((s, d) => s + d.newLevels, 0);
+                if (totalDiff < levelsToRoll) {
+                    const fallbackDie = parseInt(getClassHitDie(classes[0]?.name).replace('d', '')) || 8;
+                    diffList.push({
+                        name: classes[0]?.name || 'Primary Class',
+                        hitDie: fallbackDie,
+                        newLevels: levelsToRoll - totalDiff
+                    });
+                }
+                let remaining = levelsToRoll;
+                let lvlCounter = (totalLevel - levelsToRoll + 1);
+                diffList.forEach(diff => {
+                    for (let i = 0; i < diff.newLevels && remaining > 0; i++) {
+                        const die = diff.hitDie;
+                        const avg = Math.floor(die / 2) + 1;
+                        let roll = 0;
+                        if (builderState.hpMode === 'max') roll = die;
+                        else if (builderState.hpMode === 'average') roll = avg;
+                        else if (builderState.hpMode === 'roll') roll = Math.floor(Math.random() * die) + 1;
+                        else if (builderState.hpMode === 'roll_avg_min') roll = Math.max(avg, Math.floor(Math.random() * die) + 1);
+                        const gain = Math.max(1, roll + conMod);
+                        rolls.push({ level: lvlCounter, className: diff.name, roll, con: conMod, total: gain, hd: die, val: roll });
+                        total += gain;
+                        lvlCounter++;
+                        remaining--;
+                    }
+                });
                 builderState.addedHp = total - existingHp;
             } else {
                 let lvlCounter = 1;
@@ -4278,7 +4390,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         if (lvlCounter === 1) {
                             roll = die;
                             const gain = Math.max(1, roll + conMod);
-                            rolls.push({ level: lvlCounter, roll, con: conMod, total: gain, hd: die, isMax: true, val: roll });
+                            rolls.push({ level: lvlCounter, className: c.name, roll, con: conMod, total: gain, hd: die, isMax: true, val: roll });
                             total += gain;
                         } else {
                             if (builderState.hpMode === 'max') roll = die;
@@ -4286,7 +4398,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                             else if (builderState.hpMode === 'roll') roll = Math.floor(Math.random() * die) + 1;
                             else if (builderState.hpMode === 'roll_avg_min') roll = Math.max(avg, Math.floor(Math.random() * die) + 1);
                             const gain = Math.max(1, roll + conMod);
-                            rolls.push({ level: lvlCounter, roll, con: conMod, total: gain, hd: die, val: roll });
+                            rolls.push({ level: lvlCounter, className: c.name, roll, con: conMod, total: gain, hd: die, val: roll });
                             total += gain;
                         }
                         lvlCounter++;
@@ -4298,10 +4410,15 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         }
 
         function renderHpBreakdownHtml() {
-            if (builderState.hpRolls.length === 0) return '';
+            if (builderState.hpRolls.length === 0) {
+                if (builderState.hpScope === 'new_levels' && existingHp > 0 && builderState.hpNewLevelsCount === 0) {
+                    return `<div style="font-size:0.75rem; color:var(--color-text-muted); padding:6px 0;"><i class="fa-solid fa-circle-check" style="color:#81c784;"></i> Character is at their current saved level (${totalLevel}). No new levels detected (+0 HP). Adjust "Levels to add" if leveling up.</div>`;
+                }
+                return '<div style="font-size:0.75rem; color:var(--color-text-muted); padding:4px 0;">No rolls recorded.</div>';
+            }
             return builderState.hpRolls.map(r => `
                 <div style="font-size:0.75rem; display:flex; justify-content:space-between; padding:2px 0; border-bottom:1px solid rgba(255,255,255,0.03);">
-                    <span>Lv ${r.level}: [1d${r.hd} ${r.isMax ? '(Max)' : ''} &rarr; ${r.val}] + CON (${r.con >= 0 ? `+${r.con}` : r.con})</span>
+                    <span>Lv ${r.level} ${r.className ? `(${r.className})` : ''}: [1d${r.hd} ${r.isMax ? '(Max)' : ''} &rarr; ${r.val}] + CON (${r.con >= 0 ? `+${r.con}` : r.con})</span>
                     <strong style="color:var(--color-gold-light);">+${r.total} HP</strong>
                 </div>
             `).join('');
@@ -4528,6 +4645,58 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     </div>
                 </div>
 
+                <!-- SECTION 3B: OPTIONAL FEATURES & CUSTOMIZATIONS -->
+                ${optFeatureSections.length === 0 ? '' : `
+                    <div class="builder-section-box">
+                        <div class="builder-section-header">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <i class="fa-solid fa-wand-magic-sparkles text-gradient-gold"></i>
+                                <strong style="font-size:0.95rem; color:var(--color-gold-base);">Optional Features & Customizations</strong>
+                                <span class="builder-pill">${optFeatureSections.map(s => `${s.title}: ${s.selected.size}/${s.slotLimit}`).join(' &bull; ')}</span>
+                            </div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:12px;">
+                            ${optFeatureSections.map((sec, sIdx) => `
+                                <div style="background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:12px;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                                        <div style="display:flex; align-items:center; gap:8px;">
+                                            <strong style="color:var(--color-gold-light); font-size:0.9rem;">${sec.title}</strong>
+                                            <span class="builder-pill">${sec.className}</span>
+                                            <span class="builder-pill" style="color:#4fc3f7;">Slots: <strong id="pc-builder-opt-slots-${sec.id}">${sec.selected.size} / ${sec.slotLimit}</strong></span>
+                                            ${sec.isBattleMaster ? `<span class="builder-pill" style="color:#ffd54f;"><i class="fa-solid fa-dice-d20"></i> ${sec.dieCount}${sec.dieSize} Superiority Dice</span>` : ''}
+                                        </div>
+                                        <div style="display:flex; gap:6px;">
+                                            <input type="text" class="pc-builder-opt-search form-control form-control-xs" data-sec-idx="${sIdx}" placeholder="Filter ${sec.title}..." style="width:160px; font-size:0.75rem; padding:2px 6px; height:24px;">
+                                        </div>
+                                    </div>
+                                    <div class="scroll-styled pc-builder-opt-list" data-sec-idx="${sIdx}" style="max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:4px; border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:4px;">
+                                        ${sec.pool.length === 0 ? '<div style="color:var(--color-text-muted); font-size:0.78rem; padding:8px;">No options available for this level.</div>' : sec.pool.map(f => {
+                                            const isChecked = sec.selected.has(f.id);
+                                            return `
+                                                <label class="builder-item-row ${isChecked ? 'is-checked' : ''} pc-builder-opt-row" data-sec-idx="${sIdx}" data-feat-id="${f.id}" data-name="${f.name.toLowerCase()}" style="cursor:pointer; margin:0; padding:6px 8px;">
+                                                    <input type="checkbox" class="pc-builder-opt-feat-chk" data-sec-idx="${sIdx}" data-feat-id="${f.id}" ${isChecked ? 'checked' : ''} style="accent-color:var(--color-gold-base); margin-top:2px;">
+                                                    <div style="flex:1;">
+                                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                                            <div>
+                                                                <strong style="font-size:0.83rem; color:var(--color-text-primary);">${f.name}</strong>
+                                                                ${f.prerequisite && f.prerequisite !== 'None' ? `<span style="font-size:0.68rem; background:rgba(255,255,255,0.06); padding:1px 6px; border-radius:3px; color:var(--color-text-muted); margin-left:6px;">Prereq: ${f.prerequisite}</span>` : ''}
+                                                            </div>
+                                                            <span class="badge" style="font-size:0.68rem; text-transform:uppercase; padding:1px 6px; border-radius:4px; background:rgba(212,175,55,0.15); color:var(--color-gold-light);">${f.actionType || 'passive'}</span>
+                                                        </div>
+                                                        <div style="font-size:0.73rem; color:var(--color-text-secondary); margin-top:2px; line-height:1.3;">
+                                                            ${(f.description || '').slice(0, 150)}${(f.description || '').length > 150 ? '...' : ''}
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            `;
+                                        }).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `}
+
                 <!-- SECTION 4: ITEMS & STARTING GEAR -->
                 <div class="builder-section-box">
                     <div class="builder-section-header">
@@ -4553,13 +4722,27 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                                 ${classEquipChoiceSets.map((set, si) => `
                                     <div style="display:flex; flex-direction:column; gap:4px;">
                                         <div style="font-size:0.72rem; color:var(--color-text-muted);">Package Choice ${si + 1}:</div>
-                                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                        <div style="display:flex; flex-direction:column; gap:6px;">
                                             ${set.options.map(opt => `
-                                                <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.78rem; cursor:pointer; background:rgba(0,0,0,0.3); border:1px solid ${set.selectedOption === opt.key ? 'var(--color-gold-base)' : 'var(--color-border-subtle)'}; padding:4px 8px; border-radius:4px; margin:0;">
-                                                    <input type="radio" name="pc-builder-cls-equip-${si}" class="pc-builder-cls-equip-radio" data-set-idx="${si}" value="${opt.key}" ${set.selectedOption === opt.key ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
-                                                    <strong style="color:var(--color-gold-light);">Option ${opt.displayKey}:</strong>
-                                                    <span>${opt.label}</span>
-                                                </label>
+                                                <div style="display:flex; flex-direction:column; gap:4px; background:rgba(0,0,0,0.3); border:1px solid ${set.selectedOption === opt.key ? 'var(--color-gold-base)' : 'var(--color-border-subtle)'}; padding:6px 10px; border-radius:4px;">
+                                                    <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.78rem; cursor:pointer; margin:0;">
+                                                        <input type="radio" name="pc-builder-cls-equip-${si}" class="pc-builder-cls-equip-radio" data-set-idx="${si}" value="${opt.key}" ${set.selectedOption === opt.key ? 'checked' : ''} style="accent-color:var(--color-gold-base);">
+                                                        <strong style="color:var(--color-gold-light);">Option ${opt.displayKey}:</strong>
+                                                        <span id="pc-builder-opt-label-${si}-${opt.key}">${opt.items.map(p => (p.qty > 1 ? `${p.qty}x ` : '') + (p.chosenItemName || p.name)).join(', ')}</span>
+                                                    </label>
+                                                    ${(set.selectedOption === opt.key && opt.items.some(p => p.isGeneric)) ? `
+                                                        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; padding-left:22px;">
+                                                            ${opt.items.map((p, pIdx) => p.isGeneric ? `
+                                                                <div style="display:inline-flex; align-items:center; gap:6px; font-size:0.75rem;">
+                                                                    <span style="color:var(--color-gold-light);">${p.name}:</span>
+                                                                    <select class="form-control form-control-xs pc-builder-generic-equip-sel" data-set-idx="${si}" data-opt-key="${opt.key}" data-item-idx="${pIdx}" style="font-size:0.75rem; padding:1px 6px; height:24px;">
+                                                                        ${p.genericOptions.map(gOpt => `<option value="${gOpt}" ${p.chosenItemName === gOpt ? 'selected' : ''}>${gOpt}</option>`).join('')}
+                                                                    </select>
+                                                                </div>
+                                                            ` : '').join('')}
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
                                             `).join('')}
                                         </div>
                                     </div>
@@ -4588,7 +4771,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     </div>
                 </div>
 
-                <!-- SECTION 5: SPELLCASTING & SPELLS (PER CLASS, TABULAR) -->
+                <!-- SECTION 5: SPELLCASTING & SPELLS (PER CLASS, TABULAR WITH QUICK FILTERS) -->
                 ${classSpellSections.length === 0 ? '' : `
                     <div class="builder-section-box">
                         <div class="builder-section-header">
@@ -4612,6 +4795,41 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                                             <button class="btn btn-secondary btn-xxs pc-builder-sp-cls-none" data-cls-idx="${sec.classIdx}">Deselect All</button>
                                         </div>
                                     </div>
+
+                                    <!-- Quick Filters Bar -->
+                                    <div class="pc-builder-spell-filters" data-cls-idx="${sec.classIdx}" style="display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:8px; background:rgba(0,0,0,0.25); padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.05);">
+                                        <div class="btn-group btn-group-xs" style="display:inline-flex; gap:2px;">
+                                            <button type="button" class="btn btn-secondary btn-xxs pc-builder-sp-lvl-btn active" data-cls-idx="${sec.classIdx}" data-lvl="all">All</button>
+                                            <button type="button" class="btn btn-secondary btn-xxs pc-builder-sp-lvl-btn" data-cls-idx="${sec.classIdx}" data-lvl="0">Cantrip</button>
+                                            ${Array.from({ length: sec.maxSlot }, (_, i) => i + 1).map(l => `
+                                                <button type="button" class="btn btn-secondary btn-xxs pc-builder-sp-lvl-btn" data-cls-idx="${sec.classIdx}" data-lvl="${l}">Lv ${l}</button>
+                                            `).join('')}
+                                        </div>
+                                        <select class="form-control form-control-xs pc-builder-sp-school-sel" data-cls-idx="${sec.classIdx}" style="width:125px; font-size:0.75rem; padding:2px 6px; height:24px;">
+                                            <option value="all">All Schools</option>
+                                            <option value="abjuration">Abjuration</option>
+                                            <option value="conjuration">Conjuration</option>
+                                            <option value="divination">Divination</option>
+                                            <option value="enchantment">Enchantment</option>
+                                            <option value="evocation">Evocation</option>
+                                            <option value="illusion">Illusion</option>
+                                            <option value="necromancy">Necromancy</option>
+                                            <option value="transmutation">Transmutation</option>
+                                        </select>
+                                        <label style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; cursor:pointer; margin:0; color:var(--color-text-secondary);">
+                                            <input type="checkbox" class="pc-builder-sp-ritual-toggle" data-cls-idx="${sec.classIdx}" style="accent-color:var(--color-gold-base);">
+                                            <span>Ritual</span>
+                                        </label>
+                                        <label style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; cursor:pointer; margin:0; color:var(--color-text-secondary);">
+                                            <input type="checkbox" class="pc-builder-sp-conc-toggle" data-cls-idx="${sec.classIdx}" style="accent-color:var(--color-gold-base);">
+                                            <span>Concentration</span>
+                                        </label>
+                                        <label style="display:inline-flex; align-items:center; gap:4px; font-size:0.75rem; cursor:pointer; margin:0; margin-left:auto; color:var(--color-gold-light);">
+                                            <input type="checkbox" class="pc-builder-sp-selected-only" data-cls-idx="${sec.classIdx}" style="accent-color:var(--color-gold-base);">
+                                            <span>Selected Only</span>
+                                        </label>
+                                    </div>
+
                                     <div style="margin-bottom:8px;">
                                         <input type="text" class="pc-builder-spell-search" data-cls-idx="${sec.classIdx}" placeholder="Search ${sec.className} spells by name or school...">
                                     </div>
@@ -4627,7 +4845,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                                             </thead>
                                             <tbody>
                                                 ${sec.spells.length === 0 ? `<tr><td colspan="4" style="text-align:center; color:var(--color-text-muted); padding:16px;">No spells found.</td></tr>` : sec.spells.map((sp, idx) => `
-                                                    <tr class="builder-spell-tr ${sp.checked ? 'is-checked' : ''}" data-cls-idx="${sec.classIdx}" data-sp-id="${sp.id}" data-name="${sp.name.toLowerCase()}" data-school="${(sp.school || '').toLowerCase()}">
+                                                    <tr class="builder-spell-tr ${sp.checked ? 'is-checked' : ''}" data-cls-idx="${sec.classIdx}" data-sp-id="${sp.id}" data-name="${sp.name.toLowerCase()}" data-school="${(sp.school || '').toLowerCase()}" data-lvl="${sp.level}" data-ritual="${(sp.description || '').toLowerCase().includes('ritual') ? '1' : '0'}" data-conc="${(sp.duration || '').toLowerCase().includes('concentration') ? '1' : '0'}">
                                                         <td style="text-align:center;">
                                                             <input type="checkbox" class="pc-builder-sp-chk" data-cls-idx="${sec.classIdx}" data-sp-id="${sp.id}" ${sp.checked ? 'checked' : ''} style="accent-color:var(--color-gold-base); cursor:pointer;">
                                                         </td>
@@ -4662,7 +4880,15 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                             </div>
                         </div>
                         <div style="display:flex; flex-direction:column; gap:12px;">
-                            ${asiTiers.map((tier, tIdx) => `
+                            ${asiTiers.map((tier, tIdx) => {
+                                const matchedFeat = catalogFeats.find(f => f.name === tier.featName) || catalogFeats[0];
+                                const isHalf = !!matchedFeat?.isHalfFeat;
+                                const chooseList = matchedFeat?.abilityBonus?.chooseFrom || matchedFeat?.abilityBonus?.choose;
+                                const statChoices = (Array.isArray(chooseList) && chooseList.length > 0) ? chooseList : statOptions;
+                                if (!tier.halfFeatStat || !statChoices.includes(tier.halfFeatStat)) {
+                                    tier.halfFeatStat = statChoices[0] || 'str';
+                                }
+                                return `
                                 <div class="builder-asi-card" data-tier-idx="${tIdx}">
                                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                                         <strong style="color:var(--color-gold-light); font-size:0.9rem;">${tier.label}</strong>
@@ -4720,16 +4946,28 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                                             <label style="font-size:0.75rem;">Select Feat</label>
                                             <select class="pc-builder-feat-sel form-control form-control-sm" data-tier-idx="${tIdx}">
                                                 ${catalogFeats.map(ft => `
-                                                    <option value="${ft.name}" ${tier.featName === ft.name ? 'selected' : ''}>${ft.name} [${ft.source || 'PHB'}]</option>
+                                                    <option value="${ft.name}" ${tier.featName === ft.name ? 'selected' : ''}>${ft.name} [${ft.source || 'PHB'}]${ft.isHalfFeat ? ' (Half-Feat)' : ''}</option>
                                                 `).join('')}
                                             </select>
                                         </div>
+
+                                        <!-- Half Feat Stat Selector -->
+                                        <div class="pc-builder-half-feat-wrap" data-tier-idx="${tIdx}" style="display:${isHalf ? 'flex' : 'none'}; flex-wrap:wrap; align-items:center; gap:8px; background:rgba(212,175,55,0.1); border:1px solid rgba(212,175,55,0.3); padding:6px 10px; border-radius:4px;">
+                                            <span class="badge" style="background:var(--color-gold-base); color:#000; font-size:0.7rem; font-weight:bold;">Half-Feat (+1 Stat)</span>
+                                            <span style="font-size:0.75rem; color:var(--color-gold-light);">Ability Score to increase (+1):</span>
+                                            <select class="form-control form-control-xs pc-builder-half-feat-stat" data-tier-idx="${tIdx}" style="width:140px; font-size:0.75rem; padding:2px 6px; height:24px;">
+                                                ${statChoices.map(st => `<option value="${st}" ${tier.halfFeatStat === st ? 'selected' : ''}>${statNames[st]} (+1 &rarr; ${(char.stats?.[st] || 10) + 1})</option>`).join('')}
+                                            </select>
+                                            ${matchedFeat?.linkedSaveProficiency ? `<span style="font-size:0.72rem; color:#81c784;"><i class="fa-solid fa-shield"></i> Grants ${matchedFeat.linkedSaveProficiency.toUpperCase()} Saving Throw</span>` : ''}
+                                        </div>
+
                                         <div class="pc-builder-feat-preview" data-tier-idx="${tIdx}" style="font-size:0.78rem; color:var(--color-text-secondary); line-height:1.4; padding:6px 10px; background:rgba(0,0,0,0.3); border-radius:4px;">
-                                            ${(catalogFeats.find(f => f.name === tier.featName) || catalogFeats[0])?.description?.slice(0, 180) || ''}...
+                                            ${(matchedFeat || catalogFeats[0])?.description?.slice(0, 180) || ''}...
                                         </div>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `;
+                            }).join('')}
                         </div>
                     </div>
                 `}
@@ -4946,36 +5184,99 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 });
             });
 
+            // Optional Features Selection & Limit Enforcement
+            bodyEl.querySelectorAll('.pc-builder-opt-feat-chk').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const sIdx = parseInt(e.target.dataset.secIdx);
+                    const fId = e.target.dataset.featId;
+                    const sec = optFeatureSections[sIdx];
+                    if (!sec) return;
+                    if (e.target.checked) {
+                        if (sec.selected.size >= sec.slotLimit) {
+                            e.target.checked = false;
+                            if (typeof window.showToast === 'function') {
+                                window.showToast(`Maximum ${sec.slotLimit} choices reached for ${sec.title}. Uncheck an existing choice to swap.`);
+                            }
+                            return;
+                        }
+                        sec.selected.add(fId);
+                    } else {
+                        sec.selected.delete(fId);
+                    }
+                    e.target.closest('.builder-item-row')?.classList.toggle('is-checked', e.target.checked);
+                    const slotEl = document.getElementById(`pc-builder-opt-slots-${sec.id}`);
+                    if (slotEl) slotEl.innerText = `${sec.selected.size} / ${sec.slotLimit}`;
+                    updateCountsDisplay();
+                });
+            });
+
+            // Optional Features Live Search
+            bodyEl.querySelectorAll('.pc-builder-opt-search').forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const sIdx = parseInt(e.target.dataset.secIdx);
+                    const q = (e.target.value || '').toLowerCase().trim();
+                    const rows = bodyEl.querySelectorAll(`.pc-builder-opt-row[data-sec-idx="${sIdx}"]`);
+                    rows.forEach(r => {
+                        const name = r.dataset.name || '';
+                        r.style.display = (!q || name.includes(q)) ? '' : 'none';
+                    });
+                });
+            });
+
+            // Generic Equipment Dropdowns
+            bodyEl.querySelectorAll('.pc-builder-generic-equip-sel').forEach(sel => {
+                sel.addEventListener('change', (e) => {
+                    const sIdx = parseInt(e.target.dataset.setIdx);
+                    const optKey = e.target.dataset.optKey;
+                    const itemIdx = parseInt(e.target.dataset.itemIdx);
+                    const set = classEquipChoiceSets[sIdx];
+                    if (set) {
+                        const opt = set.options.find(o => o.key === optKey);
+                        if (opt && opt.items[itemIdx]) {
+                            opt.items[itemIdx].chosenItemName = e.target.value;
+                            const labelEl = document.getElementById(`pc-builder-opt-label-${sIdx}-${optKey}`);
+                            if (labelEl) {
+                                labelEl.innerText = opt.items.map(p => (p.qty > 1 ? `${p.qty}x ` : '') + (p.chosenItemName || p.name)).join(', ');
+                            }
+                            refreshItemsContainer();
+                        }
+                    }
+                });
+            });
+
+            function refreshItemsContainer() {
+                const resolvedItems = getResolvedClassItems();
+                const allCurrentItems = [...candidateBgItems, ...resolvedItems];
+                const container = document.getElementById('pc-builder-items-container');
+                if (container) {
+                    container.innerHTML = allCurrentItems.length === 0 ? '<div style="color:var(--color-text-muted); font-size:0.8rem; padding:8px;">No starting items detected.</div>' : allCurrentItems.map(it => `
+                        <label class="builder-item-row ${it.checked ? 'is-checked' : ''}" style="cursor:pointer; margin:0;">
+                            <input type="checkbox" class="pc-builder-it-chk" data-item-id="${it.id}" ${it.checked ? 'checked' : ''} style="margin-top:3px; accent-color:var(--color-gold-base);">
+                            <div style="flex:1; display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <strong style="font-size:0.85rem; color:var(--color-text-primary);">${it.name}</strong>
+                                    ${it.qty > 1 ? `<span style="color:var(--color-gold-base); font-size:0.75rem; margin-left:4px;">&times;${it.qty}</span>` : ''}
+                                    <span style="font-size:0.7rem; background:rgba(255,255,255,0.06); padding:1px 6px; border-radius:4px; color:var(--color-text-muted); margin-left:6px;">${it.source}</span>
+                                </div>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    ${it.weight ? `<span style="font-size:0.75rem; color:var(--color-text-muted);">${it.weight} lb</span>` : ''}
+                                    <span class="badge" style="font-size:0.7rem; padding:1px 6px; border-radius:4px; background:rgba(255,255,255,0.08); color:var(--color-text-secondary);">${it.type}</span>
+                                </div>
+                            </div>
+                        </label>
+                    `).join('');
+                    wireItemCheckboxes();
+                    updateCountsDisplay();
+                }
+            }
+
             // Class Equipment Package Radio Changes
             bodyEl.querySelectorAll('.pc-builder-cls-equip-radio').forEach(radio => {
                 radio.addEventListener('change', (e) => {
                     const sIdx = parseInt(e.target.dataset.setIdx);
                     if (classEquipChoiceSets[sIdx]) {
                         classEquipChoiceSets[sIdx].selectedOption = e.target.value;
-                        // Re-render items container
-                        const resolvedItems = getResolvedClassItems();
-                        const allCurrentItems = [...candidateBgItems, ...resolvedItems];
-                        const container = document.getElementById('pc-builder-items-container');
-                        if (container) {
-                            container.innerHTML = allCurrentItems.length === 0 ? '<div style="color:var(--color-text-muted); font-size:0.8rem; padding:8px;">No starting items detected.</div>' : allCurrentItems.map(it => `
-                                <label class="builder-item-row ${it.checked ? 'is-checked' : ''}" style="cursor:pointer; margin:0;">
-                                    <input type="checkbox" class="pc-builder-it-chk" data-item-id="${it.id}" ${it.checked ? 'checked' : ''} style="margin-top:3px; accent-color:var(--color-gold-base);">
-                                    <div style="flex:1; display:flex; justify-content:space-between; align-items:center;">
-                                        <div>
-                                            <strong style="font-size:0.85rem; color:var(--color-text-primary);">${it.name}</strong>
-                                            ${it.qty > 1 ? `<span style="color:var(--color-gold-base); font-size:0.75rem; margin-left:4px;">&times;${it.qty}</span>` : ''}
-                                            <span style="font-size:0.7rem; background:rgba(255,255,255,0.06); padding:1px 6px; border-radius:4px; color:var(--color-text-muted); margin-left:6px;">${it.source}</span>
-                                        </div>
-                                        <div style="display:flex; align-items:center; gap:8px;">
-                                            ${it.weight ? `<span style="font-size:0.75rem; color:var(--color-text-muted);">${it.weight} lb</span>` : ''}
-                                            <span class="badge" style="font-size:0.7rem; padding:1px 6px; border-radius:4px; background:rgba(255,255,255,0.08); color:var(--color-text-secondary);">${it.type}</span>
-                                        </div>
-                                    </div>
-                                </label>
-                            `).join('');
-                            wireItemCheckboxes();
-                            updateCountsDisplay();
-                        }
+                        renderDashboard();
                     }
                 });
             });
@@ -4988,10 +5289,11 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         if (bgIt) bgIt.checked = e.target.checked;
                         const fixIt = classFixedItems.find(i => i.id === itemId);
                         if (fixIt) fixIt.checked = e.target.checked;
-                        classEquipChoiceSets.forEach(s => {
+                        classEquipChoiceSets.forEach((s, sIdx) => {
                             s.options.forEach(o => {
                                 o.items.forEach((p, pIdx) => {
-                                    if (`cls_opt_${s.groupIndex}_${pIdx}_` + p.name.replace(/\W+/g, '_') === itemId) {
+                                    const actualName = p.chosenItemName || p.name;
+                                    if (`cls_opt_${sIdx}_${pIdx}_` + actualName.replace(/\W+/g, '_') === itemId) {
                                         p.checked = e.target.checked;
                                     }
                                 });
@@ -5024,6 +5326,105 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     c.closest('.builder-item-row')?.classList.remove('is-checked');
                 });
                 updateCountsDisplay();
+            });
+
+            // Spell Filters Management
+            const spellFilters = {};
+            classSpellSections.forEach(sec => {
+                spellFilters[sec.classIdx] = {
+                    lvl: 'all',
+                    school: 'all',
+                    ritual: false,
+                    conc: false,
+                    selectedOnly: false,
+                    searchQuery: ''
+                };
+            });
+
+            function applySpellFilters(clsIdx) {
+                const f = spellFilters[clsIdx];
+                if (!f) return;
+                const rows = bodyEl.querySelectorAll(`.builder-spell-tr[data-cls-idx="${clsIdx}"]`);
+                rows.forEach(r => {
+                    const name = r.dataset.name || '';
+                    const school = r.dataset.school || '';
+                    const lvl = r.dataset.lvl;
+                    const isRitual = r.dataset.ritual === '1';
+                    const isConc = r.dataset.conc === '1';
+                    const chk = r.querySelector('.pc-builder-sp-chk');
+                    const isChecked = chk ? chk.checked : false;
+
+                    let match = true;
+                    if (f.searchQuery && !name.includes(f.searchQuery) && !school.includes(f.searchQuery)) match = false;
+                    if (f.lvl !== 'all') {
+                        if (f.lvl === '0' && lvl !== '0') match = false;
+                        else if (f.lvl !== '0' && lvl !== f.lvl) match = false;
+                    }
+                    if (f.school !== 'all' && !school.includes(f.school)) match = false;
+                    if (f.ritual && !isRitual) match = false;
+                    if (f.conc && !isConc) match = false;
+                    if (f.selectedOnly && !isChecked) match = false;
+
+                    r.style.display = match ? '' : 'none';
+                });
+            }
+
+            // Spell Level Filter Buttons
+            bodyEl.querySelectorAll('.pc-builder-sp-lvl-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const clsIdx = parseInt(e.currentTarget.dataset.clsIdx);
+                    const lvl = e.currentTarget.dataset.lvl;
+                    bodyEl.querySelectorAll(`.pc-builder-sp-lvl-btn[data-cls-idx="${clsIdx}"]`).forEach(b => b.classList.remove('active'));
+                    e.currentTarget.classList.add('active');
+                    if (spellFilters[clsIdx]) {
+                        spellFilters[clsIdx].lvl = lvl;
+                        applySpellFilters(clsIdx);
+                    }
+                });
+            });
+
+            // Spell School Dropdown
+            bodyEl.querySelectorAll('.pc-builder-sp-school-sel').forEach(sel => {
+                sel.addEventListener('change', (e) => {
+                    const clsIdx = parseInt(e.target.dataset.clsIdx);
+                    if (spellFilters[clsIdx]) {
+                        spellFilters[clsIdx].school = e.target.value.toLowerCase();
+                        applySpellFilters(clsIdx);
+                    }
+                });
+            });
+
+            // Spell Ritual Toggle
+            bodyEl.querySelectorAll('.pc-builder-sp-ritual-toggle').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const clsIdx = parseInt(e.target.dataset.clsIdx);
+                    if (spellFilters[clsIdx]) {
+                        spellFilters[clsIdx].ritual = e.target.checked;
+                        applySpellFilters(clsIdx);
+                    }
+                });
+            });
+
+            // Spell Concentration Toggle
+            bodyEl.querySelectorAll('.pc-builder-sp-conc-toggle').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const clsIdx = parseInt(e.target.dataset.clsIdx);
+                    if (spellFilters[clsIdx]) {
+                        spellFilters[clsIdx].conc = e.target.checked;
+                        applySpellFilters(clsIdx);
+                    }
+                });
+            });
+
+            // Spell Selected Only Toggle
+            bodyEl.querySelectorAll('.pc-builder-sp-selected-only').forEach(chk => {
+                chk.addEventListener('change', (e) => {
+                    const clsIdx = parseInt(e.target.dataset.clsIdx);
+                    if (spellFilters[clsIdx]) {
+                        spellFilters[clsIdx].selectedOnly = e.target.checked;
+                        applySpellFilters(clsIdx);
+                    }
+                });
             });
 
             // Spells Select All / None per class
@@ -5061,14 +5462,10 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             bodyEl.querySelectorAll('.pc-builder-spell-search').forEach(input => {
                 input.addEventListener('input', (e) => {
                     const clsIdx = parseInt(e.target.dataset.clsIdx);
-                    const q = (e.target.value || '').toLowerCase().trim();
-                    const rows = bodyEl.querySelectorAll(`.builder-spell-tr[data-cls-idx="${clsIdx}"]`);
-                    rows.forEach(r => {
-                        const name = r.dataset.name || '';
-                        const school = r.dataset.school || '';
-                        const match = !q || name.includes(q) || school.includes(q);
-                        r.style.display = match ? '' : 'none';
-                    });
+                    if (spellFilters[clsIdx]) {
+                        spellFilters[clsIdx].searchQuery = (e.target.value || '').toLowerCase().trim();
+                        applySpellFilters(clsIdx);
+                    }
                 });
             });
 
@@ -5127,6 +5524,11 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 const over20Cb = bodyEl.querySelector(`.pc-builder-asi-over20[data-tier-idx="${tIdx}"]`);
                 over20Cb?.addEventListener('change', (e) => { tier.allowOver20 = e.target.checked; });
 
+                const halfStatSel = bodyEl.querySelector(`.pc-builder-half-feat-stat[data-tier-idx="${tIdx}"]`);
+                halfStatSel?.addEventListener('change', (e) => {
+                    tier.halfFeatStat = e.target.value;
+                });
+
                 const featSel = bodyEl.querySelector(`.pc-builder-feat-sel[data-tier-idx="${tIdx}"]`);
                 featSel?.addEventListener('change', (e) => {
                     tier.featName = e.target.value;
@@ -5134,6 +5536,17 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     const prevEl = bodyEl.querySelector(`.pc-builder-feat-preview[data-tier-idx="${tIdx}"]`);
                     if (prevEl && ft) {
                         prevEl.innerText = `${ft.description ? ft.description.slice(0, 200) : ''}...`;
+                    }
+                    const halfWrap = bodyEl.querySelector(`.pc-builder-half-feat-wrap[data-tier-idx="${tIdx}"]`);
+                    if (halfWrap) {
+                        const isHalf = !!ft?.isHalfFeat;
+                        halfWrap.style.display = isHalf ? 'flex' : 'none';
+                        if (isHalf && halfStatSel) {
+                            const chooseList = ft?.abilityBonus?.chooseFrom || ft?.abilityBonus?.choose;
+                            const statChoices = (Array.isArray(chooseList) && chooseList.length > 0) ? chooseList : statOptions;
+                            halfStatSel.innerHTML = statChoices.map(st => `<option value="${st}" ${tier.halfFeatStat === st ? 'selected' : ''}>${statNames[st]} (+1 &rarr; ${(char.stats?.[st] || 10) + 1})</option>`).join('');
+                            tier.halfFeatStat = statChoices[0] || 'str';
+                        }
                     }
                 });
             });
@@ -5164,9 +5577,9 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 });
             });
 
-            // New levels input
+            // New levels input (allow 0 if no level up)
             document.getElementById('pc-builder-new-levels-input')?.addEventListener('input', (e) => {
-                builderState.hpNewLevelsCount = Math.max(1, parseInt(e.target.value) || 1);
+                builderState.hpNewLevelsCount = Math.max(0, parseInt(e.target.value) || 0);
                 runHpCalculation();
                 document.getElementById('pc-builder-hp-preview').innerText = builderState.calculatedHp;
                 document.getElementById('pc-builder-roll-log').innerHTML = renderHpBreakdownHtml();
@@ -5263,6 +5676,96 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     resetType: ab.resetType || 'none'
                 });
             });
+
+            // 1B. Import Checked Optional Features (Invocations, Maneuvers, Infusions, Metamagic, Fighting Styles)
+            let importedOptFeaturesCount = 0;
+            optFeatureSections.forEach(sec => {
+                if (!sec.selected || sec.selected.size === 0) return;
+
+                let cat = char.abilityCategories.find(c => c.name.toLowerCase() === sec.title.toLowerCase());
+                if (!cat) {
+                    cat = {
+                        id: 'cat_opt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                        name: sec.title,
+                        collapsed: false
+                    };
+                    char.abilityCategories.push(cat);
+                }
+
+                sec.pool.filter(f => sec.selected.has(f.id)).forEach(f => {
+                    if (!char.abilityCards.some(a => (a.name || '').toLowerCase().trim() === f.name.toLowerCase().trim())) {
+                        char.abilityCards.push({
+                            id: 'opt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+                            name: f.name,
+                            actionType: f.actionType || 'passive',
+                            categoryId: cat.id,
+                            description: f.descriptionMarkdown || f.description || '',
+                            formula: f.formula || '',
+                            formulaConfig: f.formulaConfig || null,
+                            customFields: [],
+                            hasCounter: !!f.hasCounter,
+                            usesCurrent: f.usesMax || 0,
+                            usesMax: f.usesMax || 0,
+                            resetType: f.resetType || 'none'
+                        });
+                        importedOptFeaturesCount++;
+                    }
+                });
+
+                // Auto-create Superiority Dice counter card if Battle Master maneuvers were chosen
+                if (sec.isBattleMaster) {
+                    const hasSupDice = char.abilityCards.some(a => (a.name || '').toLowerCase().includes('superiority dice') || (a.name || '').toLowerCase().includes('superiority die'));
+                    if (!hasSupDice) {
+                        char.abilityCards.push({
+                            id: 'ab_supdice_' + Date.now(),
+                            name: 'Superiority Dice',
+                            actionType: 'special',
+                            categoryId: cat.id,
+                            description: `You have ${sec.dieCount} Superiority Dice (${sec.dieSize}) per short or long rest to fuel your maneuvers.`,
+                            formula: sec.dieSize || '1d8',
+                            formulaConfig: null,
+                            customFields: [],
+                            hasCounter: true,
+                            usesCurrent: sec.dieCount || 4,
+                            usesMax: sec.dieCount || 4,
+                            resetType: 'short'
+                        });
+                    }
+                }
+            });
+
+            // 1C. Apply Racial Speeds, Senses, and Size from matchedRace
+            if (matchedRace) {
+                if (matchedRace.speeds) {
+                    char.speed = {
+                        walk: matchedRace.speeds.walk !== undefined ? matchedRace.speeds.walk : 30,
+                        fly: matchedRace.speeds.fly || 0,
+                        swim: matchedRace.speeds.swim || 0,
+                        climb: matchedRace.speeds.climb || 0,
+                        burrow: matchedRace.speeds.burrow || 0
+                    };
+                }
+                if (matchedRace.senses) {
+                    char.senses = {
+                        darkvision: matchedRace.senses.darkvision || 0,
+                        blindsight: matchedRace.senses.blindsight || 0,
+                        truesight: matchedRace.senses.truesight || 0,
+                        devilSight: matchedRace.senses.devilSight || 0
+                    };
+                    const maxVision = Math.max(
+                        parseInt(char.senses.darkvision) || 0,
+                        parseInt(char.senses.blindsight) || 0,
+                        parseInt(char.senses.truesight) || 0,
+                        parseInt(char.senses.devilSight) || 0
+                    );
+                    if (maxVision > 0) {
+                        char.tokenSight = maxVision;
+                    }
+                }
+                if (matchedRace.size) {
+                    char.size = matchedRace.size;
+                }
+            }
 
             // 2. Import Saving Throws & Proficiencies
             char.saves = char.saves || {};
@@ -5406,6 +5909,23 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 } else if (tier.choice === 'feat' && tier.featName) {
                     const matchedFeat = catalogFeats.find(f => f.name === tier.featName);
                     if (matchedFeat) {
+                        // Apply Half-Feat ability bonus and linked saving throw proficiency
+                        if (matchedFeat.isHalfFeat && tier.halfFeatStat) {
+                            let curStat = parseInt(char.stats[tier.halfFeatStat]) || 10;
+                            curStat += 1;
+                            if (!tier.allowOver20) curStat = Math.min(20, curStat);
+                            char.stats[tier.halfFeatStat] = curStat;
+
+                            if (matchedFeat.linkedSaveProficiency) {
+                                char.saves = char.saves || {};
+                                if (typeof matchedFeat.linkedSaveProficiency === 'string') {
+                                    char.saves[matchedFeat.linkedSaveProficiency] = true;
+                                } else {
+                                    char.saves[tier.halfFeatStat] = true;
+                                }
+                            }
+                        }
+
                         let featCat = char.abilityCategories.find(c => c.name.toLowerCase() === 'feats');
                         if (!featCat) {
                             featCat = {
@@ -5442,6 +5962,9 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 char.hpCurrent = char.hpMax;
             }
             char.previousLevel = totalLevel;
+            char.level = totalLevel;
+            char.classes = JSON.parse(JSON.stringify(classes));
+            char.previousClasses = JSON.parse(JSON.stringify(classes));
             char.ac = builderState.calculatedAc;
 
             // 9. Broadcast HP Rolls to Chat if enabled
@@ -5467,7 +5990,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             closeModal();
 
             if (typeof window.showToast === 'function') {
-                window.showToast(`Character updated! Imported ${checkedAbilities.length} abilities, ${checkedItems.length} items, and ${importedSpellsCount} spells.`);
+                window.showToast(`Character updated! Imported ${checkedAbilities.length + importedOptFeaturesCount} abilities, ${checkedItems.length} items, and ${importedSpellsCount} spells.`);
             }
         };
     }
@@ -5963,12 +6486,13 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         // Clear existing content
         portrait.innerHTML = '';
         const cleanUrl = (url || '').split('?')[0].toLowerCase();
+        const safeUrl = typeof window.getSafeVttUrl === 'function' ? window.getSafeVttUrl(url) : ((url && (url.includes('discordapp.com') || url.includes('discordapp.net'))) ? ('/api/proxy-discord?url=' + encodeURIComponent(url)) : url);
         const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i);
         const isYoutube = url && (url.includes('youtube.com/embed') || url.includes('youtube.com/watch') || url.includes('youtu.be/'));
         let mediaEl;
         if (isVideo) {
             mediaEl = document.createElement('video');
-            mediaEl.src = url;
+            mediaEl.src = safeUrl;
             mediaEl.muted = true;
             mediaEl.loop = true;
             mediaEl.autoplay = true;
@@ -5979,7 +6503,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             mediaEl.play().catch(() => { });
         } else if (isYoutube) {
             mediaEl = document.createElement('iframe');
-            mediaEl.src = url;
+            mediaEl.src = safeUrl;
             mediaEl.frameBorder = '0';
             mediaEl.allow = 'autoplay; encrypted-media';
             mediaEl.style.cssText = 'width:100%; height:100%; pointer-events:none; border:none;';
@@ -5987,7 +6511,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         } else {
             // Static image or GIF (GIFs animate natively in <img>)
             mediaEl = document.createElement('img');
-            mediaEl.src = url || 'favicon.svg';
+            mediaEl.src = safeUrl || 'favicon.svg';
             mediaEl.draggable = false;
             mediaEl.style.cssText = 'width:100%; height:100%; object-fit:cover; display:block;';
             portrait.appendChild(mediaEl);
@@ -6004,6 +6528,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         currentChar.tokenImages.forEach((imgObj, idx) => {
             const isActive = currentChar.activeTokenIndex === idx;
             const url = imgObj.url || '';
+            const safeItemUrl = typeof window.getSafeVttUrl === 'function' ? window.getSafeVttUrl(url) : ((url && (url.includes('discordapp.com') || url.includes('discordapp.net'))) ? ('/api/proxy-discord?url=' + encodeURIComponent(url)) : url);
             // Strip query params for extension checking (e.g. Pinterest CDN adds ?v=xxx)
             const cleanUrl = url.split('?')[0].toLowerCase();
             const isVideo = cleanUrl.match(/\.(mp4|webm|ogg)$/i);
@@ -6021,7 +6546,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             let mediaEl;
             if (isVideo) {
                 mediaEl = document.createElement('video');
-                mediaEl.src = imgObj.url;
+                mediaEl.src = safeItemUrl;
                 mediaEl.muted = true;
                 mediaEl.loop = true;
                 mediaEl.autoplay = true;
@@ -6030,14 +6555,14 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 mediaEl.play().catch(() => { }); // Trigger play proactively after append
             } else if (isYoutube) {
                 mediaEl = document.createElement('iframe');
-                mediaEl.src = imgObj.url;
+                mediaEl.src = safeItemUrl;
                 mediaEl.frameBorder = '0';
                 mediaEl.allow = 'autoplay; encrypted-media';
                 mediaEl.style.cssText = 'width:100%; height:100%; pointer-events:none; border:none;';
             } else {
                 // img — covers both GIFs (which animate natively) and static images
                 mediaEl = document.createElement('img');
-                mediaEl.src = imgObj.url;
+                mediaEl.src = safeItemUrl;
                 mediaEl.title = imgObj.name || 'Token';
                 mediaEl.style.cssText = 'width:100%; height:100%; object-fit:cover; display:block;';
             }
@@ -8065,7 +8590,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         try { tokenUrl = window.Renderer.monster.getTokenUrl(m); } catch (e) {}
                     }
                     if (!tokenUrl && (m.source || m.name)) {
-                        const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(m.name) : (m.name || '').replace(/ /g, '-').toLowerCase();
+                        const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(m.name) : (m.name || '').replace(/"/g, '').trim();
                         const source = m.source || 'MM';
                         tokenUrl = `img/bestiary/tokens/${source}/${cleanName}.webp`;
                     }
@@ -8146,7 +8671,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     characterId: c.id,
                     isCompanion: !!c.isCompanion,
                     isPlayer: !c.isCompanion && !c.isCustomNpc,
-                    sightRange: c.tokenSight !== undefined ? c.tokenSight : (c.monsterData ? (window.parseMonsterVision ? window.parseMonsterVision(c.monsterData) : 0) : 0)
+                    sightRange: (c.tokenSight !== undefined && c.tokenSight > 0) ? c.tokenSight : (c.monsterData ? (window.parseMonsterVision ? window.parseMonsterVision(c.monsterData) : 5) : 5)
                 }));
                 e.dataTransfer.effectAllowed = 'copy';
             });
@@ -8332,7 +8857,8 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                             } catch (err) {}
                             if (!fullMonster) {
                                 try {
-                                    const partRes = await fetch(`/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`);
+                                    let partRes = await fetch(`/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`);
+                                    if (!partRes.ok) partRes = await fetch(`/vtt/data/bestiary-normalized/bestiary-${monster.source.toLowerCase()}.json`);
                                     if (partRes.ok) {
                                         const partition = await partRes.json();
                                         const clean = (monster.id || monster.name).toLowerCase();
@@ -8341,14 +8867,17 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                                 } catch (err) {}
                             }
                         }
-                        const finalMonsterData = fullMonster || monster;
+                        const finalMonsterData = fullMonster ? JSON.parse(JSON.stringify(fullMonster)) : JSON.parse(JSON.stringify(monster));
+                        if (nickname) {
+                            finalMonsterData.name = nickname;
+                        }
 
                         let defaultToken = finalMonsterData.tokenImg || finalMonsterData.tokenUrl || finalMonsterData.imgUrl;
                         if (!defaultToken && typeof window.Renderer !== 'undefined' && window.Renderer.monster?.getTokenUrl) {
                             try { defaultToken = window.Renderer.monster.getTokenUrl(finalMonsterData); } catch (e) {}
                         }
                         if (!defaultToken && (finalMonsterData.source || finalMonsterData.name)) {
-                            const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(finalMonsterData.name) : (finalMonsterData.name || '').replace(/ /g, '-').toLowerCase();
+                            const cleanName = typeof window.Parser !== 'undefined' ? window.Parser.nameToTokenName(finalMonsterData.name) : (finalMonsterData.name || '').replace(/"/g, '').trim();
                             const source = finalMonsterData.source || 'MM';
                             defaultToken = `img/bestiary/tokens/${source}/${cleanName}.webp`;
                         }
@@ -8360,6 +8889,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                             isCompanion: true,
                             assignedPlayers: owner ? [owner] : [],
                             monsterData: finalMonsterData,
+                            tokenSight: window.parseMonsterVision ? window.parseMonsterVision(finalMonsterData) : 5,
                             hpMax: hp,
                             hpCurrent: hp,
                             tempHp: 0,
@@ -8466,7 +8996,30 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         }
 
         if ((char.isCompanion || char.isCustomNpc || char.monsterData) && vtt.creatureSheet) {
+            if (vtt.sheetDock && !vtt.sheetDock._internalCall) {
+                vtt.sheetDock.openSheet({
+                    type: 'creature',
+                    monsterData: char.monsterData,
+                    characterId: char.id,
+                    name: char.name,
+                    avatar: char.avatar || char.tokenImage,
+                    isCompanion: char.isCompanion,
+                    isCustomNpc: char.isCustomNpc,
+                    isGeneric: char.isGeneric
+                });
+                return;
+            }
             vtt.creatureSheet.openSheet(char.monsterData, null, char.id);
+            return;
+        }
+
+        if (vtt.sheetDock && !vtt.sheetDock._internalCall) {
+            vtt.sheetDock.openSheet({
+                type: 'player',
+                id: char.id,
+                name: char.name,
+                avatar: char.avatar || char.tokenImage
+            });
             return;
         }
 
@@ -8584,7 +9137,11 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             parseInt(char.senses.truesight) || 0
         );
         if (char.tokenSight === undefined) {
-            char.tokenSight = maxSpecialVision;
+            if (char.isCompanion && char.monsterData) {
+                char.tokenSight = window.parseMonsterVision ? window.parseMonsterVision(char.monsterData) : 5;
+            } else {
+                char.tokenSight = maxSpecialVision > 0 ? maxSpecialVision : 60;
+            }
         }
         
         char.spells = (typeof char.spells === 'object' && char.spells !== null && !Array.isArray(char.spells)) ? char.spells : { cantrip: [], level1: [], level2: [], level3: [], level4: [], level5: [], level6: [], level7: [], level8: [], level9: [], legacy: [{ id: 'sp_legacy', name: 'Legacy Spells', description: char.spells || '' }] };
@@ -9977,8 +10534,8 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                             <i class="fa-solid fa-grip-vertical" style="font-size:0.9rem;"></i>
                         </div>
                         <i class="fa-solid fa-chevron-right pc-ability-expand" data-idx="${i}" style="transition:transform 0.2s; cursor:pointer; font-size:0.7rem; color:var(--color-text-muted);"></i>
-                        <div class="pc-ability-ping" data-idx="${i}" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); display:flex; align-items:center; gap:6px;">
-                            <i class="fa-solid fa-bolt text-gradient-gold"></i> ${card.name}
+                        <div class="pc-ability-ping" data-idx="${i}" title="Ping description to chat" style="cursor:pointer; font-weight:600; color:var(--color-text-primary); display:flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-comment-dots text-gradient-gold"></i> ${card.name}
                             ${actionPill}
                         </div>
                     </div>
@@ -10239,22 +10796,21 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             if (char.skillToggles) {
                 char.skillToggles.filter(t => t.enabled).forEach(t => {
                     if (t.target === 'all' || t.target === 'initiative') {
-                        toggleFormulaStr += (t.formula.startsWith('+') || t.formula.startsWith('-')) ? t.formula : '+' + t.formula;
+                        const cleanT = (t.formula.startsWith('+') || t.formula.startsWith('-')) ? t.formula : '+' + t.formula;
+                        toggleFormulaStr += `${cleanT}[${t.name || 'Toggle'}]`;
                     }
                 });
             }
             const globalMod = char.globalAbilityMod || "0";
-            let modStr = dexMod >= 0 ? '+' + dexMod : dexMod;
-            if (globalMod !== "0") {
-                if (globalMod.includes('d')) {
-                    modStr += (globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod);
-                } else {
-                    const m = parseInt(globalMod) || 0;
-                    const newMod = dexMod + m;
-                    modStr = newMod >= 0 ? '+' + newMod : newMod;
-                }
+            let formula = '1d20';
+            if (dexMod !== 0) {
+                formula += `${dexMod >= 0 ? '+' : ''}${dexMod}[DEX]`;
             }
-            const formula = `1d20${modStr}${toggleFormulaStr}`;
+            if (globalMod !== "0") {
+                const cleanG = (globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod);
+                formula += `${cleanG}[Global]`;
+            }
+            formula += toggleFormulaStr;
 
             const rollData = simulateRoll(formula, 20, e);
 
@@ -10390,18 +10946,15 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             btn.addEventListener('click', (e) => {
                 const ab = e.currentTarget.dataset.ab;
                 const mod = parseInt(e.currentTarget.dataset.mod);
-                let modStr = mod >= 0 ? '+' + mod : mod;
+                let formula = '1d20';
+                if (mod !== 0) {
+                    formula += `${mod >= 0 ? '+' : ''}${mod}[${ab.toUpperCase()}]`;
+                }
                 const globalMod = char.globalAbilityMod || "0";
                 if (globalMod !== "0") {
-                    if (globalMod.includes('d')) {
-                        modStr += (globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod);
-                    } else {
-                        const m = parseInt(globalMod) || 0;
-                        const newMod = mod + m;
-                        modStr = newMod >= 0 ? '+' + newMod : newMod;
-                    }
+                    const cleanG = (globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod);
+                    formula += `${cleanG}[Global]`;
                 }
-                const formula = `1d20${modStr}`;
                 vtt.socket.emit('chat:msg', {
                     text: `[${char.name}: ${ab.toUpperCase()} Check] rolls **Ability Check**`,
                     roll: simulateRoll(formula, 20, e)
@@ -10416,23 +10969,30 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 const baseMod = parseInt(e.currentTarget.dataset.mod);
                 const globalMod = char.globalSaveMod || 0;
                 const customMod = (char.saveMods && char.saveMods[ab]) || 0;
+                const pb = getProfBonus(char.level);
 
-                let toggleFormulaStr = '';
+                let formula = '1d20';
+                if (baseMod !== 0) {
+                    formula += `${baseMod >= 0 ? '+' : ''}${baseMod}[${ab.toUpperCase()}]`;
+                }
+                if (isProf && pb) {
+                    formula += `+${pb}[PB]`;
+                }
+                if (customMod) {
+                    formula += `${customMod >= 0 ? '+' : ''}${customMod}[Custom]`;
+                }
+                if (globalMod) {
+                    formula += `${globalMod >= 0 ? '+' : ''}${globalMod}[Global]`;
+                }
+
                 if (char.saveToggles) {
                     char.saveToggles.filter(t => t.enabled).forEach(t => {
                         if (t.target === 'all' || t.target === ab) {
-                            if (t.formula.startsWith('+') || t.formula.startsWith('-')) {
-                                toggleFormulaStr += t.formula;
-                            } else {
-                                toggleFormulaStr += '+' + t.formula;
-                            }
+                            const cleanT = (t.formula.startsWith('+') || t.formula.startsWith('-')) ? t.formula : '+' + t.formula;
+                            formula += `${cleanT}[${t.name || 'Toggle'}]`;
                         }
                     });
                 }
-
-                const totalMod = baseMod + (isProf ? getProfBonus(char.level) : 0) + globalMod + customMod;
-                const modStr = totalMod >= 0 ? '+' + totalMod : totalMod;
-                const formula = `1d20${modStr}${toggleFormulaStr}`;
 
                 vtt.socket.emit('chat:msg', {
                     text: `[${char.name}: ${ab.toUpperCase()} Save] rolls **Saving Throw**`,
@@ -10508,44 +11068,39 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 const isProf = char.skills[skill];
                 const isExp = char.expertise[skill];
                 const profBonus = getProfBonus(char.level);
-                let totalMod = baseMod + (isProf ? profBonus : 0) + (isExp ? profBonus : 0);
 
-                let modStr = totalMod >= 0 ? '+' + totalMod : totalMod;
+                let formula = '1d20';
+                if (baseMod !== 0) {
+                    formula += `${baseMod >= 0 ? '+' : ''}${baseMod}[${ab.toUpperCase()}]`;
+                }
+                if (isProf && profBonus) {
+                    formula += `+${profBonus}[PB]`;
+                }
+                if (isExp && profBonus) {
+                    formula += `+${profBonus}[EXP]`;
+                }
 
                 const customMod = char.skillMods[skill] || "0";
                 if (customMod !== "0") {
-                    if (customMod.includes('d')) {
-                        modStr += (customMod.startsWith('+') || customMod.startsWith('-') ? customMod : '+' + customMod);
-                    } else {
-                        const m = parseInt(customMod) || 0;
-                        const newMod = totalMod + m;
-                        modStr = newMod >= 0 ? '+' + newMod : newMod;
-                        totalMod = newMod;
-                    }
+                    const cleanC = customMod.startsWith('+') || customMod.startsWith('-') ? customMod : '+' + customMod;
+                    formula += `${cleanC}[Custom]`;
                 }
 
                 const globalMod = char.globalAbilityMod || "0";
                 if (globalMod !== "0") {
-                    if (globalMod.includes('d')) {
-                        modStr += (globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod);
-                    } else {
-                        const m = parseInt(globalMod) || 0;
-                        const newMod = totalMod + m;
-                        modStr = newMod >= 0 ? '+' + newMod : newMod;
-                        totalMod = newMod;
-                    }
+                    const cleanG = globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod;
+                    formula += `${cleanG}[Global]`;
                 }
 
-                let toggleFormulaStr = '';
                 if (char.skillToggles) {
                     char.skillToggles.filter(t => t.enabled).forEach(t => {
                         if (t.target === 'all' || t.target === skill) {
-                            toggleFormulaStr += (t.formula.startsWith('+') || t.formula.startsWith('-')) ? t.formula : '+' + t.formula;
+                            const cleanT = (t.formula.startsWith('+') || t.formula.startsWith('-')) ? t.formula : '+' + t.formula;
+                            formula += `${cleanT}[${t.name || 'Toggle'}]`;
                         }
                     });
                 }
 
-                const formula = `1d20${modStr}${toggleFormulaStr}`;
                 vtt.socket.emit('chat:msg', {
                     text: `[${char.name}: ${skill}] rolls **Skill Check**`,
                     roll: simulateRoll(formula, 20, e)
@@ -10626,32 +11181,29 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 const isProf = toolData.prof;
                 const isExp = toolData.exp;
                 const profBonus = getProfBonus(char.level);
-                let totalMod = baseMod + (isProf ? profBonus : 0) + (isExp ? profBonus : 0);
 
-                let modStr = totalMod >= 0 ? '+' + totalMod : totalMod;
+                let formula = '1d20';
+                if (baseMod !== 0) formula += `${baseMod >= 0 ? '+' : ''}${baseMod}[${ab.toUpperCase()}]`;
+                if (isProf && profBonus) formula += `+${profBonus}[PB]`;
+                if (isExp && profBonus) formula += `+${profBonus}[EXP]`;
 
                 const customMod = toolData.mod || "0";
                 if (customMod !== "0") {
-                    if (customMod.includes('d')) {
-                        modStr += (customMod.startsWith('+') || customMod.startsWith('-') ? customMod : '+' + customMod);
-                    } else {
-                        const m = parseInt(customMod) || 0;
-                        const newMod = totalMod + m;
-                        modStr = newMod >= 0 ? '+' + newMod : newMod;
-                    }
+                    const cleanC = customMod.startsWith('+') || customMod.startsWith('-') ? customMod : '+' + customMod;
+                    formula += `${cleanC}[Custom]`;
                 }
-                
-                let formula = `1d20${modStr}`;
                 
                 const globalMod = char.globalAbilityMod || "0";
                 if (globalMod !== "0") {
-                    formula += (globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod);
+                    const cleanG = (globalMod.startsWith('+') || globalMod.startsWith('-') ? globalMod : '+' + globalMod);
+                    formula += `${cleanG}[Global]`;
                 }
 
                 if (char.skillToggles) {
                     char.skillToggles.filter(t => t.enabled).forEach(t => {
                         if (t.target === 'all') {
-                            formula += (t.formula.startsWith('+') || t.formula.startsWith('-') ? t.formula : '+' + t.formula);
+                            const cleanT = (t.formula.startsWith('+') || t.formula.startsWith('-')) ? t.formula : '+' + t.formula;
+                            formula += `${cleanT}[${t.name || 'Toggle'}]`;
                         }
                     });
                 }
@@ -10780,9 +11332,6 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             formula += atkFormula;
 
             const rollResult = simulateRoll(formula, m.critRange || 20, optEvent);
-            if (rollResult && rollResult.breakdownStr) {
-                rollResult.breakdownStr = rollResult.breakdownStr.replace(/^([+-]?\s*\d+(?:\(.*?\))?)/, '[$1]');
-            }
             return rollResult;
         }
 
@@ -12163,31 +12712,82 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             return list;
         }
 
+        function findPlayerSpell(c, level, idx, spellName = null) {
+            if (!c || !c.spells) return null;
+            let list = c.spells[level];
+            if (!list && level) {
+                if (level.startsWith('level')) {
+                    const numKey = level.replace('level', '');
+                    list = c.spells[numKey];
+                } else if (/^\d+$/.test(level)) {
+                    list = c.spells[level === '0' ? 'cantrip' : ('level' + level)];
+                } else if (level === 'cantrip') {
+                    list = c.spells['0'];
+                }
+            }
+            if (list && idx !== null && idx !== undefined && !isNaN(idx) && list[idx]) {
+                return list[idx];
+            }
+            if (spellName) {
+                const cleanName = spellName.toLowerCase().replace(/\[.*?\]$/, '').trim();
+                for (const k in c.spells) {
+                    if (Array.isArray(c.spells[k])) {
+                        const found = c.spells[k].find(s => s && (s.name || '').toLowerCase().replace(/\[.*?\]$/, '').trim() === cleanName);
+                        if (found) return found;
+                    }
+                }
+            }
+            return null;
+        }
+
+        function getCharIs2024(c) {
+            if (!c) return false;
+            return !!(
+                (c.classes && c.classes.some(cls => (cls.name || '').includes('[XPHB]') || (cls.source || '').toUpperCase() === 'XPHB')) ||
+                c.ruleset === '2024' ||
+                c.source === 'XPHB' ||
+                c.source === 'XMM' ||
+                c.is2024
+            );
+        }
+
         document.querySelectorAll('.pc-spell-expand-btn').forEach(btn => btn.addEventListener('click', async (e) => {
             const item = e.currentTarget.closest('.cs-spell-item, .pc-spell-item') || e.currentTarget.closest('[data-level]');
             if (!item) return;
             const details = item.querySelector('.pc-spell-details');
             const nameEl = item.querySelector('.pc-spell-name');
-            const spellName = nameEl ? nameEl.textContent.trim() : 'Spell';
+            const spellName = nameEl ? nameEl.textContent.trim() : (item.dataset.spellName || 'Spell');
             const descEl = details ? details.querySelector('.pc-spell-desc') : null;
             const chevron = e.currentTarget.querySelector('.fa-chevron-right');
 
             const postChatBtn = item.querySelector('.pc-spell-post-chat');
             const level = item.dataset.level || (postChatBtn ? postChatBtn.dataset.level : null);
             const idx = item.dataset.idx !== undefined ? parseInt(item.dataset.idx) : (postChatBtn ? parseInt(postChatBtn.dataset.idx) : null);
-            const sp = (level && idx !== null && !isNaN(idx) && char?.spells?.[level]) ? char.spells[level][idx] : null;
+            let sp = findPlayerSpell(char, level, idx, spellName);
+            const is2024 = getCharIs2024(char);
+            if (!sp) {
+                sp = { name: spellName, level: level, source: is2024 ? 'XPHB' : 'PHB' };
+            } else if (!sp.source || sp.source === 'MM' || sp.source === 'XMM') {
+                sp.source = is2024 ? 'XPHB' : 'PHB';
+            }
+
+            const spellOptions = { is2024, caster: char };
 
             if (details) {
                 if (details.style.display === 'none') {
                     details.style.display = 'block';
                     if (chevron) chevron.style.transform = 'rotate(90deg)';
                     if (sp && window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
-                        await window.VTTSpellManager.ensureSpellIsParsed(sp);
+                        try {
+                            await window.VTTSpellManager.ensureSpellIsParsed(sp, spellOptions);
+                        } catch (err) {
+                            console.warn('[VTTSpellManager] Error parsing spell:', err);
+                        }
                     }
                     if (window.VTTSpellManager && window.VTTSpellManager.renderAndInjectSpell) {
-                        window.VTTSpellManager.renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level);
-                    } else {
-                        renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level);
+                        window.VTTSpellManager.renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level, spellOptions);
+                    } else if (typeof renderAndInjectSpell === 'function') {
+                        renderAndInjectSpell(spellName, descEl, sp?.description || '', sp, level, spellOptions);
                     }
                 } else {
                     details.style.display = 'none';
@@ -12199,11 +12799,19 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         document.querySelectorAll('.pc-spell-post-chat').forEach(btn => btn.addEventListener('click', async (e) => {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
-            const sp = char?.spells?.[level]?.[idx];
+            const item = e.currentTarget.closest('.cs-spell-item, .pc-spell-item') || e.currentTarget.closest('[data-level]');
+            const nameEl = item?.querySelector('.pc-spell-name');
+            const spellName = nameEl ? nameEl.textContent.trim() : (item?.dataset.spellName || '');
+            let sp = findPlayerSpell(char, level, idx, spellName);
+            const is2024 = getCharIs2024(char);
+            if (!sp && spellName) {
+                sp = { name: spellName, level: level, source: is2024 ? 'XPHB' : 'PHB' };
+            }
             if (!sp) return;
 
+            const spellOptions = { is2024, caster: char };
             if (window.VTTSpellManager && window.VTTSpellManager.ensureSpellIsParsed) {
-                await window.VTTSpellManager.ensureSpellIsParsed(sp);
+                await window.VTTSpellManager.ensureSpellIsParsed(sp, spellOptions);
             }
 
             const visibility = typeof getVisibilitySetting === 'function' ? getVisibilitySetting() : 'public';
@@ -12231,13 +12839,16 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         document.querySelectorAll('.pc-spell-ping-macro').forEach(btn => btn.addEventListener('click', (e) => {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
-            const sp = char.spells[level][idx];
+            const item = e.currentTarget.closest('.cs-spell-item, .pc-spell-item') || e.currentTarget.closest('[data-level]');
+            const nameEl = item?.querySelector('.pc-spell-name');
+            const spellName = nameEl ? nameEl.textContent.trim() : (item?.dataset.spellName || '');
+            const sp = findPlayerSpell(char, level, idx, spellName);
             if (!sp) return;
             
             const hasUpcast = sp.upcastBonus || (sp.damageList && sp.damageList.some(d => d.upcastBonus && String(d.upcastBonus).trim() !== ''));
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || promptUpcastLevel;
             if (level !== 'cantrip' && level !== 'legacy' && hasUpcast && upcastFn) {
-                upcastFn(parseInt(level.replace('level', '')) || 1, (lvl) => {
+                upcastFn(parseInt(String(level).replace('level', '')) || 1, (lvl) => {
                     if (lvl) {
                         if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
                             window.VTTSpellManager.rollSpell(sp, level, char, { type: 'roll', castLvl: lvl });
@@ -12254,7 +12865,11 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         document.querySelectorAll('.pc-spell-prep-toggle').forEach(btn => btn.addEventListener('click', (e) => {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
-            const sp = char.spells[level][idx];
+            const item = e.currentTarget.closest('.cs-spell-item, .pc-spell-item') || e.currentTarget.closest('[data-level]');
+            const nameEl = item?.querySelector('.pc-spell-name');
+            const spellName = nameEl ? nameEl.textContent.trim() : (item?.dataset.spellName || '');
+            const sp = findPlayerSpell(char, level, idx, spellName);
+            if (!sp) return;
             sp.prepared = sp.prepared === false ? true : false;
             saveAndEmit(char); renderSheetData(char);
         }));
@@ -12262,7 +12877,10 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         document.querySelectorAll('.pc-spell-macro-attack').forEach(btn => btn.addEventListener('click', (e) => {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
-            const sp = char.spells[level][idx];
+            const item = e.currentTarget.closest('.cs-spell-item, .pc-spell-item') || e.currentTarget.closest('[data-level]');
+            const nameEl = item?.querySelector('.pc-spell-name');
+            const spellName = nameEl ? nameEl.textContent.trim() : (item?.dataset.spellName || '');
+            const sp = findPlayerSpell(char, level, idx, spellName);
             if (sp && window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
                 window.VTTSpellManager.rollSpell(sp, level, char, { type: 'attack' });
             }
@@ -12271,7 +12889,10 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         document.querySelectorAll('.pc-spell-macro-save').forEach(btn => btn.addEventListener('click', (e) => {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
-            const sp = char.spells[level][idx];
+            const item = e.currentTarget.closest('.cs-spell-item, .pc-spell-item') || e.currentTarget.closest('[data-level]');
+            const nameEl = item?.querySelector('.pc-spell-name');
+            const spellName = nameEl ? nameEl.textContent.trim() : (item?.dataset.spellName || '');
+            const sp = findPlayerSpell(char, level, idx, spellName);
             if (sp && window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
                 window.VTTSpellManager.rollSpell(sp, level, char, { type: 'save' });
             }
@@ -12280,13 +12901,16 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         document.querySelectorAll('.pc-spell-macro-damage').forEach(btn => btn.addEventListener('click', (e) => {
             const level = e.currentTarget.dataset.level;
             const idx = e.currentTarget.dataset.idx;
-            const sp = char.spells[level][idx];
+            const item = e.currentTarget.closest('.cs-spell-item, .pc-spell-item') || e.currentTarget.closest('[data-level]');
+            const nameEl = item?.querySelector('.pc-spell-name');
+            const spellName = nameEl ? nameEl.textContent.trim() : (item?.dataset.spellName || '');
+            const sp = findPlayerSpell(char, level, idx, spellName);
             if (!sp) return;
             
             const hasUpcast = sp.upcastBonus || (sp.damageList && sp.damageList.some(d => d.upcastBonus && String(d.upcastBonus).trim() !== ''));
             const upcastFn = window.VTTSpellManager?.promptUpcastLevel || promptUpcastLevel;
             if (level !== 'cantrip' && level !== 'legacy' && hasUpcast && upcastFn) {
-                upcastFn(parseInt(level.replace('level', '')) || 1, (lvl) => {
+                upcastFn(parseInt(String(level).replace('level', '')) || 1, (lvl) => {
                     if (lvl) {
                         if (window.VTTSpellManager && window.VTTSpellManager.rollSpell) {
                             window.VTTSpellManager.rollSpell(sp, level, char, { type: 'damage', castLvl: lvl });
@@ -12301,12 +12925,25 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         }));
 
         document.querySelectorAll('.btn-add-spell').forEach(btn => btn.addEventListener('click', (e) => {
-            if (window.VTTSpellManager) { window.VTTSpellManager.openModal(e.currentTarget.dataset.level, -1, currentChar, (char) => { saveAndEmit(char); renderSheetData(char); }); }
+            const is2024 = getCharIs2024(currentChar);
+            if (window.VTTSpellManager) { window.VTTSpellManager.openModal(e.currentTarget.dataset.level, -1, currentChar, (c) => { saveAndEmit(c); renderSheetData(c); }, { is2024 }); }
         }));
 
         document.querySelectorAll('.pc-spell-edit').forEach(btn => btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (window.VTTSpellManager) { window.VTTSpellManager.openModal(e.currentTarget.dataset.level, e.currentTarget.dataset.idx, currentChar, (char) => { saveAndEmit(char); renderSheetData(char); }); }
+            const level = e.currentTarget.dataset.level;
+            const idx = e.currentTarget.dataset.idx;
+            const item = e.currentTarget.closest('.cs-spell-item, .pc-spell-item') || e.currentTarget.closest('[data-level]');
+            const nameEl = item?.querySelector('.pc-spell-name');
+            const spellName = nameEl ? nameEl.textContent.trim() : (item?.dataset.spellName || '');
+            const sp = findPlayerSpell(char, level, idx, spellName);
+            const is2024 = getCharIs2024(currentChar);
+            if (window.VTTSpellManager) { 
+                window.VTTSpellManager.openModal(level, idx, currentChar, (c) => { 
+                    saveAndEmit(c); 
+                    renderSheetData(c); 
+                }, { targetSpell: sp, is2024 }); 
+            }
         }));
 
         document.querySelectorAll('.pc-slot-current').forEach(inp => inp.addEventListener('change', (e) => {
@@ -12769,6 +13406,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
 
         const tokens = canvasEngine.getTokens();
         let changed = false;
+        const updatedTokens = [];
 
         Object.values(tokens).forEach(token => {
             if (token.characterId === char.id) {
@@ -12778,6 +13416,7 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 if (char.tokenSight !== undefined) {
                     token.sightRange = char.tokenSight;
                 }
+                updatedTokens.push(token);
                 changed = true;
             }
         });
@@ -12785,7 +13424,9 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
         if (changed) {
             const currentMapId = canvasEngine.getCurrentMapId();
             if (currentMapId) {
-                vtt.socket.emit('token:update', { mapId: currentMapId, tokens });
+                updatedTokens.forEach(t => {
+                    vtt.socket.emit('token:update', { mapId: currentMapId, token: t });
+                });
             }
             canvasEngine.renderAll();
         }

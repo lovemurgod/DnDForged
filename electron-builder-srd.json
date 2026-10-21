@@ -4,7 +4,7 @@
   "asar": false,
   "directories": {
     "app": ".release-stage",
-    "output": "dist"
+    "output": "dist-srd"
   },
   "files": [
     "server.js",
@@ -31,12 +31,6 @@
     "target": [
       {
         "target": "nsis",
-        "arch": [
-          "x64"
-        ]
-      },
-      {
-        "target": "dir",
         "arch": [
           "x64"
         ]

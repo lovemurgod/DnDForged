@@ -172,12 +172,16 @@ export function initVttDataBridge(vtt) {
             });
         }
 
-        // Live search filter & clear button
+        // Live search filter & clear button (debounced 150ms for smooth typing)
+        let searchDebounceTimer = null;
         const searchClear = document.getElementById('library-search-clear');
         if (searchInput) {
             searchInput.addEventListener('input', () => {
                 if (searchClear) searchClear.style.display = searchInput.value ? 'block' : 'none';
-                applyMonsterFilters();
+                if (searchDebounceTimer) clearTimeout(searchDebounceTimer);
+                searchDebounceTimer = setTimeout(() => {
+                    applyMonsterFilters();
+                }, 150);
             });
         }
         if (searchClear && searchInput) {
@@ -549,9 +553,18 @@ export function initVttDataBridge(vtt) {
             // Clicking opens creature sheet (fetches full statblock if needed)
             item.addEventListener('click', async (e) => {
                 if (e.target.closest('.btn-mobile-spawn-token')) return;
-                if (window.VTT?.creatureSheet) {
-                    let fullMonster = await fetchFullCreature(monster.source, monster.id);
-                    if (!fullMonster) fullMonster = monster;
+                let fullMonster = await fetchFullCreature(monster.source, monster.id);
+                if (!fullMonster) fullMonster = monster;
+                if (window.VTT?.sheetDock?.openSheet) {
+                    window.VTT.sheetDock.openSheet({
+                        type: 'creature',
+                        monsterData: fullMonster,
+                        tokenId: null,
+                        name: fullMonster.name,
+                        avatar: fullMonster.tokenUrl || fullMonster.img,
+                        isGeneric: true
+                    });
+                } else if (window.VTT?.creatureSheet) {
                     window.VTT.creatureSheet.openSheet(fullMonster, null);
                 }
             });
@@ -665,21 +678,78 @@ export function initVttDataBridge(vtt) {
         return 20;
     }
 
-    // Parse maximum vision distance from senses array (returns 0 if no special vision like darkvision)
+    // Parse vision distance from creature senses.
+    // Supports:
+    // - Normalized bestiary: { passivePerception: 15, sensesString: 'darkvision 60 ft., blindsight 30 ft.' }
+    // - Array of strings: ['darkvision 120 ft.', 'passive Perception 15']
+    // - Comma-separated string: 'darkvision 60 ft., passive Perception 12'
+    // - Object with sense keys: { darkvision: 60, blindsight: 30, truesight: 120, tremorsense: 60, devilSight: 120 }
+    // Returns maximum special vision distance (e.g. 60, 120), or 5 ft baseline for normal vision creatures.
     function parseMonsterVision(monster) {
-        if (!monster || !monster.senses) return 0;
+        if (!monster) return 5;
         let maxVision = 0;
-        const senses = Array.isArray(monster.senses) ? monster.senses : [monster.senses];
-        senses.forEach(sense => {
-            if (typeof sense === 'string') {
-                const match = sense.match(/(?:darkvision|blindsight|truesight|tremorsense)\s*(\d+)/i);
-                if (match && match[1]) {
-                    const dist = parseInt(match[1], 10);
-                    if (dist > maxVision) maxVision = dist;
-                }
+        const sensesData = monster.senses || monster.sense;
+
+        if (sensesData) {
+            // Check direct numeric/string sense properties if object
+            if (typeof sensesData === 'object' && !Array.isArray(sensesData)) {
+                ['darkvision', 'blindsight', 'truesight', 'tremorsense', 'devilSight', 'devilsSight'].forEach(k => {
+                    if (sensesData[k] !== undefined && sensesData[k] !== null) {
+                        const val = parseInt(sensesData[k], 10);
+                        if (!isNaN(val) && val > maxVision) maxVision = val;
+                    }
+                });
             }
-        });
-        return maxVision;
+
+            // Gather all textual senses into an array of strings
+            const textChunks = [];
+            if (typeof sensesData === 'string') {
+                textChunks.push(sensesData);
+            } else if (Array.isArray(sensesData)) {
+                sensesData.forEach(item => {
+                    if (typeof item === 'string') textChunks.push(item);
+                    else if (typeof item === 'object' && item !== null) {
+                        if (item.sensesString) textChunks.push(item.sensesString);
+                        Object.values(item).forEach(v => { if (typeof v === 'string') textChunks.push(v); });
+                    }
+                });
+            } else if (typeof sensesData === 'object' && sensesData !== null) {
+                if (sensesData.sensesString) textChunks.push(sensesData.sensesString);
+                Object.values(sensesData).forEach(v => {
+                    if (typeof v === 'string') textChunks.push(v);
+                });
+            }
+
+            // Parse any special vision ranges from text
+            const senseRegex = /(?:darkvision|blindsight|truesight|tremorsense|devil(?:'s)?\s*sight)\s*(?:up\s+to\s+|to\s+a\s+range\s+of\s+|of\s+)?(\d+)/gi;
+            textChunks.forEach(text => {
+                let match;
+                while ((match = senseRegex.exec(text)) !== null) {
+                    if (match[1]) {
+                        const dist = parseInt(match[1], 10);
+                        if (!isNaN(dist) && dist > maxVision) maxVision = dist;
+                    }
+                }
+            });
+        }
+
+        // Check traits if monster object has trait array
+        const traitsList = Array.isArray(monster.trait) ? monster.trait : (Array.isArray(monster.traits) ? monster.traits : null);
+        if (maxVision === 0 && traitsList) {
+            const senseRegex = /(?:darkvision|blindsight|truesight|tremorsense|devil(?:'s)?\s*sight)\s*(?:up\s+to\s+|to\s+a\s+range\s+of\s+|of\s+)?(\d+)/gi;
+            traitsList.forEach(t => {
+                const desc = (t.name || '') + ' ' + (t.entries ? (Array.isArray(t.entries) ? t.entries.join(' ') : String(t.entries)) : (t.text || ''));
+                let match;
+                while ((match = senseRegex.exec(desc)) !== null) {
+                    if (match[1]) {
+                        const dist = parseInt(match[1], 10);
+                        if (!isNaN(dist) && dist > maxVision) maxVision = dist;
+                    }
+                }
+            });
+        }
+
+        return maxVision > 0 ? maxVision : 5;
     }
     window.parseMonsterVision = parseMonsterVision;
 
@@ -755,10 +825,15 @@ export function initVttDataBridge(vtt) {
                     fetchFullCreature(data.source, data.id || data.name).then(fullMonster => {
                         if (fullMonster) {
                             token.monsterData = fullMonster;
+                            const fullSight = parseMonsterVision(fullMonster);
+                            if (fullSight > token.sightRange) {
+                                token.sightRange = fullSight;
+                            }
                             if (window.VTT?.socket) {
                                 const curMapId = canvasEngine.getCurrentMapId?.() || canvasEngine.currentMap?.id || null;
                                 window.VTT.socket.emit('token:update', { mapId: curMapId, token });
                             }
+                            if (canvasEngine.renderAll) canvasEngine.renderAll();
                         }
                     });
                 }
@@ -808,25 +883,41 @@ export function initVttDataBridge(vtt) {
 
                 const finalSize = charRef && charRef.tokenSize !== undefined ? charRef.tokenSize : data.size;
 
-                // Determine sight range:
-                // 1. charRef.tokenSight if explicitly saved
-                // 2. data.sightRange if provided
-                // 3. parseMonsterVision if monsterData exists
-                // 4. Default to 0 (no special vision in pitch darkness)
-                let resolvedSight = 0;
-                if (charRef && charRef.tokenSight !== undefined) {
-                    resolvedSight = parseInt(charRef.tokenSight);
-                } else if (data.sightRange !== undefined) {
-                    resolvedSight = parseInt(data.sightRange);
-                } else if (charRef?.monsterData) {
-                    resolvedSight = parseMonsterVision(charRef.monsterData);
+                // Determine sight range with self-healing migration:
+                // 1. If creature has monsterData, parse true senses (darkvision or 5 ft fallback)
+                // 2. If charRef.tokenSight was set, respect custom overrides unless corrupted by legacy passive perception bug
+                // 3. For player characters, extract from charRef.senses or fallback to 60 ft standard player sight
+                let resolvedSight = 5;
+                if (charRef?.monsterData) {
+                    const parsedMonsterSight = parseMonsterVision(charRef.monsterData);
+                    if (charRef.tokenSight !== undefined && charRef.tokenSight !== null && charRef.tokenSight > 0) {
+                        const rawPp = charRef.monsterData.passive || charRef.monsterData.senses?.passivePerception;
+                        if (rawPp && parseInt(charRef.tokenSight, 10) === parseInt(rawPp, 10) && parsedMonsterSight !== parseInt(rawPp, 10)) {
+                            resolvedSight = parsedMonsterSight;
+                            charRef.tokenSight = parsedMonsterSight;
+                        } else {
+                            resolvedSight = parseInt(charRef.tokenSight, 10);
+                        }
+                    } else {
+                        resolvedSight = parsedMonsterSight;
+                        charRef.tokenSight = parsedMonsterSight;
+                    }
+                } else if (charRef && charRef.tokenSight !== undefined && charRef.tokenSight !== null && charRef.tokenSight > 0) {
+                    resolvedSight = parseInt(charRef.tokenSight, 10);
+                } else if (data.sightRange !== undefined && data.sightRange !== null && data.sightRange > 0) {
+                    resolvedSight = parseInt(data.sightRange, 10);
                 } else if (charRef?.senses && typeof charRef.senses === 'object') {
-                    resolvedSight = Math.max(
-                        parseInt(charRef.senses.darkvision) || 0,
-                        parseInt(charRef.senses.devilSight) || 0,
-                        parseInt(charRef.senses.blindsight) || 0,
-                        parseInt(charRef.senses.truesight) || 0
+                    const maxS = Math.max(
+                        parseInt(charRef.senses.darkvision, 10) || 0,
+                        parseInt(charRef.senses.devilSight, 10) || 0,
+                        parseInt(charRef.senses.blindsight, 10) || 0,
+                        parseInt(charRef.senses.truesight, 10) || 0
                     );
+                    resolvedSight = maxS > 0 ? maxS : (isPlayer ? 60 : 5);
+                } else if (data.monsterData) {
+                    resolvedSight = parseMonsterVision(data.monsterData);
+                } else if (isPlayer) {
+                    resolvedSight = 60;
                 }
 
                 const token = {
@@ -848,6 +939,8 @@ export function initVttDataBridge(vtt) {
                     isGeneric: isGeneric,
                     characterId: isGeneric ? null : data.characterId,
                     sourceCharacterId: isGeneric ? (data.sourceCharacterId || data.characterId) : null,
+                    ownerUsername: (window.VTT?.role !== 'GM' && window.VTT?.username) ? window.VTT.username : (charRef?.ownerUsername || null),
+                    playerOwner: (window.VTT?.role !== 'GM' && window.VTT?.username) ? window.VTT.username : (charRef?.owner || null),
                     monsterData: isGeneric 
                         ? Object.assign(charRef?.monsterData ? JSON.parse(JSON.stringify(charRef.monsterData)) : (data.monsterData ? JSON.parse(JSON.stringify(data.monsterData)) : {}), { isCustomNpc: true, isGeneric: true })
                         : (charRef?.monsterData || data.monsterData || null),
@@ -983,7 +1076,9 @@ export function initVttDataBridge(vtt) {
     function getNearestHexFeatures(x, y, grid, unitSize) {
         const offsetX = grid.offsetX || 0;
         const offsetY = grid.offsetY || 0;
-        const isVert = grid.type === 'hex-v';
+        const type = grid.type || 'square';
+        const isVert = type === 'hex-v' || type === 'hex-v-even';
+        const isEven = type === 'hex-v-even' || type === 'hex-h-even';
         const R = unitSize / Math.sqrt(3);
         let bestDistCenter = Infinity;
         let bestCx = x, bestCy = y;
@@ -1006,7 +1101,8 @@ export function initVttDataBridge(vtt) {
                 for (let dc = -2; dc <= 2; dc++) {
                     const r = estR + dr;
                     const c = estC + dc;
-                    const cx = offsetX + c * W + (Math.abs(r) % 2 === 1 ? W / 2 : 0);
+                    const isShifted = isEven ? (Math.abs(r) % 2 === 0) : (Math.abs(r) % 2 === 1);
+                    const cx = offsetX + c * W + (isShifted ? W / 2 : 0);
                     const cy = offsetY + r * ySpacing;
                     checkHex(cx, cy);
                 }
@@ -1020,8 +1116,9 @@ export function initVttDataBridge(vtt) {
                 for (let dc = -2; dc <= 2; dc++) {
                     const r = estR + dr;
                     const c = estC + dc;
+                    const isShifted = isEven ? (Math.abs(c) % 2 === 0) : (Math.abs(c) % 2 === 1);
                     const cx = offsetX + c * xSpacing;
-                    const cy = offsetY + r * H + (Math.abs(c) % 2 === 1 ? H / 2 : 0);
+                    const cy = offsetY + r * H + (isShifted ? H / 2 : 0);
                     checkHex(cx, cy);
                 }
             }
@@ -1035,7 +1132,7 @@ export function initVttDataBridge(vtt) {
         const offsetX = grid.offsetX || 0;
         const offsetY = grid.offsetY || 0;
 
-        if (grid.type === 'hex-v' || grid.type === 'hex-h') {
+        if (grid.type && (grid.type.startsWith('hex') || grid.type === 'hex-v' || grid.type === 'hex-h')) {
             const px = x + size / 2;
             const py = y + size / 2;
             const hex = getNearestHexFeatures(px, py, grid, size);
@@ -1176,7 +1273,7 @@ export function initVttDataBridge(vtt) {
             isGeneric: isGeneric,
             isCustomNpc: true,
             isPlayer: false,
-            sightRange: npc.tokenSight !== undefined ? npc.tokenSight : parseMonsterVision(npc.monsterData),
+            sightRange: (npc.tokenSight !== undefined && npc.tokenSight > 0) ? npc.tokenSight : parseMonsterVision(npc.monsterData),
             img: tokenImg,
             layer: targetLayer,
             isBorderless: true,
@@ -1260,7 +1357,7 @@ export function initVttDataBridge(vtt) {
             sourceCharacterId: char.id,
             isCompanion: isCompanion,
             isPlayer: !isCompanion && !char.isCustomNpc,
-            sightRange: char.tokenSight !== undefined ? char.tokenSight : (char.monsterData ? parseMonsterVision(char.monsterData) : 0),
+            sightRange: (char.tokenSight !== undefined && char.tokenSight > 0) ? char.tokenSight : (char.monsterData ? parseMonsterVision(char.monsterData) : (isCompanion ? 5 : 60)),
             img: tokenImg,
             layer: targetLayer,
             isBorderless: true,
@@ -1526,6 +1623,9 @@ export function initVttDataBridge(vtt) {
                 fullMonster = await fetchFullCreature(monster.source, monster.id || monster.name);
             }
             const customMonsterData = fullMonster ? JSON.parse(JSON.stringify(fullMonster)) : JSON.parse(JSON.stringify(monster));
+            if (nickname) {
+                customMonsterData.name = nickname;
+            }
             
             const defaultToken = getMonsterImageUrl(customMonsterData);
             const initialTokens = (defaultToken && defaultToken !== 'favicon.svg') 
@@ -1539,11 +1639,14 @@ export function initVttDataBridge(vtt) {
                 isCustomNpc: true,
                 isGeneric: true,
                 monsterData: customMonsterData,
+                tokenSight: parseMonsterVision(customMonsterData),
                 hpMax: hp,
                 hpCurrent: hp,
-                tempHp: 0,
-                ac: monster.ac ? (Array.isArray(monster.ac) ? (monster.ac[0].ac || monster.ac[0]) : (typeof monster.ac === 'object' ? monster.ac.ac : monster.ac)) : 10,
-                tokenImages: initialTokens,
+                ac: (() => {
+                    const acObj = Array.isArray(monster.ac) ? monster.ac[0] : monster.ac;
+                    if (typeof acObj === 'object' && acObj !== null) return (acObj.value ?? acObj.ac ?? monster.primaryAc ?? 10);
+                    return (typeof acObj === 'number' ? acObj : (parseInt(acObj) || monster.primaryAc || 10));
+                })(),
                 activeTokenIndex: 0
             };
             
@@ -1654,7 +1757,7 @@ export function initVttDataBridge(vtt) {
                     customWidth: npc.tokenCustomWidth,
                     customHeight: npc.tokenCustomHeight,
                     img: null,
-                    sightRange: npc.tokenSight !== undefined ? npc.tokenSight : parseMonsterVision(npc.monsterData),
+                    sightRange: (npc.tokenSight !== undefined && npc.tokenSight > 0) ? npc.tokenSight : parseMonsterVision(npc.monsterData),
                     monsterData: npc.monsterData ? JSON.parse(JSON.stringify(npc.monsterData)) : null
                 }));
                 e.dataTransfer.effectAllowed = 'copy';
@@ -1662,7 +1765,18 @@ export function initVttDataBridge(vtt) {
             
             row.addEventListener('click', (e) => {
                 if(e.target.closest('button')) return;
-                if (window.VTT?.creatureSheet) {
+                if (window.VTT?.sheetDock?.openSheet) {
+                    window.VTT.sheetDock.openSheet({
+                        type: 'creature',
+                        monsterData: npc.monsterData,
+                        characterId: id,
+                        name: npc.name,
+                        avatar: npc.avatar || npc.tokenImage,
+                        isCompanion: npc.isCompanion,
+                        isCustomNpc: true,
+                        isGeneric: npc.isGeneric
+                    });
+                } else if (window.VTT?.creatureSheet) {
                     window.VTT.creatureSheet.openSheet(npc.monsterData, null, id);
                 }
             });
@@ -1784,6 +1898,9 @@ export function initVttDataBridge(vtt) {
             if (window.VTTSpellManager?.invalidateSpellCache) {
                 window.VTTSpellManager.invalidateSpellCache();
                 window.VTTSpellManager.loadSpells?.(activeCampId);
+            }
+            if (window.vttPlayerSheetAPI?.invalidateItemCache) {
+                window.vttPlayerSheetAPI.invalidateItemCache();
             }
             if (window.VTT?.toast) {
                 window.VTT.toast('📚 Database sources updated');
@@ -1954,6 +2071,8 @@ export function initVttDataBridge(vtt) {
         // Local image path
         const baseUrl = '/img/';
         const mapUrl = baseUrl + targetMap.href.path;
+        const thumbPath = (targetMap.hrefThumbnail && targetMap.hrefThumbnail.path) || (parentMap && parentMap.hrefThumbnail && parentMap.hrefThumbnail.path);
+        const thumbUrl = thumbPath ? (baseUrl + thumbPath) : mapUrl;
 
         // Construct grid
         let mapGrid = { size: 50, offsetX: 0, offsetY: 0, scale: 1.0, feetPerSquare: 5, type: 'square' };
@@ -1968,7 +2087,21 @@ export function initVttDataBridge(vtt) {
             mapGrid.offsetX = gridSource.grid.offsetX || 0;
             mapGrid.offsetY = gridSource.grid.offsetY || 0;
             mapGrid.scale = 1.0; 
-            mapGrid.type = gridSource.grid.type || 'square';
+            
+            const rawType = (gridSource.grid.type || 'square').toLowerCase();
+            if (rawType === 'hexcolsodd' || rawType === 'hexcols') {
+                mapGrid.type = 'hex-h'; // flat-top odd
+            } else if (rawType === 'hexcolseven') {
+                mapGrid.type = 'hex-h-even'; // flat-top even
+            } else if (rawType === 'hexrowsodd' || rawType === 'hexrows') {
+                mapGrid.type = 'hex-v'; // pointy-top odd
+            } else if (rawType === 'hexrowseven') {
+                mapGrid.type = 'hex-v-even'; // pointy-top even
+            } else if (rawType.startsWith('hex')) {
+                mapGrid.type = 'hex-v';
+            } else {
+                mapGrid.type = gridSource.grid.type || 'square';
+            }
         }
 
         // Construct Walls and Notes from mapRegions
@@ -2061,8 +2194,9 @@ export function initVttDataBridge(vtt) {
 
         return {
             name: mapTitle,
+            folder: adv.name || adventureId || "",
             mapImage: mapUrl, // Dual-guarantee authoritative background anchor!
-            thumbnail: mapUrl,
+            thumbnail: thumbUrl,
             gridWidth: gWidth || 40,
             gridHeight: gHeight || 30,
             grid: mapGrid,

@@ -1,0 +1,1165 @@
+[
+  {
+    "id": "optfeat_apex_dominance_grimhollowplayerpack",
+    "name": "Apex Dominance",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use an action and spend 5 maneuver points to attempt to sunder your enemy with excessive force. When you do, a creature within your reach must succeed on a Strength saving throw. If the creature is currently grappled by you, it has disadvantage on this saving throw.</p>\n<p>On a failed saving throw, the creature takes 6d10 force damage. On a successful save, the target takes half as much damage. If damage from this maneuver reduces a creature to 0 hit points, it immediately dies as you rip it apart.</p>",
+    "description": "You can use an action and spend 5 maneuver points to attempt to sunder your enemy with excessive force. When you do, a creature within your reach must succeed on a Strength saving throw. If the creature is currently grappled by you, it has disadvantage on this saving throw.\n\nOn a failed saving throw, the creature takes 6d10 force damage. On a successful save, the target takes half as much damage. If damage from this maneuver reduces a creature to 0 hit points, it immediately dies as you rip it apart.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "6d10",
+    "formulaConfig": {
+      "baseDice": "6d10",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_arcing_iron_grimhollowplayerpack",
+    "name": "Arcing Iron",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You swing your weapon in a wide arc, catching additional foes. As a bonus action, you can spend 1 or more maneuver points to empower your next melee attack this turn. When you make that attack, make an additional attack against each additional creature within your reach, spending 1 maneuver point per additional creature targeted.</p>",
+    "description": "You swing your weapon in a wide arc, catching additional foes. As a bonus action, you can spend 1 or more maneuver points to empower your next melee attack this turn. When you make that attack, make an additional attack against each additional creature within your reach, spending 1 maneuver point per additional creature targeted.",
+    "actionType": "bonus",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_armor_crushing_blows_grimhollowplayerpack",
+    "name": "Armor-Crushing Blows",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When you hit a creature with an attack, if it is wearing armor, you can spend 4 maneuver points and deal no damage with that attack. Instead, the target must make a Dexterity or Constitution saving throw. On a failed save, their armor is damaged. A creature with damage armor has its AC reduced by 2. If this maneuver is used on damaged armor, that armor is destroyed or otherwise rendered unusable. This maneuver has no effect on natural or magical armor.</p>",
+    "description": "When you hit a creature with an attack, if it is wearing armor, you can spend 4 maneuver points and deal no damage with that attack. Instead, the target must make a Dexterity or Constitution saving throw. On a failed save, their armor is damaged. A creature with damage armor has its AC reduced by 2. If this maneuver is used on damaged armor, that armor is destroyed or otherwise rendered unusable. This maneuver has no effect on natural or magical armor.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_axolotl_s_regeneration_grimhollowplayerpack",
+    "name": "Axolotl's Regeneration",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use a bonus action and spend 2 or 6 maneuver points to regenerate your body. When you do, you regain 1d12 + your Constitution modifier hit points. If you spent 6 points, you also regrow a lost limb or organ of your choice.</p>",
+    "description": "You can use a bonus action and spend 2 or 6 maneuver points to regenerate your body. When you do, you regain 1d12 + your Constitution modifier hit points. If you spent 6 points, you also regrow a lost limb or organ of your choice.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d12 + @con",
+    "formulaConfig": {
+      "baseDice": "1d12",
+      "scalingMod": "CON",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_bestial_transformation_grimhollowplayerpack",
+    "name": "Bestial Transformation",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use an action and spend 8 maneuver points to cast polymorph targeting only yourself without providing material components. However, you can only transform into a beast with a CR of half your level or lower, and you retain your Intelligence, Wisdom, and Charisma scores. Constitution is your spellcasting ability when you cast the spell in this way.</p>",
+    "description": "You can use an action and spend 8 maneuver points to cast polymorph targeting only yourself without providing material components. However, you can only transform into a beast with a CR of half your level or lower, and you retain your Intelligence, Wisdom, and Charisma scores. Constitution is your spellcasting ability when you cast the spell in this way.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_blade_breaking_blow_grimhollowplayerpack",
+    "name": "Blade Breaking Blow",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When you hit a creature with an attack, if it is wielding a weapon, you can spend 4 maneuver points and deal no damage with that attack. Instead, the target must make a Strength or Dexterity saving throw. On a failed save, one of their weapons is damaged. A damaged weapon deals half as much damage. If this maneuver is used on a damaged weapon, that weapon is destroyed or otherwise rendered unusable. This maneuver has no effect on natural or magical weapons.</p>",
+    "description": "When you hit a creature with an attack, if it is wielding a weapon, you can spend 4 maneuver points and deal no damage with that attack. Instead, the target must make a Strength or Dexterity saving throw. On a failed save, one of their weapons is damaged. A damaged weapon deals half as much damage. If this maneuver is used on a damaged weapon, that weapon is destroyed or otherwise rendered unusable. This maneuver has no effect on natural or magical weapons.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_blade_of_eternal_demise_grimhollowplayerpack",
+    "name": "Blade of Eternal Demise",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As an action, you can spend 3 maneuver points and imbue your weapon with magic and declare a single creature. For the next 8 hours, that weapon is magical and if it deals damage to the declared creature, it also reduces the target's maximum hit points by same amount. This reduction lasts until the target finishes a long rest.</p>\n<p>If the declared creature dies from damage dealt by the imbued weapon, it cannot be returned to life by magic for as long as the weapon is touching the creature.</p>",
+    "description": "As an action, you can spend 3 maneuver points and imbue your weapon with magic and declare a single creature. For the next 8 hours, that weapon is magical and if it deals damage to the declared creature, it also reduces the target's maximum hit points by same amount. This reduction lasts until the target finishes a long rest.\n\nIf the declared creature dies from damage dealt by the imbued weapon, it cannot be returned to life by magic for as long as the weapon is touching the creature.",
+    "actionType": "action",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_call_of_the_beast_lord_grimhollowplayerpack",
+    "name": "Call of the Beast Lord",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use an action and spend 5 maneuver points to howl, calling a bestial spirit to your aid. When you do, choose any beast with a CR equal to or less than your level to appear in an unoccupied space of your choice within 60 feet.</p>\n<p>A beast conjured in this way disappears when it is reduced to 0 hit points, after 10 minutes, or when you lose concentration on this maneuver (as if you were concentration||concentrating on a spell). The summoned creature is friendly to you and your companions. The creature shares your initiative but takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any commands to the creature, it defends itself from hostile creatures by taking the Dodge action.</p>",
+    "description": "You can use an action and spend 5 maneuver points to howl, calling a bestial spirit to your aid. When you do, choose any beast with a CR equal to or less than your level to appear in an unoccupied space of your choice within 60 feet.\n\nA beast conjured in this way disappears when it is reduced to 0 hit points, after 10 minutes, or when you lose concentration on this maneuver (as if you were concentration||concentrating on a spell). The summoned creature is friendly to you and your companions. The creature shares your initiative but takes its turn immediately after yours. It obeys your verbal commands (no action required by you). If you don't issue any commands to the creature, it defends itself from hostile creatures by taking the Dodge action.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_carrion_feast_grimhollowplayerpack",
+    "name": "Carrion Feast",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use an action and spend 4 maneuver points to feast on an enemy's waning life. When you use this maneuver, make a melee weapon attack. On a hit, the attack deals an additional 5d6 necrotic damage and you gain temporary hit points equal to the necrotic damage dealt.</p>",
+    "description": "You can use an action and spend 4 maneuver points to feast on an enemy's waning life. When you use this maneuver, make a melee weapon attack. On a hit, the attack deals an additional 5d6 necrotic damage and you gain temporary hit points equal to the necrotic damage dealt.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "5d6",
+    "formulaConfig": {
+      "baseDice": "5d6",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_commanding_grasp_grimhollowplayerpack",
+    "name": "Commanding Grasp",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As an action, you can spend 2 maneuver points and attempt to grab a creature at a distance. Choose a creature of your size or smaller within 30 feet that you can see. The target must succeed on a Strength saving throw or be teleported to an unoccupied space next to you and become grappled by you.</p>",
+    "description": "As an action, you can spend 2 maneuver points and attempt to grab a creature at a distance. Choose a creature of your size or smaller within 30 feet that you can see. The target must succeed on a Strength saving throw or be teleported to an unoccupied space next to you and become grappled by you.",
+    "actionType": "action",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_contest_of_wills_grimhollowplayerpack",
+    "name": "Contest of Wills",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As a bonus action, you can spend 1 maneuver point to face down a creature you can see that can see you in a contest of wills. Make a Charisma (Intimidation) check contested by the target's Charisma (Intimidation). The creature that succeeds has advantage on attack rolls against the other creature until the end of its next turn.</p>",
+    "description": "As a bonus action, you can spend 1 maneuver point to face down a creature you can see that can see you in a contest of wills. Make a Charisma (Intimidation) check contested by the target's Charisma (Intimidation). The creature that succeeds has advantage on attack rolls against the other creature until the end of its next turn.",
+    "actionType": "bonus",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_curse_of_the_befuddled_grimhollowplayerpack",
+    "name": "Curse of the Befuddled",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As an action, you can spend 2 jinx points, and the creature marked by your evil eye is charmed for 10 minutes. When you do, the creature is no longer marked by your evil eye, and the charmed condition ends early if you or your allies deal damage to the creature or cause it to make a saving throw. After the 10 minutes have elapsed, the creature knows you used magic to influence its mood and disposition towards you.</p>",
+    "description": "As an action, you can spend 2 jinx points, and the creature marked by your evil eye is charmed for 10 minutes. When you do, the creature is no longer marked by your evil eye, and the charmed condition ends early if you or your allies deal damage to the creature or cause it to make a saving throw. After the 10 minutes have elapsed, the creature knows you used magic to influence its mood and disposition towards you.",
+    "actionType": "action",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_clumsy_grimhollowplayerpack",
+    "name": "Curse of the Clumsy",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When a creature marked by your evil eye moves 5 feet or more, you can use your reaction and spend 3 jinx points to cause the creature to fall prone and have its movement speed reduced to 0 until the end of the turn. When you do, the creature is no longer marked by your evil eye.</p>",
+    "description": "When a creature marked by your evil eye moves 5 feet or more, you can use your reaction and spend 3 jinx points to cause the creature to fall prone and have its movement speed reduced to 0 until the end of the turn. When you do, the creature is no longer marked by your evil eye.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_debilitated_grimhollowplayerpack",
+    "name": "Curse of the Debilitated",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When a creature marked by your evil eye takes damage, you can use your reaction and spend 1 jinx point to roll 1d12. The creature takes necrotic damage equal to the result.</p>",
+    "description": "When a creature marked by your evil eye takes damage, you can use your reaction and spend 1 jinx point to roll 1d12. The creature takes necrotic damage equal to the result.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "1d12",
+    "formulaConfig": {
+      "baseDice": "1d12",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_curse_of_the_doomed_grimhollowplayerpack",
+    "name": "Curse of the Doomed",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>After you miss with a weapon attack against a creature marked by your evil eye, you can use your reaction and spend 1 jinx point to make an additional weapon attack against the creature as part of the same action.</p>",
+    "description": "After you miss with a weapon attack against a creature marked by your evil eye, you can use your reaction and spend 1 jinx point to make an additional weapon attack against the creature as part of the same action.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_fearful_grimhollowplayerpack",
+    "name": "Curse of the Fearful",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As an action, you can spend 2 jinx points, and the creature marked by your evil eye is frightened for 1 minute. When you do, the creature is no longer marked by your evil eye, and it can make a Wisdom saving throw at the end of each of its turns, ending this misfortune early on a success.</p>",
+    "description": "As an action, you can spend 2 jinx points, and the creature marked by your evil eye is frightened for 1 minute. When you do, the creature is no longer marked by your evil eye, and it can make a Wisdom saving throw at the end of each of its turns, ending this misfortune early on a success.",
+    "actionType": "action",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_inept_grimhollowplayerpack",
+    "name": "Curse of the Inept",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>After a creature marked by your evil eye makes an ability check or attack roll, but before the DM declares whether or not it is successful, you can use your reaction and spend 1 jinx point to make the creature reroll and use the lower result.</p>",
+    "description": "After a creature marked by your evil eye makes an ability check or attack roll, but before the DM declares whether or not it is successful, you can use your reaction and spend 1 jinx point to make the creature reroll and use the lower result.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_insensate_grimhollowplayerpack",
+    "name": "Curse of the Insensate",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As an action, you can spend 3 jinx points, and the creature marked by your evil eye is blinded and deafened for 1 minute. When you do, the creature is no longer marked by your evil eye, and it can make a Constitution saving throw at the end of each of its turns, ending this misfortune early on a success.</p>",
+    "description": "As an action, you can spend 3 jinx points, and the creature marked by your evil eye is blinded and deafened for 1 minute. When you do, the creature is no longer marked by your evil eye, and it can make a Constitution saving throw at the end of each of its turns, ending this misfortune early on a success.",
+    "actionType": "action",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_maimed_grimhollowplayerpack",
+    "name": "Curse of the Maimed",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When you hit a creature marked by your evil eye with a weapon attack, and the die result was 18 or 19, you can use your reaction and spend 2 jinx points to turn the hit into a critical.</p>",
+    "description": "When you hit a creature marked by your evil eye with a weapon attack, and the die result was 18 or 19, you can use your reaction and spend 2 jinx points to turn the hit into a critical.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_marked_grimhollowplayerpack",
+    "name": "Curse of the Marked",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As a bonus action on your turn, you can spend 2 jinx points to enhance the effects of your evil eye on a creature you have marked by it. When you do, the duration increases to 24 hours or until you mark a different creature with your evil eye, whichever comes first. Additionally, while the creature is marked by your evil eye, you always know the direction and distance to the creature, provided you are on the same plane.</p>",
+    "description": "As a bonus action on your turn, you can spend 2 jinx points to enhance the effects of your evil eye on a creature you have marked by it. When you do, the duration increases to 24 hours or until you mark a different creature with your evil eye, whichever comes first. Additionally, while the creature is marked by your evil eye, you always know the direction and distance to the creature, provided you are on the same plane.",
+    "actionType": "bonus",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_plagued_grimhollowplayerpack",
+    "name": "Curse of the Plagued",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When a creature marked by your evil eye regains hit points, you can use your reaction and spend 1 jinx point to halve the amount of hit points regained. When you do, the creature can't regain hit points until the start of your next turn.</p>",
+    "description": "When a creature marked by your evil eye regains hit points, you can use your reaction and spend 1 jinx point to halve the amount of hit points regained. When you do, the creature can't regain hit points until the start of your next turn.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_ruined_grimhollowplayerpack",
+    "name": "Curse of the Ruined",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>After a creature marked by your evil eye makes a saving throw, but before the DM declares whether or not it is successful, you can use your reaction and spend 2 jinx points to make the creature reroll and use the lower result.</p>",
+    "description": "After a creature marked by your evil eye makes a saving throw, but before the DM declares whether or not it is successful, you can use your reaction and spend 2 jinx points to make the creature reroll and use the lower result.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_somnolent_grimhollowplayerpack",
+    "name": "Curse of the Somnolent",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As an action, you can spend 3 jinx points, and the creature marked by your evil eye becomes drowsy. Roll a number of d10 equal to your level in this class and add 15 to their total. If the creature's current hit points are equal to or less than the total, it goes unconscious. The target regains consciousness after 10 minutes, or when it takes damage or another creature uses its action to rouse it.</p>",
+    "description": "As an action, you can spend 3 jinx points, and the creature marked by your evil eye becomes drowsy. Roll a number of d10 equal to your level in this class and add 15 to their total. If the creature's current hit points are equal to or less than the total, it goes unconscious. The target regains consciousness after 10 minutes, or when it takes damage or another creature uses its action to rouse it.",
+    "actionType": "action",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "",
+    "formulaConfig": null
+  },
+  {
+    "id": "optfeat_curse_of_the_unlucky_grimhollowplayerpack",
+    "name": "Curse of the Unlucky",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "Misf"
+    ],
+    "featureTypeName": "Misf",
+    "featureCategory": "Misf",
+    "categoryKey": "other",
+    "classPrereq": null,
+    "subclassPrereq": null,
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As a bonus action on your turn, you can spend 3 jinx points to put a pox on a creature marked by your evil eye. Whenever the creature makes an attack roll or saving throw, you roll 1d4 and subtract the result from their total</p>\n<p>This pox ends when the creature is no longer marked by your evil eye.</p>",
+    "description": "As a bonus action on your turn, you can spend 3 jinx points to put a pox on a creature marked by your evil eye. Whenever the creature makes an attack roll or saving throw, you roll 1d4 and subtract the result from their total\n\nThis pox ends when the creature is no longer marked by your evil eye.",
+    "actionType": "bonus",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": null,
+    "formula": "1d4",
+    "formulaConfig": {
+      "baseDice": "1d4",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_disarming_swipe_grimhollowplayerpack",
+    "name": "Disarming Swipe",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can target your foe's weapon instead of their body. When you hit with a melee attack, you can spend 2 maneuver points and deal no damage with that attack. Instead, the target must succeed on a Strength or Dexterity saving throw (its choice) or be disarmed. A disarmed creature drops any weapons or shields it is holding.</p>",
+    "description": "You can target your foe's weapon instead of their body. When you hit with a melee attack, you can spend 2 maneuver points and deal no damage with that attack. Instead, the target must succeed on a Strength or Dexterity saving throw (its choice) or be disarmed. A disarmed creature drops any weapons or shields it is holding.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_falcon_s_glide_grimhollowplayerpack",
+    "name": "Falcon's Glide",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When you fall, you can use your reaction and spend 1 maneuver point to slow your fall to 60 feet per round for 1 minute. If you land before this time elapses, you take no falling damage.</p>\n<p>In addition, as a bonus action on each of your turns for the duration of this maneuver, you can spend 1 additional maneuver point to gain a fly speed of 30 feet until the end of the turn.</p>",
+    "description": "When you fall, you can use your reaction and spend 1 maneuver point to slow your fall to 60 feet per round for 1 minute. If you land before this time elapses, you take no falling damage.\n\nIn addition, as a bonus action on each of your turns for the duration of this maneuver, you can spend 1 additional maneuver point to gain a fly speed of 30 feet until the end of the turn.",
+    "actionType": "bonus",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_feral_fighting_grimhollowplayerpack",
+    "name": "Feral Fighting",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use a bonus action and spend 1 maneuver point to fight with beastlike fury. When you do, make a single unarmed strike against a creature. On a hit, you can roll 1d8 in place of the normal damage of your unarmed strike.</p>",
+    "description": "You can use a bonus action and spend 1 maneuver point to fight with beastlike fury. When you do, make a single unarmed strike against a creature. On a hit, you can roll 1d8 in place of the normal damage of your unarmed strike.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_helmsplitter_grimhollowplayerpack",
+    "name": "Helmsplitter",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When you hit a creature with an attack, you can spend 4 maneuver points and that creature must succeed on a Constitution saving throw or become stunned until the end of its next turn. If you had advantage on the attack, the target has disadvantage on the saving throw.</p>",
+    "description": "When you hit a creature with an attack, you can spend 4 maneuver points and that creature must succeed on a Constitution saving throw or become stunned until the end of its next turn. If you had advantage on the attack, the target has disadvantage on the saving throw.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_hibernating_bear_recuperation_grimhollowplayerpack",
+    "name": "Hibernating Bear Recuperation",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can spend an action and 5 maneuver points to put yourself into a deep and restful sleep for the next 10 minutes. During this time you have resistance to all damage except psychic and, when you take damage, you can choose to remain asleep or wake up. If you sleep for the entire 10 minutes, you gain the benefits of having completed a short rest, immediately end any poison affecting you, and lose one level of exhaustion.</p>\n<p>At the end of this sleep, you can spend and roll any number of Hit Die, adding your Constitution modifier to each Hit Die rolled, gaining temporary hit points equal to the total.</p>",
+    "description": "You can spend an action and 5 maneuver points to put yourself into a deep and restful sleep for the next 10 minutes. During this time you have resistance to all damage except psychic and, when you take damage, you can choose to remain asleep or wake up. If you sleep for the entire 10 minutes, you gain the benefits of having completed a short rest, immediately end any poison affecting you, and lose one level of exhaustion.\n\nAt the end of this sleep, you can spend and roll any number of Hit Die, adding your Constitution modifier to each Hit Die rolled, gaining temporary hit points equal to the total.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_iron_tempest_grimhollowplayerpack",
+    "name": "Iron Tempest",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As an action, you can spend 4 maneuver points and make a weapon attack against a creature. Until the end of your turn, whenever you hit with a weapon attack, it deals 2d6 additional damage and you can make an additional number of attacks equal to your proficiency bonus, but each bonus attack must be against a different target.</p>",
+    "description": "As an action, you can spend 4 maneuver points and make a weapon attack against a creature. Until the end of your turn, whenever you hit with a weapon attack, it deals 2d6 additional damage and you can make an additional number of attacks equal to your proficiency bonus, but each bonus attack must be against a different target.",
+    "actionType": "action",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "2d6",
+    "formulaConfig": {
+      "baseDice": "2d6",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_pack_leader_grimhollowplayerpack",
+    "name": "Pack Leader",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When an enemy creature within 5 feet of you is attacked, you can use your reaction and spend 1 maneuver point to make a melee attack at the same enemy creature. When you do, the triggering attack has advantage.</p>",
+    "description": "When an enemy creature within 5 feet of you is attacked, you can use your reaction and spend 1 maneuver point to make a melee attack at the same enemy creature. When you do, the triggering attack has advantage.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_predator_s_howl_grimhollowplayerpack",
+    "name": "Predator's Howl",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use a bonus action and spend 2 maneuver points to emit a terrifying howl. Two creatures of your choice within 30 feet of you must make a Wisdom saving throw. On a failed save, the creature is frightened until the start of your next turn. Each time the frightened creature takes damage from weapon attacks, they take an additional 1d6 psychic damage.</p>",
+    "description": "You can use a bonus action and spend 2 maneuver points to emit a terrifying howl. Two creatures of your choice within 30 feet of you must make a Wisdom saving throw. On a failed save, the creature is frightened until the start of your next turn. Each time the frightened creature takes damage from weapon attacks, they take an additional 1d6 psychic damage.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d6",
+    "formulaConfig": {
+      "baseDice": "1d6",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_refusal_to_bleed_grimhollowplayerpack",
+    "name": "Refusal to Bleed",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As a reaction when you take damage, you can spend 1 maneuver point to roll a d10. Add your fighter level to the number rolled and reduce the damage by that total.</p>\n<p>If the triggering damage is from an attack, you can spend 3 additional maneuver points to reduce all damage from the creature that attacked you by the same total until the start of your next turn.</p>",
+    "description": "As a reaction when you take damage, you can spend 1 maneuver point to roll a d10. Add your fighter level to the number rolled and reduce the damage by that total.\n\nIf the triggering damage is from an attack, you can spend 3 additional maneuver points to reduce all damage from the creature that attacked you by the same total until the start of your next turn.",
+    "actionType": "reaction",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_shape_of_the_behemoth_grimhollowplayerpack",
+    "name": "Shape of the Behemoth",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As an action you can spend 3 maneuver points to embody the power of nature's largest beasts for 1 minute. When you do, your size increases by one category to a maximum size of Large. In addition, for the duration your reach increases by 5 feet, your weapon attacks deal an additional 1d6 damage, and you gain 1d6 temporary hit points at the start of each of your turns. This maneuver ends early if you lose concentration (as if you were concentration||concentrating on a spell).</p>",
+    "description": "As an action you can spend 3 maneuver points to embody the power of nature's largest beasts for 1 minute. When you do, your size increases by one category to a maximum size of Large. In addition, for the duration your reach increases by 5 feet, your weapon attacks deal an additional 1d6 damage, and you gain 1d6 temporary hit points at the start of each of your turns. This maneuver ends early if you lose concentration (as if you were concentration||concentrating on a spell).",
+    "actionType": "action",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d6",
+    "formulaConfig": {
+      "baseDice": "1d6",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_slippery_otter_grimhollowplayerpack",
+    "name": "Slippery Otter",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use a bonus action and spend 1 maneuver point to embody the grace and endurance of an otter in water. For the next hour, you have a swimming speed of 30 feet and can hold your breath for a number of minutes equal to twice your Constitution ability score. While in the water, you can take the Dash action as a bonus action.</p>",
+    "description": "You can use a bonus action and spend 1 maneuver point to embody the grace and endurance of an otter in water. For the next hour, you have a swimming speed of 30 feet and can hold your breath for a number of minutes equal to twice your Constitution ability score. While in the water, you can take the Dash action as a bonus action.",
+    "actionType": "bonus",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_snout_of_the_bloodhound_grimhollowplayerpack",
+    "name": "Snout of the Bloodhound",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You take a minute and spend a maneuver point to attune your senses to your surroundings, enhancing your senses of smell, sight, and hearing for the next hour. During this time, you gain the following benefits:</p>\n<p>You have advantage on Wisdom (Perception) and Wisdom (Survival) checks to track You add your proficiency bonus to initiative checks You do not have disadvantage on attack rolls against invisible creatures Stoic Oxen Spirit (2 points) When you become charmed or frightened, you can use your reaction and spend 2 maneuver points to immediately end the triggering charmed or frightened condition. In addition, you have advantage on attack rolls against the creature who attempted to charm or frighten you until the end of your next turn.</p>",
+    "description": "You take a minute and spend a maneuver point to attune your senses to your surroundings, enhancing your senses of smell, sight, and hearing for the next hour. During this time, you gain the following benefits:\n\nYou have advantage on Wisdom (Perception) and Wisdom (Survival) checks to track You add your proficiency bonus to initiative checks You do not have disadvantage on attack rolls against invisible creatures Stoic Oxen Spirit (2 points) When you become charmed or frightened, you can use your reaction and spend 2 maneuver points to immediately end the triggering charmed or frightened condition. In addition, you have advantage on attack rolls against the creature who attempted to charm or frighten you until the end of your next turn.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_steely_determination_grimhollowplayerpack",
+    "name": "Steely Determination",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When you use your Second Wind, you can spend 1 maneuver point and regain an additional number of hit points equal to your fighter level.</p>",
+    "description": "When you use your Second Wind, you can spend 1 maneuver point and regain an additional number of hit points equal to your fighter level.",
+    "actionType": "bonus",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_trampling_bull_grimhollowplayerpack",
+    "name": "Trampling Bull",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use a bonus action and spend 3 maneuver points to channel the charging bull, moving up to your speed. While moving this way, you can move through the space of creatures of your size or smaller, but you must end your movement in an unoccupied space.</p>\n<p>Each creature whose space you moved through must succeed on a Strength saving throw or be knocked prone and take bludgeoning damage equal to 1d8 + your Strength modifier.</p>",
+    "description": "You can use a bonus action and spend 3 maneuver points to channel the charging bull, moving up to your speed. While moving this way, you can move through the space of creatures of your size or smaller, but you must end your movement in an unoccupied space.\n\nEach creature whose space you moved through must succeed on a Strength saving throw or be knocked prone and take bludgeoning damage equal to 1d8 + your Strength modifier.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8 + @str",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "STR",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_tusks_of_the_rampaging_mammoth_grimhollowplayerpack",
+    "name": "Tusks of the Rampaging Mammoth",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>You can use an action and spend 3 maneuver points to strike an enemy with the overwhelming force of a rampaging mammoth. When you do, make a melee weapon attack against a creature within 5 feet. On a hit, you deal 3d12 damage in addition to your attack's normal damage. If the creature is Huge or smaller, you push the creature 15 feet.</p>",
+    "description": "You can use an action and spend 3 maneuver points to strike an enemy with the overwhelming force of a rampaging mammoth. When you do, make a melee weapon attack against a creature within 5 feet. On a hit, you deal 3d12 damage in addition to your attack's normal damage. If the creature is Huge or smaller, you push the creature 15 feet.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "3d12",
+    "formulaConfig": {
+      "baseDice": "3d12",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_unstoppable_missile_grimhollowplayerpack",
+    "name": "Unstoppable Missile",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>As an action, you can spend 2 maneuver points and throw a melee weapon you are wielding, affecting an area the size of a 5-foot-wide line that is 30 feet long. Each creature in the line must succeed on a Dexterity saving throw or take damage equal to one roll of that weapon's damage dice plus your Strength or Dexterity modifier (your choice).</p>\n<p>For each creature that takes damage from this maneuver, you can spend 1 maneuver point and that creature takes an additional 2d6 damage of the weapon's type.</p>",
+    "description": "As an action, you can spend 2 maneuver points and throw a melee weapon you are wielding, affecting an area the size of a 5-foot-wide line that is 30 feet long. Each creature in the line must succeed on a Dexterity saving throw or take damage equal to one roll of that weapon's damage dice plus your Strength or Dexterity modifier (your choice).\n\nFor each creature that takes damage from this maneuver, you can spend 1 maneuver point and that creature takes an additional 2d6 damage of the weapon's type.",
+    "actionType": "action",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "2d6",
+    "formulaConfig": {
+      "baseDice": "2d6",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_wall_of_blades_grimhollowplayerpack",
+    "name": "Wall of Blades",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:BB"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When you are hit with a weapon attack, you can use your reaction and spend 2 maneuver points to make a weapon attack against the creature attacking you. You can replace your AC with the result of this attack roll until the beginning of your next turn, including against the triggering attack, potentially causing it to miss.</p>",
+    "description": "When you are hit with a weapon attack, you can use your reaction and spend 2 maneuver points to make a weapon attack against the creature attacking you. You can replace your AC with the result of this attack roll until the beginning of your next turn, including against the triggering attack, potentially causing it to miss.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d8",
+    "formulaConfig": {
+      "baseDice": "1d8",
+      "scalingMod": "none",
+      "modClass": "Fighter",
+      "extraBonus": 0
+    }
+  },
+  {
+    "id": "optfeat_woolly_beast_s_hide_grimhollowplayerpack",
+    "name": "Woolly Beast's Hide",
+    "source": "GrimHollowPlayerPack",
+    "page": 0,
+    "featureType": [
+      "MV:CR"
+    ],
+    "featureTypeName": "Maneuver",
+    "featureCategory": "Battle Master Maneuvers",
+    "categoryKey": "maneuver",
+    "classPrereq": "Fighter",
+    "subclassPrereq": "Battle Master",
+    "levelPrereq": 1,
+    "prerequisite": "None",
+    "entriesHtml": "<p>When you are hit by an attack, you can use your reaction and spend 2 or more maneuver points to use the resilient parts of your body to shield your vulnerabilities from harmful damage. When you use this maneuver, roll 1d6 for every 2 points you spend to use this maneuver and reduce the damage from an attack by the result. After taking any remaining damage, you also gain temporary hit points equal to the result of the roll.</p>",
+    "description": "When you are hit by an attack, you can use your reaction and spend 2 or more maneuver points to use the resilient parts of your body to shield your vulnerabilities from harmful damage. When you use this maneuver, roll 1d6 for every 2 points you spend to use this maneuver and reduce the damage from an attack by the result. After taking any remaining damage, you also gain temporary hit points equal to the result of the roll.",
+    "actionType": "passive",
+    "hasCounter": false,
+    "usesMax": null,
+    "resetType": "short",
+    "formula": "1d6",
+    "formulaConfig": {
+      "baseDice": "1d6",
+      "scalingMod": "none",
+      "modClass": "",
+      "extraBonus": 0
+    }
+  }
+]

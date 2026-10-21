@@ -10,6 +10,7 @@ import zlib from 'zlib';
 
 import multer from 'multer';
 import cors from 'cors';
+import compression from 'compression';
 import { createCampaignTemplate, updateMapProperty, isValidAssetPath, verifyPassword, hashPassword } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,7 +22,10 @@ const io = new Server(httpServer, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"]
-  }
+  },
+  maxHttpBufferSize: 5e7, // 50MB: prevents packet overflow disconnections for large maps/drawings
+  pingTimeout: 60000,     // 60s: protects against background tab throttling / sleep wake
+  pingInterval: 25000     // 25s heartbeat
 });
 
 process.on('uncaughtException', (err) => {
@@ -31,6 +35,8 @@ process.on('unhandledRejection', (reason, promise) => {
   console.error('[Server Error] Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
+// High-performance response compression for all routes
+app.use(compression());
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -74,24 +80,36 @@ function loadServerConfig() {
   }
 }
 // --- Sources & Homebrew Configuration Manager ---
+let sourcesConfigFileMtime = 0;
 let sourcesConfig = {
   disabledSources: { global: [], campaigns: {} },
   customSources: []
 };
 
-function loadSourcesConfig() {
+function loadSourcesConfig(force = false) {
   try {
     const p = path.join(DATA_DIR, 'sources-config.json');
     if (fs.existsSync(p)) {
-      sourcesConfig = JSON.parse(fs.readFileSync(p, 'utf8'));
+      const stat = fs.statSync(p);
+      if (force || stat.mtimeMs !== sourcesConfigFileMtime) {
+        sourcesConfigFileMtime = stat.mtimeMs;
+        sourcesConfig = JSON.parse(fs.readFileSync(p, 'utf8'));
+      }
+    } else {
+      sourcesConfigFileMtime = 0;
+      sourcesConfig = {
+        disabledSources: { global: [], campaigns: {} },
+        customSources: []
+      };
     }
   } catch (e) {
     console.error('[Server] Error loading sources-config.json:', e);
   }
 }
-loadSourcesConfig();
+loadSourcesConfig(true);
 
 function getDisabledSourcesSet(campaignId = null) {
+  loadSourcesConfig(false);
   const set = new Set((sourcesConfig.disabledSources?.global || []).map(s => String(s).toUpperCase()));
   if (campaignId && sourcesConfig.disabledSources?.campaigns?.[campaignId]) {
     for (const s of sourcesConfig.disabledSources.campaigns[campaignId]) {
@@ -99,6 +117,41 @@ function getDisabledSourcesSet(campaignId = null) {
     }
   }
   return set;
+}
+
+function extractEntityArray(data, category) {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (typeof data !== 'object') return [];
+
+  const cat = String(category || '').toLowerCase();
+  const singular = cat.endsWith('s') ? cat.slice(0, -1) : cat;
+  const plural = cat.endsWith('s') ? cat : cat + 's';
+  const candidateKeys = [
+    cat,
+    singular,
+    plural,
+    cat === 'bestiary' ? 'monster' : null,
+    cat === 'bestiary' ? 'monsters' : null,
+    'monster', 'monsters',
+    'spell', 'spells',
+    'item', 'items',
+    'class', 'classes',
+    'race', 'races',
+    'feat', 'feats',
+    'background', 'backgrounds',
+    'adventure', 'adventures',
+    'optionalfeature', 'optionalfeatures',
+    'data'
+  ].filter(Boolean);
+
+  for (const k of candidateKeys) {
+    if (Array.isArray(data[k])) return data[k];
+  }
+  for (const val of Object.values(data)) {
+    if (Array.isArray(val) && val.length > 0 && typeof val[0] === 'object') return val;
+  }
+  return [];
 }
 
 function loadCustomEntities(category) {
@@ -113,8 +166,7 @@ function loadCustomEntities(category) {
           const raw = fs.readFileSync(path.join(catDir, file), 'utf8');
           const data = JSON.parse(raw);
           const srcCode = String(data.source || file.replace(/\.json$/i, '')).toUpperCase();
-          const listProp = category === 'bestiary' ? 'monsters' : category;
-          const items = Array.isArray(data) ? data : (Array.isArray(data[listProp]) ? data[listProp] : []);
+          const items = extractEntityArray(data, category);
           for (const item of items) {
             if (item && typeof item === 'object') {
               if (!item.source) item.source = srcCode;
@@ -257,9 +309,47 @@ app.use('/vtt-uploads', (req, res, next) => {
   res.status(404).send('Upload file not found');
 });
 
-app.use('/assets', (req, res, next) => {
-  express.static(ASSETS_DIR)(req, res, next);
-});
+app.use('/assets', express.static(ASSETS_DIR, { maxAge: '2h', etag: true, lastModified: true }));
+
+function sendImageFile(filePath, res) {
+  const ext = path.extname(filePath).toLowerCase();
+  let mimeType = ext === '.webp' ? 'image/webp'
+    : ext === '.png' ? 'image/png'
+    : ext === '.jpg' || ext === '.jpeg' ? 'image/jpeg'
+    : ext === '.svg' ? 'image/svg+xml'
+    : ext === '.gif' ? 'image/gif'
+    : 'application/octet-stream';
+
+  // If a file is labeled .webp but actually contains SVG XML, serve as svg+xml to prevent decode failure
+  if (ext === '.webp') {
+    try {
+      const fd = fs.openSync(filePath, 'r');
+      const buf = Buffer.alloc(16);
+      fs.readSync(fd, buf, 0, 16, 0);
+      fs.closeSync(fd);
+      if (buf.toString('utf8').trim().startsWith('<svg')) {
+        mimeType = 'image/svg+xml';
+      }
+    } catch (e) {}
+  }
+
+  res.setHeader('Content-Type', mimeType);
+  res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+  return res.sendFile(filePath);
+}
+
+function isRealWebpFile(filePath) {
+  if (!fs.existsSync(filePath)) return false;
+  try {
+    const fd = fs.openSync(filePath, 'r');
+    const buf = Buffer.alloc(12);
+    fs.readSync(fd, buf, 0, 12, 0);
+    fs.closeSync(fd);
+    return buf.subarray(0, 4).toString() === 'RIFF' && buf.subarray(8, 12).toString() === 'WEBP';
+  } catch (e) {
+    return false;
+  }
+}
 
 // Local Image Route for /img/* and /vtt/img/* (Tokens, Bestiary, Items, Adventure Maps) with On-Demand Mirror Fallback
 app.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
@@ -277,76 +367,117 @@ app.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
     safePath = path.join('img', safePath);
   }
 
-  // Check in vtt/ directory first (for local standalone assets)
   const vttTarget = path.join(VTT_DIR, safePath);
+  const localTarget = path.join(__dirname, '5etools-src', safePath);
+
+  // If vttTarget exists and is a real WebP, serve it immediately
   if (fs.existsSync(vttTarget) && fs.statSync(vttTarget).isFile()) {
-    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    return res.sendFile(vttTarget);
+    if (isRealWebpFile(vttTarget) || !isRealWebpFile(localTarget)) {
+      return sendImageFile(vttTarget, res);
+    }
+  }
+
+  // If localTarget in 5etools-src is a real WebP, prioritize it over fake SVG tokens
+  if (fs.existsSync(localTarget) && fs.statSync(localTarget).isFile()) {
+    return sendImageFile(localTarget, res);
   }
 
   // Check variants in vtt/
   if (safePath.includes(' ')) {
     const vttHyphen = path.join(VTT_DIR, safePath.replace(/ /g, '-'));
     if (fs.existsSync(vttHyphen) && fs.statSync(vttHyphen).isFile()) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-      return res.sendFile(vttHyphen);
+      return sendImageFile(vttHyphen, res);
     }
   } else if (safePath.includes('-')) {
     const vttSpace = path.join(VTT_DIR, safePath.replace(/-/g, ' '));
     if (fs.existsSync(vttSpace) && fs.statSync(vttSpace).isFile()) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-      return res.sendFile(vttSpace);
+      return sendImageFile(vttSpace, res);
     }
   }
 
-  const localTarget = path.join(__dirname, '5etools-src', safePath);
-
-  // 1. Check exact local path on disk in 5etools-src fallback
-  if (fs.existsSync(localTarget) && fs.statSync(localTarget).isFile()) {
-    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    return res.sendFile(localTarget);
-  }
-
-  // 2. Also check raw encoded path locally
-  const rawRel = req.path.replace(/^[\\/]?(?:vtt[\\/])/i, '');
-  const rawTarget = path.join(__dirname, '5etools-src', rawRel);
-  if (fs.existsSync(rawTarget) && fs.statSync(rawTarget).isFile()) {
-    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-    return res.sendFile(rawTarget);
-  }
-
-  // 3. If file has spaces or hyphens, check local variant on disk
+  // Check variants in 5etools-src
   if (safePath.includes(' ')) {
     const hyphenVariant = path.join(__dirname, '5etools-src', safePath.replace(/ /g, '-'));
     if (fs.existsSync(hyphenVariant) && fs.statSync(hyphenVariant).isFile()) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-      return res.sendFile(hyphenVariant);
+      return sendImageFile(hyphenVariant, res);
     }
   } else if (safePath.includes('-')) {
     const spaceVariant = path.join(__dirname, '5etools-src', safePath.replace(/-/g, ' '));
     if (fs.existsSync(spaceVariant) && fs.statSync(spaceVariant).isFile()) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
-      return res.sendFile(spaceVariant);
+      return sendImageFile(spaceVariant, res);
     }
   }
 
-  // 4. On-demand Mirror Fetch & Cache:
-  // Strip '/img/' or 'img/' prefix to get repo-relative path (e.g., 'bestiary/tokens/GGR/Horncaller.webp')
+  // Also check raw encoded path locally
+  const rawRel = req.path.replace(/^[\\/]?(?:vtt[\\/])/i, '');
+  const rawTarget = path.join(__dirname, '5etools-src', rawRel);
+  if (fs.existsSync(rawTarget) && fs.statSync(rawTarget).isFile()) {
+    return sendImageFile(rawTarget, res);
+  }
+
+  // If vttTarget existed (e.g. valid SVG fallback), serve it now
+  if (fs.existsSync(vttTarget) && fs.statSync(vttTarget).isFile()) {
+    return sendImageFile(vttTarget, res);
+  }
+
+  // On-demand Mirror Fetch & Cache:
   const cleanRel = safePath.replace(/^[\\/]?img[\\/]/i, '').replace(/\\/g, '/');
-  const candidates = [
-    `https://raw.githubusercontent.com/5etools-mirror-2/5etools-img/main/${encodeURI(cleanRel)}`,
-    `https://5e.tools/img/${encodeURI(cleanRel)}`,
-    `https://raw.githubusercontent.com/5etools-mirror-1/5etools-img/main/${encodeURI(cleanRel)}`
-  ];
+  const candidateRels = new Set([cleanRel]);
 
   if (cleanRel.includes(' ')) {
-    const hyp = cleanRel.replace(/ /g, '-');
-    candidates.push(`https://raw.githubusercontent.com/5etools-mirror-2/5etools-img/main/${encodeURI(hyp)}`);
-    candidates.push(`https://5e.tools/img/${encodeURI(hyp)}`);
+    candidateRels.add(cleanRel.replace(/ /g, '-'));
   } else if (cleanRel.includes('-')) {
-    const spc = cleanRel.replace(/-/g, ' ');
-    candidates.push(`https://raw.githubusercontent.com/5etools-mirror-2/5etools-img/main/${encodeURI(spc)}`);
-    candidates.push(`https://5e.tools/img/${encodeURI(spc)}`);
+    candidateRels.add(cleanRel.replace(/-/g, ' '));
+  }
+
+  // Normalize canonical source casing for bestiary tokens (e.g. COS -> CoS, OOTA -> OotA)
+  const canonicalSources = {
+    'cos': 'CoS', 'oota': 'OotA', 'toa': 'ToA', 'wdh': 'WDH', 'wdmm': 'WDMM',
+    'idrotf': 'IDRotF', 'bgdia': 'BGDIA', 'gos': 'GoS', 'hotdq': 'HotDQ',
+    'rot': 'RoT', 'lmop': 'LMoP', 'dosi': 'DoSI', 'xmm': 'XMM', 'mm': 'MM',
+    'vgm': 'VGM', 'mtf': 'MTF', 'ftd': 'FTD', 'mpmm': 'MPMM', 'egw': 'EGW',
+    'erlw': 'ERLW', 'ggr': 'GGR', 'mot': 'MOT', 'scc': 'SCC', 'dsotdq': 'DSotDQ',
+    'lox': 'LoX', 'pabtso': 'PaBTSO', 'tftyp': 'TftYP', 'pota': 'PotA',
+    'ai': 'AI', 'psz': 'PSZ', 'skt': 'SKT', 'vrgr': 'VRGR', 'veor': 'VEoR',
+    'mabjov': 'MaBJoV', 'imr': 'IMR'
+  };
+
+  for (const rel of Array.from(candidateRels)) {
+    const parts = rel.split('/');
+    if (parts.length >= 3 && parts[0] === 'bestiary' && parts[1] === 'tokens') {
+      const srcLower = parts[2].toLowerCase();
+      if (canonicalSources[srcLower] && canonicalSources[srcLower] !== parts[2]) {
+        const fixedParts = [...parts];
+        fixedParts[2] = canonicalSources[srcLower];
+        candidateRels.add(fixedParts.join('/'));
+      }
+    }
+  }
+
+  const mirrorHosts = [
+    'https://raw.githubusercontent.com/5etools-mirror-2/5etools-img/main/',
+    'https://5e.tools/img/',
+    'https://raw.githubusercontent.com/5etools-mirror-1/5etools-img/main/'
+  ];
+
+  const candidates = [];
+  for (const host of mirrorHosts) {
+    for (const rel of candidateRels) {
+      candidates.push(`${host}${encodeURI(rel)}`);
+    }
+  }
+
+  // Partnered / homebrew / 3rd-party repositories (e.g. Kobold Press ToB1-2023, ToB, etc.)
+  for (const rel of candidateRels) {
+    const parts = rel.split('/');
+    if (parts.length >= 4 && parts[0] === 'bestiary' && parts[1] === 'tokens') {
+      const src = parts[2];
+      const fileName = parts.slice(3).join('/');
+      // TheGiddyLimit/homebrew-img uses: img/{source}/bestiary/tokens/{name}
+      candidates.push(`https://raw.githubusercontent.com/TheGiddyLimit/homebrew-img/main/img/${encodeURI(src)}/bestiary/tokens/${encodeURI(fileName)}`);
+      candidates.push(`https://raw.githubusercontent.com/TheGiddyLimit/homebrew-img/main/img/bestiary/tokens/${encodeURI(src)}/${encodeURI(fileName)}`);
+      candidates.push(`https://raw.githubusercontent.com/TheGiddyLimit/homebrew-img/main/img/${encodeURI(rel)}`);
+    }
   }
 
   for (const mirrorUrl of candidates) {
@@ -359,9 +490,12 @@ app.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
       if (response.ok) {
         const buf = Buffer.from(await response.arrayBuffer());
         if (buf.length > 50) {
-          const dir = path.dirname(localTarget);
-          if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-          fs.writeFileSync(localTarget, buf);
+          // Cache in local directory and vtt directory
+          for (const cacheTarget of [localTarget, vttTarget]) {
+            const dir = path.dirname(cacheTarget);
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+            fs.writeFileSync(cacheTarget, buf);
+          }
 
           const ext = path.extname(localTarget).toLowerCase();
           const mimeType = ext === '.webp' ? 'image/webp'
@@ -372,12 +506,39 @@ app.get(['/img/*', '/vtt/img/*'], async (req, res, next) => {
             : response.headers.get('content-type') || 'application/octet-stream';
 
           res.setHeader('Content-Type', mimeType);
-          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+          res.setHeader('Cache-Control', 'no-cache, must-revalidate');
           return res.send(buf);
         }
       }
     } catch (e) {
       // Try next mirror candidate
+    }
+  }
+
+  // Bestiary Token Fallback: If a specific source token was not found (e.g. FleeMortals/Specter.webp or OotA/Zhentarim Thug.webp),
+  // check if MM or XMM has a matching token for this creature.
+  const tokenMatch = cleanRel.match(/^bestiary\/tokens\/[^\/]+\/(.+)$/i);
+  if (tokenMatch) {
+    const rawFileName = tokenMatch[1];
+    const fileBase = path.basename(rawFileName, path.extname(rawFileName));
+    const words = fileBase.split(/[\s_-]+/);
+    const candidateNames = [
+      rawFileName,
+      `${words[words.length - 1]}.webp`
+    ];
+
+    for (const candName of candidateNames) {
+      for (const fallbackSrc of ['MM', 'XMM', 'CoS']) {
+        const fallbackRel = path.join('img', 'bestiary', 'tokens', fallbackSrc, candName);
+        const vttFb = path.join(VTT_DIR, fallbackRel);
+        if (fs.existsSync(vttFb) && isRealWebpFile(vttFb)) {
+          return sendImageFile(vttFb, res);
+        }
+        const srcFb = path.join(__dirname, '5etools-src', fallbackRel);
+        if (fs.existsSync(srcFb) && isRealWebpFile(srcFb)) {
+          return sendImageFile(srcFb, res);
+        }
+      }
     }
   }
 
@@ -422,13 +583,18 @@ app.get('/api/proxy-discord', (req, res) => {
 let gzippedSpellsCatalogBuf = null;
 let spellsCatalogEtag = null;
 let rawSpellsCatalogData = null;
+let rawSpellsCatalogMtime = 0;
+let gzippedSpellsCatalogMtime = 0;
 
 function getRawSpellsCatalog() {
-  if (rawSpellsCatalogData) return rawSpellsCatalogData;
   const catPath = path.join(VTT_DATA_DIR, 'spells-catalog.json');
   if (fs.existsSync(catPath)) {
     try {
-      rawSpellsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      const stat = fs.statSync(catPath);
+      if (!rawSpellsCatalogData || stat.mtimeMs !== rawSpellsCatalogMtime) {
+        rawSpellsCatalogMtime = stat.mtimeMs;
+        rawSpellsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      }
       return rawSpellsCatalogData;
     } catch (e) {}
   }
@@ -439,9 +605,13 @@ function loadGzippedSpellsCatalog() {
   try {
     const catPath = path.join(VTT_DATA_DIR, 'spells-catalog.json');
     if (fs.existsSync(catPath)) {
-      const raw = fs.readFileSync(catPath);
-      gzippedSpellsCatalogBuf = zlib.gzipSync(raw, { level: 9 });
-      spellsCatalogEtag = `W/"${gzippedSpellsCatalogBuf.length}-${fs.statSync(catPath).mtimeMs}"`;
+      const stat = fs.statSync(catPath);
+      if (!gzippedSpellsCatalogBuf || stat.mtimeMs !== gzippedSpellsCatalogMtime) {
+        gzippedSpellsCatalogMtime = stat.mtimeMs;
+        const raw = fs.readFileSync(catPath);
+        gzippedSpellsCatalogBuf = zlib.gzipSync(raw, { level: 9 });
+        spellsCatalogEtag = `W/"${gzippedSpellsCatalogBuf.length}-${stat.mtimeMs}"`;
+      }
     }
   } catch (e) {
     console.error('Error loading gzipped spells catalog cache:', e);
@@ -470,11 +640,12 @@ app.get(['/api/spells/catalog', '/data/spells-catalog.json', '/vtt/data/spells-c
   const filtered = raw.filter(sp => !disabledSet.has(String(sp.source || 'PHB').toUpperCase()));
   for (const cs of customSpells) {
     if (!disabledSet.has(String(cs.source).toUpperCase())) {
+      const genId = cs.id || `spell_${(cs.name || 'unnamed').toLowerCase().replace(/[^a-z0-9]/g, '_')}_${(cs.source || 'mybrew').toLowerCase()}`;
       filtered.push({
-        id: cs.id,
-        name: cs.name,
-        source: cs.source,
-        level: cs.level || 0,
+        id: genId,
+        name: cs.name || 'Unnamed Spell',
+        source: cs.source || 'MYBREW',
+        level: cs.level !== undefined ? parseInt(cs.level, 10) || 0 : 0,
         school: cs.school || 'A',
         time: cs.time || [{ number: 1, unit: 'action' }],
         range: cs.range || { type: 'point' },
@@ -513,7 +684,7 @@ function getSpellPartition(source) {
   if (fs.existsSync(customPartPath)) {
     try {
       const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
-      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.spells) ? parsed.spells : []);
+      const list = extractEntityArray(parsed, 'spells');
       spellPartitionCache.set(srcKey, list);
       return list;
     } catch (err) {
@@ -563,13 +734,18 @@ app.get('/api/spell/partition/:source', (req, res) => {
 let gzippedItemsCatalogBuf = null;
 let itemsCatalogEtag = null;
 let rawItemsCatalogData = null;
+let rawItemsCatalogMtime = 0;
+let gzippedItemsCatalogMtime = 0;
 
 function getRawItemsCatalog() {
-  if (rawItemsCatalogData) return rawItemsCatalogData;
   const catPath = path.join(VTT_DATA_DIR, 'items-catalog.json');
   if (fs.existsSync(catPath)) {
     try {
-      rawItemsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      const stat = fs.statSync(catPath);
+      if (!rawItemsCatalogData || stat.mtimeMs !== rawItemsCatalogMtime) {
+        rawItemsCatalogMtime = stat.mtimeMs;
+        rawItemsCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      }
       return rawItemsCatalogData;
     } catch (e) {}
   }
@@ -580,9 +756,13 @@ function loadGzippedItemsCatalog() {
   try {
     const catPath = path.join(VTT_DATA_DIR, 'items-catalog.json');
     if (fs.existsSync(catPath)) {
-      const raw = fs.readFileSync(catPath);
-      gzippedItemsCatalogBuf = zlib.gzipSync(raw, { level: 9 });
-      itemsCatalogEtag = `W/"${gzippedItemsCatalogBuf.length}-${fs.statSync(catPath).mtimeMs}"`;
+      const stat = fs.statSync(catPath);
+      if (!gzippedItemsCatalogBuf || stat.mtimeMs !== gzippedItemsCatalogMtime) {
+        gzippedItemsCatalogMtime = stat.mtimeMs;
+        const raw = fs.readFileSync(catPath);
+        gzippedItemsCatalogBuf = zlib.gzipSync(raw, { level: 9 });
+        itemsCatalogEtag = `W/"${gzippedItemsCatalogBuf.length}-${stat.mtimeMs}"`;
+      }
     }
   } catch (e) {
     console.error('Error loading gzipped items catalog cache:', e);
@@ -611,11 +791,12 @@ app.get(['/api/items/catalog', '/data/items-catalog.json', '/vtt/data/items-cata
   const filtered = raw.filter(it => !disabledSet.has(String(it.source || 'PHB').toUpperCase()));
   for (const ci of customItems) {
     if (!disabledSet.has(String(ci.source).toUpperCase())) {
+      const genId = ci.id || `item_${(ci.name || 'unnamed').toLowerCase().replace(/[^a-z0-9]/g, '_')}_${(ci.source || 'mybrew').toLowerCase()}`;
       filtered.push({
-        id: ci.id,
-        name: ci.name,
-        source: ci.source,
-        type: ci.type || 'G',
+        id: genId,
+        name: ci.name || 'Unnamed Item',
+        source: ci.source || 'MYBREW',
+        type: ci.type || ci.itemType || 'G',
         rarity: ci.rarity || 'none',
         value: ci.value || 0
       });
@@ -652,7 +833,7 @@ function getItemPartition(source) {
   if (fs.existsSync(customPartPath)) {
     try {
       const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
-      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.items) ? parsed.items : []);
+      const list = extractEntityArray(parsed, 'items');
       itemPartitionCache.set(srcKey, list);
       return list;
     } catch (err) {
@@ -690,7 +871,8 @@ app.get('/api/item/:source/:id', (req, res) => {
 const compendiumPartitionCache = new Map();
 
 function getCompendiumPartition(type, source) {
-  const cleanType = (type || '').toLowerCase();
+  let cleanType = (type || '').toLowerCase();
+  if (cleanType === 'optionalfeature') cleanType = 'optionalfeatures';
   const srcKey = (source || 'phb').toLowerCase();
   const cacheKey = `${cleanType}:${srcKey}`;
   if (compendiumPartitionCache.has(cacheKey)) {
@@ -711,7 +893,7 @@ function getCompendiumPartition(type, source) {
   if (fs.existsSync(customPartPath)) {
     try {
       const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
-      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed[cleanType]) ? parsed[cleanType] : []);
+      const list = extractEntityArray(parsed, cleanType);
       compendiumPartitionCache.set(cacheKey, list);
       return list;
     } catch (err) {
@@ -722,7 +904,8 @@ function getCompendiumPartition(type, source) {
 }
 
 app.get(['/api/compendium/:type/catalog', '/data/:type-catalog.json', '/5etools-src/data/:type-catalog.json'], (req, res) => {
-  const type = req.params.type.replace(/-catalog\.json$/i, '');
+  let type = req.params.type.replace(/-catalog\.json$/i, '').toLowerCase();
+  if (type === 'optionalfeature') type = 'optionalfeatures';
   const campId = req.query.campaignId || extractSubdomain(req.headers.host);
   const disabledSet = getDisabledSourcesSet(campId);
   const customEntries = loadCustomEntities(type);
@@ -745,10 +928,11 @@ app.get(['/api/compendium/:type/catalog', '/data/:type-catalog.json', '/5etools-
 
   for (const ce of customEntries) {
     if (!disabledSet.has(String(ce.source).toUpperCase())) {
+      const genId = ce.id || `${type}_${(ce.name || 'unnamed').toLowerCase().replace(/[^a-z0-9]/g, '_')}_${(ce.source || 'mybrew').toLowerCase()}`;
       items.push({
-        id: ce.id,
-        name: ce.name,
-        source: ce.source
+        id: genId,
+        name: ce.name || 'Unnamed Entry',
+        source: ce.source || 'MYBREW'
       });
     }
   }
@@ -849,13 +1033,18 @@ app.get('/api/:type(classes|races|feats|backgrounds)/catalog', (req, res) => {
 let gzippedBestiaryCatalogBuf = null;
 let bestiaryCatalogEtag = null;
 let rawBestiaryCatalogData = null;
+let rawBestiaryCatalogMtime = 0;
+let gzippedBestiaryCatalogMtime = 0;
 
 function getRawBestiaryCatalog() {
-  if (rawBestiaryCatalogData) return rawBestiaryCatalogData;
   const catPath = path.join(VTT_DATA_DIR, 'bestiary-catalog.json');
   if (fs.existsSync(catPath)) {
     try {
-      rawBestiaryCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      const stat = fs.statSync(catPath);
+      if (!rawBestiaryCatalogData || stat.mtimeMs !== rawBestiaryCatalogMtime) {
+        rawBestiaryCatalogMtime = stat.mtimeMs;
+        rawBestiaryCatalogData = JSON.parse(fs.readFileSync(catPath, 'utf8'));
+      }
       return rawBestiaryCatalogData;
     } catch (e) {}
   }
@@ -866,9 +1055,13 @@ function loadGzippedBestiaryCatalog() {
   try {
     const catPath = path.join(VTT_DATA_DIR, 'bestiary-catalog.json');
     if (fs.existsSync(catPath)) {
-      const raw = fs.readFileSync(catPath);
-      gzippedBestiaryCatalogBuf = zlib.gzipSync(raw, { level: 9 });
-      bestiaryCatalogEtag = `W/"${gzippedBestiaryCatalogBuf.length}-${fs.statSync(catPath).mtimeMs}"`;
+      const stat = fs.statSync(catPath);
+      if (!gzippedBestiaryCatalogBuf || stat.mtimeMs !== gzippedBestiaryCatalogMtime) {
+        gzippedBestiaryCatalogMtime = stat.mtimeMs;
+        const raw = fs.readFileSync(catPath);
+        gzippedBestiaryCatalogBuf = zlib.gzipSync(raw, { level: 9 });
+        bestiaryCatalogEtag = `W/"${gzippedBestiaryCatalogBuf.length}-${stat.mtimeMs}"`;
+      }
     }
   } catch (e) {
     console.error('Error loading gzipped bestiary catalog cache:', e);
@@ -897,15 +1090,26 @@ app.get(['/api/bestiary/catalog', '/data/bestiary-catalog.json', '/vtt/data/best
   const filtered = raw.filter(m => !disabledSet.has(String(m.source || 'MM').toUpperCase()));
   for (const cm of customMonsters) {
     if (!disabledSet.has(String(cm.source).toUpperCase())) {
+      const rawAc = Array.isArray(cm.ac) ? cm.ac[0] : cm.ac;
+      const parsedAc = typeof rawAc === 'object' && rawAc !== null
+        ? (rawAc.ac || rawAc.value || 10)
+        : (parseInt(rawAc, 10) || 10);
+
+      const parsedHp = typeof cm.hp === 'object' && cm.hp !== null
+        ? (cm.hp.average || 10)
+        : (parseInt(cm.hp, 10) || 10);
+
+      const genId = cm.id || `creature_${(cm.name || 'unnamed').toLowerCase().replace(/[^a-z0-9]/g, '_')}_${(cm.source || 'mybrew').toLowerCase()}`;
+
       filtered.push({
-        id: cm.id,
-        name: cm.name,
-        source: cm.source,
-        type: cm.type || 'humanoid',
-        cr: cm.cr || '0',
-        crNumeric: cm.crNumeric !== undefined ? cm.crNumeric : 0,
-        hp: cm.hp?.average || 10,
-        ac: cm.ac?.[0]?.ac || 10
+        id: genId,
+        name: cm.name || 'Unnamed Creature',
+        source: cm.source || 'MYBREW',
+        type: typeof cm.type === 'object' && cm.type !== null ? (cm.type.type || 'humanoid') : (cm.type || 'humanoid'),
+        cr: cm.cr !== undefined ? String(cm.cr) : '0',
+        crNumeric: cm.crNumeric !== undefined ? cm.crNumeric : (parseFloat(cm.cr) || 0),
+        hp: parsedHp,
+        ac: parsedAc
       });
     }
   }
@@ -940,7 +1144,7 @@ function getCreaturePartition(source) {
   if (fs.existsSync(customPartPath)) {
     try {
       const parsed = JSON.parse(fs.readFileSync(customPartPath, 'utf8'));
-      const list = Array.isArray(parsed) ? parsed : (Array.isArray(parsed.monsters) ? parsed.monsters : []);
+      const list = extractEntityArray(parsed, 'bestiary');
       creaturePartitionCache.set(srcKey, list);
       return list;
     } catch (err) {
@@ -958,12 +1162,17 @@ app.get('/api/creature/:source/:id', (req, res) => {
     return res.status(404).json({ error: `Bestiary source '${source}' not found` });
   }
 
-  const cleanId = id.toLowerCase();
-  const creature = partition.find(m =>
-    m.id?.toLowerCase() === cleanId ||
-    m.name?.toLowerCase() === cleanId ||
-    m.id?.toLowerCase() === `creature_${cleanId}_${source.toLowerCase()}`
-  );
+  const cleanId = decodeURIComponent(id || '').toLowerCase();
+  const normalizedSlug = cleanId.replace(/[^a-z0-9]/g, '_');
+  const creature = partition.find(m => {
+    const mId = (m.id || '').toLowerCase();
+    const mName = (m.name || '').toLowerCase();
+    return mId === cleanId ||
+      mName === cleanId ||
+      mName === cleanId.replace(/_/g, ' ') ||
+      mId === `creature_${normalizedSlug}_${source.toLowerCase()}` ||
+      mId === `creature_${cleanId}_${source.toLowerCase()}`;
+  });
 
   if (!creature) {
     return res.status(404).json({ error: `Creature '${id}' not found in source '${source}'` });
@@ -974,12 +1183,14 @@ app.get('/api/creature/:source/:id', (req, res) => {
   res.json(creature);
 });
 
-// Disable JS/CSS caching during development so browsers always load the latest files
+// Browser caching & ETag validation for JS and CSS files
 app.use((req, res, next) => {
   if (req.path.endsWith('.js') || req.path.endsWith('.css')) {
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
+    if (process.env.NODE_ENV === 'development') {
+      res.setHeader('Cache-Control', 'no-store');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=7200, must-revalidate');
+    }
   }
   next();
 });
@@ -1009,21 +1220,40 @@ app.get(['/sheet', '/sheet.html', '/vtt/sheet', '/vtt/sheet.html'], (req, res) =
   return res.sendFile(path.join(__dirname, 'vtt', 'sheet.html'));
 });
 
-// Serve standalone ForgeDVTT client statically
-app.use('/vtt/data', express.static(VTT_DATA_DIR));
-app.use('/vtt/data', (req, res, next) => {
+// Static cache headers configuration for high-performance international client loading
+const STATIC_CACHE_OPTS = { maxAge: '2h', etag: true, lastModified: true };
+const LIB_CACHE_OPTS = { maxAge: '24h', etag: true, lastModified: true };
+
+// Serve standalone ForgeDVTT client statically with compression & caching
+app.use(['/data', '/vtt/data'], express.static(VTT_DATA_DIR, STATIC_CACHE_OPTS));
+app.use(['/data', '/vtt/data'], (req, res, next) => {
   const relPath = req.path.replace(/^[/\\]+/, '');
   const target = path.join(VTT_DATA_DIR, relPath);
   if (fs.existsSync(target) && fs.statSync(target).isFile()) {
-    return res.sendFile(target);
+    return res.sendFile(target, { maxAge: '2h', etag: true });
   }
   next();
 });
 
-app.use('/vtt', express.static(VTT_DIR));
+app.use('/vtt', express.static(VTT_DIR, {
+  maxAge: '1h',
+  etag: true,
+  lastModified: true,
+  setHeaders: (res, filePath) => {
+    if (filePath && filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    }
+  }
+}));
 app.get(['/vtt', '/vtt/', '/vtt.html'], (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, must-revalidate');
   res.sendFile(path.join(VTT_DIR, 'index.html'));
 });
+
+// Static fallbacks for root requests (/vtt.html, /) so relative assets resolve cleanly
+app.use('/css', express.static(path.join(VTT_DIR, 'css'), STATIC_CACHE_OPTS));
+app.use('/js', express.static(path.join(VTT_DIR, 'js'), STATIC_CACHE_OPTS));
+app.use('/lib', express.static(path.join(VTT_DIR, 'lib'), LIB_CACHE_OPTS));
 
 // Serve 5etools-src statically as optional companion / compendium if present
 if (fs.existsSync(path.join(__dirname, '5etools-src'))) {
@@ -1198,7 +1428,7 @@ function saveCampaigns(sync = false) {
       campaignsSaveTimeout = null;
     }
     try {
-      atomicWriteFileSync(CAMPAIGNS_FILE, JSON.stringify(campaigns, null, 2));
+      atomicWriteFileSync(CAMPAIGNS_FILE, JSON.stringify(campaigns));
     } catch (err) {
       console.error("Failed to save campaigns sync:", err);
     }
@@ -1209,7 +1439,7 @@ function saveCampaigns(sync = false) {
   campaignsSaveTimeout = setTimeout(async () => {
     campaignsSaveTimeout = null;
     try {
-      await atomicWriteFile(CAMPAIGNS_FILE, JSON.stringify(campaigns, null, 2));
+      await atomicWriteFile(CAMPAIGNS_FILE, JSON.stringify(campaigns));
     } catch (err) {
       console.error("Failed to save campaigns async:", err);
     }
@@ -1223,7 +1453,7 @@ function saveChat(sync = false) {
       chatSaveTimeout = null;
     }
     try {
-      atomicWriteFileSync(CHAT_FILE, JSON.stringify(chatLogs, null, 2));
+      atomicWriteFileSync(CHAT_FILE, JSON.stringify(chatLogs));
     } catch (err) {
       console.error("Failed to save chat sync:", err);
     }
@@ -1234,7 +1464,7 @@ function saveChat(sync = false) {
   chatSaveTimeout = setTimeout(async () => {
     chatSaveTimeout = null;
     try {
-      await atomicWriteFile(CHAT_FILE, JSON.stringify(chatLogs, null, 2));
+      await atomicWriteFile(CHAT_FILE, JSON.stringify(chatLogs));
     } catch (err) {
       console.error("Failed to save chat async:", err);
     }
@@ -1292,8 +1522,8 @@ app.post('/api/server/sync-config', (req, res) => {
 });
 
 // Sources & Homebrew Sync Endpoint
-app.post('/api/server/sync-sources', (req, res) => {
-  loadSourcesConfig();
+app.post(['/api/server/sync-sources', '/api/sources/sync'], (req, res) => {
+  loadSourcesConfig(true);
   // Invalidate in-memory caches
   rawSpellsCatalogData = null;
   rawItemsCatalogData = null;
@@ -1314,7 +1544,7 @@ app.post('/api/server/sync-sources', (req, res) => {
     io.emit('sources:updated', { timestamp: Date.now() });
   }
   console.log('[Sources] Hot-reloaded source filters and broadcast update to VTT.');
-  res.json({ success: true });
+  res.json({ success: true, timestamp: Date.now() });
 });
 
 // Check if username requires GM password
@@ -1844,7 +2074,7 @@ app.get('/api/chat', (req, res) => {
 // stripped, ensuring payloads stay far below Cloudflare's 1MB WebSocket frame limit (<50KB).
 function getSanitizedCampaignSync(camp, role, username) {
   if (!camp) return null;
-  const cloned = JSON.parse(JSON.stringify(camp));
+  const cloned = structuredClone(camp);
 
   // Determine which map IDs need full data for this user
   const activeIds = new Set();
@@ -1861,12 +2091,14 @@ function getSanitizedCampaignSync(camp, role, username) {
         cloned.maps[mapId] = {
           id: m.id,
           name: m.name,
+          folder: m.folder || '',
           mapImage: m.mapImage || '',
           thumbnail: m.thumbnail || m.mapImage || '',
           gridWidth: m.gridWidth,
           gridHeight: m.gridHeight,
           grid: m.grid,
           lightingSettings: m.lightingSettings,
+          weather: m.weather || null,
           tokens: m.tokens || {},
           walls: m.walls || [],
           notes: [],
@@ -1914,6 +2146,48 @@ function broadcastCampaignSync(campaignId) {
       s.emit('campaign:state-sync', getSanitizedCampaignSync(camp, s.role, s.username));
     }
   }
+}
+
+function isCharacterControlledBySocket(char, socket) {
+  if (!char || !socket) return false;
+  if (socket.role === 'GM') return true;
+  const username = socket.username;
+  if (!username) return false;
+
+  if (char.owner === username || char.ownerUsername === username) return true;
+  if (Array.isArray(char.assignedPlayers) && (char.assignedPlayers.includes(username) || char.assignedPlayers.includes('*'))) return true;
+  if (Array.isArray(char.players) && (char.players.includes(username) || char.players.includes('*'))) return true;
+
+  return false;
+}
+
+function isTokenControlledBySocket(token, socket, campaign) {
+  if (!token || !socket) return false;
+  if (socket.role === 'GM') return true;
+  const username = socket.username;
+  if (!username) return false;
+
+  // Direct ownership on the token object
+  if (token.owner === username || token.playerOwner === username || token.ownerUsername === username) {
+    return true;
+  }
+  if (Array.isArray(token.players) && (token.players.includes(username) || token.players.includes('*'))) {
+    return true;
+  }
+  if (Array.isArray(token.assignedPlayers) && (token.assignedPlayers.includes(username) || token.assignedPlayers.includes('*'))) {
+    return true;
+  }
+
+  // Linked character or companion ownership
+  const charId = token.characterId || token.sourceCharacterId;
+  if (charId && campaign && campaign.characters && campaign.characters[charId]) {
+    const char = campaign.characters[charId];
+    if (isCharacterControlledBySocket(char, socket)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 // WebSocket Synchronizer
@@ -2081,6 +2355,10 @@ io.on('connection', (socket) => {
 
     // Handle single token format { token } gracefully
     if (data.token && data.token.id && !data.tokens) {
+      if (socket.role !== 'GM' && !isTokenControlledBySocket(data.token, socket, campaigns[campaignId])) {
+        console.warn(`[Security] Unauthorized token update attempt by ${socket.username} for token ${data.token.id}`);
+        return;
+      }
       if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
         if (!campaigns[campaignId].maps[mapId].tokens) campaigns[campaignId].maps[mapId].tokens = {};
         const cloned = JSON.parse(JSON.stringify(data.token));
@@ -2094,15 +2372,40 @@ io.on('connection', (socket) => {
 
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
       const cloned = JSON.parse(JSON.stringify(data.tokens || {}));
+      const existingTokens = campaigns[campaignId].maps[mapId].tokens || {};
       for (const id in cloned) {
+        if (socket.role !== 'GM') {
+          const checkTok = existingTokens[id] || cloned[id];
+          if (!isTokenControlledBySocket(checkTok, socket, campaigns[campaignId])) {
+            continue;
+          }
+        }
         if (cloned[id]?._animReq) delete cloned[id]._animReq;
+        existingTokens[id] = cloned[id];
       }
-      campaigns[campaignId].maps[mapId].tokens = cloned;
+      campaigns[campaignId].maps[mapId].tokens = existingTokens;
       saveCampaigns();
     }
 
-    // Broadcast update to everyone in the room (including sender to trigger local sync)
-    io.to(campaignId).emit('token:updated', { mapId, tokens: data.tokens, origin: socket.id });
+    // Broadcast update tailored per recipient role (GM receives all tokens; players receive sanitized tokens)
+    const room = io.sockets.adapter.rooms.get(campaignId);
+    if (room) {
+      const fullTokens = (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]?.tokens) || {};
+      const safeTokens = {};
+      for (const tId in fullTokens) {
+        const tok = fullTokens[tId];
+        if (tok && tok.layer !== 'gm' && !tok.hidden) {
+          safeTokens[tId] = tok;
+        }
+      }
+      for (const socketId of room) {
+        const s = io.sockets.sockets.get(socketId);
+        if (s) {
+          const tokensToSend = s.role === 'GM' ? fullTokens : safeTokens;
+          s.emit('token:updated', { mapId, tokens: tokensToSend, origin: socket.id });
+        }
+      }
+    }
   });
 
   // Add new token
@@ -2110,14 +2413,16 @@ io.on('connection', (socket) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
 
-    // Security check: Players may only add player tokens assigned to themselves
+    // Security check: Players may only add tokens they control (characters or companions)
     if (socket.role !== 'GM') {
-      if (!data.token?.isPlayer) {
-        console.warn(`[Security] Player ${socket.username} attempted to add non-player token`);
+      const isAllowed = isTokenControlledBySocket(data.token, socket, campaigns[campaignId]);
+      if (!isAllowed) {
+        console.warn(`[Security] Player ${socket.username} attempted to add unauthorized token`);
         return;
       }
-      data.token.owner = socket.username;
-      data.token.playerOwner = socket.username;
+      if (!data.token.owner) data.token.owner = socket.username;
+      if (!data.token.playerOwner) data.token.playerOwner = socket.username;
+      if (!data.token.ownerUsername) data.token.ownerUsername = socket.username;
     }
     
     const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
@@ -2140,13 +2445,9 @@ io.on('connection', (socket) => {
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
       const existingToken = campaigns[campaignId].maps[mapId].tokens[data.tokenId];
       if (existingToken) {
-        // Security check: GM can update any token; Players can only update player tokens they control
+        // Security check: GM can update any token; Players can only update tokens they control
         if (socket.role !== 'GM') {
-          const isOwner = existingToken.isPlayer && (
-            existingToken.owner === socket.username ||
-            existingToken.playerOwner === socket.username ||
-            (Array.isArray(existingToken.players) && existingToken.players.includes(socket.username))
-          );
+          const isOwner = isTokenControlledBySocket(existingToken, socket, campaigns[campaignId]);
           if (!isOwner) {
             console.warn(`[Security] Unauthorized token delta update attempt by ${socket.username} for token ${data.tokenId}`);
             return;
@@ -2172,13 +2473,9 @@ io.on('connection', (socket) => {
       const existingToken = campaigns[campaignId].maps[mapId].tokens[data.tokenId];
       if (!existingToken) return;
 
-      // Security check: GM can delete any token; Players can only delete player tokens they control
+      // Security check: GM can delete any token; Players can only delete tokens they control
       if (socket.role !== 'GM') {
-        const isOwner = existingToken.isPlayer && (
-          existingToken.owner === socket.username ||
-          existingToken.playerOwner === socket.username ||
-          (Array.isArray(existingToken.players) && existingToken.players.includes(socket.username))
-        );
+        const isOwner = isTokenControlledBySocket(existingToken, socket, campaigns[campaignId]);
         if (!isOwner) {
           console.warn(`[Security] Unauthorized token delete attempt by ${socket.username} for token ${data.tokenId}`);
           return;
@@ -2512,14 +2809,15 @@ io.on('connection', (socket) => {
     if (socket.role !== 'GM') {
       const existing = campaigns[campaignId].characters[charId];
       if (existing) {
-        const isOwner = existing.owner === socket.username ||
-          (Array.isArray(existing.players) && existing.players.includes(socket.username));
+        const isOwner = isCharacterControlledBySocket(existing, socket);
         if (!isOwner) {
           console.warn(`[Security] Unauthorized character update attempt by ${socket.username} for character ${charId}`);
           return;
         }
       } else {
         data.character.owner = socket.username;
+        data.character.ownerUsername = socket.username;
+        if (!data.character.assignedPlayers) data.character.assignedPlayers = [socket.username];
         if (!data.character.players) data.character.players = [socket.username];
       }
     }
@@ -2540,8 +2838,7 @@ io.on('connection', (socket) => {
     if (!existing) return;
 
     if (socket.role !== 'GM') {
-      const isOwner = existing.owner === socket.username ||
-        (Array.isArray(existing.players) && existing.players.includes(socket.username));
+      const isOwner = isCharacterControlledBySocket(existing, socket);
       if (!isOwner) {
         console.warn(`[Security] Unauthorized character delete attempt by ${socket.username} for character ${data.id}`);
         return;
@@ -2572,6 +2869,7 @@ io.on('connection', (socket) => {
     const newMap = {
       id: mapId,
       name: data.name || "Unnamed Map",
+      folder: (data.folder || "").trim(),
       mapImage: data.mapImage || "",
       thumbnail: data.thumbnail || data.mapImage || "",
       gridWidth: data.gridWidth,
@@ -2593,6 +2891,37 @@ io.on('connection', (socket) => {
     saveCampaigns();
 
     console.log(`[map:create] SUCCESS: created map "${newMap.name}" (${mapId}), broadcasting campaign:state-sync to room ${campaignId}`);
+    broadcastCampaignSync(campaignId);
+  });
+
+  // Duplicate an existing map (GM only)
+  socket.on('map:duplicate', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+    if (socket.role !== 'GM') return;
+
+    const { mapId } = data || {};
+    const sourceMap = campaigns[campaignId].maps?.[mapId];
+    if (!sourceMap) return;
+
+    const newMapId = `map_${campaignId}_${Date.now()}`;
+    const cloned = JSON.parse(JSON.stringify(sourceMap));
+    cloned.id = newMapId;
+    cloned.name = `${sourceMap.name || 'Map'} (Copy)`;
+    
+    // Ensure cloned tokens have new IDs if needed so token state is independent
+    if (cloned.tokens && typeof cloned.tokens === 'object') {
+      const remappedTokens = {};
+      for (const [tId, tVal] of Object.entries(cloned.tokens)) {
+        const newTId = `token_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+        remappedTokens[newTId] = { ...tVal, id: newTId };
+      }
+      cloned.tokens = remappedTokens;
+    }
+
+    campaigns[campaignId].maps[newMapId] = cloned;
+    saveCampaigns();
+    console.log(`[map:duplicate] SUCCESS: duplicated map "${sourceMap.name}" into "${cloned.name}" (${newMapId})`);
     broadcastCampaignSync(campaignId);
   });
 
@@ -2647,6 +2976,32 @@ io.on('connection', (socket) => {
     }
 
     socket.emit('campaign:state-sync', getSanitizedCampaignSync(camp, socket.role, socket.username));
+  });
+
+  // Player switches map (e.g. via token locator to jump to a map where they control a token)
+  socket.on('map:switch-player', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+
+    const { mapId } = data;
+    const camp = campaigns[campaignId];
+    if (!camp.maps || !camp.maps[mapId]) return;
+
+    // Security check: If not GM, ensure player controls at least one token on target map
+    if (socket.role !== 'GM') {
+      const targetTokens = camp.maps[mapId].tokens || {};
+      const controlsToken = Object.values(targetTokens).some(tok => isTokenControlledBySocket(tok, socket, camp));
+      if (!controlsToken) {
+        console.warn(`[Security] Player ${socket.username} attempted unauthorized map switch to ${mapId}`);
+        return;
+      }
+    }
+
+    if (!camp.playerMapOverrides) camp.playerMapOverrides = {};
+    camp.playerMapOverrides[socket.username] = mapId;
+    saveCampaigns();
+
+    broadcastCampaignSync(campaignId);
   });
 
   // Client updates campaign settings/activeGMMapId

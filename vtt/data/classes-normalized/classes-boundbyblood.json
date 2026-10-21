@@ -1,0 +1,2501 @@
+[
+  {
+    "id": "class_kindred_boundbyblood",
+    "name": "Kindred",
+    "source": "BoundByBlood",
+    "page": 0,
+    "hitDie": "d10",
+    "primaryAbility": "0",
+    "features": [
+      {
+        "id": "cf_kindred_boundbyblood_blood_potency_1",
+        "name": "Blood Potency",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d10 + @classes.kindred.level",
+        "formulaConfig": {
+          "baseDice": "1d10",
+          "scalingMod": "classLevel",
+          "modClass": "Kindred",
+          "extraBonus": 0
+        },
+        "entriesHtml": "<p>You are fueled by blood, represented by Blood Points. Your Kindred level determines the number of points you have, as shown in the Blood Points column of the Kindred Features table. You can expend Blood Points in the following ways:</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Heal Wounds.</strong> <p>As a Bonus Action|XPHB, you can expend 1 Blood Point to regain Hit Points|XPHB equal to 1d10 plus your Kindred level.</p></div>\n<div class=\"compendium-subentry\"><strong>Hunger Sated.</strong> <p>If you fail a D20 Test|XPHB that is affected by your Beast feature, you can expend 1 Blood Point to ignore the effects of The Beast|Kindred|BoundByBlood|1||Hunger.</p></div>\n<div class=\"compendium-subentry\"><strong>Vitae Powers.</strong> <p>There are Kindred feats|feats|category=kf and subclass features fueled by expending Blood Points.</p></div></div>",
+        "rawEntries": [
+          "You are fueled by blood, represented by Blood Points. Your Kindred level determines the number of points you have, as shown in the Blood Points column of the Kindred Features table. You can expend Blood Points in the following ways:",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Heal Wounds",
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, you can expend 1 Blood Point to regain {@variantrule Hit Points|XPHB} equal to {@dice 1d10} plus your Kindred level."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Hunger Sated",
+                "entries": [
+                  "If you fail a {@variantrule D20 Test|XPHB} that is affected by your Beast feature, you can expend 1 Blood Point to ignore the effects of {@classFeature The Beast|Kindred|BoundByBlood|1||Hunger}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Vitae Powers",
+                "entries": [
+                  "There are {@filter Kindred feats|feats|category=kf} and subclass features fueled by expending Blood Points."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_feed_1",
+        "name": "Feed",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 1,
+        "actionType": "action",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You feed on the blood of other creatures. This is most often accomplished through your sharp fangs. As an action, you can feed on another creature within 5 feet of yourself if the target is willing, Charmed by you, or has the Incapacitated, Grappled, Paralyzed, Restrained, Stunned, or Unconscious condition. You can feed only once per turn.</p>\n<p>When you feed, roll up to your maximum Feed Dice plus your Constitution modifier (minimum of 1). The creature takes Necrotic damage equal to the roll's total. This damage only reduces the creature's Hit Points|XPHB|Hit Point maximum by an amount equal to the roll's total. The number of Feed Dice increases as you gain Kindred levels, as shown in the Feed Dice column of the Kindred Features table. If you roll a 6 on a d6 on a Feed Die, you can regain 1 expended Blood Point. If a creature's Hit Points|XPHB|Hit Point maximum is reduced to 0, you can regain 1 expended Blood Point.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Feeding from the Willing.</strong> <p>If you feed on a willing creature or a creature Charmed by you, it can spend 1 Hit Point Dice|XPHB|Hit Point Die. It rolls the Hit Point Dice|XPHB|Hit Point Die and reduces its Hit Points|XPHB|Hit Point maximum by the amount rolled, and you can regain 1 expended Blood Point. Feeding in this way doesn't end the Charmed condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Hit Die Deficit.</strong> <p>If a creature has no remaining Hit Point Dice|XPHB, the creature takes Necrotic damage equal to a roll of your Feed Dice plus your Constitution modifier, and the creature's Hit Points|XPHB|Hit Point maximum is reduced by an amount equal to the roll's total.</p></div>\n<div class=\"compendium-subentry\"><strong>Maximum Successful Feedings.</strong> <p>A creature can provide a number of Blood Points based on its size. A Small creature provides 1 Blood Point, a Medium provides 3, a Large provides 5, a Huge provides 7, and a Gargantuan provides 10. A creature regains all lost Blood Points when it finishes a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Creature Susceptible to Feed.</strong> <p>You can feed on any creature with blood or other life-giving fluid. Aberrations, Beasts, Dragons, Fey, Giants, Monstrosities, and Humanoids are the most common targets. Constructs, Elementals, Oozes, and Plants usually don't have blood. Work with your GM to determine the types of creatures you can feed on.</p></div></div>\n<div class=\"compendium-subentry\"><strong>The Blood Bond.</strong> <p>A mysterious power in the blood of Kindred causes creatures to become Blood Bound to that Kindred when:</p>\n<ul><li>They drink from the same Kindred at least three times within one year.</li><li>At least one Long Rest|XPHB occurs between each of the three drinks.</li></ul>\n<p>While Blood Bound to a Kindred, a creature is considered Charmed by that Kindred and has Advantage|XPHB on saving throws to avoid being Charmed or Frightened by other creatures. This is in addition to the effects from the Kindred Vitae consumable.</p>\n<p>A Blood Bond can be suppressed for 1 minute if the creature succeeds on a DC 25 Charisma saving throw. The bond is only permanently removed if the creature doesn't drink from that Kindred again for a year, or if the Kindred in question is killed.</p></div>",
+        "rawEntries": [
+          "You feed on the blood of other creatures. This is most often accomplished through your sharp fangs. As an action, you can feed on another creature within 5 feet of yourself if the target is willing, {@condition Charmed|XPHB} by you, or has the {@condition Incapacitated|XPHB}, {@condition Grappled|XPHB}, {@condition Paralyzed|XPHB}, {@condition Restrained|XPHB}, {@condition Stunned|XPHB}, or {@condition Unconscious|XPHB} condition. You can feed only once per turn.",
+          "When you feed, roll up to your maximum Feed Dice plus your Constitution modifier (minimum of 1). The creature takes Necrotic damage equal to the roll's total. This damage only reduces the creature's {@variantrule Hit Points|XPHB|Hit Point} maximum by an amount equal to the roll's total. The number of Feed Dice increases as you gain Kindred levels, as shown in the Feed Dice column of the Kindred Features table. If you roll a 6 on a d6 on a Feed Die, you can regain 1 expended Blood Point. If a creature's {@variantrule Hit Points|XPHB|Hit Point} maximum is reduced to 0, you can regain 1 expended Blood Point.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Feeding from the Willing",
+                "entries": [
+                  "If you feed on a willing creature or a creature {@condition Charmed|XPHB} by you, it can spend 1 {@variantrule Hit Point Dice|XPHB|Hit Point Die}. It rolls the {@variantrule Hit Point Dice|XPHB|Hit Point Die} and reduces its {@variantrule Hit Points|XPHB|Hit Point} maximum by the amount rolled, and you can regain 1 expended Blood Point. Feeding in this way doesn't end the {@condition Charmed|XPHB} condition."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Hit Die Deficit",
+                "entries": [
+                  "If a creature has no remaining {@variantrule Hit Point Dice|XPHB}, the creature takes Necrotic damage equal to a roll of your Feed Dice plus your Constitution modifier, and the creature's {@variantrule Hit Points|XPHB|Hit Point} maximum is reduced by an amount equal to the roll's total."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Maximum Successful Feedings",
+                "entries": [
+                  "A creature can provide a number of Blood Points based on its size. A Small creature provides 1 Blood Point, a Medium provides 3, a Large provides 5, a Huge provides 7, and a Gargantuan provides 10. A creature regains all lost Blood Points when it finishes a {@variantrule Long Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Creature Susceptible to Feed",
+                "entries": [
+                  "You can feed on any creature with blood or other life-giving fluid. Aberrations, Beasts, Dragons, Fey, Giants, Monstrosities, and Humanoids are the most common targets. Constructs, Elementals, Oozes, and Plants usually don't have blood. Work with your GM to determine the types of creatures you can feed on."
+                ]
+              }
+            ]
+          },
+          {
+            "type": "inset",
+            "name": "The Blood Bond",
+            "entries": [
+              "A mysterious power in the blood of Kindred causes creatures to become Blood Bound to that Kindred when:",
+              {
+                "type": "list",
+                "items": [
+                  "They drink from the same Kindred at least three times within one year.",
+                  "At least one {@variantrule Long Rest|XPHB} occurs between each of the three drinks."
+                ]
+              },
+              "While Blood Bound to a Kindred, a creature is considered {@condition Charmed|XPHB} by that Kindred and has {@variantrule Advantage|XPHB} on saving throws to avoid being {@condition Charmed|XPHB} or {@condition Frightened|XPHB} by other creatures. This is in addition to the effects from the {@item Kindred Vitae|BoundByBlood} consumable.",
+              "A Blood Bond can be suppressed for 1 minute if the creature succeeds on a DC 25 Charisma saving throw. The bond is only permanently removed if the creature doesn't drink from that Kindred again for a year, or if the Kindred in question is killed."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_kindred_biology_1",
+        "name": "Kindred Biology",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You are a specific kind of vampire known as a Kindred, which brings physical benefits and drawbacks.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Awaken.</strong> <p>You don't regain expended Blood Points when you finish a Short Rest|XPHB|Short or Long Rest|XPHB. To gain the benefits of a Long Rest|XPHB, you must have at least 1 Blood Point in your pool or you only gain the benefits of a Short Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Darkvision.</strong> <p>You have Darkvision with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Sanguivore.</strong> <p>You can't eat food or drink. If you consume more than a nibble or sip, you have the Poisoned condition that ends once you expel what you consumed. While Poisoned in this way, you must succeed on a Constitution saving throw every 10 minutes to avoid having the Incapacitated condition, which lasts for 1 minute as you vomit up what you've consumed. The initial DC of this saving throw is 10, and it increases by 5 with each successive save.</p>\n<p>Instead, you must consume a number of Blood Points per day equal to the number of pounds of food a creature your size normally requires per day (usually, 1 per day for Small and Medium creatures). You can expend 1 Blood Point to automatically succeed on the DC 10 Constitution saving throw to avoid gaining 1 level of Exhaustion from Malnutrition.</p>\n<p>Expending Blood Points to activate your Kindred features or Kindred Feats does not count towards the Blood Points you need to expend for sustenance.</p></div>\n<div class=\"compendium-subentry\"><strong>Sunlight Vulnerability.</strong> <p>You take 5 Radiant damage if you start your turn in sunlight.</p></div>\n<div class=\"compendium-subentry\"><strong>Supernatural Spellcasting.</strong> <p>Charisma is your spellcasting ability for spells from your Kindred subclass and Kindred feats, your spells require no Verbal or Somatic components, and they require no Material components unless they are consumed by the spell or have a cost specified in it; taking damage can't break your Concentration.</p></div>\n<div class=\"compendium-subentry\"><strong>Torpor.</strong> <p>If your Exhaustion level is 6, you aren't killed. Instead, you drop to 1 Hit Points|XPHB|Hit Point, become Unconscious, and can't remove the condition until you have expended a number of Blood Points equal to your Proficiency|XPHB|Proficiency Bonus over any length of time. Another creature can feed you while you are Unconscious to recover Blood Points, but the details of how that occurs is left for you and your GM to determine.</p></div>\n<div class=\"compendium-subentry\"><strong>Undead.</strong> <p>You have the Undead (Kindred) creature type in addition to your normal creature type. You don't age.</p></div>\n<div class=\"compendium-subentry\"><strong>Vampiric Resilience.</strong> <p>You automatically succeed on Death Saving Throw|XPHB|Death Saving Throws. Being reduced to 0 Hit Points|XPHB by Fire or Radiant damage, or being beheaded kills you outright.</p></div>\n<div class=\"compendium-subentry\"><strong>Vampiric Vulnerabilities.</strong> <p>You have Vulnerability|XPHB to Fire and Radiant damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Wooden Stake Through the Heart.</strong> <p>When you are attacked with a wooden weapon that deals Piercing damage and you are reduced to 0 Hit Points|XPHB or the attack roll is a Critical Hit|XPHB, you are staked through the heart and have the Paralyzed condition until the weapon is removed.</p></div></div>",
+        "rawEntries": [
+          "You are a specific kind of vampire known as a Kindred, which brings physical benefits and drawbacks.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Awaken",
+                "entries": [
+                  "You don't regain expended Blood Points when you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}. To gain the benefits of a {@variantrule Long Rest|XPHB}, you must have at least 1 Blood Point in your pool or you only gain the benefits of a {@variantrule Short Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Darkvision",
+                "entries": [
+                  "You have {@sense Darkvision|XPHB} with a range of 60 feet."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Sanguivore",
+                "entries": [
+                  "You can't eat food or drink. If you consume more than a nibble or sip, you have the {@condition Poisoned|XPHB} condition that ends once you expel what you consumed. While {@condition Poisoned|XPHB} in this way, you must succeed on a Constitution saving throw every 10 minutes to avoid having the {@condition Incapacitated|XPHB} condition, which lasts for 1 minute as you vomit up what you've consumed. The initial DC of this saving throw is 10, and it increases by 5 with each successive save.",
+                  "Instead, you must consume a number of Blood Points per day equal to the number of pounds of food a creature your size normally requires per day (usually, 1 per day for Small and Medium creatures). You can expend 1 Blood Point to automatically succeed on the DC 10 Constitution saving throw to avoid gaining 1 level of {@condition Exhaustion|XPHB} from {@hazard Malnutrition|XPHB}.",
+                  "Expending Blood Points to activate your Kindred features or Kindred Feats does not count towards the Blood Points you need to expend for sustenance."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Sunlight Vulnerability",
+                "entries": [
+                  "You take 5 Radiant damage if you start your turn in sunlight."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Supernatural Spellcasting",
+                "entries": [
+                  "Charisma is your spellcasting ability for spells from your Kindred subclass and Kindred feats, your spells require no Verbal or Somatic components, and they require no Material components unless they are consumed by the spell or have a cost specified in it; taking damage can't break your {@condition Concentration|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Torpor",
+                "entries": [
+                  "If your {@condition Exhaustion|XPHB} level is 6, you aren't killed. Instead, you drop to 1 {@variantrule Hit Points|XPHB|Hit Point}, become {@condition Unconscious|XPHB}, and can't remove the condition until you have expended a number of Blood Points equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus} over any length of time. Another creature can feed you while you are {@condition Unconscious|XPHB} to recover Blood Points, but the details of how that occurs is left for you and your GM to determine."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Undead",
+                "entries": [
+                  "You have the Undead (Kindred) creature type in addition to your normal creature type. You don't age."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Vampiric Resilience",
+                "entries": [
+                  "You automatically succeed on {@variantrule Death Saving Throw|XPHB|Death Saving Throws}. Being reduced to 0 {@variantrule Hit Points|XPHB} by Fire or Radiant damage, or being beheaded kills you outright."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Vampiric Vulnerabilities",
+                "entries": [
+                  "You have {@variantrule Vulnerability|XPHB} to Fire and Radiant damage."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Wooden Stake Through the Heart",
+                "entries": [
+                  "When you are attacked with a wooden weapon that deals Piercing damage and you are reduced to 0 {@variantrule Hit Points|XPHB} or the attack roll is a {@variantrule Critical Hit|XPHB}, you are staked through the heart and have the {@condition Paralyzed|XPHB} condition until the weapon is removed."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_the_beast_1",
+        "name": "The Beast",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have a terrible Beast within that can only be sated with blood. As a Bonus Action|XPHB, you can use this Beast's predatory instincts to sharpen your senses and abilities. Until the start of your next turn, you have Advantage|XPHB on D20 Test|XPHB|D20 Tests you make.</p>\n<p>You can use this feature a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Hunger.</strong> <p>If a D20 Test|XPHB benefiting from your Beast feature fails, you go into a bloodlusted, hunger-driven state. This bloodlusted state ends after 1 minute or after you have successfully used your Feed feature, whichever comes first.</p>\n<p>While bloodlusted, you regard the creature nearest to you that you can see or hear and that you can feed on as your prey. If there are multiple possible creatures, choose one at random. On each of your turns, you must move as close to the creature as possible and take the Attack action to make an Unarmed Strike|XPHB to grapple the target. If you're unable to get close enough to the creature to grapple it, your turn ends after you've used up all your available movement. If the creature dies or can no longer be seen or heard by you, the next nearest creature that you can see or hear and that you can feed on becomes your new target. If the target is in range and has the Grappled condition at the start of your turn, you use your action to feed on it.</p></div></div>",
+        "rawEntries": [
+          "You have a terrible Beast within that can only be sated with blood. As a {@variantrule Bonus Action|XPHB}, you can use this Beast's predatory instincts to sharpen your senses and abilities. Until the start of your next turn, you have {@variantrule Advantage|XPHB} on {@variantrule D20 Test|XPHB|D20 Tests} you make.",
+          "You can use this feature a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Hunger",
+                "entries": [
+                  "If a {@variantrule D20 Test|XPHB} benefiting from your Beast feature fails, you go into a bloodlusted, hunger-driven state. This bloodlusted state ends after 1 minute or after you have successfully used your Feed feature, whichever comes first.",
+                  "While bloodlusted, you regard the creature nearest to you that you can see or hear and that you can feed on as your prey. If there are multiple possible creatures, choose one at random. On each of your turns, you must move as close to the creature as possible and take the {@action Attack|XPHB} action to make an {@variantrule Unarmed Strike|XPHB} to grapple the target. If you're unable to get close enough to the creature to grapple it, your turn ends after you've used up all your available movement. If the creature dies or can no longer be seen or heard by you, the next nearest creature that you can see or hear and that you can feed on becomes your new target. If the target is in range and has the {@condition Grappled|XPHB} condition at the start of your turn, you use your action to feed on it."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_kindred_feat_2",
+        "name": "Kindred Feat",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a Kindred feat|feats|category=kf of your choice for which you qualify. You gain this feature again at Kindred levels 7, 10, 13, and 17.</p>",
+        "rawEntries": [
+          "You gain a {@filter Kindred feat|feats|category=kf} of your choice for which you qualify. You gain this feature again at Kindred levels 7, 10, 13, and 17."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_kindred_subclass_3",
+        "name": "Kindred Subclass",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a Kindred subclass of your choice. A subclass is a specialization that grants you features at certain Kindred levels. For the rest of your career, you gain each of your subclass's features that are of your Kindred level or lower.</p>",
+        "rawEntries": [
+          "You gain a Kindred subclass of your choice. A subclass is a specialization that grants you features at certain Kindred levels. For the rest of your career, you gain each of your subclass's features that are of your Kindred level or lower."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_ability_score_improvement_4",
+        "name": "Ability Score Improvement",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 4,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify. You gain this feature again at Kindred levels 8, 12, and 16.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another {@5etools feat|feats.html} of your choice for which you qualify. You gain this feature again at Kindred levels 8, 12, and 16."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_bestial_fury_5",
+        "name": "Bestial Fury",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Once per turn when you hit a target with a Melee weapon or Unarmed Strike|XPHB, you can expend 2 uses of your The Beast|Kindred|BoundByBlood|1||Beast feature to roll the weapon's damage dice twice and use either roll against the target. If this damage reduces it to 0 Hit Points|XPHB, you can't choose to leave the creature at 1 Hit Points|XPHB|Hit Point as per the \"Knocking Out a Creature|XPHB\" rule.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Bestial Flurry.</strong> <p>While affected by your The Beast|Kindred|BoundByBlood|1||Beast feature, you can attack twice instead of once whenever you take the Attack action on your turn.</p></div></div>",
+        "rawEntries": [
+          "Once per turn when you hit a target with a Melee weapon or {@variantrule Unarmed Strike|XPHB}, you can expend 2 uses of your {@classFeature The Beast|Kindred|BoundByBlood|1||Beast} feature to roll the weapon's damage dice twice and use either roll against the target. If this damage reduces it to 0 {@variantrule Hit Points|XPHB}, you can't choose to leave the creature at 1 {@variantrule Hit Points|XPHB|Hit Point} as per the \"{@variantrule Knocking Out a Creature|XPHB}\" rule.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Bestial Flurry",
+                "entries": [
+                  "While affected by your {@classFeature The Beast|Kindred|BoundByBlood|1||Beast} feature, you can attack twice instead of once whenever you take the {@action Attack|XPHB} action on your turn."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_improved_feed_5",
+        "name": "Improved Feed",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can use the Feed|Kindred|BoundByBlood|1 feature as a Bonus Action|XPHB. In addition, a creature Grappled by you has Disadvantage|XPHB on its checks to escape the grapple.</p>",
+        "rawEntries": [
+          "You can use the {@classFeature Feed|Kindred|BoundByBlood|1} feature as a {@variantrule Bonus Action|XPHB}. In addition, a creature {@condition Grappled|XPHB} by you has {@variantrule Disadvantage|XPHB} on its checks to escape the grapple."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_subclass_feature_6",
+        "name": "Subclass Feature",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 6,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Kindred Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Kindred Subclass."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_kindred_feat_7",
+        "name": "Kindred Feat",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 7,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a Kindred feat|feats|category=kf of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain a {@filter Kindred feat|feats|category=kf} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_ability_score_improvement_8",
+        "name": "Ability Score Improvement",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 8,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another {@5etools feat|feats.html} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_subclass_feature_9",
+        "name": "Subclass Feature",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 9,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Kindred Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Kindred Subclass."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_kindred_feat_10",
+        "name": "Kindred Feat",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a Kindred feat|feats|category=kf of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain a {@filter Kindred feat|feats|category=kf} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_vampiric_will_10",
+        "name": "Vampiric Will",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have Advantage|XPHB on saving throws to avoid or end the Charmed condition, and against effects that turn undead.</p>",
+        "rawEntries": [
+          "You have {@variantrule Advantage|XPHB} on saving throws to avoid or end the {@condition Charmed|XPHB} condition, and against effects that turn undead."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_subclass_feature_11",
+        "name": "Subclass Feature",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 11,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Kindred Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Kindred Subclass."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_ability_score_improvement_12",
+        "name": "Ability Score Improvement",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 12,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another {@5etools feat|feats.html} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_kindred_feat_13",
+        "name": "Kindred Feat",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 13,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a Kindred feat|feats|category=kf of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain a {@filter Kindred feat|feats|category=kf} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_efficient_feeding_14",
+        "name": "Efficient Feeding",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 14,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Whenever you roll a die for your Feed|Kindred|BoundByBlood|1 feature, you can reroll the die, and you must use the new roll.</p>",
+        "rawEntries": [
+          "Whenever you roll a die for your {@classFeature Feed|Kindred|BoundByBlood|1} feature, you can reroll the die, and you must use the new roll."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_subclass_feature_15",
+        "name": "Subclass Feature",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 15,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Kindred Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Kindred Subclass."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_ability_score_improvement_16",
+        "name": "Ability Score Improvement",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 16,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement feat or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XPHB} feat or another {@5etools feat|feats.html} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_kindred_feat_17",
+        "name": "Kindred Feat",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 17,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a Kindred feat|feats|category=kf of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain a {@filter Kindred feat|feats|category=kf} of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_subclass_feature_18",
+        "name": "Subclass Feature",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 18,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Kindred Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Kindred Subclass."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_epic_boon_19",
+        "name": "Epic Boon",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 19,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain an Epic Boon feat|feats|category=EB or another feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain an {@filter Epic Boon feat|feats|category=EB} or another feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_kindred_boundbyblood_ancient_awakening_20",
+        "name": "Ancient Awakening",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "level": 20,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>The essence of the original vampiric Antediluvians has awoken in you. Pick four Ability Scores. Increase each chosen Ability Score by 2, to a maximum of 25.</p>\n<p>If a Kindred subclass feature allows for an Ability Score to be increased beyond 25, Ancient Awakening can increase that Ability Score up to the maximum noted in that other feature.</p>",
+        "rawEntries": [
+          "The essence of the original vampiric Antediluvians has awoken in you. Pick four Ability Scores. Increase each chosen Ability Score by 2, to a maximum of 25.",
+          "If a Kindred subclass feature allows for an Ability Score to be increased beyond 25, Ancient Awakening can increase that Ability Score up to the maximum noted in that other feature."
+        ]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "subclass_kindred_brujah_boundbyblood",
+        "name": "Brujah",
+        "shortName": "Brujah",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "features": [
+          {
+            "id": "scf_kindred_brujah_boundbyblood_brujah_3",
+            "name": "Brujah",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Brujah",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p><em>Stand Up, Stand Firm, and Fight for Something</em></p>\n<p>The Brujah are a clan of freethinkers and revolutionaries who thrive on their own liberty and fight against oppression and stagnation. They find a power in themselves that is reflected as strength, speed, and a force of personality that makes them formidable in the varied conflicts they often find themselves in.</p>",
+            "rawEntries": [
+              "{@i Stand Up, Stand Firm, and Fight for Something}",
+              "The Brujah are a clan of freethinkers and revolutionaries who thrive on their own liberty and fight against oppression and stagnation. They find a power in themselves that is reflected as strength, speed, and a force of personality that makes them formidable in the varied conflicts they often find themselves in.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Brujah Bane|Kindred|BoundByBlood|Brujah|BoundByBlood|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Fighting Fury|Kindred|BoundByBlood|Brujah|BoundByBlood|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_brujah_boundbyblood_brujah_bane_3",
+            "name": "Brujah Bane",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Brujah",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your blood simmers with the rage of your vampiric ancestors. If you fail a D20 Test|XPHB that is affected by your The Beast|Kindred|BoundByBlood|1||Beast feature and choose to expend Blood Points to ignore the effects of The Beast|Kindred|BoundByBlood|1||Hunger, you must expend a number of Blood Points equal to your Proficiency|XPHB|Proficiency Bonus to ignore the effects, instead of 1.</p>",
+            "rawEntries": [
+              "Your blood simmers with the rage of your vampiric ancestors. If you fail a {@variantrule D20 Test|XPHB} that is affected by your {@classFeature The Beast|Kindred|BoundByBlood|1||Beast} feature and choose to expend Blood Points to ignore the effects of {@classFeature The Beast|Kindred|BoundByBlood|1||Hunger}, you must expend a number of Blood Points equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus} to ignore the effects, instead of 1."
+            ]
+          },
+          {
+            "id": "scf_kindred_brujah_boundbyblood_fighting_fury_3",
+            "name": "Fighting Fury",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Brujah",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can channel the rage simmering below the surface, funneling it into your physical strength and speed. You can expend 1 Blood Point to gain the following benefits for 1 minute.</p>\n<div class=\"compendium-subentry\"><strong>Brawn.</strong> <p>You have Advantage|XPHB on the first attack roll you make with a Melee weapon or Unarmed Strike|XPHB on your turn.</p></div>\n<div class=\"compendium-subentry\"><strong>Swiftness.</strong> <p>You can take the Dash or Dodge action as a Bonus Action|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Weapon Training.</strong> <p>You gain proficiency with Martial weapons, and your training with weapons allows you to use the mastery properties of two kinds of Simple or Martial Melee weapons of your choice.</p></div>",
+            "rawEntries": [
+              "You can channel the rage simmering below the surface, funneling it into your physical strength and speed. You can expend 1 Blood Point to gain the following benefits for 1 minute.",
+              {
+                "type": "entries",
+                "name": "Brawn",
+                "entries": [
+                  "You have {@variantrule Advantage|XPHB} on the first attack roll you make with a Melee weapon or {@variantrule Unarmed Strike|XPHB} on your turn."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Swiftness",
+                "entries": [
+                  "You can take the {@action Dash|XPHB} or {@action Dodge|XPHB} action as a {@variantrule Bonus Action|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Weapon Training",
+                "entries": [
+                  "You gain proficiency with Martial weapons, and your training with weapons allows you to use the mastery properties of two kinds of Simple or Martial Melee weapons of your choice."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_brujah_boundbyblood_fearsome_6",
+            "name": "Fearsome",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Brujah",
+            "subclassSource": "BoundByBlood",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your vampiric presence exudes menace from the rise of your inner Beast.</p>\n<div class=\"compendium-subentry\"><strong>Dread Gaze.</strong> <p>You bare your fangs, your eyes flash with predatory hunger, and you let out a hiss that strikes terror in the hearts of others. You can expend 1 Blood Point to cast the Fear spell.</p></div>\n<div class=\"compendium-subentry\"><strong>Predatory Aura.</strong> <p>You have Advantage|XPHB on Charisma (Intimidation) checks.</p></div>",
+            "rawEntries": [
+              "Your vampiric presence exudes menace from the rise of your inner Beast.",
+              {
+                "type": "entries",
+                "name": "Dread Gaze",
+                "entries": [
+                  "You bare your fangs, your eyes flash with predatory hunger, and you let out a hiss that strikes terror in the hearts of others. You can expend 1 Blood Point to cast the {@spell Fear|XPHB} spell."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Predatory Aura",
+                "entries": [
+                  "You have {@variantrule Advantage|XPHB} on Charisma ({@skill Intimidation|XPHB}) checks."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_brujah_boundbyblood_fleetness_9",
+            "name": "Fleetness",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Brujah",
+            "subclassSource": "BoundByBlood",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your celerity grants you bursts of incredible speed.</p>\n<div class=\"compendium-subentry\"><strong>Dizzying Speed.</strong> <p>You can expend 3 Blood Points to cast the Haste spell on yourself. When you cast the spell in this way, when the spell ends, you aren't Incapacitated and your Speed|XPHB isn't reduced to 0.</p></div>",
+            "rawEntries": [
+              "Your celerity grants you bursts of incredible speed.",
+              {
+                "type": "entries",
+                "name": "Dizzying Speed",
+                "entries": [
+                  "You can expend 3 Blood Points to cast the {@spell Haste|XPHB} spell on yourself. When you cast the spell in this way, when the spell ends, you aren't {@condition Incapacitated|XPHB} and your {@variantrule Speed|XPHB} isn't reduced to 0."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_brujah_boundbyblood_burning_wrath_11",
+            "name": "Burning Wrath",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Brujah",
+            "subclassSource": "BoundByBlood",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "2d8",
+            "formulaConfig": {
+              "baseDice": "2d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You pour all of your intensity and fury into yourself, causing your blood to seemingly boil on your skin. As a Bonus Action|XPHB, you can expend 2 Blood Points to empower your Unarmed Strike|XPHB|Unarmed Strikes. For 1 minute or until you fail to make an attack roll against an enemy on your turn, whichever comes first, you can deal an extra 2d8 Necrotic damage to a target you hit with an Unarmed Strike|XPHB.</p>",
+            "rawEntries": [
+              "You pour all of your intensity and fury into yourself, causing your blood to seemingly boil on your skin. As a {@variantrule Bonus Action|XPHB}, you can expend 2 Blood Points to empower your {@variantrule Unarmed Strike|XPHB|Unarmed Strikes}. For 1 minute or until you fail to make an attack roll against an enemy on your turn, whichever comes first, you can deal an extra {@damage 2d8} Necrotic damage to a target you hit with an {@variantrule Unarmed Strike|XPHB}."
+            ]
+          },
+          {
+            "id": "scf_kindred_brujah_boundbyblood_rouse_emotions_15",
+            "name": "Rouse Emotions",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Brujah",
+            "subclassSource": "BoundByBlood",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can extend your own passionate feelings into others, infecting them with your fervor. You can expend 3 Blood Points to cast one of the following spells.</p>\n<div class=\"compendium-subentry\"><strong>Enthrall.</strong> <p>You cast the Charm Person spell as if with a level 6 spell slot, and the creatures have Disadvantage|XPHB on the saving throw.</p></div>\n<div class=\"compendium-subentry\"><strong>Incite.</strong> <p>You cast the Confusion spell. A creature that fails its saving throw automatically rolls 7-8 to determine its behavior for each turn.</p></div>\n<div class=\"compendium-subentry\"><strong>Terrorize.</strong> <p>You cast the Fear spell. When you cast the spell in this way, you can modify it so that it doesn't require Concentration and creatures have Disadvantage|XPHB on the saving throw.</p></div>",
+            "rawEntries": [
+              "You can extend your own passionate feelings into others, infecting them with your fervor. You can expend 3 Blood Points to cast one of the following spells.",
+              {
+                "type": "entries",
+                "name": "Enthrall",
+                "entries": [
+                  "You cast the {@spell Charm Person|XPHB} spell as if with a level 6 spell slot, and the creatures have {@variantrule Disadvantage|XPHB} on the saving throw."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Incite",
+                "entries": [
+                  "You cast the {@spell Confusion|XPHB} spell. A creature that fails its saving throw automatically rolls 7-8 to determine its behavior for each turn."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Terrorize",
+                "entries": [
+                  "You cast the {@spell Fear|XPHB} spell. When you cast the spell in this way, you can modify it so that it doesn't require {@condition Concentration|XPHB} and creatures have {@variantrule Disadvantage|XPHB} on the saving throw."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_brujah_boundbyblood_puissant_might_18",
+            "name": "Puissant Might",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Brujah",
+            "subclassSource": "BoundByBlood",
+            "level": 18,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your raw, supernatural strength is legendary.</p>\n<div class=\"compendium-subentry\"><strong>Ability Score Increase.</strong> <p>Your Strength score increases by 4, to a maximum of 30.</p></div>\n<div class=\"compendium-subentry\"><strong>Pulverize.</strong> <p>When you hit a target with an attack roll using a Melee weapon or an Unarmed Strike|XPHB, your Melee weapon or Unarmed Strike|XPHB deals two extra dice of its damage.</p></div>",
+            "rawEntries": [
+              "Your raw, supernatural strength is legendary.",
+              {
+                "type": "entries",
+                "name": "Ability Score Increase",
+                "entries": [
+                  "Your Strength score increases by 4, to a maximum of 30."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Pulverize",
+                "entries": [
+                  "When you hit a target with an attack roll using a Melee weapon or an {@variantrule Unarmed Strike|XPHB}, your Melee weapon or {@variantrule Unarmed Strike|XPHB} deals two extra dice of its damage."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_kindred_gangrel_boundbyblood",
+        "name": "Gangrel",
+        "shortName": "Gangrel",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "features": [
+          {
+            "id": "scf_kindred_gangrel_boundbyblood_gangrel_3",
+            "name": "Gangrel",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Gangrel",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p><em>Let the Beast Inside in Order to Control It</em></p>\n<p>The Gangrel have made peace with their Beast long ago, choosing to harness the wild power it promises and wield it rather than trying to stifle it. They are attuned to its feral nature, embodying the predator.</p>",
+            "rawEntries": [
+              "{@i Let the Beast Inside in Order to Control It}",
+              "The Gangrel have made peace with their Beast long ago, choosing to harness the wild power it promises and wield it rather than trying to stifle it. They are attuned to its feral nature, embodying the predator.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Gangrel Bane|Kindred|BoundByBlood|Gangrel|BoundByBlood|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Gifts of the Beast|Kindred|BoundByBlood|Gangrel|BoundByBlood|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_gangrel_boundbyblood_gangrel_bane_3",
+            "name": "Gangrel Bane",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Gangrel",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>The Beast reveals itself in you as animalistic features and behaviors. If you are affected by the The Beast|Kindred|BoundByBlood|1||Hunger of your Beast feature, you have Disadvantage|XPHB on Charisma (Deception and Persuasion) checks until you finish a Long Rest|XPHB.</p>",
+            "rawEntries": [
+              "The Beast reveals itself in you as animalistic features and behaviors. If you are affected by the {@classFeature The Beast|Kindred|BoundByBlood|1||Hunger} of your Beast feature, you have {@variantrule Disadvantage|XPHB} on Charisma ({@skill Deception|XPHB} and {@skill Persuasion|XPHB}) checks until you finish a {@variantrule Long Rest|XPHB}."
+            ]
+          },
+          {
+            "id": "scf_kindred_gangrel_boundbyblood_gifts_of_the_beast_3",
+            "name": "Gifts of the Beast",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Gangrel",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "2d6",
+            "formulaConfig": {
+              "baseDice": "2d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your body reflects the protean gifts of your animalistic Beast. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Eyes of the Beast.</strong> <p>The range of your Darkvision increases to 240 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Feral Weapons.</strong> <p>As a Bonus Action|XPHB, you can expend 1 Blood Point to grow rending claws for 1 minute. Your Unarmed Strike|XPHB|Unarmed Strikes deal 2d6 Slashing damage, and you can use your Dexterity modifier instead of your Strength modifier for the attack and damage rolls of your Unarmed Strike|XPHB|Unarmed Strikes.</p></div>",
+            "rawEntries": [
+              "Your body reflects the protean gifts of your animalistic Beast. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Eyes of the Beast",
+                "entries": [
+                  "The range of your {@sense Darkvision|XPHB} increases to 240 feet."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Feral Weapons",
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, you can expend 1 Blood Point to grow rending claws for 1 minute. Your {@variantrule Unarmed Strike|XPHB|Unarmed Strikes} deal {@damage 2d6} Slashing damage, and you can use your Dexterity modifier instead of your Strength modifier for the attack and damage rolls of your {@variantrule Unarmed Strike|XPHB|Unarmed Strikes}."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_gangrel_boundbyblood_feral_spirit_6",
+            "name": "Feral Spirit",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Gangrel",
+            "subclassSource": "BoundByBlood",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d6",
+            "formulaConfig": {
+              "baseDice": "1d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your connection to your wild self forges a spiritual bridge with Beasts.</p>\n<div class=\"compendium-subentry\"><strong>Beastmind.</strong> <p>While you look in the eyes of a Beast within 30 feet of yourself, you can speak telepathically with it, and you can use any of the Influence action's skill options with it.</p></div>\n<div class=\"compendium-subentry\"><strong>Like Minds.</strong> <p>You can cast the Animal Friendship spell without expending a spell slot. And when you cast the spell in this way, it is cast as if you had used a spell slot level equal to your Proficiency|XPHB|Proficiency Bonus.</p></div>\n<div class=\"compendium-subentry\"><strong>Wild Hunger.</strong> <p>When you are affected by the The Beast|Kindred|BoundByBlood|1||Hunger of your Beast feature, you can deal 1d6 extra Slashing damage when you hit with an Unarmed Strike|XPHB, and you also count as one size larger when determining what you can grapple.</p></div>",
+            "rawEntries": [
+              "Your connection to your wild self forges a spiritual bridge with Beasts.",
+              {
+                "type": "entries",
+                "name": "Beastmind",
+                "entries": [
+                  "While you look in the eyes of a Beast within 30 feet of yourself, you can speak telepathically with it, and you can use any of the {@action Influence|XPHB} action's skill options with it."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Like Minds",
+                "entries": [
+                  "You can cast the {@spell Animal Friendship|XPHB} spell without expending a spell slot. And when you cast the spell in this way, it is cast as if you had used a spell slot level equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Wild Hunger",
+                "entries": [
+                  "When you are affected by the {@classFeature The Beast|Kindred|BoundByBlood|1||Hunger} of your Beast feature, you can deal {@damage 1d6} extra Slashing damage when you hit with an {@variantrule Unarmed Strike|XPHB}, and you also count as one size larger when determining what you can grapple."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_gangrel_boundbyblood_gifts_of_survival_9",
+            "name": "Gifts of Survival",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Gangrel",
+            "subclassSource": "BoundByBlood",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your body is built to survive whatever the world sets before you.</p>\n<div class=\"compendium-subentry\"><strong>Feral Fortitude.</strong> <p>When you take damage except Fire and Radiant, you can take a Reaction|XPHB to reduce the damage taken by your Proficiency|XPHB|Proficiency Bonus plus your Constitution modifier (minimum reduction of 1).</p></div>\n<div class=\"compendium-subentry\"><strong>Meld with Earth.</strong> <p>As a Magic action, you can expend 1 Blood Point to cast the Meld into Stone spell, except the surface must be dirt, sand, or clay instead of stone. Additionally, while the spell is active, you gain Tremorsense with a range of 60 feet. The spell lasts until you end it (no action required) or when you finish a Long Rest|XPHB.</p></div>",
+            "rawEntries": [
+              "Your body is built to survive whatever the world sets before you.",
+              {
+                "type": "entries",
+                "name": "Feral Fortitude",
+                "entries": [
+                  "When you take damage except Fire and Radiant, you can take a {@variantrule Reaction|XPHB} to reduce the damage taken by your {@variantrule Proficiency|XPHB|Proficiency Bonus} plus your Constitution modifier (minimum reduction of 1)."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Meld with Earth",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you can expend 1 Blood Point to cast the {@spell Meld into Stone|XPHB} spell, except the surface must be dirt, sand, or clay instead of stone. Additionally, while the spell is active, you gain {@sense Tremorsense|XPHB} with a range of 60 feet. The spell lasts until you end it (no action required) or when you finish a {@variantrule Long Rest|XPHB}."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_gangrel_boundbyblood_corporeal_mastery_11",
+            "name": "Corporeal Mastery",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Gangrel",
+            "subclassSource": "BoundByBlood",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You embody the supernatural powers of ancient vampire legends, transforming for a time.</p>\n<div class=\"compendium-subentry\"><strong>Beast Form.</strong> <p>As a Magic action, you can expend a number of Blood Points to shape-shift into a Beast form applicable to this feature (see \"Known Forms\" below). You stay in that form for a number of hours equal to half your Kindred level or until you use Corporeal Mastery again, have the Incapacitated condition, or die. You can also leave the form early as a Bonus Action|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Known Forms.</strong> <p>You can expend 2 Blood Points to shape-shift into a Bat, Cat, Rat, Raven, or Wolf. You can expend 4 Blood Points to shape-shift into a Dire Wolf, Giant Bat, Giant Rat, or Panther.</p></div>\n<div class=\"compendium-subentry\"><strong>Temporary Hit Points.</strong> <p>When you assume a Beast form, you gain a number of Temporary Hit Points|XPHB equal to your Kindred level.</p></div>\n<div class=\"compendium-subentry\"><strong>Game Statistics.</strong> <p>Your game statistics are replaced by the Beast's stat block, but you retain your creature type; Hit Points|XPHB; Hit Point Dice|XPHB; Intelligence, Wisdom, and Charisma scores; class features; languages; and feats. You also retain your skill and saving throw proficiencies and use your Proficiency|XPHB|Proficiency Bonus for them, in addition to gaining the proficiencies of the creature. If a skill or saving throw modifier in the Beast's stat block is higher than yours, use the one in the stat block. While in Beast form, you retain your personality and memories, and you can understand languages you know, but you can't speak.</p></div>\n<div class=\"compendium-subentry\"><strong>Objects.</strong> <p>Your ability to handle objects is determined by the form's limbs rather than your own. In addition, your equipment merges into your new form. Nonmagical equipment that merges with the form has no effect while you're in that form.</p></div>",
+            "rawEntries": [
+              "You embody the supernatural powers of ancient vampire legends, transforming for a time.",
+              {
+                "type": "entries",
+                "name": "Beast Form",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you can expend a number of Blood Points to shape-shift into a Beast form applicable to this feature (see \"Known Forms\" below). You stay in that form for a number of hours equal to half your Kindred level or until you use Corporeal Mastery again, have the {@condition Incapacitated|XPHB} condition, or die. You can also leave the form early as a {@variantrule Bonus Action|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Known Forms",
+                "entries": [
+                  "You can expend 2 Blood Points to shape-shift into a {@creature Bat|XMM}, {@creature Cat|XMM}, {@creature Rat|XMM}, {@creature Raven|XMM}, or {@creature Wolf|XMM}. You can expend 4 Blood Points to shape-shift into a {@creature Dire Wolf|XMM}, {@creature Giant Bat|XMM}, {@creature Giant Rat|XMM}, or {@creature Panther|XMM}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Temporary Hit Points",
+                "entries": [
+                  "When you assume a Beast form, you gain a number of {@variantrule Temporary Hit Points|XPHB} equal to your Kindred level."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Game Statistics",
+                "entries": [
+                  "Your game statistics are replaced by the Beast's stat block, but you retain your creature type; {@variantrule Hit Points|XPHB}; {@variantrule Hit Point Dice|XPHB}; Intelligence, Wisdom, and Charisma scores; class features; languages; and feats. You also retain your skill and saving throw proficiencies and use your {@variantrule Proficiency|XPHB|Proficiency Bonus} for them, in addition to gaining the proficiencies of the creature. If a skill or saving throw modifier in the Beast's stat block is higher than yours, use the one in the stat block. While in Beast form, you retain your personality and memories, and you can understand languages you know, but you can't speak."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Objects",
+                "entries": [
+                  "Your ability to handle objects is determined by the form's limbs rather than your own. In addition, your equipment merges into your new form. Nonmagical equipment that merges with the form has no effect while you're in that form."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_gangrel_boundbyblood_command_the_beast_15",
+            "name": "Command the Beast",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Gangrel",
+            "subclassSource": "BoundByBlood",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can impose your will upon wild things, allowing your Beast to overwhelm theirs.</p>\n<div class=\"compendium-subentry\"><strong>Rein.</strong> <p>You cast the Dominate Beast spell as its level 7 version, without expending a spell slot, and you can modify it so that it doesn't require Concentration.</p>\n<p>Once you cast the spell with this feature, you can't do so in this way again until you finish a Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Rouse.</strong> <p>When an Undead (Kindred) you can see within 30 feet of you is about to make a D20 Test|XPHB, you can take a Reaction|XPHB and expend 1 Blood Point to force that creature to use its The Beast|Kindred|BoundByBlood|1||Beast feature on that D20 Test|XPHB. If the Kindred has no remaining uses of its The Beast|Kindred|BoundByBlood|1||Beast feature, this effect automatically fails.</p></div>",
+            "rawEntries": [
+              "You can impose your will upon wild things, allowing your Beast to overwhelm theirs.",
+              {
+                "type": "entries",
+                "name": "Rein",
+                "entries": [
+                  "You cast the {@spell Dominate Beast|XPHB} spell as its level 7 version, without expending a spell slot, and you can modify it so that it doesn't require {@condition Concentration|XPHB}.",
+                  "Once you cast the spell with this feature, you can't do so in this way again until you finish a {@variantrule Long Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Rouse",
+                "entries": [
+                  "When an Undead (Kindred) you can see within 30 feet of you is about to make a {@variantrule D20 Test|XPHB}, you can take a {@variantrule Reaction|XPHB} and expend 1 Blood Point to force that creature to use its {@classFeature The Beast|Kindred|BoundByBlood|1||Beast} feature on that {@variantrule D20 Test|XPHB}. If the Kindred has no remaining uses of its {@classFeature The Beast|Kindred|BoundByBlood|1||Beast} feature, this effect automatically fails."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_gangrel_boundbyblood_protean_rewards_18",
+            "name": "Protean Rewards",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Gangrel",
+            "subclassSource": "BoundByBlood",
+            "level": 18,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your body can perform greater wonders.</p>\n<div class=\"compendium-subentry\"><strong>Flesh of Marble.</strong> <p>As a Magic action, you can expend 2 Blood Points to double your Gifts of Survival|Kindred|BoundByBlood|Gangrel|BoundByBlood|9 feature's Damage Reduction for 1 minute.</p></div>\n<div class=\"compendium-subentry\"><strong>Mistform.</strong> <p>You can expend 2 Blood Points to cast the Gaseous Form spell on yourself. When you cast the spell in this way, you can modify it so that it doesn't require Concentration.</p></div>",
+            "rawEntries": [
+              "Your body can perform greater wonders.",
+              {
+                "type": "entries",
+                "name": "Flesh of Marble",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you can expend 2 Blood Points to double your {@subclassFeature Gifts of Survival|Kindred|BoundByBlood|Gangrel|BoundByBlood|9} feature's Damage Reduction for 1 minute."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Mistform",
+                "entries": [
+                  "You can expend 2 Blood Points to cast the {@spell Gaseous Form|XPHB} spell on yourself. When you cast the spell in this way, you can modify it so that it doesn't require {@condition Concentration|XPHB}."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_kindred_lasombra_boundbyblood",
+        "name": "Lasombra",
+        "shortName": "Lasombra",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "features": [
+          {
+            "id": "scf_kindred_lasombra_boundbyblood_lasombra_3",
+            "name": "Lasombra",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Lasombra",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p><em>Manipulate Darkness and Weakness with Ease</em></p>\n<p>Kindred are creatures of darkness, but none so much as the Lasombra. They are masters infused with the inky abyss from which they draw their power, turning shadows into an extension of themselves.</p>",
+            "rawEntries": [
+              "{@i Manipulate Darkness and Weakness with Ease}",
+              "Kindred are creatures of darkness, but none so much as the Lasombra. They are masters infused with the inky abyss from which they draw their power, turning shadows into an extension of themselves.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Lasombra Bane|Kindred|BoundByBlood|Lasombra|BoundByBlood|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Taste of Oblivion|Kindred|BoundByBlood|Lasombra|BoundByBlood|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_lasombra_boundbyblood_lasombra_bane_3",
+            "name": "Lasombra Bane",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Lasombra",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Lasombra don't tolerate failure, especially their own. When you roll a 1 on the d20 of a D20 Test|XPHB, you have Disadvantage|XPHB on the next D20 Test|XPHB you make within 1 minute.</p>",
+            "rawEntries": [
+              "Lasombra don't tolerate failure, especially their own. When you roll a 1 on the {@dice d20} of a {@variantrule D20 Test|XPHB}, you have {@variantrule Disadvantage|XPHB} on the next {@variantrule D20 Test|XPHB} you make within 1 minute."
+            ]
+          },
+          {
+            "id": "scf_kindred_lasombra_boundbyblood_taste_of_oblivion_3",
+            "name": "Taste of Oblivion",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Lasombra",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You are infused with the essence of darkness itself, gaining the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Oblivion's Sight.</strong> <p>You can see normally in Dim Light|XPHB and Darkness|XPHB—both magical and nonmagical—within 120 feet of yourself.</p></div>\n<div class=\"compendium-subentry\"><strong>Shadow Cloak.</strong> <p>You have Advantage|XPHB on Dexterity (Stealth) checks, and you can take the Hide action as a Bonus Action|XPHB.</p></div>",
+            "rawEntries": [
+              "You are infused with the essence of darkness itself, gaining the following benefits.",
+              {
+                "type": "entries",
+                "name": "Oblivion's Sight",
+                "entries": [
+                  "You can see normally in {@variantrule Dim Light|XPHB} and {@variantrule Darkness|XPHB}—both magical and nonmagical—within 120 feet of yourself."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Shadow Cloak",
+                "entries": [
+                  "You have {@variantrule Advantage|XPHB} on Dexterity ({@skill Stealth|XPHB}) checks, and you can take the {@action Hide|XPHB} action as a {@variantrule Bonus Action|XPHB}."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_lasombra_boundbyblood_shadow_mastery_6",
+            "name": "Shadow Mastery",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Lasombra",
+            "subclassSource": "BoundByBlood",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d6",
+            "formulaConfig": {
+              "baseDice": "1d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You can call forth different aspects of the abyssal darkness.</p>\n<div class=\"compendium-subentry\"><strong>Arms of Ahriman.</strong> <p>You can expend 2 Blood Points to cast the Evard's Black Tentacles spell. When you cast the spell in this way, the Evard's Black Tentacles deal 1d6 Bludgeoning damage and 2d6 Cold damage (instead of 3d6 Bludgeoning damage)</p></div>\n<div class=\"compendium-subentry\"><strong>Shrouding.</strong> <p>You can expend 1 Blood Point to cast the Darkness spell.</p></div>",
+            "rawEntries": [
+              "You can call forth different aspects of the abyssal darkness.",
+              {
+                "type": "entries",
+                "name": "Arms of Ahriman",
+                "entries": [
+                  "You can expend 2 Blood Points to cast the {@spell Evard's Black Tentacles|XPHB|Black Tentacles} spell. When you cast the spell in this way, the {@spell Evard's Black Tentacles|XPHB|Black Tentacles} deal {@damage 1d6} Bludgeoning damage and {@damage 2d6} Cold damage (instead of {@damage 3d6} Bludgeoning damage)"
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Shrouding",
+                "entries": [
+                  "You can expend 1 Blood Point to cast the {@spell Darkness|XPHB} spell."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_lasombra_boundbyblood_force_of_will_9",
+            "name": "Force of Will",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Lasombra",
+            "subclassSource": "BoundByBlood",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can focus your will upon others in a mental vise of your supernatural dominance.</p>\n<div class=\"compendium-subentry\"><strong>Mesmerize.</strong> <p>You can expend 1 Blood Point to cast the Suggestion spell.</p></div>\n<div class=\"compendium-subentry\"><strong>Shhh ....</strong> <p>As a Magic action, you can expend 1 Blood Point to mentally lull a creature that you can see within 15 feet of yourself to sleep. The creature must succeed on a Wisdom saving throw (DC 8 plus your Charisma modifier and Proficiency|XPHB|Proficiency Bonus) or gain the Unconscious condition for 10 minutes. The effect ends if it takes damage or someone within 5 feet takes an action to shake it out of the effect. Creatures that don't sleep, such as elves, or that have Immunity|XPHB to the Exhaustion condition automatically succeed on saves against this effect.</p></div>",
+            "rawEntries": [
+              "You can focus your will upon others in a mental vise of your supernatural dominance.",
+              {
+                "type": "entries",
+                "name": "Mesmerize",
+                "entries": [
+                  "You can expend 1 Blood Point to cast the {@spell Suggestion|XPHB} spell."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Shhh ...",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you can expend 1 Blood Point to mentally lull a creature that you can see within 15 feet of yourself to sleep. The creature must succeed on a Wisdom saving throw (DC 8 plus your Charisma modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or gain the {@condition Unconscious|XPHB} condition for 10 minutes. The effect ends if it takes damage or someone within 5 feet takes an action to shake it out of the effect. Creatures that don't sleep, such as elves, or that have {@variantrule Immunity|XPHB} to the {@condition Exhaustion|XPHB} condition automatically succeed on saves against this effect."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_lasombra_boundbyblood_abyssal_strength_11",
+            "name": "Abyssal Strength",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Lasombra",
+            "subclassSource": "BoundByBlood",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You are a creature of darkness able to tap into a fierce wellspring of physical power.</p>\n<div class=\"compendium-subentry\"><strong>Monstrous Might.</strong> <p>As a Bonus Action|XPHB, you can expend 2 Blood Points to increase your Strength score by an amount equal to your Proficiency|XPHB|Proficiency Bonus for 1 minute.</p></div>",
+            "rawEntries": [
+              "You are a creature of darkness able to tap into a fierce wellspring of physical power.",
+              {
+                "type": "entries",
+                "name": "Monstrous Might",
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, you can expend 2 Blood Points to increase your Strength score by an amount equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus} for 1 minute."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_lasombra_boundbyblood_crush_weakness_15",
+            "name": "Crush Weakness",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Lasombra",
+            "subclassSource": "BoundByBlood",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "4d8",
+            "formulaConfig": {
+              "baseDice": "4d8",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You abhor failure and weakness in all its forms, and you relish punishing those who succumb to it. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Dark Judgment.</strong> <p>When a creature you can see within 30 feet of you fails an ability check or saving throw, you can take a Reaction|XPHB to expend 2 Blood Points to deal 4d8 Psychic damage to that creature.</p></div>\n<div class=\"compendium-subentry\"><strong>Obliviate.</strong> <p>When a creature that you can see within 10 feet of you misses an attack roll, you can take a Reaction|XPHB and expend 2 Blood Points to deal 2d8 Bludgeoning damage and 2d8 Cold damage to that creature.</p></div>",
+            "rawEntries": [
+              "You abhor failure and weakness in all its forms, and you relish punishing those who succumb to it. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Dark Judgment",
+                "entries": [
+                  "When a creature you can see within 30 feet of you fails an ability check or saving throw, you can take a {@variantrule Reaction|XPHB} to expend 2 Blood Points to deal {@damage 4d8} Psychic damage to that creature."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Obliviate",
+                "entries": [
+                  "When a creature that you can see within 10 feet of you misses an attack roll, you can take a {@variantrule Reaction|XPHB} and expend 2 Blood Points to deal {@damage 2d8} Bludgeoning damage and {@damage 2d8} Cold damage to that creature."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_lasombra_boundbyblood_tenebrous_form_18",
+            "name": "Tenebrous Form",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Lasombra",
+            "subclassSource": "BoundByBlood",
+            "level": 18,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "4d10",
+            "formulaConfig": {
+              "baseDice": "4d10",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your body can be wreathed in a whirling, armored skin of tangible darkness. As a Magic action, you can expend 5 Blood Points to assume a Tenebrous Form for 1 minute. While in your Tenebrous Form, you gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Armored by Darkness.</strong> <p>You have a +4 bonus to AC.</p></div>\n<div class=\"compendium-subentry\"><strong>Dark Vigor.</strong> <p>You gain 4d10 Temporary Hit Points|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Extend Shadows.</strong> <p>You can expend 1 Blood Point to increase the duration of Tenebrous Form by 1 minute.</p></div>\n<div class=\"compendium-subentry\"><strong>Power of Oblivion.</strong> <p>You have Advantage|XPHB on Strength and Constitution checks and saving throws.</p></div>\n<div class=\"compendium-subentry\"><strong>Shadowstep.</strong> <p>You can expend 1 Blood Point to cast the Misty Step spell, but the unoccupied space you travel to must be in Dim Light|XPHB or Darkness|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Umbral Limbs.</strong> <p>When you make an Unarmed Strike|XPHB, your reach is 5 feet greater than normal, you can deal an extra 2d10 Cold damage to a target you hit with an Unarmed Strike|XPHB, and you can grapple a creature if it is Huge or smaller.</p></div>",
+            "rawEntries": [
+              "Your body can be wreathed in a whirling, armored skin of tangible darkness. As a {@action Magic|XPHB} action, you can expend 5 Blood Points to assume a Tenebrous Form for 1 minute. While in your Tenebrous Form, you gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Armored by Darkness",
+                "entries": [
+                  "You have a +4 bonus to AC."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Dark Vigor",
+                "entries": [
+                  "You gain {@dice 4d10} {@variantrule Temporary Hit Points|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Extend Shadows",
+                "entries": [
+                  "You can expend 1 Blood Point to increase the duration of Tenebrous Form by 1 minute."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Power of Oblivion",
+                "entries": [
+                  "You have {@variantrule Advantage|XPHB} on Strength and Constitution checks and saving throws."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Shadowstep",
+                "entries": [
+                  "You can expend 1 Blood Point to cast the {@spell Misty Step|XPHB} spell, but the unoccupied space you travel to must be in {@variantrule Dim Light|XPHB} or {@variantrule Darkness|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Umbral Limbs",
+                "entries": [
+                  "When you make an {@variantrule Unarmed Strike|XPHB}, your reach is 5 feet greater than normal, you can deal an extra {@damage 2d10} Cold damage to a target you hit with an {@variantrule Unarmed Strike|XPHB}, and you can grapple a creature if it is Huge or smaller."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_kindred_nosferatu_boundbyblood",
+        "name": "Nosferatu",
+        "shortName": "Nosferatu",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "features": [
+          {
+            "id": "scf_kindred_nosferatu_boundbyblood_hidden_in_plain_sight_3",
+            "name": "Hidden in Plain Sight",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Nosferatu",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<div class=\"compendium-subentry\"><strong>Mask of a Thousand Faces.</strong> <p>You can cast the Disguise Self spell without expending a spell slot.</p></div>\n<div class=\"compendium-subentry\"><strong>Vanish.</strong> <p>You can cast the Invisibility spell without expending a spell slot a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and regain all expended uses when you finish a Short Rest|XPHB or Long Rest|XPHB.</p></div>",
+            "rawEntries": [
+              {
+                "type": "entries",
+                "name": "Mask of a Thousand Faces",
+                "entries": [
+                  "You can cast the {@spell Disguise Self|XPHB} spell without expending a spell slot."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Vanish",
+                "entries": [
+                  "You can cast the {@spell Invisibility|XPHB} spell without expending a spell slot a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and regain all expended uses when you finish a {@variantrule Short Rest|XPHB} or {@variantrule Long Rest|XPHB}."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_nosferatu_boundbyblood_nosferatu_3",
+            "name": "Nosferatu",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Nosferatu",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p><em>Hide Yourself from Prying Eyes and Unleash Your Own Monstrous Nature</em></p>\n<p>Nosferatu undergo a tragic transformation upon becoming Kindred. Their visage is warped to represent the Beast inside, making them into a terror who forges connections only with vermin and monsters. They must overcome this adversity with their gifts, lest they become the monsters they resemble.</p>",
+            "rawEntries": [
+              "{@i Hide Yourself from Prying Eyes and Unleash Your Own Monstrous Nature}",
+              "Nosferatu undergo a tragic transformation upon becoming Kindred. Their visage is warped to represent the Beast inside, making them into a terror who forges connections only with vermin and monsters. They must overcome this adversity with their gifts, lest they become the monsters they resemble.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Hidden in Plain Sight|Kindred|BoundByBlood|Nosferatu|BoundByBlood|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Nosferatu Bane|Kindred|BoundByBlood|Nosferatu|BoundByBlood|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_nosferatu_boundbyblood_nosferatu_bane_3",
+            "name": "Nosferatu Bane",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Nosferatu",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your physical appearance is monstrous and unsettling. You have Disadvantage|XPHB on Charisma checks when interacting with non-Undead that can see your hideous visage.</p>",
+            "rawEntries": [
+              "Your physical appearance is monstrous and unsettling. You have {@variantrule Disadvantage|XPHB} on Charisma checks when interacting with non-Undead that can see your hideous visage."
+            ]
+          },
+          {
+            "id": "scf_kindred_nosferatu_boundbyblood_monstrous_gifts_6",
+            "name": "Monstrous Gifts",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Nosferatu",
+            "subclassSource": "BoundByBlood",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d8 + @str",
+            "formulaConfig": {
+              "baseDice": "1d8",
+              "scalingMod": "STR",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>You have become more at peace with your monstrous appearance, unlocking aspects of yourself. You can choose two benefits from the following list.</p>\n<div class=\"compendium-subentry\"><strong>Animalist.</strong> <p>You can cast the Animal Friendship, Animal Messenger, and Speak with Animals spells. You can cast each of these spells without expending a spell slot. Once you cast each spell in this way, you can't cast that spell in this way again until you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Ears of the Bat.</strong> <p>You have Blindsight with a range of 60 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Feral Talons.</strong> <p>You have a Climb Speed|XPHB equal to your Speed|XPHB, and when you hit with your Unarmed Strike|XPHB and deal damage, you can deal Slashing damage equal to 1d8 plus your Strength modifier instead of the normal damage of an Unarmed Strike|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Leathery Hide.</strong> <p>Damage dealt to you except Fire and Radiant is reduced by an amount equal to your Constitution modifier (minimum reduction of 1).</p></div>\n<div class=\"compendium-subentry\"><strong>Patagia.</strong> <p>If you aren't Incapacitated or wearing Heavy armor, you can extend your skin to glide. When you fall, you can move up to 5 feet horizontally for every 1 foot you descend, and when you would take damage from a fall, you can take a Reaction|XPHB to reduce the fall's damage to 0.</p></div>\n<div class=\"compendium-subentry\"><strong>The Terror.</strong> <p>As a Magic action, you can reveal your monstrous nature to up to three creatures you can see within 30 feet. Each target must succeed on a Wisdom saving throw (DC 8 plus your Charisma modifier and Proficiency|XPHB|Proficiency Bonus) or gain the Frightened condition for 1 minute, or until you deal damage to it.</p></div>",
+            "rawEntries": [
+              "You have become more at peace with your monstrous appearance, unlocking aspects of yourself. You can choose two benefits from the following list.",
+              {
+                "type": "entries",
+                "name": "Animalist",
+                "entries": [
+                  "You can cast the {@spell Animal Friendship|XPHB}, {@spell Animal Messenger|XPHB}, and {@spell Speak with Animals|XPHB} spells. You can cast each of these spells without expending a spell slot. Once you cast each spell in this way, you can't cast that spell in this way again until you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Ears of the Bat",
+                "entries": [
+                  "You have {@sense Blindsight|XPHB} with a range of 60 feet."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Feral Talons",
+                "entries": [
+                  "You have a {@variantrule Climb Speed|XPHB} equal to your {@variantrule Speed|XPHB}, and when you hit with your {@variantrule Unarmed Strike|XPHB} and deal damage, you can deal Slashing damage equal to {@damage 1d8} plus your Strength modifier instead of the normal damage of an {@variantrule Unarmed Strike|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Leathery Hide",
+                "entries": [
+                  "Damage dealt to you except Fire and Radiant is reduced by an amount equal to your Constitution modifier (minimum reduction of 1)."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Patagia",
+                "entries": [
+                  "If you aren't {@condition Incapacitated|XPHB} or wearing Heavy armor, you can extend your skin to glide. When you fall, you can move up to 5 feet horizontally for every 1 foot you descend, and when you would take damage from a fall, you can take a {@variantrule Reaction|XPHB} to reduce the fall's damage to 0."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "The Terror",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you can reveal your monstrous nature to up to three creatures you can see within 30 feet. Each target must succeed on a Wisdom saving throw (DC 8 plus your Charisma modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or gain the {@condition Frightened|XPHB} condition for 1 minute, or until you deal damage to it."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_nosferatu_boundbyblood_inhuman_strength_9",
+            "name": "Inhuman Strength",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Nosferatu",
+            "subclassSource": "BoundByBlood",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d10",
+            "formulaConfig": {
+              "baseDice": "1d10",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your supernatural strength is as potent as your apperance is horrifying.</p>\n<div class=\"compendium-subentry\"><strong>Ability Score Increase.</strong> <p>Your Strength score increases by 2, to a maximum of 25.</p></div>\n<div class=\"compendium-subentry\"><strong>Powerful Blows.</strong> <p>As a Bonus Action|XPHB, expend 3 Blood Points for 1 minute. When you hit with a Melee weapon or Unarmed Strike|XPHB, the target takes an extra 1d10 Force damage.</p></div>",
+            "rawEntries": [
+              "Your supernatural strength is as potent as your apperance is horrifying.",
+              {
+                "type": "entries",
+                "name": "Ability Score Increase",
+                "entries": [
+                  "Your Strength score increases by 2, to a maximum of 25."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Powerful Blows",
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, expend 3 Blood Points for 1 minute. When you hit with a Melee weapon or {@variantrule Unarmed Strike|XPHB}, the target takes an extra {@damage 1d10} Force damage."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_nosferatu_boundbyblood_the_concealing_11",
+            "name": "The Concealing",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Nosferatu",
+            "subclassSource": "BoundByBlood",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your obfuscation abilities can now extend to objects and creatures in your vicinity.</p>\n<div class=\"compendium-subentry\"><strong>Conceal.</strong> <p>As a Magic action you can expend 3 Blood Points to touch an object and make it vanish from sight and memory. The object gains the Invisible condition and creatures forgetting it may recover memories by succeeding on the Investigation check described in the source. A Remove Curse or Greater Restoration restores true memory.</p></div>\n<div class=\"compendium-subentry\"><strong>Cloak the Gathering.</strong> <p>When you cast Invisibility, you can expend up to 6 Blood Points to affect additional creatures within 30 feet.</p></div>",
+            "rawEntries": [
+              "Your obfuscation abilities can now extend to objects and creatures in your vicinity.",
+              {
+                "type": "entries",
+                "name": "Conceal",
+                "entries": [
+                  "As a {@action Magic|XPHB} action you can expend 3 Blood Points to touch an object and make it vanish from sight and memory. The object gains the Invisible condition and creatures forgetting it may recover memories by succeeding on the Investigation check described in the source. A {@spell Remove Curse|XPHB} or {@spell Greater Restoration|XPHB} restores true memory."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Cloak the Gathering",
+                "entries": [
+                  "When you cast {@spell Invisibility|XPHB}, you can expend up to 6 Blood Points to affect additional creatures within 30 feet."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_nosferatu_boundbyblood_greater_monstrous_gifts_15",
+            "name": "Greater Monstrous Gifts",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Nosferatu",
+            "subclassSource": "BoundByBlood",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "2d6 + @str",
+            "formulaConfig": {
+              "baseDice": "2d6",
+              "scalingMod": "STR",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your physical monstrousness has evolved. You can choose one benefit from the following list.</p>\n<div class=\"compendium-subentry\"><strong>Call the Wretched.</strong> <p>You can expend 2 Blood Points to cast the Blight or Insect Plague spell.</p></div>\n<div class=\"compendium-subentry\"><strong>Distending Jaws.</strong> <p>You can roll one additional Feed Die when you feed. In addition, you can use your jaws to make Unarmed Strike|XPHB|Unarmed Strikes. When you hit with your Unarmed Strike|XPHB and deal damage, you can deal Piercing damage equal to 2d6 plus your Strength modifier instead of the normal damage of an Unarmed Strike|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>One with the Night.</strong> <p>Your Blindsight is increased to 90 feet, and you can see normally in Dim Light|XPHB and Darkness|XPHB—both magical and nonmagical—within 120 feet of yourself.</p></div>\n<div class=\"compendium-subentry\"><strong>Skin of the Chameleon.</strong> <p>You can expend 2 Blood Points to cast the Greater Invisibility spell. In addition, you have Advantage|XPHB on Dexterity (Stealth) checks.</p></div>\n<div class=\"compendium-subentry\"><strong>Stony Flesh.</strong> <p>In response to taking damage, you can use your Reaction|XPHB to expend 1 Blood Point to gain Resistance|XPHB for 1 minute to two damage types, other than Fire, Psychic, and Radiant, including against the triggering damage.</p></div>\n<div class=\"compendium-subentry\"><strong>Wings of the Gargoyle.</strong> <p>While you aren't wearing Heavy armor, your Speed|XPHB increases by 10 feet, and you gain a Fly Speed|XPHB equal to your Speed|XPHB.</p></div>",
+            "rawEntries": [
+              "Your physical monstrousness has evolved. You can choose one benefit from the following list.",
+              {
+                "type": "entries",
+                "name": "Call the Wretched",
+                "entries": [
+                  "You can expend 2 Blood Points to cast the {@spell Blight|XPHB} or {@spell Insect Plague|XPHB} spell."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Distending Jaws",
+                "entries": [
+                  "You can roll one additional Feed Die when you feed. In addition, you can use your jaws to make {@variantrule Unarmed Strike|XPHB|Unarmed Strikes}. When you hit with your {@variantrule Unarmed Strike|XPHB} and deal damage, you can deal Piercing damage equal to {@damage 2d6} plus your Strength modifier instead of the normal damage of an {@variantrule Unarmed Strike|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "One with the Night",
+                "entries": [
+                  "Your {@sense Blindsight|XPHB} is increased to 90 feet, and you can see normally in {@variantrule Dim Light|XPHB} and {@variantrule Darkness|XPHB}—both magical and nonmagical—within 120 feet of yourself."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Skin of the Chameleon",
+                "entries": [
+                  "You can expend 2 Blood Points to cast the {@spell Greater Invisibility|XPHB} spell. In addition, you have {@variantrule Advantage|XPHB} on Dexterity ({@skill Stealth|XPHB}) checks."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Stony Flesh",
+                "entries": [
+                  "In response to taking damage, you can use your {@variantrule Reaction|XPHB} to expend 1 Blood Point to gain {@variantrule Resistance|XPHB} for 1 minute to two damage types, other than Fire, Psychic, and Radiant, including against the triggering damage."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Wings of the Gargoyle",
+                "entries": [
+                  "While you aren't wearing Heavy armor, your {@variantrule Speed|XPHB} increases by 10 feet, and you gain a {@variantrule Fly Speed|XPHB} equal to your {@variantrule Speed|XPHB}."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_nosferatu_boundbyblood_what_goes_bump_in_the_night_18",
+            "name": "What Goes Bump in the Night",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Nosferatu",
+            "subclassSource": "BoundByBlood",
+            "level": 18,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d4 + 1",
+            "formulaConfig": {
+              "baseDice": "1d4",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 1
+            },
+            "entriesHtml": "<div class=\"compendium-subentry\"><strong>Lord of Vermin.</strong> <p>As a Magic action expend 3 Blood Points to summon 1d4 + 1 swarms of bats, insects, or rats for 1 hour. Once used, can't use again until a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Stalk the Shadows.</strong> <p>You can cast Greater Invisibility on yourself without a spell slot a number of times equal to your Proficiency|XPHB|Proficiency Bonus, regaining uses on a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>",
+            "rawEntries": [
+              {
+                "type": "entries",
+                "name": "Lord of Vermin",
+                "entries": [
+                  "As a {@action Magic|XPHB} action expend 3 Blood Points to summon {@dice 1d4 + 1} swarms of bats, insects, or rats for 1 hour. Once used, can't use again until a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Stalk the Shadows",
+                "entries": [
+                  "You can cast {@spell Greater Invisibility|XPHB} on yourself without a spell slot a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, regaining uses on a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_kindred_toreador_boundbyblood",
+        "name": "Toreador",
+        "shortName": "Toreador",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "features": [
+          {
+            "id": "scf_kindred_toreador_boundbyblood_an_artist_s_soul_3",
+            "name": "An Artist's Soul",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Toreador",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You have in you a spark of talent and inspiration that has only been fanned brighter by your vampiric ascension. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Auspicious Senses.</strong> <p>You have Advantage|XPHB on Intelligence (Investigation) and Wisdom (Perception) checks. In addition, the range of your Darkvision increases to 120 feet.</p></div>\n<div class=\"compendium-subentry\"><strong>Chosen for Talent.</strong> <p>You gain proficiency in two skills and one tool of your choice. If you already have proficiency in the chosen skill, you gain Expertise|XPHB in it.</p></div>",
+            "rawEntries": [
+              "You have in you a spark of talent and inspiration that has only been fanned brighter by your vampiric ascension. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Auspicious Senses",
+                "entries": [
+                  "You have {@variantrule Advantage|XPHB} on Intelligence ({@skill Investigation|XPHB}) and Wisdom ({@skill Perception|XPHB}) checks. In addition, the range of your {@sense Darkvision|XPHB} increases to 120 feet."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Chosen for Talent",
+                "entries": [
+                  "You gain proficiency in two skills and one tool of your choice. If you already have proficiency in the chosen skill, you gain {@variantrule Expertise|XPHB} in it."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_toreador_boundbyblood_toreador_3",
+            "name": "Toreador",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Toreador",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p><em>See the World Like No One Else Can</em></p>\n<p>Toreador are steeped in art and beauty. They use their superhuman senses to experience aspects of the world no one else can. They feel everything deeply, and, with a glance or a few words, can instill similar feelings in others. If there is awe to be found, a Toreador can find it.</p>",
+            "rawEntries": [
+              "{@i See the World Like No One Else Can}",
+              "Toreador are steeped in art and beauty. They use their superhuman senses to experience aspects of the world no one else can. They feel everything deeply, and, with a glance or a few words, can instill similar feelings in others. If there is awe to be found, a Toreador can find it.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "An Artist's Soul|Kindred|BoundByBlood|Toreador|BoundByBlood|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Toreador Bane|Kindred|BoundByBlood|Toreador|BoundByBlood|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_toreador_boundbyblood_toreador_bane_3",
+            "name": "Toreador Bane",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Toreador",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You suffer a great malaise in the absence of beauty. When you roll a 9 or lower on the d20 for an Intelligence (Investigation) or Wisdom (Perception) check, you see nothing of immediate beauty and gain the Restrained condition. At the end of each of your turns, you can make a DC 10 Wisdom saving throw, ending the condition on a success.</p>",
+            "rawEntries": [
+              "You suffer a great malaise in the absence of beauty. When you roll a 9 or lower on the d20 for an Intelligence ({@skill Investigation|XPHB}) or Wisdom ({@skill Perception|XPHB}) check, you see nothing of immediate beauty and gain the {@condition Restrained|XPHB} condition. At the end of each of your turns, you can make a DC 10 Wisdom saving throw, ending the condition on a success."
+            ]
+          },
+          {
+            "id": "scf_kindred_toreador_boundbyblood_depth_of_feelings_6",
+            "name": "Depth of Feelings",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Toreador",
+            "subclassSource": "BoundByBlood",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can see aspects of the world that others can't, including emotions. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Aura Sight.</strong> <p>As a Magic action, you can expend 2 Blood Points to see a creature's aura for 1 minute. You can ask the GM up to two questions that can be answered with yes or no. You must ask your questions before the effect ends. You receive a correct answer for each question. The following are example questions.</p>\n<ul><li>Is the creature's creature type X? (Where X is a creature type specified by the player character, such as Monstrosity or Undead)</li><li>Can the creature cast spells?</li><li>Is the creature Hostile [Attitude]|XPHB|Hostile toward me?</li><li>Does the creature believe what it is saying?</li></ul>\n<p>The GM has final say as to whether the question can be answered, but the answers must be truthful.</p></div>\n<div class=\"compendium-subentry\"><strong>Entrancement.</strong> <p>You can expend 1 Blood Point to cast the Calm Emotions, Charm Monster, or Charm Person spell.</p></div>",
+            "rawEntries": [
+              "You can see aspects of the world that others can't, including emotions. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Aura Sight",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you can expend 2 Blood Points to see a creature's aura for 1 minute. You can ask the GM up to two questions that can be answered with yes or no. You must ask your questions before the effect ends. You receive a correct answer for each question. The following are example questions.",
+                  {
+                    "type": "list",
+                    "style": "list-no-bullets",
+                    "items": [
+                      "Is the creature's creature type X? (Where X is a creature type specified by the player character, such as Monstrosity or Undead)",
+                      "Can the creature cast spells?",
+                      "Is the creature {@variantrule Hostile [Attitude]|XPHB|Hostile} toward me?",
+                      "Does the creature believe what it is saying?"
+                    ]
+                  },
+                  "The GM has final say as to whether the question can be answered, but the answers must be truthful."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Entrancement",
+                "entries": [
+                  "You can expend 1 Blood Point to cast the {@spell Calm Emotions|XPHB}, {@spell Charm Monster|XPHB}, or {@spell Charm Person|XPHB} spell."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_toreador_boundbyblood_live_fast_be_a_good_looking_corpse_9",
+            "name": "Live Fast, Be a Good Looking Corpse",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Toreador",
+            "subclassSource": "BoundByBlood",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You experience the world, in all its wonders, with vampiric speed. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Ability Score Increase.</strong> <p>Your Dexterity score increases by 2, to a maximum of 25.</p></div>\n<div class=\"compendium-subentry\"><strong>Rapidity.</strong> <p>As a Bonus Action|XPHB, you can expend 1 Blood Point to gain an additional action on your turns. That action can be used to take only the Attack (one attack only), Dash, Disengage, Hide, or Utilize action. This effects lasts for a number of turns equal to your Proficiency|XPHB|Proficiency Bonus.</p></div>",
+            "rawEntries": [
+              "You experience the world, in all its wonders, with vampiric speed. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Ability Score Increase",
+                "entries": [
+                  "Your Dexterity score increases by 2, to a maximum of 25."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Rapidity",
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, you can expend 1 Blood Point to gain an additional action on your turns. That action can be used to take only the {@action Attack|XPHB} (one attack only), {@action Dash|XPHB}, {@action Disengage|XPHB}, {@action Hide|XPHB}, or {@action Utilize|XPHB} action. This effects lasts for a number of turns equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_toreador_boundbyblood_visionary_11",
+            "name": "Visionary",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Toreador",
+            "subclassSource": "BoundByBlood",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You have honed your skills and your perceptions to a razor's edge. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Practiced Perfection.</strong> <p>You gain Expertise|XPHB in three of your skill proficiencies of your choice.</p></div>\n<div class=\"compendium-subentry\"><strong>Spirit's Touch.</strong> <p>As a Magic action, you can expend 2 Blood Points to touch an object and perceive emotional residues on it for 10 minutes. You can ask the GM a number of questions equal to your Proficiency|XPHB|Proficiency Bonus, which must be answered truthfully. You must ask your questions before the effect ends. The following are examples of questions that can be asked.</p>\n<ul><li>What did the last creature that touched this look like?</li><li>What was the emotional state of the last creature that used the object?</li><li>Is this object magical?</li><li>Is this object cursed?</li><li>Is this object trapped?</li><li>What are any physical details of the object that aren't readily visible?</li><li>How many creatures have touched the object in the last 24 hours?</li></ul></div>",
+            "rawEntries": [
+              "You have honed your skills and your perceptions to a razor's edge. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Practiced Perfection",
+                "entries": [
+                  "You gain {@variantrule Expertise|XPHB} in three of your skill proficiencies of your choice."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spirit's Touch",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you can expend 2 Blood Points to touch an object and perceive emotional residues on it for 10 minutes. You can ask the GM a number of questions equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, which must be answered truthfully. You must ask your questions before the effect ends. The following are examples of questions that can be asked.",
+                  {
+                    "type": "list",
+                    "style": "list-no-bullets",
+                    "items": [
+                      "What did the last creature that touched this look like?",
+                      "What was the emotional state of the last creature that used the object?",
+                      "Is this object magical?",
+                      "Is this object cursed?",
+                      "Is this object trapped?",
+                      "What are any physical details of the object that aren't readily visible?",
+                      "How many creatures have touched the object in the last 24 hours?"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_toreador_boundbyblood_truly_majestic_15",
+            "name": "Truly Majestic",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Toreador",
+            "subclassSource": "BoundByBlood",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You exude vampiric allure and have learned how to charm others. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Eerily Convincing.</strong> <p>You have Advantage|XPHB on Charisma (Deception and Persuasion) checks. In addition, when you cast a spell with your Entrancement feature, a creature has Disadvantage|XPHB on any saving throw it makes against the spell.</p></div>\n<div class=\"compendium-subentry\"><strong>Majesty.</strong> <p>You can expend 3 Blood Points to cast the Sanctuary spell on yourself. When you cast the spell in this way, the spell doesn't end if you make an attack roll, cast a spell, or deal damage.</p></div>",
+            "rawEntries": [
+              "You exude vampiric allure and have learned how to charm others. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Eerily Convincing",
+                "entries": [
+                  "You have {@variantrule Advantage|XPHB} on Charisma ({@skill Deception|XPHB} and {@skill Persuasion|XPHB}) checks. In addition, when you cast a spell with your Entrancement feature, a creature has {@variantrule Disadvantage|XPHB} on any saving throw it makes against the spell."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Majesty",
+                "entries": [
+                  "You can expend 3 Blood Points to cast the {@spell Sanctuary|XPHB} spell on yourself. When you cast the spell in this way, the spell doesn't end if you make an attack roll, cast a spell, or deal damage."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_toreador_boundbyblood_magnum_opus_18",
+            "name": "Magnum Opus",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Toreador",
+            "subclassSource": "BoundByBlood",
+            "level": 18,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You have mastered what it means to be one of the greatest vampiric artisans, which defines you as much as you define it. Choose two of the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Flicker.</strong> <p>As a Bonus Action|XPHB, you can expend 3 Blood Points to dance between the beats of a mortal's heart. Until the start of your next turn, you have a +3 bonus to AC, your Speed|XPHB is doubled, your movement doesn't provoke Opportunity Attack, and you have Advantage|XPHB on attack rolls.</p></div>\n<div class=\"compendium-subentry\"><strong>Clairvoyance.</strong> <p>You can expend 2 Blood Points to cast the Clairvoyance or Scrying spell. When you cast the spell in this way, the sensor can't be perceived.</p></div>\n<div class=\"compendium-subentry\"><strong>Open Mind.</strong> <p>You can use a Magic action to expend 1 Blood point to choose any number of creatures you know within 5 miles of yourself or any number of creatures you can see within 120 feet of yourself. You and the chosen creatures can communicate telepathically with each other while the creatures and you are within 5 miles of each other for 8 hours. You and the targets can instantly share words, images, sounds, and other sensory messages with each other through the link, and the targets recognize you as the creature they are communicating with. This effect enables creatures to understand the meaning of your words and any sensory messages you send to them.</p></div>\n<div class=\"compendium-subentry\"><strong>Star Magnetism.</strong> <p>You can expend 3 Blood Points to cast the Mass Suggestion spell. When you cast the spell in this way, you can target any creature you can communicate with, you don't need line of sight, the range becomes 1 mile, and you can modify it so that it doesn't require Concentration.</p></div>",
+            "rawEntries": [
+              "You have mastered what it means to be one of the greatest vampiric artisans, which defines you as much as you define it. Choose two of the following benefits.",
+              {
+                "type": "entries",
+                "name": "Flicker",
+                "entries": [
+                  "As a {@variantrule Bonus Action|XPHB}, you can expend 3 Blood Points to dance between the beats of a mortal's heart. Until the start of your next turn, you have a +3 bonus to AC, your {@variantrule Speed|XPHB} is doubled, your movement doesn't provoke {@action Opportunity Attack|XPHB|Opportunity Attacks}, and you have {@variantrule Advantage|XPHB} on attack rolls."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Clairvoyance",
+                "entries": [
+                  "You can expend 2 Blood Points to cast the {@spell Clairvoyance|XPHB} or {@spell Scrying|XPHB} spell. When you cast the spell in this way, the sensor can't be perceived."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Open Mind",
+                "entries": [
+                  "You can use a {@action Magic|XPHB} action to expend 1 Blood point to choose any number of creatures you know within 5 miles of yourself or any number of creatures you can see within 120 feet of yourself. You and the chosen creatures can communicate telepathically with each other while the creatures and you are within 5 miles of each other for 8 hours. You and the targets can instantly share words, images, sounds, and other sensory messages with each other through the link, and the targets recognize you as the creature they are communicating with. This effect enables creatures to understand the meaning of your words and any sensory messages you send to them."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Star Magnetism",
+                "entries": [
+                  "You can expend 3 Blood Points to cast the {@spell Mass Suggestion|XPHB} spell. When you cast the spell in this way, you can target any creature you can communicate with, you don't need line of sight, the range becomes 1 mile, and you can modify it so that it doesn't require {@condition Concentration|XPHB}."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "subclass_kindred_ventrue_boundbyblood",
+        "name": "Ventrue",
+        "shortName": "Ventrue",
+        "source": "BoundByBlood",
+        "page": 0,
+        "className": "Kindred",
+        "classSource": "BoundByBlood",
+        "features": [
+          {
+            "id": "scf_kindred_ventrue_boundbyblood_ventrue_3",
+            "name": "Ventrue",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Ventrue",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p><em>Control Others with Influence and Guile</em></p>\n<p>The Ventrue have elevated themselves to be the \"Clan of Kings,\" imposing their will on the clans and standing contemptuously against those who would defy them. After lifetimes of prudent rule, the Ventrue have earned their figurative throne.</p>",
+            "rawEntries": [
+              "{@i Control Others with Influence and Guile}",
+              "The Ventrue have elevated themselves to be the \"Clan of Kings,\" imposing their will on the clans and standing contemptuously against those who would defy them. After lifetimes of prudent rule, the Ventrue have earned their figurative throne.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Voice of Authority|Kindred|BoundByBlood|Ventrue|BoundByBlood|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Ventrue Bane|Kindred|BoundByBlood|Ventrue|BoundByBlood|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_ventrue_boundbyblood_ventrue_bane_3",
+            "name": "Ventrue Bane",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Ventrue",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You have an arguably refined palate for blood. Choose a specific physical aspect (such as natural blondes or the elderly) or a social aspect (such as employees, soldiers, or the willing). It cannot be a wide generalization, such as creature type. When you use your Feed|Kindred|BoundByBlood|1 feature on a creature that doesn't have your preferred aspect, you roll half the number of Feed Dice.</p>",
+            "rawEntries": [
+              "You have an arguably refined palate for blood. Choose a specific physical aspect (such as natural blondes or the elderly) or a social aspect (such as employees, soldiers, or the willing). It cannot be a wide generalization, such as creature type. When you use your {@classFeature Feed|Kindred|BoundByBlood|1} feature on a creature that doesn't have your preferred aspect, you roll half the number of Feed Dice."
+            ]
+          },
+          {
+            "id": "scf_kindred_ventrue_boundbyblood_voice_of_authority_3",
+            "name": "Voice of Authority",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Ventrue",
+            "subclassSource": "BoundByBlood",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You can impose control over others while keeping others from imposing control over you. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Do as I Say.</strong> <p>You can cast the Command and Suggestion spells. You can cast either spell without expending a spell slot a number of times equal to your Proficiency|XPHB|Proficiency Bonus, and you regain all expended uses when you finish a Short Rest|XPHB|Short or Long Rest|XPHB.</p></div>\n<div class=\"compendium-subentry\"><strong>Unshakably Confident.</strong> <p>You have Advantage|XPHB on Wisdom saving throws.</p></div>",
+            "rawEntries": [
+              "You can impose control over others while keeping others from imposing control over you. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Do as I Say",
+                "entries": [
+                  "You can cast the {@spell Command|XPHB} and {@spell Suggestion|XPHB} spells. You can cast either spell without expending a spell slot a number of times equal to your {@variantrule Proficiency|XPHB|Proficiency Bonus}, and you regain all expended uses when you finish a {@variantrule Short Rest|XPHB|Short} or {@variantrule Long Rest|XPHB}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Unshakably Confident",
+                "entries": [
+                  "You have {@variantrule Advantage|XPHB} on Wisdom saving throws."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_ventrue_boundbyblood_dare_not_falter_6",
+            "name": "Dare Not Falter",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Ventrue",
+            "subclassSource": "BoundByBlood",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You effortlessly shrug off harm to your body and mind. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Toughened.</strong> <p>Your Hit Points|XPHB|Hit Point maximum increases by an amount equal to your Kindred level when you gain this feature. Whenever you gain a Kindred level thereafter, your Hit Points|XPHB|Hit Point maximum increases by an additional 1 Hit Points|XPHB|Hit Point.</p></div>\n<div class=\"compendium-subentry\"><strong>Unswayable Mind.</strong> <p>If you fail a saving throw to avoid or end the Charmed, Frightened, or Stunned condition, you can reroll it. You must use the new roll.</p></div>",
+            "rawEntries": [
+              "You effortlessly shrug off harm to your body and mind. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Toughened",
+                "entries": [
+                  "Your {@variantrule Hit Points|XPHB|Hit Point} maximum increases by an amount equal to your Kindred level when you gain this feature. Whenever you gain a Kindred level thereafter, your {@variantrule Hit Points|XPHB|Hit Point} maximum increases by an additional 1 {@variantrule Hit Points|XPHB|Hit Point}."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Unswayable Mind",
+                "entries": [
+                  "If you fail a saving throw to avoid or end the {@condition Charmed|XPHB}, {@condition Frightened|XPHB}, or {@condition Stunned|XPHB} condition, you can reroll it. You must use the new roll."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_ventrue_boundbyblood_domineering_control_9",
+            "name": "Domineering Control",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Ventrue",
+            "subclassSource": "BoundByBlood",
+            "level": 9,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>With a glance, you can steer the emotions and thoughts of intelligent creatures.</p>\n<div class=\"compendium-subentry\"><strong>Befuddle.</strong> <p>You can expend 1 Blood Point to cast the Hypnotic Pattern spell. When you cast the spell in this way, a creature with an Intelligence of 3 or lower automatically succeeds on its saving throw against the spell while a creature with an Intelligence of 4 or higher has Disadvantage|XPHB on the saving throw.</p></div>\n<div class=\"compendium-subentry\"><strong>Entrance.</strong> <p>As a Magic action, make a Charisma (Persuasion) check and expend 2 Blood Points to choose a creature you can see within 30 feet of you. The target must make a Wisdom saving throw with a DC equal to the result of your Persuasion check. On a failed save, the creature has the Stunned condition until the end of your next turn. At the end of each of the Stunned creature's turns, the creature repeats the save, ending the effect on itself on a success. A creature with an Intelligence of 3 or lower automatically succeeds on its saving throw against the effect.</p></div>\n<div class=\"compendium-subentry\"><strong>Persuade.</strong> <p>You can expend 1 Blood Point to cast the Charm Monster spell.</p></div>\n<div class=\"compendium-subentry\"><strong>Terrify.</strong> <p>As a Magic action, make a Charisma (Intimidation) check and expend 1 Blood Point to choose a creature you can see within 30 feet of you. The target must make a Wisdom saving throw with a DC equal to the result of your Intimidation check. On a failed save, the creature has the Frightened condition for 1 minute. At the end of each of the Frightened creature's turns, the creature repeats the save, ending the effect on itself on a success. A creature with an Intelligence of 3 or lower automatically succeeds on its saving throw against the effect.</p></div>",
+            "rawEntries": [
+              "With a glance, you can steer the emotions and thoughts of intelligent creatures.",
+              {
+                "type": "entries",
+                "name": "Befuddle",
+                "entries": [
+                  "You can expend 1 Blood Point to cast the {@spell Hypnotic Pattern|XPHB} spell. When you cast the spell in this way, a creature with an Intelligence of 3 or lower automatically succeeds on its saving throw against the spell while a creature with an Intelligence of 4 or higher has {@variantrule Disadvantage|XPHB} on the saving throw."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Entrance",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, make a Charisma ({@skill Persuasion}) check and expend 2 Blood Points to choose a creature you can see within 30 feet of you. The target must make a Wisdom saving throw with a DC equal to the result of your {@skill Persuasion|XPHB} check. On a failed save, the creature has the {@condition Stunned|XPHB} condition until the end of your next turn. At the end of each of the {@condition Stunned|XPHB} creature's turns, the creature repeats the save, ending the effect on itself on a success. A creature with an Intelligence of 3 or lower automatically succeeds on its saving throw against the effect."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Persuade",
+                "entries": [
+                  "You can expend 1 Blood Point to cast the {@spell Charm Monster|XPHB} spell."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Terrify",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, make a Charisma ({@skill Intimidation|XPHB}) check and expend 1 Blood Point to choose a creature you can see within 30 feet of you. The target must make a Wisdom saving throw with a DC equal to the result of your {@skill Intimidation|XPHB} check. On a failed save, the creature has the {@condition Frightened|XPHB} condition for 1 minute. At the end of each of the {@condition Frightened|XPHB} creature's turns, the creature repeats the save, ending the effect on itself on a success. A creature with an Intelligence of 3 or lower automatically succeeds on its saving throw against the effect."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_ventrue_boundbyblood_mass_manipulation_11",
+            "name": "Mass Manipulation",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Ventrue",
+            "subclassSource": "BoundByBlood",
+            "level": 11,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your ability to command and sway others grows to encompass multiple minds at once. You can expend 3 Blood Points to cast the Mass Suggestion spell. At level 15, you can expend 4 Blood Points to cast the spell as its level 7 version; at level 18, you can expend 5 Blood Points to cast it as its level 8 version; and at level 20, you can expend 6 Blood Points to cast it as its level 9 version.</p>",
+            "rawEntries": [
+              "Your ability to command and sway others grows to encompass multiple minds at once. You can expend 3 Blood Points to cast the {@spell Mass Suggestion|XPHB} spell. At level 15, you can expend 4 Blood Points to cast the spell as its level 7 version; at level 18, you can expend 5 Blood Points to cast it as its level 8 version; and at level 20, you can expend 6 Blood Points to cast it as its level 9 version."
+            ]
+          },
+          {
+            "id": "scf_kindred_ventrue_boundbyblood_sanguine_fortification_15",
+            "name": "Sanguine Fortification",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Ventrue",
+            "subclassSource": "BoundByBlood",
+            "level": 15,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your vitae has resilience-enhancing properties. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Draught of Endurance.</strong> <p>When a creature within 60 feet of you drinks your vitae, you can take a Reaction|XPHB and expend 2 Blood Points to grant that creature a number of Temporary Hit Points|XPHB equal to twice your Kindred level.</p></div>\n<div class=\"compendium-subentry\"><strong>Flesh of Marble.</strong> <p>When you take damage except Fire and Radiant, you can take a Reaction|XPHB and expend 2 Blood Points to reduce the damage you take by half (round down) or 4 Blood Points to reduce the damage to 0.</p></div>",
+            "rawEntries": [
+              "Your vitae has resilience-enhancing properties. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Draught of Endurance",
+                "entries": [
+                  "When a creature within 60 feet of you drinks your vitae, you can take a {@variantrule Reaction|XPHB} and expend 2 Blood Points to grant that creature a number of {@variantrule Temporary Hit Points|XPHB} equal to twice your Kindred level."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Flesh of Marble",
+                "entries": [
+                  "When you take damage except Fire and Radiant, you can take a {@variantrule Reaction|XPHB} and expend 2 Blood Points to reduce the damage you take by half (round down) or 4 Blood Points to reduce the damage to 0."
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_kindred_ventrue_boundbyblood_lordly_power_18",
+            "name": "Lordly Power",
+            "source": "BoundByBlood",
+            "page": 0,
+            "className": "Kindred",
+            "classSource": "BoundByBlood",
+            "subclassShortName": "Ventrue",
+            "subclassSource": "BoundByBlood",
+            "level": 18,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Your will over others becomes ironclad and staggeringly powerful. You gain the following benefits.</p>\n<div class=\"compendium-subentry\"><strong>Imposing Aura.</strong> <p>When a creature within 15 feet of you targets you with an attack roll or a damaging spell, it must succeed on a Wisdom saving throw (DC 8 plus your Strength modifier and Proficiency|XPHB|Proficiency Bonus) or either choose a new target or lose the attack or spell. On a successful save, the target isn't affected, and it's immune to Imposing Aura for 24 hours.</p></div>\n<div class=\"compendium-subentry\"><strong>Penetrating Dominance.</strong> <p>Creatures you can see within 60 feet of yourself have Disadvantage|XPHB on saving throws to avoid or end the Charmed condition.</p></div>\n<div class=\"compendium-subentry\"><strong>Summon.</strong> <p>As a Magic action, you can expend 3 Blood Points to urge a Beast, Humanoid, or Undead you have touched and is on the same plane of existence as you to make a Wisdom saving throw (DC 8 plus your Charisma modifier and Proficiency|XPHB|Proficiency Bonus). On a failed save, the creature is compelled to come to you. The creature must use as much of its movement as possible to move in your direction on its turns, taking the safest route, and stopping only to eat and rest. A compelled creature repeats the save at the end of each day at dusk, ending the effect on itself on a success. You know if the compulsion ends early. You can't have more than one creature under this effect at a time. If you use this feature again, the effect on another creature ends.</p>\n<p>When the creature appears, it is under no compulsion to behave a particular way. You can ask it to perform a service in exchange for payment, but it isn't obliged to do so. The requested task could range from simple (fly us across the chasm, or help us fight a battle) to complex (spy on our enemies, or protect us during our foray into the dungeon). You must be able to communicate with the creature to bargain for its services. Payment can take a variety of forms.</p>\n<p>The GM can adjust these payments based on the circumstances under which you called upon it. If the task is aligned with the creature's ethos, the payment might be halved or even waived. Nonhazardous tasks typically require only half the payment, while especially dangerous tasks might require a greater gift. Creatures rarely accept tasks that seem suicidal.</p>\n<p>A Remove Curse, Greater Restoration, or Wish spell ends this effect.</p></div>",
+            "rawEntries": [
+              "Your will over others becomes ironclad and staggeringly powerful. You gain the following benefits.",
+              {
+                "type": "entries",
+                "name": "Imposing Aura",
+                "entries": [
+                  "When a creature within 15 feet of you targets you with an attack roll or a damaging spell, it must succeed on a Wisdom saving throw (DC 8 plus your Strength modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}) or either choose a new target or lose the attack or spell. On a successful save, the target isn't affected, and it's immune to Imposing Aura for 24 hours."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Penetrating Dominance",
+                "entries": [
+                  "Creatures you can see within 60 feet of yourself have {@variantrule Disadvantage|XPHB} on saving throws to avoid or end the {@condition Charmed|XPHB} condition."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Summon",
+                "entries": [
+                  "As a {@action Magic|XPHB} action, you can expend 3 Blood Points to urge a Beast, Humanoid, or Undead you have touched and is on the same plane of existence as you to make a Wisdom saving throw (DC 8 plus your Charisma modifier and {@variantrule Proficiency|XPHB|Proficiency Bonus}). On a failed save, the creature is compelled to come to you. The creature must use as much of its movement as possible to move in your direction on its turns, taking the safest route, and stopping only to eat and rest. A compelled creature repeats the save at the end of each day at dusk, ending the effect on itself on a success. You know if the compulsion ends early. You can't have more than one creature under this effect at a time. If you use this feature again, the effect on another creature ends.",
+                  "When the creature appears, it is under no compulsion to behave a particular way. You can ask it to perform a service in exchange for payment, but it isn't obliged to do so. The requested task could range from simple (fly us across the chasm, or help us fight a battle) to complex (spy on our enemies, or protect us during our foray into the dungeon). You must be able to communicate with the creature to bargain for its services. Payment can take a variety of forms.",
+                  "The GM can adjust these payments based on the circumstances under which you called upon it. If the task is aligned with the creature's ethos, the payment might be halved or even waived. Nonhazardous tasks typically require only half the payment, while especially dangerous tasks might require a greater gift. Creatures rarely accept tasks that seem suicidal.",
+                  "A {@spell Remove Curse|XPHB}, {@spell Greater Restoration|XPHB}, or {@spell Wish|XPHB} spell ends this effect."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

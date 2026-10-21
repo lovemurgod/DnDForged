@@ -1,0 +1,1502 @@
+[
+  {
+    "id": "class_druid_xua2023druidandpaladin",
+    "name": "Druid",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 3,
+    "hitDie": "d8",
+    "primaryAbility": "None",
+    "features": [
+      {
+        "id": "cf_druid_xua2023druidandpaladin_channel_nature_1",
+        "name": "Channel Nature",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 4,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 1,
+        "actionType": "bonus",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>As a Druid, you gain the following class features when you reach the specified levels in this class. These features are listed on the Druid table.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>1st Level: Channel Nature.</strong> <p>The magic of nature infuses you. Tapping into that power, you can create various magical effects. You start with one such effect: Wild Shape, which is described below. Other Druid features give additional Channel Nature effect options. Each time you use this Channel Nature, you choose which effect to create from among those you have from this class.</p>\n<p>You can use Channel Nature twice. You regain one expended use when you finish a Short Rest|XUA2023DruidAndPaladin, and you regain all expended uses when you finish a Long Rest|XUA2023DruidAndPaladin. You gain additional uses when you reach certain Druid levels, as shown in the Channel Nature column of the Druid table.</p>\n<p>If a Channel Nature effect requires a saving throw, the DC equals the Spell Save DC from this class's Spellcasting feature.</p></div>\n<div class=\"compendium-subentry\"><strong>Wild Shape.</strong> <p>As a Magic action, you transform into a form that you have learned for this feature. You start knowing one form, Animal of the Land, which is detailed in the \"Wild Shapes\" section later in this class's description. You stay in that form for a number of hours equal to half your Druid level or until you use Wild Shape again, have the Incapacitated condition, or die. You can also end Wild Shape early as a Bonus Action.</p>\n<p>While in a form, its game statistics replace yours, and your ability to handle objects is determined by the form's limbs, rather than your own. You retain your personality, memories, ability to speak, and Wild Shape. You lose access to all your other features, such as the ability to cast spells (you can continue to concentrate on one).</p>\n<p>When you transform, you choose whether your equipment falls to the ground in your space or merges into your new form. Equipment that merges with the form has no effect until you leave the form.</p></div>\n<div class=\"compendium-subentry\"><strong>Wild Shapes.</strong> <p>When you use your Wild Shape, you transform into a form you've learned for this feature. This section includes three forms: Animal of the Land, Animal of the Sea, and Animal of the Sky.</p>\n<p>As you assume a form, you determine its appearance, selecting an example animal from the form's description, selecting another appropriate animal, or choosing a hybrid form that incorporates visual characteristics from two or more animals. The appearance you choose has no effect on the form's capabilities.</p>\n<p>When choosing an animal's appearance for a form, that animal needn't be the same size as the form. For example, you could choose elephant for the appearance and Small for the size—creating a form that resembles a little elephant.</p></div></div>",
+        "rawEntries": [
+          "As a Druid, you gain the following class features when you reach the specified levels in this class. These features are listed on the Druid table.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "1st Level: Channel Nature",
+                "entries": [
+                  "The magic of nature infuses you. Tapping into that power, you can create various magical effects. You start with one such effect: Wild Shape, which is described below. Other Druid features give additional Channel Nature effect options. Each time you use this Channel Nature, you choose which effect to create from among those you have from this class.",
+                  "You can use Channel Nature twice. You regain one expended use when you finish a {@variantrule Short Rest|XUA2023DruidAndPaladin}, and you regain all expended uses when you finish a {@variantrule Long Rest|XUA2023DruidAndPaladin}. You gain additional uses when you reach certain Druid levels, as shown in the Channel Nature column of the Druid table.",
+                  "If a Channel Nature effect requires a saving throw, the DC equals the Spell Save DC from this class's Spellcasting feature."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Wild Shape",
+                "entries": [
+                  "As a {@action Magic|XUA2023DruidAndPaladin} action, you transform into a form that you have learned for this feature. You start knowing one form, Animal of the Land, which is detailed in the \"Wild Shapes\" section later in this class's description. You stay in that form for a number of hours equal to half your Druid level or until you use Wild Shape again, have the {@condition Incapacitated|XUA2023DruidAndPaladin} condition, or die. You can also end Wild Shape early as a Bonus Action.",
+                  "While in a form, its game statistics replace yours, and your ability to handle objects is determined by the form's limbs, rather than your own. You retain your personality, memories, ability to speak, and Wild Shape. You lose access to all your other features, such as the ability to cast spells (you can continue to concentrate on one).",
+                  "When you transform, you choose whether your equipment falls to the ground in your space or merges into your new form. Equipment that merges with the form has no effect until you leave the form."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Wild Shapes",
+                "entries": [
+                  "When you use your Wild Shape, you transform into a form you've learned for this feature. This section includes three forms: {@creature Animal of the Land|XUA2023DruidAndPaladin}, {@creature Animal of the Sea|XUA2023DruidAndPaladin}, and {@creature Animal of the Sky|XUA2023DruidAndPaladin}.",
+                  "As you assume a form, you determine its appearance, selecting an example animal from the form's description, selecting another appropriate animal, or choosing a hybrid form that incorporates visual characteristics from two or more animals. The appearance you choose has no effect on the form's capabilities.",
+                  "When choosing an animal's appearance for a form, that animal needn't be the same size as the form. For example, you could choose elephant for the appearance and Small for the size—creating a form that resembles a little elephant."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_druidic_1",
+        "name": "Druidic",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 5,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You know Druidic, the secret language of Druids. You can speak the language and use it to leave hidden messages.</p>\n<p>You and others who know this language automatically spot such a message. Others spot the message's presence with a successful 15 Intelligence (Investigation) check but can't decipher it without magic.</p>",
+        "rawEntries": [
+          "You know Druidic, the secret language of Druids. You can speak the language and use it to leave hidden messages.",
+          "You and others who know this language automatically spot such a message. Others spot the message's presence with a successful {@dc 15} Intelligence ({@skill Investigation}) check but can't decipher it without magic."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_spellcasting_1",
+        "name": "Spellcasting",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 5,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have learned to cast spells through studying the mystical forces of nature. See the Player's Handbook for the rules on spellcasting. The information below details how you use those rules as a Druid.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Prepared Spells.</strong> <p>You have the following spells prepared: Cure Wounds, Druidcraft, Produce Flame, and Thunderwave. Alternatively, you can prepare two 0-level spells (also known as cantrips) and two 1st-level spells of your choice from the Primal spell list.</p>\n<p>Whenever you finish a Long Rest|XUA2023DruidAndPaladin, you can meditate and replace any spell you have prepared for this class with another Primal spell of the same level.</p>\n<p>At higher levels in this class, you can prepare more spells, as shown on the Druid table. The numbers there determine the number of different spells you can prepare of each level. For example, as a 4th-level Druid, you can prepare three different 0-level spells, four different 1st-level spells, and three different 2nd-level spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Spell Slots.</strong> <p>When you cast a prepared Druid spell, you expend a Spell Slot. The number of Spell Slots you have of 1st-level and higher is the same as the number of different spells you can prepare of each level, as shown on the Druid table. For example, as a 5th-level Druid, you have four 1st-level Spell Slots, three 2nd-level Spell Slots, and two 3rd-level Spell Slots.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Ability.</strong> <p>Wisdom is your Spellcasting Ability for your Druid Spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Focus.</strong> <p>You can use a Druidic Focus as a Spellcasting Focus for the spells you prepare for this class.</p></div></div>",
+        "rawEntries": [
+          "You have learned to cast spells through studying the mystical forces of nature. See the Player's Handbook for the rules on spellcasting. The information below details how you use those rules as a Druid.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Prepared Spells",
+                "entries": [
+                  "You have the following spells prepared: {@spell Cure Wounds}, {@spell Druidcraft}, {@spell Produce Flame}, and {@spell Thunderwave}. Alternatively, you can prepare two 0-level spells (also known as cantrips) and two 1st-level spells of your choice from the Primal spell list.",
+                  "Whenever you finish a {@variantrule Long Rest|XUA2023DruidAndPaladin}, you can meditate and replace any spell you have prepared for this class with another Primal spell of the same level.",
+                  "At higher levels in this class, you can prepare more spells, as shown on the Druid table. The numbers there determine the number of different spells you can prepare of each level. For example, as a 4th-level Druid, you can prepare three different 0-level spells, four different 1st-level spells, and three different 2nd-level spells."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spell Slots",
+                "entries": [
+                  "When you cast a prepared Druid spell, you expend a Spell Slot. The number of Spell Slots you have of 1st-level and higher is the same as the number of different spells you can prepare of each level, as shown on the Druid table. For example, as a 5th-level Druid, you have four 1st-level Spell Slots, three 2nd-level Spell Slots, and two 3rd-level Spell Slots."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spellcasting Ability",
+                "entries": [
+                  "Wisdom is your Spellcasting Ability for your Druid Spells."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spellcasting Focus",
+                "entries": [
+                  "You can use a Druidic Focus as a Spellcasting Focus for the spells you prepare for this class."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_nature_s_aid_2",
+        "name": "Nature's Aid",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 5,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You learn two more ways to use your Channel Nature—Healing Blossoms and Wild Companion—each of which is described below.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Healing Blossoms.</strong> <p>As a Magic action, you channel healing energy that appears as blooming flowers. Choose a point within 30 feet of yourself, and spectral flowers appear for a moment in a 10-foot-radius sphere centered on that point. Then roll a number of d4s equal to your Wisdom modifier (minimum of one die), and add the dice together. The total is the number of Hit Points you can distribute to creatures in that sphere. You decide the number of Hit Points that are restored to each of those creatures, deducting the healing from the total.</p></div>\n<div class=\"compendium-subentry\"><strong>Wild Companion.</strong> <p>You can summon a nature spirit that assumes an animal form to aid you. As a Magic action, you can expend a use of your Channel Nature and cast the Find Familiar spell without material components.</p>\n<p>When you cast the spell in this way, the familiar is a Fey, and it disappears when you finish a Long Rest|XUA2023DruidAndPaladin.</p></div></div>",
+        "rawEntries": [
+          "You learn two more ways to use your Channel Nature—Healing Blossoms and Wild Companion—each of which is described below.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Healing Blossoms",
+                "entries": [
+                  "As a {@action Magic|XUA2023DruidAndPaladin} action, you channel healing energy that appears as blooming flowers. Choose a point within 30 feet of yourself, and spectral flowers appear for a moment in a 10-foot-radius sphere centered on that point. Then roll a number of d4s equal to your Wisdom modifier (minimum of one die), and add the dice together. The total is the number of Hit Points you can distribute to creatures in that sphere. You decide the number of Hit Points that are restored to each of those creatures, deducting the healing from the total."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Wild Companion",
+                "entries": [
+                  "You can summon a nature spirit that assumes an animal form to aid you. As a {@action Magic|XUA2023DruidAndPaladin} action, you can expend a use of your Channel Nature and cast the {@spell Find Familiar} spell without material components.",
+                  "When you cast the spell in this way, the familiar is a Fey, and it disappears when you finish a {@variantrule Long Rest|XUA2023DruidAndPaladin}."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_druid_subclass_3",
+        "name": "Druid Subclass",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 5,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Circle of the Moon subclass or another Druid subclass of your choice. The Circle of the Moon is detailed after the Druid's class description, and other subclasses will appear in future Unearthed Arcana articles.</p>\n<p>A subclass is a specialization that grants you special abilities at certain Druid levels. For the rest of your career, you gain each of your subclass's features that are of your Druid level and lower. This class's description tells you the levels when your subclass provides features.</p>",
+        "rawEntries": [
+          "You gain the Circle of the Moon subclass or another Druid subclass of your choice. The Circle of the Moon is detailed after the Druid's class description, and other subclasses will appear in future Unearthed Arcana articles.",
+          "A subclass is a specialization that grants you special abilities at certain Druid levels. For the rest of your career, you gain each of your subclass's features that are of your Druid level and lower. This class's description tells you the levels when your subclass provides features."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_feat_4",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 4,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_might_of_the_land_5",
+        "name": "Might of the Land",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Your connection to the land deepens, empowering the Animal of the Land form of your Wild Shape; you unlock that form's Climb Speed|XUA2023DruidAndPaladin and Multiattack.</p>",
+        "rawEntries": [
+          "Your connection to the land deepens, empowering the {@creature Animal of the Land|XUA2023DruidAndPaladin} form of your Wild Shape; you unlock that form's {@variantrule Climb Speed|XUA2023DruidAndPaladin} and Multiattack."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_subclass_feature_6",
+        "name": "Subclass Feature",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 6,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Druid Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Druid Subclass."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_aquatic_form_7",
+        "name": "Aquatic Form",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 7,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You learn a new form for your Wild Shape: Animal of the Sea, which is described in the \"Wild Shapes\" section later in this class's description.</p>",
+        "rawEntries": [
+          "You learn a new form for your Wild Shape: {@creature Animal of the Sea|XUA2023DruidAndPaladin}, which is described in the \"Wild Shapes\" section later in this class's description."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_feat_8",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 8,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_aerial_form_9",
+        "name": "Aerial Form",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 9,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You learn a new form for your Wild Shape: Animal of the Sky, which is described in the \"Wild Shapes\" section later in this class's description.</p>",
+        "rawEntries": [
+          "You learn a new form for your Wild Shape: {@creature Animal of the Sky|XUA2023DruidAndPaladin}, which is described in the \"Wild Shapes\" section later in this class's description."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_subclass_feature_10",
+        "name": "Subclass Feature",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Druid Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Druid Subclass."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_tiny_critter_11",
+        "name": "Tiny Critter",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 11,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the ability to become a Tiny creature. When you transform into a Wild Shape form, you can make it Tiny. If you do so, you can stay in that form no longer than 10 minutes, and the damage you deal in that form is halved.</p>",
+        "rawEntries": [
+          "You gain the ability to become a Tiny creature. When you transform into a Wild Shape form, you can make it Tiny. If you do so, you can stay in that form no longer than 10 minutes, and the damage you deal in that form is halved."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_feat_12",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 12,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_alternating_forms_13",
+        "name": "Alternating Forms",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 13,
+        "actionType": "bonus",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can now rapidly shift between a Wild Shape form and your normal form. If you're in a Wild Shape form, you can switch to your normal form as a Bonus Action, and you can then switch back into that Wild Shape form within the next minute as a Bonus Action. Neither switch expends a use of Wild Shape.</p>",
+        "rawEntries": [
+          "You can now rapidly shift between a Wild Shape form and your normal form. If you're in a Wild Shape form, you can switch to your normal form as a Bonus Action, and you can then switch back into that Wild Shape form within the next minute as a Bonus Action. Neither switch expends a use of Wild Shape."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_subclass_feature_14",
+        "name": "Subclass Feature",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 14,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Druid Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Druid Subclass."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_wild_resurgence_15",
+        "name": "Wild Resurgence",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 15,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you use your Wild Shape, primal magic radiates from you, allowing you to use Healing Blossoms as part of the same use of Channel Nature.</p>",
+        "rawEntries": [
+          "When you use your Wild Shape, primal magic radiates from you, allowing you to use Healing Blossoms as part of the same use of Channel Nature."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_feat_16",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 16,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_beast_spells_17",
+        "name": "Beast Spells",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 17,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can cast spells in any Wild Shape form. While in such a form, you can perform Somatic and Verbal Components, and you don't need to provide free Material Components. If a spell consumes its Material Component, you can't cast that spell while in a Wild Shape form.</p>",
+        "rawEntries": [
+          "You can cast spells in any Wild Shape form. While in such a form, you can perform Somatic and Verbal Components, and you don't need to provide free Material Components. If a spell consumes its Material Component, you can't cast that spell while in a Wild Shape form."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_archdruid_18",
+        "name": "Archdruid",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 18,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Whenever you roll Initiative, you regain one use of your Channel Nature.</p>\n<p>In addition, the primal magic that you wield causes you to age more slowly. For every 10 years that pass, your body ages only 1 year.</p>",
+        "rawEntries": [
+          "Whenever you roll Initiative, you regain one use of your Channel Nature.",
+          "In addition, the primal magic that you wield causes you to age more slowly. For every 10 years that pass, your body ages only 1 year."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_feat_19",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 19,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_druid_xua2023druidandpaladin_epic_boon_20",
+        "name": "Epic Boon",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 6,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 20,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the following benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Ability Score Increase.</strong> <p>Choose one of your ability scores. That score increases by 2, and this increase can raise the score above 20 but not above 30.</p></div></li><li><div class=\"compendium-subentry\"><strong>Epic Boon Feat.</strong> <p>You gain the Epic Boon of Spell Recall or another Epic Boon feat of your choice.</p></div></li></ul>",
+        "rawEntries": [
+          "You gain the following benefits:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Ability Score Increase",
+                "entries": [
+                  "Choose one of your ability scores. That score increases by 2, and this increase can raise the score above 20 but not above 30."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Epic Boon Feat",
+                "entries": [
+                  "You gain the Epic Boon of Spell Recall or another Epic Boon feat of your choice."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "subclass_druid_moon_xua2023druidandpaladin",
+        "name": "Circle of the Moon",
+        "shortName": "Moon",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 8,
+        "className": "Druid",
+        "classSource": "XUA2023DruidAndPaladin",
+        "features": [
+          {
+            "id": "scf_druid_moon_xua2023druidandpaladin_circle_of_the_moon_3",
+            "name": "Circle of the Moon",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 8,
+            "className": "Druid",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Moon",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Druids of the Circle of the Moon draw on the magic of the moon to transform themselves and to guard the wilds. Their order gathers under the full moon to share news and perform rituals. They wander the deepest parts of the wilderness, where they might go for weeks on end before crossing paths with another person, let alone another Druid.</p>\n<p>Changeable as the moon, a Druid of this circle might prowl as a great cat one night, soar over the treetops as an eagle the next day, and crash through the undergrowth in bear form to drive off a trespassing monster. The wild is in the Druid's blood.</p>",
+            "rawEntries": [
+              "Druids of the Circle of the Moon draw on the magic of the moon to transform themselves and to guard the wilds. Their order gathers under the full moon to share news and perform rituals. They wander the deepest parts of the wilderness, where they might go for weeks on end before crossing paths with another person, let alone another Druid.",
+              "Changeable as the moon, a Druid of this circle might prowl as a great cat one night, soar over the treetops as an eagle the next day, and crash through the undergrowth in bear form to drive off a trespassing monster. The wild is in the Druid's blood.",
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Combat Wild Shape|Druid|XUA2023DruidAndPaladin|Moon|XUA2023DruidAndPaladin|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_druid_moon_xua2023druidandpaladin_combat_wild_shape_3",
+            "name": "Combat Wild Shape",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 8,
+            "className": "Druid",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Moon",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 3,
+            "actionType": "bonus",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You have learned magical techniques that allow you to transform quickly and to channel magical protection while transformed, giving you these benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Abjuration Spells.</strong> <p>While you're in a Wild Shape form, you can cast any spell you currently have prepared from the Abjuration School, provided the spell doesn't require a material component.</p></div></li><li><div class=\"compendium-subentry\"><strong>Quick Attack.</strong> <p>You can use Unarmed Strike|XUA2023DruidAndPaladin as a Bonus Action.</p></div></li><li><div class=\"compendium-subentry\"><strong>Swift Transformation.</strong> <p>You can use your Wild Shape as a Bonus Action or Magic action, but no more than once on a turn.</p></div></li></ul>",
+            "rawEntries": [
+              "You have learned magical techniques that allow you to transform quickly and to channel magical protection while transformed, giving you these benefits:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Abjuration Spells",
+                    "entries": [
+                      "While you're in a Wild Shape form, you can cast any spell you currently have prepared from the Abjuration School, provided the spell doesn't require a material component."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Quick Attack",
+                    "entries": [
+                      "You can use {@variantrule Unarmed Strike|XUA2023DruidAndPaladin} as a Bonus Action."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Swift Transformation",
+                    "entries": [
+                      "You can use your Wild Shape as a Bonus Action or {@action Magic|XUA2023DruidAndPaladin} action, but no more than once on a turn."
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_druid_moon_xua2023druidandpaladin_elemental_wild_shape_6",
+            "name": "Elemental Wild Shape",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 8,
+            "className": "Druid",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Moon",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>Channeling ancient lunar magic, you imbue your Wild Shape forms with power from the Elemental Planes. Whenever you assume a Wild Shape form, choose one of the following damage types: Acid, Cold, Fire, Lightning, or Thunder.</p>\n<p>While in that form, you have Resistance to the chosen damage type, and the form's Bestial Strike can deal damage of that type rather than its normal type—with you choosing between the types when you hit.</p>\n<p>Your form also displays signs of the chosen damage type. For example, if you choose Fire, your fur in Wild Shape might flicker with harmless flames. You choose the details.</p>",
+            "rawEntries": [
+              "Channeling ancient lunar magic, you imbue your Wild Shape forms with power from the Elemental Planes. Whenever you assume a Wild Shape form, choose one of the following damage types: Acid, Cold, Fire, Lightning, or Thunder.",
+              "While in that form, you have Resistance to the chosen damage type, and the form's Bestial Strike can deal damage of that type rather than its normal type—with you choosing between the types when you hit.",
+              "Your form also displays signs of the chosen damage type. For example, if you choose Fire, your fur in Wild Shape might flicker with harmless flames. You choose the details."
+            ]
+          },
+          {
+            "id": "scf_druid_moon_xua2023druidandpaladin_elemental_strike_10",
+            "name": "Elemental Strike",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 8,
+            "className": "Druid",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Moon",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d6",
+            "formulaConfig": {
+              "baseDice": "1d6",
+              "scalingMod": "none",
+              "modClass": "",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Elemental forces imbue your attacks. When you deal damage with your Bestial Strike, the target takes an extra 1d6 damage of the type you chose from Elemental Wild Shape. This extra damage increases to 2d6 when you reach 17th level in this class.</p>",
+            "rawEntries": [
+              "Elemental forces imbue your attacks. When you deal damage with your Bestial Strike, the target takes an extra {@damage 1d6} damage of the type you chose from Elemental Wild Shape. This extra damage increases to {@dice 2d6} when you reach 17th level in this class."
+            ]
+          },
+          {
+            "id": "scf_druid_moon_xua2023druidandpaladin_thousand_forms_14",
+            "name": "Thousand Forms",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 8,
+            "className": "Druid",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Moon",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 14,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You have learned to use lunar magic to alter your physical form in innumerable ways. You always have the Alter Self spell prepared, and you can cast it without expending a Spell Slot. It also doesn't count against the number of spells you have prepared.</p>",
+            "rawEntries": [
+              "You have learned to use lunar magic to alter your physical form in innumerable ways. You always have the {@spell Alter Self} spell prepared, and you can cast it without expending a Spell Slot. It also doesn't count against the number of spells you have prepared."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "class_paladin_xua2023druidandpaladin",
+    "name": "Paladin",
+    "source": "XUA2023DruidAndPaladin",
+    "page": 9,
+    "hitDie": "d10",
+    "primaryAbility": "None",
+    "features": [
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_lay_on_hands_1",
+        "name": "Lay on Hands",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 10,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": true,
+        "usesMax": 5,
+        "resetType": "long",
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Your blessed touch can heal wounds. You have a pool of healing power that replenishes when you take a Long Rest|XUA2023DruidAndPaladin. With that pool, you can restore a total number of Hit Points equal to five times your Paladin level.</p>\n<p>As a Magic action, you can touch a creature (which could be yourself) and draw power from the pool of healing to restore a number of Hit Points to that creature, up to the maximum amount remaining in the pool.</p>\n<p>In addition, you can expend 5 Hit Points from the pool of healing to remove the Poisoned condition from the creature, rather than using those points to restore Hit Points.</p>",
+        "rawEntries": [
+          "Your blessed touch can heal wounds. You have a pool of healing power that replenishes when you take a {@variantrule Long Rest|XUA2023DruidAndPaladin}. With that pool, you can restore a total number of Hit Points equal to five times your Paladin level.",
+          "As a {@action Magic|XUA2023DruidAndPaladin} action, you can touch a creature (which could be yourself) and draw power from the pool of healing to restore a number of Hit Points to that creature, up to the maximum amount remaining in the pool.",
+          "In addition, you can expend 5 Hit Points from the pool of healing to remove the Poisoned condition from the creature, rather than using those points to restore Hit Points."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_spellcasting_1",
+        "name": "Spellcasting",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 10,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 1,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have learned to cast spells through prayer, meditation, and devotion. See the Player's Handbook for the rules on spellcasting. The information below details how you use those rules as a Paladin.</p>\n<div class=\"compendium-subentry\"><div class=\"compendium-subentry\"><strong>Prepared Spells.</strong> <p>You have the following spells prepared: Heroism, Resistance, Spare the Dying, and Thunderous Smite. Alternatively, you can prepare two 0-level spells (also known as cantrips) and two 1st-level spells of your choice from the Divine spell list.</p>\n<p>Whenever you finish a Long Rest|XUA2023DruidAndPaladin, you can meditate and replace any spell you have prepared for this class with another Divine spell of the same level.</p>\n<p>At higher levels in this class, you can prepare more spells, as shown on the Paladin table. The numbers there determine the number of different spells you can prepare of each level. For example, as a 4th-level Paladin, you can prepare two different 0-level spells and three different 1st-level spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Spell Slots.</strong> <p>When you cast a prepared Paladin spell, you expend a Spell Slot. The number of Spell Slots you have of 1st-level and higher is the same as the number of different spells you can prepare of each level, as shown on the Paladin table. For example, as a 5th-level Paladin, you have four 1st-level Spell Slots and two 2nd-level Spell Slots.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Ability.</strong> <p>Charisma is your Spellcasting Ability for your Paladin spells.</p></div>\n<div class=\"compendium-subentry\"><strong>Spellcasting Focus.</strong> <p>You can use a Holy Symbol as a Spellcasting Focus for the spells you prepare for this class.</p></div></div>",
+        "rawEntries": [
+          "You have learned to cast spells through prayer, meditation, and devotion. See the Player's Handbook for the rules on spellcasting. The information below details how you use those rules as a Paladin.",
+          {
+            "type": "entries",
+            "entries": [
+              {
+                "type": "entries",
+                "name": "Prepared Spells",
+                "entries": [
+                  "You have the following spells prepared: {@spell Heroism}, {@spell Resistance}, {@spell Spare the Dying}, and {@spell Thunderous Smite}. Alternatively, you can prepare two 0-level spells (also known as cantrips) and two 1st-level spells of your choice from the Divine spell list.",
+                  "Whenever you finish a {@variantrule Long Rest|XUA2023DruidAndPaladin}, you can meditate and replace any spell you have prepared for this class with another Divine spell of the same level.",
+                  "At higher levels in this class, you can prepare more spells, as shown on the Paladin table. The numbers there determine the number of different spells you can prepare of each level. For example, as a 4th-level Paladin, you can prepare two different 0-level spells and three different 1st-level spells."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spell Slots",
+                "entries": [
+                  "When you cast a prepared Paladin spell, you expend a Spell Slot. The number of Spell Slots you have of 1st-level and higher is the same as the number of different spells you can prepare of each level, as shown on the Paladin table. For example, as a 5th-level Paladin, you have four 1st-level Spell Slots and two 2nd-level Spell Slots."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spellcasting Ability",
+                "entries": [
+                  "Charisma is your Spellcasting Ability for your Paladin spells."
+                ]
+              },
+              {
+                "type": "entries",
+                "name": "Spellcasting Focus",
+                "entries": [
+                  "You can use a Holy Symbol as a Spellcasting Focus for the spells you prepare for this class."
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_divine_smite_2",
+        "name": "Divine Smite",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 11,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "2d8",
+        "formulaConfig": {
+          "baseDice": "2d8",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "entriesHtml": "<p>When you strike a target, you can channel divine energy to smite it. Immediately after you hit a target with an attack roll using a weapon or an Unarmed Strike|XUA2023DruidAndPaladin, you can expend one Spell Slot to deal Radiant damage to the target. The damage is 2d8 for a 1st-level Spell Slot, plus 1d8 for each slot level higher than 1st.</p>\n<p>You can use Divine Smite no more than once during a turn, and you can't use it on the same turn that you cast a spell.</p>",
+        "rawEntries": [
+          "When you strike a target, you can channel divine energy to smite it. Immediately after you hit a target with an attack roll using a weapon or an {@variantrule Unarmed Strike|XUA2023DruidAndPaladin}, you can expend one Spell Slot to deal Radiant damage to the target. The damage is {@dice 2d8} for a 1st-level Spell Slot, plus {@dice 1d8} for each slot level higher than 1st.",
+          "You can use Divine Smite no more than once during a turn, and you can't use it on the same turn that you cast a spell."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_fighting_style_2",
+        "name": "Fighting Style",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 11,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 2,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You have honed your martial prowess and gain the Fighting Style: Defense feat, or you gain another Fighting Style feat of your choice.</p>\n<p>Whenever you gain a feat at later levels, Fighting Style feats are among your options, even though you aren't a member of the Warrior group.</p>",
+        "rawEntries": [
+          "You have honed your martial prowess and gain the {@feat Fighting Style: Defense|XUA2022ExpertClasses} feat, or you gain another Fighting Style feat of your choice.",
+          "Whenever you gain a feat at later levels, Fighting Style feats are among your options, even though you aren't a member of the Warrior group."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_channel_divinity_3",
+        "name": "Channel Divinity",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 11,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 3,
+        "actionType": "bonus",
+        "hasCounter": true,
+        "usesMax": 1,
+        "resetType": "short",
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can channel divine energy directly from the Outer Planes, using that energy to fuel magical effects. You start with one such effect: Divine Sense, which is described below. Other Paladin features give additional Channel Divinity effect options. Each time you use this Channel Divinity, you choose which effect to create from among those you have from this class.</p>\n<p>You can use Channel Divinity twice. You regain one expended use when you finish a Short Rest|XUA2023DruidAndPaladin, and you regain all expended uses when you finish a Long Rest|XUA2023DruidAndPaladin. You gain additional uses when you reach certain Paladin levels, as shown in the Channel Divinity column of the Paladin table. If a Channel Divinity effect requires a saving throw, the DC equals the Spell Save DC from this class's Spellcasting feature.</p>\n<div class=\"compendium-subentry\"><strong>Divine Sense.</strong> <p>As a Bonus Action, you can open your awareness to detect Celestials, Fiends, and Undead. For the next 10 minutes or until you have the Incapacitated condition, you know the location of any creature of those types within 60 feet of yourself, and you know its creature type. Within the same radius, you also detect the presence of any place or object that has been consecrated or desecrated, as with the Hallow spell.</p></div>",
+        "rawEntries": [
+          "You can channel divine energy directly from the Outer Planes, using that energy to fuel magical effects. You start with one such effect: Divine Sense, which is described below. Other Paladin features give additional Channel Divinity effect options. Each time you use this Channel Divinity, you choose which effect to create from among those you have from this class.",
+          "You can use Channel Divinity twice. You regain one expended use when you finish a {@variantrule Short Rest|XUA2023DruidAndPaladin}, and you regain all expended uses when you finish a {@variantrule Long Rest|XUA2023DruidAndPaladin}. You gain additional uses when you reach certain Paladin levels, as shown in the Channel Divinity column of the Paladin table. If a Channel Divinity effect requires a saving throw, the DC equals the Spell Save DC from this class's Spellcasting feature.",
+          {
+            "type": "entries",
+            "name": "Divine Sense",
+            "entries": [
+              "As a Bonus Action, you can open your awareness to detect Celestials, Fiends, and Undead. For the next 10 minutes or until you have the {@condition Incapacitated|XUA2023DruidAndPaladin} condition, you know the location of any creature of those types within 60 feet of yourself, and you know its creature type. Within the same radius, you also detect the presence of any place or object that has been consecrated or desecrated, as with the {@spell Hallow} spell."
+            ]
+          }
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_paladin_subclass_3",
+        "name": "Paladin Subclass",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 11,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 3,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Oath of Devotion subclass or another Paladin subclass of your choice. The Oath of Devotion is detailed after the Paladin's class description, and other subclasses will appear in future Unearthed Arcana articles.</p>\n<p>A subclass is a specialization that grants you special abilities at certain Paladin levels. For the rest of your career, you gain each of your subclass's features that are of your Paladin level and lower. This class's description tells you the levels when your subclass provides features.</p>",
+        "rawEntries": [
+          "You gain the Oath of Devotion subclass or another Paladin subclass of your choice. The Oath of Devotion is detailed after the Paladin's class description, and other subclasses will appear in future Unearthed Arcana articles.",
+          "A subclass is a specialization that grants you special abilities at certain Paladin levels. For the rest of your career, you gain each of your subclass's features that are of your Paladin level and lower. This class's description tells you the levels when your subclass provides features."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_feat_4",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 11,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 4,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_extra_attack_5",
+        "name": "Extra Attack",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 11,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can attack twice, instead of once, whenever you take the Attack action on your turn.</p>",
+        "rawEntries": [
+          "You can attack twice, instead of once, whenever you take the {@action Attack|XUA2023DruidAndPaladin} action on your turn."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_faithful_steed_5",
+        "name": "Faithful Steed",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 11,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 5,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You can easily call on the aid of an otherworldly steed. You always have the Find Steed spell prepared, and it doesn't count against the number of spells you can prepare.</p>\n<p>When you cast this spell, its casting time is an action. You can also cast the spell once without expending a Spell Slot, and you regain the ability to do so when you finish a Long Rest|XUA2023DruidAndPaladin.</p>",
+        "rawEntries": [
+          "You can easily call on the aid of an otherworldly steed. You always have the {@spell Find Steed} spell prepared, and it doesn't count against the number of spells you can prepare.",
+          "When you cast this spell, its casting time is an action. You can also cast the spell once without expending a Spell Slot, and you regain the ability to do so when you finish a {@variantrule Long Rest|XUA2023DruidAndPaladin}."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_subclass_feature_6",
+        "name": "Subclass Feature",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 11,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 6,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Druid Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Druid Subclass."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_aura_of_protection_7",
+        "name": "Aura of Protection",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 7,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You radiate a protective, invisible aura that extends 10 feet from you in every direction, but it doesn't extend through Total Cover.</p>\n<p>You and your allies in the aura gain a bonus to saving throws equal to your Charisma modifier (minimum bonus of +1).</p>\n<p>If another Paladin is present, a creature can benefit from only one Aura of Protection at a time; the creature chooses which one when entering the auras.</p>",
+        "rawEntries": [
+          "You radiate a protective, invisible aura that extends 10 feet from you in every direction, but it doesn't extend through Total Cover.",
+          "You and your allies in the aura gain a bonus to saving throws equal to your Charisma modifier (minimum bonus of +1).",
+          "If another Paladin is present, a creature can benefit from only one Aura of Protection at a time; the creature chooses which one when entering the auras."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_feat_8",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 8,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_abjure_foes_9",
+        "name": "Abjure Foes",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 9,
+        "actionType": "action",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>As a Magic action, you can expend one use of your Channel Divinity to overwhelm foes with divine awe. As you present your Holy Symbol or weapon, you can target a number of creatures equal to your Charisma modifier (minimum of one creature) that you can see within 60 feet of yourself.</p>\n<p>Each target must make a Wisdom saving throw. On a failed save, the target has the Dazed and Frightened conditions for 1 minute or until it takes any damage. On a successful save, the target has the Dazed condition for 1 minute or until it takes any damage.</p>",
+        "rawEntries": [
+          "As a {@action Magic|XUA2023DruidAndPaladin} action, you can expend one use of your Channel Divinity to overwhelm foes with divine awe. As you present your Holy Symbol or weapon, you can target a number of creatures equal to your Charisma modifier (minimum of one creature) that you can see within 60 feet of yourself.",
+          "Each target must make a Wisdom saving throw. On a failed save, the target has the {@condition Dazed|XUA2023DruidAndPaladin} and {@condition Frightened} conditions for 1 minute or until it takes any damage. On a successful save, the target has the {@condition Dazed|XUA2023DruidAndPaladin} condition for 1 minute or until it takes any damage."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_subclass_feature_10",
+        "name": "Subclass Feature",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 10,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Paladin Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Paladin Subclass."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_radiant_strikes_11",
+        "name": "Radiant Strikes",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 11,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "1d8",
+        "formulaConfig": {
+          "baseDice": "1d8",
+          "scalingMod": "none",
+          "modClass": "",
+          "extraBonus": 0
+        },
+        "entriesHtml": "<p>You are so suffused with divine might that your weapon strikes carry supernatural power with them. When you hit a target with an attack roll using a Simple or Martial weapon, the target takes an extra 1d8 Radiant damage.</p>",
+        "rawEntries": [
+          "You are so suffused with divine might that your weapon strikes carry supernatural power with them. When you hit a target with an attack roll using a Simple or Martial weapon, the target takes an extra {@damage 1d8} Radiant damage."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_feat_12",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 12,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_aura_of_courage_13",
+        "name": "Aura of Courage",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 13,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You and your allies are immune to the Frightened condition while in your Aura of Protection. If a Frightened ally enters the aura, that condition is suppressed while the ally is there.</p>",
+        "rawEntries": [
+          "You and your allies are immune to the Frightened condition while in your Aura of Protection. If a Frightened ally enters the aura, that condition is suppressed while the ally is there."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_subclass_feature_14",
+        "name": "Subclass Feature",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 14,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain a feature from your Paladin Subclass.</p>",
+        "rawEntries": [
+          "You gain a feature from your Paladin Subclass."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_restoring_touch_15",
+        "name": "Restoring Touch",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 15,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>When you use Lay on Hands on a creature, you can also remove one or more of the following conditions from the creature: Blinded, Charmed, Dazed, Deafened, Frightened, Paralyzed, or Stunned. You must expend 5 Hit Points from the healing pool of Lay on Hands for each of these conditions you remove; those points don't also restore Hit Points to the creature.</p>",
+        "rawEntries": [
+          "When you use Lay on Hands on a creature, you can also remove one or more of the following conditions from the creature: {@condition Blinded}, {@condition Charmed}, {@condition Dazed|XUA2023DruidAndPaladin}, {@condition Deafened}, {@condition Frightened}, {@condition Paralyzed}, or {@condition Stunned}. You must expend 5 Hit Points from the healing pool of Lay on Hands for each of these conditions you remove; those points don't also restore Hit Points to the creature."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_feat_16",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 16,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_aura_expansion_17",
+        "name": "Aura Expansion",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 17,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Your Aura of Protection now extends 30 feet from you rather than 10 feet.</p>",
+        "rawEntries": [
+          "Your Aura of Protection now extends 30 feet from you rather than 10 feet."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_divine_conduit_18",
+        "name": "Divine Conduit",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 18,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>Whenever you roll Initiative, you regain one use of this class's Channel Divinity.</p>",
+        "rawEntries": [
+          "Whenever you roll Initiative, you regain one use of this class's Channel Divinity."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_feat_19",
+        "name": "Feat",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 19,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the Ability Score Improvement Feat or another Feat of your choice for which you qualify.</p>",
+        "rawEntries": [
+          "You gain the {@feat Ability Score Improvement|XUA2022ClericAndRevisedSpecies} Feat or another Feat of your choice for which you qualify."
+        ]
+      },
+      {
+        "id": "cf_paladin_xua2023druidandpaladin_epic_boon_20",
+        "name": "Epic Boon",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 12,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "level": 20,
+        "actionType": "passive",
+        "hasCounter": false,
+        "usesMax": null,
+        "resetType": null,
+        "formula": "",
+        "formulaConfig": null,
+        "entriesHtml": "<p>You gain the following benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Ability Score Increase.</strong> <p>Choose one of your ability scores. That score increases by 2, and this increase can raise the score above 20 but not above 30.</p></div></li><li><div class=\"compendium-subentry\"><strong>Epic Boon Feat.</strong> <p>You gain the Epic Boon of Truesight or another Epic Boon feat of your choice.</p></div></li></ul>",
+        "rawEntries": [
+          "You gain the following benefits:",
+          {
+            "type": "list",
+            "style": "list-hang-notitle",
+            "items": [
+              {
+                "type": "item",
+                "name": "Ability Score Increase",
+                "entries": [
+                  "Choose one of your ability scores. That score increases by 2, and this increase can raise the score above 20 but not above 30."
+                ]
+              },
+              {
+                "type": "item",
+                "name": "Epic Boon Feat",
+                "entries": [
+                  "You gain the Epic Boon of Truesight or another Epic Boon feat of your choice."
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "subclasses": [
+      {
+        "id": "subclass_paladin_devotion_xua2023druidandpaladin",
+        "name": "Oath of Devotion",
+        "shortName": "Devotion",
+        "source": "XUA2023DruidAndPaladin",
+        "page": 13,
+        "className": "Paladin",
+        "classSource": "XUA2023DruidAndPaladin",
+        "features": [
+          {
+            "id": "scf_paladin_devotion_xua2023druidandpaladin_oath_of_devotion_3",
+            "name": "Oath of Devotion",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 13,
+            "className": "Paladin",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Devotion",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>The Oath of Devotion binds a Paladin to the loftiest ideals of justice and order. These Paladins meet the ideal of the knight in shining armor. They hold themselves to the highest standards of conduct, and some, for better or worse, hold the rest of the world to the same standards. Many who swear this oath are devoted to gods of law and good and use their gods' tenets as the measure of their devotion. They hold angels as their ideals and incorporate images of angelic wings into their helmets or coats of arms.</p>\n<div class=\"compendium-subentry\"><strong>Tenets of Devotion.</strong> <p>Though the exact words and strictures of the Oath of Devotion vary, Paladins of this oath share these tenets.</p>\n<div class=\"compendium-subentry\"><strong>Honesty.</strong> <p>Don't lie or cheat. Let your word be your promise.</p></div>\n<div class=\"compendium-subentry\"><strong>Courage.</strong> <p>Never fear to act, though caution is wise.</p></div>\n<div class=\"compendium-subentry\"><strong>Compassion.</strong> <p>Aid others, protect the weak, and punish those who threaten them. Show mercy to your foes, but temper it with wisdom. Honor. Treat others with fairness, and let your honorable deeds be an example to them.</p></div></div>",
+            "rawEntries": [
+              "The Oath of Devotion binds a Paladin to the loftiest ideals of justice and order. These Paladins meet the ideal of the knight in shining armor. They hold themselves to the highest standards of conduct, and some, for better or worse, hold the rest of the world to the same standards. Many who swear this oath are devoted to gods of law and good and use their gods' tenets as the measure of their devotion. They hold angels as their ideals and incorporate images of angelic wings into their helmets or coats of arms.",
+              {
+                "type": "inset",
+                "name": "Tenets of Devotion",
+                "entries": [
+                  "Though the exact words and strictures of the Oath of Devotion vary, Paladins of this oath share these tenets.",
+                  {
+                    "type": "entries",
+                    "name": "Honesty",
+                    "entries": [
+                      "Don't lie or cheat. Let your word be your promise."
+                    ]
+                  },
+                  {
+                    "type": "entries",
+                    "name": "Courage",
+                    "entries": [
+                      "Never fear to act, though caution is wise."
+                    ]
+                  },
+                  {
+                    "type": "entries",
+                    "name": "Compassion",
+                    "entries": [
+                      "Aid others, protect the weak, and punish those who threaten them. Show mercy to your foes, but temper it with wisdom. Honor. Treat others with fairness, and let your honorable deeds be an example to them."
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Oath Spells|Paladin|XUA2023DruidAndPaladin|Devotion|XUA2023DruidAndPaladin|3"
+              },
+              {
+                "type": "refSubclassFeature",
+                "subclassFeature": "Sacred Weapon|Paladin|XUA2023DruidAndPaladin|Devotion|XUA2023DruidAndPaladin|3"
+              }
+            ]
+          },
+          {
+            "id": "scf_paladin_devotion_xua2023druidandpaladin_oath_spells_3",
+            "name": "Oath Spells",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 13,
+            "className": "Paladin",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Devotion",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 3,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>The magic of your oath gives you the following benefits:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Prepared Spells.</strong> <p>You always have certain spells ready; when you reach a Paladin level specified in the Oath of Devotion Spells table, you thereafter always have the listed spells prepared. These spells don't count against the number of spells you can prepare, and they follow the rules of this class's Spellcasting feature.</p></div></li><li><div class=\"compendium-subentry\"><strong>Free Casting.</strong> <p>You can cast one of your prepared spells from this feature without expending a Spell Slot, and you must finish a Long Rest|XUA2023DruidAndPaladin before you use this benefit again.</p></div></li></ul>\n<table class=\"compendium-table\"><thead><tr><th>Paladin Level</th><th>Spells</th></tr></thead><tbody><tr><td>3rd</td><td>Protection from Evil And Good, Shield of Faith</td></tr><tr><td>5th</td><td>Aid, Zone of Truth</td></tr><tr><td>9th</td><td>Aura of Vitality, Blinding Smite</td></tr><tr><td>13th</td><td>Guardian of Faith, Staggering Smite</td></tr><tr><td>17th</td><td>Commune, Flame Strike</td></tr></tbody></table>",
+            "rawEntries": [
+              "The magic of your oath gives you the following benefits:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Prepared Spells",
+                    "entries": [
+                      "You always have certain spells ready; when you reach a Paladin level specified in the Oath of Devotion Spells table, you thereafter always have the listed spells prepared. These spells don't count against the number of spells you can prepare, and they follow the rules of this class's Spellcasting feature."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Free Casting",
+                    "entries": [
+                      "You can cast one of your prepared spells from this feature without expending a Spell Slot, and you must finish a {@variantrule Long Rest|XUA2023DruidAndPaladin} before you use this benefit again."
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "table",
+                "caption": "Oath of Devotion Spells",
+                "colLabels": [
+                  "Paladin Level",
+                  "Spells"
+                ],
+                "colStyles": [
+                  "col-2 text-center",
+                  "col-10"
+                ],
+                "rows": [
+                  [
+                    "3rd",
+                    "{@spell Protection from Evil And Good}, {@spell Shield of Faith}"
+                  ],
+                  [
+                    "5th",
+                    "{@spell Aid}, {@spell Zone of Truth}"
+                  ],
+                  [
+                    "9th",
+                    "{@spell Aura of Vitality}, {@spell Blinding Smite}"
+                  ],
+                  [
+                    "13th",
+                    "{@spell Guardian of Faith}, {@spell Staggering Smite}"
+                  ],
+                  [
+                    "17th",
+                    "{@spell Commune}, {@spell Flame Strike}"
+                  ]
+                ]
+              }
+            ]
+          },
+          {
+            "id": "scf_paladin_devotion_xua2023druidandpaladin_sacred_weapon_3",
+            "name": "Sacred Weapon",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 13,
+            "className": "Paladin",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Devotion",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 3,
+            "actionType": "bonus",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>As a Bonus Action, you can expend one use of your Channel Divinity to imbue one Simple or Martial weapon that you are holding with positive energy. For 1 minute, you add your Charisma modifier to attack rolls you make with that weapon (minimum bonus of +1), and each time you hit with it, you cause it to deal its normal damage type or Radiant damage.</p>\n<p>The weapon also emits Vision and Light||2||bright light in a 20-foot radius and Vision and Light||2||dim light 20 feet beyond that.</p>\n<p>You can end this effect as a Bonus Action. This effect also ends if you aren't holding or carrying the weapon or if you have the Incapacitated condition.</p>",
+            "rawEntries": [
+              "As a Bonus Action, you can expend one use of your Channel Divinity to imbue one Simple or Martial weapon that you are holding with positive energy. For 1 minute, you add your Charisma modifier to attack rolls you make with that weapon (minimum bonus of +1), and each time you hit with it, you cause it to deal its normal damage type or Radiant damage.",
+              "The weapon also emits {@quickref Vision and Light||2||bright light} in a 20-foot radius and {@quickref Vision and Light||2||dim light} 20 feet beyond that.",
+              "You can end this effect as a Bonus Action. This effect also ends if you aren't holding or carrying the weapon or if you have the {@condition Incapacitated|XUA2023DruidAndPaladin} condition."
+            ]
+          },
+          {
+            "id": "scf_paladin_devotion_xua2023druidandpaladin_smite_of_protection_6",
+            "name": "Smite of Protection",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 13,
+            "className": "Paladin",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Devotion",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 6,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "1d8 + @classes.the.level",
+            "formulaConfig": {
+              "baseDice": "1d8",
+              "scalingMod": "classLevel",
+              "modClass": "The",
+              "extraBonus": 0
+            },
+            "entriesHtml": "<p>Your Divine Smite now radiates protective energy that allows you and your allies to stay in the fight. Whenever you use your Divine Smite, choose yourself or an ally within 30 feet of yourself. The chosen creature gains Temporary Hit Points equal to 1d8 plus the level of the Spell Slot used for the Divine Smite.</p>",
+            "rawEntries": [
+              "Your Divine Smite now radiates protective energy that allows you and your allies to stay in the fight. Whenever you use your Divine Smite, choose yourself or an ally within 30 feet of yourself. The chosen creature gains Temporary Hit Points equal to {@dice 1d8} plus the level of the Spell Slot used for the Divine Smite."
+            ]
+          },
+          {
+            "id": "scf_paladin_devotion_xua2023druidandpaladin_aura_of_devotion_10",
+            "name": "Aura of Devotion",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 14,
+            "className": "Paladin",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Devotion",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 10,
+            "actionType": "passive",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>You and your allies are immune to the Charmed condition while in your Aura of Protection. If a Charmed ally enters the aura, that condition is suppressed while the ally is there.</p>",
+            "rawEntries": [
+              "You and your allies are immune to the Charmed condition while in your Aura of Protection. If a Charmed ally enters the aura, that condition is suppressed while the ally is there."
+            ]
+          },
+          {
+            "id": "scf_paladin_devotion_xua2023druidandpaladin_holy_nimbus_14",
+            "name": "Holy Nimbus",
+            "source": "XUA2023DruidAndPaladin",
+            "page": 14,
+            "className": "Paladin",
+            "classSource": "XUA2023DruidAndPaladin",
+            "subclassShortName": "Devotion",
+            "subclassSource": "XUA2023DruidAndPaladin",
+            "level": 14,
+            "actionType": "bonus",
+            "hasCounter": false,
+            "usesMax": null,
+            "resetType": null,
+            "formula": "",
+            "formulaConfig": null,
+            "entriesHtml": "<p>As a Bonus Action, you can imbue your Aura of Protection with holy power. The aura gains the following benefits for 1 minute or until you end them as a Bonus Action:</p>\n<ul><li><div class=\"compendium-subentry\"><strong>Radiant Damage.</strong> <p>Whenever an enemy starts its turn in the aura, that creature takes Radiant damage equal to your Proficiency Bonus plus your Charisma modifier.</p></div></li><li><div class=\"compendium-subentry\"><strong>Sunlight.</strong> <p>The aura is filled with Vision and Light||2||bright light that is sunlight.</p>\n<p>Once you use this feature, you can't use it again until you finish a Long Rest|XUA2023DruidAndPaladin unless you expend a Spell Slot of at least 4th level when you use it again.</p></div></li></ul>",
+            "rawEntries": [
+              "As a Bonus Action, you can imbue your Aura of Protection with holy power. The aura gains the following benefits for 1 minute or until you end them as a Bonus Action:",
+              {
+                "type": "list",
+                "style": "list-hang-notitle",
+                "items": [
+                  {
+                    "type": "item",
+                    "name": "Radiant Damage",
+                    "entries": [
+                      "Whenever an enemy starts its turn in the aura, that creature takes Radiant damage equal to your Proficiency Bonus plus your Charisma modifier."
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "name": "Sunlight",
+                    "entries": [
+                      "The aura is filled with {@quickref Vision and Light||2||bright light} that is sunlight.",
+                      "Once you use this feature, you can't use it again until you finish a {@variantrule Long Rest|XUA2023DruidAndPaladin} unless you expend a Spell Slot of at least 4th level when you use it again."
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

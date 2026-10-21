@@ -26,13 +26,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
     function getCurrentFolderNode(tree, pathStr) {
         if (!pathStr || pathStr === "") return tree;
         const parts = pathStr.split('/');
         let current = tree;
         for (const p of parts) {
             if (!p) continue;
-            const child = current.children.find(c => c.name === p && c.type === 'folder');
+            const child = (current && Array.isArray(current.children)) ? current.children.find(c => c.name === p && c.type === 'folder') : null;
             if (child) {
                 current = child;
             } else {
@@ -55,7 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
         parts.forEach((part, i) => {
             if (!part) return;
             buildPath += (buildPath ? "/" : "") + part;
-            html += ` > <span class="breadcrumb-link" data-path="${buildPath}">${part}</span>`;
+            const safePath = escapeHtml(buildPath);
+            const safePart = escapeHtml(part);
+            html += ` > <span class="breadcrumb-link" data-path="${safePath}">${safePart}</span>`;
         });
         
         breadcrumbs.innerHTML = html;
@@ -119,11 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const el = document.createElement('div');
             el.className = 'asset-item';
             
+            const safeName = escapeHtml(item.name || '');
             if (item.type === 'folder') {
                 el.classList.add('asset-folder');
                 el.innerHTML = `
                     <i class="fa-solid fa-folder asset-icon"></i>
-                    <span class="asset-name" title="${item.name}">${item.name}</span>
+                    <span class="asset-name" title="${safeName}">${safeName}</span>
                 `;
                 el.addEventListener('click', () => {
                     currentPath = item.path;
@@ -134,20 +147,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 // File or URL
                 let thumbHtml = "";
                 const isVideo = item.url && (item.url.match(/\.(mp4|webm|ogg)$/i) || item.url.includes('v.pinimg.com'));
-                
-                const isYoutube = item.url && item.url.includes('youtube.com/embed');
+                const ytMatch = item.url && item.url.match(/(?:embed\/|v=|\.be\/)([a-zA-Z0-9_-]{11})/);
+                const isYoutube = Boolean(ytMatch);
                 
                 if (isVideo) {
-                    thumbHtml = `<video class="asset-thumb" src="${item.url}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`;
-                } else if (isYoutube) {
-                    thumbHtml = `<iframe class="asset-thumb" src="${item.url}" frameborder="0" style="pointer-events: none; object-fit: cover;"></iframe>`;
+                    thumbHtml = `<video class="asset-thumb" src="${escapeHtml(item.url)}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`;
+                } else if (isYoutube && ytMatch[1]) {
+                    thumbHtml = `<div class="asset-thumb-yt-wrap" style="position:relative;width:100%;height:100%;overflow:hidden;"><img class="asset-thumb" src="https://img.youtube.com/vi/${ytMatch[1]}/mqdefault.jpg" alt="${safeName}" loading="lazy" style="width:100%;height:100%;object-fit:cover;"><i class="fa-brands fa-youtube" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#ff0000;font-size:1.5rem;text-shadow:0 0 4px rgba(0,0,0,0.8);pointer-events:none;"></i></div>`;
                 } else {
-                    thumbHtml = `<img class="asset-thumb" src="${item.url}" alt="${item.name}" loading="lazy">`;
+                    thumbHtml = `<img class="asset-thumb" src="${escapeHtml(item.url)}" alt="${safeName}" loading="lazy">`;
                 }
 
                 el.innerHTML = `
                     ${thumbHtml}
-                    <span class="asset-name" title="${item.name}">${item.name}</span>
+                    <span class="asset-name" title="${safeName}">${safeName}</span>
                     <button class="btn-mobile-spawn-token asset-mobile-spawn-btn" title="Place on Map" style="position: absolute; top: 4px; right: 4px; z-index: 5;">
                         <i class="fa-solid fa-plus pointer-events-none"></i>
                     </button>

@@ -607,25 +607,62 @@ export function initVttChat(vtt, chatHistory) {
         });
     }
 
-    // Inject dice expression chips into plain text for chat display
-    function injectDiceChipsChat(text) {
-        if (!text) return '';
-        let result = text;
+    // Inject dice expression chips into text for chat display (safe against HTML tags, attributes, and existing buttons)
+    function injectDiceChipsChat(html) {
+        if (!html) return '';
+        let clean = html;
 
-        // 1. XdY+Z or XdY-Z or XdY (runs first to avoid double wrapping generated buttons)
-        result = result.replace(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?/gi, (match, count, faces, sign, mod) => {
-            let formula = `${count}d${faces}`;
-            if (sign && mod) formula += `${sign}${mod}`;
-            return `<button class="dice-chip" data-formula="${formula}" title="Roll: ${formula}">${match.trim()}</button>`;
-        });
+        // Strip any existing/corrupted dice-chips back to their inner content to prevent nested buttons
+        clean = clean.replace(/<button class="dice-chip[^"]*"[^>]*>([\s\S]*?)<\/button>/gi, '$1');
+        clean = clean.replace(/<button class="dice-chip[^"]*"[^>]*>([\s\S]*?)<\/button>/gi, '$1');
 
-        // 2. +N to hit → roll chip (runs second so its output is not parsed by the d-matcher)
-        result = result.replace(/\+(\d+)\s+to\s+hit/gi, (match, bonus) => {
-            const formula = `1d20+${bonus}`;
-            return `<button class="dice-chip" data-formula="${formula}" title="Roll attack">+${bonus} to hit</button>`;
-        });
+        // Split by HTML tags to isolate plain text nodes from tag markup/attributes
+        const parts = clean.split(/(<[^>]*>)/g);
+        let inButton = false;
+        let inAnchor = false;
 
-        return result;
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            if (!part) continue;
+
+            // HTML tag handling
+            if (part.startsWith('<') && part.endsWith('>')) {
+                const tagLower = part.toLowerCase();
+                if (tagLower.startsWith('<button')) inButton = true;
+                else if (tagLower.startsWith('</button')) inButton = false;
+                else if (tagLower.startsWith('<a')) inAnchor = true;
+                else if (tagLower.startsWith('</a')) inAnchor = false;
+                // Never modify tag contents or attributes
+                continue;
+            }
+
+            // Only process text that is NOT inside interactive elements or existing buttons
+            if (!inButton && !inAnchor) {
+                let text = part;
+
+                // 1. Roll chip for dice: XdY+Z or XdY-Z or XdY
+                text = text.replace(/(\d+)d(\d+)(?:\s*([+\-])\s*(\d+))?/gi, (match, count, faces, sign, mod) => {
+                    let formula = `${count}d${faces}`;
+                    if (sign && mod) formula += `${sign}${mod}`;
+                    return `<button class="dice-chip" data-formula="${formula}" title="Roll: ${formula}">${match.trim()}</button>`;
+                });
+
+                // 2. +N to hit -> roll chip
+                text = text.replace(/\+(\d+)\s+to\s+hit/gi, (match, bonus) => {
+                    const formula = `1d20+${bonus}`;
+                    return `<button class="dice-chip" data-formula="${formula}" title="Roll attack: ${formula}">+${bonus} to hit</button>`;
+                });
+
+                // 3. DC N -> dc chip
+                text = text.replace(/DC\s+(\d+)/gi, (match, dcVal) => {
+                    return `<button class="dice-chip dc-chip" data-dc="${dcVal}" style="border-color: var(--color-gold-base);" title="Ping DC ${dcVal} to Chat">DC ${dcVal}</button>`;
+                });
+
+                parts[i] = text;
+            }
+        }
+
+        return parts.join('');
     }
 
     function escapeHtml(str) {
@@ -643,6 +680,100 @@ export function initVttChat(vtt, chatHistory) {
         const safe = escapeHtml(text);
         return safe.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
                    .replace(/\*(.+?)\*/g, '<em>$1</em>');
+    }
+
+    function renderMarkdownTablesAndFormatting(text) {
+        if (!text) return '';
+        let res = text;
+
+        // Match markdown table blocks (header | divider | body rows)
+        res = res.replace(/(?:^|\n)(\|[^\n]+\|\r?\n\|[-:\s|]+\|\r?\n(?:\|[^\n]+\|\r?\n?)+)/g, (match, tableContent) => {
+            const rawRows = tableContent.trim().split(/\r?\n/).filter(r => r.trim());
+            if (rawRows.length < 2) return match;
+
+            const parseRow = (line) => {
+                const parts = line.split('|');
+                if (parts.length > 2) {
+                    return parts.slice(1, -1).map(c => c.trim());
+                }
+                return parts.map(c => c.trim()).filter(Boolean);
+            };
+
+            const headerCells = parseRow(rawRows[0]);
+            const bodyRows = rawRows.slice(2);
+
+            let html = '<div class="table-responsive ability-card-table-wrap"><table class="ability-card-table">';
+            html += '<thead><tr>' + headerCells.map(c => `<th>${escapeHtml(c)}</th>`).join('') + '</tr></thead><tbody>';
+            bodyRows.forEach(row => {
+                const cells = parseRow(row);
+                html += '<tr>' + cells.map(c => `<td>${escapeHtml(c)}</td>`).join('') + '</tr>';
+            });
+            html += '</tbody></table></div>';
+            return '\n' + html + '\n';
+        });
+
+        // Markdown Horizontal rules: ---
+        res = res.replace(/\n\s*---\s*\n/g, '<hr class="ability-card-hr">');
+
+        // Markdown Bold / Italic
+        res = res.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        res = res.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+        return res;
+    }
+
+    function formatAbilityCardText(rawText) {
+        if (!rawText) return '';
+        let text = String(rawText).trim();
+
+        // 1. Remove raw 5etools footer metadata, source headers, or internal header chrome if present
+        text = text.replace(/<div class="vtt-spell-source-footer"[\s\S]*?<\/div>/gi, '');
+        text = text.replace(/<div class="ve-split-v-end"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/gi, '');
+        text = text.replace(/<div class="ve-split-v-end"[\s\S]*?<\/div>\s*<\/div>/gi, '');
+        text = text.replace(/<div class="ve-split-v-end"[\s\S]*?<\/div>/gi, '');
+        text = text.replace(/<div class="ve-stats__wrp-h-source[\s\S]*?<\/div>/gi, '');
+        text = text.replace(/<h1[^>]*>[\s\S]*?<\/h1>/gi, '');
+        text = text.replace(/<a\s+href="book\.html[^"]*"[^>]*>[\s\S]*?<\/a>/gi, '');
+        text = text.replace(/<span class="ve-stats__h-source-abbreviation[^"]*"[^>]*>[\s\S]*?<\/span>/gi, '');
+        text = text.replace(/<span class="rd__h-toggle"[^>]*>[\s\S]*?<\/span>/gi, '');
+
+        // 2. Clean 5etools tag syntax (e.g. {@damage 1d6}, {@hit 5}, {@dice 1d20}, {@spell ...})
+        text = text.replace(/\{@damage\s+([^}]+)\}/gi, '$1');
+        text = text.replace(/\{@dice\s+([^}]+)\}/gi, '$1');
+        text = text.replace(/\{@hit\s+([+-]?\d+)\}/gi, '+$1');
+        text = text.replace(/\{@spell\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@item\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@creature\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@condition\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@skill\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@sense\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+        text = text.replace(/\{@[a-z]+\s+([^|}]+)(?:\|[^}]+)?\}/gi, '$1');
+
+        // 3. Check if text already has rich HTML markup
+        const hasHtmlTags = /<\/?(?:div|p|span|table|tr|td|th|ul|ol|li|i|b|strong|em|br|hr|button|h\d)[^>]*>/i.test(text);
+
+        if (hasHtmlTags) {
+            // Strip harmful attributes from scraped HTML
+            text = text.replace(/\s+(?:onmouseover|onmouseleave|onmousemove|onclick|onmousedown|onmouseup|onwheel|ondragstart|ontouchstart)="[^"]*"/gi, '');
+            text = text.replace(/\s+data-vet-[a-z]+="[^"]*"/gi, '');
+
+            // Convert markdown tables and bold/italics inside the HTML
+            text = renderMarkdownTablesAndFormatting(text);
+
+            // Inject clickable dice chips for formulas
+            text = injectDiceChipsChat(text);
+
+            return text;
+        }
+
+        // 4. Pure Markdown / Plain Text path
+        text = escapeHtml(text);
+        text = renderMarkdownTablesAndFormatting(text);
+        text = text.replace(/\n\n+/g, '</p><p>');
+        text = text.replace(/\n/g, '<br>');
+        text = injectDiceChipsChat(text);
+
+        return text;
     }
 
     function renderMacroCardHtml(mc, isHistorical = false) {
@@ -663,7 +794,7 @@ export function initVttChat(vtt, chatHistory) {
 
         // Description section
         const descSection = mc.description
-            ? `<div class="macro-card-desc">${parseSimpleMarkdown(mc.description)}</div>`
+            ? `<div class="macro-card-desc">${formatAbilityCardText(mc.description)}</div>`
             : '';
 
         // Attack roll row
@@ -685,8 +816,9 @@ export function initVttChat(vtt, chatHistory) {
             atkSection = `
                 <div class="macro-card-row" style="align-items: flex-start; padding: 10px 12px;">
                     <div class="macro-row-label" style="padding-top: 2px;"><i class="fa-solid fa-crosshairs macro-row-icon" style="color:#90caf9;"></i> Attack Roll</div>
-                    <div class="macro-row-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex:1;">
-                        <span class="macro-row-total ${critClass}" style="font-size:1.35rem; line-height:1; min-width:auto; color:var(--color-gold-light);" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${mc.atkRoll.total}</span>
+                    <div class="macro-row-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:2px; flex:1;">
+                        <span class="macro-row-total ${critClass}" style="font-size:1.35rem; line-height:1; min-width:auto; color:var(--color-gold-light); cursor:help;" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${mc.atkRoll.total}</span>
+                        ${mc.atkRoll.compactBreakdown ? `<span style="font-size:0.75rem; color:#888; font-family:var(--font-mono, monospace); letter-spacing:0.5px; cursor:help;" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${mc.atkRoll.compactBreakdown}</span>` : ''}
                         ${critLabel}
                     </div>
                 </div>`;
@@ -708,23 +840,27 @@ export function initVttChat(vtt, chatHistory) {
 
         // Per-type damage rows
         const dmgSections = (mc.dmgRolls || []).map(dr => {
-            const color = dmgColors[dr.type] || '#ef9a9a';
-            const icon = dmgIcons[dr.type] || 'fa-solid fa-droplet';
+            const rawType = (dr.type || 'Damage').trim();
+            const normalizedType = rawType.length > 0 ? (rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase()) : 'Damage';
+            const color = dmgColors[normalizedType] || dmgColors[dr.type] || '#ef9a9a';
+            const icon = dmgIcons[normalizedType] || dmgIcons[dr.type] || 'fa-solid fa-droplet';
             const bd = dr.roll ? (dr.roll.breakdownStr || (dr.roll.diceList ? `[${dr.roll.diceList.map(d => d.val).join(', ')}]` : '')) : '';
             const total = dr.roll ? dr.roll.total : 0;
             const formulaText = (dr.formula || '').toUpperCase();
             const tooltipText = formulaText ? `${formulaText} → ${bd}` : bd;
-            const labelText = dr.label && dr.label.trim() && dr.label.trim().toLowerCase() !== (dr.type || '').trim().toLowerCase()
+            const compactBd = dr.roll ? (dr.roll.compactBreakdown || '') : '';
+            const labelText = dr.label && dr.label.trim() && dr.label.trim().toLowerCase() !== normalizedType.toLowerCase()
                 ? ` <span style="font-size:0.75rem; opacity:0.8; font-weight:normal; margin-left:4px;">(${dr.label.trim()})</span>`
                 : '';
             return `
                 <div class="macro-card-row">
                     <div class="macro-row-label">
                         <i class="${icon} macro-row-icon" style="color:${color};"></i>
-                        <span>${dr.type || 'Damage'}</span>${labelText}
+                        <span>${normalizedType}</span>${labelText}
                     </div>
-                    <div class="macro-row-right">
-                        <span class="macro-row-total" style="color:${color};" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${total}</span>
+                    <div class="macro-row-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
+                        <span class="macro-row-total" style="color:${color}; cursor:help;" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${total}</span>
+                        ${compactBd ? `<span style="font-size:0.75rem; color:#888; font-family:var(--font-mono, monospace); letter-spacing:0.5px; cursor:help;" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${compactBd}</span>` : ''}
                     </div>
                 </div>`;
         }).join('');
@@ -754,8 +890,8 @@ export function initVttChat(vtt, chatHistory) {
                     <div class="macro-card-header-left">
                         <i class="fa-solid fa-dice-d20 macro-card-icon"></i>
                         <div>
-                            <span class="macro-card-charname">${mc.charName}</span>
-                            <span class="macro-card-name">${mc.macroName}</span>
+                            <span class="macro-card-charname">${escapeHtml(mc.charName || '')}</span>
+                            <span class="macro-card-name">${escapeHtml(mc.macroName || '')}</span>
                         </div>
                     </div>
                 </div>
@@ -782,13 +918,13 @@ export function initVttChat(vtt, chatHistory) {
                     <div class="macro-card-header-left">
                         <i class="fa-solid fa-backpack macro-card-icon" style="color:var(--color-gold-base);"></i>
                         <div>
-                            <span class="macro-card-charname">${ic.charName} pings an item</span>
-                            <span class="macro-card-name" style="color:var(--color-gold-light);">${ic.itemName}</span>
+                            <span class="macro-card-charname">${escapeHtml(ic.charName || '')} pings an item</span>
+                            <span class="macro-card-name" style="color:var(--color-gold-light);">${escapeHtml(ic.itemName || '')}</span>
                         </div>
                     </div>
                 </div>
                 <div class="macro-card-desc" style="font-size:0.96rem; color:var(--color-text-muted); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:4px; margin-bottom:6px;">
-                    <strong>Weight:</strong> ${ic.weight} lb &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Quantity:</strong> ${ic.qty}
+                    <strong>Weight:</strong> ${escapeHtml(ic.weight || '0')} lb &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Quantity:</strong> ${escapeHtml(ic.qty || '1')}
                 </div>
                 <div class="macro-card-desc" style="font-size:0.9rem; color:var(--color-text-secondary);">
                     ${descHtml}
@@ -842,15 +978,16 @@ export function initVttChat(vtt, chatHistory) {
         // Structured ability card from creature sheet
         if (msg.abilityCard) {
             const ac = msg.abilityCard;
-            let descHtml = parseSimpleMarkdown(ac.text);
+            const descHtml = formatAbilityCardText(ac.text);
+            const creatureName = escapeHtml(ac.creatureName || 'Creature');
+            const abilityName = escapeHtml(ac.abilityName || 'Ability');
             
             bodyText = `
                 <div class="ability-chat-card">
                     <div class="ability-chat-header">
-                        <span class="ability-chat-creature">${escapeHtml(ac.creatureName)}</span>
-                        <i class="fa-solid fa-bolt ability-chat-icon"></i>
+                        <div class="ability-chat-creature">${creatureName}</div>
+                        <div class="ability-chat-name">${abilityName}</div>
                     </div>
-                    <div class="ability-chat-name">${escapeHtml(ac.abilityName)}</div>
                     <div class="ability-chat-desc">${descHtml}</div>
                 </div>
             `;
@@ -895,6 +1032,9 @@ export function initVttChat(vtt, chatHistory) {
                 const modStr = msg.roll.modifier !== undefined && msg.roll.modifier !== 0 ? ` ${msg.roll.modifier > 0 ? '+' : '-'} ${Math.abs(msg.roll.modifier)}` : '';
                 breakdownHtml = `[${listStr}]${modStr}`;
             }
+
+            const compactBreakdown = msg.roll.compactBreakdown || breakdownHtml;
+            const detailedTooltip = msg.roll.breakdownStr || breakdownHtml;
             
             let rollTitle = "";
             let rollSub = "";
@@ -922,13 +1062,13 @@ export function initVttChat(vtt, chatHistory) {
                 <div class="dice-roll-card">
                     <div class="roll-card-header">
                         <div class="roll-card-header-left">
-                            <span class="roll-card-title">${rollTitle}</span>
-                            ${rollSub ? `<span class="roll-card-subtitle">${rollSub}</span>` : ''}
+                            <span class="roll-card-title">${escapeHtml(rollTitle)}</span>
+                            ${rollSub ? `<span class="roll-card-subtitle">${escapeHtml(rollSub)}</span>` : ''}
                         </div>
-                        <span class="roll-card-formula">${msg.roll.formula.toUpperCase()}</span>
+                        <span class="roll-card-formula">${escapeHtml((msg.roll.formula || '').toUpperCase())}</span>
                     </div>
-                    <div class="roll-card-result ${critClass}">${msg.roll.total}</div>
-                    <div class="roll-card-breakdown">${breakdownHtml}</div>
+                    <div class="roll-card-result ${critClass}" style="cursor:help;" data-tooltip="${detailedTooltip.replace(/"/g, '&quot;')}">${msg.roll.total}</div>
+                    <div class="roll-card-breakdown" style="cursor:help;" data-tooltip="${detailedTooltip.replace(/"/g, '&quot;')}">${compactBreakdown}</div>
                     ${critLabel}
                 </div>
             `;
@@ -1643,6 +1783,8 @@ export function initVttChat(vtt, chatHistory) {
             }
             if (btnInitMinPrev) btnInitMinPrev.disabled = true;
             if (btnInitMinNext) btnInitMinNext.disabled = true;
+            const dock = window.VTT?.sheetDock || vtt?.sheetDock;
+            if (dock?.setActiveTurnToken) dock.setActiveTurnToken(null, null);
             return;
         }
 
@@ -1666,6 +1808,11 @@ export function initVttChat(vtt, chatHistory) {
         if (btnInitMinNext) btnInitMinNext.disabled = false;
 
         const activeCombatant = visualActiveIndex >= 0 ? renderList[visualActiveIndex] : null;
+        const dock = window.VTT?.sheetDock || vtt?.sheetDock;
+        if (dock?.setActiveTurnToken) {
+            dock.setActiveTurnToken(activeCombatant?.tokenId, activeCombatant?.name);
+        }
+
         if (activeCombatant) {
             const actName = activeCombatant.name || 'Unknown';
             const actToken = canvasEngine ? canvasEngine.getTokens()[activeCombatant.tokenId] : null;
@@ -1701,15 +1848,16 @@ export function initVttChat(vtt, chatHistory) {
                 const actMonogram = getCombatantMonogram(actName);
                 const actTargetImg = (actToken && actToken.img) || activeCombatant.img;
                 if (actTargetImg) {
+                    const safeActTargetImg = typeof window.getSafeVttUrl === 'function' ? window.getSafeVttUrl(actTargetImg) : (actTargetImg.includes('discordapp.com') || actTargetImg.includes('discordapp.net') ? ('/api/proxy-discord?url=' + encodeURIComponent(actTargetImg)) : actTargetImg);
                     const cleanTarget = actTargetImg.split('?')[0].toLowerCase();
                     const isTargetVideo = (actToken && actToken.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
                     const isTargetYt = actTargetImg.includes('youtube.com') || actTargetImg.includes('youtu.be');
                     if (isTargetYt) {
                         initMinAvatar.innerHTML = '📺';
                     } else if (isTargetVideo) {
-                        initMinAvatar.innerHTML = `<video src="${actTargetImg}" autoplay muted loop playsinline preload="auto" onloadeddata="this.play().catch(()=>{})"></video>`;
+                        initMinAvatar.innerHTML = `<video src="${safeActTargetImg}" autoplay muted loop playsinline preload="auto" onloadeddata="this.play().catch(()=>{})"></video>`;
                     } else {
-                        initMinAvatar.innerHTML = `<img src="${actTargetImg}" alt="${actName}" onerror="this.parentElement.innerHTML='<div class=\\'init-monogram-avatar\\' style=\\'background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};\\'>${actMonogram.letters}</div>';">`;
+                        initMinAvatar.innerHTML = `<img src="${safeActTargetImg}" alt="${actName}" onerror="this.parentElement.innerHTML='<div class=\\'init-monogram-avatar\\' style=\\'background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};\\'>${actMonogram.letters}</div>';">`;
                     }
                 } else {
                     initMinAvatar.innerHTML = `<div class="init-monogram-avatar" style="background: ${actMonogram.bg}; border-color: ${actMonogram.border}; color: ${actMonogram.color};">${actMonogram.letters}</div>`;
@@ -1792,17 +1940,19 @@ export function initVttChat(vtt, chatHistory) {
                 const isTargetVideo = (token && token.isVideo) || !!cleanTarget.match(/\.(mp4|webm|ogg)$/i);
                 const isTargetYt = targetImg.includes('youtube.com') || targetImg.includes('youtu.be');
 
+                const safeTargetImg = typeof window.getSafeVttUrl === 'function' ? window.getSafeVttUrl(targetImg) : (targetImg.includes('discordapp.com') || targetImg.includes('discordapp.net') ? ('/api/proxy-discord?url=' + encodeURIComponent(targetImg)) : targetImg);
+
                 if (isTargetYt) {
                     avatarHtml = `<div class="init-token-avatar init-avatar-yt" title="YouTube Token">📺</div>`;
                 } else if (isTargetVideo) {
                     avatarHtml = `
                         <div class="init-token-avatar-wrap">
-                            <video class="init-token-avatar" src="${targetImg}" autoplay muted loop playsinline preload="auto" onloadeddata="this.play().catch(()=>{})"></video>
+                            <video class="init-token-avatar" src="${safeTargetImg}" autoplay muted loop playsinline preload="auto" onloadeddata="this.play().catch(()=>{})"></video>
                         </div>`;
                 } else {
                     avatarHtml = `
                         <div class="init-token-avatar-wrap">
-                            <img class="init-token-avatar" src="${targetImg}" alt="${name}" onerror="this.parentElement.innerHTML = '<div class=\\'init-monogram-avatar\\' style=\\'background: ${monogram.bg}; border-color: ${monogram.border}; color: ${monogram.color};\\'>${monogram.letters}</div>';">
+                            <img class="init-token-avatar" src="${safeTargetImg}" alt="${name}" onerror="this.parentElement.innerHTML = '<div class=\\'init-monogram-avatar\\' style=\\'background: ${monogram.bg}; border-color: ${monogram.border}; color: ${monogram.color};\\'>${monogram.letters}</div>';">
                         </div>`;
                 }
             }
@@ -1950,14 +2100,13 @@ export function initVttChat(vtt, chatHistory) {
         // Structured ability card (private)
         else if (msg.abilityCard) {
             const ac = msg.abilityCard;
-            const descHtml = parseSimpleMarkdown(ac.text);
+            const descHtml = formatAbilityCardText(ac.text);
             bodyText = `
                 <div class="ability-chat-card">
                     <div class="ability-chat-header">
-                        <span class="ability-chat-creature">${escapeHtml(ac.creatureName)}</span>
-                        <i class="fa-solid fa-bolt ability-chat-icon"></i>
+                        <div class="ability-chat-creature">${escapeHtml(ac.creatureName || 'Creature')}</div>
+                        ${ac.abilityName ? `<div class="ability-chat-name">${escapeHtml(ac.abilityName)}</div>` : ''}
                     </div>
-                    ${ac.abilityName ? `<div class="ability-chat-name">${escapeHtml(ac.abilityName)}</div>` : ''}
                     <div class="ability-chat-desc">${descHtml}</div>
                 </div>
             `;
@@ -1983,10 +2132,10 @@ export function initVttChat(vtt, chatHistory) {
                 <div class="dice-roll-card">
                     <div class="roll-card-header">
                         <div class="roll-card-header-left">
-                            <span class="roll-card-title">${rollTitle}</span>
-                            ${rollSub ? `<span class="roll-card-subtitle">${rollSub}</span>` : ''}
+                            <span class="roll-card-title">${escapeHtml(rollTitle)}</span>
+                            ${rollSub ? `<span class="roll-card-subtitle">${escapeHtml(rollSub)}</span>` : ''}
                         </div>
-                        <span class="roll-card-formula">${msg.roll.formula.toUpperCase()}</span>
+                        <span class="roll-card-formula">${escapeHtml((msg.roll.formula || '').toUpperCase())}</span>
                     </div>
                     <div class="roll-card-result">${msg.roll.total}</div>
                     <div class="roll-card-breakdown">[${listStr}]${modStr}</div>

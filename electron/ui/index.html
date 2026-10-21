@@ -433,6 +433,7 @@
             </div>
             <div class="sources-header-actions">
               <button class="btn btn-sm btn-outline" id="btn-refresh-sources" title="Refresh Sources">🔄 Refresh</button>
+              <button class="btn btn-sm btn-accent" id="btn-sync-sources-vtt" title="Sync database sources and hot-reload active VTT sessions">⚡ Sync to VTT</button>
             </div>
           </div>
           <div class="card-body">
@@ -443,6 +444,12 @@
                   <option value="">Global Defaults (All Campaigns)</option>
                   <!-- Dynamically populated campaign options -->
                 </select>
+                <button type="button" class="btn btn-xs btn-outline vtt-hidden" id="btn-reset-campaign-sources" title="Reset this campaign's book selections to match Global Defaults">
+                  ↺ Reset to Global
+                </button>
+                <span class="campaign-override-indicator vtt-hidden" id="campaign-override-indicator">
+                  <span class="pulse-dot"></span> <span id="campaign-override-text">0 Custom Overrides</span>
+                </span>
               </div>
 
               <!-- Presets Dropdown -->
@@ -494,6 +501,7 @@
               <div class="sources-accordion-controls">
                 <button type="button" class="btn btn-xs btn-outline" id="btn-expand-all-cats" title="Expand all categories">Expand All</button>
                 <button type="button" class="btn btn-xs btn-outline" id="btn-collapse-all-cats" title="Collapse all categories">Collapse All</button>
+                <button type="button" class="btn btn-xs btn-outline" id="btn-open-url-import" title="Import from Web URL (5eTools/GitHub)">🌐 URL Import</button>
                 <button type="button" class="btn btn-xs btn-accent" id="btn-open-bulk-import" title="Import multiple JSON or ZIP sourcebook files">
                   📦 Bulk Import
                 </button>
@@ -535,10 +543,18 @@
             <span class="cat-chip" data-cat="backgrounds">🎭 Backgrounds</span>
             <span class="cat-chip" data-cat="adventures">📖 Lore</span>
           </div>
-          <div class="global-search-results-panel vtt-hidden" id="global-search-results-panel"></div>
         </section>
 
-        <!-- Categories Accordion List -->
+        <!-- Drag & Drop Overlay for Sourcebooks -->
+        <div class="sources-dropzone-overlay vtt-hidden" id="sources-dropzone-overlay">
+          <div class="dropzone-box">
+            <span class="dropzone-icon">📥</span>
+            <h3>Drop Sourcebook Files Here</h3>
+            <p>Drop .json or .zip compendium files to automatically inspect and import them.</p>
+          </div>
+        </div>
+
+        <!-- Categories Accordion List (Table Mode) -->
         <div class="sources-categories-accordion" id="sources-categories-accordion">
           <!-- Dynamically populated category accordions with built-in and custom sources -->
           <div class="loading-placeholder">Loading database sources...</div>
@@ -595,6 +611,12 @@
                       <button type="button" class="dropdown-item" id="btn-action-create-blank">
                         ✨ Create Blank Entry
                       </button>
+                      <button type="button" class="dropdown-item" id="btn-action-archetype-wizard">
+                        ⚡ From Archetype Wizard...
+                      </button>
+                      <button type="button" class="dropdown-item" id="btn-action-plaintext-import">
+                        📋 Quick Paste Plaintext...
+                      </button>
                       <button type="button" class="dropdown-item" id="btn-action-clone-compendium">
                         📥 Clone from Compendium...
                       </button>
@@ -626,10 +648,13 @@
                   </div>
                 </div>
 
-                <!-- Visual Forms Container -->
-                <div class="entity-forms-wrap" id="entity-visual-forms-wrap">
-                  <!-- Empty State -->
-                  <div class="entity-empty-state" id="entity-empty-state">
+                <!-- Split Layout: Left Editor, Right Live 5e Preview -->
+                <div class="entity-studio-split-body">
+                  <div class="entity-editor-pane">
+                    <!-- Visual Forms Container -->
+                    <div class="entity-forms-wrap" id="entity-visual-forms-wrap">
+                      <!-- Empty State -->
+                      <div class="entity-empty-state" id="entity-empty-state">
                     <span class="empty-icon">📖</span>
                     <h3>Select an entry to edit</h3>
                     <p class="text-muted">Choose an entry from the left column, or click <strong>"+ Add Entry"</strong> to build a new one.</p>
@@ -1324,18 +1349,45 @@
                   </div>
                 </div>
 
-                <!-- Raw JSON Editor Container for active entry -->
-                <div class="entity-raw-json-wrap vtt-hidden" id="entity-entry-json-wrap">
-                  <div class="json-editor-toolbar">
-                    <div class="json-toolbar-left">
-                      <span class="json-status-tag" id="entity-json-syntax-status">✅ Valid JSON</span>
-                    </div>
-                    <div class="json-toolbar-right">
-                      <button type="button" class="btn btn-xs btn-outline" id="btn-format-entity-json">✨ Prettify</button>
+                    <!-- Raw JSON Editor Container for active entry -->
+                    <div class="entity-raw-json-wrap vtt-hidden" id="entity-entry-json-wrap">
+                      <div class="json-editor-toolbar">
+                        <div class="json-toolbar-left">
+                          <span class="json-status-tag" id="entity-json-syntax-status">✅ Valid JSON</span>
+                        </div>
+                        <div class="json-toolbar-right">
+                          <button type="button" class="btn btn-xs btn-outline" id="btn-format-entity-json">✨ Prettify</button>
+                        </div>
+                      </div>
+                      <div class="json-editor-wrap">
+                        <textarea id="entity-entry-json-textarea" class="json-code-textarea" spellcheck="false" placeholder="Loading entity JSON..."></textarea>
+                      </div>
                     </div>
                   </div>
-                  <div class="json-editor-wrap">
-                    <textarea id="entity-entry-json-textarea" class="json-code-textarea" spellcheck="false" placeholder="Loading entity JSON..."></textarea>
+
+                  <!-- Right Pane: Real-Time 5e Statblock Preview & Test Roll Tray -->
+                  <div class="entity-live-preview-pane" id="entity-live-preview-pane">
+                    <div class="live-preview-header">
+                      <div class="preview-header-left">
+                        <span class="preview-title-icon">👁️</span>
+                        <span class="preview-title-text">Live 5e Preview</span>
+                      </div>
+                      <div class="preview-header-right">
+                        <span class="badge" id="preview-entity-type-badge">Statblock</span>
+                      </div>
+                    </div>
+                    <div class="live-card-render-container" id="live-card-render-container">
+                      <div class="preview-placeholder">Live preview will render here as you edit or select an entry.</div>
+                    </div>
+                    <div class="interactive-test-roll-tray" id="interactive-test-roll-tray">
+                      <div class="test-roll-header">
+                        <span class="test-roll-title">🎲 Interactive Combat Tester</span>
+                        <button type="button" class="btn-clear-tray" id="btn-clear-test-roll-tray" title="Clear test roll history">&times; Clear</button>
+                      </div>
+                      <div class="test-roll-log" id="test-roll-log">
+                        <div class="test-roll-hint">Click any attack roll (+X to hit), damage (e.g. 2d6+3), or DC save in the preview above to test rolls!</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1427,6 +1479,25 @@
       </div>
     </div>
 
+    <!-- Quick Inspect Compendium Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-compendium-inspect" style="z-index: 1060;">
+      <div class="modal-card modal-medium" style="max-width: 650px;">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <h3 id="inspect-modal-title">Entry Preview</h3>
+            <span class="badge" id="inspect-modal-badge">5e</span>
+          </div>
+          <button class="modal-close" id="btn-close-compendium-inspect">&times;</button>
+        </div>
+        <div class="modal-body" id="inspect-modal-body" style="padding: 20px; max-height: 80vh; overflow-y: auto;">
+          <div class="loading-placeholder"><i class="fa-solid fa-spinner fa-spin"></i> Loading entry details...</div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; padding: 12px 20px; border-top: 1px solid var(--border-color);">
+          <button type="button" class="btn btn-sm btn-outline" id="btn-inspect-close">Close</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Clone from Compendium Modal -->
     <div class="modal-overlay vtt-hidden" id="modal-clone-compendium">
       <div class="modal-card modal-medium">
@@ -1448,6 +1519,165 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-secondary" id="btn-cancel-clone">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Archetype Monster Wizard Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-archetype-wizard">
+      <div class="modal-card modal-large">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <h3>⚡ Archetype Monster Wizard</h3>
+            <span class="badge badge-accent">Instant 5e Monster Builder</span>
+          </div>
+          <button class="modal-close" id="btn-close-archetype-wizard">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted mb-12">
+            Select a combat archetype and target Challenge Rating. DnDForged will automatically calculate balanced HP, AC, attack bonuses, damage dice curves, and signature abilities.
+          </p>
+
+          <label class="form-label-bold mb-8">1. Choose Combat Role Archetype</label>
+          <div class="archetype-cards-grid" id="archetype-cards-container">
+            <div class="archetype-choice-card selected" data-archetype="brute">
+              <div class="archetype-icon">🔨</div>
+              <div class="archetype-info">
+                <h4>Brute</h4>
+                <p>High HP, crushing strength, extra damage dice, and heavy melee multiattacks.</p>
+              </div>
+            </div>
+            <div class="archetype-choice-card" data-archetype="skirmisher">
+              <div class="archetype-icon">🏹</div>
+              <div class="archetype-info">
+                <h4>Skirmisher</h4>
+                <p>High Dexterity, 40 ft. speed, Nimble Escape (Bonus Action Disengage/Hide), and dual strikes.</p>
+              </div>
+            </div>
+            <div class="archetype-choice-card" data-archetype="spellcaster">
+              <div class="archetype-icon">🔮</div>
+              <div class="archetype-info">
+                <h4>Spellcaster</h4>
+                <p>Arcane Shield reaction (+5 AC), ranged spell attacks, and area-of-effect elemental bursts.</p>
+              </div>
+            </div>
+            <div class="archetype-choice-card" data-archetype="minion">
+              <div class="archetype-icon">💀</div>
+              <div class="archetype-info">
+                <h4>Minion (Horde)</h4>
+                <p>1 HP cannon fodder, Pack Tactics advantage, and flat damage for speedy swarm combat.</p>
+              </div>
+            </div>
+            <div class="archetype-choice-card" data-archetype="boss">
+              <div class="archetype-icon">👑</div>
+              <div class="archetype-info">
+                <h4>Solo / Boss</h4>
+                <p>Apex adversary with Legendary Resistance (3/Day), 3 Legendary Actions, and multi-attacks.</p>
+              </div>
+            </div>
+          </div>
+
+          <label class="form-label-bold mt-16 mb-8">2. Configure Details & Target CR</label>
+          <div class="form-row-grid">
+            <div class="input-group">
+              <label for="wizard-archetype-name">Creature Name</label>
+              <input type="text" id="wizard-archetype-name" placeholder="e.g. Ironclad Ogre" />
+            </div>
+            <div class="input-group">
+              <label for="wizard-archetype-cr">Challenge Rating (CR)</label>
+              <select id="wizard-archetype-cr" class="form-select">
+                <option value="0">CR 0 (10 XP)</option>
+                <option value="1/8">CR 1/8 (25 XP)</option>
+                <option value="1/4">CR 1/4 (50 XP)</option>
+                <option value="1/2">CR 1/2 (100 XP)</option>
+                <option value="1" selected>CR 1 (200 XP)</option>
+                <option value="2">CR 2 (450 XP)</option>
+                <option value="3">CR 3 (700 XP)</option>
+                <option value="4">CR 4 (1,100 XP)</option>
+                <option value="5">CR 5 (1,800 XP)</option>
+                <option value="6">CR 6 (2,300 XP)</option>
+                <option value="7">CR 7 (2,900 XP)</option>
+                <option value="8">CR 8 (3,900 XP)</option>
+                <option value="9">CR 9 (5,000 XP)</option>
+                <option value="10">CR 10 (5,900 XP)</option>
+                <option value="12">CR 12 (8,400 XP)</option>
+                <option value="15">CR 15 (13,000 XP)</option>
+                <option value="20">CR 20 (25,000 XP)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="wizard-archetype-type">Creature Type</label>
+              <select id="wizard-archetype-type" class="form-select">
+                <option value="Humanoid">Humanoid</option>
+                <option value="Monstrosity">Monstrosity</option>
+                <option value="Beast">Beast</option>
+                <option value="Fiend">Fiend</option>
+                <option value="Undead">Undead</option>
+                <option value="Dragon">Dragon</option>
+                <option value="Construct">Construct</option>
+                <option value="Elemental">Elemental</option>
+                <option value="Fey">Fey</option>
+                <option value="Aberration">Aberration</option>
+                <option value="Giant">Giant</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="wizard-archetype-size">Size</label>
+              <select id="wizard-archetype-size" class="form-select">
+                <option value="Small">Small</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="Large">Large</option>
+                <option value="Huge">Huge</option>
+                <option value="Gargantuan">Gargantuan</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="archetype-benchmark-preview" id="wizard-benchmark-preview">
+            <!-- Dynamically populated stat summary -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-archetype-wizard">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btn-submit-archetype-wizard">
+            ⚡ Generate &amp; Edit in Studio
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Paste Plaintext Importer Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-plaintext-import">
+      <div class="modal-card modal-large">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <h3>📋 Quick Paste Plaintext Importer</h3>
+            <span class="badge badge-accent">Statblock &amp; Spell Parser</span>
+          </div>
+          <button class="modal-close" id="btn-close-plaintext-import">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <p class="text-muted" style="margin: 0; font-size: 13px;">
+              Paste plain text copied from D&amp;D Beyond, GM Binder, Reddit, or statblock generators. The parser automatically structures it for 5e.
+            </p>
+            <button type="button" class="btn btn-xs btn-outline" id="btn-insert-sample-plaintext">
+              💡 Insert Sample Statblock
+            </button>
+          </div>
+
+          <textarea id="plaintext-import-textarea" class="plaintext-editor-area" rows="12" placeholder="Paste statblock, spell, or magic item text here..."></textarea>
+
+          <div class="plaintext-detection-box mt-12" id="plaintext-detection-box">
+            <span class="detection-icon">🔍</span>
+            <span id="plaintext-detection-status" class="detection-text">Type or paste text above to auto-detect content...</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-plaintext-import">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btn-submit-plaintext-import" disabled>
+            📥 Import into Homebrew Studio
+          </button>
         </div>
       </div>
     </div>
@@ -1661,6 +1891,60 @@
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" id="btn-confirm-conflict-choice">Continue</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- URL Import Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-url-import" style="z-index: 1040;">
+      <div class="modal-card modal-medium">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <h3>🌐 Import Sourcebook from URL</h3>
+            <span class="badge badge-accent">5eTools / GitHub JSON</span>
+          </div>
+          <button class="modal-close" id="btn-close-url-import">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="text-muted" style="margin-bottom: 14px; font-size: 13px; line-height: 1.5;">
+            Enter a direct web URL to a 5eTools-compatible sourcebook JSON file (such as a raw GitHub URL or community brew link). ForgeDVTT will download, validate, and integrate the sourcebook automatically.
+          </p>
+          <div class="input-group">
+            <label for="input-source-url">Sourcebook JSON Web URL</label>
+            <input type="url" id="input-source-url" placeholder="https://raw.githubusercontent.com/.../my-brew.json" autocomplete="off" />
+            <small class="field-hint">Supports direct links ending in .json from raw.githubusercontent.com, gist, or 5e.tools compendiums.</small>
+          </div>
+          <div class="url-import-status vtt-hidden" id="url-import-status-box" style="margin-top: 12px; padding: 10px; border-radius: 6px; font-size: 13px;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-url-import">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btn-execute-url-import">
+            🚀 Download & Import
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instant 5e Compendium Inspect Modal -->
+    <div class="modal-overlay vtt-hidden" id="modal-compendium-inspect" style="z-index: 1060;">
+      <div class="modal-card modal-large" style="max-width: 860px; max-height: 90vh; display: flex; flex-direction: column;">
+        <div class="modal-header">
+          <div class="modal-header-title">
+            <h3 id="inspect-modal-title">Entity Name</h3>
+            <span class="badge" id="inspect-modal-badge">BESTIARY</span>
+            <span class="source-code-badge" id="inspect-modal-source">SRD</span>
+          </div>
+          <button class="modal-close" id="btn-close-inspect-modal">&times;</button>
+        </div>
+        <div class="modal-body" style="overflow-y: auto; padding: 20px; flex: 1;" id="inspect-modal-body">
+          <div class="loading-placeholder">Loading compendium entry...</div>
+        </div>
+        <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="text-muted" style="font-size: 12px;" id="inspect-modal-footer-info"></div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-secondary" id="btn-inspect-close">Close</button>
+            <button type="button" class="btn btn-primary" id="btn-inspect-open-studio">✏️ Edit in Studio</button>
+          </div>
         </div>
       </div>
     </div>
