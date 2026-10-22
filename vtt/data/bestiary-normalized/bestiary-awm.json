@@ -84,7 +84,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_invisible_in_water_bfiz",
+        "id": "act_invisible_in_water_3o0b",
         "name": "Invisible in Water",
         "actionType": "trait",
         "descriptionHtml": "<p>The big water slurpent is invisible while fully immersed in water.</p>",
@@ -104,7 +104,7 @@
         }
       },
       {
-        "id": "act_water_bound_jmpz",
+        "id": "act_water_bound_i4uw",
         "name": "Water Bound",
         "actionType": "trait",
         "descriptionHtml": "<p>The big water slurpent dies if it leaves the water to which it is bound or if that water is destroyed.</p>",
@@ -126,7 +126,7 @@
     ],
     "actions": [
       {
-        "id": "act_constrict_ddoa",
+        "id": "act_constrict_r8w2",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, one target. Hit: 13 (3d6+3) bludgeoning damage. If the target is Medium or smaller, it is grappled (escape DC 13) and pulled 5 feet toward the big water slurpent. Until this grapple ends, the target is restrained, the big water slurpent tries to drown it, and the big water slurpent can't constrict another target.</p>",
@@ -147,7 +147,8 @@
           "damages": [
             {
               "formula": "3d6+3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -264,7 +265,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_rvps",
+        "id": "act_pack_tactics_4d8i",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>Birdsquirrel has advantage on an attack roll against a creature if at least one of the Birdsquirrel's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -286,7 +287,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jrgt",
+        "id": "act_multiattack_9zoo",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Birdsquirrel makes two attacks: one with its bite and one with its claws.</p>",
@@ -306,7 +307,7 @@
         }
       },
       {
-        "id": "act_bite_4rke",
+        "id": "act_bite_mnx1",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6+2) piercing damage.</p>",
@@ -324,14 +325,15 @@
           "damages": [
             {
               "formula": "1d6+2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_0c31",
+        "id": "act_claws_gndh",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4+2) slashing damage.</p>",
@@ -349,7 +351,8 @@
           "damages": [
             {
               "formula": "1d4+2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -466,7 +469,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_9v2f",
+        "id": "act_pack_tactics_g8rs",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The Boontu monkey has advantage on an attack roll against a creature if at least one of the boontu monkey's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -488,7 +491,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_hlci",
+        "id": "act_bite_gi7e",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 1 (1d4 - 1) piercing damage.</p>",
@@ -506,7 +509,8 @@
           "damages": [
             {
               "formula": "1d4 - 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -623,7 +627,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_hlf5",
+        "id": "act_amphibious_vmmf",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merfolk can breathe air and water.</p>",
@@ -643,7 +647,7 @@
         }
       },
       {
-        "id": "act_siren_song_0ine",
+        "id": "act_siren_song_fwbf",
         "name": "Siren Song",
         "actionType": "trait",
         "descriptionHtml": "<p>Lovely singing voices charm every humanoid or giant within 300 feet. The targets must succeed on a DC 11 Wisdom saving throw or be charmed until the song ends.</p>",
@@ -668,7 +672,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_zr4c",
+        "id": "act_bite_6f3t",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, one target. Hit: 3 (1d6) piercing damage.</p>",
@@ -686,7 +690,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -894,7 +899,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_t510",
+        "id": "act_amphibious_r83l",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The hag can breathe air and water.</p>",
@@ -914,7 +919,7 @@
         }
       },
       {
-        "id": "act_mimicry__green_hag__p4yx",
+        "id": "act_mimicry__green_hag__ssjn",
         "name": "Mimicry (Green Hag)",
         "actionType": "trait",
         "descriptionHtml": "<p>The hag can mimic animal sounds and humanoid voices. A creature that hears the sounds can tell they are imitations with a successful DC 14 Wisdom (Insight) check.</p>",
@@ -939,7 +944,7 @@
     ],
     "actions": [
       {
-        "id": "act_illusory_appearance_sts1",
+        "id": "act_illusory_appearance_cb82",
         "name": "Illusory Appearance",
         "actionType": "action",
         "descriptionHtml": "<p>The hag covers herself with a magical illusion that allows her to look like another creature of her general size and shape. The illusion ends when the hag chooses, or if she dies. A DC 20 Intelligence (Investigation) check will expose the hag's disguise.</p>",
@@ -962,7 +967,7 @@
         }
       },
       {
-        "id": "act_invisible_passage_h8i3",
+        "id": "act_invisible_passage_b2fa",
         "name": "Invisible Passage",
         "actionType": "action",
         "descriptionHtml": "<p>The hag magically turns invisible until she attacks or casts a spell, or until her concentration ends. While invisible, she leaves no physical evidence of her passage, and can only be tracked by magic.</p>",
@@ -982,7 +987,7 @@
         }
       },
       {
-        "id": "act_claws_lhv1",
+        "id": "act_claws_d3g4",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, one target. Hit: 17 (2d8 + 4) slashing damage.</p>",
@@ -1000,7 +1005,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1117,7 +1123,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_nimble_escape_u2vh",
+        "id": "act_nimble_escape_c0tu",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>The goblin can take the Disengage or Hide action as a bonus action on each of its turns.</p>",
@@ -1139,7 +1145,7 @@
     ],
     "actions": [
       {
-        "id": "act_catch_me_if_you_can__8iqt",
+        "id": "act_catch_me_if_you_can__akon",
         "name": "Catch me if you can!",
         "actionType": "action",
         "descriptionHtml": "<p>Dum-Dum Goblins will opt to run and hide before fighting! A DC 15 Dexterity check must be made before they can be attacked.</p>",
@@ -1162,7 +1168,7 @@
         }
       },
       {
-        "id": "act_scimitar_rs7a",
+        "id": "act_scimitar_rwy8",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, one target. Hit: 3 (1d6 +2) slashing damage.</p>",
@@ -1180,14 +1186,15 @@
           "damages": [
             {
               "formula": "1d6 +2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_q4si",
+        "id": "act_shortbow_pxym",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, one target. Hit: 6 (1d6 + 2) piercing damage.</p>",
@@ -1205,7 +1212,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1324,7 +1332,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dwarven_resilience_32tc",
+        "id": "act_dwarven_resilience_9gy6",
         "name": "Dwarven Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>They have advantage on saving throws against poison, and they have resistance to poison damage.</p>",
@@ -1346,7 +1354,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortbow_bimw",
+        "id": "act_shortbow_efqy",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, one target. Hit: 4 (1d6 + 1) slashing damage.</p>",
@@ -1364,7 +1372,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1481,7 +1490,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_tunneler_vz4u",
+        "id": "act_tunneler_o7qj",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The worm can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
@@ -1503,7 +1512,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vv8o",
+        "id": "act_multiattack_p8lz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The worm makes two attacks:</p>",
@@ -1523,7 +1532,7 @@
         }
       },
       {
-        "id": "act_bite_rmut",
+        "id": "act_bite_12l0",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, one target. Hit: 22 (3d8) piercing damage. Target must make a DC 19 Dexterity save, or be swallowed by the worm!</p>",
@@ -1544,14 +1553,15 @@
           "damages": [
             {
               "formula": "3d8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_stinger_x014",
+        "id": "act_tail_stinger_ov33",
         "name": "Tail Stinger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, one creature. Hit: 19 (3d6 + 9) piercing damage Target must make a DC 19 Constitution save, or take 42 (12d6) poison damage.</p>",
@@ -1572,11 +1582,13 @@
           "damages": [
             {
               "formula": "3d6 + 9",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "12d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1693,7 +1705,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_limited_telepathy_a04h",
+        "id": "act_limited_telepathy_qqi6",
         "name": "Limited Telepathy",
         "actionType": "trait",
         "descriptionHtml": "<p>The otyugh can magically transmit simple messages and images to any creature within 120 feet of it that can understand a language. This form of telepathy doesn't allow the receiving creature to telepathically respond.</p>",
@@ -1715,7 +1727,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_58j9",
+        "id": "act_multiattack_buuu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The otyugh makes three attacks:</p>",
@@ -1735,7 +1747,7 @@
         }
       },
       {
-        "id": "act_bite_g1ro",
+        "id": "act_bite_lde6",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 12 (2d8 + 3) piercing damage. Target must make a DC 15 Constitution save, or take 6 (1d10) poison damage until cured.</p>",
@@ -1756,18 +1768,20 @@
           "damages": [
             {
               "formula": "2d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tentacle_kysr",
+        "id": "act_tentacle_lshu",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. Target must make a DC 19 Constitution save, or take 42 (12d6) poison damage.</p>",
@@ -1788,18 +1802,20 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "12d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slam__6ujg",
+        "id": "act_slam__r2rk",
         "name": "Slam!",
         "actionType": "action",
         "descriptionHtml": "<p>Target must make a DC 14 Constitution save, or be grappled.</p>",
@@ -1933,7 +1949,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_38ex",
+        "id": "act_multiattack_9w3x",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes two greatclub attacks.</p>",
@@ -1953,7 +1969,7 @@
         }
       },
       {
-        "id": "act_greatclub_1gyd",
+        "id": "act_greatclub_rxuo",
         "name": "Greatclub",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, one target. Hit: 18 (3d8 + 5) bludgeoning damage.</p>",
@@ -1971,14 +1987,15 @@
           "damages": [
             {
               "formula": "3d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rock_ohja",
+        "id": "act_rock_74kf",
         "name": "Rock",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +8 to hit, one target. Hit: 21 (3d10 + 5) bludgeoning damage.</p>",
@@ -1996,7 +2013,8 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2438,7 +2456,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_weapons_r1hw",
+        "id": "act_magic_weapons_u9tf",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The couatl's weapon attacks are magical.</p>",
@@ -2458,7 +2476,7 @@
         }
       },
       {
-        "id": "act_shielded_mind_vy4e",
+        "id": "act_shielded_mind_skv1",
         "name": "Shielded Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The couatl is immune to scrying and to any effect that would sense its emotions, read its thoughts, or detect its location.</p>",
@@ -2480,7 +2498,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_hhhy",
+        "id": "act_bite_f8cg",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one creature. Hit: 8 (1d6 + 5) piercing damage. Target must make a DC 13 Constitution save, or fall unconscious. Another creature can use an action to shake the target awake.</p>",
@@ -2501,14 +2519,15 @@
           "damages": [
             {
               "formula": "1d6 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_constrict_kuoa",
+        "id": "act_constrict_r947",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one Medium or smaller creature. Hit: 10 (2d6 + 3) bludgeoning damage. Target is grappled (escape DC 15). The couatl can constrain only one target at a time.</p>",
@@ -2529,14 +2548,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_change_shape_t9rm",
+        "id": "act_change_shape_fjjp",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The couatl magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the couatl's choice).</p><p>In a new form, the couatl retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and other actions are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks. If the new form has a bite attack, the couatl can use its bite in that form.</p>",

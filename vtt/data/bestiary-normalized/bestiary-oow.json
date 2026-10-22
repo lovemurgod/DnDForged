@@ -103,7 +103,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_j3wm",
+        "id": "act_multiattack_jgli",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes two attacks: one with its bite and one to constrict.</p>",
@@ -123,7 +123,7 @@
         }
       },
       {
-        "id": "act_bite_qpi1",
+        "id": "act_bite_q693",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 22 (3d10 + 6) piercing damage.</p>",
@@ -141,14 +141,15 @@
           "damages": [
             {
               "formula": "3d10 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_constrict_9k1x",
+        "id": "act_constrict_d0fm",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one Large or smaller creature. Hit: 17 (2d10 + 6) bludgeoning damage plus 17 (2d10 + 6) slashing damage. The target is grappled (escape DC 16) if the behir isn't already constricting a creature, and the target is restrained until this grapple ends.</p>",
@@ -169,18 +170,20 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "2d10 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_lightning_breath__recharge_5__2gdt",
+        "id": "act_lightning_breath__recharge_5__ko79",
         "name": "Lightning Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The behir exhales a line of lightning that is 20 feet long and 5 feet wide. Each creature in that line must make a DC 16 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -201,14 +204,15 @@
           "damages": [
             {
               "formula": "12d10",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_swallow_cc3h",
+        "id": "act_swallow_gppp",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is blinded and restrained, it has Cover against attacks and other effects outside the behir, and it takes 21 (6d6) acid damage at the start of each of the behir's turns. A behir can have only one creature swallowed at a time.</p><p>If the behir takes 30 damage or more on a single turn from the swallowed creature, the behir must succeed on a DC 14 Constitution saving throw at the end of that turn or regurgitate the creature, which falls prone in a space within 10 feet of the behir. If the behir dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 15 feet of movement, exiting prone.</p>",
@@ -230,7 +234,8 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -635,7 +640,7 @@
     ],
     "traits": [
       {
-        "id": "act_divine_eminence_suko",
+        "id": "act_divine_eminence_xshs",
         "name": "Divine Eminence",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Dagdra can expend a spell slot to cause its melee weapon attacks to magically deal an extra 10 (3d6) radiant damage to a target on a hit. This benefit lasts until the end of the turn. If the priest expends a spell slot of 2nd level or higher, the extra damage increases by 1d6 for each level above 1st.</p>",
@@ -653,11 +658,13 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -666,7 +673,7 @@
     ],
     "actions": [
       {
-        "id": "act_mace_tjq2",
+        "id": "act_mace_z64t",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage.</p>",
@@ -684,14 +691,15 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_scroll_service__1_day__s2wj",
+        "id": "act_scroll_service__1_day__cebz",
         "name": "Scroll Service (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>As an action, Dagdra draws a spell scroll from her documancy satchel. The scroll contains a spell of up to 3rd level of Dagdra's choice. Only Dagdra can use the scroll, which vanishes after 1 minute.</p>",
@@ -989,7 +997,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_yl12",
+        "id": "act_club_cm6s",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -1007,7 +1015,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1128,7 +1137,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reach_bsgr",
+        "id": "act_reach_zyk3",
         "name": "Reach",
         "actionType": "trait",
         "descriptionHtml": "<p>The tentacle can reach anywhere in the room.</p>",
@@ -1150,7 +1159,7 @@
     ],
     "actions": [
       {
-        "id": "act_constrict_pzw2",
+        "id": "act_constrict_zl6g",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 35 ft., one creature. Hit: 13 (2d8 + 4) bludgeoning damage, and the target is grappled (escape DC 16). Until this grapple ends, the creature is restrained, and the tentacle can't constrict another target.</p>",
@@ -1171,7 +1180,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1456,7 +1466,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_c4yl",
+        "id": "act_club_qzea",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -1474,7 +1484,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1594,7 +1605,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_martial_advantage_5cgk",
+        "id": "act_martial_advantage_fon8",
         "name": "Martial Advantage",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, Grunka can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the hobgoblin that isn't incapacitated.</p>",
@@ -1612,7 +1623,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1621,7 +1633,7 @@
     ],
     "actions": [
       {
-        "id": "act_longsword_ukdn",
+        "id": "act_longsword_8tvb",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage, or 6 (1d10 + 1) slashing damage if used with two hands.</p>",
@@ -1639,18 +1651,20 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_4d3g",
+        "id": "act_longbow_v0cb",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +3 to hit, range 150/600 ft., one target. Hit: 5 (1d8 + 1) piercing damage.</p>",
@@ -1668,14 +1682,15 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_acid_spray_gun__recharge_5__2l7c",
+        "id": "act_acid_spray_gun__recharge_5__ijgf",
         "name": "Acid Spray Gun (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The hobgoblin sprays acid in a 10-foot cone. Each creature in the area must make a DC 10 Dexterity saving throw, taking 7 (2d6) acid damage on a failed save, or half as much damage on a successful one.</p><p>The spray gun has a tank that can be filled with ten standard vials of acid mixed with water, allowing it to be used five times.</p>",
@@ -1697,7 +1712,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -1824,7 +1840,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_shortsword_ej6n",
+        "id": "act_shortsword_obsp",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -1842,14 +1858,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_rr1s",
+        "id": "act_shortbow_o3lq",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -1867,7 +1884,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1994,7 +2012,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_me9x",
+        "id": "act_multiattack_hxiv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The chimera makes three attacks: one with its bite, one with its horns, and one with its claws. When its fire breath is available, it can use the breath in place of its bite or horns.</p>",
@@ -2014,7 +2032,7 @@
         }
       },
       {
-        "id": "act_bite_07jd",
+        "id": "act_bite_1ddu",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage.</p>",
@@ -2032,14 +2050,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_horns_fopu",
+        "id": "act_horns_15ld",
         "name": "Horns",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 10 (1d12 + 4) bludgeoning damage.</p>",
@@ -2057,14 +2076,15 @@
           "damages": [
             {
               "formula": "1d12 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_i477",
+        "id": "act_claws_gz86",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
@@ -2082,14 +2102,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__6eek",
+        "id": "act_fire_breath__recharge_5__dwr3",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon head exhales fire in a 15-foot cone. Each creature in that area must make a DC 15 Dexterity saving throw, taking 31 (7d8) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -2110,7 +2131,8 @@
           "damages": [
             {
               "formula": "7d8",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -2233,7 +2255,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_0zat",
+        "id": "act_keen_smell_oked",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The cat has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -2253,7 +2275,7 @@
         }
       },
       {
-        "id": "act_relative_size_xlh8",
+        "id": "act_relative_size_fvrm",
         "name": "Relative Size",
         "actionType": "trait",
         "descriptionHtml": "<p>Any damage Onyx would take is reduced to 0. She has advantage on ability checks and saving throws.</p>",
@@ -2273,7 +2295,7 @@
         }
       },
       {
-        "id": "act_dealing_with_onyx_djkw",
+        "id": "act_dealing_with_onyx_mlf3",
         "name": "Dealing with Onyx",
         "actionType": "trait",
         "descriptionHtml": "<p>Onyx cannot be overcome or killed by combat. Any weapon attack against her that hits AC 12 makes contact but deals no lasting damage. However, if the attack would deal 10 or more damage, Onyx has disadvantage on attack rolls until the end of her next turn. If Onyx would take 10 or more damage from spells or other effects, it yields the same result. Spells that impose conditions function normally against Onyx, but those conditions end automatically at the end of the cat's next turn.</p>",
@@ -2295,7 +2317,7 @@
     ],
     "actions": [
       {
-        "id": "act_claws_d7tv",
+        "id": "act_claws_4wvq",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 20 ft., one target. Hit: 11 (2d10) slashing damage.</p>",
@@ -2313,7 +2335,8 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2433,7 +2456,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_l1sc",
+        "id": "act_axiomatic_mind_8p8q",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The duodrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -2453,7 +2476,7 @@
         }
       },
       {
-        "id": "act_dismantlable_u0jq",
+        "id": "act_dismantlable_l5et",
         "name": "Dismantlable",
         "actionType": "trait",
         "descriptionHtml": "<p>If the replica duodrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
@@ -2475,7 +2498,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ib1j",
+        "id": "act_multiattack_2p48",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The duodrone makes two fist attacks or two javelin attacks.</p>",
@@ -2495,7 +2518,7 @@
         }
       },
       {
-        "id": "act_fist_8gaz",
+        "id": "act_fist_8jcq",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -2513,14 +2536,15 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_javelin_3658",
+        "id": "act_javelin_vd14",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 4 (1d6 + 1) piercing damage.</p>",
@@ -2538,7 +2562,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2667,7 +2692,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_abyf",
+        "id": "act_axiomatic_mind_iko9",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The monodrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -2687,7 +2712,7 @@
         }
       },
       {
-        "id": "act_dismantlable_jwyw",
+        "id": "act_dismantlable_spnj",
         "name": "Dismantlable",
         "actionType": "trait",
         "descriptionHtml": "<p>If the replica monodrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
@@ -2709,7 +2734,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_jr60",
+        "id": "act_dagger_cgio",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
@@ -2727,14 +2752,15 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_javelin_vno0",
+        "id": "act_javelin_rf0k",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +2 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 3 (1d6) piercing damage.</p>",
@@ -2752,7 +2778,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2885,7 +2912,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_rz7x",
+        "id": "act_axiomatic_mind_r2es",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The pentadrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -2905,7 +2932,7 @@
         }
       },
       {
-        "id": "act_dismantlable_qark",
+        "id": "act_dismantlable_wxfr",
         "name": "Dismantlable",
         "actionType": "trait",
         "descriptionHtml": "<p>If the replica pentadrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
@@ -2927,7 +2954,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_nzsq",
+        "id": "act_multiattack_vgz2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The pentadrone makes five arm attacks.</p>",
@@ -2947,7 +2974,7 @@
         }
       },
       {
-        "id": "act_arm_4kzv",
+        "id": "act_arm_5i8v",
         "name": "Arm",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage.</p>",
@@ -2965,14 +2992,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_paralysis_gas__recharge_5__sbrz",
+        "id": "act_paralysis_gas__recharge_5__9s3u",
         "name": "Paralysis Gas (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The pentadrone exhales a 30-foot cone of gas. Each creature in that area must succeed on a DC 11 Constitution saving throw or be paralyzed for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -3121,7 +3149,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_6viv",
+        "id": "act_axiomatic_mind_1ulq",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The quadrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -3141,7 +3169,7 @@
         }
       },
       {
-        "id": "act_dismantlable_drkh",
+        "id": "act_dismantlable_8y83",
         "name": "Dismantlable",
         "actionType": "trait",
         "descriptionHtml": "<p>If the replica quadrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
@@ -3163,7 +3191,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_59y6",
+        "id": "act_multiattack_xv2z",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The quadrone makes two fist attacks or four shortbow attacks.</p>",
@@ -3183,7 +3211,7 @@
         }
       },
       {
-        "id": "act_fist_ln76",
+        "id": "act_fist_4pq9",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
@@ -3201,14 +3229,15 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_selb",
+        "id": "act_shortbow_hier",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -3226,7 +3255,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3355,7 +3385,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_axiomatic_mind_86x8",
+        "id": "act_axiomatic_mind_12cz",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The tridrone can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -3375,7 +3405,7 @@
         }
       },
       {
-        "id": "act_dismantlable_zvzy",
+        "id": "act_dismantlable_osvr",
         "name": "Dismantlable",
         "actionType": "trait",
         "descriptionHtml": "<p>If the replica tridrone dies, its body falls into a pile of parts (gears, plates, screws, and wires), leaving behind its weapons and anything else it was carrying.</p>",
@@ -3397,7 +3427,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_v9lc",
+        "id": "act_multiattack_x3rt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The tridrone makes three fist attacks or three javelin attacks.</p>",
@@ -3417,7 +3447,7 @@
         }
       },
       {
-        "id": "act_fist_eiju",
+        "id": "act_fist_il22",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
@@ -3435,14 +3465,15 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_javelin_n8gu",
+        "id": "act_javelin_v78f",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 4 (1d6 + 1) piercing damage.</p>",
@@ -3460,7 +3491,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3594,7 +3626,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_turn_immunity_afob",
+        "id": "act_turn_immunity_2h5a",
         "name": "Turn Immunity",
         "actionType": "trait",
         "descriptionHtml": "<p>The foot is immune to effects that turn undead.</p>",
@@ -3616,7 +3648,7 @@
     ],
     "actions": [
       {
-        "id": "act_stomp_r6tx",
+        "id": "act_stomp_edcy",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
@@ -3634,7 +3666,8 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3769,7 +3802,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cunning_action_foae",
+        "id": "act_cunning_action_ba4h",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>On each of its turns, Two Dry Cloaks can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
@@ -3789,7 +3822,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__86dq",
+        "id": "act_sneak_attack__1_turn__45ey",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>Two Dry Cloaks deals an extra 7 (2d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't incapacitated and the spy doesn't have disadvantage on the attack roll.</p>",
@@ -3807,7 +3840,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3816,7 +3850,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_r4gt",
+        "id": "act_multiattack_lxoe",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Two Dry Cloaks makes two melee attacks.</p>",
@@ -3836,7 +3870,7 @@
         }
       },
       {
-        "id": "act_shortsword_3pgw",
+        "id": "act_shortsword_mj78",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -3854,14 +3888,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow_yi5m",
+        "id": "act_hand_crossbow_risq",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -3879,7 +3914,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4001,7 +4037,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_thbr",
+        "id": "act_bite_u3dg",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one creature. Hit: 3 (1d4 + 1) piercing damage, and the target must succeed on a DC 11 Constitution saving throw against being magically petrified. On a failed save, the creature begins to turn to stone and is restrained. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is petrified for 24 hours.</p>",
@@ -4022,7 +4058,8 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

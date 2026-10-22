@@ -270,7 +270,7 @@
     ],
     "traits": [
       {
-        "id": "act_illumination_ctia",
+        "id": "act_illumination_i20h",
         "name": "Illumination",
         "actionType": "trait",
         "descriptionHtml": "<p>As a Bonus Action, the drake can produce dim light in a 15 ft radius, or bright light in a 15 ft radius and dim light for an additional 15 ft radius. The drake can end this effect as a Bonus Action.</p>",
@@ -290,7 +290,7 @@
         }
       },
       {
-        "id": "act_prickly_pines_251f",
+        "id": "act_prickly_pines_zwr7",
         "name": "Prickly Pines",
         "actionType": "trait",
         "descriptionHtml": "<p>If a creature successfully hits the drake with a melee attack, the creature takes 4 (1d8) piercing damage.</p>",
@@ -308,14 +308,15 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__bs04",
+        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__flun",
         "name": "Legendary Resistance (3/Day, or 4/Day in Lair)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the drake fails a saving throw, it can choose to succeed instead.</p>",
@@ -337,7 +338,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_u7uh",
+        "id": "act_multiattack_bid8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The drake makes three Rend attacks. It can replace one attack with a use of (A) Incandescent Breath or (B) Spellcasting to cast Color Spray.</p>",
@@ -357,7 +358,7 @@
         }
       },
       {
-        "id": "act_rend_64cy",
+        "id": "act_rend_995c",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 13 (2d8 + 4) Slashing damage plus 7 (2d6) Radiant damage.</p>",
@@ -375,18 +376,20 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_incandescent_breath__recharge_5__7rbb",
+        "id": "act_incandescent_breath__recharge_5__v3h5",
         "name": "Incandescent Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 19, each creature in a 90 ft long, 5 ft wide Line [Area of Effect]. {@actSaveFail} 55 (10d10) Radiant damage. {@actSaveSuccess} Half damage.</p>",
@@ -407,7 +410,8 @@
           "damages": [
             {
               "formula": "10d10",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -421,7 +425,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_bright_tail_lash_ltt6",
+          "id": "act_bright_tail_lash_1tex",
           "name": "Bright Tail Lash",
           "actionType": "legendary",
           "descriptionHtml": "<p>str DC 17, a creature the drake can see within 15 ft. {@actSaveFail} 10 (3d6) Radiant damage, and the target is knocked Prone.</p>",
@@ -442,14 +446,15 @@
             "damages": [
               {
                 "formula": "3d6",
-                "type": "Radiant"
+                "type": "Radiant",
+                "saveRider": true
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_pounce_ljii",
+          "id": "act_pounce_cx8g",
           "name": "Pounce",
           "actionType": "legendary",
           "descriptionHtml": "<p>The drake moves up to half its Speed, and it makes one Rend attack.</p>",
@@ -469,7 +474,7 @@
           }
         },
         {
-          "id": "act_twinkling_lights_ar77",
+          "id": "act_twinkling_lights_0sz7",
           "name": "Twinkling Lights",
           "actionType": "legendary",
           "descriptionHtml": "<p>The drake uses Spellcasting to cast Faerie Fire.</p>",
@@ -601,7 +606,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_burst_kocc",
+        "id": "act_death_burst_8gn3",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>The pudding gremlin explodes when it dies. dex DC 11, each creature in a 5-foot Emanation [Area of Effect] originating from the pudding gremlin. {@actSaveFail} 7 (2d6) Fire damage. {@actSaveSuccess} Half damage.</p>",
@@ -622,14 +627,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_false_appearance_a55a",
+        "id": "act_false_appearance_8vm9",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>If the pudding gremlin doesn't move on its turn, it has Advantage when taking the Hide action.</p>",
@@ -651,7 +657,7 @@
     ],
     "actions": [
       {
-        "id": "act_claw_q969",
+        "id": "act_claw_9sa1",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft, Hit: 5 (1d4 + 3) Slashing damage.</p>",
@@ -669,14 +675,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fire_breath___recharge__itg4",
+        "id": "act_fire_breath___recharge__a1se",
         "name": "Fire Breath {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 11, each creature in a 15 ft Cone [Area of Effect]. {@actSaveFail} 7 (2d6) Fire damage. {@actSaveSuccess} Half damage.</p>",
@@ -697,14 +704,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_create_gremlin__1_day__74lb",
+        "id": "act_create_gremlin__1_day__bsqj",
         "name": "Create Gremlin (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>If the pudding gremlin is within 10 ft of an ordinary pudding, it can turn the ordinary pudding into another pudding gremlin. This new pudding gremlin appears in an unoccupied space within 10 ft of the original pudding gremlin and acts as its ally.</p>",
@@ -1032,7 +1040,7 @@
     ],
     "traits": [
       {
-        "id": "act_inscrutable_dma0",
+        "id": "act_inscrutable_mdj6",
         "name": "Inscrutable",
         "actionType": "trait",
         "descriptionHtml": "<p>No magic can observe the sphinx remotely or detect its thoughts without its permission. Wisdom (Insight) checks made to ascertain its intentions or sincerity are made with Disadvantage.</p>",
@@ -1054,7 +1062,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5y7d",
+        "id": "act_multiattack_0rj6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sphinx makes two Claw attacks.</p>",
@@ -1074,7 +1082,7 @@
         }
       },
       {
-        "id": "act_claw_vn5p",
+        "id": "act_claw_ixp9",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft, Hit: 12 (2d8 + 3) Slashing damage plus 14 (4d6) Cold damage.</p>",
@@ -1092,11 +1100,13 @@
           "damages": [
             {
               "formula": "2d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "4d6",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1105,7 +1115,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_freezing_glare__recharge_5__ih4w",
+        "id": "act_freezing_glare__recharge_5__1xmq",
         "name": "Freezing Glare (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>con DC 13, each creature in a 30-foot Cone [Area of Effect]. 1 The target has the Restrained condition and repeats the save at the end of its next turn if it is still Restrained, ending the effect on itself on a success. 2 The target has the Petrified condition instead of the Restrained condition, and is turned into an ice statue.</p>",

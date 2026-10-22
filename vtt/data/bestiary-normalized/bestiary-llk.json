@@ -340,7 +340,7 @@
     ],
     "traits": [
       {
-        "id": "act_detect_sentience_a7jx",
+        "id": "act_detect_sentience_34dq",
         "name": "Detect Sentience",
         "actionType": "trait",
         "descriptionHtml": "<p>The brain in a jar can sense the presence and location of any creature within 300 feet of it that has an Intelligence of 3 or higher, regardless of interposing barriers, unless the creature is protected by a mind blank spell.</p>",
@@ -360,7 +360,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_veep",
+        "id": "act_magic_resistance_czlu",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The brain in a jar has advantage on saving throws against spells and other magical effects.</p>",
@@ -382,7 +382,7 @@
     ],
     "actions": [
       {
-        "id": "act_mind_blast__recharge_5__e2fi",
+        "id": "act_mind_blast__recharge_5__s4gu",
         "name": "Mind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The brain in a jar magically emits psychic energy in a 60-foot cone. Each creature in that area must succeed on a DC 15 Intelligence saving throw or take 13 (2d8 + 4) psychic damage and be stunned for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -403,7 +403,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -543,7 +544,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_xsih",
+        "id": "act_magic_resistance_olrz",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The clockwork kraken has advantage on saving throws against spells and other magical effects.</p>",
@@ -563,7 +564,7 @@
         }
       },
       {
-        "id": "act_independent_tentacles_1c51",
+        "id": "act_independent_tentacles_g2nz",
         "name": "Independent Tentacles",
         "actionType": "trait",
         "descriptionHtml": "<p>The clockwork kraken has eight tentacles, each of which is treated as a Medium creature, moves independently on the construct's turn, and has a flying speed of 40 feet. The clockwork kraken's senses operate through its tentacles as well as its main body. Each tentacle can be attacked independently, with damage dealt to tentacles applied to the clockwork kraken's hit point total. A tentacle is destroyed if it takes more than 20 damage.</p><p>Reducing the construct to three or fewer tentacles reduces its attacks accordingly. A clockwork kraken can regrow any destroyed tentacles at the end of a long rest.</p>",
@@ -586,7 +587,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xtkf",
+        "id": "act_multiattack_x663",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The clockwork kraken makes four tentacle slam attacks.</p>",
@@ -606,7 +607,7 @@
         }
       },
       {
-        "id": "act_tentacle_slam_1sza",
+        "id": "act_tentacle_slam_vigm",
         "name": "Tentacle Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage.</p>",
@@ -624,7 +625,8 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -768,7 +770,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_coffin_imprisonment_zg8w",
+        "id": "act_coffin_imprisonment_l6d8",
         "name": "Coffin Imprisonment",
         "actionType": "trait",
         "descriptionHtml": "<p>Ctenmiir is imprisoned within a magical iron coffin mounted atop animated golem legs. Ctenmiir's coffin has a speed of 30 feet and a climbing speed of 10 feet, and protects the vampire from sunlight even as it prevents him from escaping his servitude.</p>",
@@ -788,7 +790,7 @@
         }
       },
       {
-        "id": "act_shapechanger_ksbk",
+        "id": "act_shapechanger_rj17",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>If Ctenmiir isn't in sunlight or running water, it can use its action to polymorph into a Tiny bat or a Medium cloud of mist, or back into its true form.</p><p>While in bat form, Ctenmiir can't speak, its walking speed is 5 feet, and it has a flying speed of 30 feet. Its statistics, other than its size and speed, are unchanged. Anything it is wearing transforms with it, but nothing it is carrying does. It reverts to its true form if it dies.</p><p>While in mist form, Ctenmiir can't take any actions, speak, or manipulate objects. It is weightless, has a flying speed of 20 feet, can hover, and can enter a hostile creature's space and stop there. In addition, if air can pass through a space, the mist can do so without squeezing, and it can't pass through water. It has advantage on Strength, Dexterity, and Constitution saving throws, and it is immune to all nonmagical damage, except the damage it takes from sunlight.</p>",
@@ -810,7 +812,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__3l33",
+        "id": "act_legendary_resistance__3_day__qtmf",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Ctenmiir fails a saving throw, it can choose to succeed instead.</p>",
@@ -830,7 +832,7 @@
         }
       },
       {
-        "id": "act_misty_escape_84bv",
+        "id": "act_misty_escape_yubn",
         "name": "Misty Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>When it drops to 0 hit points outside its resting place, Ctenmiir transforms into a cloud of mist (as in the Shapechanger trait) instead of falling unconscious, provided that it isn't in sunlight or running water. If it can't transform, it is destroyed.</p><p>While it has 0 hit points in mist form, it can't revert to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it reverts to its vampire form. It is then paralyzed until it regains at least 1 hit point. After spending 1 hour in its resting place with 0 hit points, it regains 1 hit point.</p>",
@@ -851,7 +853,7 @@
         }
       },
       {
-        "id": "act_regeneration_j8q0",
+        "id": "act_regeneration_kpz9",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>Ctenmiir regains 20 hit points at the start of its turn if it has at least 1 hit point and isn't in sunlight or running water. If the vampire takes radiant damage or damage from Holy Water (Flask), this trait doesn't function at the start of the vampire's next turn.</p>",
@@ -871,7 +873,7 @@
         }
       },
       {
-        "id": "act_spider_climb_2ndf",
+        "id": "act_spider_climb_00zm",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>Ctenmiir can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -891,7 +893,7 @@
         }
       },
       {
-        "id": "act_vampire_weaknesses_rhi0",
+        "id": "act_vampire_weaknesses_ayij",
         "name": "Vampire Weaknesses",
         "actionType": "trait",
         "descriptionHtml": "<p>Ctenmiir has the following flaws:</p><ul><li><strong><em>Forbiddance.</em></strong> <p>Ctenmiir can't enter a residence without an invitation from one of the occupants.</p></li><li><strong><em>Harmed by Running Water.</em></strong> <p>Ctenmiir takes 20 acid damage if it ends its turn in running water.</p></li><li><strong><em>Stake to the Heart.</em></strong> <p>If a piercing weapon made of wood is driven into Ctenmiir's heart while the vampire is incapacitated in its resting place, the vampire is paralyzed until the stake is removed.</p></li><li><strong><em>Sunlight Hypersensitivity.</em></strong> <p>Ctenmiir takes 20 radiant damage when it starts its turn in sunlight. While in sunlight, it has disadvantage on attack rolls and ability checks.</p></li></ul>",
@@ -939,7 +941,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__vampire_form_only__v8kq",
+        "id": "act_multiattack__vampire_form_only__kjkw",
         "name": "Multiattack (Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ctenmiir makes two attacks, only one of which can be a bite attack.</p>",
@@ -959,7 +961,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike__vampire_form_only__5asi",
+        "id": "act_unarmed_strike__vampire_form_only__dnqm",
         "name": "Unarmed Strike (Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 8 (1d8 + 4) bludgeoning damage. Instead of dealing damage, Ctenmiir can grapple the target (escape DC 18).</p>",
@@ -980,14 +982,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite__bat_or_vampire_form_only__l0f6",
+        "id": "act_bite__bat_or_vampire_form_only__yjod",
         "name": "Bite (Bat or Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one willing creature, or a creature that is grappled by Ctenmiir, incapacitated, or restrained. Hit: 7 (1d6 + 4) piercing damage plus 10 (3d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0. A humanoid slain in this way and then buried in the ground rises the following night as a vampire spawn under the vampire's control.</p>",
@@ -1005,18 +1008,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_charm_jero",
+        "id": "act_charm_cz5b",
         "name": "Charm",
         "actionType": "action",
         "descriptionHtml": "<p>Ctenmiir targets one humanoid it can see within 30 feet of it. If the target can see the vampire, the target must succeed on a DC 17 Wisdom saving throw against this magic or be charmed by the vampire. The charmed target regards the vampire as a trusted friend to be heeded and protected. Although the target isn't under the vampire's control, it takes the vampire's requests or actions in the most favorable way it can, and it is a willing target for the vampire's bite attack.</p><p>Each time Ctenmiir or the vampire's companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the vampire is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect.</p>",
@@ -1040,7 +1045,7 @@
         }
       },
       {
-        "id": "act_children_of_the_night__1_day__orn6",
+        "id": "act_children_of_the_night__1_day__qycr",
         "name": "Children of the Night (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Ctenmiir magically calls 2d4 swarms of swarm of bats or swarm of rats, provided that the sun isn't up. While outdoors, the vampire can call 3d6 wolf instead. The called creatures arrive in 1d4 rounds, acting as allies of the vampire and obeying its spoken commands. The beasts remain for 1 hour, until the vampire dies, or until the vampire dismisses them as a bonus action.</p>",
@@ -1067,7 +1072,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_wb3i",
+          "id": "act_move_1cqc",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>Ctenmiir moves up to its speed without provoking opportunity attacks.</p>",
@@ -1087,7 +1092,7 @@
           }
         },
         {
-          "id": "act_unarmed_strike_w6rl",
+          "id": "act_unarmed_strike_r6jq",
           "name": "Unarmed Strike",
           "actionType": "legendary",
           "descriptionHtml": "<p>Ctenmiir makes one unarmed strike.</p>",
@@ -1107,7 +1112,7 @@
           }
         },
         {
-          "id": "act_bite__costs_2_actions__y6b1",
+          "id": "act_bite__costs_2_actions__gu30",
           "name": "Bite (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Ctenmiir makes one bite attack.</p>",
@@ -1134,7 +1139,7 @@
     "lairActionsDesc": "",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_ubz1",
+        "id": "act_regional_effect_3xec",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>There's a noticeable increase in the populations of bats, rats, and wolves in the region.</p>",
@@ -1154,7 +1159,7 @@
         }
       },
       {
-        "id": "act_regional_effect_h19a",
+        "id": "act_regional_effect_4lju",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Plants within 500 feet of the lair wither, and their stems and branches become twisted and thorny.</p>",
@@ -1174,7 +1179,7 @@
         }
       },
       {
-        "id": "act_regional_effect_xfb4",
+        "id": "act_regional_effect_dfzq",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Shadows cast within 500 feet of the lair seem abnormally gaunt and sometimes move as though alive.</p>",
@@ -1194,7 +1199,7 @@
         }
       },
       {
-        "id": "act_regional_effect_fej9",
+        "id": "act_regional_effect_rf1r",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>A creeping fog clings to the ground within 500 feet of the vampire's lair. The fog occasionally takes eerie forms, such as grasping claws and writhing serpents.</p>",
@@ -1325,7 +1330,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_special_equipment_428d",
+        "id": "act_special_equipment_dftb",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>East Wind is armed with a longsword that is a polymorph blade.</p>",
@@ -1345,7 +1350,7 @@
         }
       },
       {
-        "id": "act_unarmored_defense_yzf0",
+        "id": "act_unarmored_defense_g8sp",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While East Wind is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
@@ -1367,7 +1372,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_w2ct",
+        "id": "act_multiattack_4zwo",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>East Wind makes three unarmed strikes or three dart attacks.</p>",
@@ -1387,7 +1392,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_esl7",
+        "id": "act_unarmed_strike_4q4x",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. If the target is a creature, East Wind can choose one of the following additional effects:</p><ul><li>The target must succeed on a DC 13 Strength saving throw or drop one item it is holding (adept's choice).</li><li>The target must succeed on a DC 13 Dexterity saving throw or be knocked prone.</li><li>The target must succeed on a DC 13 Constitution saving throw or be stunned until the end of East Wind's next turn.</li></ul>",
@@ -1416,14 +1421,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dart_w1ki",
+        "id": "act_dart_2oaz",
         "name": "Dart",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
@@ -1441,14 +1447,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_polymorph_blade_av6g",
+        "id": "act_polymorph_blade_9xqa",
         "name": "Polymorph Blade",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 7 (1d8 + 3) piercing damage. If East Wind rolls a 20 on the attack roll, the target must succeed on a DC 15 Wisdom saving throw or suffer the effects of a polymorph spell.</p>",
@@ -1469,7 +1476,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1479,7 +1487,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_missile_4c8n",
+        "id": "act_deflect_missile_s6s1",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, East Wind deflects the missile. The damage it takes from the attack is reduced by 1d10 + 3. If the damage is reduced to 0, the adept catches the missile if it's small enough to hold in one hand and the adept has a hand free.</p>",
@@ -1829,7 +1837,7 @@
     ],
     "traits": [
       {
-        "id": "act_dark_devotion_nnoz",
+        "id": "act_dark_devotion_waee",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>The monk has advantage on saving throws against being charmed or frightened.</p>",
@@ -1851,7 +1859,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rt94",
+        "id": "act_multiattack_8n2e",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The monk makes two melee attacks.</p>",
@@ -1871,7 +1879,7 @@
         }
       },
       {
-        "id": "act_force_pike_ay8g",
+        "id": "act_force_pike_3ace",
         "name": "Force Pike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 40/100 ft., one creature. Hit: 7 (1d10 + 2) force damage. The attack has disadvantage against any target with polished metal armor or shield, and has its ranged halved when firing through smoke or fog.</p>",
@@ -1889,7 +1897,8 @@
           "damages": [
             {
               "formula": "1d10 + 2",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2191,7 +2200,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_ashw",
+        "id": "act_special_equipment_rlgg",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Garret wears a Ring of Warmth (included in his statistics) and wields a Gambler's Blade longsword.</p>",
@@ -2211,7 +2220,7 @@
         }
       },
       {
-        "id": "act_bardic_inspiration__3_day__fwnz",
+        "id": "act_bardic_inspiration__3_day__0y1s",
         "name": "Bardic Inspiration (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Garret can give one chosen creature (other than him) a d6 inspiration die. The chosen creature must be within 60 feet of Garret and able to hear him. Once within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can use the inspiration die after the roll is made but before the DM says whether it succeeds or fails. Once the inspiration die is rolled, it is lost. A creature can have only one inspiration die at a time.</p>",
@@ -2231,7 +2240,7 @@
         }
       },
       {
-        "id": "act_cunning_action_d12u",
+        "id": "act_cunning_action_n03u",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>On each of his turns, Garret can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
@@ -2251,7 +2260,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__pfu2",
+        "id": "act_sneak_attack__1_turn__w221",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>Garret deals an extra 7 (2d6) damage when he hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of Garret that isn't incapacitated and Garret doesn't have disadvantage on the attack roll.</p>",
@@ -2269,7 +2278,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2278,7 +2288,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_37q6",
+        "id": "act_shortsword_er00",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -2296,7 +2306,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2458,7 +2469,7 @@
     ],
     "traits": [
       {
-        "id": "act_unique_programming_1380",
+        "id": "act_unique_programming_4qmi",
         "name": "Unique Programming",
         "actionType": "trait",
         "descriptionHtml": "<p>Gearbox's unique programming allows the modron to function as an Orb of Direction and an Orb of Time, to cast the light cantrip at will, and to grant other characters advantage on Dexterity checks made with thieves' tools and on ability checks made to identify or operate mechanical or laboratory equipment.</p>",
@@ -2478,7 +2489,7 @@
         }
       },
       {
-        "id": "act_axiomatic_mind_n6q2",
+        "id": "act_axiomatic_mind_2vk7",
         "name": "Axiomatic Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>Gearbox can't be compelled to act in a manner contrary to its nature or its instructions.</p>",
@@ -2498,7 +2509,7 @@
         }
       },
       {
-        "id": "act_disintegration_fpid",
+        "id": "act_disintegration_guh5",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If Gearbox dies, its body disintegrates into dust, leaving behind its weapons and anything else it was carrying.</p>",
@@ -2520,7 +2531,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_7gk3",
+        "id": "act_dagger_wfum",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
@@ -2538,14 +2549,15 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_javelin_tylm",
+        "id": "act_javelin_7tz0",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +2 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 3 (1d6) piercing damage.</p>",
@@ -2563,7 +2575,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2707,7 +2720,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_petrifying_gaze_645i",
+        "id": "act_petrifying_gaze_du7i",
         "name": "Petrifying Gaze",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature that can see the medusa's eyes starts its turn within 30 feet of the medusa, the medusa can force it to make a DC 14 Constitution saving throw if the medusa isn't incapacitated and can see the creature. If the saving throw fails by 5 or more, the creature is instantly petrified. Otherwise, a creature that fails the save begins to turn to glass and is restrained. The restrained creature must repeat the saving throw at the end of its next turn, becoming petrified on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the greater restoration spell or other magic.</p><p>Unless surprised, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see the medusa until the start of its next turn, when it can avert its eyes again. If the creature looks at the medusa in the meantime, it must immediately make the save.</p><p>If the medusa sees itself reflected on a polished surface within 30 feet of it and in an area of bright light, the medusa is, due to its curse, affected by its own gaze.</p>",
@@ -2734,7 +2747,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vxfd",
+        "id": "act_multiattack_ujfc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Gloine makes either three melee attacks—one with its snake hair and two with its shortsword—or two ranged attacks with its longbow.</p>",
@@ -2754,7 +2767,7 @@
         }
       },
       {
-        "id": "act_snake_hair_wycb",
+        "id": "act_snake_hair_t335",
         "name": "Snake Hair",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 4 (1d4 + 2) piercing damage plus 14 (4d6) poison damage.</p>",
@@ -2772,18 +2785,20 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "4d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword_ryef",
+        "id": "act_shortsword_4rxw",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -2801,14 +2816,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_s2qh",
+        "id": "act_longbow_lo4r",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage plus 7 (2d6) poison damage.</p>",
@@ -2826,11 +2842,13 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3204,7 +3222,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_coqs",
+        "id": "act_special_equipment_ebl9",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Mary wears Bracers of Defense and a Ring of Protection, and carries a Deck of Several Things</p>",
@@ -3224,7 +3242,7 @@
         }
       },
       {
-        "id": "act_fey_presence__recharges_after_a_short_rest__0npq",
+        "id": "act_fey_presence__recharges_after_a_short_rest__wsqu",
         "name": "Fey Presence (Recharges after a Short Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>Mary can cause each creature within 10 feet of her to succeed on a DC 12 Wisdom saving throw or become charmed or frightened by her (Mary's choice) until the end of her next turn.</p>",
@@ -3247,7 +3265,7 @@
         }
       },
       {
-        "id": "act_fey_ancestry_39cf",
+        "id": "act_fey_ancestry_ki4w",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Mary has advantage on saving throws against being charmed, and magic can't put her to sleep.</p>",
@@ -3269,7 +3287,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_7h0b",
+        "id": "act_quarterstaff_x2ls",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage.</p>",
@@ -3287,7 +3305,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3437,7 +3456,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_vorpal_claws_byck",
+        "id": "act_vorpal_claws_9t6n",
         "name": "Vorpal Claws",
         "actionType": "trait",
         "descriptionHtml": "<p>Shards of a vorpal sword once broken against the devil replace its claws. A successful DC 12 Intelligence (Arcana) or Wisdom (Perception) check identifies them as such. When the devil rolls a 20 on an attack roll with a claw, the target is decapitated. (At your option, the attack can instead deal an extra 6d8 slashing damage.) A target is immune to this effect if it is immune to slashing damage, has legendary actions, doesn't have or need a head, or if you decide that the target is too large for its head to be cut off by the devil's claws. If removed, the shards lose their magical powers.</p>",
@@ -3458,14 +3477,15 @@
           "damages": [
             {
               "formula": "6d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_teleportation_bracelets_q81u",
+        "id": "act_teleportation_bracelets_8a51",
         "name": "Teleportation Bracelets",
         "actionType": "trait",
         "descriptionHtml": "<p>Local teleportation-field bracelets encircle the devil's arms and tail. These devices allow the Grand Master to make its claw and sting attacks remotely, though still on the devil's turn and using its actions.</p>",
@@ -3485,7 +3505,7 @@
         }
       },
       {
-        "id": "act_devil_s_sight_p8xc",
+        "id": "act_devil_s_sight_t9sk",
         "name": "Devil's Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>Magical darkness doesn't impede the Grand Master's darkvision.</p>",
@@ -3505,7 +3525,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_ewnb",
+        "id": "act_magic_resistance_o7pa",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Grand Master has advantage on saving throws against spells and other magical effects.</p>",
@@ -3527,7 +3547,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_htxn",
+        "id": "act_multiattack_k2s7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Grand Master makes three attacks: two with its claws and one with its sting.</p>",
@@ -3547,7 +3567,7 @@
         }
       },
       {
-        "id": "act_claw_d36o",
+        "id": "act_claw_zxo8",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 8 (1d8 + 4) slashing damage.</p>",
@@ -3565,14 +3585,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sting_sktt",
+        "id": "act_sting_obg1",
         "name": "Sting",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) piercing damage plus 17 (5d6) poison damage, and the target must succeed on a DC 14 Constitution saving throw or become poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -3593,11 +3614,13 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "5d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3753,7 +3776,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dark_devotion_pjfc",
+        "id": "act_dark_devotion_8sc4",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>The monk has advantage on saving throws against being charmed or frightened.</p>",
@@ -3775,7 +3798,7 @@
     ],
     "actions": [
       {
-        "id": "act_hooked_polearm_g7qv",
+        "id": "act_hooked_polearm_zf2h",
         "name": "Hooked Polearm",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) piercing damage. If the target is a Medium or smaller creature, it is grappled (escape DC 10). Until this grapple ends, the monk cannot use its polearm on another target.</p>",
@@ -3796,7 +3819,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3920,7 +3944,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_transparent_5yof",
+        "id": "act_transparent_krc8",
         "name": "Transparent",
         "actionType": "trait",
         "descriptionHtml": "<p>Even when an ooze-folk is in plain sight, it takes a DC 12 Wisdom (Perception) check to spot an ooze-folk that has neither moved nor attacked. A creature that tries to enter the ooze-folk's space while unaware of the ooze-folk is surprised by the ooze-folk.</p>",
@@ -3943,7 +3967,7 @@
         }
       },
       {
-        "id": "act_fragile_bones_qljo",
+        "id": "act_fragile_bones_sruz",
         "name": "Fragile Bones",
         "actionType": "trait",
         "descriptionHtml": "<p>For each 5 damage it takes, the ooze-folk's walking speed is reduced by 5 feet.</p>",
@@ -3965,7 +3989,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_lnoj",
+        "id": "act_multiattack_4pnx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ooze folk makes one glass longsword attack and one pseudopod attack.</p>",
@@ -3985,7 +4009,7 @@
         }
       },
       {
-        "id": "act_glass_longsword_e20n",
+        "id": "act_glass_longsword_nkli",
         "name": "Glass Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 6 (1d8 + 2) slashing damage. If a 1 is rolled on an attack roll with a glass longsword, it shatters and can no longer be used.</p>",
@@ -4003,14 +4027,15 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_pseudopod_agdj",
+        "id": "act_pseudopod_bjmv",
         "name": "Pseudopod",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6 + 2) acid damage. </p>",
@@ -4028,7 +4053,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4155,7 +4181,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_special_equipment_u3dv",
+        "id": "act_special_equipment_1vj1",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>West Wind is armed with a longsword that is a blade of the medusa.</p>",
@@ -4175,7 +4201,7 @@
         }
       },
       {
-        "id": "act_unarmored_defense_7oqi",
+        "id": "act_unarmored_defense_of5o",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While West Wind is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
@@ -4197,7 +4223,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_v82q",
+        "id": "act_multiattack_0nve",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>West Wind makes three unarmed strikes or three dart attacks.</p>",
@@ -4217,7 +4243,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_qekx",
+        "id": "act_unarmed_strike_k5lg",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. If the target is a creature, West Wind can choose one of the following additional effects:</p><ul><li>The target must succeed on a DC 13 Strength saving throw or drop one item it is holding (adept's choice).</li><li>The target must succeed on a DC 13 Dexterity saving throw or be knocked prone.</li><li>The target must succeed on a DC 13 Constitution saving throw or be stunned until the end of West Wind's next turn.</li></ul>",
@@ -4246,14 +4272,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dart_7kyq",
+        "id": "act_dart_w9u4",
         "name": "Dart",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
@@ -4271,14 +4298,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_blade_of_the_medusa_eec5",
+        "id": "act_blade_of_the_medusa_tmj3",
         "name": "Blade of the Medusa",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 7 (1d8 + 3) piercing damage. If West Wind rolls a 20 on the attack roll, the target must succeed on a DC 15 Constitution saving throw or suffer the effects of a flesh to stone spell.</p>",
@@ -4299,7 +4327,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4309,7 +4338,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_missile_f2sf",
+        "id": "act_deflect_missile_6rn3",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, West Wind deflects the missile. The damage it takes from the attack is reduced by 1d10 + 3. If the damage is reduced to 0, the adept catches the missile if it's small enough to hold in one hand and the adept has a hand free.</p>",

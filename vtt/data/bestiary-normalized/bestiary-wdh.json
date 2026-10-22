@@ -104,7 +104,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dwarven_resilience_tw5x",
+        "id": "act_dwarven_resilience_f4y7",
         "name": "Dwarven Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>Ahmaergo has advantage on saving throws against being poisoned.</p>",
@@ -124,7 +124,7 @@
         }
       },
       {
-        "id": "act_indomitable__2_day__mrvd",
+        "id": "act_indomitable__2_day__z3v6",
         "name": "Indomitable (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Ahmaergo can reroll a saving throw that he fails. He must use the new roll.</p>",
@@ -144,7 +144,7 @@
         }
       },
       {
-        "id": "act_second_wind__recharges_after_a_short_or_long_rest__gn63",
+        "id": "act_second_wind__recharges_after_a_short_or_long_rest__ge4l",
         "name": "Second Wind (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Ahmaergo can regain 20 hit points.</p>",
@@ -166,7 +166,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0fmf",
+        "id": "act_multiattack_g39z",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ahmaergo makes three attacks with his greataxe.</p>",
@@ -186,7 +186,7 @@
         }
       },
       {
-        "id": "act_greataxe_uv93",
+        "id": "act_greataxe_i0op",
         "name": "Greataxe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 11 (1d12 + 5) slashing damage, plus 7 (2d6) slashing damage if Ahmaergo has more than half his hit points remaining.</p>",
@@ -204,18 +204,20 @@
           "damages": [
             {
               "formula": "1d12 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heavy_crossbow_mako",
+        "id": "act_heavy_crossbow_vxvv",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 100/400 ft., one target. Hit: 7 (1d10 + 2) piercing damage.</p>",
@@ -233,7 +235,8 @@
           "damages": [
             {
               "formula": "1d10 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -751,7 +754,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_quarterstaff_oeg9",
+        "id": "act_quarterstaff_rurd",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d6 - 1) bludgeoning damage, or 3 (1d8 - 1) bludgeoning damage if used with two hands.</p>",
@@ -769,11 +772,13 @@
           "damages": [
             {
               "formula": "1d6 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -915,7 +920,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_2p4k",
+        "id": "act_amphibious_h52n",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Aurinax can breathe air and water.</p>",
@@ -935,7 +940,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__sltq",
+        "id": "act_legendary_resistance__3_day__vlem",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Aurinax fails a saving throw, it can choose to succeed instead.</p>",
@@ -957,7 +962,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_q410",
+        "id": "act_multiattack_yr9y",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Aurinax can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
@@ -977,7 +982,7 @@
         }
       },
       {
-        "id": "act_bite_7rau",
+        "id": "act_bite_6tof",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 10 ft., one target. Hit: 19 (2d10 + 8) piercing damage.</p>",
@@ -995,14 +1000,15 @@
           "damages": [
             {
               "formula": "2d10 + 8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_ziq8",
+        "id": "act_claw_j0bk",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 5 ft., one target. Hit: 15 (2d6 + 8) slashing damage.</p>",
@@ -1020,14 +1026,15 @@
           "damages": [
             {
               "formula": "2d6 + 8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_je55",
+        "id": "act_tail_25jo",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 15 ft., one target. Hit: 17 (2d8 + 8) bludgeoning damage.</p>",
@@ -1045,14 +1052,15 @@
           "damages": [
             {
               "formula": "2d8 + 8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_frightful_presence_conb",
+        "id": "act_frightful_presence_58fk",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of Aurinax's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 21 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
@@ -1075,7 +1083,7 @@
         }
       },
       {
-        "id": "act_breath_weapons__recharge_5__0bs4",
+        "id": "act_breath_weapons__recharge_5__dodz",
         "name": "Breath Weapons (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Aurinax uses one of the following breath weapons.</p><ul><li><strong><em>Fire Breath.</em></strong> <p>Aurinax exhales fire in a 60-foot cone. Each creature in that area must make a DC 21 Dexterity saving throw, taking 66 (12d10) fire damage on a failed save, or half as much damage on a successful one.</p></li><li><strong><em>Weakening Breath.</em></strong> <p>Aurinax exhales gas in a 60-foot cone. Each creature in that area must succeed on a DC 21 Strength saving throw or have disadvantage on Strength-based attack rolls, Strength checks, and Strength saving throws for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li></ul>",
@@ -1112,14 +1120,15 @@
           "damages": [
             {
               "formula": "12d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_change_shape_71me",
+        "id": "act_change_shape_qcak",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>Aurinax magically polymorphs into a humanoid or beast that has a challenge rating no higher than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the dragon's choice).</p><p>In a new form, Aurinax retains its alignment, hit points, Hit Dice, ability to speak, proficiencies, Legendary Resistance, lair actions, and Intelligence, Wisdom, and Charisma scores, as well as this action. Its statistics and capabilities are otherwise replaced by those of the new form, except any class features or legendary actions of that form.</p>",
@@ -1147,7 +1156,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_v16d",
+          "id": "act_detect_goav",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>Aurinax makes a Wisdom (Perception) check.</p>",
@@ -1167,7 +1176,7 @@
           }
         },
         {
-          "id": "act_tail_attack_oofq",
+          "id": "act_tail_attack_4bhp",
           "name": "Tail Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>Aurinax makes a tail attack.</p>",
@@ -1187,7 +1196,7 @@
           }
         },
         {
-          "id": "act_wing_attack__costs_2_actions__53o8",
+          "id": "act_wing_attack__costs_2_actions__grlm",
           "name": "Wing Attack (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Aurinax beats its wings. Each creature within 10 feet of the dragon must succeed on a DC 22 Dexterity saving throw or take 15 (2d6 + 8) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed.</p>",
@@ -1208,7 +1217,8 @@
             "damages": [
               {
                 "formula": "2d6 + 8",
-                "type": "Bludgeoning"
+                "type": "Bludgeoning",
+                "saveRider": true
               }
             ],
             "recharge": null
@@ -1219,7 +1229,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_dragon_glimpses_dg3d",
+        "id": "act_dragon_glimpses_hgws",
         "name": "Dragon Glimpses",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon glimpses the future, so it has advantage on attack rolls, ability checks, and saving throws until initiative count 20 on the next round.</p>",
@@ -1239,7 +1249,7 @@
         }
       },
       {
-        "id": "act_beguiling_glow_h10x",
+        "id": "act_beguiling_glow_4dau",
         "name": "Beguiling Glow",
         "actionType": "lair",
         "descriptionHtml": "<p>Warm light fills a 30-foot-radius sphere centered on the dragon; each creature in that area must succeed on a DC 15 Wisdom saving throw or be charmed by the dragon until initiative count 20 on the next round.</p>",
@@ -1266,7 +1276,7 @@
     "lairActionsDesc": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects; the dragon can't use the same effect two rounds in a row:",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_tw6x",
+        "id": "act_regional_effect_y6f4",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Whenever a creature that can understand a language sleeps or enters a state of trance or reverie within 6 miles of the dragon's lair, the dragon can establish telepathic contact with that creature and converse with it in its dreams. The creature remembers its conversation with the dragon upon waking.</p>",
@@ -1286,7 +1296,7 @@
         }
       },
       {
-        "id": "act_regional_effect_0bx7",
+        "id": "act_regional_effect_0tqx",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Banks of beautiful, opalescent mist manifest within 6 miles of the dragon's lair. The mist doesn't obscure anything. It assumes haunting forms when evil creatures are near the dragon or other non-evil creatures in the mist, warning such creatures of the danger.</p>",
@@ -1306,7 +1316,7 @@
         }
       },
       {
-        "id": "act_regional_effect_5dpz",
+        "id": "act_regional_effect_577f",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Gems and pearls within 1 mile of the dragon's lair sparkle and gleam, shedding dim light in a 5-foot radius.</p>",
@@ -1326,7 +1336,7 @@
         }
       },
       {
-        "id": "act_additional_regional_effects_pk8z",
+        "id": "act_additional_regional_effects_pqqb",
         "name": "Additional Regional Effects",
         "actionType": "regional",
         "descriptionHtml": "<p>Any of these effects might appear in the area around a gold dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Beneficent Trail.</em></strong> <p>Within 10 miles of the dragon's lair, small runes in the shape of a gold dragon appear to creatures in great need, marking a subtle trail leading to the dragon's lair.</p></li><li><strong><em>Emanation of Justice.</em></strong> <p>Creatures that spend a year within 6 miles of the dragon's lair value fairness and justice over their personal feelings.</p></li><li><strong><em>Liar's Revelation.</em></strong> <p>Within 6 miles of the dragon's lair, any creature attempting to tell a deliberate lie must succeed on a DC 15 Charisma saving throw or find itself accidentally revealing the truth it was attempting to conceal. The first time a creature fails this saving throw, it is immune to this effect for 24 hours.</p></li></ul>",
@@ -1852,7 +1862,7 @@
     ],
     "traits": [
       {
-        "id": "act_control_water_63uc",
+        "id": "act_control_water_ws0n",
         "name": "Control Water",
         "actionType": "trait",
         "descriptionHtml": "<p>At will, Avi can control the flow and shape of water in a 5-foot cube, or cause the water to freeze for up to 1 hour.</p>",
@@ -1872,7 +1882,7 @@
         }
       },
       {
-        "id": "act_divine_eminence_d7wl",
+        "id": "act_divine_eminence_363d",
         "name": "Divine Eminence",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Avi can expend a spell slot to cause its melee weapon attacks to magically deal an extra 10 (3d6) radiant damage to a target on a hit. This benefit lasts until the end of the turn. If the priest expends a spell slot of 2nd level or higher, the extra damage increases by 1d6 for each level above 1st.</p>",
@@ -1890,11 +1900,13 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1903,7 +1915,7 @@
     ],
     "actions": [
       {
-        "id": "act_mace_eggv",
+        "id": "act_mace_rjo7",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage.</p>",
@@ -1921,7 +1933,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2040,7 +2053,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_u3yz",
+        "id": "act_keen_smell_esxm",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -2062,7 +2075,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_3yew",
+        "id": "act_bite_cnos",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 piercing damage.</p>",
@@ -2546,7 +2559,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_q03l",
+        "id": "act_special_equipment_taon",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Barnibus carries a wand of magic detection. (spell included in spell list below but does not use a slot when cast from the wand)</p>",
@@ -2568,7 +2581,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_sam1",
+        "id": "act_dagger_95t6",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +2 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 2 (1d4) piercing damage.</p>",
@@ -2586,7 +2599,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2706,7 +2720,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_dekr",
+        "id": "act_club_jqm7",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -2724,7 +2738,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2862,7 +2877,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cunning_action_plsb",
+        "id": "act_cunning_action_a9z7",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>On each of her turns, the Black Viper can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
@@ -2882,7 +2897,7 @@
         }
       },
       {
-        "id": "act_evasion_tl35",
+        "id": "act_evasion_24ts",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Black Viper is subjected to an effect that allows her to make a Dexterity saving throw to take only half damage, she instead takes no damage if she succeeds on the saving throw, and only half damage if she fails. She can't use this trait if she's incapacitated.</p>",
@@ -2902,7 +2917,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__16yl",
+        "id": "act_sneak_attack__1_turn__ilxe",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>The Black Viper deals an extra 14 (4d6) damage when she hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the Black Viper that isn't incapacitated and the Black Viper doesn't have disadvantage on the attack roll.</p>",
@@ -2920,7 +2935,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2929,7 +2945,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_mfol",
+        "id": "act_multiattack_cymn",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Black Viper makes three attacks with her rapier.</p>",
@@ -2949,7 +2965,7 @@
         }
       },
       {
-        "id": "act_rapier_ca8e",
+        "id": "act_rapier_90c9",
         "name": "Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 4) piercing damage.</p>",
@@ -2967,14 +2983,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow_87af",
+        "id": "act_hand_crossbow_gif4",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +7 to hit, range 30/120 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
@@ -2992,7 +3009,8 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3002,7 +3020,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_z99k",
+        "id": "act_uncanny_dodge_7k8s",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>The Black Viper halves the damage that she takes from an attack that hits her. She must be able to see the attacker.</p>",
@@ -3136,7 +3154,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blinded_s0bw",
+        "id": "act_blinded_ypnk",
         "name": "Blinded",
         "actionType": "trait",
         "descriptionHtml": "<p>The troll is wearing an eyeless helm, and is blinded.</p>",
@@ -3156,7 +3174,7 @@
         }
       },
       {
-        "id": "act_keen_smell_vow5",
+        "id": "act_keen_smell_mmd0",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The troll has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -3176,7 +3194,7 @@
         }
       },
       {
-        "id": "act_regeneration_0ejh",
+        "id": "act_regeneration_4xup",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The troll regains 10 hit points at the start of its turn. If the troll takes acid or fire damage, this trait doesn't function at the start of the troll's next turn. The troll dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
@@ -3198,7 +3216,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rn9y",
+        "id": "act_multiattack_2595",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The troll makes three attacks: one with its bite and two with its claws.</p>",
@@ -3218,7 +3236,7 @@
         }
       },
       {
-        "id": "act_bite_dtk0",
+        "id": "act_bite_njye",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
@@ -3236,14 +3254,15 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_qwl2",
+        "id": "act_claw_rs32",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
@@ -3261,7 +3280,8 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3434,7 +3454,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_fxgz",
+        "id": "act_shapechanger_0qvx",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>Bonnie can use its action to polymorph into a Small or Medium humanoid it has seen, or back into its true form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -3454,7 +3474,7 @@
         }
       },
       {
-        "id": "act_ambusher_qlme",
+        "id": "act_ambusher_7c70",
         "name": "Ambusher",
         "actionType": "trait",
         "descriptionHtml": "<p>In the first round of a combat, Bonnie has advantage on attack rolls against any creature it surprised.</p>",
@@ -3474,7 +3494,7 @@
         }
       },
       {
-        "id": "act_surprise_attack_ovxu",
+        "id": "act_surprise_attack_8cm2",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If Bonnie surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 10 (3d6) damage from the attack.</p>",
@@ -3492,7 +3512,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3501,7 +3522,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2pq1",
+        "id": "act_multiattack_nimz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Bonnie makes two melee attacks.</p>",
@@ -3521,7 +3542,7 @@
         }
       },
       {
-        "id": "act_slam_5yyv",
+        "id": "act_slam_oxda",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage.</p>",
@@ -3539,14 +3560,15 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_read_thoughts_yc9s",
+        "id": "act_read_thoughts_ahjh",
         "name": "Read Thoughts",
         "actionType": "action",
         "descriptionHtml": "<p>Bonnie magically reads the surface thoughts of one creature within 60 feet of it. The effect can penetrate barriers, but 3 feet of wood or dirt, 2 feet of stone, 2 inches of metal, or a thin sheet of lead blocks it. While the target is in range, the doppelganger can continue reading its thoughts, as long as the doppelganger's concentration isn't broken (as if concentration on a spell). While reading the target's mind, the doppelganger has advantage on Wisdom (Insight) and Charisma (Deception, Intimidation, and Persuasion) checks against the target.</p>",
@@ -4130,7 +4152,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_hsor",
+        "id": "act_fey_ancestry_3kzk",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Davil has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
@@ -4152,7 +4174,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_xryr",
+        "id": "act_dagger_ks0m",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage. Or Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -4170,11 +4192,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4292,7 +4316,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_beak_jrjq",
+        "id": "act_beak_t6ha",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
@@ -4310,7 +4334,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4435,7 +4460,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_l3s4",
+        "id": "act_shapechanger_1w8a",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic can use its action to polymorph into an object or back into its true, amorphous form. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -4455,7 +4480,7 @@
         }
       },
       {
-        "id": "act_adhesive__object_form_only__gqpk",
+        "id": "act_adhesive__object_form_only__w90e",
         "name": "Adhesive (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic adheres to anything that touches it. A Huge or smaller creature adhered to the mimic is also grappled by it (escape DC 13). Ability checks made to escape this grapple have disadvantage.</p>",
@@ -4478,7 +4503,7 @@
         }
       },
       {
-        "id": "act_false_appearance__object_form_only__lpyv",
+        "id": "act_false_appearance__object_form_only__1zk4",
         "name": "False Appearance (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>While the mimic remains motionless, it is indistinguishable from an ordinary object.</p>",
@@ -4498,7 +4523,7 @@
         }
       },
       {
-        "id": "act_grappler_idvr",
+        "id": "act_grappler_177x",
         "name": "Grappler",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic has advantage on attack rolls against any creature grappled by it.</p>",
@@ -4520,7 +4545,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_btst",
+        "id": "act_multiattack_ini3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mimic can make three attacks; two with its pseudopods and one with its bite</p>",
@@ -4540,7 +4565,7 @@
         }
       },
       {
-        "id": "act_pseudopod_on7r",
+        "id": "act_pseudopod_7nau",
         "name": "Pseudopod",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. If the mimic is in object form, the target is subjected to its Adhesive trait.</p>",
@@ -4558,14 +4583,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_5ez2",
+        "id": "act_bite_fyts",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage plus 4 (1d8) acid damage.</p>",
@@ -4583,11 +4609,13 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4831,7 +4859,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_777q",
+        "id": "act_fey_ancestry_ctax",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>The drow has advantage on saving throws against being charmed, and magic can't put the drow to sleep.</p>",
@@ -4851,7 +4879,7 @@
         }
       },
       {
-        "id": "act_gunslinger_2u0x",
+        "id": "act_gunslinger_hnhf",
         "name": "Gunslinger",
         "actionType": "trait",
         "descriptionHtml": "<p>Being within 5 feet of a hostile creature or attacking at long range doesn't impose disadvantage on the drow's ranged attack rolls with a pistol. In addition, the drow ignores Cover and Cover when making ranged attacks with a pistol.</p>",
@@ -4871,7 +4899,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_j7ep",
+        "id": "act_sunlight_sensitivity_6isp",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the drow has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -4893,7 +4921,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4u2x",
+        "id": "act_multiattack_gcri",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The drow makes two shortsword attacks.</p>",
@@ -4913,7 +4941,7 @@
         }
       },
       {
-        "id": "act_shortsword_c4z9",
+        "id": "act_shortsword_2tsl",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
@@ -4931,14 +4959,15 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_poisonous_pistol_5gri",
+        "id": "act_poisonous_pistol_vt3v",
         "name": "Poisonous Pistol",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 30/90 ft., one target. Hit: 9 (1d10 + 4) piercing damage plus 11 (2d10) poison damage.</p>",
@@ -4956,11 +4985,13 @@
           "damages": [
             {
               "formula": "1d10 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5092,7 +5123,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_special_equipment_uwdy",
+        "id": "act_special_equipment_9t1z",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Durnan wields a Greatsword of Sharpness called Grimvault. He wears boots of striding and springing, elven chain, and a ring of spell turning.</p>",
@@ -5112,7 +5143,7 @@
         }
       },
       {
-        "id": "act_indomitable__recharges_after_a_long_rest__ear7",
+        "id": "act_indomitable__recharges_after_a_long_rest__n9y3",
         "name": "Indomitable (Recharges after a Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>Durnan can reroll a saving throw that he fails. He must use the new roll.</p>",
@@ -5132,7 +5163,7 @@
         }
       },
       {
-        "id": "act_spell_turning_befe",
+        "id": "act_spell_turning_2fu3",
         "name": "Spell Turning",
         "actionType": "trait",
         "descriptionHtml": "<p>While wearing his ring of spell turning, Durnan has advantage on saving throws against any spell that targets only him (not in an area of effect). If Durnan rolls a 20 for the save and the spell is 7th level or lower, the spell has no effect on him and instead targets the caster, using the slot level, spell save DC, attack bonus, and spellcasting ability of the caster.</p>",
@@ -5154,7 +5185,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_fzcd",
+        "id": "act_multiattack_p4mf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Durnan makes four melee weapon attacks.</p>",
@@ -5174,7 +5205,7 @@
         }
       },
       {
-        "id": "act_grimvault_kbhk",
+        "id": "act_grimvault_w8vu",
         "name": "Grimvault",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage. If the target is an object, the hit instead deals 16 slashing damage. If the target is a creature and Durnan rolls a 20 on the d20 for the attack roll, the target takes an extra 14 slashing damage, and Durnan rolls another d20. On a roll of 20, he lops off one of the target's limbs, or some other part of its body if it is limbless.</p>",
@@ -5192,14 +5223,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_double_crossbow_usv9",
+        "id": "act_double_crossbow_oe6x",
         "name": "Double Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 60/240 ft., one target. Hit: 13 (2d10 + 2) piercing damage.</p>",
@@ -5217,7 +5249,8 @@
           "damages": [
             {
               "formula": "2d10 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5506,7 +5539,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_viyh",
+        "id": "act_multiattack_aofd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Embric makes three melee attacks: two with its scimitar and one with its dagger. Or the captain makes two ranged attacks with its daggers.</p>",
@@ -5526,7 +5559,7 @@
         }
       },
       {
-        "id": "act_scimitar_kh65",
+        "id": "act_scimitar_qla1",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.</p>",
@@ -5544,14 +5577,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_6wa6",
+        "id": "act_dagger_dfzr",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
@@ -5569,7 +5603,8 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5579,7 +5614,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_v1dj",
+        "id": "act_parry_nrqo",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Embric adds 2 to its AC against one melee attack that would hit it. To do so, the captain must see the attacker and be wielding a melee weapon.</p>",
@@ -5710,7 +5745,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_03i7",
+        "id": "act_club_am0n",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -5728,7 +5763,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6015,7 +6051,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_dagger_ao4q",
+        "id": "act_dagger_mz7o",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +2 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 2 (1d4) piercing damage.</p>",
@@ -6033,7 +6069,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6389,7 +6426,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_quarterstaff_0kxm",
+        "id": "act_quarterstaff_8ekv",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit (+4 to hit with shillelagh), reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, 4 (1d8) bludgeoning damage if wielded with two hands, or 6 (1d8 + 2) bludgeoning damage with shillelagh.</p>",
@@ -6407,15 +6444,18 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6536,7 +6576,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_0rsw",
+        "id": "act_keen_sight_4zoq",
         "name": "Keen Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The falcon has advantage on Wisdom (Perception) checks that rely on sight.</p>",
@@ -6558,7 +6598,7 @@
     ],
     "actions": [
       {
-        "id": "act_talons_d98a",
+        "id": "act_talons_ixxi",
         "name": "Talons",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1 slashing damage.</p>",
@@ -6815,7 +6855,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_4pdv",
+        "id": "act_fey_ancestry_pfv1",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Fel'rekt has advantage on saving throws against being charmed, and magic can't put the drow to sleep.</p>",
@@ -6835,7 +6875,7 @@
         }
       },
       {
-        "id": "act_gunslinger_ufey",
+        "id": "act_gunslinger_fsg9",
         "name": "Gunslinger",
         "actionType": "trait",
         "descriptionHtml": "<p>Being within 5 feet of a hostile creature or attacking at long range doesn't impose disadvantage on Fel'rekt's ranged attack rolls with a pistol. In addition, the drow ignores Cover and Cover when making ranged attacks with a pistol.</p>",
@@ -6855,7 +6895,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_la0i",
+        "id": "act_sunlight_sensitivity_5r13",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Fel'rekt has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -6877,7 +6917,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_82ui",
+        "id": "act_multiattack_nd3v",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Fel'rekt makes two shortsword attacks.</p>",
@@ -6897,7 +6937,7 @@
         }
       },
       {
-        "id": "act_shortsword_3by9",
+        "id": "act_shortsword_s3j1",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
@@ -6915,14 +6955,15 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_poisonous_pistol_93br",
+        "id": "act_poisonous_pistol_v879",
         "name": "Poisonous Pistol",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 30/90 ft., one target. Hit: 9 (1d10 + 4) piercing damage plus 11 (2d10) poison damage.</p>",
@@ -6940,11 +6981,13 @@
           "damages": [
             {
               "formula": "1d10 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7064,7 +7107,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_mfla",
+        "id": "act_club_60gb",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -7082,7 +7125,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7214,7 +7258,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_antimagic_susceptibility_8ji5",
+        "id": "act_antimagic_susceptibility_pk8v",
         "name": "Antimagic Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>The staff is incapacitated while in the area of an antimagic field. If targeted by dispel magic, the staff must succeed on a Constitution saving throw against the caster's spell save DC or fall unconscious for 1 minute.</p>",
@@ -7234,7 +7278,7 @@
         }
       },
       {
-        "id": "act_false_appearance_6en2",
+        "id": "act_false_appearance_le99",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the staff remains motionless and isn't flying, it is indistinguishable from a normal staff.</p>",
@@ -7256,7 +7300,7 @@
     ],
     "actions": [
       {
-        "id": "act_knife_zoer",
+        "id": "act_knife_q2f9",
         "name": "Knife",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
@@ -7274,7 +7318,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7402,7 +7447,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_lance_p8at",
+        "id": "act_lance_qfay",
         "name": "Lance",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit (with disadvantage against a target within 5 ft.), reach 10 ft., one target. Hit: 8 (1d12 + 2) piercing damage, or 11 (1d12 + 5) piercing damage while mounted.</p>",
@@ -7420,18 +7465,20 @@
           "damages": [
             {
               "formula": "1d12 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d12 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_o216",
+        "id": "act_dagger_zqkm",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage. Or Ranged Weapon Attack: +4 to hit, range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -7449,18 +7496,20 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_feather_fall_gr74",
+        "id": "act_feather_fall_wpus",
         "name": "Feather Fall",
         "actionType": "action",
         "descriptionHtml": "<p>The rider wears a magic ring with which it can cast the feather fall spell on itself once as a reaction to falling. After the spell is cast, the ring becomes nonmagical.</p>",
@@ -8015,7 +8064,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_dagger_3rk9",
+        "id": "act_dagger_c33o",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -8033,7 +8082,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8327,7 +8377,7 @@
     ],
     "traits": [
       {
-        "id": "act_relentless_endurance_9bgv",
+        "id": "act_relentless_endurance_q1oz",
         "name": "Relentless Endurance",
         "actionType": "trait",
         "descriptionHtml": "<p>When reduced to 0 hit points, Grum'shar drops to 1 hit point instead. He can only do this once per long rest.</p>",
@@ -8349,7 +8399,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_qepi",
+        "id": "act_dagger_vm7y",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) piercing damage. Or Ranged Weapon Attack: +2 to hit, range 20/60 ft., one target. Hit: 2 (1d4) piercing damage.</p>",
@@ -8367,11 +8417,13 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8658,7 +8710,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_2mkk",
+        "id": "act_club_yjzu",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -8676,7 +8728,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -9143,7 +9196,7 @@
     ],
     "traits": [
       {
-        "id": "act_evasion_vxed",
+        "id": "act_evasion_fnqo",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If Hlam is subjected to an effect that allows him to make a Dexterity saving throw to take only half damage, he instead takes no damage if he succeeds on the saving throw, and only half damage if he fails. He can't use this trait if he's incapacitated.</p>",
@@ -9163,7 +9216,7 @@
         }
       },
       {
-        "id": "act_magic_attacks_0nen",
+        "id": "act_magic_attacks_k1me",
         "name": "Magic Attacks",
         "actionType": "trait",
         "descriptionHtml": "<p>Hlam's unarmed strikes are magical.</p>",
@@ -9183,7 +9236,7 @@
         }
       },
       {
-        "id": "act_unarmored_defense_kpn7",
+        "id": "act_unarmored_defense_ww87",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While Hlam is wearing no armor and wielding no shield, his AC includes his Wisdom modifier.</p>",
@@ -9205,7 +9258,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ta1z",
+        "id": "act_multiattack_f5tn",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Hlam attacks three times using his unarmed strike, darts, or both.</p>",
@@ -9225,7 +9278,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_tgcj",
+        "id": "act_unarmed_strike_ng47",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 12 (1d10 + 7) bludgeoning, magic damage. If the target is a creature, Hlam can choose one of the following additional effects:</p><p>The target must succeed on a DC 18 Strength saving throw or drop one item it is holding (Hlam's choice).</p><p>The target must succeed on a DC 18 Dexterity saving throw or be knocked prone.</p><p>The target must succeed on a DC 18 Constitution saving throw or be stunned until the end of Hlam's next turn.</p>",
@@ -9249,14 +9302,15 @@
           "damages": [
             {
               "formula": "1d10 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dart_gfe7",
+        "id": "act_dart_j0af",
         "name": "Dart",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +12 to hit, range 20/60 ft., one target. Hit: 9 (1d4 + 7) piercing damage.</p>",
@@ -9274,14 +9328,15 @@
           "damages": [
             {
               "formula": "1d4 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_quivering_palm___recharge__ml1m",
+        "id": "act_quivering_palm___recharge__ysqj",
         "name": "Quivering Palm {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one creature. Hit: The target must make a DC 18 Constitution saving throw. On a failed save, the target is reduced to 0 hit points. On a successful save, the target takes 55 (10d10) necrotic damage.</p>",
@@ -9302,14 +9357,15 @@
           "damages": [
             {
               "formula": "10d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wholeness_of_body__recharges_after_a_long_rest__mwpm",
+        "id": "act_wholeness_of_body__recharges_after_a_long_rest__zeb0",
         "name": "Wholeness of Body (Recharges after a Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Hlam regains 60 hit points.</p>",
@@ -9332,7 +9388,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_missile_4wr5",
+        "id": "act_deflect_missile_s5r6",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, Hlam deflects the missile. The damage he takes from the attack is reduced by 1d10 + 27. If the damage is reduced to 0, Hlam catches the missile if it's small enough to hold in one hand and he has a hand free.</p>",
@@ -9352,7 +9408,7 @@
         }
       },
       {
-        "id": "act_slow_fall_21ed",
+        "id": "act_slow_fall_jfi5",
         "name": "Slow Fall",
         "actionType": "reaction",
         "descriptionHtml": "<p>Hlam reduces the bludgeoning damage he takes from a fall by 100.</p>",
@@ -9377,7 +9433,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_quick_step_046s",
+          "id": "act_quick_step_g98p",
           "name": "Quick Step",
           "actionType": "legendary",
           "descriptionHtml": "<p>Hlam moves up to his speed without provoking opportunity attacks.</p>",
@@ -9397,7 +9453,7 @@
           }
         },
         {
-          "id": "act_unarmed_strike__costs_2_actions__u4xw",
+          "id": "act_unarmed_strike__costs_2_actions__bd17",
           "name": "Unarmed Strike (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Hlam makes one unarmed strike.</p>",
@@ -9417,7 +9473,7 @@
           }
         },
         {
-          "id": "act_invisibility__costs_3_actions__08yf",
+          "id": "act_invisibility__costs_3_actions__5twc",
           "name": "Invisibility (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Hlam becomes invisible until the end of his next turn. The effect ends if Hlam attacks or casts a spell.</p>",
@@ -9558,7 +9614,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_indomitable__2_day__2ts0",
+        "id": "act_indomitable__2_day__8y64",
         "name": "Indomitable (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Hrabbaz can reroll a saving throw that he fails. He must use the new roll.</p>",
@@ -9578,7 +9634,7 @@
         }
       },
       {
-        "id": "act_relentless_endurance__recharges_after_a_long_rest__x60u",
+        "id": "act_relentless_endurance__recharges_after_a_long_rest__rw7s",
         "name": "Relentless Endurance (Recharges after a Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>When Hrabbaz is reduced to 0 hit points but not killed outright, he drops to 1 hit point instead.</p>",
@@ -9600,7 +9656,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_mw5r",
+        "id": "act_multiattack_0qcu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Hrabbaz makes three attacks with his morningstar.</p>",
@@ -9620,7 +9676,7 @@
         }
       },
       {
-        "id": "act_morningstar_07js",
+        "id": "act_morningstar_jha8",
         "name": "Morningstar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 9 (1d8 + 5) piercing damage, plus 3 (1d6) piercing damage if Hrabbaz has more than half his hit points remaining.</p>",
@@ -9638,11 +9694,13 @@
           "damages": [
             {
               "formula": "1d8 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -10409,7 +10467,7 @@
     ],
     "traits": [
       {
-        "id": "act_dwarven_resilience_oiav",
+        "id": "act_dwarven_resilience_6o3y",
         "name": "Dwarven Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>Istrid has advantage on saving throws against being poisoned.</p>",
@@ -10431,7 +10489,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kaua",
+        "id": "act_multiattack_lhe0",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Istrid makes two melee attacks.</p>",
@@ -10451,7 +10509,7 @@
         }
       },
       {
-        "id": "act_maul_qmm9",
+        "id": "act_maul_dg6g",
         "name": "Maul",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 8 (2d6 + 1) bludgeoning damage.</p>",
@@ -10469,14 +10527,15 @@
           "damages": [
             {
               "formula": "2d6 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_treasure_sense__3_day__l7xc",
+        "id": "act_treasure_sense__3_day__zixh",
         "name": "Treasure Sense (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Istrid magically pinpoints precious metals and stones, such as coins and gems, within 60 feet of her.</p>",
@@ -10621,7 +10680,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_special_equipment_9nj6",
+        "id": "act_special_equipment_z4gj",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Jalester carries a badge of the Watch.</p>",
@@ -10641,7 +10700,7 @@
         }
       },
       {
-        "id": "act_second_wind__recharges_after_a_short_or_long_rest__7tto",
+        "id": "act_second_wind__recharges_after_a_short_or_long_rest__bgmc",
         "name": "Second Wind (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Jalester can regain 16 (1d10 + 11) hit points.</p>",
@@ -10663,7 +10722,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_piyj",
+        "id": "act_multiattack_typh",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Jalester makes two weapon attacks.</p>",
@@ -10683,7 +10742,7 @@
         }
       },
       {
-        "id": "act_longsword_8phv",
+        "id": "act_longsword_2es0",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage when used with two hands.</p>",
@@ -10701,18 +10760,20 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_us38",
+        "id": "act_dagger_b6jk",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage. Or Ranged Weapon Attack: +4 to hit, range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -10730,11 +10791,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -10744,7 +10807,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_riposte_3ypd",
+        "id": "act_riposte_dcmi",
         "name": "Riposte",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature that Jalester can see misses him with a melee attack, he can use his reaction to make a melee weapon attack against that creature. On a hit, the target takes an extra 4 damage from the weapon.</p>",
@@ -11137,7 +11200,7 @@
     ],
     "traits": [
       {
-        "id": "act_dark_devotion_6d8v",
+        "id": "act_dark_devotion_k8j0",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>Jandar has advantage on saving throws against being charmed or frightened.</p>",
@@ -11159,7 +11222,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_p5sz",
+        "id": "act_multiattack_qiui",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Jandar makes two melee attacks.</p>",
@@ -11179,7 +11242,7 @@
         }
       },
       {
-        "id": "act_dagger_7ul6",
+        "id": "act_dagger_x3fu",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 4 (1d4 + 2) piercing damage. Or Ranged Weapon Attack: +4 to hit, range 20/60 ft., one creature. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -11197,11 +11260,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -11455,7 +11520,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_pa4y",
+        "id": "act_special_equipment_vr7w",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Jarlaxle wears +3 leather armor, a hat of disguise, a bracer of flying daggers, a cloak of invisibility, a knave's eye patch, and a ring of truth telling. He wields a +3 rapier and carries a portable hole and a wand of web. His hat is adorned with a feather of diatryma summoning.</p>",
@@ -11475,7 +11540,7 @@
         }
       },
       {
-        "id": "act_evasion_yvmc",
+        "id": "act_evasion_eq4w",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If he is subjected to an effect that allows him to make a Dexterity saving throw to take only half damage, Jarlaxle instead takes no damage if he succeeds on the saving throw, and only half damage if he fails. He can't use this trait if he's incapacitated.</p>",
@@ -11495,7 +11560,7 @@
         }
       },
       {
-        "id": "act_fey_ancestry_ryuo",
+        "id": "act_fey_ancestry_22us",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Jarlaxle has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
@@ -11515,7 +11580,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__1_day__ux3l",
+        "id": "act_legendary_resistance__1_day__rj3s",
         "name": "Legendary Resistance (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Jarlaxle fails a saving throw, he can choose to succeed instead.</p>",
@@ -11535,7 +11600,7 @@
         }
       },
       {
-        "id": "act_master_attuner_oaer",
+        "id": "act_master_attuner_xyzc",
         "name": "Master Attuner",
         "actionType": "trait",
         "descriptionHtml": "<p>Jarlaxle can attune to up to five magic items, and he can attune to magic items that normally require attunement by a sorcerer, warlock, or wizard.</p>",
@@ -11555,7 +11620,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__jlfk",
+        "id": "act_sneak_attack__1_turn__r3yr",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>Jarlaxle deals an extra 24 (7d6) damage when he hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of Jarlaxle's that isn't incapacitated and Jarlaxle doesn't have disadvantage on the attack roll.</p>",
@@ -11573,14 +11638,15 @@
           "damages": [
             {
               "formula": "7d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_suave_defense_y3h8",
+        "id": "act_suave_defense_zis0",
         "name": "Suave Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While Jarlaxle is wearing light or no armor and wielding no shield, his AC includes his Charisma modifier.</p>",
@@ -11600,7 +11666,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_0jzm",
+        "id": "act_sunlight_sensitivity_kwc7",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>When not wearing his knave's eye patch, Jarlaxle has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -11622,7 +11688,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tbnx",
+        "id": "act_multiattack_b88w",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Jarlaxle makes three attacks with his +3 rapier or two attacks with daggers created by his bracer of flying daggers.</p>",
@@ -11642,7 +11708,7 @@
         }
       },
       {
-        "id": "act__3_rapier_biq6",
+        "id": "act__3_rapier_n85z",
         "name": "+3 Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 5 ft., one target. Hit: 13 (1d8 + 9) piercing damage.</p>",
@@ -11660,14 +11726,15 @@
           "damages": [
             {
               "formula": "1d8 + 9",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_flying_dagger_s77b",
+        "id": "act_flying_dagger_rg9g",
         "name": "Flying Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +11 to hit, range 20/60 ft., one target. Hit: 8 (1d4 + 6) piercing damage.</p>",
@@ -11685,7 +11752,8 @@
           "damages": [
             {
               "formula": "1d4 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -11699,7 +11767,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_quick_step_yonu",
+          "id": "act_quick_step_hush",
           "name": "Quick Step",
           "actionType": "legendary",
           "descriptionHtml": "<p>Jarlaxle moves up to his speed without provoking opportunity attacks.</p>",
@@ -11719,7 +11787,7 @@
           }
         },
         {
-          "id": "act_attack__costs_2_actions__o349",
+          "id": "act_attack__costs_2_actions__fhr6",
           "name": "Attack (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Jarlaxle makes one attack with his +3 rapier or two attacks with daggers created by his bracer of flying daggers.</p>",
@@ -12372,7 +12440,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_xifz",
+        "id": "act_special_equipment_jcq9",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Kaevja carries a yellow elemental gem. As an action she can break the gem releasing an earth elemental under her command.</p>",
@@ -12394,7 +12462,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_3m8a",
+        "id": "act_dagger_p31g",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -12412,7 +12480,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -12812,7 +12881,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_rfx8",
+        "id": "act_fey_ancestry_55tq",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Kalain has advantage on saving throws against being charmed and magic can't put her to sleep.</p>",
@@ -12832,7 +12901,7 @@
         }
       },
       {
-        "id": "act_art_imitates_life__3_day__wqjm",
+        "id": "act_art_imitates_life__3_day__g59k",
         "name": "Art Imitates Life (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Kalain touches one of her paintings and causes its subject to spring forth, becoming a creature of that kind provided its CR is 3 or lower. The creature appears in an unoccupied space within 5 feet of the painting, which becomes blank. The creature is friendly toward Kalain and hostile toward all others. It rolls initiative to determine when it acts. It disappears after 1 minute, when it is reduced to 0 hit points, or when Kalain dies or falls unconscious.</p>",
@@ -12852,7 +12921,7 @@
         }
       },
       {
-        "id": "act_taunt__2_day__bhcg",
+        "id": "act_taunt__2_day__zj36",
         "name": "Taunt (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Kalain can use a bonus action on her turn to target one creature within 30 feet of it. If the target can hear Kalain, the target must succeed on a DC 12 Charisma saving throw or have disadvantage on ability checks, attack rolls, and saving throws until the start of Kalain's next turn.</p>",
@@ -12877,7 +12946,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_c7t6",
+        "id": "act_shortsword_eevn",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -12895,14 +12964,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_h954",
+        "id": "act_shortbow_8w0e",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -12920,7 +12990,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -13164,7 +13235,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_zhdb",
+        "id": "act_fey_ancestry_i44o",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Krebbyg has advantage on saving throws against being charmed, and magic can't put the drow to sleep.</p>",
@@ -13184,7 +13255,7 @@
         }
       },
       {
-        "id": "act_gunslinger_rmww",
+        "id": "act_gunslinger_cqbn",
         "name": "Gunslinger",
         "actionType": "trait",
         "descriptionHtml": "<p>Being within 5 feet of a hostile creature or attacking at long range doesn't impose disadvantage on Krebbyg's ranged attack rolls with a pistol. In addition, the drow ignores Cover and Cover when making ranged attacks with a pistol.</p>",
@@ -13204,7 +13275,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_ubgf",
+        "id": "act_sunlight_sensitivity_trkt",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Krebbyg has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -13226,7 +13297,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6w6l",
+        "id": "act_multiattack_mibw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Krebbyg makes two shortsword attacks.</p>",
@@ -13246,7 +13317,7 @@
         }
       },
       {
-        "id": "act_shortsword_d51l",
+        "id": "act_shortsword_qixb",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage.</p>",
@@ -13264,14 +13335,15 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_poisonous_pistol_a8o0",
+        "id": "act_poisonous_pistol_u4z6",
         "name": "Poisonous Pistol",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 30/90 ft., one target. Hit: 9 (1d10 + 4) piercing damage plus 11 (2d10) poison damage.</p>",
@@ -13289,11 +13361,13 @@
           "damages": [
             {
               "formula": "1d10 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -13428,7 +13502,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_97tg",
+        "id": "act_false_appearance_0q3w",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the gargoyle remains motionless, it is indistinguishable from an inanimate statue.</p>",
@@ -13450,7 +13524,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hn9a",
+        "id": "act_multiattack_jm5n",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The gargoyle makes two attacks: one with its bite and one with its claws.</p>",
@@ -13470,7 +13544,7 @@
         }
       },
       {
-        "id": "act_bite_ymb9",
+        "id": "act_bite_yzr4",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -13488,14 +13562,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_recw",
+        "id": "act_claws_yzch",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage.</p>",
@@ -13513,7 +13588,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -14370,7 +14446,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_1iop",
+        "id": "act_special_equipment_rwf1",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Laeral wears a white robe of the archmagi (accounted for in her statistics). She wields a flame tongue longsword.</p>",
@@ -14390,7 +14466,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_2mfz",
+        "id": "act_magic_resistance_51uc",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>While wearing her robe of the archmagi, Laeral has advantage on saving throws against spells and other magical effects.</p>",
@@ -14412,7 +14488,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_j1kt",
+        "id": "act_multiattack_h1kt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Laeral makes three attacks with her silver hair and flame tongue, in any combination. She can cast one of her cantrips or 1st-level spells before or after making these attacks.</p>",
@@ -14432,7 +14508,7 @@
         }
       },
       {
-        "id": "act_silver_hair_3per",
+        "id": "act_silver_hair_h9sw",
         "name": "Silver Hair",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 5 ft., one target. Hit: 7 (2d6) force damage, and the target must succeed on a DC 19 Constitution saving throw or be paralyzed for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -14453,14 +14529,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_flame_tongue_20o9",
+        "id": "act_flame_tongue_5ezq",
         "name": "Flame Tongue",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage plus 7 (2d6) fire damage, or 6 (1d10 + 1) slashing damage plus 7 (2d6) fire damage when used with two hands.</p>",
@@ -14478,26 +14555,30 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spellfire__recharges_after_a_long_rest__p9x1",
+        "id": "act_spellfire__recharges_after_a_long_rest__gq4i",
         "name": "Spellfire (Recharges after a Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Magical, heatless, silver fire harmlessly erupts from Laeral and surrounds her until she is incapacitated or until she uses an action to quench it. She gains one of the following benefits of her choice, which lasts until the silver fire ends:</p><ul><li>She can breathe underwater.</li><li>She can survive without food and water.</li><li>She is immune to magic that would ascertain her thoughts, truthfulness, alignment, or creature type.</li><li>She gains resistance to cold damage, and she is unharmed by temperatures as low as -50 degrees Fahrenheit.</li></ul><p>While the silver fire is present, she has the following additional action options:</p><ul><li>Cast the cure wounds spell. The target regains 1d8 + 5 hit points. After Laeral takes this action, roll a d6. On a roll of 1, the silver fire disappears.</li><li>Cast the revivify spell without material components. After Laeral takes this action, roll a d6. On a roll of 1-2, the silver fire disappears.</li><li>Release a 60-foot line of silver fire that is 5 feet wide or a 30-foot cone of silver fire. Objects in the area that aren't being worn or carried take 26 (4d12) fire damage. Each creature in the area must succeed on a DC 21 Dexterity saving throw, taking 26 (4d12) fire damage on a failed save, or half as much damage on a successful one. After Laeral takes this action, roll a d6. On a roll of 1-3, the silver fire disappears.</li></ul>",
@@ -14536,11 +14617,13 @@
           "damages": [
             {
               "formula": "4d12",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             },
             {
               "formula": "4d12",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -14922,7 +15005,7 @@
     ],
     "traits": [
       {
-        "id": "act_dark_devotion_6i18",
+        "id": "act_dark_devotion_1gmq",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>Laiba has advantage on saving throws against being charmed or frightened.</p>",
@@ -14944,7 +15027,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7rfi",
+        "id": "act_multiattack_qq5b",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Laiba makes two melee attacks.</p>",
@@ -14964,7 +15047,7 @@
         }
       },
       {
-        "id": "act_dagger_jj62",
+        "id": "act_dagger_u1b8",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 4 (1d4 + 2) piercing damage. Or Ranged Weapon Attack: +4 to hit, range 20/60 ft., one creature. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -14982,11 +15065,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -15525,7 +15610,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_dagger_qnma",
+        "id": "act_dagger_f10p",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -15543,7 +15628,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -15679,7 +15765,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fey_ancestry_pxb5",
+        "id": "act_fey_ancestry_6hy3",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Umbero has advantage on saving throws against being charmed and magic can't put him to sleep.</p>",
@@ -15701,7 +15787,7 @@
     ],
     "actions": [
       {
-        "id": "act_rapier_626s",
+        "id": "act_rapier_7e9b",
         "name": "Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) piercing damage.</p>",
@@ -15719,7 +15805,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -15729,7 +15816,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_qt8i",
+        "id": "act_parry_6qgs",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>The noble adds 2 to its AC against one melee attack that would hit it. To do so, the noble must see the attacker and be wielding a melee weapon.</p>",
@@ -16279,7 +16366,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_hxp9",
+        "id": "act_special_equipment_a2y6",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Manafret wears a teleporter ring.</p>",
@@ -16301,7 +16388,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_wbcw",
+        "id": "act_dagger_lszm",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -16319,7 +16406,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -17173,7 +17261,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_i9se",
+        "id": "act_special_equipment_ripb",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Manshoon wears a black robe of the archmagi and wields a staff of power (both accounted for in his statistics). Roll 2d10 to determine how many charges the staff has remaining.</p>",
@@ -17193,7 +17281,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_7yh4",
+        "id": "act_magic_resistance_nsip",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>While wearing his robe of the archmagi, Manshoon has advantage on saving throws against spells and other magical effects.</p>",
@@ -17215,7 +17303,7 @@
     ],
     "actions": [
       {
-        "id": "act_metal_fist_dbbt",
+        "id": "act_metal_fist_un4q",
         "name": "Metal Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) bludgeoning damage.</p>",
@@ -17233,14 +17321,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_staff_of_power_9r6b",
+        "id": "act_staff_of_power_a7jc",
         "name": "Staff of Power",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage, or 6 (1d8 + 2) bludgeoning damage when used with two hands. Manshoon can expend 1 of the staff's charges to deal an extra 3 (1d6) force damage on a hit.</p>",
@@ -17258,15 +17347,18 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -17915,7 +18007,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_metal_fist_e3ff",
+        "id": "act_metal_fist_btm2",
         "name": "Metal Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) bludgeoning damage.</p>",
@@ -17933,7 +18025,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -18324,7 +18417,7 @@
     ],
     "traits": [
       {
-        "id": "act_song_of_rest_n3th",
+        "id": "act_song_of_rest_1a75",
         "name": "Song of Rest",
         "actionType": "trait",
         "descriptionHtml": "<p>Mattrim can perform a song while taking a short rest. Any ally who hears the song regains an extra 1d6 hit points if it spends any Hit Dice to regain hit points at the end of that rest. The bard can confer this benefit on itself as well.</p>",
@@ -18344,7 +18437,7 @@
         }
       },
       {
-        "id": "act_taunt__2_day__bdua",
+        "id": "act_taunt__2_day__s1zq",
         "name": "Taunt (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Mattrim can use a bonus action on its turn to target one creature within 30 feet of it. If the target can hear the bard, the target must succeed on a DC 12 Charisma saving throw or have disadvantage on ability checks, attack rolls, and saving throws until the start of the bard's next turn.</p>",
@@ -18369,7 +18462,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_60m8",
+        "id": "act_shortsword_nqos",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -18387,14 +18480,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_bswo",
+        "id": "act_shortbow_z9ac",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -18412,7 +18506,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -18532,7 +18627,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_hooves_jnvc",
+        "id": "act_hooves_h32b",
         "name": "Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (2d4 + 4) bludgeoning damage.</p>",
@@ -18550,7 +18645,8 @@
           "damages": [
             {
               "formula": "2d4 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -18672,7 +18768,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_slam_nxlg",
+        "id": "act_slam_ceif",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 2 (1d3) piercing damage, and the bird is destroyed by the impact.</p>",
@@ -18690,7 +18786,8 @@
           "damages": [
             {
               "formula": "1d3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -19044,7 +19141,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_kuxn",
+        "id": "act_fey_ancestry_u5bz",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Melannor has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
@@ -19066,7 +19163,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_rm2i",
+        "id": "act_quarterstaff_7khg",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit or Melee Weapon Attack +4 to hit with shillelagh, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 6 (1d8 + 2) bludgeoning damage with shillelagh or if wielded with two hands.</p>",
@@ -19084,11 +19181,13 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -19221,7 +19320,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_special_equipment_56w4",
+        "id": "act_special_equipment_ev4i",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Meloon wields Azuredge but can't attune to it, and thus gains none of its benefits.</p>",
@@ -19241,7 +19340,7 @@
         }
       },
       {
-        "id": "act_indomitable__2_day__w0cc",
+        "id": "act_indomitable__2_day__m948",
         "name": "Indomitable (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Meloon can reroll a saving throw that he fails. He must use the new roll.</p>",
@@ -19261,7 +19360,7 @@
         }
       },
       {
-        "id": "act_second_wind__recharges_after_a_short_or_long_rest__215z",
+        "id": "act_second_wind__recharges_after_a_short_or_long_rest__gal6",
         "name": "Second Wind (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Meloon can regain 20 hit points.</p>",
@@ -19283,7 +19382,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0ou8",
+        "id": "act_multiattack_wrcm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Meloon makes four attacks with Azuredge.</p>",
@@ -19303,7 +19402,7 @@
         }
       },
       {
-        "id": "act_azuredge_jqyj",
+        "id": "act_azuredge_jetj",
         "name": "Azuredge",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +9 to hit, reach 5 ft., one target. Hit: 11 (1d12 + 5) slashing damage.</p>",
@@ -19321,7 +19420,8 @@
           "damages": [
             {
               "formula": "1d12 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -19459,7 +19559,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_special_equipment_4eh6",
+        "id": "act_special_equipment_hh4t",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Mirt wears bracers of defense and a ring of regeneration. He wields a +1 longsword and a +1 dagger.</p>",
@@ -19479,7 +19579,7 @@
         }
       },
       {
-        "id": "act_brute_115n",
+        "id": "act_brute_nhxs",
         "name": "Brute",
         "actionType": "trait",
         "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when Mirt hits with it (included in the attacks below).</p>",
@@ -19499,7 +19599,7 @@
         }
       },
       {
-        "id": "act_evasion_og9j",
+        "id": "act_evasion_kwqz",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If he is subjected to an effect that allows him to make a Dexterity saving throw to take only half damage, Mirt instead takes no damage if he succeeds on the saving throw, and only half damage if he fails. He can't use this trait if he's incapacitated.</p>",
@@ -19519,7 +19619,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__t5oq",
+        "id": "act_sneak_attack__1_turn__xfoi",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>Mirt deals an extra 14 (4d6) damage when he hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of Mirt's that isn't incapacitated and Mirt doesn't have disadvantage on the attack roll.</p>",
@@ -19537,7 +19637,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -19546,7 +19647,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1rha",
+        "id": "act_multiattack_p915",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Mirt makes three attacks: two with his +1 longsword and one with his +1 dagger.</p>",
@@ -19566,7 +19667,7 @@
         }
       },
       {
-        "id": "act__1_longsword_c6i4",
+        "id": "act__1_longsword_x3cq",
         "name": "+1 Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) slashing damage, or 16 (2d10 + 5) slashing damage when used with two hands.</p>",
@@ -19584,18 +19685,20 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d10 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act__1_dagger_31np",
+        "id": "act__1_dagger_utjj",
         "name": "+1 Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 10 (2d4 + 5) piercing damage. Or Ranged Weapon Attack: +9 to hit, range 20/60 ft., one target. Hit: 7 (1d4 + 5) piercing damage.</p>",
@@ -19613,11 +19716,13 @@
           "damages": [
             {
               "formula": "2d4 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -19627,7 +19732,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_6bn8",
+        "id": "act_parry_kse8",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Mirt adds 2 to his AC against one melee attack that would hit him. To do so, Mirt must see the attacker and be wielding a melee weapon.</p>",
@@ -20328,7 +20433,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_bz2a",
+        "id": "act_fey_ancestry_0d8d",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Nar'l has advantage on saving throws against being charmed, and magic can't put the drow to sleep.</p>",
@@ -20348,7 +20453,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_xjr8",
+        "id": "act_sunlight_sensitivity_eujd",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Nar'l has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -20368,7 +20473,7 @@
         }
       },
       {
-        "id": "act_special_equipment_1vwd",
+        "id": "act_special_equipment_3exe",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Nar'l carries a vial containing three doses of eyescratch, a contact poison. A creature that comes into contact with the poison must succeed on a DC 14 Constitution saving throw or be poisoned for 1 hour and blinded while poisoned in this way. A lesser restoration spell or similar magic ends the effect.</p>",
@@ -20393,7 +20498,7 @@
     ],
     "actions": [
       {
-        "id": "act_staff_pfdl",
+        "id": "act_staff_2532",
         "name": "Staff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d6 - 1) bludgeoning damage, or 3 (1d8 - 1) bludgeoning damage if used with two hands, plus 3 (1d6) poison damage.</p>",
@@ -20411,22 +20516,25 @@
           "damages": [
             {
               "formula": "1d6 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_summon_demon__1_day__trbg",
+        "id": "act_summon_demon__1_day__kxl2",
         "name": "Summon Demon (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Nar'l magically summons a quasit, or attempts to summon a shadow demon with a 50% chance of success. The summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 10 minutes, until it or its summoner dies, or until its summoner dismisses it as an action.</p>",
@@ -20796,7 +20904,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_u5dj",
+        "id": "act_magic_resistance_6aa6",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Nihiloor has advantage on saving throws against spells and other magical effects.</p>",
@@ -20818,7 +20926,7 @@
     ],
     "actions": [
       {
-        "id": "act_tentacles_478j",
+        "id": "act_tentacles_6zy6",
         "name": "Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one creature. Hit: 15 (2d10 + 4) psychic damage. If the target is Medium or smaller, it is grappled (escape DC 15) and must succeed on a DC 15 Intelligence saving throw or be stunned until this grapple ends.</p>",
@@ -20839,14 +20947,15 @@
           "damages": [
             {
               "formula": "2d10 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_extract_brain_aok4",
+        "id": "act_extract_brain_3lxc",
         "name": "Extract Brain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one incapacitated humanoid grappled by Nihiloor. Hit: The target takes 55 (10d10) piercing damage. If this damage reduces the target to 0 hit points, the mind flayer kills the target by extracting and devouring its brain.</p>",
@@ -20864,14 +20973,15 @@
           "damages": [
             {
               "formula": "10d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mind_blast__recharge_5__93i9",
+        "id": "act_mind_blast__recharge_5__iyfw",
         "name": "Mind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Nihiloor magically emits psychic energy in a 60-foot cone. Each creature in that area must succeed on a DC 15 Intelligence saving throw or take 22 (4d8 + 4) psychic damage and be stunned for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -20892,7 +21002,8 @@
           "damages": [
             {
               "formula": "4d8 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -21036,7 +21147,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_t7s6",
+        "id": "act_magic_resistance_5b04",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The nimblewright has advantage on saving throws against spells and other magical effects.</p>",
@@ -21056,7 +21167,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_sai7",
+        "id": "act_magic_weapons_v27r",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The nimblewright's weapon attacks are magical.</p>",
@@ -21076,7 +21187,7 @@
         }
       },
       {
-        "id": "act_repairable_pr0f",
+        "id": "act_repairable_xyh7",
         "name": "Repairable",
         "actionType": "trait",
         "descriptionHtml": "<p>As long as it has at least 1 hit point remaining, the nimblewright regains 1 hit point when a mending spell is cast on it.</p>",
@@ -21096,7 +21207,7 @@
         }
       },
       {
-        "id": "act_sure_footed_hrpc",
+        "id": "act_sure_footed_npke",
         "name": "Sure-Footed",
         "actionType": "trait",
         "descriptionHtml": "<p>The nimblewright has advantage on Strength and Dexterity saving throws made against effects that would knock it prone.</p>",
@@ -21118,7 +21229,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ftay",
+        "id": "act_multiattack_m9ig",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The nimblewright makes three attacks: two with its rapier and one with its dagger.</p>",
@@ -21138,7 +21249,7 @@
         }
       },
       {
-        "id": "act_rapier_f5yz",
+        "id": "act_rapier_ihh1",
         "name": "Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) piercing damage.</p>",
@@ -21156,14 +21267,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_xmqp",
+        "id": "act_dagger_qnjf",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d4 + 4) piercing damage. Or Ranged Weapon Attack: +6 to hit, range 20/60 ft., one target. Hit: 6 (1d4 + 4) piercing damage.</p>",
@@ -21181,11 +21293,13 @@
           "damages": [
             {
               "formula": "1d4 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -21195,7 +21309,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_42ft",
+        "id": "act_parry_w3ii",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>The nimblewright adds 2 to its AC against one melee attack that would hit it. To do so, the nimblewright must see the attacker and be wielding a melee weapon.</p>",
@@ -21332,7 +21446,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_0upe",
+        "id": "act_pack_tactics_qpq5",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>Noska has advantage on an attack roll against a creature if at least one of Noska's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -21352,7 +21466,7 @@
         }
       },
       {
-        "id": "act_dwarven_resilience_fhre",
+        "id": "act_dwarven_resilience_dvu0",
         "name": "Dwarven Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>Noska has advantage on saving throws against poison and resistance to poison damage.</p>",
@@ -21372,7 +21486,7 @@
         }
       },
       {
-        "id": "act_difficult_climber_8jzq",
+        "id": "act_difficult_climber_u94i",
         "name": "Difficult Climber",
         "actionType": "trait",
         "descriptionHtml": "<p>Noska has disadvantage on Strength checks made to climb, due to his disability.</p>",
@@ -21394,7 +21508,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_maxy",
+        "id": "act_multiattack_zhu5",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Noska makes two melee attacks.</p>",
@@ -21414,7 +21528,7 @@
         }
       },
       {
-        "id": "act_mace_19hg",
+        "id": "act_mace_bf9l",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6 + 2) bludgeoning damage.</p>",
@@ -21432,14 +21546,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heavy_crossbow_dcu4",
+        "id": "act_heavy_crossbow_5alx",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +2 to hit, range 100/400 ft., one target. Hit: 5 (1d10) piercing damage.</p>",
@@ -21457,7 +21572,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -21862,7 +21978,7 @@
     ],
     "traits": [
       {
-        "id": "act_divine_eminence_2kyq",
+        "id": "act_divine_eminence_1x92",
         "name": "Divine Eminence",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Obaya can expend a spell slot to cause its melee weapon attacks to magically deal an extra 10 (3d6) radiant damage to a target on a hit. This benefit lasts until the end of the turn. If the priest expends a spell slot of 2nd level or higher, the extra damage increases by 1d6 for each level above 1st.</p>",
@@ -21880,11 +21996,13 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -21893,7 +22011,7 @@
     ],
     "actions": [
       {
-        "id": "act_mace_0vx6",
+        "id": "act_mace_xtgh",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage.</p>",
@@ -21911,7 +22029,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -22034,7 +22153,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blood_frenzy_gja7",
+        "id": "act_blood_frenzy_zet2",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>Obliteros has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
@@ -22054,7 +22173,7 @@
         }
       },
       {
-        "id": "act_water_breathing_t46i",
+        "id": "act_water_breathing_phdo",
         "name": "Water Breathing",
         "actionType": "trait",
         "descriptionHtml": "<p>Obliteros can breathe only underwater.</p>",
@@ -22076,7 +22195,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_wo3x",
+        "id": "act_bite_grig",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 22 (3d10 + 6) piercing damage.</p>",
@@ -22094,7 +22213,8 @@
           "damages": [
             {
               "formula": "3d10 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -22222,7 +22342,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_rapier_fpir",
+        "id": "act_rapier_nq1m",
         "name": "Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) piercing damage.</p>",
@@ -22240,7 +22360,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -22250,7 +22371,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_z0ah",
+        "id": "act_parry_m6ce",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Orond adds 2 to its AC against one melee attack that would hit it. To do so, the noble must see the attacker and be wielding a melee weapon.</p>",
@@ -22405,7 +22526,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_devil_s_sight_sndc",
+        "id": "act_devil_s_sight_h6oy",
         "name": "Devil's Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>Magical darkness doesn't impede Osvaldo's darkvision.</p>",
@@ -22425,7 +22546,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_iehb",
+        "id": "act_magic_resistance_4xih",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Osvaldo has advantage on saving throws against spells and other magical effects.</p>",
@@ -22447,7 +22568,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jafz",
+        "id": "act_multiattack_dqkk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Osvaldo makes two attacks with its chains.</p>",
@@ -22467,7 +22588,7 @@
         }
       },
       {
-        "id": "act_chain_i9l1",
+        "id": "act_chain_3ogm",
         "name": "Chain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 11 (2d6 + 4) slashing damage. The target is grappled (escape DC 14) if Osvaldo isn't already grappling a creature. Until this grapple ends, the target is restrained and takes 7 (2d6) piercing damage at the start of each of its turns.</p>",
@@ -22488,18 +22609,20 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_animate_chains__recharges_after_a_short_or_long_rest__pz3z",
+        "id": "act_animate_chains__recharges_after_a_short_or_long_rest__6cw4",
         "name": "Animate Chains (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Up to four chains Osvaldo can see within 60 feet of it magically sprout razor-edged barbs and animate under the devil's control, provided that the chains aren't being worn or carried.</p><p>Each animated chain is an object with AC 20, 20 hit points, resistance to piercing damage, and immunity to psychic and thunder damage. When Osvaldo uses Multiattack on its turn, it can use each animated chain to make one additional chain attack. An animated chain can grapple one creature of its own but can't make attacks while grappling. An animated chain reverts to its inanimate state if reduced to 0 hit points or if the devil is incapacitated or dies.</p>",
@@ -22523,7 +22646,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_unnerving_mask_w7lm",
+        "id": "act_unnerving_mask_fmqt",
         "name": "Unnerving Mask",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature Osvaldo can see starts its turn within 30 feet of the devil, the devil can create the illusion that it looks like one of the creature's departed loved ones or bitter enemies. If the creature can see the devil, it must succeed on a DC 14 Wisdom saving throw or be frightened until the end of its turn.</p>",
@@ -22665,7 +22788,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dwarven_resilience_niek",
+        "id": "act_dwarven_resilience_p6pp",
         "name": "Dwarven Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>Ott has advantage on saving throws against poison and resistance to poison damage.</p>",
@@ -22685,7 +22808,7 @@
         }
       },
       {
-        "id": "act_dark_devotion_eoof",
+        "id": "act_dark_devotion_5c63",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>The cultist has advantage on saving throws against being charmed or frightened.</p>",
@@ -22707,7 +22830,7 @@
     ],
     "actions": [
       {
-        "id": "act_scimitar_o9aw",
+        "id": "act_scimitar_5vni",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one creature. Hit: 4 (1d6 + 1) slashing damage.</p>",
@@ -22725,7 +22848,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -23013,7 +23137,7 @@
     ],
     "traits": [
       {
-        "id": "act_dwarven_resilience_ihpd",
+        "id": "act_dwarven_resilience_pvax",
         "name": "Dwarven Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>The dwarf has advantage on saving throws against poison and resistance to poison damage.</p>",
@@ -23035,7 +23159,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_nwb1",
+        "id": "act_dagger_s289",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) piercing damage. Or Ranged Weapon Attack: +2 to hit, range 20/60 ft., one target. Hit: 2 (1d4) piercing damage.</p>",
@@ -23053,11 +23177,13 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -23730,7 +23856,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_e1pf",
+        "id": "act_special_equipment_zzkz",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Remallia has a Figurine of Wondrous Power, Silver Raven.</p>",
@@ -23750,7 +23876,7 @@
         }
       },
       {
-        "id": "act_fey_ancestry_mmr4",
+        "id": "act_fey_ancestry_znuo",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Remallia has advantage on saving throws against being charmed, and magic can't put her to sleep.</p>",
@@ -23770,7 +23896,7 @@
         }
       },
       {
-        "id": "act_arcane_ward_mug9",
+        "id": "act_arcane_ward_omh0",
         "name": "Arcane Ward",
         "actionType": "trait",
         "descriptionHtml": "<p>Remallia has a magical ward that has 30 hit points. Whenever she takes damage, the ward takes the damage instead. If the ward is reduced to 0 hit points, Remallia takes any remaining damage. When Remallia casts an abjuration spell of 1st level or higher, the ward regains a number of hit points equal to twice the level of the spell. This applies to any of the following spells she casts: alarm, mage armor, shield, arcane lock, counterspell, dispel magic, banishment, stoneskin, globe of invulnerability and symbol.</p>",
@@ -23792,7 +23918,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_4pe7",
+        "id": "act_dagger_hvl8",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -23810,7 +23936,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -23937,7 +24064,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_lightfooted_032b",
+        "id": "act_lightfooted_2jfv",
         "name": "Lightfooted",
         "actionType": "trait",
         "descriptionHtml": "<p>Renaer can take the Dash or Disengage action as a bonus action on each of its turns.</p>",
@@ -23957,7 +24084,7 @@
         }
       },
       {
-        "id": "act_suave_defense_v1sp",
+        "id": "act_suave_defense_9wp7",
         "name": "Suave Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While Renaer is wearing light or no armor and wielding no shield, its AC includes its Charisma modifier.</p>",
@@ -23979,7 +24106,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3x24",
+        "id": "act_multiattack_xb65",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Renaer makes three attacks: one with a dagger and two with its rapier.</p>",
@@ -23999,7 +24126,7 @@
         }
       },
       {
-        "id": "act_dagger_8c7r",
+        "id": "act_dagger_ojdx",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 6 (1d4 + 4) piercing damage.</p>",
@@ -24017,14 +24144,15 @@
           "damages": [
             {
               "formula": "1d4 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rapier_ltkf",
+        "id": "act_rapier_06cq",
         "name": "Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) piercing damage.</p>",
@@ -24042,7 +24170,8 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -24586,7 +24715,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_breath_weapon_973q",
+        "id": "act_breath_weapon_x2b2",
         "name": "Breath Weapon",
         "actionType": "action",
         "descriptionHtml": "<p>Rishaal can use his action to exhale a 15-foot cone of fire (but can't do this again until he finishes a short or long rest); each creature in the cone must make a DC 10 Dexterity saving throw, taking 2d6 fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -24607,14 +24736,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_tb12",
+        "id": "act_dagger_b7za",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage. Or Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -24632,11 +24762,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -24764,7 +24896,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_g2lq",
+        "id": "act_multiattack_1plm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Saeth makes two longsword attacks. If it has a shortsword drawn, it can also make a shortsword attack.</p>",
@@ -24784,7 +24916,7 @@
         }
       },
       {
-        "id": "act_longsword_4wx4",
+        "id": "act_longsword_6vy5",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands.</p>",
@@ -24802,18 +24934,20 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword_68rj",
+        "id": "act_shortsword_n8n5",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -24831,14 +24965,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heavy_crossbow_mbpk",
+        "id": "act_heavy_crossbow_haav",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +3 to hit, range 100/400 ft., one target. Hit: 6 (1d10 + 1) piercing damage.</p>",
@@ -24856,7 +24991,8 @@
           "damages": [
             {
               "formula": "1d10 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -24991,7 +25127,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cunning_action_vhdx",
+        "id": "act_cunning_action_rj58",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>On each of its turns, Samara can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
@@ -25011,7 +25147,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__w0xb",
+        "id": "act_sneak_attack__1_turn__bxbv",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>Samara deals an extra 7 (2d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the spy that isn't incapacitated and the spy doesn't have disadvantage on the attack roll.</p>",
@@ -25029,7 +25165,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -25038,7 +25175,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_thlo",
+        "id": "act_multiattack_yrhb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Samara makes two melee attacks.</p>",
@@ -25058,7 +25195,7 @@
         }
       },
       {
-        "id": "act_shortsword_fb79",
+        "id": "act_shortsword_yeas",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -25076,14 +25213,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow_vbjy",
+        "id": "act_hand_crossbow_kxer",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -25101,7 +25239,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -25225,7 +25364,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_spear_oocb",
+        "id": "act_spear_cjxa",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d6 + 1) piercing damage, or 5 (1d8 + 1) piercing damage if used with two hands to make a melee attack.</p>",
@@ -25243,11 +25382,13 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -25384,7 +25525,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_dbry",
+        "id": "act_shapechanger_qler",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The Shard Shunner can use their action to polymorph into a rat-humanoid hybrid or into a giant rat, or back into their true form, which is humanoid. Their statistics, other than their size, are the same in each form. Any equipment they are wearing or carrying isn't transformed. They revert to their true form if they die.</p>",
@@ -25404,7 +25545,7 @@
         }
       },
       {
-        "id": "act_keen_smell_6jpx",
+        "id": "act_keen_smell_j7ek",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The Shard Shunner has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -25424,7 +25565,7 @@
         }
       },
       {
-        "id": "act_halfling_nimbleness_0aab",
+        "id": "act_halfling_nimbleness_q53b",
         "name": "Halfling Nimbleness",
         "actionType": "trait",
         "descriptionHtml": "<p>The Shard Shunner can move through the space of creatures that is of a size larger than them.</p>",
@@ -25444,7 +25585,7 @@
         }
       },
       {
-        "id": "act_brave_i6ej",
+        "id": "act_brave_398d",
         "name": "Brave",
         "actionType": "trait",
         "descriptionHtml": "<p>The Shard Shunner has advantage on saving throws against being frightened.</p>",
@@ -25466,7 +25607,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__humanoid_or_hybrid_form_only__20tp",
+        "id": "act_multiattack__humanoid_or_hybrid_form_only__qmm5",
         "name": "Multiattack (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The Shard Shunner makes two attacks, only one of which can be a bite.</p>",
@@ -25486,7 +25627,7 @@
         }
       },
       {
-        "id": "act_bite__rat_or_hybrid_form_only__m6x4",
+        "id": "act_bite__rat_or_hybrid_form_only__db0w",
         "name": "Bite (Rat or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage. If the target is a humanoid, it must succeed on a DC 11 Constitution saving throw or be cursed with wererat Player Characters as Lycanthropes.</p>",
@@ -25507,14 +25648,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword__humanoid_or_hybrid_form_only__ubpn",
+        "id": "act_shortsword__humanoid_or_hybrid_form_only__nvyn",
         "name": "Shortsword (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -25532,14 +25674,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__a54o",
+        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__mdwi",
         "name": "Hand Crossbow (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -25557,7 +25700,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -26102,7 +26246,7 @@
     ],
     "traits": [
       {
-        "id": "act_gnome_cunning_gpv2",
+        "id": "act_gnome_cunning_d5qb",
         "name": "Gnome Cunning",
         "actionType": "trait",
         "descriptionHtml": "<p>Skeemo has advantage on Intelligence, Wisdom, and Charisma saving throws against magic.</p>",
@@ -26124,7 +26268,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_ez3r",
+        "id": "act_dagger_vmpr",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage. Or Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -26142,11 +26286,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -26390,7 +26536,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_8ewy",
+        "id": "act_fey_ancestry_4l5k",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Soluun has advantage on saving throws against being charmed, and magic can't put Soluun to sleep.</p>",
@@ -26410,7 +26556,7 @@
         }
       },
       {
-        "id": "act_gunslinger_base",
+        "id": "act_gunslinger_yu6q",
         "name": "Gunslinger",
         "actionType": "trait",
         "descriptionHtml": "<p>Being within 5 feet of a hostile creature or attacking at long range doesn't impose disadvantage on Soluun's ranged attack rolls with a pistol. In addition, Soluun ignores Cover and Cover when making ranged attacks with a pistol.</p>",
@@ -26430,7 +26576,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_zr0u",
+        "id": "act_sunlight_sensitivity_8as5",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Soluun has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -26450,7 +26596,7 @@
         }
       },
       {
-        "id": "act_equipment_j9zs",
+        "id": "act_equipment_2lj9",
         "name": "Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Four packets of smokepowder and a pouch containing 20 pistol bullets</p>",
@@ -26470,7 +26616,7 @@
         }
       },
       {
-        "id": "act_boots_of_elvenkind_g2yy",
+        "id": "act_boots_of_elvenkind_7ymq",
         "name": "Boots of Elvenkind",
         "actionType": "trait",
         "descriptionHtml": "<p>Whilst wearing these boots Soluun's steps make no sound and he has advantage on any Dexterity (Stealth) checks that rely on moving silently.</p>",
@@ -26492,7 +26638,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4i40",
+        "id": "act_multiattack_qocm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Soluun makes two scimitar attacks.</p>",
@@ -26512,7 +26658,7 @@
         }
       },
       {
-        "id": "act_scimitar_6pfx",
+        "id": "act_scimitar_q7y9",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) slashing damage.</p>",
@@ -26530,14 +26676,15 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_poisonous_pistol_ekvj",
+        "id": "act_poisonous_pistol_jba1",
         "name": "Poisonous Pistol",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 30/90 ft., one target. Hit: 9 (1d10 + 4) piercing damage plus 11 (2d10) poison damage.</p>",
@@ -26555,11 +26702,13 @@
           "damages": [
             {
               "formula": "1d10 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -26794,7 +26943,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_swarm_ibfq",
+        "id": "act_swarm_r1ze",
         "name": "Swarm",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny book. The swarm can't regain hit points or gain temporary hit points.</p>",
@@ -26816,7 +26965,7 @@
     ],
     "actions": [
       {
-        "id": "act_slam_gvr2",
+        "id": "act_slam_lmu1",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 0 ft., one creature in the swarm's space. Hit: 5 (2d4) bludgeoning damage, or 2 (1d4) bludgeoning damage if the swarm has half of its hit points or fewer.</p>",
@@ -26834,11 +26983,13 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -26972,7 +27123,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_constructed_nature_n418",
+        "id": "act_constructed_nature_zli1",
         "name": "Constructed Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm doesn't require air, food, drink, or sleep.</p>",
@@ -26992,7 +27143,7 @@
         }
       },
       {
-        "id": "act_swarm_it34",
+        "id": "act_swarm_46bg",
         "name": "Swarm",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny insect. The swarm can't regain hit points or gain temporary hit points.</p>",
@@ -27012,7 +27163,7 @@
         }
       },
       {
-        "id": "act_spider_climb_7s1z",
+        "id": "act_spider_climb_0o3x",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -27032,7 +27183,7 @@
         }
       },
       {
-        "id": "act_web_sense_yzca",
+        "id": "act_web_sense_kalv",
         "name": "Web Sense",
         "actionType": "trait",
         "descriptionHtml": "<p>While in contact with a web, the swarm knows the exact location of any other creature in contact with the same web.</p>",
@@ -27052,7 +27203,7 @@
         }
       },
       {
-        "id": "act_web_walker_8yzw",
+        "id": "act_web_walker_txzp",
         "name": "Web Walker",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm ignores movement restrictions caused by webbing.</p>",
@@ -27074,7 +27225,7 @@
     ],
     "actions": [
       {
-        "id": "act_bites_qjdi",
+        "id": "act_bites_lkg0",
         "name": "Bites",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 0 ft., one target in the swarm's space. Hit: 10 (4d4) piercing damage, or 5 (2d4) piercing damage if the swarm has half of its hit points or fewer.</p>",
@@ -27092,11 +27243,13 @@
           "damages": [
             {
               "formula": "4d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -27213,7 +27366,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_water_breathing_58yj",
+        "id": "act_water_breathing_t6tb",
         "name": "Water Breathing",
         "actionType": "trait",
         "descriptionHtml": "<p>Sylgar can breathe only underwater.</p>",
@@ -27235,7 +27388,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_5psi",
+        "id": "act_bite_s6lk",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1 piercing damage.</p>",
@@ -27368,7 +27521,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fey_ancestry_f4c3",
+        "id": "act_fey_ancestry_8mxa",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Tally has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
@@ -27390,7 +27543,7 @@
     ],
     "actions": [
       {
-        "id": "act_club_rhj4",
+        "id": "act_club_52p8",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -27408,7 +27561,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -27541,7 +27695,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_indomitable__2_day__rxla",
+        "id": "act_indomitable__2_day__ajue",
         "name": "Indomitable (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Tashlyn can reroll a saving throw that she fails. She must use the new roll.</p>",
@@ -27561,7 +27715,7 @@
         }
       },
       {
-        "id": "act_second_wind__recharges_after_a_short_or_long_rest__9z8b",
+        "id": "act_second_wind__recharges_after_a_short_or_long_rest__mpkg",
         "name": "Second Wind (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Tashlyn can regain 20 hit points.</p>",
@@ -27581,7 +27735,7 @@
         }
       },
       {
-        "id": "act_extra_damage_ny46",
+        "id": "act_extra_damage_l9od",
         "name": "Extra Damage",
         "actionType": "trait",
         "descriptionHtml": "<p>Tashlyn deals an extra 7 (2d6) damage to every hit if she has more than half her hit points remaining.</p>",
@@ -27599,7 +27753,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -27608,7 +27763,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yk8u",
+        "id": "act_multiattack_fueq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Tashlyn makes three attacks with her greatsword or her shortbow.</p>",
@@ -27628,7 +27783,7 @@
         }
       },
       {
-        "id": "act_greatsword_241f",
+        "id": "act_greatsword_rxri",
         "name": "Greatsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
@@ -27646,14 +27801,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_51d6",
+        "id": "act_shortbow_8sus",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -27671,7 +27827,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -27898,7 +28055,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dwarven_resilience_t6o5",
+        "id": "act_dwarven_resilience_1jmo",
         "name": "Dwarven Resilience",
         "actionType": "trait",
         "descriptionHtml": "<p>Thorvin has advantage on saving throws against poison and resistance to poison damage.</p>",
@@ -27920,7 +28077,7 @@
     ],
     "actions": [
       {
-        "id": "act_club_djt2",
+        "id": "act_club_l51n",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -27938,7 +28095,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -28060,7 +28218,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reckless_k1ws",
+        "id": "act_reckless_ongp",
         "name": "Reckless",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of his turn, Thrakkus can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against him have advantage until the start of his next turn.</p>",
@@ -28082,7 +28240,7 @@
     ],
     "actions": [
       {
-        "id": "act_greataxe_iwwt",
+        "id": "act_greataxe_43gx",
         "name": "Greataxe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 9 (1d12 + 3) slashing damage.</p>",
@@ -28100,14 +28258,15 @@
           "damages": [
             {
               "formula": "1d12 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_breath_weapon__1_day__0bib",
+        "id": "act_breath_weapon__1_day__ulty",
         "name": "Breath Weapon (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Thrakkus can use his action to exhale a 15-foot cone of fire. Each creature in the cone must make a DC 13 Dexterity saving throw, taking 6 (2d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -28128,7 +28287,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -28510,7 +28670,7 @@
     ],
     "traits": [
       {
-        "id": "act_dark_devotion_su4u",
+        "id": "act_dark_devotion_wnqu",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>Tissina has advantage on saving throws against being charmed or frightened.</p>",
@@ -28532,7 +28692,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bi2t",
+        "id": "act_multiattack_oau3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Tissina makes two melee attacks.</p>",
@@ -28552,7 +28712,7 @@
         }
       },
       {
-        "id": "act_dagger_vsn5",
+        "id": "act_dagger_71on",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 4 (1d4 + 2) piercing damage. Or Ranged Weapon Attack: +4 to hit, range 20/60 ft., one creature. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -28570,11 +28730,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -28713,7 +28875,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_assassinate_00f7",
+        "id": "act_assassinate_g5zd",
         "name": "Assassinate",
         "actionType": "trait",
         "descriptionHtml": "<p>During its first turn, Urstul has advantage on attack rolls against any creature that hasn't taken a turn. Any hit the assassin scores against a surprised creature is a critical hit.</p>",
@@ -28733,7 +28895,7 @@
         }
       },
       {
-        "id": "act_evasion_ikz7",
+        "id": "act_evasion_6ywi",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If Urstul is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, the assassin instead takes no damage if it succeeds on the saving throw, and only half damage if it fails.</p>",
@@ -28753,7 +28915,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__kx4l",
+        "id": "act_sneak_attack__1_turn__hgs3",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>Urstul deals an extra 14 (4d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the assassin that isn't incapacitated and the assassin doesn't have disadvantage on the attack roll.</p>",
@@ -28771,7 +28933,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -28780,7 +28943,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4stq",
+        "id": "act_multiattack_p2bn",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Urstul makes two shortsword attacks.</p>",
@@ -28800,7 +28963,7 @@
         }
       },
       {
-        "id": "act_shortsword_7tro",
+        "id": "act_shortsword_vvqc",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage, and the target must make a DC 15 Constitution saving throw, taking 24 (7d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -28821,18 +28984,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "7d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_light_crossbow_fbnz",
+        "id": "act_light_crossbow_efu7",
         "name": "Light Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 80/320 ft., one target. Hit: 7 (1d8 + 3) piercing damage, and the target must make a DC 15 Constitution saving throw, taking 24 (7d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -28853,11 +29018,13 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "7d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -29716,7 +29883,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_4od4",
+        "id": "act_special_equipment_kj66",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Vajra wields the Blackstaff, accounted for in her statistics. Roll 2d10 to determine how many charges the staff has remaining.</p>",
@@ -29736,7 +29903,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_uqut",
+        "id": "act_magic_resistance_v5zl",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Vajra has advantage on saving throws against spells and other magical effects.</p>",
@@ -29756,7 +29923,7 @@
         }
       },
       {
-        "id": "act_staff_spells_uj27",
+        "id": "act_staff_spells_l33r",
         "name": "Staff Spells",
         "actionType": "trait",
         "descriptionHtml": "<p>While holding the Blackstaff, Vajra can use an action to expend 1 or more of its charges to cast one of the following spells from it, using her spell save DC and spell attack bonus: cone of cold (5 charges), fireball (5th-level version, 5 charges), globe of invulnerability (6 charges), hold monster (5 charges), levitate (2 charges), lightning bolt (5th-level version, 5 charges), magic missile (1 charge), ray of enfeeblement (1 charge), or wall of force (5 charges).</p>",
@@ -29778,7 +29945,7 @@
     ],
     "actions": [
       {
-        "id": "act_blackstaff_4kw8",
+        "id": "act_blackstaff_pld5",
         "name": "Blackstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning, magic damage, or 6 (1d8 + 2) bludgeoning, magic damage when used with two hands. Vajra can expend 1 of the staff's charges to deal an extra 3 (1d6) force damage on a hit.</p>",
@@ -29796,15 +29963,18 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -30212,7 +30382,7 @@
     ],
     "traits": [
       {
-        "id": "act_divine_eminence_guvz",
+        "id": "act_divine_eminence_mh7u",
         "name": "Divine Eminence",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Valetta can expend a spell slot to cause her melee weapon attacks to magically deal an extra 10 (3d6) radiant damage to a target on a hit. This benefit lasts until the end of the turn. If Valetta expends a spell slot of 2nd level or higher, the extra damage increases by 1d6 for each level above 1st.</p>",
@@ -30230,11 +30400,13 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -30243,7 +30415,7 @@
     ],
     "actions": [
       {
-        "id": "act_breathe_weapon_euch",
+        "id": "act_breathe_weapon_4aaz",
         "name": "Breathe Weapon",
         "actionType": "action",
         "descriptionHtml": "<p>Valetta can use her action to exhale a 5-foot-wide, 30-foot line of lightning (but can't do this again until she finishes a short or long rest); each creature in the line must make a DC 11 Dexterity saving throw, taking 2d6 lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -30264,14 +30436,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mace_riau",
+        "id": "act_mace_88q4",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage.</p>",
@@ -30289,7 +30462,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -31181,7 +31355,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_7grn",
+        "id": "act_special_equipment_uoxy",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Victoro wears a ring of protection and glamoured studded leather disguised to look like fine clothing. He carries a rod of rulership shaped like a ruby-tipped cane.</p>",
@@ -31201,7 +31375,7 @@
         }
       },
       {
-        "id": "act_fey_ancestry_6c0z",
+        "id": "act_fey_ancestry_pul2",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Victoro has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
@@ -31221,7 +31395,7 @@
         }
       },
       {
-        "id": "act_rod_of_rulership_o8is",
+        "id": "act_rod_of_rulership_x2o0",
         "name": "Rod of Rulership",
         "actionType": "trait",
         "descriptionHtml": "<p>Victoro can use an action to present the rod and command obedience from each creature of his choice that he can see within 120 feet of him. Each target must succeed on a DC 15 Wisdom saving throw or be charmed for 8 hours by Victoro. While charmed in this way, the creature regards Victoro as its trusted leader. If harmed by Victoro or his companions, or commanded to do something contrary to its nature, a target ceases to be charmed in this way. The rod can't be used again until the next dawn.</p>",
@@ -31246,7 +31420,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_31d7",
+        "id": "act_multiattack_er3r",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Victoro makes two attacks with his rapier.</p>",
@@ -31266,7 +31440,7 @@
         }
       },
       {
-        "id": "act_rapier_0qw4",
+        "id": "act_rapier_avq5",
         "name": "Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) piercing damage.</p>",
@@ -31284,14 +31458,15 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_cloak_of_shadows__2_day__1q2d",
+        "id": "act_cloak_of_shadows__2_day__6dp9",
         "name": "Cloak of Shadows (2/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Victoro becomes invisible until the end of his next turn. He becomes visible early immediately after he attacks or casts a spell.</p>",
@@ -31311,7 +31486,7 @@
         }
       },
       {
-        "id": "act_summon_devil__recharges_after_9_days__gigc",
+        "id": "act_summon_devil__recharges_after_9_days__tz7s",
         "name": "Summon Devil (Recharges after 9 Days)",
         "actionType": "action",
         "descriptionHtml": "<p>Victoro summons a barbed devil. The devil appears in an unoccupied space within 30 feet of Victoro, acts as Victoro's ally, and can't summon other devils. It remains for 1 minute, until it or Victoro dies, or until Victoro dismisses it as an action.</p>",
@@ -31775,7 +31950,7 @@
     ],
     "traits": [
       {
-        "id": "act_limited_magic_immunity_c38r",
+        "id": "act_limited_magic_immunity_1add",
         "name": "Limited Magic Immunity",
         "actionType": "trait",
         "descriptionHtml": "<p>Vincent can't be affected or detected by spells of 6th level or lower unless it wishes to be. It has advantage on saving throws against all other spells and magical effects.</p>",
@@ -31797,7 +31972,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hw2d",
+        "id": "act_multiattack_zlbu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Vincent makes two claw attacks.</p>",
@@ -31817,7 +31992,7 @@
         }
       },
       {
-        "id": "act_claw_weoj",
+        "id": "act_claw_t1km",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 9 (2d6 + 2) slashing damage, and the target is cursed if it is a creature. The magical curse takes effect whenever the target takes a short or long rest, filling the target's thoughts with horrible images and dreams. The cursed target gains no benefit from finishing a short or long rest. The curse lasts until it is lifted by a remove curse spell or similar magic.</p>",
@@ -31835,7 +32010,8 @@
           "damages": [
             {
               "formula": "2d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -31978,7 +32154,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_crumbling_colossus_7o66",
+        "id": "act_crumbling_colossus_36ny",
         "name": "Crumbling Colossus",
         "actionType": "trait",
         "descriptionHtml": "<p>When the statue drops to 0 hit points, it crumbles and is destroyed. Any creature on the ground within 30 feet of the crumbling statue must make a DC 22 Dexterity saving throw, taking 22 (4d10) bludgeoning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -31999,14 +32175,15 @@
           "damages": [
             {
               "formula": "4d10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_immutable_form_vbop",
+        "id": "act_immutable_form_4l9a",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The statue is immune to any spell or effect that would alter its form.</p>",
@@ -32026,7 +32203,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_79nl",
+        "id": "act_magic_resistance_8k85",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The statue has advantage on saving throws against spells and other magical effects.</p>",
@@ -32046,7 +32223,7 @@
         }
       },
       {
-        "id": "act_siege_monster_b8st",
+        "id": "act_siege_monster_kbfo",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The statue deals double damage to objects and structures.</p>",
@@ -32068,7 +32245,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_m02a",
+        "id": "act_multiattack_bo0j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The statue makes two melee attacks.</p>",
@@ -32088,7 +32265,7 @@
         }
       },
       {
-        "id": "act_slam_f51f",
+        "id": "act_slam_mn3q",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +16 to hit, reach 5 ft., one target. Hit: 29 (3d12 + 10) bludgeoning damage.</p>",
@@ -32106,14 +32283,15 @@
           "damages": [
             {
               "formula": "3d12 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hurled_stone_do5m",
+        "id": "act_hurled_stone_hnw9",
         "name": "Hurled Stone",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +16 to hit, range 200/800 ft., one target. Hit: 43 (6d10 + 10) bludgeoning damage.</p>",
@@ -32131,7 +32309,8 @@
           "damages": [
             {
               "formula": "6d10 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -32258,7 +32437,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_tx6x",
+        "id": "act_shapechanger_ngm3",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>Willifort can use its action to polymorph into a Small or Medium humanoid it has seen, or back into its true form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -32278,7 +32457,7 @@
         }
       },
       {
-        "id": "act_ambusher_vilb",
+        "id": "act_ambusher_4l7v",
         "name": "Ambusher",
         "actionType": "trait",
         "descriptionHtml": "<p>In the first round of a combat, Willifort has advantage on attack rolls against any creature it surprised.</p>",
@@ -32298,7 +32477,7 @@
         }
       },
       {
-        "id": "act_surprise_attack_q1nd",
+        "id": "act_surprise_attack_yuke",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If Willifort surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 10 (3d6) damage from the attack.</p>",
@@ -32316,7 +32495,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -32325,7 +32505,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vn2u",
+        "id": "act_multiattack_8f93",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Willifort makes two melee attacks.</p>",
@@ -32345,7 +32525,7 @@
         }
       },
       {
-        "id": "act_slam_0g1c",
+        "id": "act_slam_4cb7",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage.</p>",
@@ -32363,14 +32543,15 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_read_thoughts_2qaq",
+        "id": "act_read_thoughts_6abu",
         "name": "Read Thoughts",
         "actionType": "action",
         "descriptionHtml": "<p>Willifort magically reads the surface thoughts of one creature within 60 feet of it. The effect can penetrate barriers, but 3 feet of wood or dirt, 2 feet of stone, 2 inches of metal, or a thin sheet of lead blocks it. While the target is in range, the doppelganger can continue reading its thoughts, as long as the doppelganger's concentration isn't broken (as if concentration on a spell). While reading the target's mind, the doppelganger has advantage on Wisdom (Insight) and Charisma (Deception, Intimidation, and Persuasion) checks against the target.</p>",
@@ -32524,7 +32705,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_special_equipment_uk59",
+        "id": "act_special_equipment_df4b",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Xanathar wears a ring of invisibility, a ring of mind shielding, and a ring of force resistance.</p>",
@@ -32544,7 +32725,7 @@
         }
       },
       {
-        "id": "act_antimagic_cone_n95x",
+        "id": "act_antimagic_cone_52n5",
         "name": "Antimagic Cone",
         "actionType": "trait",
         "descriptionHtml": "<p>Xanathar's central eye creates an area of antimagic, as in the antimagic field spell, in a 150-foot cone. At the start of each of its turns, the beholder decides which way the cone faces and whether the cone is active. The area works against the beholder's own eye rays.</p>",
@@ -32566,7 +32747,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_hgt4",
+        "id": "act_bite_zzxq",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 14 (4d6) piercing damage.</p>",
@@ -32584,14 +32765,15 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_eye_rays_4z2e",
+        "id": "act_eye_rays_jqy8",
         "name": "Eye Rays",
         "actionType": "action",
         "descriptionHtml": "<p>Xanathar shoots three of the following magical eye rays at random (reroll duplicates), choosing one to three targets it can see within 120 feet of it:</p><ul><li><strong><em>1. Charm Ray.</em></strong> <p>The targeted creature must succeed on a DC 16 Wisdom saving throw or be charmed by Xanathar for 1 hour, or until the beholder harms the creature.</p></li><li><strong><em>2. Paralyzing Ray.</em></strong> <p>The targeted creature must succeed on a DC 16 Constitution saving throw or be paralyzed for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>3. Fear Ray.</em></strong> <p>The targeted creature must succeed on a DC 16 Wisdom saving throw or be frightened for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>4. Slowing Ray.</em></strong> <p>The targeted creature must succeed on a DC 16 Dexterity saving throw. On a failed save, the target's speed is halved for 1 minute. In addition, the creature can't take reactions, and it can take either an action or a bonus action on its turn, not both. The creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>5. Enervation Ray.</em></strong> <p>The targeted creature must make a DC 16 Constitution saving throw, taking 36 (8d8) necrotic damage on a failed save, or half as much damage on a successful one.</p></li><li><strong><em>6. Telekinetic Ray.</em></strong> <p>If the target is a creature, it must succeed on a DC 16 Strength saving throw or Xanathar moves it up to 30 feet in any direction. It is restrained by the ray's telekinetic grip until the start of the beholder's next turn or until the beholder is incapacitated.</p><p>If the target is an object weighing 300 pounds or less that isn't being worn or carried, it is moved up to 30 feet in any direction. Xanathar can also exert fine control on objects with this ray, such as manipulating a simple tool or opening a door or a container.</p></li><li><strong><em>7. Sleep Ray.</em></strong> <p>The targeted creature must succeed on a DC 16 Wisdom saving throw or fall asleep and remain unconscious for 1 minute. The target awakens if it takes damage or another creature takes an action to wake it. This ray has no effect on constructs and undead.</p></li><li><strong><em>8. Petrification Ray.</em></strong> <p>The targeted creature must make a DC 16 Dexterity saving throw. On a failed save, the creature begins to turn to stone and is restrained. It must repeat the saving throw at the end of its next turn. On a success, the effect ends. On a failure, the creature is petrified until freed by the greater restoration spell or other magic.</p></li><li><strong><em>9. Disintegration Ray.</em></strong> <p>If the target is a creature, it must succeed on a DC 16 Dexterity saving throw or take 45 (10d8) force damage. If this damage reduces the creature to 0 hit points, its body becomes a pile of fine gray dust.</p><p>If the target is a Large or smaller nonmagical object or creation of magical force, it is disintegrated without a saving throw. If the target is a Huge or larger object or creation of magical force, this ray disintegrates a 10-foot cube of it.</p></li><li><strong><em>10. Death Ray.</em></strong> <p>The targeted creature must succeed on a DC 16 Dexterity saving throw or take 55 (10d10) necrotic damage. The target dies if the ray reduces it to 0 hit points.</p></li></ul>",
@@ -32674,15 +32856,18 @@
           "damages": [
             {
               "formula": "8d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             },
             {
               "formula": "10d8",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             },
             {
               "formula": "10d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -32696,7 +32881,7 @@
       "description": "Xanathar can take 3 legendary actions, using the Eye Ray option below. It can take only one legendary action at a time and only at the end of another creature's turn. The beholder regains spent legendary actions at the start of its turn.",
       "entries": [
         {
-          "id": "act_eye_ray_a0hv",
+          "id": "act_eye_ray_dzks",
           "name": "Eye Ray",
           "actionType": "legendary",
           "descriptionHtml": "<p>Xanathar uses one random eye ray.</p>",
@@ -32720,7 +32905,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_50_foot_square_area_rh66",
+        "id": "act_50_foot_square_area_ahk5",
         "name": "50-foot-square Area",
         "actionType": "lair",
         "descriptionHtml": "<p>A 50-foot-square area of ground within 120 feet of the beholder becomes slimy; that area is difficult terrain until initiative count 20 on the next round.</p>",
@@ -32740,7 +32925,7 @@
         }
       },
       {
-        "id": "act_walls_within_120_488q",
+        "id": "act_walls_within_120_myar",
         "name": "Walls Within 120",
         "actionType": "lair",
         "descriptionHtml": "<p>Walls within 120 feet of the beholder sprout grasping appendages until initiative count 20 on the round after next. Each creature of the beholder's choice that starts its turn within 10 feet of such a wall must succeed on a DC 15 Dexterity saving throw or be grappled. Escaping requires a successful DC 15 Strength (Athletics) or Dexterity (Acrobatics) check.</p>",
@@ -32763,7 +32948,7 @@
         }
       },
       {
-        "id": "act_eye_opens_h9o0",
+        "id": "act_eye_opens_914t",
         "name": "Eye Opens",
         "actionType": "lair",
         "descriptionHtml": "<p>An eye opens on a solid surface within 60 feet of the beholder. One random eye ray of the beholder shoots from that eye at a target of the beholder's choice that it can see. The eye then closes and disappears.</p>",
@@ -32783,7 +32968,7 @@
         }
       },
       {
-        "id": "act_beholder_can_t_repeat_zjti",
+        "id": "act_beholder_can_t_repeat_sds0",
         "name": "Beholder Can't Repeat",
         "actionType": "lair",
         "descriptionHtml": "<p>The beholder can't repeat an effect until they have all been used, and it can't use the same effect two rounds in a row.</p>",
@@ -32807,7 +32992,7 @@
     "lairActionsDesc": "When fighting inside its lair, a beholder can invoke the ambient magic to take lair actions. On initiative count 20 (losing initiative ties), the beholder can take one lair action to cause one of the following effects:",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_qqhs",
+        "id": "act_regional_effect_nn3t",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Creatures within 1 mile of the beholder's lair sometimes feel as if they're being watched when they aren't.</p>",
@@ -32827,7 +33012,7 @@
         }
       },
       {
-        "id": "act_regional_effect_cpuv",
+        "id": "act_regional_effect_csoj",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>When the beholder sleeps, minor warps in reality occur within 1 mile of its lair and then vanish 24 hours later. Marks on cave walls might change subtly, an eerie trinket might appear where none existed before, harmless slime might coat a statue, and so on. These effects apply only to natural surfaces and to nonmagical objects that aren't on anyone's person.</p>",
@@ -33026,7 +33211,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_relentless_endurance_fw10",
+        "id": "act_relentless_endurance_40zv",
         "name": "Relentless Endurance",
         "actionType": "trait",
         "descriptionHtml": "<p>When reduced to 0 hit points, Yagra drops to 1 hit point instead (but can't do this again until she finishes a long rest).</p>",
@@ -33046,7 +33231,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_3bo7",
+        "id": "act_pack_tactics_e5u8",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>Yagra has advantage on an attack roll against a creature if at least one of her allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -33066,7 +33251,7 @@
         }
       },
       {
-        "id": "act_savage_attacks_mcv8",
+        "id": "act_savage_attacks_7zr6",
         "name": "Savage Attacks",
         "actionType": "trait",
         "descriptionHtml": "<p>When she scores a critical hit Yagra can roll one of the weapon's damage dice and add it to the extra damage of the critical hit.</p>",
@@ -33088,7 +33273,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4qvy",
+        "id": "act_multiattack_2s8q",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Yagra makes two melee attacks.</p>",
@@ -33108,7 +33293,7 @@
         }
       },
       {
-        "id": "act_mace_vcnl",
+        "id": "act_mace_ogq0",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6 + 2) bludgeoning damage.</p>",
@@ -33126,14 +33311,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heavy_crossbow_bj05",
+        "id": "act_heavy_crossbow_o3yt",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +2 to hit, range 100/400 ft., one target. Hit: 5 (1d10) piercing damage.</p>",
@@ -33151,7 +33337,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -33280,7 +33467,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_rapier_llmn",
+        "id": "act_rapier_x2o8",
         "name": "Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) piercing damage.</p>",
@@ -33298,7 +33485,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -33308,7 +33496,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_al0d",
+        "id": "act_parry_s659",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Yalah adds 2 to its AC against one melee attack that would hit it. To do so, the noble must see the attacker and be wielding a melee weapon.</p>",
@@ -33443,7 +33631,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_9vxb",
+        "id": "act_pack_tactics_wbhp",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The thug has advantage on an attack roll against a creature if at least one of the thug's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -33463,7 +33651,7 @@
         }
       },
       {
-        "id": "act_relentless_endurance__1_day__cpgm",
+        "id": "act_relentless_endurance__1_day__q4nj",
         "name": "Relentless Endurance (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>When reduced to 0 hit points Yorn drops to 1 hit point instead.</p>",
@@ -33485,7 +33673,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9nn0",
+        "id": "act_multiattack_4mgz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The thug makes two melee attacks.</p>",
@@ -33505,7 +33693,7 @@
         }
       },
       {
-        "id": "act_mace_u9v5",
+        "id": "act_mace_jaae",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6 + 2) bludgeoning damage.</p>",
@@ -33523,14 +33711,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heavy_crossbow_pc7o",
+        "id": "act_heavy_crossbow_yl8z",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +2 to hit, range 100/400 ft., one target. Hit: 5 (1d10) piercing damage.</p>",
@@ -33548,7 +33737,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -33676,7 +33866,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unarmored_defense_gur1",
+        "id": "act_unarmored_defense_0u6d",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While the adept is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
@@ -33696,7 +33886,7 @@
         }
       },
       {
-        "id": "act_special_equipment_swok",
+        "id": "act_special_equipment_qpr2",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>The adept wears a teleporter ring.</p>",
@@ -33718,7 +33908,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qsah",
+        "id": "act_multiattack_cdus",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The adept makes three unarmed strikes or three dart attacks.</p>",
@@ -33738,7 +33928,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_3sp1",
+        "id": "act_unarmed_strike_tagy",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. If the target is a creature, the adept can choose one of the following additional effects:</p><ul><li>The target must succeed on a DC 13 Strength saving throw or drop one item it is holding (adept's choice).</li><li>The target must succeed on a DC 13 Dexterity saving throw or be knocked prone.</li><li>The target must succeed on a DC 13 Constitution saving throw or be stunned until the end of the adept's next turn.</li></ul>",
@@ -33767,14 +33957,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dart_fe6t",
+        "id": "act_dart_filt",
         "name": "Dart",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
@@ -33792,7 +33983,8 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -33802,7 +33994,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_missile_qmqu",
+        "id": "act_deflect_missile_6m5a",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, the adept deflects the missile. The damage it takes from the attack is reduced by 1d10 + 3. If the damage is reduced to 0, the adept catches the missile if it's small enough to hold in one hand and the adept has a hand free.</p>",
@@ -34144,7 +34336,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_6klu",
+        "id": "act_multiattack_atl3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ziraj makes three attacks with his glaive or with his oversized longbow.</p>",
@@ -34164,7 +34356,7 @@
         }
       },
       {
-        "id": "act_glaive_u4nl",
+        "id": "act_glaive_re7e",
         "name": "Glaive",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) slashing damage.</p>",
@@ -34182,14 +34374,15 @@
           "damages": [
             {
               "formula": "1d10 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_oversized_longbow_qjwc",
+        "id": "act_oversized_longbow_lpfh",
         "name": "Oversized Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +7 to hit, range 150/600 ft., one target. Hit: 11 (2d6 + 4) piercing damage.</p>",
@@ -34207,14 +34400,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dreadful_aspect__recharges_after_a_short_or_long_rest__oxyp",
+        "id": "act_dreadful_aspect__recharges_after_a_short_or_long_rest__5skw",
         "name": "Dreadful Aspect (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Ziraj exudes magical menace. Each enemy within 30 feet of him must succeed on a DC 13 Wisdom saving throw or be frightened for 1 minute of Ziraj. If a frightened enemy ends its turn more than 30 feet away from Ziraj, the enemy can repeat the saving throw, ending the effect on itself on a success.</p>",

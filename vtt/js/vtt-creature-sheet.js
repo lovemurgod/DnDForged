@@ -2804,10 +2804,61 @@ export function initVttCreatureSheet(vtt) {
         return rows.join('');
     }
 
+    function formatDefenseEntry(item) {
+        if (!item) return '';
+        if (typeof item === 'string') return item;
+        if (typeof item !== 'object') return String(item);
+        
+        // Structured object: { types: [...], bypasses: [...], note: "..." }
+        if (Array.isArray(item.types) && item.types.length > 0) {
+            const typeStr = item.types.join(', ');
+            const parts = [];
+            if (Array.isArray(item.bypasses) && item.bypasses.length > 0) {
+                const hasMagic = item.bypasses.includes('magic') || item.bypasses.includes('nonmagical');
+                const hasSilver = item.bypasses.includes('silver') || item.bypasses.includes('silvered');
+                const hasAdamantine = item.bypasses.includes('adamantine');
+                
+                if (hasMagic && hasSilver) {
+                    parts.push("from nonmagical attacks that aren't silvered");
+                } else if (hasMagic && hasAdamantine) {
+                    parts.push("from nonmagical attacks that aren't adamantine");
+                } else if (hasMagic) {
+                    parts.push("from nonmagical attacks");
+                } else if (hasSilver) {
+                    parts.push("from attacks that aren't silvered");
+                } else if (hasAdamantine) {
+                    parts.push("from attacks that aren't adamantine");
+                } else {
+                    parts.push(`except ${item.bypasses.join(', ')}`);
+                }
+            }
+            if (item.note) {
+                parts.push(item.note);
+            }
+            if (parts.length > 0) {
+                return `${typeStr} (${parts.join('; ')})`;
+            }
+            return typeStr;
+        }
+
+        // Legacy 5etools object
+        const innerList = item.immune || item.resist || item.vulnerable;
+        const innerStr = Array.isArray(innerList) ? innerList.join(', ') : (innerList || '');
+        if (item.note && innerStr) {
+            return `${innerStr} (${item.note})`;
+        } else if (item.note) {
+            return item.note;
+        } else if (innerStr) {
+            return innerStr;
+        }
+        return JSON.stringify(item);
+    }
+
     function formatDamageList(list) {
         if (!list) return '—';
         if (!Array.isArray(list)) return String(list);
-        return list.map(item => (typeof item === 'object' && item !== null) ? `${item.note || ''} (${item.immune || item.resist || item.vulnerable || ''})` : item).join('; ');
+        if (list.length === 0) return '—';
+        return list.map(formatDefenseEntry).filter(Boolean).join('; ');
     }
 
     function getProfBonus(crStr) {
@@ -3275,11 +3326,625 @@ export function initVttCreatureSheet(vtt) {
         }
     });
 
-    // ─── Editing Logic ───────────────────────────────────────────────────────
+    // ─── Mass Roll Context Menu & Workflow ────────────────────────────────────
+    function escapeMassRollHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    contentEl.addEventListener('contextmenu', async (e) => {
+        const nameEl = e.target.closest('.cs-ability-name');
+        if (!nameEl) return;
+        const entry = nameEl.closest('.cs-ability-entry');
+        if (!entry) return;
+
+        let abilityName = nameEl.textContent.trim();
+        if (abilityName === 'Ping') abilityName = 'Ability';
+        
+        const abilityText = entry.querySelector('.cs-ability-text')?.innerHTML.trim() || '';
+        const rawJsonEl = entry.querySelector('.cs-ability-raw');
+        const macroJsonEl = entry.querySelector('.cs-ability-macro');
+        let rawEntries = [];
+        let preParsedMacro = null;
+        if (rawJsonEl) {
+            try {
+                rawEntries = JSON.parse(decodeURIComponent(rawJsonEl.textContent));
+            } catch (err) {}
+        }
+        if (macroJsonEl && macroJsonEl.textContent) {
+            try {
+                preParsedMacro = JSON.parse(decodeURIComponent(macroJsonEl.textContent));
+            } catch (err) {}
+        }
+        const charName = currentMonster?.name || 'Creature';
+        
+        // Probe whether this ability has an attack roll or damage roll
+        const probeMacro = parseActionMacro(abilityName, rawEntries, abilityText, charName, preParsedMacro, 'normal');
+        if (!probeMacro.atkRoll && (!probeMacro.dmgRolls || probeMacro.dmgRolls.length === 0)) {
+            return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        let initialMode = 'normal';
+        if (e.shiftKey) initialMode = 'adv';
+        else if (e.ctrlKey) initialMode = 'dis';
+
+        showMassRollDialog({
+            abilityName,
+            charName,
+            initialMode,
+            hasAttack: !!probeMacro.atkRoll,
+            onConfirm: (count, rollMode) => {
+                executeMassRolls({
+                    count,
+                    rollMode,
+                    abilityName,
+                    rawEntries,
+                    abilityText,
+                    charName,
+                    preParsedMacro
+                });
+            }
+        });
+    });
+
+    function showMassRollDialog({ abilityName, charName, initialMode, hasAttack, onConfirm }) {
+        const existing = document.getElementById('vtt-mass-roll-backdrop');
+        if (existing) existing.remove();
+
+        const backdrop = document.createElement('div');
+        backdrop.id = 'vtt-mass-roll-backdrop';
+        backdrop.className = 'vtt-modal-backdrop';
+
+        let currentCount = 2;
+        let currentMode = initialMode || 'normal';
+
+        const dialog = document.createElement('div');
+        dialog.className = 'vtt-mass-roll-dialog';
+        dialog.innerHTML = `
+            <div class="mass-roll-header">
+                <div class="mass-roll-title">
+                    <i class="fa-solid fa-dice-d20"></i>
+                    <span>Mass Roll: ${escapeMassRollHtml(abilityName)}</span>
+                </div>
+                <button type="button" class="mass-roll-close" id="btn-mass-roll-close" title="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="mass-roll-body">
+                <div class="mass-roll-creature-info">${escapeMassRollHtml(charName)}</div>
+                
+                <div>
+                    <div class="mass-roll-label">
+                        <span>Number of Rolls</span>
+                        <span id="mass-roll-count-display" style="color:var(--color-gold-light); font-family:var(--font-mono, monospace);">2</span>
+                    </div>
+                    <div class="mass-roll-count-row">
+                        <button type="button" class="mass-roll-step-btn" id="mass-roll-minus">-</button>
+                        <input type="number" class="mass-roll-input" id="mass-roll-input" value="2" min="1" max="50">
+                        <button type="button" class="mass-roll-step-btn" id="mass-roll-plus">+</button>
+                    </div>
+                </div>
+
+                <div class="mass-roll-presets">
+                    <button type="button" class="mass-roll-preset-chip" data-count="2">2x</button>
+                    <button type="button" class="mass-roll-preset-chip" data-count="3">3x</button>
+                    <button type="button" class="mass-roll-preset-chip" data-count="4">4x</button>
+                    <button type="button" class="mass-roll-preset-chip" data-count="5">5x</button>
+                    <button type="button" class="mass-roll-preset-chip" data-count="8">8x</button>
+                    <button type="button" class="mass-roll-preset-chip" data-count="10">10x</button>
+                </div>
+
+                ${hasAttack ? `
+                <div>
+                    <div class="mass-roll-label">Roll Mode</div>
+                    <div class="mass-roll-mode-group" id="mass-roll-mode-group">
+                        <button type="button" class="mass-roll-mode-btn ${currentMode === 'normal' ? 'active' : ''}" data-mode="normal">
+                            <i class="fa-solid fa-dice"></i> Normal
+                        </button>
+                        <button type="button" class="mass-roll-mode-btn ${currentMode === 'adv' ? 'active' : ''}" data-mode="adv">
+                            <i class="fa-solid fa-angles-up"></i> Advantage
+                        </button>
+                        <button type="button" class="mass-roll-mode-btn ${currentMode === 'dis' ? 'active' : ''}" data-mode="dis">
+                            <i class="fa-solid fa-angles-down"></i> Disadvantage
+                        </button>
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+            <div class="mass-roll-footer">
+                <button type="button" class="btn-mass-roll-cancel" id="btn-mass-roll-cancel">Cancel</button>
+                <button type="button" class="btn-mass-roll-confirm" id="btn-mass-roll-confirm">
+                    <i class="fa-solid fa-dice-d20"></i> <span id="btn-mass-roll-confirm-label">Roll 2 Attacks</span>
+                </button>
+            </div>
+        `;
+
+        backdrop.appendChild(dialog);
+        document.body.appendChild(backdrop);
+
+        const inputEl = dialog.querySelector('#mass-roll-input');
+        const countDisplay = dialog.querySelector('#mass-roll-count-display');
+        const confirmLabel = dialog.querySelector('#btn-mass-roll-confirm-label');
+
+        function updateCount(val) {
+            currentCount = Math.max(1, Math.min(50, parseInt(val) || 1));
+            inputEl.value = currentCount;
+            if (countDisplay) countDisplay.textContent = currentCount;
+            if (confirmLabel) confirmLabel.textContent = `Roll ${currentCount} ${hasAttack ? 'Attacks' : 'Times'}`;
+        }
+
+        inputEl.focus();
+        inputEl.select();
+
+        inputEl.addEventListener('input', () => updateCount(inputEl.value));
+        dialog.querySelector('#mass-roll-minus').addEventListener('click', () => updateCount(currentCount - 1));
+        dialog.querySelector('#mass-roll-plus').addEventListener('click', () => updateCount(currentCount + 1));
+
+        dialog.querySelectorAll('.mass-roll-preset-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const c = parseInt(chip.dataset.count) || 2;
+                updateCount(c);
+            });
+        });
+
+        if (hasAttack) {
+            dialog.querySelectorAll('.mass-roll-mode-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    dialog.querySelectorAll('.mass-roll-mode-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentMode = btn.dataset.mode;
+                });
+            });
+        }
+
+        function closeDialog() {
+            window.removeEventListener('keydown', onKeyDown);
+            backdrop.remove();
+        }
+
+        function doConfirm() {
+            closeDialog();
+            if (typeof onConfirm === 'function') {
+                onConfirm(currentCount, currentMode);
+            }
+        }
+
+        function onKeyDown(e) {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeDialog();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                doConfirm();
+            }
+        }
+
+        window.addEventListener('keydown', onKeyDown);
+        dialog.querySelector('#btn-mass-roll-close').addEventListener('click', closeDialog);
+        dialog.querySelector('#btn-mass-roll-cancel').addEventListener('click', closeDialog);
+        dialog.querySelector('#btn-mass-roll-confirm').addEventListener('click', doConfirm);
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) closeDialog();
+        });
+    }
+
+    function executeMassRolls({ count, rollMode, abilityName, rawEntries, abilityText, charName, preParsedMacro }) {
+        if (!vtt.socket) return;
+        const visibility = getVisibilitySetting();
+        const attacks = [];
+        let index = 0;
+
+        function rollNext() {
+            if (index < count) {
+                const i = index + 1;
+                const macroCard = parseActionMacro(abilityName, rawEntries, abilityText, charName, preParsedMacro, rollMode);
+                const msgOut = {
+                    text: `uses ${abilityName} (#${i})`,
+                    macroCard: macroCard,
+                    creatureName: charName
+                };
+
+                if (visibility === 'private' || visibility === 'gm') {
+                    msgOut.to = vtt.username;
+                    vtt.socket.emit('chat:whisper', msgOut);
+                } else {
+                    vtt.socket.emit('chat:msg', msgOut);
+                }
+
+                attacks.push({
+                    index: i,
+                    atkRoll: macroCard.atkRoll ? {
+                        formula: macroCard.atkRoll.formula,
+                        total: macroCard.atkRoll.total,
+                        breakdownStr: macroCard.atkRoll.breakdownStr,
+                        diceList: macroCard.atkRoll.diceList,
+                        isCritSuccess: macroCard.atkRoll.isCritSuccess,
+                        isCritFail: macroCard.atkRoll.isCritFail
+                    } : null,
+                    dmgRolls: (macroCard.dmgRolls || []).map(dr => ({
+                        type: dr.type,
+                        formula: dr.formula,
+                        saveRider: !!dr.saveRider,
+                        roll: {
+                            total: dr.roll?.total || 0,
+                            formula: dr.roll?.formula || dr.formula,
+                            breakdownStr: dr.roll?.breakdownStr || ''
+                        }
+                    })),
+                    saveInfo: macroCard.saveInfo || null
+                });
+
+                index++;
+                setTimeout(rollNext, 150);
+            } else {
+                // All N individual rolls finished rolling! Emit the GM-Only Mass Attack Summary Card!
+                const massAttackCard = {
+                    creatureName: charName,
+                    abilityName: abilityName,
+                    rollMode: rollMode,
+                    attacks: attacks,
+                    resolved: null,
+                    timestamp: Date.now()
+                };
+
+                vtt.socket.emit('chat:msg', {
+                    whisperToGM: true,
+                    massAttackCard: massAttackCard
+                });
+            }
+        }
+
+        rollNext();
+    }
     let currentEditCharId = null;
+    let currentEditDefenses = null;
+
+    function defenseToEditableRows(list) {
+        if (!list) return [];
+        const arr = Array.isArray(list) ? list : [list];
+        const rows = [];
+        arr.forEach(item => {
+            if (!item) return;
+            if (typeof item === 'string') {
+                rows.push({
+                    types: [item.trim().toLowerCase()],
+                    bypasses: [],
+                    note: ''
+                });
+            } else if (typeof item === 'object') {
+                if (Array.isArray(item.types)) {
+                    rows.push({
+                        types: item.types.map(t => String(t).trim().toLowerCase()).filter(Boolean),
+                        bypasses: Array.isArray(item.bypasses) ? item.bypasses.map(b => String(b).trim().toLowerCase()).filter(Boolean) : [],
+                        note: item.note || ''
+                    });
+                } else {
+                    const inner = item.immune || item.resist || item.vulnerable || [];
+                    const types = (Array.isArray(inner) ? inner : [inner]).map(t => String(t).trim().toLowerCase()).filter(Boolean);
+                    const note = item.note || '';
+                    const bypasses = [];
+                    if (/nonmagical/i.test(note)) bypasses.push('magic');
+                    if (/silver/i.test(note)) bypasses.push('silver');
+                    if (/adamantine/i.test(note)) bypasses.push('adamantine');
+                    rows.push({ types, bypasses, note });
+                }
+            }
+        });
+        return rows;
+    }
+
+    function editableRowsToDefenses(rows) {
+        if (!rows || !Array.isArray(rows)) return [];
+        const list = [];
+        rows.forEach(r => {
+            const types = (r.types || []).map(t => t.trim().toLowerCase()).filter(Boolean);
+            if (types.length === 0) return;
+            const bypasses = (r.bypasses || []).map(b => b.trim().toLowerCase()).filter(Boolean);
+            const note = (r.note || '').trim();
+            if (bypasses.length > 0 || note) {
+                list.push({ types, bypasses, note });
+            } else {
+                types.forEach(t => list.push(t));
+            }
+        });
+        return list;
+    }
+
+    function parseDefenseTextInput(text, fallbackExisting = []) {
+        if (!text || !text.trim()) return [];
+        const entries = text.split(/;|\,(?![^\(]*\))/).map(s => s.trim()).filter(Boolean);
+        const result = [];
+        entries.forEach(entry => {
+            const parenMatch = entry.match(/^([^\(]+)(?:\((.*)\))?$/);
+            if (parenMatch) {
+                const typePart = parenMatch[1].trim();
+                const notePart = (parenMatch[2] || '').trim();
+                const types = typePart.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+                if (notePart) {
+                    const bypasses = [];
+                    if (/nonmagical/i.test(notePart)) bypasses.push('magic');
+                    if (/silver/i.test(notePart)) bypasses.push('silver');
+                    if (/adamantine/i.test(notePart)) bypasses.push('adamantine');
+                    result.push({ types, bypasses, note: notePart });
+                } else {
+                    types.forEach(t => result.push(t));
+                }
+            } else {
+                result.push(entry.toLowerCase());
+            }
+        });
+        return result.length > 0 ? result : fallbackExisting;
+    }
+
+    function openCreatureDefenseConfigModal(currentDefenses, onApply) {
+        let overlay = document.getElementById('cs-defenses-modal-overlay');
+        if (overlay) overlay.remove();
+
+        const ALL_TYPES = ['acid', 'bludgeoning', 'cold', 'fire', 'force', 'lightning', 'necrotic', 'piercing', 'poison', 'psychic', 'radiant', 'slashing', 'thunder'];
+        const BPS_TYPES = ['bludgeoning', 'piercing', 'slashing'];
+        const ELEM_TYPES = ['acid', 'cold', 'fire', 'lightning', 'thunder'];
+
+        const state = {
+            resist: JSON.parse(JSON.stringify(currentDefenses.resist || [])),
+            immune: JSON.parse(JSON.stringify(currentDefenses.immune || [])),
+            vulnerable: JSON.parse(JSON.stringify(currentDefenses.vulnerable || []))
+        };
+        let activeTab = 'resist';
+
+        overlay = document.createElement('div');
+        overlay.id = 'cs-defenses-modal-overlay';
+        overlay.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:10001; display:flex; justify-content:center; align-items:center;";
+
+        const modal = document.createElement('div');
+        modal.style.cssText = "width:620px; max-width:92vw; max-height:88vh; background:var(--color-bg-base, #11151f); border:1px solid var(--color-gold-base, #c5a059); border-radius:8px; display:flex; flex-direction:column; box-shadow:0 8px 32px rgba(0,0,0,0.9);";
+
+        modal.innerHTML = `
+            <div style="padding:14px 18px; border-bottom:1px solid var(--color-border-subtle, #333); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); border-radius:8px 8px 0 0;">
+                <h3 style="margin:0; font-family:var(--font-heading); color:var(--color-gold-base); font-size:1.1rem; display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-shield-halved"></i> Configure Creature Defenses
+                </h3>
+                <button type="button" id="cs-def-close-btn" style="background:none; border:none; color:var(--color-text-muted); cursor:pointer; font-size:1.1rem;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div style="display:flex; border-bottom:1px solid var(--color-border-subtle, #333); background:rgba(0,0,0,0.2);">
+                <button type="button" class="cs-def-tab-btn" data-tab="resist" style="flex:1; padding:10px 8px; background:transparent; border:none; border-bottom:2px solid transparent; color:var(--color-text-muted); font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.2s;">Resistances</button>
+                <button type="button" class="cs-def-tab-btn" data-tab="immune" style="flex:1; padding:10px 8px; background:transparent; border:none; border-bottom:2px solid transparent; color:var(--color-text-muted); font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.2s;">Immunities</button>
+                <button type="button" class="cs-def-tab-btn" data-tab="vulnerable" style="flex:1; padding:10px 8px; background:transparent; border:none; border-bottom:2px solid transparent; color:var(--color-text-muted); font-size:0.85rem; font-weight:600; cursor:pointer; transition:all 0.2s;">Vulnerabilities</button>
+            </div>
+            <div id="cs-def-tab-content" style="flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px;"></div>
+            <div style="padding:12px 18px; border-top:1px solid var(--color-border-subtle, #333); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); border-radius:0 0 8px 8px;">
+                <button type="button" class="btn btn-secondary btn-sm" id="cs-def-add-row-btn" style="display:inline-flex; align-items:center; gap:6px;">
+                    <i class="fa-solid fa-plus"></i> Add Defense Rule
+                </button>
+                <div style="display:flex; gap:8px;">
+                    <button type="button" class="btn btn-secondary btn-sm" id="cs-def-cancel-btn">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="cs-def-apply-btn">Apply Defenses</button>
+                </div>
+            </div>
+        `;
+
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+
+        function updateTabStyles() {
+            modal.querySelectorAll('.cs-def-tab-btn').forEach(btn => {
+                const isActive = btn.dataset.tab === activeTab;
+                btn.style.borderBottomColor = isActive ? 'var(--color-gold-base, #c5a059)' : 'transparent';
+                btn.style.color = isActive ? 'var(--color-gold-base, #c5a059)' : 'var(--color-text-muted)';
+                btn.style.background = isActive ? 'rgba(197, 160, 89, 0.1)' : 'transparent';
+            });
+        }
+
+        function renderRows() {
+            const container = modal.querySelector('#cs-def-tab-content');
+            container.innerHTML = '';
+            const rows = state[activeTab] || [];
+
+            if (rows.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:32px 16px; color:var(--color-text-muted); font-size:0.85rem;">
+                        No ${activeTab} configured yet.<br>Click <strong>"Add Defense Rule"</strong> below to create one.
+                    </div>
+                `;
+                return;
+            }
+
+            rows.forEach((row, rIdx) => {
+                const rowCard = document.createElement('div');
+                rowCard.style.cssText = "background:rgba(255,255,255,0.03); border:1px solid var(--color-border-subtle, #333); border-radius:6px; padding:12px; display:flex; flex-direction:column; gap:10px;";
+
+                const cardHeader = document.createElement('div');
+                cardHeader.style.cssText = "display:flex; justify-content:space-between; align-items:center;";
+                cardHeader.innerHTML = `
+                    <span style="font-size:0.8rem; font-weight:600; color:var(--color-text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Rule #${rIdx + 1}</span>
+                    <button type="button" class="btn btn-danger btn-xxs cs-def-del-row" data-idx="${rIdx}" style="padding:2px 6px;" title="Delete this rule"><i class="fa-solid fa-trash"></i></button>
+                `;
+                rowCard.appendChild(cardHeader);
+
+                const typesSection = document.createElement('div');
+                typesSection.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="font-size:0.75rem; color:var(--color-text-muted);">Damage Types:</span>
+                        <div style="display:flex; gap:4px;">
+                            <button type="button" class="btn btn-secondary btn-xxs cs-def-preset-bps" data-idx="${rIdx}" style="font-size:0.7rem; padding:1px 5px;">BPS</button>
+                            <button type="button" class="btn btn-secondary btn-xxs cs-def-preset-elem" data-idx="${rIdx}" style="font-size:0.7rem; padding:1px 5px;">Elemental</button>
+                            <button type="button" class="btn btn-secondary btn-xxs cs-def-preset-clear" data-idx="${rIdx}" style="font-size:0.7rem; padding:1px 5px;">Clear</button>
+                        </div>
+                    </div>
+                `;
+
+                const chipsGrid = document.createElement('div');
+                chipsGrid.style.cssText = "display:flex; flex-wrap:wrap; gap:4px;";
+                ALL_TYPES.forEach(t => {
+                    const isSelected = (row.types || []).map(x => x.toLowerCase()).includes(t);
+                    const chip = document.createElement('button');
+                    chip.type = 'button';
+                    chip.className = 'cs-def-type-chip';
+                    chip.dataset.type = t;
+                    chip.dataset.idx = rIdx;
+                    chip.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+                    chip.style.cssText = isSelected
+                        ? "padding:2px 8px; font-size:0.75rem; border-radius:12px; border:1px solid var(--color-gold-base, #c5a059); background:var(--color-gold-base, #c5a059); color:#000; font-weight:600; cursor:pointer;"
+                        : "padding:2px 8px; font-size:0.75rem; border-radius:12px; border:1px solid var(--color-border-subtle, #444); background:rgba(0,0,0,0.2); color:var(--color-text-muted); cursor:pointer;";
+                    
+                    chip.addEventListener('click', () => {
+                        row.types = row.types || [];
+                        const curIdx = row.types.findIndex(x => x.toLowerCase() === t);
+                        if (curIdx >= 0) row.types.splice(curIdx, 1);
+                        else row.types.push(t);
+                        renderRows();
+                    });
+                    chipsGrid.appendChild(chip);
+                });
+                typesSection.appendChild(chipsGrid);
+                rowCard.appendChild(typesSection);
+
+                const bypassSection = document.createElement('div');
+                bypassSection.style.cssText = "background:rgba(0,0,0,0.2); padding:8px; border-radius:4px; display:flex; flex-direction:column; gap:4px;";
+                const bypasses = (row.bypasses || []).map(b => b.toLowerCase());
+                const isMagicBypass = bypasses.includes('magic') || bypasses.includes('nonmagical');
+                const isSilverBypass = bypasses.includes('silver') || bypasses.includes('silvered');
+                const isAdamBypass = bypasses.includes('adamantine');
+
+                bypassSection.innerHTML = `
+                    <span style="font-size:0.72rem; color:var(--color-gold-base); font-weight:600; text-transform:uppercase;">Bypassed by attacks that are:</span>
+                    <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:2px;">
+                        <label style="font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--color-text-secondary);">
+                            <input type="checkbox" class="cs-def-bypass-magic" data-idx="${rIdx}" ${isMagicBypass ? 'checked' : ''}> Magical (Nonmagical bypasses)
+                        </label>
+                        <label style="font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--color-text-secondary);">
+                            <input type="checkbox" class="cs-def-bypass-silver" data-idx="${rIdx}" ${isSilverBypass ? 'checked' : ''}> Silvered
+                        </label>
+                        <label style="font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--color-text-secondary);">
+                            <input type="checkbox" class="cs-def-bypass-adam" data-idx="${rIdx}" ${isAdamBypass ? 'checked' : ''}> Adamantine
+                        </label>
+                    </div>
+                `;
+                rowCard.appendChild(bypassSection);
+
+                const noteSection = document.createElement('div');
+                noteSection.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <span style="font-size:0.75rem; color:var(--color-text-muted); white-space:nowrap;">Note:</span>
+                        <input type="text" class="vtt-input cs-def-note-input" data-idx="${rIdx}" value="${(row.note || '').replace(/"/g, '&quot;')}" placeholder="e.g. while in dim light or darkness" style="width:100%; font-size:0.75rem; padding:3px 6px;">
+                    </div>
+                `;
+                rowCard.appendChild(noteSection);
+
+                container.appendChild(rowCard);
+            });
+
+            container.querySelectorAll('.cs-def-del-row').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.dataset.idx);
+                    state[activeTab].splice(idx, 1);
+                    renderRows();
+                });
+            });
+
+            container.querySelectorAll('.cs-def-preset-bps').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.dataset.idx);
+                    const r = state[activeTab][idx];
+                    r.types = [...new Set([...(r.types || []), ...BPS_TYPES])];
+                    renderRows();
+                });
+            });
+
+            container.querySelectorAll('.cs-def-preset-elem').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.dataset.idx);
+                    const r = state[activeTab][idx];
+                    r.types = [...new Set([...(r.types || []), ...ELEM_TYPES])];
+                    renderRows();
+                });
+            });
+
+            container.querySelectorAll('.cs-def-preset-clear').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const idx = parseInt(btn.dataset.idx);
+                    state[activeTab][idx].types = [];
+                    renderRows();
+                });
+            });
+
+            container.querySelectorAll('.cs-def-bypass-magic').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const idx = parseInt(cb.dataset.idx);
+                    const r = state[activeTab][idx];
+                    r.bypasses = r.bypasses || [];
+                    r.bypasses = r.bypasses.filter(b => b !== 'magic' && b !== 'nonmagical');
+                    if (cb.checked) r.bypasses.push('magic');
+                });
+            });
+
+            container.querySelectorAll('.cs-def-bypass-silver').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const idx = parseInt(cb.dataset.idx);
+                    const r = state[activeTab][idx];
+                    r.bypasses = r.bypasses || [];
+                    r.bypasses = r.bypasses.filter(b => b !== 'silver' && b !== 'silvered');
+                    if (cb.checked) r.bypasses.push('silver');
+                });
+            });
+
+            container.querySelectorAll('.cs-def-bypass-adam').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const idx = parseInt(cb.dataset.idx);
+                    const r = state[activeTab][idx];
+                    r.bypasses = r.bypasses || [];
+                    r.bypasses = r.bypasses.filter(b => b !== 'adamantine');
+                    if (cb.checked) r.bypasses.push('adamantine');
+                });
+            });
+
+            container.querySelectorAll('.cs-def-note-input').forEach(inp => {
+                inp.addEventListener('input', () => {
+                    const idx = parseInt(inp.dataset.idx);
+                    state[activeTab][idx].note = inp.value;
+                });
+            });
+        }
+
+        modal.querySelectorAll('.cs-def-tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                activeTab = btn.dataset.tab;
+                updateTabStyles();
+                renderRows();
+            });
+        });
+
+        modal.querySelector('#cs-def-add-row-btn').addEventListener('click', () => {
+            state[activeTab] = state[activeTab] || [];
+            state[activeTab].push({ types: [], bypasses: [], note: '' });
+            renderRows();
+        });
+
+        const closeFn = () => overlay.remove();
+        modal.querySelector('#cs-def-close-btn').addEventListener('click', closeFn);
+        modal.querySelector('#cs-def-cancel-btn').addEventListener('click', closeFn);
+
+        modal.querySelector('#cs-def-apply-btn').addEventListener('click', () => {
+            onApply(state);
+            closeFn();
+        });
+
+        updateTabStyles();
+        renderRows();
+    }
 
     function openEditModal(m, charId) {
         currentEditCharId = charId;
+        currentEditDefenses = {
+            resist: defenseToEditableRows(m.resist),
+            immune: defenseToEditableRows(m.immune),
+            vulnerable: defenseToEditableRows(m.vulnerable)
+        };
         const char = window.VTT.campaignState.characters[charId];
         
         let overlay = document.getElementById('cs-edit-modal-overlay');
@@ -3609,7 +4274,12 @@ export function initVttCreatureSheet(vtt) {
                 </div>
 
                 <div style="background:var(--color-bg-light); padding:12px; border-radius:4px;">
-                    <h4 style="margin:0 0 8px 0; color:var(--color-text-secondary);">Defenses & Info</h4>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <h4 style="margin:0; color:var(--color-text-secondary);">Defenses & Info</h4>
+                        <button type="button" class="btn btn-secondary btn-xs" id="cs-btn-manage-defenses" style="display:inline-flex; align-items:center; gap:6px;">
+                            <i class="fa-solid fa-shield-halved"></i> Configure Defenses
+                        </button>
+                    </div>
                     <div style="display:flex; flex-direction:column; gap:8px;">
                         <div>
                             <label style="display:block; font-size:0.8rem; margin-bottom:4px;">Immunities</label>
@@ -3787,7 +4457,7 @@ export function initVttCreatureSheet(vtt) {
                     initDamages = item.macro.damages.map(d => {
                         const rawType = (d.type || 'Slashing').trim();
                         const matched = STANDARD_DAMAGE_TYPES.find(dt => dt.toLowerCase() === rawType.toLowerCase()) || (rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase());
-                        return { formula: d.formula || '', type: matched };
+                        return { formula: d.formula || '', type: matched, saveRider: !!d.saveRider };
                     });
                 }
             } else if (desc) {
@@ -3803,13 +4473,15 @@ export function initVttCreatureSheet(vtt) {
                         initSaveAb = dcMatch[2].substring(0, 3).toLowerCase();
                     }
                 }
+                const saveBoundary = desc.search(/(?:saving\s+throw|save\s+DC|\{@actSave|\{@dc|\bDC\s*\d+|\bmust\s+(?:make|succeed)\b)/i);
                 const dmgMatches = [...desc.matchAll(/(?:\{@damage\s+([^}]+)\}|(?:(?:(\d+)\s*\(([^)]+)\))|([1-9]\d*d\d+(?:\s*[+-]\s*\d+)?))\s*([a-zA-Z]+)?\s*damage)/gi)];
                 dmgMatches.forEach(dm => {
                     const formula = (dm[1] || dm[3] || dm[4] || '').trim();
                     const rawType = (dm[5] || 'Slashing').trim();
                     const type = STANDARD_DAMAGE_TYPES.find(dt => dt.toLowerCase() === rawType.toLowerCase()) || 'Slashing';
+                    const isRider = (saveBoundary !== -1 && dm.index >= saveBoundary);
                     if (formula) {
-                        initDamages.push({ formula, type });
+                        initDamages.push({ formula, type, saveRider: isRider });
                     }
                 });
             }
@@ -3852,7 +4524,7 @@ export function initVttCreatureSheet(vtt) {
 
             const damageTypes = STANDARD_DAMAGE_TYPES;
 
-            function createDmgRow(formula = '', type = 'Slashing') {
+            function createDmgRow(formula = '', type = 'Slashing', isRider = false) {
                 const rawType = (type || 'Slashing').trim();
                 const matchedType = damageTypes.find(t => t.toLowerCase() === rawType.toLowerCase()) || (rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase());
                 const dRow = document.createElement('div');
@@ -3863,6 +4535,10 @@ export function initVttCreatureSheet(vtt) {
                     <select class="vtt-input edit-ab-dmg-type" style="padding:2px 4px; font-size:0.8rem;">
                         ${damageTypes.map(t => `<option value="${t}" ${t.toLowerCase() === matchedType.toLowerCase() ? 'selected' : ''}>${t}</option>`).join('')}
                     </select>
+                    <label class="edit-ab-dmg-rider-label" style="display:flex; align-items:center; gap:3px; font-size:0.75rem; color:var(--color-text-muted); cursor:pointer; user-select:none; white-space:nowrap;" title="Check if this damage requires a saving throw (Save Rider)">
+                        <input type="checkbox" class="edit-ab-dmg-rider" ${isRider ? 'checked' : ''} style="cursor:pointer; margin:0;">
+                        <span>Rider</span>
+                    </label>
                     <button type="button" class="btn btn-xxs btn-danger edit-ab-del-dmg" style="padding:2px 5px;"><i class="fa-solid fa-times"></i></button>
                 `;
                 dRow.querySelector('.edit-ab-del-dmg').addEventListener('click', () => {
@@ -3871,15 +4547,17 @@ export function initVttCreatureSheet(vtt) {
                 });
                 dRow.querySelector('.edit-ab-dmg-formula').addEventListener('input', () => syncDescFromInputs());
                 dRow.querySelector('.edit-ab-dmg-type').addEventListener('change', () => syncDescFromInputs());
+                dRow.querySelector('.edit-ab-dmg-rider').addEventListener('change', () => syncDescFromInputs());
                 return dRow;
             }
 
             if (initDamages.length > 0) {
-                initDamages.forEach(d => dmgList.appendChild(createDmgRow(d.formula, d.type)));
+                initDamages.forEach(d => dmgList.appendChild(createDmgRow(d.formula, d.type, d.saveRider)));
             }
 
             row.querySelector('.edit-ab-add-dmg').addEventListener('click', () => {
-                dmgList.appendChild(createDmgRow('1d6', 'Slashing'));
+                const hasDc = !!dcInput.value.trim();
+                dmgList.appendChild(createDmgRow('1d6', 'Slashing', hasDc && dmgList.children.length > 0));
                 syncDescFromInputs();
             });
 
@@ -3927,30 +4605,46 @@ export function initVttCreatureSheet(vtt) {
                     // Update Damages
                     const currentDmgRows = dmgList.querySelectorAll('.edit-ab-dmg-row');
                     if (currentDmgRows.length > 0) {
-                        const dmgParts = [];
+                        const hitParts = [];
+                        const riderParts = [];
                         currentDmgRows.forEach(dr => {
                             const form = dr.querySelector('.edit-ab-dmg-formula').value.trim();
                             const rawTyp = dr.querySelector('.edit-ab-dmg-type').value.trim();
+                            const isRider = dr.querySelector('.edit-ab-dmg-rider')?.checked || false;
                             const typ = damageTypes.find(t => t.toLowerCase() === rawTyp.toLowerCase()) || rawTyp;
                             if (form) {
                                 const avg = calcDiceAverage(form);
-                                dmgParts.push({ form, typ, avg });
+                                if (isRider) riderParts.push({ form, typ, avg });
+                                else hitParts.push({ form, typ, avg });
                             }
                         });
 
-                        if (dmgParts.length > 0) {
-                            const primary = dmgParts[0];
-                            const formattedPrimary = `${primary.avg} (${primary.form}) ${primary.typ.toLowerCase()} damage`;
-                            let formattedAll = formattedPrimary;
-                            if (dmgParts.length > 1) {
-                                const extra = dmgParts.slice(1).map(p => `${p.avg} (${p.form}) ${p.typ.toLowerCase()} damage`).join(' plus ');
-                                formattedAll += ` plus ${extra}`;
+                        let formattedHit = '';
+                        if (hitParts.length > 0) {
+                            const primary = hitParts[0];
+                            formattedHit = `${primary.avg} (${primary.form}) ${primary.typ.toLowerCase()} damage`;
+                            if (hitParts.length > 1) {
+                                const extra = hitParts.slice(1).map(p => `${p.avg} (${p.form}) ${p.typ.toLowerCase()} damage`).join(' plus ');
+                                formattedHit += ` plus ${extra}`;
                             }
+                        }
 
+                        let formattedRider = '';
+                        if (riderParts.length > 0) {
+                            formattedRider = riderParts.map(p => `${p.avg} (${p.form}) ${p.typ.toLowerCase()} damage`).join(' plus ');
+                        }
+
+                        if (formattedHit) {
                             if (/\{@h\}[^.]*\.?/i.test(text)) {
-                                text = text.replace(/\{@h\}[^.]*\.?/gi, `{@h}${formattedAll}.`);
+                                text = text.replace(/\{@h\}[^.]*\.?/gi, `{@h}${formattedHit}.`);
                             } else if (/Hit:\s*[^.]*\.?/i.test(text)) {
-                                text = text.replace(/Hit:\s*[^.]*\.?/gi, `Hit: ${formattedAll}.`);
+                                text = text.replace(/Hit:\s*[^.]*\.?/gi, `Hit: ${formattedHit}.`);
+                            }
+                        }
+
+                        if (formattedRider && dcVal) {
+                            if (/taking\s+[^.]+\s+damage\s+on\s+a\s+failed\s+save/i.test(text)) {
+                                text = text.replace(/taking\s+[^.]+\s+damage\s+on\s+a\s+failed\s+save/gi, `taking ${formattedRider} on a failed save`);
                             }
                         }
                     }
@@ -3989,20 +4683,22 @@ export function initVttCreatureSheet(vtt) {
 
                     // Parse Damages
                     const parsedDamages = [];
+                    const saveBoundary = text.search(/(?:saving\s+throw|save\s+DC|\{@actSave|\{@dc|\bDC\s*\d+|\bmust\s+(?:make|succeed)\b)/i);
                     const dmgMatches = [...text.matchAll(/(?:\{@damage\s+([^}]+)\}|(?:(?:(\d+)\s*\(([^)]+)\))|([1-9]\d*d\d+(?:\s*[+-]\s*[^,.]+)?))\s*([a-zA-Z]+)?\s*damage)/gi)];
                     dmgMatches.forEach(dm => {
                         const formula = (dm[1] || dm[3] || dm[4] || '').trim();
                         let rawType = (dm[5] || 'Slashing').trim();
                         let type = damageTypes.find(t => t.toLowerCase() === rawType.toLowerCase()) || 'Slashing';
-                        if (formula && !parsedDamages.some(pd => pd.formula === formula)) {
-                            parsedDamages.push({ formula, type });
+                        const isRider = (saveBoundary !== -1 && dm.index >= saveBoundary);
+                        if (formula && !parsedDamages.some(pd => pd.formula === formula && pd.saveRider === isRider)) {
+                            parsedDamages.push({ formula, type, saveRider: isRider });
                         }
                     });
 
                     if (parsedDamages.length > 0) {
                         dmgList.innerHTML = '';
                         parsedDamages.forEach(d => {
-                            dmgList.appendChild(createDmgRow(d.formula, d.type));
+                            dmgList.appendChild(createDmgRow(d.formula, d.type, d.saveRider));
                         });
                     }
                 } finally {
@@ -4417,6 +5113,23 @@ export function initVttCreatureSheet(vtt) {
             }
         });
 
+        const manageDefensesBtn = content.querySelector('#cs-btn-manage-defenses');
+        if (manageDefensesBtn) {
+            manageDefensesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openCreatureDefenseConfigModal(currentEditDefenses, (updated) => {
+                    currentEditDefenses = updated;
+                    const resInput = content.querySelector('#cs-edit-resist');
+                    if (resInput) resInput.value = formatDamageList(editableRowsToDefenses(currentEditDefenses.resist));
+                    const immInput = content.querySelector('#cs-edit-immune');
+                    if (immInput) immInput.value = formatDamageList(editableRowsToDefenses(currentEditDefenses.immune));
+                    const vulInput = content.querySelector('#cs-edit-vuln');
+                    if (vulInput) vulInput.value = formatDamageList(editableRowsToDefenses(currentEditDefenses.vulnerable));
+                });
+            });
+        }
+
         overlay.querySelector('#cs-edit-cancel-btn').onclick = () => closeEditModal(false);
         overlay.querySelector('#cs-edit-save-btn').onclick = () => {
             window.removeEventListener('keydown', onEsc);
@@ -4544,14 +5257,43 @@ export function initVttCreatureSheet(vtt) {
         }
 
         // Defenses & Info
-        const immuneStr = content.querySelector('#cs-edit-immune').value.trim();
-        if (immuneStr) m.immune = immuneStr.split(',').map(s => s.trim()); else delete m.immune;
+        if (currentEditDefenses) {
+            const immuneStr = content.querySelector('#cs-edit-immune').value.trim();
+            const compiledImm = editableRowsToDefenses(currentEditDefenses.immune);
+            if (immuneStr === '') {
+                delete m.immune;
+            } else if (immuneStr === formatDamageList(compiledImm)) {
+                m.immune = compiledImm.length > 0 ? compiledImm : undefined;
+                if (!m.immune) delete m.immune;
+            } else {
+                m.immune = parseDefenseTextInput(immuneStr, compiledImm);
+                if (!m.immune || m.immune.length === 0) delete m.immune;
+            }
 
-        const resistStr = content.querySelector('#cs-edit-resist').value.trim();
-        if (resistStr) m.resist = resistStr.split(',').map(s => s.trim()); else delete m.resist;
+            const resistStr = content.querySelector('#cs-edit-resist').value.trim();
+            const compiledRes = editableRowsToDefenses(currentEditDefenses.resist);
+            if (resistStr === '') {
+                delete m.resist;
+            } else if (resistStr === formatDamageList(compiledRes)) {
+                m.resist = compiledRes.length > 0 ? compiledRes : undefined;
+                if (!m.resist) delete m.resist;
+            } else {
+                m.resist = parseDefenseTextInput(resistStr, compiledRes);
+                if (!m.resist || m.resist.length === 0) delete m.resist;
+            }
 
-        const vulnStr = content.querySelector('#cs-edit-vuln').value.trim();
-        if (vulnStr) m.vulnerable = vulnStr.split(',').map(s => s.trim()); else delete m.vulnerable;
+            const vulnStr = content.querySelector('#cs-edit-vuln').value.trim();
+            const compiledVuln = editableRowsToDefenses(currentEditDefenses.vulnerable);
+            if (vulnStr === '') {
+                delete m.vulnerable;
+            } else if (vulnStr === formatDamageList(compiledVuln)) {
+                m.vulnerable = compiledVuln.length > 0 ? compiledVuln : undefined;
+                if (!m.vulnerable) delete m.vulnerable;
+            } else {
+                m.vulnerable = parseDefenseTextInput(vulnStr, compiledVuln);
+                if (!m.vulnerable || m.vulnerable.length === 0) delete m.vulnerable;
+            }
+        }
 
         const condStr = content.querySelector('#cs-edit-cond').value.trim();
         if (condStr) m.conditionImmune = condStr.split(',').map(s => s.trim()); else delete m.conditionImmune;
@@ -4611,9 +5353,10 @@ export function initVttCreatureSheet(vtt) {
                 dmgRows.forEach(dr => {
                     const formula = dr.querySelector('.edit-ab-dmg-formula')?.value.trim();
                     const rawType = dr.querySelector('.edit-ab-dmg-type')?.value.trim() || 'Slashing';
+                    const isRider = dr.querySelector('.edit-ab-dmg-rider')?.checked || false;
                     const type = STANDARD_DAMAGE_TYPES.find(dt => dt.toLowerCase() === rawType.toLowerCase()) || (rawType.charAt(0).toUpperCase() + rawType.slice(1).toLowerCase());
                     if (formula) {
-                        damages.push({ formula, type });
+                        damages.push({ formula, type, saveRider: isRider });
                     }
                 });
 
@@ -4859,7 +5602,7 @@ export function initVttCreatureSheet(vtt) {
         // });
     }
 
-    function evaluateDiceHelper(formula, isCrit = false) {
+    function evaluateDiceHelper(formula, isCrit = false, rollModeOverride = null) {
         if (!formula) return { total: 0, diceList: [], isCritSuccess: false, isCritFail: false, breakdownStr: '', formula: '' };
         if (isCrit) {
             formula = formula.replace(/(?:(\d+)\s*)?[dD]\s*(\d+)/gi, (m, count, faces) => `${(count ? parseInt(count) : 1) * 2}d${faces}`);
@@ -4870,10 +5613,12 @@ export function initVttCreatureSheet(vtt) {
         let isCritSuccess = false;
         let isCritFail = false;
 
-        let rollMode = window.VTT ? window.VTT.currentRollMode : 'normal';
+        let rollMode = rollModeOverride || (window.VTT ? window.VTT.currentRollMode : 'normal');
         const evt = window.event;
-        if (evt && evt.shiftKey) rollMode = 'adv';
-        else if (evt && evt.ctrlKey) rollMode = 'dis';
+        if (!rollModeOverride && evt) {
+            if (evt.shiftKey) rollMode = 'adv';
+            else if (evt.ctrlKey) rollMode = 'dis';
+        }
         const isAdvantage = rollMode === 'adv';
         const isDisadvantage = rollMode === 'dis';
         
@@ -5189,6 +5934,8 @@ export function initVttCreatureSheet(vtt) {
             mc.dmgRolls.push({
                 type: type,
                 formula: formula,
+                isMagic: true,
+                isSpell: true,
                 roll: {
                     total: evalRoll.total,
                     formula: formula,
@@ -5201,7 +5948,7 @@ export function initVttCreatureSheet(vtt) {
         return mc;
     }
 
-    function parseActionMacro(abilityName, rawEntries, abilityText, charName, preParsedMacro) {
+    function parseActionMacro(abilityName, rawEntries, abilityText, charName, preParsedMacro, rollModeOverride = null) {
         const mc = {
             charName: charName || 'Creature',
             macroName: abilityName,
@@ -5210,13 +5957,19 @@ export function initVttCreatureSheet(vtt) {
             dmgRolls: []
         };
         
+        const textToCheck = `${abilityName || ''} ${abilityText || ''} ${typeof rawEntries === 'string' ? rawEntries : JSON.stringify(rawEntries || '')}`;
+        const hasMagicWeaponsTrait = currentMonster?.trait && Array.isArray(currentMonster.trait) && currentMonster.trait.some(t => /magic\s+weapons?/i.test(t.name || ''));
+        const isMagicAttack = !!(preParsedMacro?.isMagic || hasMagicWeaponsTrait || /magic\s+weapon\s+attack|attacks?\s+are\s+magical/i.test(textToCheck));
+        const isSilveredAttack = !!(preParsedMacro?.isSilvered || /silvered/i.test(textToCheck));
+        const isAdamantineAttack = !!(preParsedMacro?.isAdamantine || /adamantine/i.test(textToCheck));
+
         // Zero-regex execution: Use pre-compiled macro schema if available
         if (preParsedMacro) {
             let isCrit = false;
             if (preParsedMacro.isAttack && preParsedMacro.attackBonus !== null && preParsedMacro.attackBonus !== undefined) {
                 const mod = preParsedMacro.attackBonus;
                 const formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-                const evalRoll = evaluateDiceHelper(formula);
+                const evalRoll = evaluateDiceHelper(formula, false, rollModeOverride);
                 mc.atkRoll = {
                     formula: formula,
                     total: evalRoll.total,
@@ -5243,6 +5996,10 @@ export function initVttCreatureSheet(vtt) {
                     mc.dmgRolls.push({
                         type: type,
                         formula: evalRoll.formula || d.formula,
+                        saveRider: !!d.saveRider,
+                        isMagic: d.isMagic !== undefined ? !!d.isMagic : isMagicAttack,
+                        isSilvered: d.isSilvered !== undefined ? !!d.isSilvered : isSilveredAttack,
+                        isAdamantine: d.isAdamantine !== undefined ? !!d.isAdamantine : isAdamantineAttack,
                         roll: {
                             total: evalRoll.total,
                             formula: evalRoll.formula || d.formula,
@@ -5266,7 +6023,7 @@ export function initVttCreatureSheet(vtt) {
         if (atkMatch) {
             const mod = parseInt(atkMatch[1]) || 0;
             const formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
-            const evalRoll = evaluateDiceHelper(formula);
+            const evalRoll = evaluateDiceHelper(formula, false, rollModeOverride);
             mc.atkRoll = {
                 formula: formula,
                 total: evalRoll.total,
@@ -5324,6 +6081,27 @@ export function initVttCreatureSheet(vtt) {
             mc.saveInfo = { dc: saveDc, ability: normalizedAbility };
         }
         
+        // Save rider boundary detection
+        let saveStartIndex = -1;
+        if (mc.saveInfo) {
+            const saveKeywords = [
+                /\{@actSave\b/i,
+                /\{@dc\b/i,
+                /\bDC\s*\d+/i,
+                /\bsaving\s+throw\b/i,
+                /\bsave\s+DC\b/i,
+                /\bmust\s+(?:make|succeed)\b/i
+            ];
+            for (const kw of saveKeywords) {
+                const pos = rawString.search(kw);
+                if (pos !== -1) {
+                    if (saveStartIndex === -1 || pos < saveStartIndex) {
+                        saveStartIndex = pos;
+                    }
+                }
+            }
+        }
+
         // Parse Damages
         const dmgRegex = /\{@damage ([^\}]+)\}(?:.*?([\w]+)\s+damage)?/gi;
         let match;
@@ -5334,11 +6112,21 @@ export function initVttCreatureSheet(vtt) {
             if (!['Fire', 'Cold', 'Lightning', 'Thunder', 'Poison', 'Acid', 'Necrotic', 'Radiant', 'Force', 'Psychic', 'Slashing', 'Piercing', 'Bludgeoning', 'Healing'].includes(type)) {
                 type = 'Slashing';
             }
+            let isRider = false;
+            if (!mc.atkRoll && mc.saveInfo) {
+                isRider = true;
+            } else if (mc.atkRoll && mc.saveInfo && saveStartIndex !== -1) {
+                isRider = match.index >= saveStartIndex;
+            }
             const evalRoll = evaluateDiceHelper(formula, isCrit);
             const rolledFormula = evalRoll.formula || formula;
             mc.dmgRolls.push({
                 type: type,
                 formula: rolledFormula,
+                saveRider: isRider,
+                isMagic: isMagicAttack,
+                isSilvered: isSilveredAttack,
+                isAdamantine: isAdamantineAttack,
                 roll: {
                     total: evalRoll.total,
                     formula: rolledFormula,
@@ -5355,11 +6143,21 @@ export function initVttCreatureSheet(vtt) {
             while ((match = fallbackDmgRegex.exec(rawString)) !== null) {
                 const formula = match[1];
                 let type = match[2].charAt(0).toUpperCase() + match[2].slice(1).toLowerCase();
+                let isRider = false;
+                if (!mc.atkRoll && mc.saveInfo) {
+                    isRider = true;
+                } else if (mc.atkRoll && mc.saveInfo && saveStartIndex !== -1) {
+                    isRider = match.index >= saveStartIndex;
+                }
                 const evalRoll = evaluateDiceHelper(formula, isCrit);
                 const rolledFormula = evalRoll.formula || formula;
                 mc.dmgRolls.push({
                     type: type,
                     formula: rolledFormula,
+                    saveRider: isRider,
+                    isMagic: isMagicAttack,
+                    isSilvered: isSilveredAttack,
+                    isAdamantine: isAdamantineAttack,
                     roll: {
                         total: evalRoll.total,
                         formula: rolledFormula,

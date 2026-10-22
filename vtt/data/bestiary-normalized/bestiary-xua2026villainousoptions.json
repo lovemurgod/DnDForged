@@ -98,7 +98,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_rampager__requires_druid_level_10___gi70",
+        "id": "act_rampager__requires_druid_level_10___i1z3",
         "name": "Rampager (Requires Druid Level 10+)",
         "actionType": "trait",
         "descriptionHtml": "<p>When you enter the space of an enemy that is at least one size smaller than you for the first time on a turn, that creature is subjected to the following effect. str DC equals {@dcYourSpellSave}. {@actSaveFail} The target has the Prone condition. If the target already has the Prone condition, it instead takes 2d6 Bludgeoning damage.</p>",
@@ -116,14 +116,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_siege_monster_a3ao",
+        "id": "act_siege_monster_4i58",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>You deal double damage to objects and structures.</p>",
@@ -145,7 +146,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__requires_druid_level_5___k225",
+        "id": "act_multiattack__requires_druid_level_5___di71",
         "name": "Multiattack (Requires Druid Level 5+)",
         "actionType": "action",
         "descriptionHtml": "<p>You make two Rend attacks.</p>",
@@ -165,7 +166,7 @@
         }
       },
       {
-        "id": "act_rend_ircf",
+        "id": "act_rend_tvs3",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d8 plus your Wisdom modifier Slashing damage.</p>",
@@ -183,14 +184,15 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_incandescent_breath_vtpi",
+        "id": "act_incandescent_breath_et9h",
         "name": "Incandescent Breath",
         "actionType": "action",
         "descriptionHtml": "<p>You expend a level 1+ spell slot. dex DC equals {@dcYourSpellSave}, each creature in a 5-foot-wide, 60-foot-long Line [Area of Effect]. {@actSaveFail} 2d8 Radiant damage per level of the spell slot expended plus your Wisdom modifier. {@actSaveSuccess} Half damage.</p>",
@@ -208,7 +210,8 @@
           "damages": [
             {
               "formula": "2d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -339,7 +342,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_r56d",
+        "id": "act_flyby_3gfx",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>You don't provoke an Opportunity Attack when you fly out of an enemy's reach.</p>",
@@ -359,7 +362,7 @@
         }
       },
       {
-        "id": "act_hive_mind__requires_druid_level_10___ic4l",
+        "id": "act_hive_mind__requires_druid_level_10___5ity",
         "name": "Hive Mind (Requires Druid Level 10+)",
         "actionType": "trait",
         "descriptionHtml": "<p>When you assume this form, you forge a telepathic link with a number of creatures of your choice you can see and that can communicate in at least one language; the maximum number of creatures is equal to your Druid level. You and the chosen creatures can communicate telepathically with each other whether or not you share a language as long as you are on the same plane.</p>",
@@ -381,7 +384,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__requires_level_5___tcet",
+        "id": "act_multiattack__requires_level_5___beyv",
         "name": "Multiattack (Requires Level 5+)",
         "actionType": "action",
         "descriptionHtml": "<p>You make two Rend attacks.</p>",
@@ -401,7 +404,7 @@
         }
       },
       {
-        "id": "act_rend_09vn",
+        "id": "act_rend_ian5",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d8 plus your Wisdom modifier Piercing damage.</p>",
@@ -419,14 +422,15 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_energizing_pollen_8iof",
+        "id": "act_energizing_pollen_bapk",
         "name": "Energizing Pollen",
         "actionType": "action",
         "descriptionHtml": "<p>You expend a level 1+ spell slot and emit a cloud of healing pollen that can restore a number of Hit Points equal to 2d8 plus five times the expended spell slot's level. Choose any number of creatures within 15 feet of yourself, and divide those Hit Points among them.</p>",
@@ -570,7 +574,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_g27a",
+        "id": "act_amphibious_bd23",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>You can breathe air and water.</p>",
@@ -590,7 +594,7 @@
         }
       },
       {
-        "id": "act_toxic_stench__requires_druid_level_10___0tqe",
+        "id": "act_toxic_stench__requires_druid_level_10___medr",
         "name": "Toxic Stench (Requires Druid Level 10+)",
         "actionType": "trait",
         "descriptionHtml": "<p>con DC equals {@dcYourSpellSave}, each creature of your choice that starts its turn in a 10-foot Emanation [Area of Effect] originating from you. {@actSaveFail} 2d4 Poison damage, and the target has the Poisoned condition until the start of its next turn.</p>",
@@ -608,7 +612,8 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -617,7 +622,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__requires_druid_level_5___840x",
+        "id": "act_multiattack__requires_druid_level_5___5ik2",
         "name": "Multiattack (Requires Druid Level 5+)",
         "actionType": "action",
         "descriptionHtml": "<p>You make two Rend attacks.</p>",
@@ -637,7 +642,7 @@
         }
       },
       {
-        "id": "act_rend_8k38",
+        "id": "act_rend_9172",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d8 plus your Wisdom modifier Bludgeoning damage.</p>",
@@ -655,7 +660,8 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -665,7 +671,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_ink_cloud_wl4s",
+        "id": "act_ink_cloud_vpum",
         "name": "Ink Cloud",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} You take damage. {@actResponse} You expend a level 1+ spell slot and release an inky cloud that fills a 15-foot-radius Cube [Area of Effect] centered on yourself, and you move up to your Speed. The Cube [Area of Effect] is Heavily Obscured. It lasts for 1 minute or until a strong current or wind (such as one created by Gust of Wind) disperses it.</p>",

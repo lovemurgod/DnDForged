@@ -188,7 +188,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_4pml",
+        "id": "act_magic_resistance_rv83",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The colour out of space has Advantage on saving throws against spells and other magical effects.</p>",
@@ -210,7 +210,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7jp0",
+        "id": "act_multiattack_e4zs",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The colour out of space makes two Draining Lash attacks.</p>",
@@ -230,7 +230,7 @@
         }
       },
       {
-        "id": "act_draining_lash_7ths",
+        "id": "act_draining_lash_0xru",
         "name": "Draining Lash",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, Reach 15 ft. Hit: 20 (3d8 + 6) Necrotic damage.</p>",
@@ -248,14 +248,15 @@
           "damages": [
             {
               "formula": "3d8 + 6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_absorb_life__recharge_5__quyg",
+        "id": "act_absorb_life__recharge_5__e2kb",
         "name": "Absorb Life (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 17, non-Mythos creatures in a 30-foot Emanation [Area of Effect] centered on the colour out of space. {@actSaveFail} 44 (8d10) Necrotic damage. {@actSaveSuccess} Half damage. If three or more creatures fail their saving throw against this effect, the colour out of space gains an additional action on its next turn.</p>",
@@ -276,7 +277,8 @@
           "damages": [
             {
               "formula": "8d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -285,7 +287,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_horrid_burrowing_7i8s",
+        "id": "act_horrid_burrowing_nbbs",
         "name": "Horrid Burrowing",
         "actionType": "bonus",
         "descriptionHtml": "<p>The colour out of space destroys an unattended, non-magical object that it can touch that has Hit Points less than or equal to the colour's maximum Hit Points.</p>",
@@ -450,7 +452,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_yzt1",
+        "id": "act_amphibious_620n",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Dagon can breathe air and water.</p>",
@@ -470,7 +472,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__pg2i",
+        "id": "act_legendary_resistance__4_day__nydk",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Dagon fails a saving throw, it can choose to succeed instead.</p>",
@@ -490,7 +492,7 @@
         }
       },
       {
-        "id": "act_one_with_the_sea_dnhe",
+        "id": "act_one_with_the_sea_h10w",
         "name": "One With the Sea",
         "actionType": "trait",
         "descriptionHtml": "<p>When Dagon drops to 0 Hit Points or would be killed outright, it instead transforms into a swirling body of water. At the start of each of Dagon's turns, it gains one recovery point but otherwise cannot use actions or legendary actions other than Relentless Horror. When it gains its fourth recovery point, its maximum Hit Points return to normal if they have been reduced and it regains all lost Hit Points. It reforms its physical body in a space of its choice within 10 miles of its location. It then loses all recovery points.</p><p>If Dagon is the target of a Banishment spell cast with a 9th-level spell slot while in this cloud form, it automatically fails its saving throw and is instead sent to the deepest corner of the ocean where it slumbers for 6d10 years.</p>",
@@ -511,7 +513,7 @@
         }
       },
       {
-        "id": "act_siege_monster_osy0",
+        "id": "act_siege_monster_06dn",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>Dagon deals double damage to objects and structures.</p>",
@@ -531,7 +533,7 @@
         }
       },
       {
-        "id": "act_spectral_waves_q801",
+        "id": "act_spectral_waves_hh2c",
         "name": "Spectral Waves",
         "actionType": "trait",
         "descriptionHtml": "<p>Storm-tossed waves formed of magical force swirl around Dagon in a 120-foot Emanation [Area of Effect] originating from him. Creatures without a Swim Speed treat this area as Difficult Terrain and take 10 Force damage if they end their turn in this area. Flying creatures that end their turn in this area must make DC 24 Strength saving throws, gaining the Prone condition on a failed save.</p>",
@@ -556,7 +558,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vs9f",
+        "id": "act_multiattack_ajtq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Dagon makes four Slashing Claw attacks.</p>",
@@ -576,7 +578,7 @@
         }
       },
       {
-        "id": "act_slashing_claw_03us",
+        "id": "act_slashing_claw_7hl1",
         "name": "Slashing Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +17, Reach 20 ft. Hit: 21 (2d10 + 10) Slashing damage and the target is pushed up to 10 feet away from Dagon and gains the Prone condition.</p>",
@@ -594,14 +596,15 @@
           "damages": [
             {
               "formula": "2d10 + 10",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hungry_tide__recharge_5__on1e",
+        "id": "act_hungry_tide__recharge_5__ck8c",
         "name": "Hungry Tide (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 24, creatures of Dagon's choice within 120 ft. of it; 1 The target takes 11 (2d10) Force damage, and gains the Restrained condition until the end of its next turn, when it repeats the save. 2 The target takes 4d20 (22) Force damage its Speed is reduced to 0 and cannot be increased until it uses an action to make a successful DC 24 Strength (Athletics) check.</p>",
@@ -622,7 +625,8 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -636,7 +640,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_disdainful_swipe_ycv2",
+          "id": "act_disdainful_swipe_925h",
           "name": "Disdainful Swipe",
           "actionType": "legendary",
           "descriptionHtml": "<p>Dagon makes a Slashing Claw attack.</p>",
@@ -656,7 +660,7 @@
           }
         },
         {
-          "id": "act_storm_tossed_seas_41bj",
+          "id": "act_storm_tossed_seas_036k",
           "name": "Storm Tossed Seas",
           "actionType": "legendary",
           "descriptionHtml": "<p>str DC 25, creatures within 120 ft. of Dagon of its choice; {@actSaveFail} Dagon moves the target up to 30 feet and the target gains the Prone condition.</p>",
@@ -679,7 +683,7 @@
           }
         },
         {
-          "id": "act_relentless_horror__recharge_5__7zyz",
+          "id": "act_relentless_horror__recharge_5__tj7o",
           "name": "Relentless Horror (Recharge 5)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Dagon chooses one of the following options:</p><ul><li>It teleports up to 200 ft. to an unoccupied space.</li><li>It immediately ends one spell or condition affecting it.</li><li>It ends one spell or magical effect of its choice within 120 ft. of it.</li></ul>",
@@ -942,7 +946,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_1qpw",
+        "id": "act_amphibious_jgfb",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The deep one can breathe air and water.</p>",
@@ -962,7 +966,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_k5f8",
+        "id": "act_magic_resistance_272n",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The deep one has Advantage on saving throws against spells and other magical effects.</p>",
@@ -984,7 +988,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_asdf",
+        "id": "act_multiattack_b4sq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The deep one makes two claw and one bite attacks.</p>",
@@ -1004,7 +1008,7 @@
         }
       },
       {
-        "id": "act_claw_9llb",
+        "id": "act_claw_oqeu",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, Reach 10 ft. Hit: 6 (1d4 + 3) Slashing damage.</p>",
@@ -1022,14 +1026,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_syjs",
+        "id": "act_bite_d3r4",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, Reach 5 ft. Hit: 7 (1d6 + 3) Piercing damage.</p>",
@@ -1047,7 +1052,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1183,7 +1189,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_mythos_fanaticism_zfhc",
+        "id": "act_mythos_fanaticism_3l6r",
         "name": "Mythos Fanaticism",
         "actionType": "trait",
         "descriptionHtml": "<p>If the deep one hybrid can see a Mythos creature of size Large or larger, it gains a +5 bonus to Initiative rolls and gains 2 Temporary Hit Points at the start of its turn.</p>",
@@ -1205,7 +1211,7 @@
     ],
     "actions": [
       {
-        "id": "act_trident_44wo",
+        "id": "act_trident_omlt",
         "name": "Trident",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, Reach 5 ft. Hit: 7 (1d8 + 2) Piercing damage.</p>",
@@ -1223,14 +1229,15 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_light_crossbow_11sa",
+        "id": "act_light_crossbow_lic5",
         "name": "Light Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +2, range 80/320 ft. Hit: 5 (1d8) Piercing damage.</p>",
@@ -1248,7 +1255,8 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1258,7 +1266,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_my_life_for_yours_8h9j",
+        "id": "act_my_life_for_yours_2q30",
         "name": "My Life for Yours",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} A Mythos creature without this Reaction is hit by a melee attack. {@actResponse} This creature becomes the target of the triggering attack if it is in range of the original attack.</p>",
@@ -1416,7 +1424,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dimensional_attunement_xcni",
+        "id": "act_dimensional_attunement_1202",
         "name": "Dimensional Attunement",
         "actionType": "trait",
         "descriptionHtml": "<p>A dimensional shambler gains 1 Dimension Point at the end of its turn during combat or when it is otherwise threatened. It begins an encounter with 0 points and can have up to 4.</p>",
@@ -1436,7 +1444,7 @@
         }
       },
       {
-        "id": "act_dimensional_warping_xzq8",
+        "id": "act_dimensional_warping_ihrd",
         "name": "Dimensional Warping",
         "actionType": "trait",
         "descriptionHtml": "<p>wis DC 14, if a creature within 30 feet of the dimensional shambler attempts to teleport. {@actSaveFail} The creature doesn't teleport. {@actSaveSuccess} The creature teleports as normal.</p>",
@@ -1459,7 +1467,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_yw47",
+        "id": "act_magic_resistance_ir3b",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The dimensional shambler has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1481,7 +1489,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jii3",
+        "id": "act_multiattack_vqb2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dimensional shambler makes up to four Dimensional Claw attacks and uses Disdainful Banishment. It can't attack the same creature more than twice with Dimensional Claw when it uses Multiattack.</p>",
@@ -1501,7 +1509,7 @@
         }
       },
       {
-        "id": "act_dimensional_claw_11on",
+        "id": "act_dimensional_claw_3kyy",
         "name": "Dimensional Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +8, Reach 10 ft. Hit: 11 (1d10 + 5) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 16). It can Grapple up to two Medium or smaller creatures at a time.</p>",
@@ -1522,14 +1530,15 @@
           "damages": [
             {
               "formula": "1d10 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_disdainful_banishment_ag1e",
+        "id": "act_disdainful_banishment_z49b",
         "name": "Disdainful Banishment",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 14, one creature Grappled by the dimensional shambler. {@actSaveFail} The target is teleported up to 30 feet to an unoccupied space the dimensional shambler can see.</p>",
@@ -1554,7 +1563,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_dimensional_flurry_08s6",
+        "id": "act_dimensional_flurry_w3g0",
         "name": "Dimensional Flurry",
         "actionType": "bonus",
         "descriptionHtml": "<p>A dimensional shambler can spend 3 Dimension Points to gain an extra use of Legendary Action. It must use the additional use before its next turn.</p>",
@@ -1574,7 +1583,7 @@
         }
       },
       {
-        "id": "act_dimensional_rend_c7f5",
+        "id": "act_dimensional_rend_p6iv",
         "name": "Dimensional Rend",
         "actionType": "bonus",
         "descriptionHtml": "<p>A dimensional shambler can spend 1 Dimension Point to extend its claws through space and time, increasing its Reach with Dimensional Claw to 30 feet and allowing it to ignore all cover with those attacks until the end of its turn.</p>",
@@ -1594,7 +1603,7 @@
         }
       },
       {
-        "id": "act_dimensional_step_bnty",
+        "id": "act_dimensional_step_rji3",
         "name": "Dimensional Step",
         "actionType": "bonus",
         "descriptionHtml": "<p>A dimensional shambler can spend 3 Dimension Points to teleport itself and all creatures it has Grappled to a chosen destination it has visited within the past month.</p>",
@@ -1614,7 +1623,7 @@
         }
       },
       {
-        "id": "act_teleport_01nw",
+        "id": "act_teleport_xxg7",
         "name": "Teleport",
         "actionType": "bonus",
         "descriptionHtml": "<p>The dimensional shambler teleports up to 60 feet to an unoccupied space it can see.</p>",
@@ -1640,7 +1649,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_ulfb",
+          "id": "act_attack_wv5v",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dimensional shambler makes up to two Dimensional Claw attacks.</p>",
@@ -1660,7 +1669,7 @@
           }
         },
         {
-          "id": "act_shift_w2bw",
+          "id": "act_shift_ch3u",
           "name": "Shift",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dimensional shambler uses Dimensional Step.</p>",
@@ -1680,7 +1689,7 @@
           }
         },
         {
-          "id": "act_step_zxfr",
+          "id": "act_step_q1v8",
           "name": "Step",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dimensional shambler uses Teleport.</p>",
@@ -2021,7 +2030,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_dhwo",
+        "id": "act_magic_resistance_jmod",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder thing has Advantage on saving throws against spells and other magical effects.</p>",
@@ -2043,7 +2052,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vnns",
+        "id": "act_multiattack_6jaz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elder thing makes up to two Grasping Tentacle attacks and uses Spellcasting.</p>",
@@ -2063,7 +2072,7 @@
         }
       },
       {
-        "id": "act_grasping_tentacle_zd03",
+        "id": "act_grasping_tentacle_9s1s",
         "name": "Grasping Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +10, Reach 20 ft. Hit: 11 (1d8 + 6) Bludgeoning damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 18). While Grappled the target has the Restrained condition.</p>",
@@ -2084,14 +2093,15 @@
           "damages": [
             {
               "formula": "1d8 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_at_will__u93a",
+        "id": "act_at_will__7vjh",
         "name": "At Will:",
         "actionType": "action",
         "descriptionHtml": "<p>Charm Person, Scorching Ray, Thunderwave.</p><p>1/day: Cone of Cold, Fear, Ice Storm.</p>",
@@ -2114,7 +2124,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_surgical_eye_l02d",
+        "id": "act_surgical_eye_kp0a",
         "name": "Surgical Eye",
         "actionType": "bonus",
         "descriptionHtml": "<p>The elder thing assesses the anatomy of a creature it can see within 30 ft. and makes a DC 15 Intelligence (Medicine) check. If it succeeds, its attacks against the target are critical hits on die rolls of 18 or higher for the next minute or until it uses Surgical Eye against a different target. If the elder thing succeeds on this check a second time against the same creature, its attacks against the target are instead critical hits on die rolls of 16 or higher for the next minute or until it uses Surgical Eye against a different target.</p>",
@@ -2143,7 +2153,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_8prr",
+          "id": "act_attack_fle5",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder thing makes a Grasping Tentacle attack.</p>",
@@ -2163,7 +2173,7 @@
           }
         },
         {
-          "id": "act_ghoulish_study_lff0",
+          "id": "act_ghoulish_study_76ri",
           "name": "Ghoulish Study",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder thing uses Surgical Eye.</p>",
@@ -2183,7 +2193,7 @@
           }
         },
         {
-          "id": "act_sudden_movement_g35y",
+          "id": "act_sudden_movement_0mb7",
           "name": "Sudden Movement",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder thing moves up to its Speed.</p>",
@@ -2335,7 +2345,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_jmut",
+        "id": "act_magic_resistance_n6vr",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The flying polyp has Advantage on saving throws against spells and other magical effects.</p>",
@@ -2357,7 +2367,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qefh",
+        "id": "act_multiattack_vb5x",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The flying polyp makes up to four Grasping Tentacle attacks and uses Wind Blast (if available).</p>",
@@ -2377,7 +2387,7 @@
         }
       },
       {
-        "id": "act_writhing_tentacles_1i5i",
+        "id": "act_writhing_tentacles_gsp5",
         "name": "Writhing Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +14, Reach 20 ft. Hit: 16 (1d10 + 10) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 24). While Grappled, the target has the Restrained condition.</p>",
@@ -2398,14 +2408,15 @@
           "damages": [
             {
               "formula": "1d10 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wind_blast__recharge_5__9v7h",
+        "id": "act_wind_blast__recharge_5__or5l",
         "name": "Wind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>str DC 24, each creature in a 20-foot-radius Sphere [Area of Effect] centered on a point the flying polyp can see within 120 feet. {@actSaveFail} 18 (4d8) Cold damage and the target is pushed up to 30 feet away from the flying polyp in a straight line. {@actSaveSuccess} Half damage.</p>",
@@ -2426,7 +2437,8 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -2435,7 +2447,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_grasping_wind_0jex",
+        "id": "act_grasping_wind_a3f0",
         "name": "Grasping Wind",
         "actionType": "bonus",
         "descriptionHtml": "<p>str DC 24, on creature within 2,000 feet. The flying polyp must have an unblocked line between it and its target, but the line does not need to be straight. The polyp does not need to see the target. {@actSaveFail} The target's Speed is reduced to 0 and cannot be increased until the end of the flying polyp's next turn. {@actSaveSuccess} No effect.</p>",
@@ -2458,7 +2470,7 @@
         }
       },
       {
-        "id": "act_invisibility__recharge_5__bigw",
+        "id": "act_invisibility__recharge_5__j3a3",
         "name": "Invisibility (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The flying polyp gains the Invisible condition until the end of its next turn.</p>",
@@ -2484,7 +2496,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_q7tu",
+          "id": "act_attack_rh2h",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The flying polyp makes a Writhing Tentacles.</p>",
@@ -2504,7 +2516,7 @@
           }
         },
         {
-          "id": "act_sudden_movement_ne0z",
+          "id": "act_sudden_movement_rdt2",
           "name": "Sudden Movement",
           "actionType": "legendary",
           "descriptionHtml": "<p>The flying polyp moves up to its Speed.</p>",
@@ -2742,7 +2754,7 @@
     ],
     "traits": [
       {
-        "id": "act_amorphous_einq",
+        "id": "act_amorphous_nex9",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The formless spawn can move through a space as narrow as 1 inch without expending extra movement to do so.</p>",
@@ -2762,7 +2774,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_idqu",
+        "id": "act_magic_resistance_j8w0",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The formless spawn has Advantage on saving throws against spells and other magical effects.</p>",
@@ -2784,7 +2796,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_erma",
+        "id": "act_multiattack_hgd7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The formless spawn makes up to four attacks, using Bludgeoning Pseudopod or Grasping Tentacle in any combination. It can replace any number of attacks with uses of Crushing Grip or Throw Victim.</p>",
@@ -2804,7 +2816,7 @@
         }
       },
       {
-        "id": "act_bludgeoning_pseudopod_yi8l",
+        "id": "act_bludgeoning_pseudopod_7i0g",
         "name": "Bludgeoning Pseudopod",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +10, Reach 10 ft. Hit: 17 (2d10 + 6) Bludgeoning damage.</p>",
@@ -2822,14 +2834,15 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_crushing_grip_qh0x",
+        "id": "act_crushing_grip_7xrw",
         "name": "Crushing Grip",
         "actionType": "action",
         "descriptionHtml": "<p>str DC 18, one creature Grappled by the formless spawn. {@actSaveFail} 14 (4d6) Bludgeoning damage. {@actSaveSuccess} Half damage.</p>",
@@ -2850,14 +2863,15 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_grasping_tentacle_sevr",
+        "id": "act_grasping_tentacle_69lw",
         "name": "Grasping Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +10, Reach 20 ft. Hit: 17 (2d10 + 6) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 18), and it has the Restrained condition until the grapple ends.</p>",
@@ -2878,14 +2892,15 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_throw_victim_be60",
+        "id": "act_throw_victim_x4lj",
         "name": "Throw Victim",
         "actionType": "action",
         "descriptionHtml": "<p>The formless spawn throws a Medium or smaller creature Grappled by it to a space it can see within 30 feet of itself that isn't in the air. dex DC 18, the creature thrown and each creature in the destination space. {@actSaveFail} 14 (4d6) Bludgeoning damage, and the target has the Prone condition. {@actSaveSuccess} Half damage only</p>",
@@ -2906,7 +2921,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -3051,7 +3067,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_fivc",
+        "id": "act_magic_resistance_ed33",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The gnoph-keh has Advantage on saving throws against spells and other magical effects.</p>",
@@ -3073,7 +3089,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_t9u8",
+        "id": "act_multiattack_q6l0",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The gnoph-keh makes six Rending Claw attacks.</p>",
@@ -3093,7 +3109,7 @@
         }
       },
       {
-        "id": "act_rending_claw_ipsy",
+        "id": "act_rending_claw_tog5",
         "name": "Rending Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +10, Reach 10 ft. Hit: 12 (1d8 + 7) Slashing damage.</p>",
@@ -3111,7 +3127,8 @@
           "damages": [
             {
               "formula": "1d8 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3120,7 +3137,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_heart_of_the_storm_qrec",
+        "id": "act_heart_of_the_storm_k3du",
         "name": "Heart of the Storm",
         "actionType": "bonus",
         "descriptionHtml": "<p>The gnoph-keh can generate a supernatural storm that fills the area around it in a howling blizzard. Driving snow and wind fill the area in a 300-foot Emanation [Area of Effect] centered on the gnoph-keh. The area is Heavily Obscured, and exposed flames in the area are doused. This effect ends if the gnoph-keh has the Incapacitated condition or dies. It can also dismiss the effect as a Bonus Action.</p><p>A creature that ends its turn in this Emanation [Area of Effect] takes 3 (1d6) Cold damage.</p>",
@@ -3139,7 +3156,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3291,7 +3309,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_even_death_may_die_7y2k",
+        "id": "act_even_death_may_die_l2zl",
         "name": "Even Death May Die",
         "actionType": "trait",
         "descriptionHtml": "<p>When Great Cthulhu drops to 0 Hit Points or would be killed outright, it instead transforms into a cloud of green mist that fills its space. At the start of each of Great Cthulhu's turns, it gains one recovery point but otherwise cannot use actions or legendary actions other than Relentless Horror. When it gains its fourth recovery point, its maximum Hit Points return to normal if they have been reduced and it regains all lost Hit Points. It reforms its physical body in a space of its choice within 10 miles of its location. It then loses all recovery points.</p><p>If Great Cthulhu is the target of a Banishment spell while in this cloud form cast with a 9th-level spell slot, it automatically fails its saving throw and is instead sent to R'lyeh where it slumbers for 10d10 years.</p>",
@@ -3312,7 +3330,7 @@
         }
       },
       {
-        "id": "act_horrid_aura_2jg0",
+        "id": "act_horrid_aura_9j9t",
         "name": "Horrid Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>A non-mythos entity that starts its turn within 30 feet of Great Cthulhu takes 10 Psychic damage.</p>",
@@ -3332,7 +3350,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__6_day__97y6",
+        "id": "act_legendary_resistance__6_day__nlnh",
         "name": "Legendary Resistance (6/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Great Cthulhu fails a saving throw, it can choose to succeed instead.</p>",
@@ -3354,7 +3372,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vdp2",
+        "id": "act_multiattack_8aio",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Great Cthulhu makes six Crushing Claw attacks.</p>",
@@ -3374,7 +3392,7 @@
         }
       },
       {
-        "id": "act_crushing_claw_bl7c",
+        "id": "act_crushing_claw_fzy9",
         "name": "Crushing Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +19, Reach 25 ft. Hit: 28 (4d8 + 10) Bludgeoning damage and the target is either knocked Prone or moved up to 20 ft. in a straight line from Great Cthulhu.</p>",
@@ -3392,14 +3410,15 @@
           "damages": [
             {
               "formula": "4d8 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_apocalyptic_majesty__recharge_5__u3m8",
+        "id": "act_apocalyptic_majesty__recharge_5__qfz9",
         "name": "Apocalyptic Majesty (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 23, creatures of Great Cthulhu's choice that can see or hear it within 500 ft. 1 The target takes 110 (20d10) Psychic damage, and is Frightened of Great Cthulhu until the end of its next turn, when it repeats the save. 2 On its next turn, Great Cthulhu controls the target. This effect ends at the end of that turn.</p>",
@@ -3420,7 +3439,8 @@
           "damages": [
             {
               "formula": "20d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -3434,7 +3454,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_disdainful_swipe_i82i",
+          "id": "act_disdainful_swipe_58zj",
           "name": "Disdainful Swipe",
           "actionType": "legendary",
           "descriptionHtml": "<p>Great Cthulhu makes two Crushing Claw attacks.</p>",
@@ -3454,7 +3474,7 @@
           }
         },
         {
-          "id": "act_relentless_horror__recharge_5__jjzv",
+          "id": "act_relentless_horror__recharge_5__asbj",
           "name": "Relentless Horror (Recharge 5)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Great Cthulhu chooses one of the following options:</p><ul><li>It teleports up to 200 ft. to an unoccupied space.</li><li>It immediately ends one spell or condition affecting it.</li><li>It ends one spell or magical effect of its choice within 120 ft. of it.</li></ul>",
@@ -3859,7 +3879,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_0fwn",
+        "id": "act_magic_resistance_5u1k",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Yithian has Advantage on saving throws against spells and other magical effects.</p>",
@@ -3879,7 +3899,7 @@
         }
       },
       {
-        "id": "act_time_master_b1xw",
+        "id": "act_time_master_th8w",
         "name": "Time Master",
         "actionType": "trait",
         "descriptionHtml": "<p>When the Yithian rolls Initiative, it may choose to treat the result of its d20 roll as a 5 or 15. It may also apply this effect to up to six willing creatures it can see.</p>",
@@ -3901,7 +3921,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ik1l",
+        "id": "act_multiattack_3zgd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Yithian makes two Snapping Claw attacks.</p>",
@@ -3921,7 +3941,7 @@
         }
       },
       {
-        "id": "act_snapping_claw_iwrd",
+        "id": "act_snapping_claw_3qny",
         "name": "Snapping Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +11, Reach 15 ft. Hit: 29 (4d10 + 7) Slashing damage.</p>",
@@ -3939,7 +3959,8 @@
           "damages": [
             {
               "formula": "4d10 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3953,7 +3974,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_vrs6",
+          "id": "act_attack_6k5f",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Yithian makes a Snapping Claw attack.</p>",
@@ -3973,7 +3994,7 @@
           }
         },
         {
-          "id": "act_spell_e8ne",
+          "id": "act_spell_duyk",
           "name": "Spell",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Yithian uses Spellcasting, but can only cast spells it can use at will.</p>",
@@ -4437,7 +4458,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_d4qy",
+        "id": "act_magic_resistance_c1lc",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The greater crawling one has Advantage on saving throws against spells and other magical effects.</p>",
@@ -4457,7 +4478,7 @@
         }
       },
       {
-        "id": "act_implacable_evil_2pns",
+        "id": "act_implacable_evil_0ry1",
         "name": "Implacable Evil",
         "actionType": "trait",
         "descriptionHtml": "<p>When a greater crawling one is reduced to 0 Hit Points, it falls into a pile of rotting flesh, worms, and maggots. If it takes at least 40 Fire damage before the end of its next turn, the greater crawling one is permanently destroyed. It can still be targeted by spells and effects that target creatures. Otherwise, the greater crawling one reforms in 2d6 days. The new body appears in an unoccupied space within the tomb it was originally buried in.</p>",
@@ -4479,7 +4500,7 @@
     ],
     "actions": [
       {
-        "id": "act_slimy_grasp_ex2v",
+        "id": "act_slimy_grasp_8tdy",
         "name": "Slimy Grasp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +7, Reach 5 ft. Hit: 8 (1d8 + 3) Necrotic damage.</p>",
@@ -4497,7 +4518,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4511,7 +4533,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_by_my_command_yqei",
+          "id": "act_by_my_command_37yv",
           "name": "By My Command",
           "actionType": "legendary",
           "descriptionHtml": "<p>The greater crawling one chooses up to three willing Undead or Mythos creatures it can see. Each of the chosen creatures can take a Reaction to move up to its Speed, and each creature gains Advantage on the next attack roll it makes before the greater crawling one's next turn.</p>",
@@ -4531,7 +4553,7 @@
           }
         },
         {
-          "id": "act_squirming_escape_d8ro",
+          "id": "act_squirming_escape_b17b",
           "name": "Squirming Escape",
           "actionType": "legendary",
           "descriptionHtml": "<p>The greater crawling one teleports up to 60 feet to an unoccupied space it can see.</p>",
@@ -4909,7 +4931,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_j2pd",
+        "id": "act_magic_resistance_uuq3",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The greater dark young of Shub-Niggurath has Advantage on saving throws against spells and other magical effects.</p>",
@@ -4931,7 +4953,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5380",
+        "id": "act_multiattack_sbtm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The greater dark young of Shub-Niggurath makes four Flailing Tentacle attacks. It can replace two attacks with a use of Spellcasting.</p>",
@@ -4951,7 +4973,7 @@
         }
       },
       {
-        "id": "act_flailing_tentacle_ixfs",
+        "id": "act_flailing_tentacle_idis",
         "name": "Flailing Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +10, Reach 30 ft. Hit: 15 (2d8 + 6) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 18).</p>",
@@ -4972,7 +4994,8 @@
           "damages": [
             {
               "formula": "2d8 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4986,7 +5009,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_swarming_tentacles_ta50",
+          "id": "act_swarming_tentacles_vfm5",
           "name": "Swarming Tentacles",
           "actionType": "legendary",
           "descriptionHtml": "<p>The greater dark young of Shub-Niggurath makes two Flailing Tentacle attacks.</p>",
@@ -5006,7 +5029,7 @@
           }
         },
         {
-          "id": "act_clamor_of_hooves_1726",
+          "id": "act_clamor_of_hooves_3sfc",
           "name": "Clamor of Hooves",
           "actionType": "legendary",
           "descriptionHtml": "<p>The greater dark young of Shub-Niggurath moves up to its Speed.</p>",
@@ -5394,7 +5417,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_cunf",
+        "id": "act_amphibious_9w1u",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The greater star-spawn of Cthulhu can breathe air and water.</p>",
@@ -5414,7 +5437,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_bjnw",
+        "id": "act_magic_resistance_zd20",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The greater star-spawn of Cthulhu has Advantage on saving throws against spells and other magical effects.</p>",
@@ -5436,7 +5459,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wng8",
+        "id": "act_multiattack_5424",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The greater star-spawn of Cthulhu makes two Crushing Fist attacks.</p>",
@@ -5456,7 +5479,7 @@
         }
       },
       {
-        "id": "act_crushing_fist_bxv7",
+        "id": "act_crushing_fist_orkn",
         "name": "Crushing Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +11, Reach 20 ft. Hit: 28 (4d10 + 6) Bludgeoning damage.</p>",
@@ -5474,7 +5497,8 @@
           "damages": [
             {
               "formula": "4d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5488,7 +5512,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_flabby_claws_o1du",
+          "id": "act_flabby_claws_aucw",
           "name": "Flabby Claws",
           "actionType": "legendary",
           "descriptionHtml": "<p>The greater star-spawn of Cthulhu makes a Crushing Fist attack.</p>",
@@ -5508,7 +5532,7 @@
           }
         },
         {
-          "id": "act_eldritch_contradictions_41yx",
+          "id": "act_eldritch_contradictions_br8f",
           "name": "Eldritch Contradictions",
           "actionType": "legendary",
           "descriptionHtml": "<p>The greater star-spawn of Cthulhu uses Spellcasting.</p>",
@@ -5528,7 +5552,7 @@
           }
         },
         {
-          "id": "act_ravening_for_delight_hqbe",
+          "id": "act_ravening_for_delight_z9of",
           "name": "Ravening for Delight",
           "actionType": "legendary",
           "descriptionHtml": "<p>The greater star-spawn of Cthulhu moves up to its Speed.</p>",
@@ -5849,7 +5873,7 @@
     ],
     "traits": [
       {
-        "id": "act_light_sensitivity_olc8",
+        "id": "act_light_sensitivity_pj0w",
         "name": "Light Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in Bright Light, the hunting horror has Disadvantage on attack rolls and checks.</p>",
@@ -5869,7 +5893,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_izd4",
+        "id": "act_magic_resistance_4ql9",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The hunting horror has Advantage on saving throws against spells and other magical effects.</p>",
@@ -5891,7 +5915,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wvgy",
+        "id": "act_multiattack_zdo7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hunting horror makes one Bite attack and one Tail attack, It can replace one attack with a use of Spellcasting.</p>",
@@ -5911,7 +5935,7 @@
         }
       },
       {
-        "id": "act_bite_4ynb",
+        "id": "act_bite_rhpv",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +10, Reach 20 ft. Hit: 17 (2d10 + 6) Piercing damage.</p>",
@@ -5929,14 +5953,15 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_v0zr",
+        "id": "act_tail_h5a9",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +10, Reach 20 ft. Hit: 15 (2d8 + 6) Bludgeoning damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 18).</p>",
@@ -5957,7 +5982,8 @@
           "damages": [
             {
               "formula": "2d8 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5966,7 +5992,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_prey_s_doom_uqri",
+        "id": "act_prey_s_doom_nz9o",
         "name": "Prey's Doom",
         "actionType": "bonus",
         "descriptionHtml": "<p>The horror unravels a target's life force with a bite. The hunting horror studies one creature it can see within 30 feet of itself. For 1 minute, once on each of the hunting horror's turns when it hits the target with an attack roll using its Bite attack, it can cause the target to take an extra 18 (4d8) Necrotic damage, and the target can't regain Hit Points until the end of hunting horror's next turn. On each of the hunting horror's subsequent turns, it can take a Bonus Action to deal 18 (4d8) Necrotic damage to the target automatically.</p><p>This effect ends if the target is ever outside the range, if it has Cover from the hunting horror, if it is on a different plane of existence, or if hunting horror uses this Bonus Action on a different creature.</p>",
@@ -5985,11 +6011,13 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             },
             {
               "formula": "4d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6002,7 +6030,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_gnashing_teeth_fkwd",
+          "id": "act_gnashing_teeth_85iw",
           "name": "Gnashing Teeth",
           "actionType": "legendary",
           "descriptionHtml": "<p>The hunting horror makes one Bite attack.</p>",
@@ -6022,7 +6050,7 @@
           }
         },
         {
-          "id": "act_crushing_horror_74mp",
+          "id": "act_crushing_horror_w7nj",
           "name": "Crushing Horror",
           "actionType": "legendary",
           "descriptionHtml": "<p>A creature Grappled by the hunting horror takes 22 (4d10) Bludgeoning damage.</p>",
@@ -6040,14 +6068,15 @@
             "damages": [
               {
                 "formula": "4d10",
-                "type": "Bludgeoning"
+                "type": "Bludgeoning",
+                "saveRider": false
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_pursuit_of_prey_7mkn",
+          "id": "act_pursuit_of_prey_mwnf",
           "name": "Pursuit of Prey",
           "actionType": "legendary",
           "descriptionHtml": "<p>The hunting horror moves up to its Speed.</p>",
@@ -6448,7 +6477,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_alqf",
+        "id": "act_magic_resistance_swee",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The lesser crawling one has Advantage on saving throws against spells and other magical effects.</p>",
@@ -6468,7 +6497,7 @@
         }
       },
       {
-        "id": "act_relentless_evil_h2an",
+        "id": "act_relentless_evil_geip",
         "name": "Relentless Evil",
         "actionType": "trait",
         "descriptionHtml": "<p>When a lesser crawling one is reduced to 0 Hit Points, it falls into a pile of rotting flesh, worms, and maggots. If it takes at least 15 Fire damage before the end of its next turn, the lesser crawling one is permanently destroyed. It can still be targeted by spells and effects that target creatures. Otherwise, the lesser crawling one reforms in 2d6 days. The new body appears in an unoccupied space within the tomb it was originally buried in.</p>",
@@ -6490,7 +6519,7 @@
     ],
     "actions": [
       {
-        "id": "act_slimy_grasp_hojn",
+        "id": "act_slimy_grasp_v3bg",
         "name": "Slimy Grasp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, Reach 5 ft. Hit: 6 (1d8 + 1) Necrotic damage, and a Medium or smaller creature has its Speed reduced by 10 feet until the end of its next turn as it is covered in slime and maggots.</p>",
@@ -6508,7 +6537,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6522,7 +6552,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_by_my_command_ozed",
+          "id": "act_by_my_command_ogef",
           "name": "By My Command",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lesser crawling one chooses up to three willing Undead or Mythos creatures it can see. Each of the chosen creatures can take a Reaction to move up to its Speed, and each creature gains Advantage on the next attack roll it makes before the lesser crawling one's next turn.</p>",
@@ -6542,7 +6572,7 @@
           }
         },
         {
-          "id": "act_squirming_escape_vj0y",
+          "id": "act_squirming_escape_jlkt",
           "name": "Squirming Escape",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lesser crawling one teleports up to 60 feet to an unoccupied space it can see.</p>",
@@ -6794,7 +6824,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_u74n",
+        "id": "act_magic_resistance_lt0b",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The lesser dark young of Shub-Niggurath has Advantage on saving throws against spells and other magical effects.</p>",
@@ -6816,7 +6846,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_mtp4",
+        "id": "act_multiattack_axdy",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The lesser dark young of Shub-Niggurath makes four Flailing Tentacle attacks. It can replace two attacks with a use of Spellcasting.</p>",
@@ -6836,7 +6866,7 @@
         }
       },
       {
-        "id": "act_flailing_tentacle_2lpl",
+        "id": "act_flailing_tentacle_x1r0",
         "name": "Flailing Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, Reach 20 ft. Hit: 8 (1d8 + 3) Bludgeoning damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13).</p>",
@@ -6857,7 +6887,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6871,7 +6902,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_swarming_tentacles_axzl",
+          "id": "act_swarming_tentacles_4ug9",
           "name": "Swarming Tentacles",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lesser dark young of Shub-Niggurath makes two Flailing Tentacle attacks.</p>",
@@ -6891,7 +6922,7 @@
           }
         },
         {
-          "id": "act_clamor_of_hooves_69v6",
+          "id": "act_clamor_of_hooves_yi6l",
           "name": "Clamor of Hooves",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lesser dark young of Shub-Niggurath moves up to its Speed.</p>",
@@ -7176,7 +7207,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_imzq",
+        "id": "act_amphibious_g0uf",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The lesser star-spawn of Cthulhu can breathe air and water.</p>",
@@ -7196,7 +7227,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_xkku",
+        "id": "act_magic_resistance_3nt4",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The lesser star-spawn of Cthulhu has Advantage on saving throws against spells and other magical effects.</p>",
@@ -7218,7 +7249,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uwdp",
+        "id": "act_multiattack_yb8q",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The lesser star-spawn of Cthulhu makes two Crushing Fist attacks.</p>",
@@ -7238,7 +7269,7 @@
         }
       },
       {
-        "id": "act_crushing_fist_4xys",
+        "id": "act_crushing_fist_zn3w",
         "name": "Crushing Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +8, Reach 15 ft. Hit: 22 (3d10 + 5) Bludgeoning damage.</p>",
@@ -7256,7 +7287,8 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7270,7 +7302,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_flabby_claws_2789",
+          "id": "act_flabby_claws_mic7",
           "name": "Flabby Claws",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lesser star-spawn of Cthulhu makes one Crushing Fist attack.</p>",
@@ -7290,7 +7322,7 @@
           }
         },
         {
-          "id": "act_eldritch_contradictions_6w6b",
+          "id": "act_eldritch_contradictions_wfho",
           "name": "Eldritch Contradictions",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lesser star-spawn of Cthulhu uses Spellcasting.</p>",
@@ -7310,7 +7342,7 @@
           }
         },
         {
-          "id": "act_ravening_for_delight_jxbq",
+          "id": "act_ravening_for_delight_jwza",
           "name": "Ravening for Delight",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lesser star-spawn of Cthulhu moves up to its Speed.</p>",
@@ -7606,7 +7638,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_dcx0",
+        "id": "act_magic_resistance_kj3d",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The mi-go has Advantage on saving throws against spells and other magical effects.</p>",
@@ -7626,7 +7658,7 @@
         }
       },
       {
-        "id": "act_space_traveler_2pyy",
+        "id": "act_space_traveler_g3me",
         "name": "Space Traveler",
         "actionType": "trait",
         "descriptionHtml": "<p>The mi-go does not need to breathe air.</p>",
@@ -7648,7 +7680,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_nki9",
+        "id": "act_multiattack_bv13",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mi-go makes two Claw attacks and uses Spellcasting.</p>",
@@ -7668,7 +7700,7 @@
         }
       },
       {
-        "id": "act_claw_6p9u",
+        "id": "act_claw_w3c9",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, Reach 5 ft. Hit: 7 (1d8 + 2) Piercing damage.</p>",
@@ -7686,7 +7718,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7695,7 +7728,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_hideous_counsel_i9fn",
+        "id": "act_hideous_counsel_jldt",
         "name": "Hideous Counsel",
         "actionType": "bonus",
         "descriptionHtml": "<p>The mi-go confers with a human brain it has sealed away in a jar. The specimen is specifically chosen for the knowledge it can provide to the mi-go, allowing it to adapt to a variety of situations. The mi-go chooses one of the following benefits: It gains Advantage on attack rolls until the end of its turn.</p><p>It uses the Dodge action as part of this Bonus Action.</p><p>It gains a +2 bonus to its spell save DC until the end of its turn.</p>",
@@ -7983,7 +8016,7 @@
     ],
     "traits": [
       {
-        "id": "act_defeat_from_victory_rnvs",
+        "id": "act_defeat_from_victory_7e6i",
         "name": "Defeat from Victory",
         "actionType": "trait",
         "descriptionHtml": "<p>When Nyarlathotep drops to 0 Hit Points or would be killed outright, he is not slain. Instead, his body ripples with energy as it undergoes a horrific transformation. He returns to whatever strange realm he dwells in as his defeated form is torn apart by unseen forces. Mythos creatures with a combined CR of up to 20 emerge from the pile of gore, occupying the nearest, empty space. These creatures attack those who were hostile to Nyarlathotep and fight to the death.</p>",
@@ -8003,7 +8036,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__x4fp",
+        "id": "act_legendary_resistance__4_day__ofrm",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Nyarlathotep fails a saving throw, it can choose to succeed instead.</p>",
@@ -8023,7 +8056,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_lbq3",
+        "id": "act_magic_resistance_l736",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Nyarlathotep has Advantage on saving throws against spells and other magical effects.</p>",
@@ -8043,7 +8076,7 @@
         }
       },
       {
-        "id": "act_poisoned_words__rotten_soul_ady7",
+        "id": "act_poisoned_words__rotten_soul_5b54",
         "name": "Poisoned Words, Rotten Soul",
         "actionType": "trait",
         "descriptionHtml": "<p>A creature that succeeds in a Wisdom (Insight) check to detect one of Nyarlathotep's lies takes 66 (12d10) Psychic damage and cannot communicate with other creatures for 3d6 minutes. A creature killed by this trait appears to have died of a heart attack or similar cause.</p>",
@@ -8061,7 +8094,8 @@
           "damages": [
             {
               "formula": "12d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8070,7 +8104,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_z4s1",
+        "id": "act_multiattack_serf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Nyarlathotep makes two Rending Claw attacks and two Piercing Talon attacks.</p>",
@@ -8090,7 +8124,7 @@
         }
       },
       {
-        "id": "act_rending_claw_6dv2",
+        "id": "act_rending_claw_4k1u",
         "name": "Rending Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +14, Reach 15 ft. Hit: 22 (3d8 + 8) Slashing damage and the target gains the Prone condition.</p>",
@@ -8108,14 +8142,15 @@
           "damages": [
             {
               "formula": "3d8 + 8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_piercing_talon_az8l",
+        "id": "act_piercing_talon_fenz",
         "name": "Piercing Talon",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +14, Reach 5 ft. Hit: 14 (1d10 + 8) Piercing damage. Prone creatures have Vulnerability to this attack's damage.</p>",
@@ -8133,14 +8168,15 @@
           "damages": [
             {
               "formula": "1d10 + 8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_horrid_tongue_lash__recharge_5__earm",
+        "id": "act_horrid_tongue_lash__recharge_5__oaol",
         "name": "Horrid Tongue Lash (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 24, creatures of Nyarlathotep's choice within 20 ft. of it; {@actSaveFail} The target takes 66 (12d10) acid damage. {@actSaveSuccess} Half damage.</p>",
@@ -8161,14 +8197,15 @@
           "damages": [
             {
               "formula": "12d10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_shape_shift_c9ch",
+        "id": "act_shape_shift_bwqn",
         "name": "Shape-Shift",
         "actionType": "action",
         "descriptionHtml": "<p>Nyarlathotep shape-shifts into a Small or Medium Humanoid, or it returns to this form. Other than his size, his game statistics are the same in each form. Any equipment he is wearing or carrying isn't transformed.</p>",
@@ -8195,7 +8232,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_swift_claw_iqo5",
+          "id": "act_swift_claw_2n94",
           "name": "Swift Claw",
           "actionType": "legendary",
           "descriptionHtml": "<p>Nyarlathotep makes a Rending Claw attack.</p>",
@@ -8215,7 +8252,7 @@
           }
         },
         {
-          "id": "act_incite_delirium_awnf",
+          "id": "act_incite_delirium_w6s1",
           "name": "Incite Delirium",
           "actionType": "legendary",
           "descriptionHtml": "<p>wis DC 20, one creature within 120 ft. of Nyarlathotep of its choice; {@actSaveFail} The target uses its Reaction to make a weapon attack against a target of Nyarlathotep's choice.</p>",
@@ -8238,7 +8275,7 @@
           }
         },
         {
-          "id": "act_relentless_horror__recharge_5__i5e4",
+          "id": "act_relentless_horror__recharge_5__vp9n",
           "name": "Relentless Horror (Recharge 5)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Nyarlathotep chooses one of the following options:</p><ul><li>It teleports up to 200 ft. to an unoccupied space.</li><li>It immediately ends one spell or condition affecting it.</li><li>It ends one spell or magical effect of its choice within 120 ft. of it.</li></ul>",
@@ -8394,7 +8431,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hexing_aura_y1av",
+        "id": "act_hexing_aura_beat",
         "name": "Hexing Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>Each creature of the rat-thing's choice in a 10-foot Emanation [Area of Effect] originating from the rat-thing gains a +1 bonus to its spell save DC.</p>",
@@ -8414,7 +8451,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_ur9s",
+        "id": "act_magic_resistance_gw74",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat-thing has Advantage on saving throws against spells and other magical effects.</p>",
@@ -8436,7 +8473,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_kxfu",
+        "id": "act_bite_jmdx",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, Reach 5 ft. Hit: 4 (1d3 + 2) Piercing damage.</p>",
@@ -8454,7 +8491,8 @@
           "damages": [
             {
               "formula": "1d3 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8575,7 +8613,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_passage_p26c",
+        "id": "act_incorporeal_passage_jlge",
         "name": "Incorporeal Passage",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can move through other creatures and objects as if they were Difficult Terrain. If it ends its turn inside an object, it is shunted to the nearest unoccupied space and takes 1d10 Force damage for every 5 feet traveled.</p>",
@@ -8593,14 +8631,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shadow_stealth_py1l",
+        "id": "act_shadow_stealth_lw52",
         "name": "Shadow Stealth",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit may take the Hide action as a Bonus Action when in Dim Light or Darkness.</p>",
@@ -8622,7 +8661,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jvsm",
+        "id": "act_multiattack_da3e",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (round down).</p>",
@@ -8642,7 +8681,7 @@
         }
       },
       {
-        "id": "act_chill_touch__infiltrator_only__o3c6",
+        "id": "act_chill_touch__infiltrator_only__v5y3",
         "name": "Chill Touch (Infiltrator Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, Reach 5 ft. Hit: 1d8 + 3 + summonSpellLevel Cold damage.</p>",
@@ -8660,14 +8699,15 @@
           "damages": [
             {
               "formula": "1d8 + 3 + summonSpellLevel",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_deathly_bolt__assassin_only__cxc5",
+        "id": "act_deathly_bolt__assassin_only__bq8m",
         "name": "Deathly Bolt (Assassin Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: Bonus equals your spell attack modifier, range 150 ft. Hit: 2d4 + 3 + summonSpellLevel Cold damage. If the spirit was hidden when it made the attack, the attack deals an additional 2d4 Cold damage.</p>",
@@ -8685,11 +8725,13 @@
           "damages": [
             {
               "formula": "2d4 + 3 + summonSpellLevel",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             },
             {
               "formula": "2d4",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8837,7 +8879,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_hlew",
+        "id": "act_amorphous_i190",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The shoggoth can move through a space as narrow as 1 foot without expending extra movement to do so.</p>",
@@ -8857,7 +8899,7 @@
         }
       },
       {
-        "id": "act_amphibious_lduy",
+        "id": "act_amphibious_txfw",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The shoggoth can breathe air and water.</p>",
@@ -8877,7 +8919,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_kwzb",
+        "id": "act_magic_resistance_wz1x",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The shoggoth has Advantage on saving throws against spells and other magical effects.</p>",
@@ -8899,7 +8941,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_icbl",
+        "id": "act_multiattack_1c0i",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The shoggoth makes four attacks, using Horrid Tendril or Hurled Mucous in any combination. It can't attack the same target more than once.</p>",
@@ -8919,7 +8961,7 @@
         }
       },
       {
-        "id": "act_horrid_tendril_520k",
+        "id": "act_horrid_tendril_xdmp",
         "name": "Horrid Tendril",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +15, Reach 20 ft. Hit: 21 (2d10 + 10) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 20), and it has the Restrained condition until the grapple ends. It can Grapple up to four Large or smaller creatures at a time.</p>",
@@ -8940,14 +8982,15 @@
           "damages": [
             {
               "formula": "{@dice 2d10 + 10}",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hurled_mucous_cgf3",
+        "id": "act_hurled_mucous_lkg7",
         "name": "Hurled Mucous",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +15, range 200 ft. Hit: 21 (2d10 + 10) Acid damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -8965,14 +9008,15 @@
           "damages": [
             {
               "formula": "2d10 + 10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slime_wave__recharge_5__9f7b",
+        "id": "act_slime_wave__recharge_5__5bg2",
         "name": "Slime Wave (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 20, each creature in a 60-foot Cone [Area of Effect]. {@actSaveFail} 44 (8d10) Acid damage. {@actSaveSuccess} Half damage. For 1 minute, the area within the Cone [Area of Effect] is drenched with slimy acid. When a creature enters the area for the first time on a turn or ends its turn there, it takes 22 (4d10) Acid damage. A creature can take this damage only once per turn.</p>",
@@ -8993,11 +9037,13 @@
           "damages": [
             {
               "formula": "8d10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             },
             {
               "formula": "4d10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -9006,7 +9052,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_horrid_digestion_i84d",
+        "id": "act_horrid_digestion_cpgv",
         "name": "Horrid Digestion",
         "actionType": "bonus",
         "descriptionHtml": "<p>con DC 23, one creature Grappled by the shoggoth. {@actSaveFail} The target takes 32 (4d10 + 10) Acid damage.</p>",
@@ -9027,7 +9073,8 @@
           "damages": [
             {
               "formula": "4d10 + 10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -9040,7 +9087,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_thrash_of_shifting_forms_mxlz",
+          "id": "act_thrash_of_shifting_forms_kn7s",
           "name": "Thrash of Shifting Forms",
           "actionType": "legendary",
           "descriptionHtml": "<p>The shoggoth makes a Horrid Tendril or Hurled Mucous attack.</p>",
@@ -9060,7 +9107,7 @@
           }
         },
         {
-          "id": "act_bear_down_upon_w5km",
+          "id": "act_bear_down_upon_mc3v",
           "name": "Bear Down Upon",
           "actionType": "legendary",
           "descriptionHtml": "<p>The shoggoth moves up to its Speed.</p>",
@@ -9372,7 +9419,7 @@
     ],
     "traits": [
       {
-        "id": "act_amorphous_k4e6",
+        "id": "act_amorphous_ep9f",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The shoggoth can move through a space as narrow as 1 foot without expending extra movement to do so.</p>",
@@ -9392,7 +9439,7 @@
         }
       },
       {
-        "id": "act_amphibious_qlcg",
+        "id": "act_amphibious_hw5q",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The shoggoth can breathe air and water.</p>",
@@ -9412,7 +9459,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_sowy",
+        "id": "act_magic_resistance_i59q",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The shoggoth has Advantage on saving throws against spells and other magical effects.</p>",
@@ -9434,7 +9481,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_62p3",
+        "id": "act_multiattack_3ppc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The shoggoth makes four attacks, using Horrid Tendril or Hurled Mucous in any combination. It can't attack the same target more than once.</p>",
@@ -9454,7 +9501,7 @@
         }
       },
       {
-        "id": "act_horrid_tendril_3e2z",
+        "id": "act_horrid_tendril_a0rd",
         "name": "Horrid Tendril",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +15, Reach 20 ft. Hit: 21 (2d10 + 10) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 20), and it has the Restrained condition until the grapple ends. It can Grapple up to four Large or smaller creatures at a time.</p>",
@@ -9475,14 +9522,15 @@
           "damages": [
             {
               "formula": "2d10 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hurled_mucous_yy8j",
+        "id": "act_hurled_mucous_pr6x",
         "name": "Hurled Mucous",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +15, range 200 ft. Hit: 21 (2d10 + 10) Acid damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -9500,14 +9548,15 @@
           "damages": [
             {
               "formula": "2d10 + 10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slime_wave__recharge_5__p8lm",
+        "id": "act_slime_wave__recharge_5__s8mw",
         "name": "Slime Wave (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 20, each creature in a 60-foot Cone [Area of Effect]. {@actSaveFail} 44 (8d10) Acid damage. {@actSaveSuccess} Half damage. For 1 minute, the area within the Cone [Area of Effect] is drenched with slimy acid. When a creature enters the area for the first time on a turn or ends its turn there, it takes 22 (4d10) Acid damage. A creature can take this damage only once per turn.</p>",
@@ -9528,11 +9577,13 @@
           "damages": [
             {
               "formula": "8d10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             },
             {
               "formula": "4d10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -9541,7 +9592,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_horrid_digestion_599k",
+        "id": "act_horrid_digestion_52z9",
         "name": "Horrid Digestion",
         "actionType": "bonus",
         "descriptionHtml": "<p>con DC 23, one creature Grappled by the shoggoth. {@actSaveFail} The target takes 32 (4d10 + 10) Acid damage.</p>",
@@ -9562,7 +9613,8 @@
           "damages": [
             {
               "formula": "4d10 + 10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -9575,7 +9627,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_thrash_of_shifting_forms_3l40",
+          "id": "act_thrash_of_shifting_forms_blcs",
           "name": "Thrash of Shifting Forms",
           "actionType": "legendary",
           "descriptionHtml": "<p>The shoggoth makes a Horrid Tendril or Hurled Mucous attack.</p>",
@@ -9595,7 +9647,7 @@
           }
         },
         {
-          "id": "act_bear_down_upon_ymb2",
+          "id": "act_bear_down_upon_gl0e",
           "name": "Bear Down Upon",
           "actionType": "legendary",
           "descriptionHtml": "<p>The shoggoth moves up to its Speed.</p>",
@@ -9755,7 +9807,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_boundless_horror_3jd1",
+        "id": "act_boundless_horror_3p6u",
         "name": "Boundless Horror",
         "actionType": "trait",
         "descriptionHtml": "<p>When Shub-Niggurath drops to 0 Hit Points or would be killed outright, it instead transforms into a swarm of insects that fill its space. At the start of each of Shub-Niggurath's turns, it gains one recovery point but otherwise cannot use actions or legendary actions other than Relentless Horror. When it gains its fourth recovery point, its maximum Hit Points return to normal if they have been reduced and it regains all lost Hit Points. It reforms its physical body in a space of its choice within 10 miles of its location. It then loses all recovery points.</p><p>If Shub-Niggurath's space is filled with magical fire it is banished from the world and prevented from returning for 4d10 years.</p>",
@@ -9776,7 +9828,7 @@
         }
       },
       {
-        "id": "act_horrid_garden_xrhs",
+        "id": "act_horrid_garden_oduc",
         "name": "Horrid Garden",
         "actionType": "trait",
         "descriptionHtml": "<p>Horrid vines, slick acidic dew and covering in flesh, gnawing mouths erupt from the ground in a 120-foot Emanation [Area of Effect] originating from Shub-Niggurath. The effect of this trait depends on its level. When Shub-Niggurath rolls initiative, set this trait's level to 0. The trait's level increase by 1 after each of Shub-Niggurath's turns to a maximum of 3. Use the highest AC bonus granted by this trait. Shub-Niggurath gains the benefits of this trait's current level and all lower ones. These benefits end when Shub-Niggurath is no longer threatened by hostile creatures.</p><div><strong><em>Level 0.</em></strong> <p>No effect.</p></div><div><strong><em>Level 1.</em></strong> <p>The ground in the Emanation [Area of Effect] is Difficult Terrain for non-Plants. At the end of Shub-Niggurath's turns, including the turn in which this trait reached level 1, two awakened trees appear in open spots in the Emanation [Area of Effect] of Shub-Niggurath's choice. They immediately roll initiative and aid their Dark Mother.</p></div><div><strong><em>Level 2.</em></strong> <p>A non-plant takes 15 Acid damage, or 30 Acid damage if it has the Prone condition, when it ends its turn in the Emanation [Area of Effect].</p></div><div><strong><em>Level 3.</em></strong> <p>Plants have Advantage on all attack rolls made against non-Plants in the Emanation [Area of Effect]. A creature hit by a Plant's melee attack gains the Prone condition.</p></div>",
@@ -9824,7 +9876,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__03f1",
+        "id": "act_legendary_resistance__4_day__4uiw",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Shub-Niggurath fails a saving throw, it can choose to succeed instead.</p>",
@@ -9846,7 +9898,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_h89h",
+        "id": "act_multiattack_0x4y",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Shub-Niggurath makes four total Grasping Tendril and Stomping Hoff attacks.</p>",
@@ -9866,7 +9918,7 @@
         }
       },
       {
-        "id": "act_grasping_tendril_jbon",
+        "id": "act_grasping_tendril_39c0",
         "name": "Grasping Tendril",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +17, Reach 30 ft. Hit: 21 (2d10 + 10) Bludgeoning damage and the target is moved to the open space closest to Shub-Niggurath.</p>",
@@ -9884,14 +9936,15 @@
           "damages": [
             {
               "formula": "2d10 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stomping_hoof_5o7w",
+        "id": "act_stomping_hoof_sxoz",
         "name": "Stomping Hoof",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +17, Reach 10 ft. Hit: 32 (4d10 + 10) Bludgeoning damage and the target gains the Prone condition.</p>",
@@ -9909,14 +9962,15 @@
           "damages": [
             {
               "formula": "4d10 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_the_earth_hungers___recharge__a3hs",
+        "id": "act_the_earth_hungers___recharge__0r12",
         "name": "The Earth Hungers {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>str DC 25, creatures of Shub-Niggurath's choice within 200 ft. of Shub-Niggurath and the ground. {@actSaveFail} The target takes 110 (20d10) Bludgeoning damage, is pulled to the ground beneath it if it is flying, and gains the Prone and Restrained conditions as fibrous plant tendrils erupt from the ground. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically. {@actSaveSuccess} Half damage, and the target is pulled to the ground beneath it if it is flying.</p>",
@@ -9937,7 +9991,8 @@
           "damages": [
             {
               "formula": "20d10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -9946,7 +10001,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_tree_walk_zqrk",
+        "id": "act_tree_walk_yxp6",
         "name": "Tree Walk",
         "actionType": "bonus",
         "descriptionHtml": "<p>Shub-Niggurath may teleport to any open space, provided she ends that teleportation within 10 feet of a friendly Plant creature she can see.</p>",
@@ -9972,7 +10027,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_hungry_tendril_q76w",
+          "id": "act_hungry_tendril_skh9",
           "name": "Hungry Tendril",
           "actionType": "legendary",
           "descriptionHtml": "<p>Shub-Niggurath makes a Grasping Tendril Attack</p>",
@@ -9992,7 +10047,7 @@
           }
         },
         {
-          "id": "act_rapid_maneuver_hmd7",
+          "id": "act_rapid_maneuver_7cny",
           "name": "Rapid Maneuver",
           "actionType": "legendary",
           "descriptionHtml": "<p>Shub-Niggurath uses its Tree Walk Bonus Action. It can't take this action again until the start of its next turn.</p>",
@@ -10012,7 +10067,7 @@
           }
         },
         {
-          "id": "act_relentless_horror__recharge_5__bti6",
+          "id": "act_relentless_horror__recharge_5__1hrp",
           "name": "Relentless Horror (Recharge 5)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Shub-Niggurath chooses one of the following options:</p><ul><li>It teleports up to 200 ft. to an unoccupied space.</li><li>It immediately ends one spell or condition affecting it.</li><li>It ends one spell or magical effect of its choice within 120 ft. of it.</li></ul>",

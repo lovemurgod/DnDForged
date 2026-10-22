@@ -92,7 +92,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_xm7t",
+        "id": "act_amphibious_0tly",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The homarid can breathe air and water.</p>",
@@ -114,7 +114,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7muv",
+        "id": "act_multiattack_luv8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The homarid makes two claw attacks.</p>",
@@ -134,7 +134,7 @@
         }
       },
       {
-        "id": "act_claw_q7re",
+        "id": "act_claw_wazq",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage, and the target is grappled (escape DC 11). The homarid has two claws, each of which can grapple only one target.</p>",
@@ -155,7 +155,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -280,7 +281,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pounce_mbpp",
+        "id": "act_pounce_odqd",
         "name": "Pounce",
         "actionType": "trait",
         "descriptionHtml": "<p>If the kavu moves at least 20 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the kavu can make one bite attack against it as a bonus action.</p>",
@@ -305,7 +306,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_krvu",
+        "id": "act_multiattack_i9kp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The kavu makes two claw attacks.</p>",
@@ -325,7 +326,7 @@
         }
       },
       {
-        "id": "act_bite_dfgg",
+        "id": "act_bite_0s71",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage.</p>",
@@ -343,14 +344,15 @@
           "damages": [
             {
               "formula": "1d10 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_uznv",
+        "id": "act_claw_r56x",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) slashing damage.</p>",
@@ -368,7 +370,8 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -769,7 +772,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_vawq",
+        "id": "act_angelic_weapons_5bfq",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>Lyra's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
@@ -787,14 +790,15 @@
           "damages": [
             {
               "formula": "5d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_divine_awareness_x0e5",
+        "id": "act_divine_awareness_07an",
         "name": "Divine Awareness",
         "actionType": "trait",
         "descriptionHtml": "<p>Lyra knows if it hears a lie.</p>",
@@ -814,7 +818,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_oswd",
+        "id": "act_magic_resistance_99a4",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Lyra has advantage on saving throws against spells and other magical effects.</p>",
@@ -836,7 +840,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_654p",
+        "id": "act_multiattack_l9ty",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Lyra makes two melee attacks.</p>",
@@ -856,7 +860,7 @@
         }
       },
       {
-        "id": "act_greatsword_csb2",
+        "id": "act_greatsword_p8dz",
         "name": "Greatsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
@@ -874,18 +878,20 @@
           "damages": [
             {
               "formula": "4d6 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "5d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__4_day__bfyp",
+        "id": "act_healing_touch__4_day__ovkn",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Lyra touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -1133,7 +1139,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_an11",
+        "id": "act_angelic_weapons_n3f7",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel's weapon attacks are magical. When the deva hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
@@ -1151,14 +1157,15 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_2ggj",
+        "id": "act_magic_resistance_jilt",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
@@ -1180,7 +1187,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zf92",
+        "id": "act_multiattack_3kde",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
@@ -1200,7 +1207,7 @@
         }
       },
       {
-        "id": "act_mace_8qxx",
+        "id": "act_mace_f7w4",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
@@ -1218,18 +1225,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__3_day__0ugv",
+        "id": "act_healing_touch__3_day__5eyh",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -1249,7 +1258,7 @@
         }
       },
       {
-        "id": "act_change_shape_yd45",
+        "id": "act_change_shape_ycz5",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the deva's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
@@ -1600,7 +1609,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_jvce",
+        "id": "act_angelic_weapons_kd4c",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>Shalai's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra 6d8 radiant damage (included in the attack).</p>",
@@ -1618,14 +1627,15 @@
           "damages": [
             {
               "formula": "6d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_divine_awareness_qac7",
+        "id": "act_divine_awareness_kp97",
         "name": "Divine Awareness",
         "actionType": "trait",
         "descriptionHtml": "<p>Shalai knows if it hears a lie.</p>",
@@ -1645,7 +1655,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_apcu",
+        "id": "act_magic_resistance_jwu0",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Shalai has advantage on saving throws against spells and other magical effects.</p>",
@@ -1667,7 +1677,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kocm",
+        "id": "act_multiattack_c9cj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Shalai makes two greatsword attacks.</p>",
@@ -1687,7 +1697,7 @@
         }
       },
       {
-        "id": "act_greatsword_syv8",
+        "id": "act_greatsword_w68z",
         "name": "Greatsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +15 to hit, reach 5 ft., one target. Hit: 22 (4d6 + 8) slashing damage plus 27 (6d8) radiant damage.</p>",
@@ -1705,18 +1715,20 @@
           "damages": [
             {
               "formula": "4d6 + 8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "6d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slaying_longbow_o8mm",
+        "id": "act_slaying_longbow_ob6q",
         "name": "Slaying Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +13 to hit, range 150/600 ft., one target. Hit: 15 (2d8 + 6) piercing damage plus 27 (6d8) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a DC 15 Constitution saving throw or die.</p>",
@@ -1737,18 +1749,20 @@
           "damages": [
             {
               "formula": "2d8 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "6d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_flying_sword_v2rs",
+        "id": "act_flying_sword_7yrz",
         "name": "Flying Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Shalai releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies.</p>",
@@ -1768,7 +1782,7 @@
         }
       },
       {
-        "id": "act_healing_touch__4_day__g8nn",
+        "id": "act_healing_touch__4_day__8qul",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Shalai touches another creature. The target magically regains 40 (8d8 + 4) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -1795,7 +1809,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_teleport_opzb",
+          "id": "act_teleport_34om",
           "name": "Teleport",
           "actionType": "legendary",
           "descriptionHtml": "<p>Shalai magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
@@ -1815,7 +1829,7 @@
           }
         },
         {
-          "id": "act_searing_burst__costs_2_actions__zk1o",
+          "id": "act_searing_burst__costs_2_actions__835z",
           "name": "Searing Burst (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Shalai emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a DC 23 Dexterity saving throw, taking 14 (4d6) fire damage plus 14 (4d6) radiant damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1836,18 +1850,20 @@
             "damages": [
               {
                 "formula": "4d6",
-                "type": "Fire"
+                "type": "Fire",
+                "saveRider": true
               },
               {
                 "formula": "4d6",
-                "type": "Radiant"
+                "type": "Radiant",
+                "saveRider": true
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_blinding_gaze__costs_3_actions__z2dl",
+          "id": "act_blinding_gaze__costs_3_actions__zege",
           "name": "Blinding Gaze (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Shalai targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a DC 15 Constitution saving throw or be blinded until magic such as the lesser restoration spell removes the blindness.</p>",
@@ -1980,7 +1996,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_raking_charge_e6ge",
+        "id": "act_raking_charge_tc5v",
         "name": "Raking Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the kavu moves at least 20 feet straight toward a creature and then hits it with a bite attack on the same turn, that target must succeed on a DC 15 Strength saving throw or be knocked prone. If the target is prone, the kavu can make one rend attack against it as a bonus action.</p>",
@@ -2005,7 +2021,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_0i09",
+        "id": "act_bite_hnof",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) piercing damage.</p>",
@@ -2023,14 +2039,15 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rend_qajo",
+        "id": "act_rend_c4xo",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one prone creature. Hit: 23 (4d8 + 5) slashing damage.</p>",
@@ -2048,7 +2065,8 @@
           "damages": [
             {
               "formula": "4d8 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2175,7 +2193,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_zeob",
+        "id": "act_undead_fortitude_85sk",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead.</p>",
@@ -2197,7 +2215,7 @@
     ],
     "actions": [
       {
-        "id": "act_slam_c4i7",
+        "id": "act_slam_ba0i",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
@@ -2215,7 +2233,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null

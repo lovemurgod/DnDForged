@@ -115,7 +115,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_demonic_restoration_curo",
+        "id": "act_demonic_restoration_lf7k",
         "name": "Demonic Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the abveku dies outside the Abyss, its body dissolves into ichor, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss.</p>",
@@ -135,7 +135,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_ap5r",
+        "id": "act_magic_resistance_siel",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The abveku has Advantage on saving throws against spells and other magical effects.</p>",
@@ -157,7 +157,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_j5lh",
+        "id": "act_multiattack_b4d6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The abveku makes four Scything Claw attacks and uses Mesmerizing Dance if available.</p>",
@@ -177,7 +177,7 @@
         }
       },
       {
-        "id": "act_scything_claw_nq9g",
+        "id": "act_scything_claw_iy9w",
         "name": "Scything Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +11, reach 10 ft. Hit: 19 (3d8 + 6) Slashing damage.</p>",
@@ -195,14 +195,15 @@
           "damages": [
             {
               "formula": "3d8 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mesmerizing_dance__recharge_5__3kat",
+        "id": "act_mesmerizing_dance__recharge_5__6sov",
         "name": "Mesmerizing Dance (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 18, each creature within a 20-foot Emanation [Area of Effect] originating from the abveku. {@actSaveFail} The target has the Paralyzed condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
@@ -227,7 +228,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_stealth_k46b",
+        "id": "act_shadow_stealth_hh2o",
         "name": "Shadow Stealth",
         "actionType": "bonus",
         "descriptionHtml": "<p>While in Dim Light or Darkness, the abveku takes the Hide action.</p>",
@@ -249,7 +250,7 @@
     ],
     "reactions": [
       {
-        "id": "act_parry_g5t9",
+        "id": "act_parry_deoc",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The abveku is hit by a melee attack roll. {@actResponse} The abveku adds 5 to its AC against that attack, possibly causing it to miss.</p>",
@@ -397,7 +398,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__6jy9",
+        "id": "act_legendary_resistance__3_day__dooi",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the sarrukh fails a saving throw, it can choose to succeed instead.</p>",
@@ -417,7 +418,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_4gce",
+        "id": "act_magic_resistance_m6ba",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The sarrukh has Advantage on saving throws against spells and other magical effects.</p>",
@@ -439,7 +440,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_v4jj",
+        "id": "act_multiattack_bt3v",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sarrukh makes three attacks, using Trident or Necrotic Spit in any combination.</p>",
@@ -459,7 +460,7 @@
         }
       },
       {
-        "id": "act_trident_upbn",
+        "id": "act_trident_h9td",
         "name": "Trident",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +12, reach 10 ft. Hit: 33 (6d8 + 6) Piercing damage.</p>",
@@ -477,14 +478,15 @@
           "damages": [
             {
               "formula": "6d8 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_necrotic_spit_ig71",
+        "id": "act_necrotic_spit_4ir4",
         "name": "Necrotic Spit",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +12, range 90 ft. Hit: 11 (2d10) Poison damage plus 22 (4d10) Necrotic damage.</p>",
@@ -502,11 +504,13 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             },
             {
               "formula": "4d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -515,7 +519,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_venomous_teleport__recharge_5__16tj",
+        "id": "act_venomous_teleport__recharge_5__tg18",
         "name": "Venomous Teleport (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The sarrukh teleports up to 120 feet to an occupied space it can see, and each creature within 10 feet of the space the sarrukh leaves or arrives in (sarrukh's choice) is subjected to the following effect. con DC 20. {@actSaveFail} 22 (4d10) Poison damage. {@actSaveSuccess} Half damage.</p>",
@@ -536,7 +540,8 @@
           "damages": [
             {
               "formula": "4d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -545,7 +550,7 @@
     ],
     "reactions": [
       {
-        "id": "act_shape_control_qujp",
+        "id": "act_shape_control_4qfj",
         "name": "Shape Control",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} A creature the sarrukh can see shape-shifts. {@actResponse} The sarrukh chooses the resulting form from among the options available to the shape-shifting creature or prevents the creature from shape-shifting.</p>",
@@ -799,7 +804,7 @@
     ],
     "traits": [
       {
-        "id": "act_demonic_restoration_8gm2",
+        "id": "act_demonic_restoration_qc1p",
         "name": "Demonic Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the rendelith dies outside the Abyss, its body dissolves into gravel, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Abyss.</p>",
@@ -819,7 +824,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_j7ck",
+        "id": "act_magic_resistance_buif",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The rendelith has Advantage on saving throws against spells and other magical effects.</p>",
@@ -839,7 +844,7 @@
         }
       },
       {
-        "id": "act_siege_monster_phh0",
+        "id": "act_siege_monster_z0rb",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The rendelith deals double damage to objects and structures.</p>",
@@ -861,7 +866,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_i92k",
+        "id": "act_multiattack_qh2w",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The rendelith makes two Stone Hammer attacks and uses Spellcasting to cast Shatter (level 6 version).</p>",
@@ -881,7 +886,7 @@
         }
       },
       {
-        "id": "act_stone_hammer_kgn6",
+        "id": "act_stone_hammer_72p6",
         "name": "Stone Hammer",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +13, reach 10 ft. or range 120 ft. Hit: 21 (4d6 + 7) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition. If the target already has the Prone condition, it instead takes an extra 7 (2d6) Bludgeoning damage. Hit or Miss: The hammer magically returns to the rendelith's hand immediately after a ranged attack.</p>",
@@ -899,11 +904,13 @@
           "damages": [
             {
               "formula": "4d6 + 7",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -912,7 +919,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_quick_fortifications__recharge_5__1bod",
+        "id": "act_quick_fortifications__recharge_5__5wgz",
         "name": "Quick Fortifications (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The rendelith uses Spellcasting to cast Move Earth or Wall of Stone.</p>",
@@ -1250,7 +1257,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__yc6w",
+        "id": "act_legendary_resistance__3_day__jphv",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the sarrukh fails a saving throw, it can choose to succeed instead.</p>",
@@ -1270,7 +1277,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_o49c",
+        "id": "act_magic_resistance_24vx",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The sarrukh has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1292,7 +1299,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2t5o",
+        "id": "act_multiattack_cr1u",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sarrukh makes two attacks, using Bite or Fearsome Fauchard in any combination.</p>",
@@ -1312,7 +1319,7 @@
         }
       },
       {
-        "id": "act_bite_lnc6",
+        "id": "act_bite_ro74",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +12, reach 5 ft. Hit: 13 (2d6 + 6) Piercing damage plus 13 (3d8) Poison damage.</p>",
@@ -1330,18 +1337,20 @@
           "damages": [
             {
               "formula": "2d6 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d8",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fearsome_fauchard_jr56",
+        "id": "act_fearsome_fauchard_qv4j",
         "name": "Fearsome Fauchard",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +12, reach 5 ft. or range 20/60 ft. Hit: 17 (2d10 + 6) Piercing damage. If the target is a creature, it has the Frightened condition. If the target already has the Frightened condition, it takes an additional 10 (3d6) Psychic damage. Hit or Miss: The fauchard magically returns to the sarrukh's hand immediately after a ranged attack.</p>",
@@ -1359,11 +1368,13 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1373,7 +1384,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shape_control_erpg",
+        "id": "act_shape_control_qadt",
         "name": "Shape Control",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} A creature the sarrukh can see shape-shifts. {@actResponse} The sarrukh chooses the resulting form from among the options available to the shape-shifting creature or prevents the creature from shape-shifting.</p>",
@@ -1398,7 +1409,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_fearsome_glance_rmmu",
+          "id": "act_fearsome_glance_leym",
           "name": "Fearsome Glance",
           "actionType": "legendary",
           "descriptionHtml": "<p>wis DC 20, one creature the sarrukh can see within 30 feet. {@actSaveFail} 18 (4d8) Psychic damage, and the target has the Frightened condition. {@actSaveSuccess} Half damage only.</p>",
@@ -1419,14 +1430,15 @@
             "damages": [
               {
                 "formula": "4d8",
-                "type": "Psychic"
+                "type": "Psychic",
+                "saveRider": true
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_slither_o4fo",
+          "id": "act_slither_n8dl",
           "name": "Slither",
           "actionType": "legendary",
           "descriptionHtml": "<p>The sarrukh moves up to half its Speed without provoking Opportunity Attack, and it makes one Bite attack.</p>",
@@ -1446,7 +1458,7 @@
           }
         },
         {
-          "id": "act_twisted_transformation_ozbj",
+          "id": "act_twisted_transformation_jheo",
           "name": "Twisted Transformation",
           "actionType": "legendary",
           "descriptionHtml": "<p>The sarrukh uses Spellcasting to cast Polymorph, and if the target fails its saving throw, the target also has the Stunned condition until the end of its next turn. The sarrukh can't take this action again until the start of its next turn.</p>",
@@ -2045,7 +2057,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__4_day__or_5_day_in_lair__seiw",
+        "id": "act_legendary_resistance__4_day__or_5_day_in_lair__5yw2",
         "name": "Legendary Resistance (4/Day, or 5/Day in Lair)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Szass Tam fails a saving throw, he can choose to succeed instead.</p>",
@@ -2065,7 +2077,7 @@
         }
       },
       {
-        "id": "act_spirit_jar_xhbc",
+        "id": "act_spirit_jar_hum3",
         "name": "Spirit Jar",
         "actionType": "trait",
         "descriptionHtml": "<p>If destroyed, Szass Tam re-forms in 1d10 days if he has a spirit jar, reviving with all his Hit Points. The new body appears in an unoccupied space within Szass Tam's lair.</p>",
@@ -2087,7 +2099,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_oj0n",
+        "id": "act_multiattack_2rpr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Szass Tam makes three attacks, using Paralyzing Touch or Soul-Draining Ray in any combination. He can replace two attacks with a use of Spellcasting to cast Finger of Death.</p>",
@@ -2107,7 +2119,7 @@
         }
       },
       {
-        "id": "act_paralyzing_touch_v2fx",
+        "id": "act_paralyzing_touch_irrc",
         "name": "Paralyzing Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +13, reach 5 ft. Hit: 16 (3d6 + 6) Cold damage, and the target has the Paralyzed condition until the start of Szass Tam's next turn.</p>",
@@ -2125,14 +2137,15 @@
           "damages": [
             {
               "formula": "3d6 + 6",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_soul_draining_ray_hsi5",
+        "id": "act_soul_draining_ray_dplf",
         "name": "Soul-Draining Ray",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +13, range 120 ft. Hit: 25 (3d12 + 6) Necrotic damage, and the target has Disadvantage on attack rolls and saving throws until the end of its next turn.</p>",
@@ -2150,7 +2163,8 @@
           "damages": [
             {
               "formula": "3d12 + 6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2164,7 +2178,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_deathly_teleport_9dee",
+          "id": "act_deathly_teleport_e73y",
           "name": "Deathly Teleport",
           "actionType": "legendary",
           "descriptionHtml": "<p>Szass Tam teleports up to 60 feet to an unoccupied space he can see, and each creature within 10 feet of the space he left takes 13 (3d8) Necrotic damage.</p>",
@@ -2182,14 +2196,15 @@
             "damages": [
               {
                 "formula": "3d8",
-                "type": "Necrotic"
+                "type": "Necrotic",
+                "saveRider": false
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_disrupt_life_q0b4",
+          "id": "act_disrupt_life_k88c",
           "name": "Disrupt Life",
           "actionType": "legendary",
           "descriptionHtml": "<p>con DC 21, each creature that isn't an Undead in a 20-foot Emanation [Area of Effect] originating from Szass Tam. {@actSaveFail} 14 (4d6) Necrotic damage and the creature's Hit Points maximum decreases by an amount equal to the damage taken. {@actSaveSuccess} Half damage only. {@actSaveSuccessOrFail} Szass Tam can't take this action again until the start of his next turn.</p>",
@@ -2210,7 +2225,8 @@
             "damages": [
               {
                 "formula": "4d6",
-                "type": "Necrotic"
+                "type": "Necrotic",
+                "saveRider": true
               }
             ],
             "recharge": null
@@ -2224,7 +2240,7 @@
     "lairActionsDesc": "",
     "regionalEffects": [
       {
-        "id": "act_soul_siphon_xjv7",
+        "id": "act_soul_siphon_ybgo",
         "name": "Soul Siphon",
         "actionType": "regional",
         "descriptionHtml": "<p>Whenever a Humanoid dies within the lair, its soul is immediately consumed by Szass Tam. A Humanoid whose soul is consumed in this way can be brought back to life only by a True Resurrection or Wish spell.</p>",
@@ -2244,7 +2260,7 @@
         }
       },
       {
-        "id": "act_whispers_of_necromancy_21g1",
+        "id": "act_whispers_of_necromancy_cvup",
         "name": "Whispers of Necromancy",
         "actionType": "regional",
         "descriptionHtml": "<p>Whenever a creature within 1 mile of the lair casts a Necromancy spell, Szass Tam knows the spell and the identity of the creature that cast it.</p>",
@@ -2848,7 +2864,7 @@
     ],
     "traits": [
       {
-        "id": "act_evocation_sculptor_x6sa",
+        "id": "act_evocation_sculptor_9q6q",
         "name": "Evocation Sculptor",
         "actionType": "trait",
         "descriptionHtml": "<p>When Thrul casts a spell that creates an area of effect, she can choose herself and up to five other creatures she can see, sculpting the spell's energy around them. A chosen creature automatically succeeds on its saving throw against the spell, and it takes no damage if it would normally take half damage on a successful save.</p>",
@@ -2868,7 +2884,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_hd2i",
+        "id": "act_magic_resistance_zxev",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Thrul has Advantage on saving throws against spells and other magical effects.</p>",
@@ -2890,7 +2906,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_nzlt",
+        "id": "act_multiattack_935m",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Thrul makes four Arcane Burst attacks. She can replace two attacks with a use of Spellcasting to cast Fireball (level 5 version) or Lightning Bolt (level 5 version).</p>",
@@ -2910,7 +2926,7 @@
         }
       },
       {
-        "id": "act_arcane_burst_1yzj",
+        "id": "act_arcane_burst_7g4a",
         "name": "Arcane Burst",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +11, reach 5 ft. or range 120 ft. Hit: 32 (5d10 + 5) Force damage.</p>",
@@ -2928,7 +2944,8 @@
           "damages": [
             {
               "formula": "5d10 + 5",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null

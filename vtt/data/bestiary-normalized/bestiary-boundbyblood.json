@@ -92,7 +92,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_sf4t",
+        "id": "act_pack_tactics_341i",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The highland wolf has Advantage on attack rolls against a creature if at least one of the highland wolf's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
@@ -114,7 +114,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_kcnx",
+        "id": "act_bite_pxhn",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Piercing damage. If the target is a Medium or smaller creature, it has the Prone condition.</p>",
@@ -132,7 +132,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -270,7 +271,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_rage_96c6",
+        "id": "act_rage_r6fk",
         "name": "Rage",
         "actionType": "trait",
         "descriptionHtml": "<p>The lupine can give itself Advantage on its first D20 Test each turn. If it does so and fails that D20 Test, it's overcome with rage. On each of its turns while raging, the lupine attacks the nearest creature it can see. If no creature is near enough to move to and attack, its rage ends. A lupine's ally, if within 60 feet of the raging lupine, can try to calm it by taking an action to make a DC 15 Charisma (Persuasion) check; the lupine must be able to hear its ally. If this check succeeds, the lupine ceases its rage.</p>",
@@ -293,7 +294,7 @@
         }
       },
       {
-        "id": "act_regeneration_qb46",
+        "id": "act_regeneration_8dz5",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The lupine regains 10 Hit Points at the start of each of its turns. If the lupine takes Fire damage or damage from silver objects, this trait doesn't function at the start of its next turn. The lupine dies only if it starts its turn with 0 Hit Points and doesn't regenerate.</p>",
@@ -315,7 +316,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kvih",
+        "id": "act_multiattack_8gqv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The lupine makes two attacks, using Battleaxe, Rend, or Longbow in any combination. If it hits with a Rend attack, the lupine can make one Bite attack against the same target as a Bonus Action.</p>",
@@ -335,7 +336,7 @@
         }
       },
       {
-        "id": "act_battleaxe__humanoid_or_hybrid_form_only__4gu7",
+        "id": "act_battleaxe__humanoid_or_hybrid_form_only__haol",
         "name": "Battleaxe (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +8, reach 5 ft. Hit: 10 (1d10 + 5) Slashing damage.</p>",
@@ -353,14 +354,15 @@
           "damages": [
             {
               "formula": "1d10 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite__wolf_or_hybrid_form_only__klhu",
+        "id": "act_bite__wolf_or_hybrid_form_only__g7c9",
         "name": "Bite (Wolf or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +8, reach 5 ft. Hit: 16 (2d10 + 5) Piercing damage.</p>",
@@ -378,14 +380,15 @@
           "damages": [
             {
               "formula": "2d10 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rend__wolf_or_hybrid_form_only__tbyw",
+        "id": "act_rend__wolf_or_hybrid_form_only__zj4j",
         "name": "Rend (Wolf or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +8, reach 5 ft. Hit: 12 (2d6 + 5) Slashing damage.</p>",
@@ -403,14 +406,15 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow__humanoid_or_hybrid_form_only__xpt5",
+        "id": "act_longbow__humanoid_or_hybrid_form_only__bmpd",
         "name": "Longbow (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +6, range 150/600 ft. Hit: 7 (1d8 + 3) Piercing damage.</p>",
@@ -428,7 +432,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -437,7 +442,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_horrifying_howl___recharge__kqz9",
+        "id": "act_horrifying_howl___recharge__6e2o",
         "name": "Horrifying Howl {@recharge}",
         "actionType": "bonus",
         "descriptionHtml": "<p>wis DC 14, each creature within 60 feet that can hear the howl and isn't a lupine. {@actSaveFail} The target has the Frightened condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
@@ -460,7 +465,7 @@
         }
       },
       {
-        "id": "act_shape_shift_pzi0",
+        "id": "act_shape_shift_f1my",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>The lupine shape-shifts into a Large wolf-humanoid hybrid form or a Medium wolf, or it returns to its true humanoid form. Its game statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed.</p>",
@@ -610,7 +615,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_faith_imvk",
+        "id": "act_faith_bnhn",
         "name": "Faith",
         "actionType": "trait",
         "descriptionHtml": "<p>When the monster hunter rolls a 1 on the d20 of an ability check or saving throw, it can reroll the die, and it must use the new roll.</p>",
@@ -632,7 +637,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_s4se",
+        "id": "act_multiattack_e2gb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The monster hunter makes two attacks, using Handaxe or Silver Knife in any combination.</p>",
@@ -652,7 +657,7 @@
         }
       },
       {
-        "id": "act_handaxe_3d8f",
+        "id": "act_handaxe_h375",
         "name": "Handaxe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +5, reach 5 ft. or range 20/60 ft. Hit: 6 (1d6 + 3) Slashing damage, plus 10 (3d6) Slashing damage if the attack roll was made with Advantage.</p>",
@@ -670,18 +675,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_silver_knife_wmx6",
+        "id": "act_silver_knife_gbmq",
         "name": "Silver Knife",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 6 (1d6 + 3) Slashing damage, plus 10 (3d6) Slashing damage if the attack roll was made with Advantage.</p>",
@@ -699,18 +706,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wooden_stake_mifv",
+        "id": "act_wooden_stake_61bf",
         "name": "Wooden Stake",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 6 (1d6 + 3) Piercing damage.</p>",
@@ -728,7 +737,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -737,7 +747,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_aim_7is9",
+        "id": "act_aim_6h10",
         "name": "Aim",
         "actionType": "bonus",
         "descriptionHtml": "<p>The monster hunter gives itself Advantage on the next attack roll it makes during the current turn.</p>",
@@ -759,7 +769,7 @@
     ],
     "reactions": [
       {
-        "id": "act_save_ally_1i8t",
+        "id": "act_save_ally_bsce",
         "name": "Save Ally",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} An ally within 5 feet has the Grappled condition. {@actResponse} The ally can immediately make an escape roll with Advantage.</p>",
@@ -902,7 +912,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_traps__3_day__23ed",
+        "id": "act_traps__3_day__406u",
         "name": "Traps (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>{@actTrigger} The first time an enemy with a Passive Perception of 12 or lower comes within 30 feet of the trapper or the trapper shoves the creature 5 feet. dex DC 12. {@actSaveFail} The target takes 7 (2d6) Piercing damage and has the Restrained condition. A creature can use its action to make a DC 12 Strength (Athletics) check, freeing itself or another creature within its reach on a success. Each failed check deals 1d4 Piercing damage to the trapped creature.</p>",
@@ -923,11 +933,13 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             },
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -936,7 +948,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dngm",
+        "id": "act_multiattack_48w6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The trapper makes two attacks, using Greataxe or Short Bow in any combination.</p>",
@@ -956,7 +968,7 @@
         }
       },
       {
-        "id": "act_greataxe_yqk6",
+        "id": "act_greataxe_wqaz",
         "name": "Greataxe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 9 (1d12 + 3) Slashing damage.</p>",
@@ -974,14 +986,15 @@
           "damages": [
             {
               "formula": "1d12 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_ortj",
+        "id": "act_shortbow_e1ce",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +4, range 80/320 ft. Hit: 5 (1d6 + 2) Piercing damage.</p>",
@@ -999,7 +1012,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1008,7 +1022,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shove_t22n",
+        "id": "act_shove_cnnv",
         "name": "Shove",
         "actionType": "bonus",
         "descriptionHtml": "<p>str DC 13, one Large or smaller creature within 5 feet of the trapper. {@actSaveFail} The creature is pushed 5 feet directly away from the trapper.</p>",
@@ -1147,7 +1161,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_dagger_wzlk",
+        "id": "act_dagger_n847",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +3, reach 5 ft. or range 20/60 ft. Hit: 3 (1d4 + 1) Piercing damage.</p>",
@@ -1165,14 +1179,15 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_torch_hml6",
+        "id": "act_torch_hymi",
         "name": "Torch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 3 (1d4 + 1) Fire damage.</p>",
@@ -1190,14 +1205,15 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wooden_pitchfork_tee9",
+        "id": "act_wooden_pitchfork_n746",
         "name": "Wooden Pitchfork",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Piercing damage.</p>",
@@ -1215,7 +1231,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1345,7 +1362,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_i1qr",
+        "id": "act_multiattack_fbtk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The villager militia makes two attacks, using Dagger, Spear, or Torch in any combination.</p>",
@@ -1365,7 +1382,7 @@
         }
       },
       {
-        "id": "act_dagger_xaor",
+        "id": "act_dagger_4xwm",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +3, reach 5 ft. or range 20/60 ft. Hit: 5 (1d4 + 3) Piercing damage.</p>",
@@ -1383,14 +1400,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_b6h4",
+        "id": "act_spear_9929",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +5, reach 5 ft. or range 20/60 ft. Hit: 6 (1d6 + 3) Piercing damage.</p>",
@@ -1408,14 +1426,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_torch_ph4w",
+        "id": "act_torch_h5va",
         "name": "Torch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 5 (1d4 + 3) Fire damage.</p>",
@@ -1433,7 +1452,8 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null

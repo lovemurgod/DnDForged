@@ -102,7 +102,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_and_smell_to12",
+        "id": "act_keen_sight_and_smell_1zqb",
         "name": "Keen Sight and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>Billy Beaver has advantage on Wisdom (Perception) checks that rely on sight or smell.</p>",
@@ -124,7 +124,7 @@
     ],
     "actions": [
       {
-        "id": "act_beak_c4lb",
+        "id": "act_beak_kh2v",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one creature. Hit: 10 (1d10 + 5) piercing damage.</p>",
@@ -142,7 +142,8 @@
           "damages": [
             {
               "formula": "1d10 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -279,7 +280,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_surprise_attack_xsuv",
+        "id": "act_surprise_attack_mhcb",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If Buster the Bear surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
@@ -297,7 +298,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -306,7 +308,7 @@
     ],
     "actions": [
       {
-        "id": "act_bashin__banjo_4t5z",
+        "id": "act_bashin__banjo_lfsq",
         "name": "Bashin' Banjo",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) bludgeoning damage.</p>",
@@ -324,7 +326,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -449,7 +452,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_wxd5",
+        "id": "act_shapechanger_dw4o",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic can use its action to polymorph into an object or back into its true, amorphous form. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -469,7 +472,7 @@
         }
       },
       {
-        "id": "act_adhesive__object_form_only__tw39",
+        "id": "act_adhesive__object_form_only__5ql9",
         "name": "Adhesive (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic adheres to anything that touches it. A Huge or smaller creature adhered to the mimic is also grappled by it (escape DC 13). Ability checks made to escape this grapple have disadvantage.</p>",
@@ -492,7 +495,7 @@
         }
       },
       {
-        "id": "act_false_appearance__object_form_only__bshu",
+        "id": "act_false_appearance__object_form_only__74k0",
         "name": "False Appearance (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>While the mimic remains motionless, it is indistinguishable from an ordinary object.</p>",
@@ -512,7 +515,7 @@
         }
       },
       {
-        "id": "act_grappler_fldr",
+        "id": "act_grappler_ott2",
         "name": "Grappler",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic has advantage on attack rolls against any creature grappled by it.</p>",
@@ -534,7 +537,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8dz0",
+        "id": "act_multiattack_alo2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mimic makes three attacks: two with its pseudopods and one with its bite.</p>",
@@ -554,7 +557,7 @@
         }
       },
       {
-        "id": "act_pseudopod_n6ij",
+        "id": "act_pseudopod_yzve",
         "name": "Pseudopod",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. If the mimic is in object form, the target is subjected to its Adhesive trait.</p>",
@@ -572,14 +575,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_otag",
+        "id": "act_bite_xwvt",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage plus 4 (1d8) acid damage.</p>",
@@ -597,11 +601,13 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -733,7 +739,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_wnuc",
+        "id": "act_bite_vlxy",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one creature. Hit: 9 (2d6 + 2) piercing damage.</p>",
@@ -751,14 +757,15 @@
           "damages": [
             {
               "formula": "2d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_g169",
+        "id": "act_claws_72ww",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage.</p>",
@@ -776,7 +783,8 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -904,7 +912,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_uq3v",
+        "id": "act_false_appearance_zlf9",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the lycanthropickle remains motionless, it is indistinguishable from a pickle.</p>",
@@ -926,7 +934,7 @@
     ],
     "actions": [
       {
-        "id": "act_claws_0nyd",
+        "id": "act_claws_sd60",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
@@ -944,7 +952,8 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1064,7 +1073,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_x94c",
+        "id": "act_club_kvg9",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -1082,7 +1091,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1217,7 +1227,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_aggressive_4wv1",
+        "id": "act_aggressive_s5kk",
         "name": "Aggressive",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Piggy Wiggle Butt can move up to its speed toward a hostile creature that it can see.</p>",
@@ -1239,7 +1249,7 @@
     ],
     "actions": [
       {
-        "id": "act_clay_jug_wnoo",
+        "id": "act_clay_jug_njcl",
         "name": "Clay Jug",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage.</p>",
@@ -1257,7 +1267,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1389,7 +1400,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_webby_hands_spcc",
+        "id": "act_webby_hands_syos",
         "name": "Webby Hands",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) bludgeoning damage.</p>",
@@ -1407,7 +1418,8 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1533,7 +1545,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brute_kf7g",
+        "id": "act_brute_dfqe",
         "name": "Brute",
         "actionType": "trait",
         "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when Tommy hits with it (included in the attack).</p>",
@@ -1553,7 +1565,7 @@
         }
       },
       {
-        "id": "act_surprise_attack_pz47",
+        "id": "act_surprise_attack_rcxb",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If Tommy surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
@@ -1571,7 +1583,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1580,7 +1593,7 @@
     ],
     "actions": [
       {
-        "id": "act_morningstar_jujz",
+        "id": "act_morningstar_x7wu",
         "name": "Morningstar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 11 (2d8 + 2) piercing damage.</p>",
@@ -1598,14 +1611,15 @@
           "damages": [
             {
               "formula": "2d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_javelin_epqs",
+        "id": "act_javelin_esud",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 9 (2d6 + 2) piercing damage in melee or 5 (1d6 + 2) piercing damage at range.</p>",
@@ -1623,11 +1637,13 @@
           "damages": [
             {
               "formula": "2d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

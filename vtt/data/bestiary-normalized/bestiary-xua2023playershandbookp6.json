@@ -86,7 +86,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_g0jc",
+        "id": "act_charge_mhrq",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the beast moves at least 20 feet straight toward a target and then hits it with a Maul attack on the same turn, the target takes an extra 1d6 Slashing damage. If the target is a creature, it must succeed on a Strength saving throw against your Spell Save DC or have the Prone condition.</p>",
@@ -104,14 +104,15 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_primal_bond_bsdc",
+        "id": "act_primal_bond_0owt",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>You can add your Proficiency Bonus to any ability check or saving throw that the beast makes.</p>",
@@ -133,7 +134,7 @@
     ],
     "actions": [
       {
-        "id": "act_maul_9v97",
+        "id": "act_maul_bxxp",
         "name": "Maul",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d8 + 2 + PB Bludgeoning, Piercing, or Slashing damage (your choice when you summon the beast).</p>",
@@ -151,7 +152,8 @@
           "damages": [
             {
               "formula": "1d8 + 2 + PB",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -270,7 +272,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_x125",
+        "id": "act_amphibious_ua46",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast can breathe air and water.</p>",
@@ -290,7 +292,7 @@
         }
       },
       {
-        "id": "act_primal_bond_b64h",
+        "id": "act_primal_bond_fbwy",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>You can add your Proficiency Bonus to any ability check or saving throw that the beast makes.</p>",
@@ -312,7 +314,7 @@
     ],
     "actions": [
       {
-        "id": "act_binding_strike_rrpo",
+        "id": "act_binding_strike_wszh",
         "name": "Binding Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d6 + 2 + PB Bludgeoning or Piercing damage (your choice), and the target has the Grappled condition (escape DC equals your Spell Save DC). Until this grapple ends, the beast can't use this attack on another target.</p>",
@@ -330,7 +332,8 @@
           "damages": [
             {
               "formula": "1d6 + 2 + PB",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -449,7 +452,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_m3sa",
+        "id": "act_flyby_j1rk",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast doesn't provoke Opportunity Attacks when it flies out of an enemy's reach.</p>",
@@ -469,7 +472,7 @@
         }
       },
       {
-        "id": "act_primal_bond_wtpi",
+        "id": "act_primal_bond_edad",
         "name": "Primal Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>You can add your Proficiency Bonus to any ability check or saving throw that the beast makes.</p>",
@@ -491,7 +494,7 @@
     ],
     "actions": [
       {
-        "id": "act_shred_paqu",
+        "id": "act_shred_9isy",
         "name": "Shred",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: {@hitYourSpellAttack} to hit, reach 5 ft., one target. Hit: 1d4 + 3 + PB Slashing damage.</p>",
@@ -509,7 +512,8 @@
           "damages": [
             {
               "formula": "1d4 + 3 + PB",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -628,7 +632,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_life_bond_h4uv",
+        "id": "act_life_bond_k2jv",
         "name": "Life Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>When you regain Hit Points from a spell of 1st level or higher, the steed regains the same number of Hit Points if you're within 5 feet of it.</p>",
@@ -650,7 +654,7 @@
     ],
     "actions": [
       {
-        "id": "act_otherworldly_slam_0yro",
+        "id": "act_otherworldly_slam_szo0",
         "name": "Otherworldly Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Spell Attack: your Spell Attack Modifier to hit, reach 5 ft., one target. Hit: 1d8 + the spell's level of Radiant damage (Celestial), Psychic damage (Fey), or Necrotic damage (Fiend).</p>",
@@ -672,7 +676,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_fey_step__fey_only__recharges_after_a_long_rest__acy8",
+        "id": "act_fey_step__fey_only__recharges_after_a_long_rest__b4dl",
         "name": "Fey Step (Fey Only; Recharges after a Long Rest)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The steed teleports, along with its rider, to an unoccupied space of your choice up to 60 feet away.</p>",
@@ -692,7 +696,7 @@
         }
       },
       {
-        "id": "act_fell_glare__fiend_only__recharges_after_a_long_rest__lyvt",
+        "id": "act_fell_glare__fiend_only__recharges_after_a_long_rest__pyn7",
         "name": "Fell Glare (Fiend Only; Recharges after a Long Rest)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The steed's eyes gleam with fiendish light as it targets one creature it can perceive up to 60 feet away. The target must succeed on a Wisdom saving throw against your Spell Save DC or have the Frightened condition until the end of your next turn.</p>",
@@ -712,7 +716,7 @@
         }
       },
       {
-        "id": "act_healing_touch__celestial_only__recharges_after_a_long_rest__5m6f",
+        "id": "act_healing_touch__celestial_only__recharges_after_a_long_rest__0mhk",
         "name": "Healing Touch (Celestial Only; Recharges after a Long Rest)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The steed touches another creature and restores a number of Hit Points to it equal to 2d8 + the spell's level.</p>",

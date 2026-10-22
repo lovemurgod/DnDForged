@@ -96,7 +96,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_draconic_essence_z6v7",
+        "id": "act_draconic_essence_awgg",
         "name": "Draconic Essence",
         "actionType": "trait",
         "descriptionHtml": "<p>When you summon the drake, choose a damage type: acid, cold, fire, lightning, or poison. The chosen type determines the drake's damage immunity, the damage of its bite, and the damage of its Infused Strikes trait.</p>",
@@ -118,7 +118,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_th9v",
+        "id": "act_bite_xzdj",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 + PB to hit, reach 5 ft., one target. Hit: 1d6 piercing damage plus PB damage of a type determined by the drake's Draconic Essence.</p>",
@@ -136,11 +136,13 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "PB",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -150,7 +152,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_infused_strikes_cnym",
+        "id": "act_infused_strikes_pq02",
         "name": "Infused Strikes",
         "actionType": "reaction",
         "descriptionHtml": "<p>When another creature within 30 feet of the drake that it can see hits with a weapon attack, the drake infuses the strike with its essence, causing the attack to deal an extra 1d6 damage of the type determined by its Draconic Essence.</p>",
@@ -168,7 +170,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null

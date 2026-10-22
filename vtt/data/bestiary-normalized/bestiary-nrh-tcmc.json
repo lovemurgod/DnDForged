@@ -102,7 +102,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_yczf",
+        "id": "act_shapechanger_j3n3",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>Mr. Honeycutt can use its action to polymorph into a rat-humanoid hybrid or into a giant rat, or back into its true form, which is humanoid. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -122,7 +122,7 @@
         }
       },
       {
-        "id": "act_keen_smell_6hs0",
+        "id": "act_keen_smell_lw8k",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>Mr. Honeycutt has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -144,7 +144,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__humanoid_or_hybrid_form_only__q5ce",
+        "id": "act_multiattack__humanoid_or_hybrid_form_only__rvwy",
         "name": "Multiattack (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Mr. Honeycutt makes two attacks, only one of which can be a bite.</p>",
@@ -164,7 +164,7 @@
         }
       },
       {
-        "id": "act_bite__rat_or_hybrid_form_only__3ccx",
+        "id": "act_bite__rat_or_hybrid_form_only__jpbn",
         "name": "Bite (Rat or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage. If the target is a humanoid, it must succeed on a DC 11 Constitution saving throw or be cursed with wererat Player Characters as Lycanthropes.</p>",
@@ -185,14 +185,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword__humanoid_or_hybrid_form_only__p8f4",
+        "id": "act_shortsword__humanoid_or_hybrid_form_only__u41e",
         "name": "Shortsword (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -210,14 +211,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__exz2",
+        "id": "act_hand_crossbow__humanoid_or_hybrid_form_only__4kyl",
         "name": "Hand Crossbow (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -235,7 +237,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -366,7 +369,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_nimble_escape_hrgw",
+        "id": "act_nimble_escape_kiww",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>Slurmy can take the Disengage or Hide action as a bonus action on each of their turns.</p>",
@@ -388,7 +391,7 @@
     ],
     "actions": [
       {
-        "id": "act_claw_0ezs",
+        "id": "act_claw_zqfy",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage.</p>",
@@ -406,7 +409,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null

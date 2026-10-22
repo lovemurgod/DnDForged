@@ -110,7 +110,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_0xi5",
+        "id": "act_magic_resistance_3bkg",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Coral has advantage on saving throws against spells and other magical effects.</p>",
@@ -132,7 +132,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1qj7",
+        "id": "act_multiattack_2rqt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Coral makes two Hoof attacks and uses Tail Thump.</p>",
@@ -152,7 +152,7 @@
         }
       },
       {
-        "id": "act_hoof_9tak",
+        "id": "act_hoof_4jmw",
         "name": "Hoof",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage.</p>",
@@ -170,14 +170,15 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_thump_5ov9",
+        "id": "act_tail_thump_o671",
         "name": "Tail Thump",
         "actionType": "action",
         "descriptionHtml": "<p>Coral slams her tail down, unleashing a burst of magical force toward one creature she can see within 60 feet of her. The target must make a DC 16 Dexterity saving throw. On a failed save, the target takes 22 (4d10) force damage and has the prone condition. On a successful save, the target takes half as much damage only. If this damage reduces the target to 0 hit points, the target dies, and its body is reduced to fine dust.</p>",
@@ -198,7 +199,8 @@
           "damages": [
             {
               "formula": "4d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -207,7 +209,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_bubbles_of_whimsy__2_day__tjxz",
+        "id": "act_bubbles_of_whimsy__2_day__y44u",
         "name": "Bubbles of Whimsy (2/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Coral produces a stream of magical bubbles from her horn. These bubbles float toward a creature Coral can see within 60 feet of herself. Roll a d6 to determine the bubbles' effect:</p><ul><li><strong><em>1-2: Bolstering Treat.</em></strong> <p>The bubbles transform into 1d4 cookies that appear in the target's space. The target gains 11 (2d8 + 2) temporary hit points if it immediately uses its reaction to eat one of the cookies. Any leftover cookies are delicious but confer no benefits.</p></li><li><strong><em>3-4: Sparkle Burst.</em></strong> <p>The bubbles transform into glitter that swirls around the target before bursting outward. Each creature within 5 feet of the target must succeed on a DC 16 Constitution saving throw or have the blinded condition until the start of Coral's next turn.</p></li><li><strong><em>5-6: Stink Bomb Shield.</em></strong> <p>The bubbles transform into a foul-smelling cloud of gas that surrounds and shields the target. The target has Cover until the gas disappears at the start of Coral's next turn.</p></li></ul>",
@@ -256,7 +258,7 @@
         }
       },
       {
-        "id": "act_gift_of_speech__1_day__4vat",
+        "id": "act_gift_of_speech__1_day__il53",
         "name": "Gift of Speech (1/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Coral targets one Beast she can see within 10 feet of herself. The target gains the ability to understand and speak Common or Sylvan (Coral's choice) for 10 minutes.</p>",
@@ -556,7 +558,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_ijqf",
+        "id": "act_magic_resistance_c5t1",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The dandylion has advantage on saving throws against spells and other magical effects.</p>",
@@ -576,7 +578,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_927y",
+        "id": "act_pack_tactics_bvbc",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The dandylion has advantage on an attack roll against a creature if at least one of the dandylion's allies is within 5 feet of the creature and the ally doesn't have the incapacitated condition.</p>",
@@ -598,7 +600,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xvz6",
+        "id": "act_multiattack_tdso",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dandylion makes one Bite attack and one Claws attack.</p>",
@@ -618,7 +620,7 @@
         }
       },
       {
-        "id": "act_bite_kw8g",
+        "id": "act_bite_2rvg",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 13 (2d6 + 6) piercing damage.</p>",
@@ -636,14 +638,15 @@
           "damages": [
             {
               "formula": "2d6 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_7u2e",
+        "id": "act_claws_9lhk",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 20 (4d6 + 6) slashing damage. If the dandylion moved at least 20 feet straight toward the target immediately before the hit, the target must succeed on a DC 17 Strength saving throw or have the prone condition. If the target has the prone condition, the dandylion can make one Bite attack against it as a bonus action.</p>",
@@ -664,14 +667,15 @@
           "damages": [
             {
               "formula": "4d6 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rejuvenating_seedpods__2_day__wwfo",
+        "id": "act_rejuvenating_seedpods__2_day__sgf8",
         "name": "Rejuvenating Seedpods (2/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The dandylion releases a burst of seedpods from its tail, filling a 10-foot-radius sphere centered on itself. Each creature of the dandylion's choice in the sphere can immediately end one of the following conditions on itself (creature's choice): blinded, deafened, paralyzed, or poisoned. In addition, all soil in the sphere's area is enriched, restoring withered vegetation in the area to full health and causing all crops in the area to produce twice the normal harvest for the next year.</p>",
@@ -694,7 +698,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_roar_of_pride_aahv",
+        "id": "act_roar_of_pride_smzo",
         "name": "Roar of Pride",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature within 60 feet of the dandylion hits it with an attack roll, the dandylion can unleash a furious roar. The creature that triggered this reaction must succeed on a DC 15 Wisdom saving throw or have the frightened condition until the end of the dandylion's next turn.</p>",
@@ -862,7 +866,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fiery_wings_psdz",
+        "id": "act_fiery_wings_evlu",
         "name": "Fiery Wings",
         "actionType": "trait",
         "descriptionHtml": "<p>Rain's wings are made of flame, and they shed bright light out to 15 feet and dim light for an additional 15 feet. At the start of each of Rain's turns, each creature of Rain's choice within 5 feet of her takes 3 (1d6) fire damage. A creature that hits Rain with a melee attack takes 3 (1d6) fire damage.</p>",
@@ -880,18 +884,20 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_4hre",
+        "id": "act_magic_resistance_top4",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Rain has advantage on saving throws against spells and other magical effects.</p>",
@@ -913,7 +919,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zdhk",
+        "id": "act_multiattack_5glk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Rain makes two Hoof attacks.</p>",
@@ -933,7 +939,7 @@
         }
       },
       {
-        "id": "act_hoof_obzx",
+        "id": "act_hoof_l0rk",
         "name": "Hoof",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (2d4) bludgeoning damage.</p>",
@@ -951,14 +957,15 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_haloed_horn_burst__recharge_5__7fiq",
+        "id": "act_haloed_horn_burst__recharge_5__ottj",
         "name": "Haloed Horn Burst (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Rain uses her haloed horn to produce one of the following magical effects:</p>",
@@ -978,7 +985,7 @@
         }
       },
       {
-        "id": "act_glitterstorm_cp7n",
+        "id": "act_glitterstorm_qd7z",
         "name": "Glitterstorm",
         "actionType": "action",
         "descriptionHtml": "<p>Rain emits a rainbow beam in a 30-foot line that is 5 feet wide. Each creature in that area must make a DC 15 Dexterity saving throw, taking 21 (6d6) radiant damage on a failed saving throw, or half as much damage on a successful one; creatures of evil alignment have disadvantage on this saving throw. If the damage from this effect reduces a creature to 0 hit points, the creature dies, and its body turns into glittery flowers.</p>",
@@ -999,14 +1006,15 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_rainbows_giz7",
+        "id": "act_healing_rainbows_r0mu",
         "name": "Healing Rainbows",
         "actionType": "action",
         "descriptionHtml": "<p>Rain releases a wave of rejuvenating multicolored light in a 30-foot cone. Each creature of Rain's choice in that area regains 18 (4d8) hit points.</p>",
@@ -1028,7 +1036,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_i0hh",
+        "id": "act_nimble_escape_w5xa",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Rain takes either the Disengage or the Hide action.</p>",
@@ -1175,7 +1183,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_electrified_chassis_oorf",
+        "id": "act_electrified_chassis_btpy",
         "name": "Electrified Chassis",
         "actionType": "trait",
         "descriptionHtml": "<p>A creature that hits the scrapper with a melee attack while within 5 feet of it takes 19 (3d12) lightning damage.</p>",
@@ -1193,7 +1201,8 @@
           "damages": [
             {
               "formula": "3d12",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1202,7 +1211,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8cor",
+        "id": "act_multiattack_txg6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The scrapper makes two Spike Punch attacks. It can replace one of those with a Wires attack.</p>",
@@ -1222,7 +1231,7 @@
         }
       },
       {
-        "id": "act_spike_punch_u0iw",
+        "id": "act_spike_punch_do4y",
         "name": "Spike Punch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage plus 5 (1d10) piercing damage.</p>",
@@ -1240,18 +1249,20 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wires_gigk",
+        "id": "act_wires_rf3w",
         "name": "Wires",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 20 ft., one Large or smaller creature. Hit: The target has the grappled condition (escape DC 16) and must succeed on a DC 16 Strength saving throw or be pulled into an unoccupied space within 5 feet of the scrapper and take 19 (3d12) lightning damage. The scrapper can have only one creature grappled in this way at a time.</p>",
@@ -1272,14 +1283,15 @@
           "damages": [
             {
               "formula": "3d12",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_eye_beam__recharge_5__icm4",
+        "id": "act_eye_beam__recharge_5__85zi",
         "name": "Eye Beam (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The scrapper shoots a magical beam from its extended eye at one creature it can see within 120 feet of itself. The target must make a DC 16 Dexterity saving throw, taking 44 (8d10) force damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1300,7 +1312,8 @@
           "damages": [
             {
               "formula": "8d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -1444,7 +1457,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_hd2a",
+        "id": "act_amphibious_j0nb",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Seth can breathe air and water.</p>",
@@ -1464,7 +1477,7 @@
         }
       },
       {
-        "id": "act_invisible_in_water_q7gz",
+        "id": "act_invisible_in_water_fie0",
         "name": "Invisible in Water",
         "actionType": "trait",
         "descriptionHtml": "<p>Seth has the invisible condition while fully immersed in water.</p>",
@@ -1486,7 +1499,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_c5ht",
+        "id": "act_multiattack_ol76",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Seth makes one Bite attack and two Claw attacks.</p>",
@@ -1506,7 +1519,7 @@
         }
       },
       {
-        "id": "act_bite_hg18",
+        "id": "act_bite_lhoh",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 10 (1d6 + 7) piercing damage plus 9 (2d8) cold damage.</p>",
@@ -1524,18 +1537,20 @@
           "damages": [
             {
               "formula": "1d6 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_rpfl",
+        "id": "act_claw_pu5c",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 5 ft., one target. Hit: 14 (2d6 + 7) slashing damage.</p>",
@@ -1553,14 +1568,15 @@
           "damages": [
             {
               "formula": "2d6 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_riptide_breath__recharge_5__4iv9",
+        "id": "act_riptide_breath__recharge_5__ua3n",
         "name": "Riptide Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Seth exhales a torrent of frigid water in a 30-foot cone. Each creature in that area must make a DC 16 Constitution saving throw. On a failed save, the creature takes 36 (8d8) cold damage and has the incapacitated condition until the end of its next turn. On a successful save, the creature takes half as much damage only.</p>",
@@ -1581,7 +1597,8 @@
           "damages": [
             {
               "formula": "8d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -1590,7 +1607,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape_w2ys",
+        "id": "act_change_shape_0p0r",
         "name": "Change Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Seth magically transforms into a Small Humanoid or a Beast that is Tiny or Small, while retaining his game statistics (other than his size). This transformation ends if Seth is reduced to 0 hit points or uses another bonus action to end it.</p>",
@@ -1610,7 +1627,7 @@
         }
       },
       {
-        "id": "act_superspeed__2_day__gutm",
+        "id": "act_superspeed__2_day__eiqt",
         "name": "Superspeed (2/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Seth's speed is doubled for as long as he maintains concentration (as if concentration on a spell). While his speed is increased in this way, all attack rolls against him are made with disadvantage, and he becomes partially incorporeal, allowing him to move through creatures and objects as if they were difficult terrain. Seth takes 5 (1d10) force damage if he ends his turn inside an object.</p>",
@@ -1628,7 +1645,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1885,7 +1903,7 @@
     ],
     "traits": [
       {
-        "id": "act_space_dweller_802q",
+        "id": "act_space_dweller_ahw6",
         "name": "Space Dweller",
         "actionType": "trait",
         "descriptionHtml": "<p>Sheldon can breathe normally in a vacuum.</p>",
@@ -1907,7 +1925,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jglf",
+        "id": "act_multiattack_98i6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Sheldon makes either two Bite attacks, two Blueberry Fling attacks, or one of each.</p>",
@@ -1927,7 +1945,7 @@
         }
       },
       {
-        "id": "act_bite_9dzn",
+        "id": "act_bite_zvn5",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 4 (1d8) psychic damage.</p>",
@@ -1945,18 +1963,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_blueberry_fling_iff7",
+        "id": "act_blueberry_fling_9428",
         "name": "Blueberry Fling",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +7 to hit, range 30 ft., one creature. Hit: 11 (2d6 + 4) blueberry damage.</p>",
@@ -1974,14 +1994,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_jetstream_breath__recharge_5__szqv",
+        "id": "act_jetstream_breath__recharge_5__sp51",
         "name": "Jetstream Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Sheldon exhales a line of magical wind that is 60 feet long and 5 feet wide. Each creature in that area must make a DC 15 Strength saving throw. On a failed save, the creature takes 21 (6d6) force damage, is pushed 15 feet away from Sheldon, and has the prone condition. On a successful save, the creature takes half as much damage only.</p>",
@@ -2002,7 +2023,8 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -2011,7 +2033,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_wind_dash__2_day__spce",
+        "id": "act_wind_dash__2_day__u9d9",
         "name": "Wind Dash (2/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Sheldon summons a powerful gust of wind and flies up to his speed. This movement doesn't provoke opportunity attacks. At the end of this movement, each creature within 5 feet of Sheldon must succeed on a DC 15 Strength saving throw or have the prone condition, as the wind bursts around Sheldon.</p>",

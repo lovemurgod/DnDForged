@@ -3070,6 +3070,8 @@ io.on('connection', (socket) => {
       abilityCard: msg.abilityCard || null,
       macroCard: msg.macroCard || null,
       itemCard: msg.itemCard || null,
+      saveResolveCard: msg.saveResolveCard || null,
+      massAttackCard: msg.massAttackCard || null,
       timestamp: Date.now(),
       hidden: false,
       whisperToGM: msg.whisperToGM || false
@@ -3094,6 +3096,43 @@ io.on('connection', (socket) => {
       io.to(campaignId).emit('chat:msg', chatMsg);
     }
     saveChat();
+  });
+
+  // Resolve save resolution card in chat (GM only)
+  socket.on('chat:save_resolved', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || socket.role !== 'GM' || !data || !data.id) return;
+    if (chatLogs[campaignId]) {
+      const msg = chatLogs[campaignId].find(m => m.id === data.id);
+      if (msg && msg.saveResolveCard) {
+        msg.saveResolveCard.resolved = data.resolution;
+        if (data.results) {
+          msg.saveResolveCard.results = data.results;
+        }
+        saveChat();
+        io.to(campaignId).emit('chat:save_resolved', data);
+      }
+    }
+  });
+
+  // Resolve mass attack card in chat (GM only)
+  socket.on('chat:mass_attack_resolved', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || socket.role !== 'GM' || !data || !data.id) return;
+    if (chatLogs[campaignId]) {
+      const msg = chatLogs[campaignId].find(m => m.id === data.id);
+      if (msg && msg.massAttackCard) {
+        msg.massAttackCard.resolved = data.resolution || true;
+        if (data.attacks) {
+          msg.massAttackCard.attacks = data.attacks;
+        }
+        if (data.summary) {
+          msg.massAttackCard.summary = data.summary;
+        }
+        saveChat();
+        io.to(campaignId).emit('chat:mass_attack_resolved', data);
+      }
+    }
   });
 
   // Delete chat message (GM only)
@@ -3132,6 +3171,8 @@ io.on('connection', (socket) => {
       spellCard: msg.spellCard || null,
       abilityCard: msg.abilityCard || null,
       itemCard: msg.itemCard || null,
+      saveResolveCard: msg.saveResolveCard || null,
+      massAttackCard: msg.massAttackCard || null,
       timestamp: Date.now()
     };
     // Send only to the requesting socket (GM sees it privately)

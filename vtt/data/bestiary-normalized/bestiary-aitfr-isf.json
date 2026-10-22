@@ -313,7 +313,7 @@
     ],
     "traits": [
       {
-        "id": "act_elemental_demise_sbrc",
+        "id": "act_elemental_demise_r8v2",
         "name": "Elemental Demise",
         "actionType": "trait",
         "descriptionHtml": "<p>If Exul dies, his body disintegrates in a flash of fire and puff of smoke, leaving behind only the equipment he was wearing or carrying.</p>",
@@ -335,7 +335,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_46uv",
+        "id": "act_multiattack_yv3m",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Exul makes two handaxe attacks or uses his Hurl Flame twice.</p>",
@@ -355,7 +355,7 @@
         }
       },
       {
-        "id": "act_handaxe_kg7g",
+        "id": "act_handaxe_i72a",
         "name": "Handaxe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 13 (2d6 + 6) slashing damage plus 3 (1d6) fire damage.</p>",
@@ -373,18 +373,20 @@
           "damages": [
             {
               "formula": "2d6 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hurl_flame_rhth",
+        "id": "act_hurl_flame_t9vf",
         "name": "Hurl Flame",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +7 to hit, range 120 ft., one target. Hit: 17 (5d6) fire damage.</p>",
@@ -402,7 +404,8 @@
           "damages": [
             {
               "formula": "5d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -976,7 +979,7 @@
     ],
     "traits": [
       {
-        "id": "act_benign_transportation__recharges_after_malivar_casts_a_conjuration_spell_of_1st_level_or_higher__oe1e",
+        "id": "act_benign_transportation__recharges_after_malivar_casts_a_conjuration_spell_of_1st_level_or_higher__5nqy",
         "name": "Benign Transportation (Recharges after Malivar Casts a Conjuration Spell of 1st Level or Higher)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Malivar teleports up to 30 feet to an unoccupied space that he can see.</p><p>If he instead chooses a space within range that is occupied by a willing Small or Medium creature, they both teleport, swapping places.</p>",
@@ -999,7 +1002,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_12sr",
+        "id": "act_dagger_o2s4",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -1017,7 +1020,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

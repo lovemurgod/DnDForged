@@ -763,7 +763,7 @@
     ],
     "traits": [
       {
-        "id": "act_dark_one_s_own_luck__recharges_after_a_short_or_long_rest__375m",
+        "id": "act_dark_one_s_own_luck__recharges_after_a_short_or_long_rest__aau9",
         "name": "Dark One's Own Luck (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>When the warlock makes an ability check or saving throw, it can add a d10 to the roll. It can do this after the roll is made but before any of the roll's effects occur.</p>",
@@ -783,7 +783,7 @@
         }
       },
       {
-        "id": "act_regeneration_yieq",
+        "id": "act_regeneration_5v1g",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>Dirt-Under-Nails regains 10 hit points at the start of his turn if he is in contact with the ground. If Dirt-Under-Nails takes fire damage, this trait doesn't function at the start of his next turn. Dirt-Under-Nails dies only if he starts his turn with 0 hit points and doesn't regenerate.</p>",
@@ -803,7 +803,7 @@
         }
       },
       {
-        "id": "act_shared_senses_urcu",
+        "id": "act_shared_senses_w0if",
         "name": "Shared Senses",
         "actionType": "trait",
         "descriptionHtml": "<p>Dirt-Under-Nails can see and hear what any plant within 120 ft can see and hear. In addition, Dirt-Under- Nails can communicate telepathically with any plant within this range.</p>",
@@ -823,7 +823,7 @@
         }
       },
       {
-        "id": "act_special_equipment___2_rod_of_the_pact_keeper__1217",
+        "id": "act_special_equipment___2_rod_of_the_pact_keeper__mu4c",
         "name": "Special Equipment (+2 Rod of the Pact Keeper)",
         "actionType": "trait",
         "descriptionHtml": "<p>While holding this +2 Rod of the Pact Keeper, Dirt-Under-Nails gains a +2 bonus to spell attack rolls and to the saving throw DCs of his warlock spells (included in modifications, below). In addition, he can regain 1 warlock spell slot as an action while holding the rod. He can't use this property again until he finishes a long rest.</p>",
@@ -843,7 +843,7 @@
         }
       },
       {
-        "id": "act_tree_stride_z6ty",
+        "id": "act_tree_stride_sxqp",
         "name": "Tree Stride",
         "actionType": "trait",
         "descriptionHtml": "<p>Once on each of its turns, Dirt-Under-Nails can use 10 feet of his movement to step magically into one copse of mushrooms within 5 feet of him and emerge from a second copse of mushrooms within 60 feet of it, appearing in an unoccupied space within 5 feet of the second copse. Both copses of mushrooms must be Large or bigger. Dirt-Under-Nails doesn't need to be able to see the second copse to use this ability.</p>",
@@ -865,7 +865,7 @@
     ],
     "actions": [
       {
-        "id": "act_mace_degn",
+        "id": "act_mace_ds4x",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage plus 10 (3d6) fire damage.</p>",
@@ -883,11 +883,13 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1025,7 +1027,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_club_w8it",
+        "id": "act_magic_club_c6c7",
         "name": "Magic Club",
         "actionType": "trait",
         "descriptionHtml": "<p>In the rotter's hand, its club is magical and deals 7 (3d4) extra damage (included in its attacks).</p>",
@@ -1043,14 +1045,15 @@
           "damages": [
             {
               "formula": "3d4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_plant_camouflage_hqla",
+        "id": "act_plant_camouflage_ksqk",
         "name": "Plant Camouflage",
         "actionType": "trait",
         "descriptionHtml": "<p>The rotter has advantage on Dexterity (Stealth) checks it makes in terrain with ample obscuring plant life.</p>",
@@ -1070,7 +1073,7 @@
         }
       },
       {
-        "id": "act_regeneration_3k3h",
+        "id": "act_regeneration_u76a",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The rotter regains 10 hit points at the start of its turn if it is in contact with the ground. If the rotter takes fire damage, this trait doesn't function at the start of the rotter's next turn. The rotter dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
@@ -1090,7 +1093,7 @@
         }
       },
       {
-        "id": "act_shared_senses_tm8f",
+        "id": "act_shared_senses_py30",
         "name": "Shared Senses",
         "actionType": "trait",
         "descriptionHtml": "<p>The rotter can see and hear what any plant within 120 ft can see and hear. In addition, the rotter can communicate telepathically with any plant within this range.</p>",
@@ -1110,7 +1113,7 @@
         }
       },
       {
-        "id": "act_tree_stride_ber5",
+        "id": "act_tree_stride_x5xw",
         "name": "Tree Stride",
         "actionType": "trait",
         "descriptionHtml": "<p>Once on each of its turns, the rotter can use 10 feet of its movement to step magically into one copse of mushrooms within 5 feet of it and emerge from a second copse of mushrooms within 60 feet of it, appearing in an unoccupied space within 5 feet of the second copse. Both copses of mushrooms must be Large or bigger. The rotter doesn't need to be able to see the second copse to use this ability.</p>",
@@ -1132,7 +1135,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dxup",
+        "id": "act_multiattack_t3fw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The rotter makes two attacks with its club.</p>",
@@ -1152,7 +1155,7 @@
         }
       },
       {
-        "id": "act_club_j10x",
+        "id": "act_club_zfdn",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 14 (4d4 + 4) bludgeoning damage.</p>",
@@ -1170,7 +1173,8 @@
           "damages": [
             {
               "formula": "4d4 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null

@@ -89,7 +89,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration__slaadi_only__wr0c",
+        "id": "act_regeneration__slaadi_only__0t8n",
         "name": "Regeneration (Slaadi Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The aberration regains 10 hit points at the start of its turn if it has at least 1 hit point.</p>",
@@ -109,7 +109,7 @@
         }
       },
       {
-        "id": "act_whispering_aura__star_spawn_only__z2kw",
+        "id": "act_whispering_aura__star_spawn_only__f7sp",
         "name": "Whispering Aura (Star Spawn Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of the aberration's turns, each creature within 5 feet of it must succeed on a Wisdom saving throw against your spell save DC or take 3d6 psychic damage, provided that the aberration isn't incapacitated.</p>",
@@ -127,7 +127,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -136,7 +137,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vla1",
+        "id": "act_multiattack_8ygi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The aberration makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -156,7 +157,7 @@
         }
       },
       {
-        "id": "act_eye_ray__beholderkin_only__l2m3",
+        "id": "act_eye_ray__beholderkin_only__h24l",
         "name": "Eye Ray (Beholderkin Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +3 + summonSpellLevel to hit, range 30 ft., one creature. Hit: 1d8 + 3 + summonSpellLevel psychic damage.</p>",
@@ -174,14 +175,15 @@
           "damages": [
             {
               "formula": "1d8 + 3 + summonSpellLevel",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws__slaadi_only__dbjg",
+        "id": "act_claws__slaadi_only__s16p",
         "name": "Claws (Slaadi Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 + summonSpellLevel to hit, reach 5 ft., one target. Hit: 1d10 + 3 + summonSpellLevel slashing damage. If the target is a creature, it can't regain hit points until the start of the aberration's next turn.</p>",
@@ -199,14 +201,15 @@
           "damages": [
             {
               "formula": "1d10 + 3 + summonSpellLevel",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_psychic_slam__star_spawn_only__ukqm",
+        "id": "act_psychic_slam__star_spawn_only__mowo",
         "name": "Psychic Slam (Star Spawn Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Spell Attack: +3 + summonSpellLevel to hit, reach 5 ft., one creature. Hit: 1d6 + 3 + summonSpellLevel psychic damage.</p>",
@@ -224,7 +227,8 @@
           "damages": [
             {
               "formula": "1d6 + 3 + summonSpellLevel",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -343,7 +347,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious__water_only__nh3x",
+        "id": "act_amphibious__water_only__wxe9",
         "name": "Amphibious (Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast can breathe air and water.</p>",
@@ -363,7 +367,7 @@
         }
       },
       {
-        "id": "act_flyby__air_only__iamo",
+        "id": "act_flyby__air_only__nppu",
         "name": "Flyby (Air Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -383,7 +387,7 @@
         }
       },
       {
-        "id": "act_pack_tactics__land_and_water_only__2j2g",
+        "id": "act_pack_tactics__land_and_water_only__2q6a",
         "name": "Pack Tactics (Land and Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast has advantage on an attack roll against a creature if at least one of the beast's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -405,7 +409,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dbbl",
+        "id": "act_multiattack_byhc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The beast makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -425,7 +429,7 @@
         }
       },
       {
-        "id": "act_maul_h333",
+        "id": "act_maul_vd2h",
         "name": "Maul",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 + summonSpellLevel to hit, reach 5 ft., one target. Hit: 1d8 + 4 + summonSpellLevel piercing damage.</p>",
@@ -443,7 +447,8 @@
           "damages": [
             {
               "formula": "1d8 + 4 + summonSpellLevel",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -569,7 +574,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_04z2",
+        "id": "act_multiattack_yw5o",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The celestial makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -589,7 +594,7 @@
         }
       },
       {
-        "id": "act_radiant_bow__avenger_only__hw5w",
+        "id": "act_radiant_bow__avenger_only__pli6",
         "name": "Radiant Bow (Avenger Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +2 + summonSpellLevel to hit, range 150/600 ft., one target. Hit: 2d6 + 2 + summonSpellLevel radiant damage.</p>",
@@ -607,14 +612,15 @@
           "damages": [
             {
               "formula": "2d6 + 2 + summonSpellLevel",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_radiant_mace__defender_only__3c9h",
+        "id": "act_radiant_mace__defender_only__conn",
         "name": "Radiant Mace (Defender Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 + summonSpellLevel to hit, reach 5 ft., one target. Hit: 1d10 + 3 + summonSpellLevel radiant damage, and the celestial can choose itself or another creature it can see within 10 feet of the target. The chosen creature gains temporary hit points equal to the damage dealt, provided it doesn't already have temporary hit points.</p>",
@@ -632,14 +638,15 @@
           "damages": [
             {
               "formula": "1d10 + 3 + summonSpellLevel",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__1_day__bkhx",
+        "id": "act_healing_touch__1_day__3id3",
         "name": "Healing Touch (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The celestial touches another creature. The target magically regains hit points equal to 2d8 + summonSpellLevel.</p>",
@@ -807,7 +814,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_form__air__fire__and_water_only__8az0",
+        "id": "act_amorphous_form__air__fire__and_water_only__m3rw",
         "name": "Amorphous Form (Air, Fire, and Water Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The elemental can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -829,7 +836,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qqc3",
+        "id": "act_multiattack_ug0y",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elemental makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -849,7 +856,7 @@
         }
       },
       {
-        "id": "act_slam_byzj",
+        "id": "act_slam_ul4z",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 + summonSpellLevel to hit, reach 5 ft., one target. Hit: 1d10 + 4 + summonSpellLevel bludgeoning damage (Air, Earth, and Water only) or fire damage (Fire only).</p>",
@@ -867,7 +874,8 @@
           "damages": [
             {
               "formula": "1d10 + 4 + summonSpellLevel",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -989,7 +997,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fey_step_8pdj",
+        "id": "act_fey_step_zj1q",
         "name": "Fey Step",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, the fey can magically teleport up to 30 feet to an unoccupied space it can see.</p>",
@@ -1009,7 +1017,7 @@
         }
       },
       {
-        "id": "act_darkening_step__deceitful_only__5k59",
+        "id": "act_darkening_step__deceitful_only__f1b4",
         "name": "Darkening Step (Deceitful Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Immediately after using its Fey Step, the fey can fill a 5-foot cube within 5 feet of it with magical darkness, which remains until the end of the fey's next turn.</p>",
@@ -1029,7 +1037,7 @@
         }
       },
       {
-        "id": "act_ecstatic_step__joyful_only__n3mk",
+        "id": "act_ecstatic_step__joyful_only__53ej",
         "name": "Ecstatic Step (Joyful Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Immediately after using its Fey Step, the fey can choose a creature it can see within 10 feet of it and force it to succeed on a Wisdom saving throw against your spell save DC or be charmed by the fey for 1 minute. The charm ends if the fey or any of its companions deals any damage to the target.</p>",
@@ -1049,7 +1057,7 @@
         }
       },
       {
-        "id": "act_impassioned_step__furious_only__1oty",
+        "id": "act_impassioned_step__furious_only__c3ee",
         "name": "Impassioned Step (Furious Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Immediately after using its Fey Step, the fey has advantage on the next attack roll it makes before the end of its turn.</p>",
@@ -1071,7 +1079,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4alm",
+        "id": "act_multiattack_qxth",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fey makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1091,7 +1099,7 @@
         }
       },
       {
-        "id": "act_shortsword_lj0r",
+        "id": "act_shortsword_sg3y",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 + summonSpellLevel to hit, reach 5 ft., one target. Hit: 1d6 + 3 + summonSpellLevel piercing damage + 1d6 force damage.</p>",
@@ -1109,11 +1117,13 @@
           "damages": [
             {
               "formula": "1d6 + 3 + summonSpellLevel",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "+ 1d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1240,7 +1250,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_syi7",
+        "id": "act_magic_resistance_g0mb",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The fiend has advantage on saving throws against spells and other magical effects.</p>",
@@ -1260,7 +1270,7 @@
         }
       },
       {
-        "id": "act_death_throes__demon_only__uudj",
+        "id": "act_death_throes__demon_only__m0vf",
         "name": "Death Throes (Demon Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>When the fiend drops to 0 hit points or the spell ends, the fiend explodes, and each creature within 10 feet of it must make a Dexterity saving throw against your spell save DC. A creature takes 2d10 + summonSpellLevel fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1278,14 +1288,15 @@
           "damages": [
             {
               "formula": "2d10 + summonSpellLevel",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_devil_s_sight__devil_only__y69q",
+        "id": "act_devil_s_sight__devil_only__quo7",
         "name": "Devil's Sight (Devil Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Magical darkness doesn't impede the fiend's darkvision.</p>",
@@ -1307,7 +1318,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vi8l",
+        "id": "act_multiattack_a2u4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fiend makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1327,7 +1338,7 @@
         }
       },
       {
-        "id": "act_bite__demon_only__8sb9",
+        "id": "act_bite__demon_only__0f7y",
         "name": "Bite (Demon Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 + summonSpellLevel to hit, reach 5 ft., one target. Hit: 1d12 + 3 + summonSpellLevel necrotic damage.</p>",
@@ -1345,14 +1356,15 @@
           "damages": [
             {
               "formula": "1d12 + 3 + summonSpellLevel",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws__yugoloth_only__ukog",
+        "id": "act_claws__yugoloth_only__q2qc",
         "name": "Claws (Yugoloth Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 + summonSpellLevel to hit, reach 5 ft., one target. Hit: 1d8 + 3 + summonSpellLevel slashing damage. Immediately after the attack hits or misses, the fiend can magically teleport up to 30 feet to an unoccupied space it can see.</p>",
@@ -1370,14 +1382,15 @@
           "damages": [
             {
               "formula": "1d8 + 3 + summonSpellLevel",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hurl_flame__devil_only__wedw",
+        "id": "act_hurl_flame__devil_only__zkmp",
         "name": "Hurl Flame (Devil Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +3 + summonSpellLevel to hit, range 150 ft., one target. Hit: 2d6 + 3 + summonSpellLevel fire damage. If the target is a flammable object that isn't being worn or carried, it also catches fire.</p>",
@@ -1395,7 +1408,8 @@
           "damages": [
             {
               "formula": "2d6 + 3 + summonSpellLevel",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1519,7 +1533,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_bloodthirsty_frenzy__fury_only__eqwg",
+        "id": "act_bloodthirsty_frenzy__fury_only__t7pb",
         "name": "Bloodthirsty Frenzy (Fury Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit has advantage on attack rolls against frightened creatures.</p>",
@@ -1539,7 +1553,7 @@
         }
       },
       {
-        "id": "act_shadow_stealth__fear_only__tnoe",
+        "id": "act_shadow_stealth__fear_only__ywr2",
         "name": "Shadow Stealth (Fear Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>While in dim light or darkness, the spirit can take the Hide action as a bonus action.</p>",
@@ -1559,7 +1573,7 @@
         }
       },
       {
-        "id": "act_weight_of_ages__despair_only__bjsd",
+        "id": "act_weight_of_ages__despair_only__bl6x",
         "name": "Weight of Ages (Despair Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Any beast or humanoid, other than you, that starts its turn within 5 feet of the spirit has its speed reduced by 20 feet until the start of that beast or humanoid's next turn.</p>",
@@ -1581,7 +1595,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_g68t",
+        "id": "act_multiattack_sqwm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1601,7 +1615,7 @@
         }
       },
       {
-        "id": "act_chilling_rend_2gyn",
+        "id": "act_chilling_rend_23z1",
         "name": "Chilling Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 + summonSpellLevel to hit, reach 5 ft., one target. Hit: 2d8 + 3 + summonSpellLevel cold damage.</p>",
@@ -1619,14 +1633,15 @@
           "damages": [
             {
               "formula": "2d8 + 3 + summonSpellLevel",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dreadful_scream__1_day__efhv",
+        "id": "act_dreadful_scream__1_day__m3ta",
         "name": "Dreadful Scream (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit screams. Each creature within 30 feet of it must succeed on a Wisdom saving throw against your spell save DC or be frightened of the spirit for 1 minute. The frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -1767,7 +1782,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement__ghostly_only__k525",
+        "id": "act_incorporeal_movement__ghostly_only__df6z",
         "name": "Incorporeal Movement (Ghostly Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The undead can become incorporeal while moving and pass through other creatures and objects as if they were difficult terrain. If it ends its turn inside an object, it is shunted to the nearest unoccupied space and takes 1d10 force damage for every 5 feet traveled.</p>",
@@ -1785,14 +1800,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_festering_aura__putrid_only__l6nk",
+        "id": "act_festering_aura__putrid_only__k80a",
         "name": "Festering Aura (Putrid Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature, other than you, that starts its turn within 5 feet of the undead must succeed on a Constitution saving throw against your spell save DC or be poisoned until the start of its next turn.</p>",
@@ -1814,7 +1830,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tjxe",
+        "id": "act_multiattack_a8t4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1834,7 +1850,7 @@
         }
       },
       {
-        "id": "act_deathly_touch__ghostly_only__yw37",
+        "id": "act_deathly_touch__ghostly_only__cd9b",
         "name": "Deathly Touch (Ghostly Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 + summonSpellLevel to hit, reach 5 ft., one creature. Hit: 1d8 + 3 + summonSpellLevel necrotic damage, and the creature must succeed on a Wisdom saving throw against your spell save DC or be frightened of the undead until the end of the target's next turn.</p>",
@@ -1852,14 +1868,15 @@
           "damages": [
             {
               "formula": "1d8 + 3 + summonSpellLevel",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_grave_bolt__skeletal_only__xg94",
+        "id": "act_grave_bolt__skeletal_only__c7zh",
         "name": "Grave Bolt (Skeletal Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +3 + summonSpellLevel to hit, range 150 ft., one target. Hit: 2d8 + 3 + summonSpellLevel necrotic damage.</p>",
@@ -1877,14 +1894,15 @@
           "damages": [
             {
               "formula": "2d8 + 3 + summonSpellLevel",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rotting_claw__putrid_only__arfy",
+        "id": "act_rotting_claw__putrid_only__e50b",
         "name": "Rotting Claw (Putrid Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 + summonSpellLevel to hit, reach 5 ft., one target. Hit: 1d6 + 3 + summonSpellLevel slashing damage. If the target is poisoned, it must succeed on a Constitution saving throw against your spell save DC or be paralyzed until the end of its next turn.</p>",
@@ -1902,7 +1920,8 @@
           "damages": [
             {
               "formula": "1d6 + 3 + summonSpellLevel",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null

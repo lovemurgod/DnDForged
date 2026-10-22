@@ -208,7 +208,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_quarterstaff_i7y2",
+        "id": "act_quarterstaff_b0av",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 2 (1d6 - 1) bludgeoning damage, or 3 (1d8 - 1) bludgeoning damage if used with two hands.</p>",
@@ -226,18 +226,20 @@
           "damages": [
             {
               "formula": "1d6 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_burning_hands__1st_level_spell__2_day__7t95",
+        "id": "act_burning_hands__1st_level_spell__2_day__79ux",
         "name": "Burning Hands (1st-Level Spell; 2/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>You shoot forth a 15-foot cone of fire. Each creature in that area must make a DC 11 Dexterity saving throw. A creature takes 10 (3d6) fire damage on a failed save, or half as much damage on a successful one The fire ignites any flammable objects in the area that aren't being worn or carried.</p>",
@@ -258,14 +260,15 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fire_bolt__cantrip__zrcp",
+        "id": "act_fire_bolt__cantrip__5ief",
         "name": "Fire Bolt (Cantrip)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: Ranged Spell Attack: +3 to hit, range 120 ft., one target. Hit: 5 (1d10) fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.</p>",
@@ -283,7 +286,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -508,7 +512,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_mace_e4kv",
+        "id": "act_mace_dy04",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
@@ -526,14 +530,15 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sacred_flame__cantrip__9iru",
+        "id": "act_sacred_flame__cantrip__ld3q",
         "name": "Sacred Flame (Cantrip)",
         "actionType": "action",
         "descriptionHtml": "<p>You target one creature you can see within 60 feet of you. The target must succeed on a DC 11 Dexterity saving throw or take 4 (1d8) radiant damage. The target gains no benefit from cover for this saving throw.</p>",
@@ -554,7 +559,8 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -684,7 +690,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_dagger_bert",
+        "id": "act_dagger_ddk7",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
@@ -702,7 +708,8 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -711,7 +718,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_disengage_r7d7",
+        "id": "act_disengage_3ed3",
         "name": "Disengage",
         "actionType": "bonus",
         "descriptionHtml": "<p>You take the Disengage action.</p>",
@@ -851,7 +858,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_longsword_2met",
+        "id": "act_longsword_q7q1",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage, or 6 (1d10 + 1) slashing damage if used with two hands.</p>",
@@ -869,11 +876,13 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -882,7 +891,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shove_lb77",
+        "id": "act_shove_kvv5",
         "name": "Shove",
         "actionType": "bonus",
         "descriptionHtml": "<p>While wielding a shield, you try to shove one creature within 5 feet of you.</p>",

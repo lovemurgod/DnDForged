@@ -15,6 +15,10 @@
 #vtt-mobile-tools-fab,
 #vtt-mobile-tools-menu,
 #vtt-mobile-backdrop,
+#vtt-mobile-combat-pill,
+#vtt-mobile-placement-banner,
+#vtt-mobile-radial-dial,
+#vtt-mobile-sheet-carousel,
 #vtt-mobile-shape-pill,
 #vtt-mobile-shape-sheet,
 #vtt-mobile-maptools-sheet,
@@ -31,7 +35,10 @@
 
 /* Universal Touch Elements: Hidden by class only */
 #vtt-mobile-drag-pill.vtt-hidden,
-#vtt-mobile-token-actions.vtt-hidden {
+#vtt-mobile-radial-dial.vtt-hidden,
+#vtt-mobile-sheet-carousel.vtt-hidden,
+#vtt-mobile-combat-pill.vtt-hidden,
+#vtt-mobile-placement-banner.vtt-hidden {
     display: none !important;
 }
 
@@ -1183,55 +1190,480 @@
     }
 
     /* ========================================================================
-       14. MOBILE TOKEN QUICK ACTION BAR
+       14. MOBILE UNIFIED RADIAL TOUCH DIAL
        ======================================================================== */
-    #vtt-mobile-token-actions {
-        display: flex !important;
+    #vtt-mobile-radial-dial {
+        display: block !important;
         position: fixed !important;
-        z-index: 840 !important;
-        gap: 8px !important;
-        background: rgba(14, 18, 27, 0.95) !important;
-        border: 1px solid rgba(212, 175, 55, 0.45) !important;
-        border-radius: 24px !important;
-        padding: 4px 8px !important;
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.75), 0 0 15px rgba(212, 175, 55, 0.25) !important;
-        backdrop-filter: blur(8px) !important;
-        -webkit-backdrop-filter: blur(8px) !important;
-        transform: translate(-50%, -130%) !important;
-        animation: fadeInQuickAction 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        z-index: 850 !important;
+        width: 170px !important;
+        height: 170px !important;
+        transform: translate(-50%, -50%) !important;
+        pointer-events: none !important;
+        animation: popRadialDial 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
     }
 
-    #vtt-mobile-token-actions.vtt-hidden {
+    #vtt-mobile-radial-dial.vtt-hidden {
         display: none !important;
     }
 
-    @keyframes fadeInQuickAction {
-        from { opacity: 0; transform: translate(-50%, -110%) scale(0.92); }
-        to { opacity: 1; transform: translate(-50%, -130%) scale(1); }
+    @keyframes popRadialDial {
+        from { opacity: 0; transform: translate(-50%, -50%) scale(0.82); }
+        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
 
-    .vtt-token-action-btn {
+    .radial-dial-ring {
+        position: absolute !important;
+        inset: 12px !important;
+        border-radius: 50% !important;
+        border: 1.5px dashed rgba(212, 175, 55, 0.35) !important;
+        pointer-events: none !important;
+    }
+
+    .radial-center-hub {
+        pointer-events: auto !important;
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        background: rgba(15, 23, 42, 0.96) !important;
+        border: 1.5px solid #f5c242 !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 12px rgba(212, 175, 55, 0.3) !important;
+        color: #f5c242 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        transition: transform 0.12s ease !important;
+    }
+
+    .radial-center-hub:active {
+        transform: translate(-50%, -50%) scale(0.92) !important;
+    }
+
+    .radial-hub-size {
+        display: block !important;
+    }
+
+    .radial-hub-close {
+        display: none !important;
+    }
+
+    .radial-center-hub:hover .radial-hub-size {
+        display: none !important;
+    }
+
+    .radial-center-hub:hover .radial-hub-close {
+        display: block !important;
+        color: #ef4444 !important;
+    }
+
+    .radial-node {
+        pointer-events: auto !important;
+        position: absolute !important;
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50% !important;
+        background: rgba(15, 23, 42, 0.95) !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.5) !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.8), 0 0 8px rgba(212, 175, 55, 0.2) !important;
+        color: #f8fafc !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease !important;
+    }
+
+    .radial-node i {
+        font-size: 0.82rem !important;
+        color: #f5c242 !important;
+        line-height: 1 !important;
+    }
+
+    .radial-node-label {
+        font-size: 0.52rem !important;
+        font-weight: 700 !important;
+        line-height: 1 !important;
+        color: #cbd5e1 !important;
+        margin-top: 2px !important;
+    }
+
+    .radial-node:active {
+        transform: translate(-50%, -50%) scale(1.15) !important;
+        background: rgba(212, 175, 55, 0.35) !important;
+        border-color: #f5c242 !important;
+    }
+
+    /* Angular Radial Node Offsets (R = 66px) */
+    .node-top {
+        top: calc(50% - 66px) !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-top-right {
+        top: calc(50% - 47px) !important;
+        left: calc(50% + 47px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-right {
+        top: 50% !important;
+        left: calc(50% + 66px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-bottom-right {
+        top: calc(50% + 47px) !important;
+        left: calc(50% + 47px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-bottom-left {
+        top: calc(50% + 47px) !important;
+        left: calc(50% - 47px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-left {
+        top: 50% !important;
+        left: calc(50% - 66px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    .node-top-left {
+        top: calc(50% - 47px) !important;
+        left: calc(50% - 47px) !important;
+        transform: translate(-50%, -50%) !important;
+    }
+
+    /* ========================================================================
+       14C. MOBILE SHEET SWITCHER CAROUSEL (PERSISTENT AVATAR DOCK)
+       ======================================================================== */
+    #vtt-mobile-sheet-carousel {
+        display: flex !important;
+        position: fixed !important;
+        bottom: calc(56px + env(safe-area-inset-bottom, 0px)) !important;
+        left: 0 !important;
+        right: 0 !important;
+        height: 50px !important;
+        z-index: 790 !important;
+        background: rgba(10, 14, 23, 0.92) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-top: 1px solid rgba(212, 175, 55, 0.25) !important;
+        align-items: center !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        transition: transform 0.2s ease, opacity 0.2s ease !important;
+    }
+
+    #vtt-mobile-sheet-carousel.vtt-hidden {
+        display: none !important;
+    }
+
+    .mobile-sheet-track {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 0 14px !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        scrollbar-width: none !important;
+    }
+
+    .mobile-sheet-track::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .mobile-sheet-chip {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 36px !important;
+        height: 36px !important;
+        border-radius: 50% !important;
+        flex-shrink: 0 !important;
+        cursor: pointer !important;
+        position: relative !important;
+        background: #1e293b !important;
+        border: 2px solid #64748b !important;
+        transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+        overflow: hidden !important;
+    }
+
+    .mobile-sheet-chip:active {
+        transform: scale(0.92) !important;
+    }
+
+    .mobile-sheet-chip.chip-pc {
+        border-color: #22c55e !important;
+    }
+
+    .mobile-sheet-chip.chip-npc {
+        border-color: #a855f7 !important;
+    }
+
+    .mobile-sheet-chip.chip-creature {
+        border-color: #f59e0b !important;
+    }
+
+    .mobile-sheet-chip.chip-active {
+        border-color: #f5c242 !important;
+        box-shadow: 0 0 12px rgba(245, 194, 66, 0.8) !important;
+        transform: scale(1.12) !important;
+    }
+
+    .mobile-sheet-chip img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        border-radius: 50% !important;
+    }
+
+    .mobile-sheet-chip .chip-monogram {
+        font-size: 0.72rem !important;
+        font-weight: 700 !important;
+        color: #f8fafc !important;
+    }
+
+    /* Eco Mode Indicators */
+    #mobile-fab-eco-badge {
+        position: absolute !important;
+        top: -3px !important;
+        right: -3px !important;
+        width: 18px !important;
+        height: 18px !important;
+        border-radius: 50% !important;
+        background: #16a34a !important;
+        color: #ffffff !important;
+        border: 1.5px solid #0f172a !important;
+        font-size: 0.62rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-shadow: 0 0 8px rgba(34, 197, 94, 0.8) !important;
+    }
+
+    #mobile-fab-eco-badge.vtt-hidden {
+        display: none !important;
+    }
+
+    #mobile-tool-eco.active {
+        background: rgba(34, 197, 94, 0.25) !important;
+        border-color: rgba(34, 197, 94, 0.6) !important;
+    }
+
+    #mobile-tool-eco.active i {
+        color: #4ade80 !important;
+        text-shadow: 0 0 10px rgba(74, 222, 128, 0.8) !important;
+    }
+
+    /* ========================================================================
+       14B. MOBILE FLOATING COMBAT PILL & PLACEMENT BANNER
+       ======================================================================== */
+    #vtt-mobile-combat-pill {
+        display: flex !important;
+        position: fixed !important;
+        top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 820 !important;
+        background: rgba(14, 18, 27, 0.95) !important;
+        border: 1.5px solid rgba(212, 175, 55, 0.5) !important;
+        border-radius: 24px !important;
+        padding: 4px 10px 4px 6px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.75), 0 0 14px rgba(212, 175, 55, 0.25) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
+        align-items: center !important;
+        gap: 8px !important;
+        cursor: pointer !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        max-width: calc(100vw - 120px) !important;
+        transition: transform 0.15s ease, background-color 0.15s ease !important;
+    }
+
+    #vtt-mobile-combat-pill:active {
+        transform: translateX(-50%) scale(0.96) !important;
+    }
+
+    .mobile-combat-pill-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-combat-pill-avatar {
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #f5c242 !important;
+        object-fit: cover !important;
+        flex-shrink: 0 !important;
+        background: #1e293b !important;
+    }
+
+    .mobile-combat-pill-info {
+        display: flex !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+    }
+
+    .mobile-combat-pill-name {
+        font-family: var(--font-heading, 'Cinzel', serif) !important;
+        font-size: 0.85rem !important;
+        font-weight: 700 !important;
+        color: #f5c242 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 130px !important;
+    }
+
+    .mobile-combat-pill-sub {
         display: flex !important;
         align-items: center !important;
         gap: 6px !important;
-        padding: 6px 12px !important;
-        border-radius: 16px !important;
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: none !important;
-        color: #f1f5f9 !important;
-        font-size: 0.8rem !important;
+        font-size: 0.68rem !important;
+        color: #94a3b8 !important;
         font-weight: 600 !important;
+    }
+
+    .mobile-combat-pill-hp {
+        color: #4ade80 !important;
+    }
+
+    .mobile-combat-pill-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        margin-left: 4px !important;
+    }
+
+    .mobile-combat-pill-btn {
+        width: 28px !important;
+        height: 28px !important;
+        border-radius: 50% !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(212, 175, 55, 0.3) !important;
+        color: #f5c242 !important;
+        font-size: 0.75rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
         cursor: pointer !important;
     }
 
-    .vtt-token-action-btn i {
-        color: #f5c242 !important;
-        font-size: 0.85rem !important;
+    .mobile-combat-pill-btn:active {
+        background: rgba(212, 175, 55, 0.35) !important;
+        color: #ffffff !important;
     }
 
-    .vtt-token-action-btn:active {
+    /* Tap-to-Place Alert Banner */
+    #vtt-mobile-placement-banner {
+        display: flex !important;
+        position: fixed !important;
+        top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        z-index: 1400 !important;
+        background: rgba(15, 23, 42, 0.96) !important;
+        border: 1.5px solid #f59e0b !important;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(245, 158, 11, 0.35) !important;
+        border-radius: 24px !important;
+        padding: 6px 14px !important;
+        align-items: center !important;
+        gap: 12px !important;
+        white-space: nowrap !important;
+        animation: pulsePlacementBanner 2.2s infinite ease-in-out !important;
+    }
+
+    @keyframes pulsePlacementBanner {
+        0%, 100% { box-shadow: 0 6px 24px rgba(0, 0, 0, 0.8), 0 0 14px rgba(245, 158, 11, 0.3); }
+        50% { box-shadow: 0 6px 28px rgba(0, 0, 0, 0.9), 0 0 22px rgba(245, 158, 11, 0.6); }
+    }
+
+    .placement-banner-content {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .placement-banner-content i {
+        font-size: 1.1rem !important;
+        color: #f59e0b !important;
+    }
+
+    .placement-banner-text {
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        font-size: 0.82rem !important;
+    }
+
+    .placement-banner-title {
+        color: #94a3b8 !important;
+    }
+
+    .placement-banner-target {
+        font-weight: 700 !important;
+        color: #fef08a !important;
+        max-width: 120px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+    }
+
+    /* Map Tools Controls (Steppers & Damage Chips) */
+    .mobile-stepper-btn {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(212, 175, 55, 0.35) !important;
+        color: #f5c242 !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .mobile-stepper-btn:active {
         background: rgba(212, 175, 55, 0.3) !important;
-        color: #ffffff !important;
+    }
+
+    .mobile-chip-btn {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.16) !important;
+        color: #cbd5e1 !important;
+        font-size: 0.78rem !important;
+        font-weight: 600 !important;
+        padding: 5px 12px !important;
+        border-radius: 14px !important;
+        white-space: nowrap !important;
+        cursor: pointer !important;
+        flex-shrink: 0 !important;
+        transition: all 0.15s ease !important;
+    }
+
+    .mobile-chip-btn:active,
+    .mobile-chip-btn.active {
+        background: rgba(212, 175, 55, 0.3) !important;
+        border-color: #f5c242 !important;
+        color: #fef08a !important;
     }
 
     /* ========================================================================
@@ -1432,11 +1864,14 @@ html.force-desktop-ui #vtt-mobile-nav,
 html.force-desktop-ui #vtt-mobile-tools-fab,
 html.force-desktop-ui #vtt-mobile-tools-menu,
 html.force-desktop-ui #vtt-mobile-backdrop,
+html.force-desktop-ui #vtt-mobile-combat-pill,
+html.force-desktop-ui #vtt-mobile-placement-banner,
+html.force-desktop-ui #vtt-mobile-radial-dial,
+html.force-desktop-ui #vtt-mobile-sheet-carousel,
 html.force-desktop-ui #vtt-mobile-shape-pill,
 html.force-desktop-ui #vtt-mobile-shape-sheet,
 html.force-desktop-ui #vtt-mobile-maptools-sheet,
 html.force-desktop-ui #vtt-mobile-drag-pill,
-html.force-desktop-ui #vtt-mobile-token-actions,
 html.force-desktop-ui .mobile-only,
 html.force-desktop-ui .mobile-sheet-topbar,
 html.force-desktop-ui .mobile-drawer-header,

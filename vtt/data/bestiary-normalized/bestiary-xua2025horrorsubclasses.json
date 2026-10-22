@@ -95,7 +95,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_burst_2ckh",
+        "id": "act_death_burst_ls6c",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>The companion explodes when it dies. dex DC equals {@dcYourSpellSave}, each creature in a 10-foot Emanation [Area of Effect] originating from the companion. {@actSaveFail} 2d6 Necrotic damage.</p>",
@@ -113,14 +113,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_lightning_absorption_3nu6",
+        "id": "act_lightning_absorption_wk4m",
         "name": "Lightning Absorption",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the companion is subjected to Lightning damage, it regains a number of Hit Points equal to the Lightning damage dealt.</p>",
@@ -142,7 +143,7 @@
     ],
     "actions": [
       {
-        "id": "act_dreadful_swipe_cw90",
+        "id": "act_dreadful_swipe_k84d",
         "name": "Dreadful Swipe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d4 + 2 plus your Intelligence modifier Necrotic damage, and the target can't take Opportunity Attack until the start of its next turn.</p>",
@@ -160,7 +161,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null

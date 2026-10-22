@@ -110,7 +110,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_air_form_89wf",
+        "id": "act_air_form_zx19",
         "name": "Air Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The apparition can enter a hostile creature's space and stop there. It can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -132,7 +132,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kp26",
+        "id": "act_multiattack_jpnl",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The apparition makes two slam attacks.</p>",
@@ -152,7 +152,7 @@
         }
       },
       {
-        "id": "act_slam_xtpj",
+        "id": "act_slam_q8k2",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) acid damage.</p>",
@@ -170,14 +170,15 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_whirlwind__recharge_4__8hf0",
+        "id": "act_whirlwind__recharge_4__l0uo",
         "name": "Whirlwind (Recharge 4)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature in the apparition's space must make a DC 13 Strength saving throw. On a failure, a target takes 15 (3d8 + 2) bludgeoning damage and is flung up 20 feet away from the apparition in a random direction and knocked prone. If a thrown target strikes an object, such as a wall or floor, the target takes 3 (1d6) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a DC 13 Dexterity saving throw or take the same damage and be knocked prone.</p><p>If the saving throw is successful, the target takes half the bludgeoning damage and isn't flung away or knocked prone.</p>",
@@ -199,11 +200,13 @@
           "damages": [
             {
               "formula": "3d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             },
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": "4"

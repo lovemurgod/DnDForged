@@ -105,7 +105,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__27qg",
+        "id": "act_legendary_resistance__3_day__suct",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
@@ -127,7 +127,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ljwz",
+        "id": "act_multiattack_2ed4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
@@ -147,7 +147,7 @@
         }
       },
       {
-        "id": "act_bite_c0go",
+        "id": "act_bite_a769",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 10 ft., one target. Hit: 19 (2d10 + 8) piercing damage plus 7 (2d6) fire damage.</p>",
@@ -165,18 +165,20 @@
           "damages": [
             {
               "formula": "2d10 + 8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_rl30",
+        "id": "act_claw_rauh",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 5 ft., one target. Hit: 15 (2d6 + 8) slashing damage.</p>",
@@ -194,14 +196,15 @@
           "damages": [
             {
               "formula": "2d6 + 8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_j56b",
+        "id": "act_tail_4eqw",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 15 ft., one target. Hit: 17 (2d8 + 8) bludgeoning damage.</p>",
@@ -219,14 +222,15 @@
           "damages": [
             {
               "formula": "2d8 + 8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_frightful_presence_0yip",
+        "id": "act_frightful_presence_0n4n",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
@@ -249,7 +253,7 @@
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__43fc",
+        "id": "act_fire_breath__recharge_5__vfyu",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales fire in a 60-foot cone. Each creature in that area must make a DC 21 Dexterity saving throw, taking 63 (18d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -270,7 +274,8 @@
           "damages": [
             {
               "formula": "18d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -284,7 +289,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_7vq9",
+          "id": "act_detect_5vdj",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a Wisdom (Perception) check.</p>",
@@ -304,7 +309,7 @@
           }
         },
         {
-          "id": "act_tail_attack_55bi",
+          "id": "act_tail_attack_osv7",
           "name": "Tail Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a tail attack.</p>",
@@ -324,7 +329,7 @@
           }
         },
         {
-          "id": "act_wing_attack__costs_2_actions__px78",
+          "id": "act_wing_attack__costs_2_actions__4fhk",
           "name": "Wing Attack (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon beats its wings. Each creature within 10 feet of the dragon must succeed on a DC 22 Dexterity saving throw or take 15 (2d6 + 8) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed.</p>",
@@ -345,7 +350,8 @@
             "damages": [
               {
                 "formula": "2d6 + 8",
-                "type": "Bludgeoning"
+                "type": "Bludgeoning",
+                "saveRider": true
               }
             ],
             "recharge": null
@@ -356,7 +362,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_magma_erupts_8bwn",
+        "id": "act_magma_erupts_zpuk",
         "name": "Magma Erupts",
         "actionType": "lair",
         "descriptionHtml": "<p>Magma erupts from a point on the ground the dragon can see within 120 feet of it, creating a 20-foot-high, 5-foot-radius geyser. Each creature in the geyser's area must make a DC 15 Dexterity saving throw, taking 21 (6d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -377,14 +383,15 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tremor_shakes_rfh8",
+        "id": "act_tremor_shakes_urnc",
         "name": "Tremor Shakes",
         "actionType": "lair",
         "descriptionHtml": "<p>A tremor shakes the lair in a 60-foot radius around the dragon. Each creature other than the dragon on the ground in that area must succeed on a DC 15 Dexterity saving throw or be knocked prone.</p>",
@@ -407,7 +414,7 @@
         }
       },
       {
-        "id": "act_volcanic_gases_form_xva5",
+        "id": "act_volcanic_gases_form_ufai",
         "name": "Volcanic Gases Form",
         "actionType": "lair",
         "descriptionHtml": "<p>Volcanic gases form a cloud in a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is lightly obscured. It lasts until initiative count 20 on the next round. Each creature that starts its turn in the cloud must succeed on a DC 13 Constitution saving throw or be poisoned until the end of its turn. While poisoned in this way, a creature is incapacitated.</p>",
@@ -430,7 +437,7 @@
         }
       },
       {
-        "id": "act_noxious_smoke_p6w3",
+        "id": "act_noxious_smoke_mjaa",
         "name": "Noxious Smoke",
         "actionType": "lair",
         "descriptionHtml": "<p>A cloud of thick, dark smoke fills a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is Vision and Light. A creature other than the dragon that starts its turn in the cloud or enters it for the first time on its turn must succeed on a DC 15 Constitution saving throw or be poisoned until the end of its turn. The cloud lasts until initiative count 20 on the next round.</p>",
@@ -453,7 +460,7 @@
         }
       },
       {
-        "id": "act_searing_heat_5fe6",
+        "id": "act_searing_heat_1uyp",
         "name": "Searing Heat",
         "actionType": "lair",
         "descriptionHtml": "<p>Searing heat spreads out in a 15-foot-radius sphere centered on a point the dragon can see within 120 feet of it. Any creature that enters the affected area or starts its turn there must make a DC 15 Constitution saving throw, taking 10 (3d6) fire damage on a failed save, or half as much damage on a successful one. The heat lasts until initiative count 20 on the next round.</p>",
@@ -474,7 +481,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -485,7 +493,7 @@
     "lairActionsDesc": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects; the dragon can't use the same effect two rounds in a row:",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_l82r",
+        "id": "act_regional_effect_xpw7",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Small earthquakes are common within 6 miles of the dragon's lair.</p>",
@@ -505,7 +513,7 @@
         }
       },
       {
-        "id": "act_regional_effect_cjcy",
+        "id": "act_regional_effect_bw5c",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Water sources within 1 mile of the lair are supernaturally warm and tainted by sulfur.</p>",
@@ -525,7 +533,7 @@
         }
       },
       {
-        "id": "act_regional_effect_z691",
+        "id": "act_regional_effect_pb8e",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Rocky fissures within 1 mile of the dragon's lair form portals to the Elemental Plane of Fire, allowing creatures of elemental fire into the world to dwell nearby.</p>",
@@ -545,7 +553,7 @@
         }
       },
       {
-        "id": "act_additional_regional_effects_e7z7",
+        "id": "act_additional_regional_effects_iyy5",
         "name": "Additional Regional Effects",
         "actionType": "regional",
         "descriptionHtml": "<p>Any of these effects might appear in the area around a red dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Desertification.</em></strong> <p>Precipitation is almost nonexistent within 6 miles of the dragon's lair, making the land parched and arid and most plant life withered and brown.</p></li><li><strong><em>Fiery Senses.</em></strong> <p>The dragon can hear up to 30 feet through any open flame within 1 mile of the dragon's lair.</p></li><li><strong><em>Ominous Flames.</em></strong> <p>Open flames within 6 miles of the dragon's lair are tinged dark red, hiss and crackle constantly, and throw off embers and showers of sparks.</p></li></ul>",
@@ -772,7 +780,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_rkga",
+        "id": "act_hold_breath_27j4",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The ammit can hold its breath for 30 minutes.</p>",
@@ -794,7 +802,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tkye",
+        "id": "act_multiattack_nn8s",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ammit makes two attacks: one with its bite and one with its tail.</p>",
@@ -814,7 +822,7 @@
         }
       },
       {
-        "id": "act_bite_vjgp",
+        "id": "act_bite_7ak6",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 21 (3d10 + 5) piercing damage, and the target is grappled (escape DC 16). Until this grapple ends, the target is restrained, and the ammit can't bite another target.</p>",
@@ -835,14 +843,15 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_jx0p",
+        "id": "act_tail_5snm",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target not grappled by the ammit. Hit: 14 (2d8 + 5) bludgeoning damage. If the target is a creature, it must succeed on a DC 16 Strength saving throw or be knocked prone.</p>",
@@ -863,7 +872,8 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1001,7 +1011,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_6g3e",
+        "id": "act_bite_les5",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage plus 3 (1d6) fire damage.</p>",
@@ -1019,18 +1029,20 @@
           "damages": [
             {
               "formula": "1d10 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__6bm4",
+        "id": "act_fire_breath__recharge_5__qj8f",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales fire in a 15-foot cone. Each creature in that area must make a DC 13 Dexterity saving throw, taking 24 (7d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1051,7 +1063,8 @@
           "damages": [
             {
               "formula": "7d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -1253,7 +1266,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_nkkt",
+        "id": "act_hold_breath_82l4",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The hydra can hold its breath for 1 hour.</p>",
@@ -1273,7 +1286,7 @@
         }
       },
       {
-        "id": "act_multiple_heads_bjzm",
+        "id": "act_multiple_heads_bnvl",
         "name": "Multiple Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>The hydra has five heads. While it has more than one head, the hydra has advantage on saving throws against being blinded, charmed, deafened, frightened, stunned, and knocked unconscious.</p><p>Whenever the hydra takes 25 or more damage in a single turn, one of its heads dies. If all its heads die, the hydra dies.</p><p>At the end of its turn, it grows two heads for each of its heads that died since its last turn, unless it has taken fire damage since its last turn. The hydra regains 10 hit points for each head regrown in this way.</p>",
@@ -1295,7 +1308,7 @@
         }
       },
       {
-        "id": "act_reactive_heads_paf6",
+        "id": "act_reactive_heads_036x",
         "name": "Reactive Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>For each head the hydra has beyond one, it gets an extra reaction that can be used only for opportunity attacks.</p>",
@@ -1315,7 +1328,7 @@
         }
       },
       {
-        "id": "act_wakeful_c9ph",
+        "id": "act_wakeful_ql7q",
         "name": "Wakeful",
         "actionType": "trait",
         "descriptionHtml": "<p>While the hydra sleeps, at least one of its heads is awake.</p>",
@@ -1337,7 +1350,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hclc",
+        "id": "act_multiattack_txn4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hydra makes as many bite attacks as it has heads.</p>",
@@ -1357,7 +1370,7 @@
         }
       },
       {
-        "id": "act_bite_dhd1",
+        "id": "act_bite_t9tj",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 7 (1d4 + 5) piercing damage, and the target must make on a DC 16 Constitution saving throw, taking 7 (2d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1378,11 +1391,13 @@
           "damages": [
             {
               "formula": "1d4 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1527,7 +1542,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_qcrm",
+        "id": "act_multiattack_6z7b",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mummy can use its Dreadful Glare and makes one attack with its rotting fist.</p>",
@@ -1547,7 +1562,7 @@
         }
       },
       {
-        "id": "act_rotting_fist_boqi",
+        "id": "act_rotting_fist_5dsl",
         "name": "Rotting Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) bludgeoning damage plus 10 (3d6) necrotic damage. If the target is a creature, it must succeed on a DC 12 Constitution saving throw or be cursed with mummy rot. The cursed target can't regain hit points, and its hit point maximum decreases by 10 (3d6) for every 24 hours that elapse. If the curse reduces the target's hit point maximum to 0, the target dies, and its body turns to dust. The curse lasts until removed by the remove curse spell or other magic.</p>",
@@ -1568,18 +1583,20 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dreadful_glare_8f84",
+        "id": "act_dreadful_glare_364s",
         "name": "Dreadful Glare",
         "actionType": "action",
         "descriptionHtml": "<p>The mummy targets one creature it can see within 60 feet of it. If the target can see the mummy, it must succeed on a DC 11 Wisdom saving throw against this magic or become frightened until the end of the mummy's next turn. If the target fails the saving throw by 5 or more, it is also paralyzed for the same duration. A target that succeeds on the saving throw is immune to the Dreadful Glare of all mummies (but not mummy lords) for the next 24 hours.</p>",
@@ -2133,7 +2150,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_7ium",
+        "id": "act_magic_resistance_ieb1",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The mummy lord has advantage on saving throws against spells and other magical effects.</p>",
@@ -2153,7 +2170,7 @@
         }
       },
       {
-        "id": "act_rejuvenation_bgec",
+        "id": "act_rejuvenation_29wz",
         "name": "Rejuvenation",
         "actionType": "trait",
         "descriptionHtml": "<p>A destroyed mummy lord gains a new body in 24 hours if its heart is intact, regaining all its hit points and becoming active again. The new body appears within 5 feet of the mummy lord's heart.</p>",
@@ -2175,7 +2192,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_aydb",
+        "id": "act_multiattack_g3a1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mummy can use its Dreadful Glare and makes one attack with its rotting fist.</p>",
@@ -2195,7 +2212,7 @@
         }
       },
       {
-        "id": "act_rotting_fist_jkr6",
+        "id": "act_rotting_fist_8wod",
         "name": "Rotting Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 14 (3d6 + 4) bludgeoning damage plus 21 (6d6) necrotic damage. If the target is a creature, it must succeed on a DC 16 Constitution saving throw or be cursed with mummy rot. The cursed target can't regain hit points, and its hit point maximum decreases by 10 (3d6) for every 24 hours that elapse. If the curse reduces the target's hit point maximum to 0, the target dies, and its body turns to dust. The curse lasts until removed by the remove curse spell or other magic.</p>",
@@ -2216,18 +2233,20 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "6d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dreadful_glare_awv3",
+        "id": "act_dreadful_glare_ktwi",
         "name": "Dreadful Glare",
         "actionType": "action",
         "descriptionHtml": "<p>The mummy lord targets one creature it can see within 60 feet of it. If the target can see the mummy lord, it must succeed on a DC 16 Wisdom saving throw against this magic or become frightened until the end of the mummy's next turn. If the target fails the saving throw by 5 or more, it is also paralyzed for the same duration. A target that succeeds on the saving throw is immune to the Dreadful Glare of all mummies and mummy lords for the next 24 hours.</p>",
@@ -2257,7 +2276,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_hxjw",
+          "id": "act_attack_z1v5",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The mummy lord makes one attack with its rotting fist or uses its Dreadful Glare.</p>",
@@ -2277,7 +2296,7 @@
           }
         },
         {
-          "id": "act_blinding_dust_aivp",
+          "id": "act_blinding_dust_ksb6",
           "name": "Blinding Dust",
           "actionType": "legendary",
           "descriptionHtml": "<p>Blinding dust and sand swirls magically around the mummy lord. Each creature within 5 feet of the mummy lord must succeed on a DC 16 Constitution saving throw or be blinded until the end of the creature's next turn.</p>",
@@ -2300,7 +2319,7 @@
           }
         },
         {
-          "id": "act_blasphemous_word__costs_2_actions__8hd8",
+          "id": "act_blasphemous_word__costs_2_actions__4qto",
           "name": "Blasphemous Word (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The mummy lord utters a blasphemous word. Each non-undead creature within 10 feet of the mummy lord that can hear the magical utterance must succeed on a DC 16 Constitution saving throw or be stunned until the end of the mummy lord's next turn.</p>",
@@ -2323,7 +2342,7 @@
           }
         },
         {
-          "id": "act_channel_negative_energy__costs_2_actions__snet",
+          "id": "act_channel_negative_energy__costs_2_actions__hrw4",
           "name": "Channel Negative Energy (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The mummy lord magically unleashes negative energy. Creatures within 60 feet of the mummy lord, including ones behind barriers and around corners, can't regain hit points until the end of the mummy lord's next turn.</p>",
@@ -2343,7 +2362,7 @@
           }
         },
         {
-          "id": "act_whirlwind_of_sand__costs_2_actions__rlvl",
+          "id": "act_whirlwind_of_sand__costs_2_actions__xbcs",
           "name": "Whirlwind of Sand (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The mummy lord magically transforms into a whirlwind of sand, moves up to 60 feet, and reverts to its normal form. While in whirlwind form, the mummy lord is immune to all damage, and it can't be grappled, petrified, knocked prone, restrained, or stunned. Equipment worn or carried by the mummy lord remain in its possession.</p>",
@@ -2367,7 +2386,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_each_undead_creature_nswk",
+        "id": "act_each_undead_creature_72ai",
         "name": "Each Undead Creature",
         "actionType": "lair",
         "descriptionHtml": "<p>Each undead creature in the lair can pinpoint the location of each living creature within 120 feet of it until initiative count 20 on the next round.</p>",
@@ -2387,7 +2406,7 @@
         }
       },
       {
-        "id": "act_each_undead_s2qp",
+        "id": "act_each_undead_k884",
         "name": "Each Undead",
         "actionType": "lair",
         "descriptionHtml": "<p>Each undead in the lair has advantage on saving throws against effects that turn undead until initiative count 20 on the next round.</p>",
@@ -2407,7 +2426,7 @@
         }
       },
       {
-        "id": "act_until_initiative_count_a2zj",
+        "id": "act_until_initiative_count_7usf",
         "name": "Until Initiative Count",
         "actionType": "lair",
         "descriptionHtml": "<p>Until initiative count 20 on the next round, any non-undead creature that tries to cast a spell of 4th level or lower in the mummy lord's lair is wracked with pain. The creature can choose another action, but if it tries to cast the spell, it must make a DC 16 Constitution saving throw. On a failed save, it takes 1d6 necrotic damage per level of the spell, and the spell has no effect and is wasted.</p>",
@@ -2428,7 +2447,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -2439,7 +2459,7 @@
     "lairActionsDesc": "On initiative count 20 (losing initiative ties), the mummy lord takes a lair action to cause one of the following effects; the mummy lord can't use the same effect two rounds in a row:",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_iv5e",
+        "id": "act_regional_effect_ofb2",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Food instantly molders and water instantly evaporates when brought into the lair. Other non magical drinks are spoiled - wine turning to vinegar, for instance.</p>",
@@ -2459,7 +2479,7 @@
         }
       },
       {
-        "id": "act_regional_effect_d6pb",
+        "id": "act_regional_effect_kp5z",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Divination spells cast within the lair by creatures other than the mummy lord have a 25% chance to provide misleading results, as determined by the DM. If a divination spell already has a chance to fail or become unreliable when cast multiple times, that chance increases by 25 percent.</p>",
@@ -2479,7 +2499,7 @@
         }
       },
       {
-        "id": "act_regional_effect_9zv9",
+        "id": "act_regional_effect_xzv5",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>A creature that takes treasure from the lair is cursed until the treasure is returned. The cursed target has disadvantage on all saving throws. The curse lasts until removed by a remove curse spell or other magic.</p>",
@@ -3005,7 +3025,7 @@
     ],
     "traits": [
       {
-        "id": "act_inscrutable_92sb",
+        "id": "act_inscrutable_t9z9",
         "name": "Inscrutable",
         "actionType": "trait",
         "descriptionHtml": "<p>The sphinx is immune to any effect that would sense its emotions or read its thoughts, as well as any divination spell that it refuses. Wisdom (Insight) checks made to ascertain the sphinx's intentions or sincerity have disadvantage.</p>",
@@ -3025,7 +3045,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_f5gl",
+        "id": "act_magic_weapons_wkwt",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The sphinx's weapon attacks are magical.</p>",
@@ -3047,7 +3067,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_knwv",
+        "id": "act_multiattack_bpn3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sphinx makes two claw attacks.</p>",
@@ -3067,7 +3087,7 @@
         }
       },
       {
-        "id": "act_claw_gpud",
+        "id": "act_claw_do1q",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 17 (2d10 + 6) slashing damage.</p>",
@@ -3085,14 +3105,15 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_roar__3_day__1f5p",
+        "id": "act_roar__3_day__abiv",
         "name": "Roar (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The sphinx emits a magical roar. Each time it roars before finishing a long rest, the roar is louder and the effect is different, as detailed below. Each creature within 500 feet of the sphinx and able to hear the roar must make a saving throw.</p><ul><li><strong><em>First Roar.</em></strong> <p>Each creature that fails a DC 18 Wisdom saving throw is frightened for 1 minute. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>Second Roar.</em></strong> <p>Each creature that fails a DC 18 Wisdom saving throw is deafened and frightened for 1 minute. A frightened creature is paralyzed and can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>Third Roar.</em></strong> <p>Each creature makes a DC 18 Constitution saving throw. On a failed save, a creature takes 44 (8d10) thunder damage and is knocked prone. On a successful save, the creature takes half as much damage and isn't knocked prone.</p></li></ul>",
@@ -3134,7 +3155,8 @@
           "damages": [
             {
               "formula": "8d10",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -3148,7 +3170,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_claw_attack_lyfb",
+          "id": "act_claw_attack_vdx0",
           "name": "Claw Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The sphinx makes one claw attack.</p>",
@@ -3168,7 +3190,7 @@
           }
         },
         {
-          "id": "act_teleport__costs_2_actions__5s73",
+          "id": "act_teleport__costs_2_actions__zxhg",
           "name": "Teleport (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The sphinx magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
@@ -3188,7 +3210,7 @@
           }
         },
         {
-          "id": "act_cast_a_spell__costs_3_actions__tz0h",
+          "id": "act_cast_a_spell__costs_3_actions__63y5",
           "name": "Cast a Spell (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The sphinx casts a spell from its list of prepared spells, using a spell slot as normal.</p>",
@@ -3212,7 +3234,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_flow_of_time_7j4j",
+        "id": "act_flow_of_time_72vl",
         "name": "Flow Of Time",
         "actionType": "lair",
         "descriptionHtml": "<p>The flow of time is altered such that every creature in the lair must reroll initiative. The sphinx can choose not to reroll.</p>",
@@ -3232,7 +3254,7 @@
         }
       },
       {
-        "id": "act_effects_of_time_py9b",
+        "id": "act_effects_of_time_ywmb",
         "name": "Effects Of Time",
         "actionType": "lair",
         "descriptionHtml": "<p>The effects of time are altered such that every creature in the lair must succeed on a DC 15 Constitution saving throw or become 1d20 years older or younger (the sphinx's choice), but never any younger than 1 year old. A greater restoration spell can restore a creature's age to normal.</p>",
@@ -3255,7 +3277,7 @@
         }
       },
       {
-        "id": "act_flow_of_time_11fo",
+        "id": "act_flow_of_time_idoz",
         "name": "Flow Of Time",
         "actionType": "lair",
         "descriptionHtml": "<p>The flow of time within the lair is altered such that everything within moves up to 10 years forward or backward (sphinx's choice). Only the sphinx is immediately aware of the time change. A wish spell can return the caster and up to seven other creatures designated by the caster to their normal time.</p>",
@@ -3275,7 +3297,7 @@
         }
       },
       {
-        "id": "act_sphinx_shifts_itself_6x37",
+        "id": "act_sphinx_shifts_itself_sn7s",
         "name": "Sphinx Shifts Itself",
         "actionType": "lair",
         "descriptionHtml": "<p>The sphinx shifts itself and up to seven other creatures it can see within in its lair to another plane of existence. Once outside its lair, the sphinx can't use lair actions, but it can return to its lair as a bonus action on its turn, taking up to seven creatures with it.</p>",
@@ -3420,7 +3442,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__77s1",
+        "id": "act_legendary_resistance__3_day__84sr",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
@@ -3442,7 +3464,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yrkm",
+        "id": "act_multiattack_jzr7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
@@ -3462,7 +3484,7 @@
         }
       },
       {
-        "id": "act_bite_naim",
+        "id": "act_bite_6vr5",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +17 to hit, reach 15 ft., one target. Hit: 21 (2d10 + 10) piercing damage plus 14 (4d6) fire damage.</p>",
@@ -3480,18 +3502,20 @@
           "damages": [
             {
               "formula": "2d10 + 10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "4d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_oxdo",
+        "id": "act_claw_hztr",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +17 to hit, reach 10 ft., one target. Hit: 17 (2d6 + 10) slashing damage.</p>",
@@ -3509,14 +3533,15 @@
           "damages": [
             {
               "formula": "2d6 + 10",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_72oi",
+        "id": "act_tail_xu3o",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +17 to hit, reach 20 ft., one target. Hit: 19 (2d8 + 10) bludgeoning damage.</p>",
@@ -3534,14 +3559,15 @@
           "damages": [
             {
               "formula": "2d8 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_frightful_presence_04ms",
+        "id": "act_frightful_presence_xa35",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the dragon's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 21 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
@@ -3564,7 +3590,7 @@
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__d6dn",
+        "id": "act_fire_breath__recharge_5__4mal",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales fire in a 90-foot cone. Each creature in that area must make a DC 24 Dexterity saving throw, taking 91 (26d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -3585,7 +3611,8 @@
           "damages": [
             {
               "formula": "26d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -3599,7 +3626,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_6svy",
+          "id": "act_detect_tc6u",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a Wisdom (Perception) check.</p>",
@@ -3619,7 +3646,7 @@
           }
         },
         {
-          "id": "act_tail_attack_kur6",
+          "id": "act_tail_attack_358u",
           "name": "Tail Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon makes a tail attack.</p>",
@@ -3639,7 +3666,7 @@
           }
         },
         {
-          "id": "act_wing_attack__costs_2_actions__3xfx",
+          "id": "act_wing_attack__costs_2_actions__6yro",
           "name": "Wing Attack (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The dragon beats its wings. Each creature within 15 feet of the dragon must succeed on a DC 25 Dexterity saving throw or take 17 (2d6 + 10) bludgeoning damage and be knocked prone. The dragon can then fly up to half its flying speed.</p>",
@@ -3660,7 +3687,8 @@
             "damages": [
               {
                 "formula": "2d6 + 10",
-                "type": "Bludgeoning"
+                "type": "Bludgeoning",
+                "saveRider": true
               }
             ],
             "recharge": null
@@ -3671,7 +3699,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_magma_erupts_e3rh",
+        "id": "act_magma_erupts_ktyb",
         "name": "Magma Erupts",
         "actionType": "lair",
         "descriptionHtml": "<p>Magma erupts from a point on the ground the dragon can see within 120 feet of it, creating a 20-foot-high, 5-foot-radius geyser. Each creature in the geyser's area must make a DC 15 Dexterity saving throw, taking 21 (6d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -3692,14 +3720,15 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tremor_shakes_0jp0",
+        "id": "act_tremor_shakes_4cd3",
         "name": "Tremor Shakes",
         "actionType": "lair",
         "descriptionHtml": "<p>A tremor shakes the lair in a 60-foot radius around the dragon. Each creature other than the dragon on the ground in that area must succeed on a DC 15 Dexterity saving throw or be knocked prone.</p>",
@@ -3722,7 +3751,7 @@
         }
       },
       {
-        "id": "act_volcanic_gases_form_hwxi",
+        "id": "act_volcanic_gases_form_57kz",
         "name": "Volcanic Gases Form",
         "actionType": "lair",
         "descriptionHtml": "<p>Volcanic gases form a cloud in a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is lightly obscured. It lasts until initiative count 20 on the next round. Each creature that starts its turn in the cloud must succeed on a DC 13 Constitution saving throw or be poisoned until the end of its turn. While poisoned in this way, a creature is incapacitated.</p>",
@@ -3745,7 +3774,7 @@
         }
       },
       {
-        "id": "act_noxious_smoke_7bsa",
+        "id": "act_noxious_smoke_pic3",
         "name": "Noxious Smoke",
         "actionType": "lair",
         "descriptionHtml": "<p>A cloud of thick, dark smoke fills a 20-foot-radius sphere centered on a point the dragon can see within 120 feet of it. The sphere spreads around corners, and its area is Vision and Light. A creature other than the dragon that starts its turn in the cloud or enters it for the first time on its turn must succeed on a DC 15 Constitution saving throw or be poisoned until the end of its turn. The cloud lasts until initiative count 20 on the next round.</p>",
@@ -3768,7 +3797,7 @@
         }
       },
       {
-        "id": "act_searing_heat_nezj",
+        "id": "act_searing_heat_m7oh",
         "name": "Searing Heat",
         "actionType": "lair",
         "descriptionHtml": "<p>Searing heat spreads out in a 15-foot-radius sphere centered on a point the dragon can see within 120 feet of it. Any creature that enters the affected area or starts its turn there must make a DC 15 Constitution saving throw, taking 10 (3d6) fire damage on a failed save, or half as much damage on a successful one. The heat lasts until initiative count 20 on the next round.</p>",
@@ -3789,7 +3818,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -3800,7 +3830,7 @@
     "lairActionsDesc": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects; the dragon can't use the same effect two rounds in a row:",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_rum4",
+        "id": "act_regional_effect_gc8t",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Small earthquakes are common within 6 miles of the dragon's lair.</p>",
@@ -3820,7 +3850,7 @@
         }
       },
       {
-        "id": "act_regional_effect_59b7",
+        "id": "act_regional_effect_akx7",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Water sources within 1 mile of the lair are supernaturally warm and tainted by sulfur.</p>",
@@ -3840,7 +3870,7 @@
         }
       },
       {
-        "id": "act_regional_effect_dk4c",
+        "id": "act_regional_effect_l9hg",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Rocky fissures within 1 mile of the dragon's lair form portals to the Elemental Plane of Fire, allowing creatures of elemental fire into the world to dwell nearby.</p>",
@@ -3860,7 +3890,7 @@
         }
       },
       {
-        "id": "act_additional_regional_effects_k35n",
+        "id": "act_additional_regional_effects_0su7",
         "name": "Additional Regional Effects",
         "actionType": "regional",
         "descriptionHtml": "<p>Any of these effects might appear in the area around a red dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Desertification.</em></strong> <p>Precipitation is almost nonexistent within 6 miles of the dragon's lair, making the land parched and arid and most plant life withered and brown.</p></li><li><strong><em>Fiery Senses.</em></strong> <p>The dragon can hear up to 30 feet through any open flame within 1 mile of the dragon's lair.</p></li><li><strong><em>Ominous Flames.</em></strong> <p>Open flames within 6 miles of the dragon's lair are tinged dark red, hiss and crackle constantly, and throw off embers and showers of sparks.</p></li></ul>",
@@ -4201,7 +4231,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_y8u1",
+        "id": "act_angelic_weapons_59ch",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
@@ -4219,14 +4249,15 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_uk82",
+        "id": "act_magic_resistance_3qg3",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
@@ -4248,7 +4279,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4ssu",
+        "id": "act_multiattack_t9vi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
@@ -4268,7 +4299,7 @@
         }
       },
       {
-        "id": "act_staff_dqf1",
+        "id": "act_staff_edeo",
         "name": "Staff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 4) bludgeoning damage plus 18 (4d8) radiant damage, and the target is grappled (escape DC 17). Until this grapple ends, the target is restrained, and the angel can't attack another target with its staff.</p>",
@@ -4289,18 +4320,20 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__3_day__i4is",
+        "id": "act_healing_touch__3_day__3qip",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -4320,7 +4353,7 @@
         }
       },
       {
-        "id": "act_change_shape_t3z2",
+        "id": "act_change_shape_qe7v",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
@@ -4461,7 +4494,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_sdch",
+        "id": "act_undead_fortitude_7ljt",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the anointed to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the anointed drops to 1 hit point instead.</p>",
@@ -4483,7 +4516,7 @@
     ],
     "actions": [
       {
-        "id": "act_slam_ysqc",
+        "id": "act_slam_7pc3",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
@@ -4501,7 +4534,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4648,7 +4682,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_gckm",
+        "id": "act_magic_resistance_53l9",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archfiend has advantage on saving throws against spells and other magical effects.</p>",
@@ -4670,7 +4704,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ty67",
+        "id": "act_multiattack_ykk9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archfiend uses Horror Nimbus if it can. It then makes three attacks: one with its bite and two with its claws.</p>",
@@ -4690,7 +4724,7 @@
         }
       },
       {
-        "id": "act_bite_t0rn",
+        "id": "act_bite_pw8a",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 32 (5d10 + 5) piercing damage.</p>",
@@ -4708,14 +4742,15 @@
           "damages": [
             {
               "formula": "5d10 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_hfcr",
+        "id": "act_claw_2pr7",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 15 (3d6 + 5) slashing damage.</p>",
@@ -4733,14 +4768,15 @@
           "damages": [
             {
               "formula": "3d6 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_horror_nimbus__recharge_5__6tmf",
+        "id": "act_horror_nimbus__recharge_5__rcvm",
         "name": "Horror Nimbus (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The archfiend magically emits scintillating, multicolored light. Each creature within 15 feet of the archfiend that can see the light must succeed on a DC 15 Wisdom saving throw or be frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the archfiend's Horror Nimbus for the next 24 hours.</p>",
@@ -4763,7 +4799,7 @@
         }
       },
       {
-        "id": "act_teleport_xxgh",
+        "id": "act_teleport_qhw0",
         "name": "Teleport",
         "actionType": "action",
         "descriptionHtml": "<p>The archfiend magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
@@ -4903,7 +4939,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_trampling_charge_ru6o",
+        "id": "act_trampling_charge_xkau",
         "name": "Trampling Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the cerodon moves at least 20 feet straight toward a creature and then hits it with a gore attack on the same turn, that target must succeed on a DC 18 Strength saving throw or be knocked prone. If the target is prone, the cerodon can make one stomp attack against it as a bonus action.</p>",
@@ -4926,7 +4962,7 @@
         }
       },
       {
-        "id": "act_siege_monster_t6tj",
+        "id": "act_siege_monster_doxf",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The cerodon deals double damage to objects and structures.</p>",
@@ -4948,7 +4984,7 @@
     ],
     "actions": [
       {
-        "id": "act_gore_vhih",
+        "id": "act_gore_j6mh",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 25 (4d8 + 7) piercing damage.</p>",
@@ -4966,14 +5002,15 @@
           "damages": [
             {
               "formula": "4d8 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stomp_0aho",
+        "id": "act_stomp_feeq",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one prone creature. Hit: 29 (4d10 + 7) bludgeoning damage.</p>",
@@ -4991,7 +5028,8 @@
           "damages": [
             {
               "formula": "4d10 + 7",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5136,7 +5174,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inscrutable_mjvd",
+        "id": "act_inscrutable_7d2a",
         "name": "Inscrutable",
         "actionType": "trait",
         "descriptionHtml": "<p>The sphinx is immune to any effect that would sense its emotions or read its thoughts, as well as any divination spell that it refuses. Wisdom (Insight) checks made to ascertain the sphinx's intentions or sincerity have disadvantage.</p>",
@@ -5156,7 +5194,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_nxn1",
+        "id": "act_magic_weapons_gbmr",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The sphinx's weapon attacks are magical.</p>",
@@ -5178,7 +5216,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ksm3",
+        "id": "act_multiattack_l6am",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sphinx makes a ram attack and two claw attacks.</p>",
@@ -5198,7 +5236,7 @@
         }
       },
       {
-        "id": "act_ram_xp3d",
+        "id": "act_ram_psow",
         "name": "Ram",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 17 (3d8 + 4) bludgeoning damage.</p>",
@@ -5216,14 +5254,15 @@
           "damages": [
             {
               "formula": "3d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_4zrn",
+        "id": "act_claw_3nk3",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) slashing damage.</p>",
@@ -5241,7 +5280,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5255,7 +5295,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_ram_attack_glkz",
+          "id": "act_ram_attack_5z56",
           "name": "Ram Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The sphinx makes one ram attack.</p>",
@@ -5275,7 +5315,7 @@
           }
         },
         {
-          "id": "act_teleport__costs_2_actions__okhz",
+          "id": "act_teleport__costs_2_actions__ov46",
           "name": "Teleport (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The sphinx magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
@@ -5423,7 +5463,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_sensitivity_uv1x",
+        "id": "act_sunlight_sensitivity_ho5k",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the eternal has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -5445,7 +5485,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_j1wp",
+        "id": "act_multiattack_259r",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The eternal makes two longsword attacks or two longbow attacks. It can use its Life Drain in place of one longsword attack.</p>",
@@ -5465,7 +5505,7 @@
         }
       },
       {
-        "id": "act_life_drain_1abh",
+        "id": "act_life_drain_xpks",
         "name": "Life Drain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6 + 2) necrotic damage. The target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. This reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.</p><p>A humanoid slain by this attack rises 24 hours later as a zombie under the eternal's control, unless the humanoid is restored to life or its body is destroyed. The eternal can have no more than twelve zombies under its control at one time.</p>",
@@ -5487,14 +5527,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longsword_iuzp",
+        "id": "act_longsword_av42",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.</p>",
@@ -5512,18 +5553,20 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_46qa",
+        "id": "act_longbow_f0kh",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
@@ -5541,7 +5584,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5667,7 +5711,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_z24a",
+        "id": "act_multiattack_gcod",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The serpent makes two attacks: one with its bite and one to constrict.</p>",
@@ -5687,7 +5731,7 @@
         }
       },
       {
-        "id": "act_bite_w4ck",
+        "id": "act_bite_zj2d",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 22 (3d10 + 6) piercing damage.</p>",
@@ -5705,14 +5749,15 @@
           "damages": [
             {
               "formula": "3d10 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_constrict_m44v",
+        "id": "act_constrict_fgzg",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one Large or smaller creature. Hit: 17 (2d10 + 6) bludgeoning damage plus 17 (2d10 + 6) slashing damage. The target is grappled (escape DC 16) if the serpent isn't already constricting a creature, and the target is restrained until this grapple ends.</p>",
@@ -5733,18 +5778,20 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "2d10 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_swallow_k17p",
+        "id": "act_swallow_28yu",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The serpent makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is blinded and restrained, it has Cover against attacks and other effects outside the serpent, and it takes 21 (6d6) acid damage at the start of each of the serpent's turns. A serpent can have only one creature swallowed at a time.</p><p>If the serpent takes 30 damage or more on a single turn from the swallowed creature, the serpent must succeed on a DC 14 Constitution saving throw at the end of that turn or regurgitate the creature, which falls prone in a space within 10 feet of the serpent. If the serpent dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 15 feet of movement, exiting prone.</p>",
@@ -5766,7 +5813,8 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -5883,7 +5931,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_trampling_charge_np1a",
+        "id": "act_trampling_charge_7ptd",
         "name": "Trampling Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the hippopotamus moves at least 20 feet straight toward a creature and then hits it with a bite attack on the same turn, that target must succeed on a DC 12 Strength saving throw or be knocked prone. If the target is prone, the hippopotamus can make one stomp attack against it as a bonus action.</p>",
@@ -5906,7 +5954,7 @@
         }
       },
       {
-        "id": "act_hold_breath_2t09",
+        "id": "act_hold_breath_8yld",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The hippopotamus can hold its breath for 30 minutes.</p>",
@@ -5928,7 +5976,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_vvy9",
+        "id": "act_bite_rafh",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 19 (3d8 + 6) piercing damage.</p>",
@@ -5946,14 +5994,15 @@
           "damages": [
             {
               "formula": "3d8 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stomp_dow7",
+        "id": "act_stomp_jbf8",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one prone creature. Hit: 22 (3d10 + 6) bludgeoning damage.</p>",
@@ -5971,7 +6020,8 @@
           "damages": [
             {
               "formula": "3d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6095,7 +6145,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_m3nk",
+        "id": "act_keen_sight_s6ml",
         "name": "Keen Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The drake has advantage on Wisdom (Perception) checks that rely on sight.</p>",
@@ -6117,7 +6167,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_btda",
+        "id": "act_multiattack_jiyc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The drake makes two attacks: one with its beak and one with its talons.</p>",
@@ -6137,7 +6187,7 @@
         }
       },
       {
-        "id": "act_beak_97kn",
+        "id": "act_beak_jc1d",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -6155,14 +6205,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_talons_ac1u",
+        "id": "act_talons_jhmg",
         "name": "Talons",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) slashing damage.</p>",
@@ -6180,7 +6231,8 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6302,7 +6354,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_5jpb",
+        "id": "act_multiattack_l6b5",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The manticore makes two attacks, one with its bite and one with its claws.</p>",
@@ -6322,7 +6374,7 @@
         }
       },
       {
-        "id": "act_bite_u7r7",
+        "id": "act_bite_glyp",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage.</p>",
@@ -6340,14 +6392,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_glf1",
+        "id": "act_claws_7ada",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) slashing damage.</p>",
@@ -6365,14 +6418,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stinger_x4hh",
+        "id": "act_stinger_khfm",
         "name": "Stinger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 11 (2d6 + 4) piercing damage. The target must make a DC 14 Constitution saving throw, taking 24 (7d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -6393,11 +6447,13 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "7d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -6519,7 +6575,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_pqyy",
+        "id": "act_bite_8iij",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one creature. Hit: 11 (2d6 + 4) piercing damage.</p>",
@@ -6537,14 +6593,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_constrict_vuov",
+        "id": "act_constrict_j8mj",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one creature. Hit: 13 (2d8 + 4) bludgeoning damage, and the target is grappled (escape DC 16). Until this grapple ends, the creature is restrained, and the serpent can't constrict another target.</p>",
@@ -6565,7 +6622,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6688,7 +6746,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_tunneler_hohp",
+        "id": "act_tunneler_oc9y",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The wurm can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
@@ -6710,7 +6768,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_49lc",
+        "id": "act_multiattack_i0r9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The wurm makes two attacks: one with its bite and one with its stinger.</p>",
@@ -6730,7 +6788,7 @@
         }
       },
       {
-        "id": "act_bite_hzk0",
+        "id": "act_bite_3j9w",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 10 ft., one target. Hit: 22 (3d8 + 9) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 19 Dexterity saving throw or be swallowed by the wurm. A swallowed creature is blinded and restrained, it has Cover against attacks and other effects outside the wurm, and it takes 21 (6d6) acid damage at the start of each of the wurm's turns.</p><p>If the wurm takes 30 damage or more on a single turn from a creature inside it, the wurm must succeed on a DC 21 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of the wurm. If the wurm dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -6752,18 +6810,20 @@
           "damages": [
             {
               "formula": "3d8 + 9",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "6d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_stinger_ybsh",
+        "id": "act_tail_stinger_orjk",
         "name": "Tail Stinger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 10 ft., one creature. Hit: 19 (3d6 + 9) piercing damage, and the target must make a DC 19 Constitution saving throw, taking 42 (12d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -6784,11 +6844,13 @@
           "damages": [
             {
               "formula": "3d6 + 9",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "12d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -6911,7 +6973,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_smell_7l3d",
+        "id": "act_keen_smell_z3v9",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The serpopard has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -6931,7 +6993,7 @@
         }
       },
       {
-        "id": "act_pounce_l8f8",
+        "id": "act_pounce_04v0",
         "name": "Pounce",
         "actionType": "trait",
         "descriptionHtml": "<p>If the serpopard moves at least 20 feet straight toward a creature and then hits it with a bite attack on the same turn, that target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the serpopard can make one bite attack against it as a bonus action.</p>",
@@ -6956,7 +7018,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_3x5b",
+        "id": "act_bite_tj9t",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) piercing damage, and the target must make a DC 14 Constitution saving throw, taking 10 (3d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -6977,11 +7039,13 @@
           "damages": [
             {
               "formula": "1d10 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -7102,7 +7166,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_lfju",
+        "id": "act_flyby_k3ub",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The drake doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -7124,7 +7188,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_993o",
+        "id": "act_bite_7r8o",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 6 (2d4 + 1) piercing damage.</p>",
@@ -7142,7 +7206,8 @@
           "damages": [
             {
               "formula": "2d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7292,7 +7357,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_devil_s_sight_f86n",
+        "id": "act_devil_s_sight_a8ho",
         "name": "Devil's Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>Magical darkness doesn't impede the demon's darkvision.</p>",
@@ -7312,7 +7377,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_uhzq",
+        "id": "act_magic_resistance_ff7y",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The demon has advantage on saving throws against spells and other magical effects.</p>",
@@ -7334,7 +7399,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_obhu",
+        "id": "act_multiattack_hkbc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The demon makes three attacks: two with its claws and one with its sting.</p>",
@@ -7354,7 +7419,7 @@
         }
       },
       {
-        "id": "act_claw_32f8",
+        "id": "act_claw_izjj",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 8 (1d8 + 4) slashing damage.</p>",
@@ -7372,14 +7437,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sting_95w0",
+        "id": "act_sting_pkc0",
         "name": "Sting",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) piercing damage plus 17 (5d6) poison damage, and the target must succeed on a DC 14 Constitution saving throw or become poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -7400,11 +7466,13 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "5d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7574,7 +7642,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_npwk",
+        "id": "act_multiattack_lgno",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon makes three attacks: one with its bite and two with its claws.</p>",
@@ -7594,7 +7662,7 @@
         }
       },
       {
-        "id": "act_bite_ybrt",
+        "id": "act_bite_2cjv",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 17 (2d10 + 6) piercing damage plus 3 (1d6) fire damage.</p>",
@@ -7612,18 +7680,20 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_whh9",
+        "id": "act_claw_c81k",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 13 (2d6 + 6) slashing damage.</p>",
@@ -7641,14 +7711,15 @@
           "damages": [
             {
               "formula": "2d6 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__wt2x",
+        "id": "act_fire_breath__recharge_5__cf8g",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales fire in a 30-foot cone. Each creature in that area must make a DC 17 Dexterity saving throw, taking 56 (16d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -7669,7 +7740,8 @@
           "damages": [
             {
               "formula": "16d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"

@@ -852,14 +852,21 @@
                           <input type="text" id="bf-beast-languages" placeholder="e.g. Common, Goblin" />
                         </div>
                         <div class="input-group">
-                          <label>Damage Resistances</label>
+                          <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <label>Damage Resistances</label>
+                            <button type="button" class="btn btn-xs btn-outline" id="btn-beast-config-defenses" style="padding:1px 6px; font-size:0.75rem;">🛡️ Configure</button>
+                          </div>
                           <input type="text" id="bf-beast-resist" placeholder="e.g. fire, cold" />
                         </div>
                         <div class="input-group">
                           <label>Damage Immunities</label>
                           <input type="text" id="bf-beast-immune" placeholder="e.g. poison" />
                         </div>
-                        <div class="input-group span-2">
+                        <div class="input-group">
+                          <label>Damage Vulnerabilities</label>
+                          <input type="text" id="bf-beast-vuln" placeholder="e.g. radiant" />
+                        </div>
+                        <div class="input-group">
                           <label>Condition Immunities</label>
                           <input type="text" id="bf-beast-cond-immune" placeholder="e.g. poisoned, charmed" />
                         </div>
@@ -1120,6 +1127,14 @@
                         <div class="input-group">
                           <label>Weapon Properties</label>
                           <input type="text" id="bf-item-weapon-properties" placeholder="e.g. Finesse, Light, Versatile" />
+                        </div>
+                        <div class="input-group span-3" style="margin-top: 6px;">
+                          <label>Attack Bypass Properties</label>
+                          <div class="checkbox-row" style="display: flex; gap: 16px; align-items: center;">
+                            <label><input type="checkbox" id="bf-item-is-magic" checked /> Magical Damage</label>
+                            <label><input type="checkbox" id="bf-item-is-silvered" /> Silvered Weapon</label>
+                            <label><input type="checkbox" id="bf-item-is-adamantine" /> Adamantine Weapon</label>
+                          </div>
                         </div>
                       </div>
                     </div>

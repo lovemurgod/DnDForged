@@ -246,7 +246,7 @@
     ],
     "traits": [
       {
-        "id": "act_shapechanger_waqv",
+        "id": "act_shapechanger_bicl",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The anchorite can use its action to polymorph into a boar or back into its true form, which is humanoid. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -268,7 +268,7 @@
     ],
     "actions": [
       {
-        "id": "act_clawed_gauntlet__humanoid_form_only__wfdm",
+        "id": "act_clawed_gauntlet__humanoid_form_only__lgfk",
         "name": "Clawed Gauntlet (Humanoid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) slashing damage.</p>",
@@ -286,14 +286,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tusk__boar_form_only__nchj",
+        "id": "act_tusk__boar_form_only__rllr",
         "name": "Tusk (Boar Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.</p>",
@@ -311,7 +312,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -443,7 +445,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brave_q7su",
+        "id": "act_brave_bizd",
         "name": "Brave",
         "actionType": "trait",
         "descriptionHtml": "<p>Don-Jon has advantage on saving throws against being frightened.</p>",
@@ -463,7 +465,7 @@
         }
       },
       {
-        "id": "act_not_dead_yet__recharges_after_a_long_rest__qi3r",
+        "id": "act_not_dead_yet__recharges_after_a_long_rest__pfic",
         "name": "Not Dead Yet (Recharges after a Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces Don-Jon to 0 hit points, he drops to 1 hit point instead and gains advantage on attack rolls until the end of his next turn.</p>",
@@ -485,7 +487,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_a5h8",
+        "id": "act_multiattack_etja",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Don-Jon makes three melee attacks.</p>",
@@ -505,7 +507,7 @@
         }
       },
       {
-        "id": "act_dagger_v9c2",
+        "id": "act_dagger_c81a",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +2 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 2 (1d4) piercing damage.</p>",
@@ -523,14 +525,15 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sling_kgul",
+        "id": "act_sling_fh3c",
         "name": "Sling",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +2 to hit, range 30/120 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -548,7 +551,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -681,7 +685,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_archer_h2he",
+        "id": "act_archer_nwfp",
         "name": "Archer",
         "actionType": "trait",
         "descriptionHtml": "<p>A longbow or shortbow deals one extra die of its damage when Falcon hits with it (included in his longbow attack).</p>",
@@ -701,7 +705,7 @@
         }
       },
       {
-        "id": "act_sharpshooter_k9qj",
+        "id": "act_sharpshooter_n6ly",
         "name": "Sharpshooter",
         "actionType": "trait",
         "descriptionHtml": "<p>Falcon's ranged weapon attacks ignore Cover and Cover.</p>",
@@ -723,7 +727,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_phgi",
+        "id": "act_multiattack_tgzs",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Falcon makes three melee attacks or two ranged attacks.</p>",
@@ -743,7 +747,7 @@
         }
       },
       {
-        "id": "act_longsword_cjap",
+        "id": "act_longsword_jr75",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.</p>",
@@ -761,18 +765,20 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_0rlz",
+        "id": "act_longbow_op0m",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 150/600 ft., one target. Hit: 11 (2d8 + 2) piercing damage.</p>",
@@ -790,7 +796,8 @@
           "damages": [
             {
               "formula": "2d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -920,7 +927,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_relentless__recharges_after_a_short_or_long_rest__00it",
+        "id": "act_relentless__recharges_after_a_short_or_long_rest__rpps",
         "name": "Relentless (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Gorthok takes 27 damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead.</p>",
@@ -942,7 +949,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kzd2",
+        "id": "act_multiattack_2zjo",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Gorthok makes two melee attacks: one with its lightning tusks and one with its thunder hooves.</p>",
@@ -962,7 +969,7 @@
         }
       },
       {
-        "id": "act_lightning_tusks_x9ox",
+        "id": "act_lightning_tusks_0490",
         "name": "Lightning Tusks",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 12 (2d6 + 5) slashing damage plus 7 (2d6) lightning damage.</p>",
@@ -980,18 +987,20 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_thunder_hooves_q1de",
+        "id": "act_thunder_hooves_7uaf",
         "name": "Thunder Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 12 (2d6 + 5) bludgeoning damage plus 7 (2d6) thunder damage.</p>",
@@ -1009,18 +1018,20 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_lightning_bolt___recharge__7wmx",
+        "id": "act_lightning_bolt___recharge__44wz",
         "name": "Lightning Bolt {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>Gorthok shoots a bolt of lightning at one creature it can see within 120 feet of it. The target must make a DC 15 Dexterity saving throw, taking 18 (4d8) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1041,7 +1052,8 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1350,7 +1362,7 @@
     ],
     "traits": [
       {
-        "id": "act_gnome_cunning_4z4v",
+        "id": "act_gnome_cunning_7v7n",
         "name": "Gnome Cunning",
         "actionType": "trait",
         "descriptionHtml": "<p>The gnome has advantage on Intelligence, Wisdom, and Charisma saving throws against magic.</p>",
@@ -1372,7 +1384,7 @@
     ],
     "actions": [
       {
-        "id": "act_magic_missile__expends_a_1st_level_spell_slot__w6ea",
+        "id": "act_magic_missile__expends_a_1st_level_spell_slot__hwbc",
         "name": "Magic Missile (Expends a 1st-Level Spell Slot)",
         "actionType": "action",
         "descriptionHtml": "<p>The gnome creates three magical darts. Each dart hits a creature the gnome chooses within 120 feet of it and deals 3 (1d4 + 1) force damage.</p>",
@@ -1390,14 +1402,15 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_ray_of_frost_u7cr",
+        "id": "act_ray_of_frost_4wu5",
         "name": "Ray of Frost",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +4 to hit, range 60 ft., one creature. Hit: 4 (1d8) cold damage, and the target's speed is reduced by 10 feet until the start of the gnome's next turn.</p>",
@@ -1415,7 +1428,8 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1533,7 +1547,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_hooves_hwn8",
+        "id": "act_hooves_j6vk",
         "name": "Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (2d4 + 3) bludgeoning damage.</p>",
@@ -1551,7 +1565,8 @@
           "damages": [
             {
               "formula": "2d4 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null

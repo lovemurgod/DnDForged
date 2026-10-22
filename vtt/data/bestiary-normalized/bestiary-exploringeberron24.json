@@ -252,7 +252,7 @@
     ],
     "traits": [
       {
-        "id": "act_all_around_vision_hy0q",
+        "id": "act_all_around_vision_56y7",
         "name": "All-Around Vision",
         "actionType": "trait",
         "descriptionHtml": "<p>The quori can't be surprised while it isn't Incapacitated.</p>",
@@ -272,7 +272,7 @@
         }
       },
       {
-        "id": "act_aura_of_fury_utdt",
+        "id": "act_aura_of_fury_fbib",
         "name": "Aura of Fury",
         "actionType": "trait",
         "descriptionHtml": "<p>wis DC 16, any creature that starts its turn in a 60-foot Emanation [Area of Effect] originating from the quori. {@actSaveFail} The target becomes enraged. While enraged, the target has Advantage on all melee attack rolls, and all attack rolls made against the target have Advantage.</p>",
@@ -295,7 +295,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_dosg",
+        "id": "act_magic_resistance_iw5y",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The quori has Advantage on saving throws against spells and other magical effects.</p>",
@@ -315,7 +315,7 @@
         }
       },
       {
-        "id": "act_track_hatred_san0",
+        "id": "act_track_hatred_th6k",
         "name": "Track Hatred",
         "actionType": "trait",
         "descriptionHtml": "<p>When the quori deals damage to any creature, it forms a psychic link with the target for 24 hours. During that time, the quori has advantage on Wisdom (Survival) checks to track the target. The quori can attempt to track the target at any range, even if it is on another plane of existence. Abilities such as the Pass Without Trace spell or the Ranger's Nature's Veil feature do not impede the quori's ability to track its target. The quori remains alert to danger even when it is tracking while traveling.</p>",
@@ -337,7 +337,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_irbi",
+        "id": "act_multiattack_pt57",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The quori makes three Tentacle attacks.</p>",
@@ -357,7 +357,7 @@
         }
       },
       {
-        "id": "act_tentacle_17vi",
+        "id": "act_tentacle_52fd",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 12 (2d6 + 5) Bludgeoning damage plus 7 (2d6) Fire damage, and the target has the Grappled condition (escape DC 17) from one of three tentacles. While Grappled, the target takes 10 (3d6) Fire damage and 10 (3d6) Psychic damage at the start of each of the quori's turns.</p>",
@@ -378,26 +378,30 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             },
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_possession___recharge__lae9",
+        "id": "act_possession___recharge__uejx",
         "name": "Possession {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>cha DC 16, one Humanoid the quori can see within 5 feet. {@actSaveFail} The target is possessed by the quori; the quori disappears and the target has the Incapacitated condition and loses control of its body. The quori now controls the body, but the target retains awareness. The quori can't be targeted by any attack, spell, or other effect, except ones that specifically target Aberrations. The quori's game statistics are the same, except it uses the possessed target's Speed, as well as the target's Strength, Dexterity, and Constitution modifiers.</p><p>The possession lasts until the body drops to 0 Hit Points or the quori leaves as a Bonus Action. When the possession ends, the quori appears in an unoccupied space within 5 feet of the target, and the target is immune to this quori's Possession for 24 hours. {@actSaveSuccess} The target is immune to this quori's Possession for 24 hours.</p>",
@@ -421,7 +425,7 @@
         }
       },
       {
-        "id": "act_recall_agony__recharge_5__1qax",
+        "id": "act_recall_agony__recharge_5__3g2f",
         "name": "Recall Agony (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 16, one creature the quori can see within 60 feet. {@actSaveFail} 67 (15d8) Psychic damage. {@actSaveSuccess} Half damage.</p>",
@@ -442,7 +446,8 @@
           "damages": [
             {
               "formula": "15d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -452,7 +457,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_incite_fury_bsu1",
+        "id": "act_incite_fury_mkpd",
         "name": "Incite Fury",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} A creature under the effects of the quori's Aura of Fury targets the quori with an attack. {@actResponse} The target attacks another creature of the quori's choice within the targets range.</p>",
@@ -598,7 +603,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_warforged_symbiote_ksyj",
+        "id": "act_warforged_symbiote_xh40",
         "name": "Warforged Symbiote",
         "actionType": "trait",
         "descriptionHtml": "<p>A messenger can only remain active for 8 hours after it detaches from a warforged body, after which time its energy dissipates and it gains the Unconscious condition. An Unconscious messenger must complete a Short Rest or Long Rest while attached to a warforged, after which it regains its energy, as well as regaining all lost Hit Points.</p>",
@@ -620,7 +625,7 @@
     ],
     "actions": [
       {
-        "id": "act_dash_tcta",
+        "id": "act_dash_0meq",
         "name": "Dash",
         "actionType": "action",
         "descriptionHtml": "<p>The messenger gains extra movement equal to its Speed.</p>",
@@ -991,7 +996,7 @@
     ],
     "traits": [
       {
-        "id": "act_dual_mind_vp7f",
+        "id": "act_dual_mind_xx9c",
         "name": "Dual Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The inspired has Advantage on Wisdom saving throws.</p>",
@@ -1013,7 +1018,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_j7an",
+        "id": "act_multiattack_o607",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The inspired makes two Crysteel Dagger attacks. It can replace one attack with Vicious Mockery.</p>",
@@ -1033,7 +1038,7 @@
         }
       },
       {
-        "id": "act_crysteel_dagger_krd0",
+        "id": "act_crysteel_dagger_wffr",
         "name": "Crysteel Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 4 (1d4 + 2) Piercing damage plus 10 (3d6) Force damage.</p>",
@@ -1051,11 +1056,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1315,7 +1322,7 @@
     ],
     "traits": [
       {
-        "id": "act_ethereal_sight_hqyi",
+        "id": "act_ethereal_sight_ajr1",
         "name": "Ethereal Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The meld can see 60 feet into the Ethereal Plane when it is on the Material Plane and vice versa.</p>",
@@ -1335,7 +1342,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_c2np",
+        "id": "act_incorporeal_movement_6afy",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The meld can move through other creatures and objects as if they were Difficult Terrain. It takes 5 (1d10) Force damage if it ends its turn inside an object. The meld can also interact with any liquid surface as if it was solid ground.</p>",
@@ -1353,7 +1360,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1362,7 +1370,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_nmyp",
+        "id": "act_multiattack_jfk1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The meld makes four Withering Slam attacks. It can replace two attacks with a use of Conflicted Soul.</p>",
@@ -1382,7 +1390,7 @@
         }
       },
       {
-        "id": "act_withering_slam_fgp5",
+        "id": "act_withering_slam_cqd7",
         "name": "Withering Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +7, reach 10 ft. Hit: 11 (2d6 + 4) Necrotic damage.</p>",
@@ -1400,14 +1408,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_conflicted_soul_gynd",
+        "id": "act_conflicted_soul_7nan",
         "name": "Conflicted Soul",
         "actionType": "action",
         "descriptionHtml": "<p>cha DC 14, one creature the meld can see within 30 feet. {@actSaveFail} The target suffers the effect of the Confusion spell (no Concentration required to maintain the spell).</p>",
@@ -1729,7 +1738,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_j3rx",
+        "id": "act_amphibious_foap",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merfolk can breathe air and water.</p>",
@@ -1749,7 +1758,7 @@
         }
       },
       {
-        "id": "act_summon_storm_hu6c",
+        "id": "act_summon_storm_1orb",
         "name": "Summon Storm",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per day, one or more merfolk stormcallers can cast Control Weather as a Ritual that takes 10 minutes to perform. For every additional stormcaller involved in performing the Ritual, the radius of the spell's effect increases by 1 mile, the duration increases by 2 hours, and they can change the weather by one additional stage every 1d4 x 10 minutes. During the casting, if the stormcallers take any action other than performing the Ritual, they must start over.</p>",
@@ -1771,7 +1780,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5j2k",
+        "id": "act_multiattack_oejr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The stormcaller makes three Lightning Lash attacks.</p>",
@@ -1791,7 +1800,7 @@
         }
       },
       {
-        "id": "act_lightning_lash_1sw1",
+        "id": "act_lightning_lash_3n2h",
         "name": "Lightning Lash",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 15 ft. Hit: 14 (4d6) Lightning damage.</p>",
@@ -1809,7 +1818,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1819,7 +1829,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_thunderous_rebuke_v0yk",
+        "id": "act_thunderous_rebuke_endh",
         "name": "Thunderous Rebuke",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} A creature within 60 feet of the merfolk deals damage to it. dcon DC 14, the triggering creature. {@actSaveFail} 11 (2d10) Thunder damage, and the target has the Prone condition.</p>",
@@ -1840,7 +1850,8 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1963,7 +1974,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_c9vl",
+        "id": "act_amphibious_n0ah",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The plasmid can breathe air and water.</p>",
@@ -1983,7 +1994,7 @@
         }
       },
       {
-        "id": "act_receptive_telepathy_tvpq",
+        "id": "act_receptive_telepathy_6kuf",
         "name": "Receptive Telepathy",
         "actionType": "trait",
         "descriptionHtml": "<p>The plasmid is considered a shark for the purpose of being magically controlled by any sahuagin's Shark Telepathy trait.</p>",
@@ -2003,7 +2014,7 @@
         }
       },
       {
-        "id": "act_solid_state__object_form_only__xymf",
+        "id": "act_solid_state__object_form_only__ldao",
         "name": "Solid State (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>When formed into an inanimate object, the plasmid has an AC of 18 and regains 10 Hit Points at the start of each of its turns. However, the plasmid's Speed becomes 0 in this form and it cannot attack. It can be used as an item or a set of Artisan's Tools when it is in this form.</p>",
@@ -2025,7 +2036,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qmbt",
+        "id": "act_multiattack_awmg",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The plasmid makes three Vicious Pseudopod attacks.</p>",
@@ -2045,7 +2056,7 @@
         }
       },
       {
-        "id": "act_vicious_pseudopod_o76y",
+        "id": "act_vicious_pseudopod_i93q",
         "name": "Vicious Pseudopod",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 10 ft. Hit: 10 (2d6 + 3) Slashing damage.</p>",
@@ -2063,14 +2074,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_adaptive_shape_shift__amorphous_form_only__h5ut",
+        "id": "act_adaptive_shape_shift__amorphous_form_only__bl6h",
         "name": "Adaptive Shape-Shift (Amorphous Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>When in its true, amorphous form, the plasmid gains one of the following benefits until it uses this action again:</p><ul><li><strong><em>Truesight.</em></strong> <p>The plasmid gains Truesight with a range of 30 feet.</p></li><li><strong><em>Blindsight.</em></strong> <p>The plasmid gains Blindsight with a range of 60 feet.</p></li><li><strong><em>Speed.</em></strong> <p>The plasmid's Speed and Swim Speed increase to 30 feet.</p></li><li><strong><em>Extra Damage.</em></strong> <p>The plasmid's Vicious Pseudopod deals an extra 1d6 Acid damage on a hit.</p></li></ul>",
@@ -2122,7 +2134,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2131,7 +2144,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_xijq",
+        "id": "act_shape_shift_3yb2",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>The plasmid shape-shifts to resemble a Medium or Small object while retaining its game statistics, or it returns to its true amorphous form. Any equipment it is wearing or carrying isn't transformed.</p>",
@@ -2569,7 +2582,7 @@
     ],
     "traits": [
       {
-        "id": "act_blood_frenzy_vn4z",
+        "id": "act_blood_frenzy_q66g",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The sahuagin has Advantage on attack rolls against any creature that doesn't have all its Hit Points.</p>",
@@ -2589,7 +2602,7 @@
         }
       },
       {
-        "id": "act_limited_amphibiousness_5nc5",
+        "id": "act_limited_amphibiousness_n8lv",
         "name": "Limited Amphibiousness",
         "actionType": "trait",
         "descriptionHtml": "<p>The sahuagin can breathe air and water, but it must be submerged at least once every 4 hours to avoid suffocating outside water.</p>",
@@ -2609,7 +2622,7 @@
         }
       },
       {
-        "id": "act_shark_telepathy_j5dl",
+        "id": "act_shark_telepathy_a6r2",
         "name": "Shark Telepathy",
         "actionType": "trait",
         "descriptionHtml": "<p>The sahuagin can magically control sharks within 120 feet of itself, using a special telepathy.</p>",
@@ -2629,7 +2642,7 @@
         }
       },
       {
-        "id": "act_toughened_carapace_hbiz",
+        "id": "act_toughened_carapace_fbmj",
         "name": "Toughened Carapace",
         "actionType": "trait",
         "descriptionHtml": "<p>Any Critical Hit against the sahuagin becomes a normal hit.</p>",
@@ -2651,7 +2664,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uwyt",
+        "id": "act_multiattack_gto8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sahuagin makes three attacks, using Crushing Claw or Cutter Claw in any combination. It can replace one attack with a use of Spellcasting.</p>",
@@ -2671,7 +2684,7 @@
         }
       },
       {
-        "id": "act_crushing_claw_9var",
+        "id": "act_crushing_claw_c7fk",
         "name": "Crushing Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 16 (2d10 + 5) Bludgeoning damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 15) from the Crushing Claw.</p>",
@@ -2692,14 +2705,15 @@
           "damages": [
             {
               "formula": "2d10 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_cutter_claw_f9u5",
+        "id": "act_cutter_claw_uq79",
         "name": "Cutter Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 24 (3d12 + 5) Slashing damage.</p>",
@@ -2717,7 +2731,8 @@
           "damages": [
             {
               "formula": "3d12 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3216,7 +3231,7 @@
     ],
     "traits": [
       {
-        "id": "act_grace_of_the_forest_queen_li9m",
+        "id": "act_grace_of_the_forest_queen_iv44",
         "name": "Grace of the Forest Queen",
         "actionType": "trait",
         "descriptionHtml": "<p>As long as the Forest Queen is within the Endless Weald, her AC is 25.</p>",
@@ -3236,7 +3251,7 @@
         }
       },
       {
-        "id": "act_inscrutable_hmua",
+        "id": "act_inscrutable_7kk7",
         "name": "Inscrutable",
         "actionType": "trait",
         "descriptionHtml": "<p>No magic can observe the Forest Queen remotely or detect her thoughts without her permission. Wisdom (Insight) checks made to ascertain the Forest Queen's intentions or sincerity are made with Disadvantage.</p>",
@@ -3256,7 +3271,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__or_5_day_in_the_endless_weald__e7ir",
+        "id": "act_legendary_resistance__4_day__or_5_day_in_the_endless_weald__n4i9",
         "name": "Legendary Resistance (4/Day, or 5/Day in the Endless Weald)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Forest Queen fails a saving throw, she can choose to succeed instead.</p>",
@@ -3276,7 +3291,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_espe",
+        "id": "act_magic_resistance_65dt",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Forest Queen has Advantage on saving throws against spells and other magical effects.</p>",
@@ -3296,7 +3311,7 @@
         }
       },
       {
-        "id": "act_speak_with_beasts_and_plants_dv80",
+        "id": "act_speak_with_beasts_and_plants_s0zx",
         "name": "Speak with Beasts and Plants",
         "actionType": "trait",
         "descriptionHtml": "<p>The Forest Queen can communicate with Beasts and Plants as if they shared a language.</p>",
@@ -3316,7 +3331,7 @@
         }
       },
       {
-        "id": "act_thelanian_protagonist_oswm",
+        "id": "act_thelanian_protagonist_vvix",
         "name": "Thelanian Protagonist",
         "actionType": "trait",
         "descriptionHtml": "<p>If destroyed, the Forest Queen reforms in 1d4 days, reviving with all her Hit Points. The new body appears in an unoccupied space within the Endless Weald.</p>",
@@ -3336,7 +3351,7 @@
         }
       },
       {
-        "id": "act_woodland_camouflage_gi2l",
+        "id": "act_woodland_camouflage_mg1v",
         "name": "Woodland Camouflage",
         "actionType": "trait",
         "descriptionHtml": "<p>The Forest Queen has Advantage on Dexterity (Stealth) checks made to hide in wooded terrain.</p>",
@@ -3358,7 +3373,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_aftl",
+        "id": "act_multiattack_g0oc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Forest Queen makes two attacks, using Grasping Vine and Verdant Staff in any combination.</p>",
@@ -3378,7 +3393,7 @@
         }
       },
       {
-        "id": "act_grasping_vine_4r8r",
+        "id": "act_grasping_vine_3f9k",
         "name": "Grasping Vine",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +15, reach 40 ft. Hit: 26 (4d8 + 8) Bludgeoning damage, and the target has the Grappled condition (escape DC 23) from a vine that sprouts from the ground.</p>",
@@ -3399,14 +3414,15 @@
           "damages": [
             {
               "formula": "4d8 + 8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_verdant_staff_asyz",
+        "id": "act_verdant_staff_615t",
         "name": "Verdant Staff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +15, reach 10 ft. Hit: 12 (2d6 + 5) Bludgeoning damage plus 21 (6d6) Force damage.</p>",
@@ -3424,11 +3440,13 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "6d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3437,7 +3455,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_tree_stride_6vdd",
+        "id": "act_tree_stride_ey1j",
         "name": "Tree Stride",
         "actionType": "bonus",
         "descriptionHtml": "<p>If within 5 feet of a Large or bigger tree, the Forest Queen teleports to an unoccupied space within 5 feet of a second Large or bigger tree that is within 60 feet of the previous tree.</p>",
@@ -3463,7 +3481,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_bludgeon_yvgt",
+          "id": "act_bludgeon_bmtg",
           "name": "Bludgeon",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Forest Queen makes a Grasping Vine or Verdant Staff attack.</p>",
@@ -3483,7 +3501,7 @@
           }
         },
         {
-          "id": "act_crushing_grasp_5u77",
+          "id": "act_crushing_grasp_tyqw",
           "name": "Crushing Grasp",
           "actionType": "legendary",
           "descriptionHtml": "<p>One creature that is Grappled by the Forest Queen's Grasping Vine takes 27 (5d10) Bludgeoning damage.</p>",
@@ -3501,14 +3519,15 @@
             "damages": [
               {
                 "formula": "5d10",
-                "type": "Bludgeoning"
+                "type": "Bludgeoning",
+                "saveRider": false
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_touch_of_nature_a7iy",
+          "id": "act_touch_of_nature_1ekb",
           "name": "Touch of Nature",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Forest Queen uses Spellcasting to cast a spell of her choice.</p>",
@@ -3911,7 +3930,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__4_day_or_5_day_in_lair__xuv7",
+        "id": "act_legendary_resistance__4_day_or_5_day_in_lair__bgv0",
         "name": "Legendary Resistance (4/Day or 5/Day in Lair)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Forgotten Prince fails a saving throw, he can choose to succeed instead.</p>",
@@ -3931,7 +3950,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_224d",
+        "id": "act_magic_resistance_zk5t",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Forgotten Prince has Advantage on saving throws against spells and other magical effects.</p>",
@@ -3951,7 +3970,7 @@
         }
       },
       {
-        "id": "act_stolen_gifts_acjt",
+        "id": "act_stolen_gifts_a38e",
         "name": "Stolen Gifts",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of his turns, the Forgotten Prince causes one creature he can see within 60 feet to make a DC 25 Wisdom (Perception) check. On a failed check, the Forgotten Prince steals one of the following from the target until the start of the his next turn:</p><ul><li><strong><em>Weapon Skill.</em></strong> <p>For the duration, the target has Disadvantage on weapon attacks, and the Prince has Advantage on Dark Scythe attacks.</p></li><li><strong><em>Spellcasting Ability.</em></strong> <p>For the duration, the target has Disadvantage on spell attacks, and all creatures have Advantage on saving throws made to resist the target's spells. Additionally, all creatures have Disadvantage on saving throws to resist the Prince's spells.</p></li><li><strong><em>Speed.</em></strong> <p>The target's Speed is reduced by 20 feet (to a minimum of 5 feet). Additionally, the Prince's Speed is increased by 20 feet, and he can take the Disengage action as a Bonus Action.</p></li></ul>",
@@ -4001,7 +4020,7 @@
         }
       },
       {
-        "id": "act_thelanian_protagonist_uqxh",
+        "id": "act_thelanian_protagonist_wkq8",
         "name": "Thelanian Protagonist",
         "actionType": "trait",
         "descriptionHtml": "<p>If destroyed, the Forgotten Prince reforms in 1d4 days, reviving with all his Hit Points. The new body appears in an unoccupied space within the Castle of Forgotten Things.</p>",
@@ -4023,7 +4042,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0zo0",
+        "id": "act_multiattack_nd2e",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Forgotten Prince makes two Dark Scythe attacks.</p>",
@@ -4043,7 +4062,7 @@
         }
       },
       {
-        "id": "act_dark_scythe_n0ly",
+        "id": "act_dark_scythe_51f6",
         "name": "Dark Scythe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +15, reach 10 ft. Hit: 29 (6d6 + 8) Necrotic damage.</p>",
@@ -4061,14 +4080,15 @@
           "damages": [
             {
               "formula": "6d6 + 8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_threads_of_memory__recharge_5__7mvl",
+        "id": "act_threads_of_memory__recharge_5__znde",
         "name": "Threads of Memory (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 23, up to three creatures the Forgotten Prince can see within 60 feet. {@actSaveFail} 28 (8d6) Psychic damage, and the target's memories are stolen. Until the memories return, the target subtracts 2 (1d4) from all D20 Tests. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
@@ -4089,7 +4109,8 @@
           "damages": [
             {
               "formula": "8d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -4098,7 +4119,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_fey_step_6pza",
+        "id": "act_fey_step_8ixp",
         "name": "Fey Step",
         "actionType": "bonus",
         "descriptionHtml": "<p>The Forgotten Prince can teleport up to 30 feet to an unoccupied space he can see.</p>",
@@ -4118,7 +4139,7 @@
         }
       },
       {
-        "id": "act_shadow_stealth_pzs7",
+        "id": "act_shadow_stealth_z88v",
         "name": "Shadow Stealth",
         "actionType": "bonus",
         "descriptionHtml": "<p>The Forgotten Prince can take the Hide action.</p>",
@@ -4140,7 +4161,7 @@
     ],
     "reactions": [
       {
-        "id": "act_shadow_burst_48u3",
+        "id": "act_shadow_burst_6g09",
         "name": "Shadow Burst",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The Forgotten Prince is reduced to 0 Hit Points. {@actResponse} Creatures within 15 feet take 36 (8d8) Necrotic damage.</p>",
@@ -4158,7 +4179,8 @@
           "damages": [
             {
               "formula": "8d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4170,7 +4192,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_dark_scythe_4rz3",
+          "id": "act_dark_scythe_7k0s",
           "name": "Dark Scythe",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Forgotten Prince makes one Dark Scythe attack.</p>",
@@ -4190,7 +4212,7 @@
           }
         },
         {
-          "id": "act_fey_step_6exd",
+          "id": "act_fey_step_9nu7",
           "name": "Fey Step",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Forgotten Prince uses Fey Step.</p>",
@@ -4210,7 +4232,7 @@
           }
         },
         {
-          "id": "act_marked_for_vengeance_3dxv",
+          "id": "act_marked_for_vengeance_r4bf",
           "name": "Marked for Vengeance",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Forgotten Prince uses Spellcasting to cast Hex (level 5 version).</p>",
@@ -4370,7 +4392,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_alien_mind_bq4z",
+        "id": "act_alien_mind_ih00",
         "name": "Alien Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>int DC 22, any creature that tries to read Valaar's thoughts or deals Psychic damage to it. {@actSaveFail} The target has the Stunned condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
@@ -4393,7 +4415,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__or_5_day_in_lair__b73d",
+        "id": "act_legendary_resistance__4_day__or_5_day_in_lair__ucxw",
         "name": "Legendary Resistance (4/Day, or 5/Day in Lair)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Valaara fails a saving throw, it can choose to succeed instead.</p>",
@@ -4413,7 +4435,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_13n8",
+        "id": "act_magic_resistance_peuw",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Valaara has Advantage on saving throws against spells and other magical effects.</p>",
@@ -4433,7 +4455,7 @@
         }
       },
       {
-        "id": "act_regeneration_2f9v",
+        "id": "act_regeneration_zdf4",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>Valaara regains 20 Hit Points at the start of each of its turns. If Valaara takes Radiant damage, this trait doesn't function on Valaara's next turn. Valaara dies only if it starts its turn with 0 Hit Points and doesn't regenerate.</p>",
@@ -4455,7 +4477,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8anr",
+        "id": "act_multiattack_kkmk",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Valaara makes two attacks, using Chitinous Claw or Chitinous Spine in any combination. It also uses Summon Swarms.</p>",
@@ -4475,7 +4497,7 @@
         }
       },
       {
-        "id": "act_chitinous_claw_d5bz",
+        "id": "act_chitinous_claw_j5c1",
         "name": "Chitinous Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +14, reach 5 ft. Hit: 18 (2d10 + 7) Slashing damage.</p>",
@@ -4493,14 +4515,15 @@
           "damages": [
             {
               "formula": "2d10 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_chitinous_spine_ng4z",
+        "id": "act_chitinous_spine_89cc",
         "name": "Chitinous Spine",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +14, range 60/180 ft. Hit: 17 (3d6 + 7) Piercing damage.</p>",
@@ -4518,14 +4541,15 @@
           "damages": [
             {
               "formula": "3d6 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_summon_swarms_c13b",
+        "id": "act_summon_swarms_gyi9",
         "name": "Summon Swarms",
         "actionType": "action",
         "descriptionHtml": "<p>Valaara summons a swarm of insects or arachnids that fills a 10-foot-radius Sphere [Area of Effect] centered on a point Valaara can see within 120 feet, afflicting all creatures in the area with one of the following effects (roll a 1d6 or choose one), to which Valaara is immune:</p><ul><li><strong><em>Stinging Wasps.</em></strong> <p>con DC 22. {@actSaveFail} 32 (5d12) Piercing damage, and the target has Disadvantage on attack rolls and ability checks until the end of its next turn. {@actSaveSuccess} Half damage and the target doesn't have Disadvantage on attack rolls.</p></li><li><strong><em>Spinning Spiders.</em></strong> <p>dex DC 22. {@actSaveFail} 27 (6d8) Bludgeoning damage. The target has the Restrained condition until the web is destroyed (AC 10; HP 5; Vulnerability to Fire damage; Immunity to Poison and Psychic damage).</p></li><li><strong><em>Venomous Centipedes.</em></strong> <p>con DC 22. {@actSaveFail} 22 (4d10) Poison damage and the target has the Poisoned condition. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p></li><li><strong><em>Infesting Grubs.</em></strong> <p>dex DC 22. {@actSaveFail} The target is infested by 4 (1d4 + 2) rot grubs, taking 3 (1d6) Piercing damage per rot grub at the start of each of its turns. If a target infested with rot grubs ends its turn with 0 Hit Points, the rot grubs burrow into its heart, killing it. Any effect that cures disease kills all rot grubs infesting the target, ending the effect. Applying fire to the bite wound before the end of the creature's next turn deals 1 Fire damage to the creature and kills the rot grubs, ending the effect. After this time, the rot grubs are too far under the skin to be burned.</p></li><li><strong><em>Discordant Cicadas.</em></strong> <p>wis DC 22. {@actSaveFail} The target has the Frightened condition. At the end of each of its turns, the target repeats the save, ending the effect on itself on a success. After 1 minute, it succeeds automatically. While Frightened, the target has the Incapacitated condition. {@actSaveSuccess} The target has Advantage on future saves against this swarm for 24 hours.</p></li></ul>",
@@ -4587,26 +4611,30 @@
           "damages": [
             {
               "formula": "5d12",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             },
             {
               "formula": "6d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             },
             {
               "formula": "4d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             },
             {
               "formula": "1d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_psychoactive_beetles_h457",
+        "id": "act_psychoactive_beetles_cecr",
         "name": "Psychoactive Beetles",
         "actionType": "action",
         "descriptionHtml": "<p>int DC 22. {@actSaveFail} 33 (6d10) Psychic damage.</p>",
@@ -4627,7 +4655,8 @@
           "damages": [
             {
               "formula": "6d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -4636,7 +4665,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_teleport_vvb0",
+        "id": "act_teleport_lizs",
         "name": "Teleport",
         "actionType": "bonus",
         "descriptionHtml": "<p>Valaara teleports up to 30 feet to an unoccupied space it can see.</p>",
@@ -4662,7 +4691,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_throw_spine_8smv",
+          "id": "act_throw_spine_qc1y",
           "name": "Throw Spine",
           "actionType": "legendary",
           "descriptionHtml": "<p>Valaara makes one Chitinous Spine attack.</p>",
@@ -4682,7 +4711,7 @@
           }
         },
         {
-          "id": "act_imaginary_crawlers_h7x6",
+          "id": "act_imaginary_crawlers_naf4",
           "name": "Imaginary Crawlers",
           "actionType": "legendary",
           "descriptionHtml": "<p>wis DC 22, one creature Valaara can see within 60 feet. {@actSaveFail} 22 (4d10) Psychic damage, and the target immediately loses Concentration on any spell it is Concentration on.</p>",
@@ -4703,14 +4732,15 @@
             "damages": [
               {
                 "formula": "4d10",
-                "type": "Psychic"
+                "type": "Psychic",
+                "saveRider": true
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_synthesize_worm_99oq",
+          "id": "act_synthesize_worm_kn6w",
           "name": "Synthesize Worm",
           "actionType": "legendary",
           "descriptionHtml": "<p>Valaara magically fuses the swarms under its command, forming a Carrion Crawler in an unoccupied space they can see within 90 feet of themself. The Carrion Crawler takes its turn immediately after Valaara on the same Initiative count, and it obeys Valaara.</p>",

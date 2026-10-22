@@ -2612,6 +2612,18 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         <label style="font-size:0.7rem;">Custom Attack Formula / Bonus</label>
                         <input type="text" id="modal-macro-atk" placeholder="e.g. +5 or 1d20+5" style="width:100%; padding:4px; font-size:0.8rem;">
                     </div>
+                    <div style="display:flex; gap:12px; align-items:center; margin-bottom:8px; padding:6px 8px; background:rgba(0,0,0,0.25); border:1px solid rgba(255,255,255,0.06); border-radius:4px;">
+                        <span style="font-size:0.75rem; color:var(--color-gold-light); font-weight:600;">Attack Bypasses:</span>
+                        <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Attack counts as magical for overcoming damage resistance">
+                            <input type="checkbox" id="modal-macro-is-magic" style="cursor:pointer;"> Magical
+                        </label>
+                        <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Attack is made with a silvered weapon">
+                            <input type="checkbox" id="modal-macro-is-silvered" style="cursor:pointer;"> Silvered
+                        </label>
+                        <label style="font-size:0.75rem; display:flex; align-items:center; gap:4px; cursor:pointer;" title="Attack is made with an adamantine weapon">
+                            <input type="checkbox" id="modal-macro-is-adamantine" style="cursor:pointer;"> Adamantine
+                        </label>
+                    </div>
                 </div>
 
                 <div style="border-top:1px solid var(--color-border-subtle); padding-top:10px; margin-bottom:12px;">
@@ -2738,6 +2750,9 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 attackExtra: parseInt(document.getElementById('modal-macro-atk-extra')?.value) || 0,
                 critRange: parseInt(document.getElementById('modal-macro-crit-range')?.value) || 20,
                 attackBonus: (document.getElementById('modal-macro-atk')?.value || '').trim(),
+                isMagic: document.getElementById('modal-macro-is-magic')?.checked || false,
+                isSilvered: document.getElementById('modal-macro-is-silvered')?.checked || false,
+                isAdamantine: document.getElementById('modal-macro-is-adamantine')?.checked || false,
 
                 // Save configuration
                 saveAbility: document.getElementById('modal-macro-save-ab')?.value || '',
@@ -2796,6 +2811,9 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             document.getElementById('modal-macro-atk-extra').value = m.attackExtra !== undefined ? m.attackExtra : 0;
             document.getElementById('modal-macro-crit-range').value = m.critRange || 20;
             document.getElementById('modal-macro-atk').value = m.attackBonus || '';
+            document.getElementById('modal-macro-is-magic').checked = !!m.isMagic;
+            document.getElementById('modal-macro-is-silvered').checked = !!m.isSilvered;
+            document.getElementById('modal-macro-is-adamantine').checked = !!m.isAdamantine;
 
             // Save logic with legacy fallback
             document.getElementById('modal-macro-save-ab').value = m.saveAbility || '';
@@ -2834,6 +2852,9 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
             document.getElementById('modal-macro-atk-extra').value = 0;
             document.getElementById('modal-macro-crit-range').value = 20;
             document.getElementById('modal-macro-atk').value = '';
+            document.getElementById('modal-macro-is-magic').checked = false;
+            document.getElementById('modal-macro-is-silvered').checked = false;
+            document.getElementById('modal-macro-is-adamantine').checked = false;
 
             document.getElementById('modal-macro-save-ab').value = '';
             document.getElementById('modal-macro-save-dc-stat').value = 'none';
@@ -3358,6 +3379,10 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 descNote += (descNote ? '\n\n' : '') + `*Versatile:* Two-handed attack deals ${versatileVal} damage.`;
             }
 
+            const isMagic = !!(tmpl.isMagic !== undefined ? tmpl.isMagic : (cat.isMagic || cat.bonusWeapon || (item.name && /\+\d+/.test(item.name))));
+            const isSilvered = !!(tmpl.isSilvered !== undefined ? tmpl.isSilvered : (cat.isSilvered || (item.name && /silver/i.test(item.name))));
+            const isAdamantine = !!(tmpl.isAdamantine !== undefined ? tmpl.isAdamantine : (cat.isAdamantine || (item.name && /adamant/i.test(item.name))));
+
             targetChar.macros.push({
                 id: 'mac_' + Date.now() + Math.random().toString(36).substr(2, 5),
                 name: item.name,
@@ -3374,6 +3399,9 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 saveDcStat: 'none',
                 saveDcExtra: 0,
                 saveDcCustom: null,
+                isMagic,
+                isSilvered,
+                isAdamantine,
                 damage: dmgRows
             });
         }
@@ -7656,6 +7684,10 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         currentChar.macroCategories.unshift(weapCat);
                     }
 
+                    const isMagic = !!(tmpl.isMagic !== undefined ? tmpl.isMagic : (step.item?.isMagic || step.item?.bonusWeapon || (step.name && /\+\d+/.test(step.name))));
+                    const isSilvered = !!(tmpl.isSilvered !== undefined ? tmpl.isSilvered : (step.item?.isSilvered || (step.name && /silver/i.test(step.name))));
+                    const isAdamantine = !!(tmpl.isAdamantine !== undefined ? tmpl.isAdamantine : (step.item?.isAdamantine || (step.name && /adamant/i.test(step.name))));
+
                     if (!currentChar.macros) currentChar.macros = [];
                     currentChar.macros.push({
                         id: 'mac_' + Date.now() + Math.random().toString(36).substr(2, 5),
@@ -7673,6 +7705,9 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                         saveDcStat: 'none',
                         saveDcExtra: 0,
                         saveDcCustom: null,
+                        isMagic,
+                        isSilvered,
+                        isAdamantine,
                         damage: dmgRows
                     });
 
@@ -11433,7 +11468,16 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     rollFormula = rollFormula.replace(/(\d+)\s*[dD]\s*(\d+)/g, (match, count, faces) => `${parseInt(count) * 2}d${faces}`);
                 }
                 const r = simulateRoll(rollFormula, 20, optEvent);
-                return { formula: d.formula || d.dice || formula, type: d.type || '', roll: r, label: d.label || '' };
+                return {
+                    formula: d.formula || d.dice || formula,
+                    type: d.type || '',
+                    roll: r,
+                    label: d.label || '',
+                    isMagic: !!m.isMagic,
+                    isSilvered: !!m.isSilvered,
+                    isAdamantine: !!m.isAdamantine,
+                    isSpell: !!isSpell
+                };
             });
 
             typedToggles.forEach(t => {
@@ -11445,7 +11489,15 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                     rollFormula = rollFormula.replace(/(\d+)\s*[dD]\s*(\d+)/g, (match, count, faces) => `${parseInt(count) * 2}d${faces}`);
                 }
                 const r = simulateRoll(rollFormula, 20, optEvent);
-                results.push({ formula: cleanF, type: t.dmgType, roll: r });
+                results.push({
+                    formula: cleanF,
+                    type: t.dmgType,
+                    roll: r,
+                    isMagic: !!m.isMagic,
+                    isSilvered: !!m.isSilvered,
+                    isAdamantine: !!m.isAdamantine,
+                    isSpell: !!isSpell
+                });
             });
 
             return results;
@@ -11498,7 +11550,11 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 dmgRolls = [{
                     formula: m.damageFormula,
                     type: m.damageType || 'Damage',
-                    roll: simulateRoll(m.damageFormula, 20, e)
+                    roll: simulateRoll(m.damageFormula, 20, e),
+                    isMagic: !!m.isMagic,
+                    isSilvered: !!m.isSilvered,
+                    isAdamantine: !!m.isAdamantine,
+                    isSpell: false
                 }];
             }
             if (!dmgRolls.length) return;
@@ -11528,7 +11584,11 @@ function simulateRoll(formula, critRange = 20, optEvent = null) {
                 dmgRolls = [{
                     formula: m.damageFormula,
                     type: m.damageType || 'Damage',
-                    roll: simulateRoll(m.damageFormula, 20, e)
+                    roll: simulateRoll(m.damageFormula, 20, e),
+                    isMagic: !!m.isMagic,
+                    isSilvered: !!m.isSilvered,
+                    isAdamantine: !!m.isAdamantine,
+                    isSpell: false
                 }];
             }
 

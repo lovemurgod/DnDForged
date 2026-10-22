@@ -558,6 +558,7 @@ function buildNormalizedDatabase() {
             const higherLevelText = JSON.stringify(sp.entriesHigherLevel || '').toLowerCase();
 
             damageList.forEach((d, idx) => {
+                d.isMagic = true;
                 if (isCantrip) {
                     if (isMultiAttackCantrip) {
                         d.cantripScale = false;
@@ -638,6 +639,7 @@ function buildNormalizedDatabase() {
                 backgrounds: assoc.backgrounds,
                 feats: assoc.feats,
                 damageList,
+                isMagic: true,
                 cantripScale: isCantrip ? damageList.some(d => d.cantripScale) : false,
                 saveAbility,
                 attackStat,

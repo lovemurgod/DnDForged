@@ -98,7 +98,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_siege_monster_1esm",
+        "id": "act_siege_monster_6gfa",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>You deal double damage to objects and structures.</p>",
@@ -120,7 +120,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__requires_druid_level_5___w7jo",
+        "id": "act_multiattack__requires_druid_level_5___5ab6",
         "name": "Multiattack (Requires Druid Level 5+)",
         "actionType": "action",
         "descriptionHtml": "<p>You make two Rend attacks.</p>",
@@ -140,7 +140,7 @@
         }
       },
       {
-        "id": "act_rend_18w4",
+        "id": "act_rend_pszi",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d8 plus your Wisdom modifier Slashing damage. This damage increases by 1d8 when you reach Druid levels 6 (2d8) and 12 (3d8).</p>",
@@ -158,26 +158,30 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "3d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_incandescent_breath_dzef",
+        "id": "act_incandescent_breath_m9mw",
         "name": "Incandescent Breath",
         "actionType": "action",
         "descriptionHtml": "<p>You expend a level 1+ spell slot. dex DC equals {@dcYourSpellSave}, each creature in a 5-foot-wide, 60-foot-long Line [Area of Effect]. {@actSaveFail} 2d10 Radiant damage per level of the spell slot expended. {@actSaveSuccess} Half damage.</p>",
@@ -195,7 +199,8 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -204,7 +209,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_rampager__requires_druid_level_10___e3ui",
+        "id": "act_rampager__requires_druid_level_10___10xv",
         "name": "Rampager (Requires Druid Level 10+)",
         "actionType": "bonus",
         "descriptionHtml": "<p>You expend a level 1+ spell slot and move up to half your Speed without provoking Opportunity Attack. When you enter the space of an enemy that is at least two sizes smaller than you for the first time on a turn, that creature is subjected to the following effect. str DC equals {@dcYourSpellSave}. {@actSaveFail} The target has the Prone condition. If the target already has the Prone condition, it instead takes 1d10 Bludgeoning damage per level of the spell slot expended.</p>",
@@ -222,7 +227,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -352,7 +358,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby__requires_druid_level_10___r40v",
+        "id": "act_flyby__requires_druid_level_10___sj8b",
         "name": "Flyby (Requires Druid Level 10+)",
         "actionType": "trait",
         "descriptionHtml": "<p>You don't provoke an Opportunity Attack when you fly out of an enemy's reach.</p>",
@@ -372,7 +378,7 @@
         }
       },
       {
-        "id": "act_siege_monster_zcxj",
+        "id": "act_siege_monster_rg53",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>You deal double damage to objects and structures.</p>",
@@ -394,7 +400,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__requires_level_5___s1rk",
+        "id": "act_multiattack__requires_level_5___w7le",
         "name": "Multiattack (Requires Level 5+)",
         "actionType": "action",
         "descriptionHtml": "<p>You make two Rend attacks.</p>",
@@ -414,7 +420,7 @@
         }
       },
       {
-        "id": "act_rend_lnzp",
+        "id": "act_rend_k43a",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d8 plus your Wisdom modifier Piercing damage. This damage increases by 1d8 when you reach Druid levels 6 (2d8) and 12 (3d8).</p>",
@@ -432,26 +438,30 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "3d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_energizing_pollen_11cu",
+        "id": "act_energizing_pollen_c5hx",
         "name": "Energizing Pollen",
         "actionType": "action",
         "descriptionHtml": "<p>You expend a level 1+ spell slot and can move up to half your Speed without provoking Opportunity Attack while emitting a cloud of healing pollen. When you move within 5 feet of another creature during this movement, you can restore a number of Hit Points equal to 2d6 per level of the spell slot expended. A creature can receive this healing only once per turn.</p>",
@@ -595,7 +605,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_mz39",
+        "id": "act_amphibious_rf1f",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>You can breathe air and water.</p>",
@@ -615,7 +625,7 @@
         }
       },
       {
-        "id": "act_siege_monster_xq4a",
+        "id": "act_siege_monster_1jf0",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>You deal double damage to objects and structures.</p>",
@@ -637,7 +647,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__requires_druid_level_5___3ymc",
+        "id": "act_multiattack__requires_druid_level_5___wetz",
         "name": "Multiattack (Requires Druid Level 5+)",
         "actionType": "action",
         "descriptionHtml": "<p>You make two Rend attacks.</p>",
@@ -657,7 +667,7 @@
         }
       },
       {
-        "id": "act_rend_p6dj",
+        "id": "act_rend_8eju",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d8 plus your Wisdom modifier Bludgeoning damage. This damage increases by 1d8 when you reach Druid levels 6 (2d8) and 12 (3d8).</p>",
@@ -675,19 +685,23 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "3d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -696,7 +710,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_toxic_deluge__requires_druid_level_10___n4bu",
+        "id": "act_toxic_deluge__requires_druid_level_10___095b",
         "name": "Toxic Deluge (Requires Druid Level 10+)",
         "actionType": "bonus",
         "descriptionHtml": "<p>You expend a level 1+ spell slot and emit a toxic miasma. con DC equals {@dcYourSpellSave}, each creature of your choice in a 10-foot Emanation [Area of Effect] originating from yourself. {@actSaveFail} 2d4 Poison damage per level of the spell slot expended, and the target has the Poisoned condition until the start of your next turn.</p>",
@@ -714,7 +728,8 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null

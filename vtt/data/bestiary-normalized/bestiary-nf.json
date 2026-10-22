@@ -105,7 +105,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_disintegration_unws",
+        "id": "act_disintegration_02w6",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
@@ -125,7 +125,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_1anw",
+        "id": "act_magic_resistance_bqvo",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
@@ -147,7 +147,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9kj9",
+        "id": "act_multiattack_6pg8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The magen makes two attacks, using Extended Fist or Acid Spittle in any combination.</p>",
@@ -167,7 +167,7 @@
         }
       },
       {
-        "id": "act_extended_fist_wk5c",
+        "id": "act_extended_fist_o5z0",
         "name": "Extended Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 15 ft. Hit: 8 (1d8 + 4) Bludgeoning damage plus 5 (1d10) Acid damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 14) from one of two fists.</p>",
@@ -188,18 +188,20 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_acid_spittle_d8d2",
+        "id": "act_acid_spittle_qbm8",
         "name": "Acid Spittle",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +6, range 60 ft. Hit: 13 (2d8 + 4) Acid damage.</p>",
@@ -217,7 +219,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -356,7 +359,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_tt1p",
+        "id": "act_magic_resistance_kq01",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The eddy has Advantage on saving throws against spells and other magical effects.</p>",
@@ -378,7 +381,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_okp3",
+        "id": "act_multiattack_psfw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The eddy makes two attacks, using Searing Swipe or Arcane Bolt in any combination.</p>",
@@ -398,7 +401,7 @@
         }
       },
       {
-        "id": "act_searing_swipe_qnqu",
+        "id": "act_searing_swipe_aksl",
         "name": "Searing Swipe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 10 ft. Hit: 13 (3d6 + 3) Fire or Lightning damage (eddy's choice).</p>",
@@ -416,14 +419,15 @@
           "damages": [
             {
               "formula": "3d6 + 3",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_arcane_bolt_6u7c",
+        "id": "act_arcane_bolt_j6vw",
         "name": "Arcane Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +6, range 120 ft. Hit: 14 (2d10 + 3) Force damage.</p>",
@@ -441,7 +445,8 @@
           "damages": [
             {
               "formula": "2d10 + 3",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -451,7 +456,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_eldritch_overload_ihug",
+        "id": "act_eldritch_overload_deg0",
         "name": "Eldritch Overload",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The eddy takes damage. dstr DC 14, each creature of the eddy's choice in a 5-foot Emanation [Area of Effect] originating from the eddy. {@actSaveFail} 7 (2d6) Force damage, and the target has the Prone condition.</p>",
@@ -472,7 +477,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -881,7 +887,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_od5r",
+        "id": "act_magic_resistance_adpf",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The phaerimm has Advantage on saving throws against spells and other magical effects.</p>",
@@ -903,7 +909,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xjf4",
+        "id": "act_multiattack_fy7e",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The phaerimm makes three Mind Lash attacks. It can replace one attack with either (A) a Vicious Stinger attack or (B) a use of Spellcasting to cast Command (level 3 version).</p>",
@@ -923,7 +929,7 @@
         }
       },
       {
-        "id": "act_mind_lash_4pfo",
+        "id": "act_mind_lash_nm53",
         "name": "Mind Lash",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +9, reach 10 ft. or range 120 ft. Hit: 32 (6d8 + 4) Psychic damage.</p>",
@@ -941,14 +947,15 @@
           "damages": [
             {
               "formula": "6d8 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_vicious_stinger_j3q1",
+        "id": "act_vicious_stinger_1rl5",
         "name": "Vicious Stinger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 5 ft. Hit: 11 (2d6 + 4) Piercing damage plus 26 (4d12) Poison damage, and the target's Speed is reduced to 0 feet until the start of the phaerimm's next turn.</p>",
@@ -966,18 +973,20 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "4d12",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_siphon_magic__recharge_5__1h51",
+        "id": "act_siphon_magic__recharge_5__du8g",
         "name": "Siphon Magic (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The phaerimm focuses on a magic item it can see within 10 feet. When it does, the phaerimm drains the magic item of any charges. Regardless of whether charges are drained, the phaerimm can cast Clairvoyance, Geas, Major Image, and Mirage Arcane one additional time that day.</p>",
@@ -999,7 +1008,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_teleport_slib",
+        "id": "act_teleport_qxwl",
         "name": "Teleport",
         "actionType": "bonus",
         "descriptionHtml": "<p>The phaerimm teleports up to 30 feet to an unoccupied space it can see.</p>",
@@ -1253,7 +1262,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_vm3q",
+        "id": "act_magic_resistance_uvvt",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The phaerimm has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1275,7 +1284,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_cvwj",
+        "id": "act_multiattack_jg9t",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The phaerimm makes two attacks, using Stinger or Mindwarp Ray in any combination.</p>",
@@ -1295,7 +1304,7 @@
         }
       },
       {
-        "id": "act_stinger_lzw4",
+        "id": "act_stinger_vrn9",
         "name": "Stinger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Piercing damage plus 9 (2d8) Poison damage.</p>",
@@ -1313,18 +1322,20 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mindwarp_ray_lve4",
+        "id": "act_mindwarp_ray_oy2c",
         "name": "Mindwarp Ray",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +5, range 120 ft. Hit: 6 (1d6 + 3) Psychic damage, and the target has the Charmed condition until the start of the phaerimm's next turn.</p>",
@@ -1342,7 +1353,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1352,7 +1364,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_uncanny_dodge_2wdh",
+        "id": "act_uncanny_dodge_5kmm",
         "name": "Uncanny Dodge",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The phaerimm is hit by an attack roll. {@actResponse} The phaerimm halves the damage (round down) it takes from that attack.</p>",
@@ -1666,7 +1678,7 @@
     ],
     "traits": [
       {
-        "id": "act_disintegration_otsj",
+        "id": "act_disintegration_3pq8",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
@@ -1686,7 +1698,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_zlt1",
+        "id": "act_magic_resistance_zfle",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1708,7 +1720,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bjll",
+        "id": "act_multiattack_f41c",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The magen makes two attacks, using Hammer Fist or Thunderous Boom in any combination.</p>",
@@ -1728,7 +1740,7 @@
         }
       },
       {
-        "id": "act_hammer_fist_pfgc",
+        "id": "act_hammer_fist_2eil",
         "name": "Hammer Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 16 (3d8 + 3) Bludgeoning damage plus 13 (3d8) Force damage.</p>",
@@ -1746,18 +1758,20 @@
           "damages": [
             {
               "formula": "3d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "3d8",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_thunderous_boom_6k1d",
+        "id": "act_thunderous_boom_u2qu",
         "name": "Thunderous Boom",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +7, range 60 ft. Hit: 28 (8d6) Thunder damage.</p>",
@@ -1775,7 +1789,8 @@
           "damages": [
             {
               "formula": "8d6",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2022,7 +2037,7 @@
     ],
     "traits": [
       {
-        "id": "act_disintegration_mbf8",
+        "id": "act_disintegration_j22g",
         "name": "Disintegration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the magen dies, it disintegrates into dust, leaving behind anything it was wearing or carrying.</p>",
@@ -2042,7 +2057,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_zulw",
+        "id": "act_magic_resistance_hazh",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The magen has Advantage on saving throws against spells and other magical effects.</p>",
@@ -2064,7 +2079,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_nohg",
+        "id": "act_multiattack_92t9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The magen makes two Psychic Blast attacks.</p>",
@@ -2084,7 +2099,7 @@
         }
       },
       {
-        "id": "act_psychic_blast_vqnm",
+        "id": "act_psychic_blast_ofye",
         "name": "Psychic Blast",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +6, reach 5 ft. or range 60 ft. Hit: 21 (6d6) Psychic damage.</p>",
@@ -2102,7 +2117,8 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null

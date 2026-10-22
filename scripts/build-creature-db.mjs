@@ -130,6 +130,79 @@ function cleanTagsPlain(str) {
         .trim();
 }
 
+const STANDARD_DAMAGE_TYPES = [
+    'bludgeoning', 'piercing', 'slashing', 'acid', 'cold', 'fire',
+    'force', 'lightning', 'necrotic', 'poison', 'psychic', 'radiant', 'thunder'
+];
+
+function normalizeDefenseList(arr) {
+    if (!arr) return [];
+    const list = Array.isArray(arr) ? arr : [arr];
+    const result = [];
+
+    for (const item of list) {
+        if (!item) continue;
+        if (typeof item === 'string') {
+            const clean = item.trim().toLowerCase();
+            if (clean && !result.includes(clean)) result.push(clean);
+            continue;
+        }
+
+        if (typeof item === 'object') {
+            const rawTypes = item.resist || item.immune || item.vulnerable || item.conditionImmune || [];
+            let types = [];
+            if (Array.isArray(rawTypes)) {
+                rawTypes.forEach(t => {
+                    const clean = typeof t === 'string' ? t.trim().toLowerCase() : (t.name || String(t)).trim().toLowerCase();
+                    if (clean && !types.includes(clean)) types.push(clean);
+                });
+            } else if (typeof rawTypes === 'string') {
+                const clean = rawTypes.trim().toLowerCase();
+                if (clean) types.push(clean);
+            }
+
+            const noteRaw = item.note || item.special || item.preNote || '';
+            const noteClean = typeof noteRaw === 'string' ? cleanTagsPlain(noteRaw).trim() : '';
+            const noteLower = noteClean.toLowerCase();
+
+            // If types was empty but special text was provided, extract recognized damage types
+            if (types.length === 0 && noteLower) {
+                for (const dt of STANDARD_DAMAGE_TYPES) {
+                    if (noteLower.includes(dt) && !types.includes(dt)) types.push(dt);
+                }
+            }
+
+            // Extract standard bypasses
+            const bypasses = [];
+            if (noteLower.includes('nonmagical') || noteLower.includes('non-magical')) {
+                bypasses.push('magic');
+            }
+            if (noteLower.includes('silver')) {
+                bypasses.push('silver');
+            }
+            if (noteLower.includes('adamant')) {
+                bypasses.push('adamantine');
+            }
+
+            if (types.length > 0 && (bypasses.length > 0 || noteClean)) {
+                result.push({
+                    types,
+                    bypasses: Array.from(new Set(bypasses)),
+                    note: noteClean
+                });
+            } else if (types.length > 0) {
+                // Plain damage types without bypass/note
+                for (const t of types) {
+                    if (t && !result.includes(t)) result.push(t);
+                }
+            } else if (noteClean) {
+                result.push(noteClean);
+            }
+        }
+    }
+    return result;
+}
+
 function extractLairActionName(text, fallbackIndex = 1) {
     if (!text || typeof text !== 'string') return `Lair Action ${fallbackIndex}`;
     const boldMatch = text.match(/^\{@b\s+([^}]+)\}\.?\s*(.*)/i) || text.match(/^\*\*([^*]+)\*\*\.?\s*(.*)/i);
@@ -430,6 +503,27 @@ function parseActionMacroData(entryName, rawEntries, charName) {
         macro.save = { dc: saveDc, ability: normalizedAbility };
     }
 
+    // Save rider boundary detection
+    let saveStartIndex = -1;
+    if (macro.save) {
+        const saveKeywords = [
+            /\{@actSave\b/i,
+            /\{@dc\b/i,
+            /\bDC\s*\d+/i,
+            /\bsaving\s+throw\b/i,
+            /\bsave\s+DC\b/i,
+            /\bmust\s+(?:make|succeed)\b/i
+        ];
+        for (const kw of saveKeywords) {
+            const pos = rawString.search(kw);
+            if (pos !== -1) {
+                if (saveStartIndex === -1 || pos < saveStartIndex) {
+                    saveStartIndex = pos;
+                }
+            }
+        }
+    }
+
     // Damage formulas
     const dmgRegex = /\{@damage ([^\}]+)\}(?:.*?([\w]+)\s+damage)?/gi;
     let match;
@@ -439,7 +533,14 @@ function parseActionMacroData(entryName, rawEntries, charName) {
         const formula = match[1].trim();
         let type = match[2] ? (match[2].charAt(0).toUpperCase() + match[2].slice(1).toLowerCase()) : 'Slashing';
         if (!VALID_TYPES.has(type)) type = 'Slashing';
-        macro.damages.push({ formula, type });
+        
+        let isRider = false;
+        if (!macro.isAttack && macro.save) {
+            isRider = true;
+        } else if (macro.isAttack && macro.save && saveStartIndex !== -1) {
+            isRider = match.index >= saveStartIndex;
+        }
+        macro.damages.push({ formula, type, saveRider: isRider });
     }
 
     // Fallback for non-tagged damage text like "5 (1d6 + 2) slashing damage"
@@ -449,7 +550,13 @@ function parseActionMacroData(entryName, rawEntries, charName) {
             const formula = match[1].trim();
             let type = match[2].charAt(0).toUpperCase() + match[2].slice(1).toLowerCase();
             if (!VALID_TYPES.has(type)) type = 'Slashing';
-            macro.damages.push({ formula, type });
+            let isRider = false;
+            if (!macro.isAttack && macro.save) {
+                isRider = true;
+            } else if (macro.isAttack && macro.save && saveStartIndex !== -1) {
+                isRider = match.index >= saveStartIndex;
+            }
+            macro.damages.push({ formula, type, saveRider: isRider });
         }
     }
 
@@ -1389,10 +1496,12 @@ function buildCreatureDatabase() {
             saves: m.save || {},
             skill: m.skill || {},
             skills: m.skill || {},
-            immune: m.immune || [],
-            resist: m.resist || [],
-            vulnerable: m.vulnerable || [],
-            conditionImmune: m.conditionImmune || [],
+            immune: normalizeDefenseList(m.immune),
+            resist: normalizeDefenseList(m.resist),
+            vulnerable: normalizeDefenseList(m.vulnerable),
+            conditionImmune: Array.isArray(m.conditionImmune)
+                ? m.conditionImmune.map(c => typeof c === 'string' ? c.toLowerCase().trim() : (c.conditionImmune ? String(c.conditionImmune) : JSON.stringify(c)))
+                : (m.conditionImmune ? [String(m.conditionImmune)] : []),
             passive: m.passive || (10 + abilities.wis.mod),
             initiative: m.initiative,
             senses: {
@@ -1430,18 +1539,19 @@ function buildCreatureDatabase() {
             if (!Array.isArray(arr)) return res;
             arr.forEach(a => {
                 if (typeof a === 'string') res.push(a);
-                else if (a.resist) res.push(...flattenDefenses(a.resist));
-                else if (a.immune) res.push(...flattenDefenses(a.immune));
-                else if (a.vulnerable) res.push(...flattenDefenses(a.vulnerable));
-                else if (a.conditionImmune) res.push(...flattenDefenses(a.conditionImmune));
+                else if (a && Array.isArray(a.types)) res.push(...a.types);
+                else if (a && a.resist) res.push(...flattenDefenses(a.resist));
+                else if (a && a.immune) res.push(...flattenDefenses(a.immune));
+                else if (a && a.vulnerable) res.push(...flattenDefenses(a.vulnerable));
+                else if (a && a.conditionImmune) res.push(...flattenDefenses(a.conditionImmune));
             });
-            return res;
+            return Array.from(new Set(res));
         };
 
-        const flatResist = Array.isArray(m.resist) ? flattenDefenses(m.resist) : [];
-        const flatImmune = Array.isArray(m.immune) ? flattenDefenses(m.immune) : [];
-        const flatCondImmune = Array.isArray(m.conditionImmune) ? flattenDefenses(m.conditionImmune) : [];
-        const flatVuln = Array.isArray(m.vulnerable) ? flattenDefenses(m.vulnerable) : [];
+        const flatResist = flattenDefenses(normalizedCreature.resist);
+        const flatImmune = flattenDefenses(normalizedCreature.immune);
+        const flatCondImmune = flattenDefenses(normalizedCreature.conditionImmune);
+        const flatVuln = flattenDefenses(normalizedCreature.vulnerable);
         const envList = Array.isArray(m.environment) ? m.environment : (m.environment ? [m.environment] : []);
         const moveTypes = Object.keys(speedObj).filter(k => speedObj[k] && typeof speedObj[k] === 'number' || speedObj[k]?.number);
 

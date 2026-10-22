@@ -229,7 +229,7 @@
     ],
     "traits": [
       {
-        "id": "act_aberrant_form_fza8",
+        "id": "act_aberrant_form_06ac",
         "name": "Aberrant Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The zealot exudes the chaos of the Far Realm. Any non-Aberration creature that starts its turn within 5 feet of the zealot must succeed on a DC 15 Wisdom saving throw or take 7 (2d6) psychic damage.</p>",
@@ -250,14 +250,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_weirdly_pliable_enlq",
+        "id": "act_weirdly_pliable_amlt",
         "name": "Weirdly Pliable",
         "actionType": "trait",
         "descriptionHtml": "<p>The zealot, along with any equipment it is wearing or carrying, is unnaturally flexible. The zealot can move through any space as narrow as 1 inch without squeezing.</p>",
@@ -279,7 +280,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_fzhh",
+        "id": "act_multiattack_hm05",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The zealot makes one Psychic Rend attack and two Shortsword attacks.</p>",
@@ -299,7 +300,7 @@
         }
       },
       {
-        "id": "act_psychic_rend_6ipw",
+        "id": "act_psychic_rend_1i32",
         "name": "Psychic Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +7 to hit, reach 15 ft. or range 120 ft., one target. Hit: 14 (3d6 + 4) psychic damage, and the target must succeed on a DC 15 Wisdom saving throw or have the stunned condition until the start of the zealot's next turn.</p>",
@@ -320,14 +321,15 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword_ld0u",
+        "id": "act_shortsword_wyuu",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 15 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 7 (2d6) psychic damage.</p>",
@@ -345,11 +347,13 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -358,7 +362,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_void_warp__recharge_5__35p1",
+        "id": "act_void_warp__recharge_5__2z1p",
         "name": "Void Warp (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The zealot teleports, along with any equipment it is wearing or carrying, to an unoccupied space it can see within 120 feet of itself, leaving a churning void in the space it left. Immediately after it teleports, each creature within 30 feet of the void other than the zealot must make a DC 15 Strength saving throw. On a failed save, a creature takes 18 (4d8) force damage and is pulled to the unoccupied space closest to the void. On a successful save, the creature takes half as much damage only. The void then disappears.</p>",
@@ -379,7 +383,8 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -640,7 +645,7 @@
     ],
     "traits": [
       {
-        "id": "act_aberrant_form_47e5",
+        "id": "act_aberrant_form_w3lz",
         "name": "Aberrant Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The zealot exudes the chaos of the Far Realm. Any non-Aberration creature that starts its turn within 5 feet of the zealot must succeed on a DC 15 Wisdom saving throw or take 7 (2d6) psychic damage.</p>",
@@ -661,14 +666,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_weirdly_pliable_g8n3",
+        "id": "act_weirdly_pliable_0cgl",
         "name": "Weirdly Pliable",
         "actionType": "trait",
         "descriptionHtml": "<p>The zealot, along with any equipment it is wearing or carrying, is unnaturally flexible. The zealot can move through any space as narrow as 1 inch without squeezing.</p>",
@@ -690,7 +696,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_cj5a",
+        "id": "act_multiattack_ctyv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The zealot makes one Psychic Rend attack and two Shortsword attacks.</p>",
@@ -710,7 +716,7 @@
         }
       },
       {
-        "id": "act_psychic_rend_6aa7",
+        "id": "act_psychic_rend_5vsy",
         "name": "Psychic Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +7 to hit, reach 15 ft. or range 120 ft., one target. Hit: 14 (3d6 + 4) psychic damage, and the target must succeed on a DC 15 Wisdom saving throw or have the stunned condition until the start of the zealot's next turn.</p>",
@@ -731,14 +737,15 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword_1fi8",
+        "id": "act_shortsword_2nnw",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 15 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 7 (2d6) psychic damage.</p>",
@@ -756,18 +763,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mind_blast__recharge_5__shmz",
+        "id": "act_mind_blast__recharge_5__70w5",
         "name": "Mind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The zealot magically emits psychic energy in a 60-foot cone. Each creature in that area must succeed on a DC 15 Intelligence saving throw or take 22 (4d8 + 4) psychic damage and have the stunned condition for 1 minute. A target can repeat the saving throw at the end of each of its turns, ending the stunned condition on itself on a success.</p>",
@@ -788,7 +797,8 @@
           "damages": [
             {
               "formula": "4d8 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -797,7 +807,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_void_warp__recharge_5__l06r",
+        "id": "act_void_warp__recharge_5__x6tl",
         "name": "Void Warp (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The zealot teleports, along with any equipment it is wearing or carrying, to an unoccupied space it can see within 120 feet of itself, leaving a churning void in the space it left. Immediately after it teleports, each creature within 30 feet of the void other than the zealot must make a DC 15 Strength saving throw. On a failed save, a creature takes 18 (4d8) force damage and is pulled to the unoccupied space closest to the void. On a successful save, the creature takes half as much damage only. The void then disappears.</p>",
@@ -818,7 +828,8 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -944,7 +955,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_7mrb",
+        "id": "act_undead_fortitude_vgsc",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead.</p>",
@@ -964,7 +975,7 @@
         }
       },
       {
-        "id": "act_ash_cloud_fbmk",
+        "id": "act_ash_cloud_blhe",
         "name": "Ash Cloud",
         "actionType": "trait",
         "descriptionHtml": "<p>When the zombie dies, it leaves a cloud of ash that lasts for 5 minutes but does not obscure vision.</p>",
@@ -986,7 +997,7 @@
     ],
     "actions": [
       {
-        "id": "act_slam_1pk9",
+        "id": "act_slam_6fuk",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
@@ -1004,7 +1015,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1201,7 +1213,7 @@
     ],
     "traits": [
       {
-        "id": "act_creature_sense_mlz8",
+        "id": "act_creature_sense_1jgs",
         "name": "Creature Sense",
         "actionType": "trait",
         "descriptionHtml": "<p>The brain breaker is aware of creatures within 1 mile of itself that have an Intelligence score of 4 or higher. It knows the distance and direction to each creature, as well as each one's Intelligence score, but can't sense anything else about it. A creature protected by a mind blank spell, a nondetection spell, or similar magic can't be perceived in this manner.</p>",
@@ -1221,7 +1233,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_tkqx",
+        "id": "act_magic_resistance_d2lq",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The brain breaker has advantage on saving throws against spells and other magical effects.</p>",
@@ -1241,7 +1253,7 @@
         }
       },
       {
-        "id": "act_telepathic_hub_hqhi",
+        "id": "act_telepathic_hub_cxxr",
         "name": "Telepathic Hub",
         "actionType": "trait",
         "descriptionHtml": "<p>The brain breaker can use its telepathy to initiate and maintain telepathic conversations with up to ten creatures at a time. The brain breaker can let those creatures telepathically hear each other while connected in this way.</p>",
@@ -1263,7 +1275,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qyyj",
+        "id": "act_multiattack_3nuo",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The brain breaker makes two Tentacle attacks.</p>",
@@ -1283,7 +1295,7 @@
         }
       },
       {
-        "id": "act_tentacle_b8lo",
+        "id": "act_tentacle_f3nx",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 30 ft., one target. Hit: 15 (3d8 + 2) bludgeoning damage. If the target is a Huge or smaller creature, it has the grappled condition (escape DC 14) and takes 9 (1d8 + 5) psychic damage at the start of each of its turns until the grapple ends. The brain breaker can have up to four targets grappled at a time.</p>",
@@ -1304,18 +1316,20 @@
           "damages": [
             {
               "formula": "3d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mind_blast__recharge_5__1xqd",
+        "id": "act_mind_blast__recharge_5__qwo7",
         "name": "Mind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Creatures of the brain breaker's choice within 60 feet of itself must succeed on a DC 17 Intelligence saving throw or take 32 (5d10 + 5) psychic damage and have the stunned condition for 1 minute. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -1336,7 +1350,8 @@
           "damages": [
             {
               "formula": "5d10 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -1345,7 +1360,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_psychic_link_2k3b",
+        "id": "act_psychic_link_twin",
         "name": "Psychic Link",
         "actionType": "bonus",
         "descriptionHtml": "<p>The brain breaker targets one creature with the incapacitated condition that the brain breaker senses with its Creature Sense trait and establishes a psychic link with the target. Until the link ends, the brain breaker can perceive everything the target senses. The target becomes aware that something is linked to its mind once it no longer has the incapacitated condition, and the brain breaker can terminate the link at any time (no action required). The target can use an action on its turn to attempt to break the link, doing so with a successful DC 17 Charisma check. If the target breaks the link this way, the target takes 10 (3d6) psychic damage. The link also ends if the target and the brain breaker are more than 1 mile apart. The brain breaker can form psychic links with up to ten creatures at a time.</p>",
@@ -1366,7 +1381,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1664,7 +1680,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__svkn",
+        "id": "act_legendary_resistance__3_day__gqf4",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Chishinix fails a saving throw, it can choose to succeed instead.</p>",
@@ -1684,7 +1700,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_boiz",
+        "id": "act_magic_resistance_h0dl",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Chishinix has advantage on saving throws against spells and other magical effects.</p>",
@@ -1704,7 +1720,7 @@
         }
       },
       {
-        "id": "act_severed_head_k3dp",
+        "id": "act_severed_head_4q96",
         "name": "Severed Head",
         "actionType": "trait",
         "descriptionHtml": "<p>Chishinix is always accompanied by a Chishinix' Head.</p>",
@@ -1726,7 +1742,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8qqv",
+        "id": "act_multiattack_tf7h",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Chishinix makes two Tentacle attacks.</p>",
@@ -1746,7 +1762,7 @@
         }
       },
       {
-        "id": "act_tentacle_cpmr",
+        "id": "act_tentacle_9tql",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 21 (3d10 + 5) psychic damage. If the target is Medium or smaller, it has the grappled condition (escape DC 17) and must succeed on a DC 17 Intelligence saving throw or have the incapacitated condition until the grapple ends.</p>",
@@ -1767,14 +1783,15 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_extract_brain_0cwy",
+        "id": "act_extract_brain_fh2d",
         "name": "Extract Brain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one incapacitated Humanoid grappled by Chishinix. Hit: 55 (10d10) piercing damage. If this damage reduces the target to 0 hit points, the mind flayer kills it by extracting and devouring its brain.</p>",
@@ -1792,14 +1809,15 @@
           "damages": [
             {
               "formula": "10d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_unleash_void__recharge_5__zp5z",
+        "id": "act_unleash_void__recharge_5__iyy3",
         "name": "Unleash Void (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Chishinix opens a rift into the Far Realm, centered on a point the mind flayer can see within 60 feet of itself, and a tentacle lashes across creatures near the rift. Each creature other than mind flayers within 30 feet of the rift must make a DC 17 Intelligence saving throw, after which the tentacle disappears and the rift closes. On a failed save, a creature takes 18 (4d8) cold damage from the rift plus 18 (4d8) psychic damage from the tentacle and has the stunned condition for 1 minute. On a successful save, a creature takes half as much damage only. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -1820,11 +1838,13 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             },
             {
               "formula": "4d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -1834,7 +1854,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_warp_reality_91og",
+        "id": "act_warp_reality_0h63",
         "name": "Warp Reality",
         "actionType": "reaction",
         "descriptionHtml": "<p>When hit by an attack roll, Chishinix gains a +4 bonus to its AC against that attack roll, potentially causing it to miss. Then the mind flayer, along with any equipment it is wearing or carrying, magically teleports up to 60 feet to an unoccupied space it can see.</p>",
@@ -1966,7 +1986,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_lkmt",
+        "id": "act_magic_resistance_71ro",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The head has advantage on saving throws against spells and other magical effects.</p>",
@@ -1988,7 +2008,7 @@
     ],
     "actions": [
       {
-        "id": "act_psychic_slam_26yb",
+        "id": "act_psychic_slam_8f63",
         "name": "Psychic Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 16 (3d10) psychic damage.</p>",
@@ -2006,7 +2026,8 @@
           "damages": [
             {
               "formula": "3d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2015,7 +2036,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_leech_628l",
+        "id": "act_leech_xl9f",
         "name": "Leech",
         "actionType": "bonus",
         "descriptionHtml": "<p>The head targets one creature within 5 feet of itself and forces the target to make a DC 14 Dexterity saving throw. On a failed save, the head enters the target's space and attaches to the target. While the head is attached, the target takes 7 (3d4) piercing damage at the start of each of its turns, and the head can't use Leech again until it detaches. It can detach itself by spending 5 feet of its movement. As an action, the target or a creature within 5 feet of the target can detach the head by succeeding on a DC 15 Strength check.</p>",
@@ -2036,7 +2057,8 @@
           "damages": [
             {
               "formula": "3d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -2167,7 +2189,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_avoidance_0dlz",
+        "id": "act_avoidance_tp4y",
         "name": "Avoidance",
         "actionType": "trait",
         "descriptionHtml": "<p>If the mutate is subjected to an effect that allows it to make a saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails.</p>",
@@ -2187,7 +2209,7 @@
         }
       },
       {
-        "id": "act_light_sensitivity_d8dd",
+        "id": "act_light_sensitivity_j91u",
         "name": "Light Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in bright light, the mutate has disadvantage on attack rolls.</p>",
@@ -2209,7 +2231,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_658u",
+        "id": "act_multiattack_tbuf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mutate makes one Corpse Swipe attack and two Tail attacks, or it makes four Tail attacks.</p>",
@@ -2229,7 +2251,7 @@
         }
       },
       {
-        "id": "act_corpse_swipe_fm8r",
+        "id": "act_corpse_swipe_trnv",
         "name": "Corpse Swipe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 20 (3d10 + 4) bludgeoning damage. If the target is a creature, it must succeed on a DC 16 Constitution saving throw or have the poisoned condition for 1 minute. While poisoned in this way, a creature can't regain hit points.</p>",
@@ -2250,14 +2272,15 @@
           "damages": [
             {
               "formula": "3d10 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_wkww",
+        "id": "act_tail_g4nr",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) slashing damage.</p>",
@@ -2275,7 +2298,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2284,7 +2308,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_phantasmal_duplicates_c9vq",
+        "id": "act_phantasmal_duplicates_qwaq",
         "name": "Phantasmal Duplicates",
         "actionType": "bonus",
         "descriptionHtml": "<p>The mutate magically projects up to four illusory copies of itself. These duplicates make it difficult to ascertain the mutate's true location and last until the end of the mutate's next turn. While the copies exist, attack rolls against the mutate are made with disadvantage.</p>",
@@ -2304,7 +2328,7 @@
         }
       },
       {
-        "id": "act_psychic_moan___recharge__7rk5",
+        "id": "act_psychic_moan___recharge__nwol",
         "name": "Psychic Moan {@recharge}",
         "actionType": "bonus",
         "descriptionHtml": "<p>The mutate lets out a moan charged with psychic energy. Each creature within 60 feet of the mutate that isn't an Aberration must succeed on a DC 16 Wisdom saving throw or take 17 (5d6) psychic damage and have the frightened condition until the end of the mutate's next turn.</p>",
@@ -2325,7 +2349,8 @@
           "damages": [
             {
               "formula": "5d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -2450,7 +2475,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sure_footed_4z31",
+        "id": "act_sure_footed_y1z8",
         "name": "Sure-Footed",
         "actionType": "trait",
         "descriptionHtml": "<p>The skeleton has advantage on Strength and Dexterity saving throws made against effects that make it have the prone condition.</p>",
@@ -2472,7 +2497,7 @@
     ],
     "actions": [
       {
-        "id": "act_battleaxe_uf0s",
+        "id": "act_battleaxe_vixp",
         "name": "Battleaxe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands.</p>",
@@ -2490,11 +2515,13 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2615,7 +2642,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__2q7e",
+        "id": "act_legendary_resistance__3_day__ffam",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the cluster fails a saving throw, it can choose to succeed instead.</p>",
@@ -2635,7 +2662,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_p71m",
+        "id": "act_magic_resistance_6pao",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The cluster has advantage on saving throws against spells and other magical effects.</p>",
@@ -2657,7 +2684,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ihx1",
+        "id": "act_multiattack_uld7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The cluster makes two Slam attacks. It can replace one of these attacks with Spawn Progeny if available.</p>",
@@ -2677,7 +2704,7 @@
         }
       },
       {
-        "id": "act_slam_jwoz",
+        "id": "act_slam_iyiy",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 17 (2d10 + 6) bludgeoning damage plus 10 (3d6) psychic damage, and if the target is a creature, the target must succeed on a DC 18 Strength saving throw or have the prone condition. If this attack reduces the target to 0 hit points, the target immediately dies and is consumed by the cluster.</p>",
@@ -2698,18 +2725,20 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spawn_progeny__recharges_after_a_short_or_long_rest__papr",
+        "id": "act_spawn_progeny__recharges_after_a_short_or_long_rest__fb4q",
         "name": "Spawn Progeny (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>The cluster bulges and spews 1d4 mature eggs. Each egg lands in an unoccupied space of the cluster's choice within 30 feet of itself and immediately transforms into an encephalon gemmule. The gemmules obey the cluster's commands and take their turns immediately after it.</p>",
@@ -2732,7 +2761,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_aggressive_hunger_y0wu",
+        "id": "act_aggressive_hunger_dak7",
         "name": "Aggressive Hunger",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after being hit by an attack, the cluster moves up to its speed toward the attacker. This movement doesn't provoke opportunity attacks. If the cluster ends this movement within 5 feet of the attacker, it then makes one Slam attack against that attacker.</p>",
@@ -2864,7 +2893,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_encephalon_progeny_jwrc",
+        "id": "act_encephalon_progeny_ezk0",
         "name": "Encephalon Progeny",
         "actionType": "trait",
         "descriptionHtml": "<p>The gemmule matures into an encephalon cluster if not killed within 30 (4d12 + 4) days of its creation.</p>",
@@ -2884,7 +2913,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_0b71",
+        "id": "act_magic_resistance_zeaf",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The gemmule has advantage on saving throws against spells and other magical effects.</p>",
@@ -2906,7 +2935,7 @@
     ],
     "actions": [
       {
-        "id": "act_psychic_slam_z79m",
+        "id": "act_psychic_slam_mv3v",
         "name": "Psychic Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 16 (3d10) psychic damage.</p>",
@@ -2924,7 +2953,8 @@
           "damages": [
             {
               "formula": "3d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2933,7 +2963,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_leech_iiy6",
+        "id": "act_leech_8px2",
         "name": "Leech",
         "actionType": "bonus",
         "descriptionHtml": "<p>The gemmule targets one creature within 5 feet of itself and forces the target to make a DC 14 Dexterity saving throw. On a failed save, the gemmule enters the target's space and attaches to the target. While the gemmule is attached, the target takes 7 (3d4) piercing damage at the start of each of its turns, and the gemmule can't use Leech again until it detaches. It can detach itself by spending 5 feet of its movement. As an action, the target or a creature within 5 feet of the target can detach the gemmule by succeeding on a DC 15 Strength check.</p>",
@@ -2954,7 +2984,8 @@
           "damages": [
             {
               "formula": "3d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -3089,7 +3120,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_jusf",
+        "id": "act_multiattack_hrh5",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ashenwight makes two Necrotic Shard attacks.</p>",
@@ -3109,7 +3140,7 @@
         }
       },
       {
-        "id": "act_necrotic_shard_kujv",
+        "id": "act_necrotic_shard_63sq",
         "name": "Necrotic Shard",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +7 to hit, reach 5 ft. or range 60 ft., one target. Hit: 7 (1d6 + 4) necrotic damage. If the target is a creature, it has disadvantage on the next attack roll it makes before the end of its next turn.</p>",
@@ -3127,7 +3158,8 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3256,7 +3288,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_siege_monster_jaxg",
+        "id": "act_siege_monster_glck",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The auger deals double damage to objects and structures.</p>",
@@ -3276,7 +3308,7 @@
         }
       },
       {
-        "id": "act_tunneler_tluu",
+        "id": "act_tunneler_e15i",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The auger can burrow through solid rock at half its burrow speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
@@ -3298,7 +3330,7 @@
     ],
     "actions": [
       {
-        "id": "act_flaming_drill_0bdq",
+        "id": "act_flaming_drill_topj",
         "name": "Flaming Drill",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 17 (2d10 + 6) piercing damage plus 7 (2d6) fire damage. If the auger moves at least 20 feet in a straight line toward the target immediately before the hit, the target takes an additional 11 (2d10) piercing damage, and if the target is a creature, it must succeed on a DC 17 Strength saving throw or have the prone condition.</p>",
@@ -3319,15 +3351,18 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "2d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3336,7 +3371,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_burst_of_heat__recharge_5__np4k",
+        "id": "act_burst_of_heat__recharge_5__7h41",
         "name": "Burst of Heat (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The auger releases an intense burst of heat in a 30-foot-radius sphere centered on itself. This heat spreads around corners. Each creature in this area must make a DC 17 Constitution saving throw, taking 13 (3d8) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -3357,7 +3392,8 @@
           "damages": [
             {
               "formula": "3d8",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -3484,7 +3520,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_u9ob",
+        "id": "act_amorphous_aueh",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The flesh meld can move through a space as narrow as 1 inch without squeezing.</p>",
@@ -3504,7 +3540,7 @@
         }
       },
       {
-        "id": "act_aura_of_death_gpte",
+        "id": "act_aura_of_death_fvw3",
         "name": "Aura of Death",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of the flesh meld's turns, each creature within 5 feet of it must succeed on a DC 15 Constitution saving throw or take 3 (1d6) necrotic damage and have the poisoned condition until the start of the flesh meld's next turn.</p>",
@@ -3525,14 +3561,15 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_gu4b",
+        "id": "act_magic_resistance_m6wk",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The flesh meld has advantage on saving throws against spells and other magical effects.</p>",
@@ -3552,7 +3589,7 @@
         }
       },
       {
-        "id": "act_spider_climb_a1nl",
+        "id": "act_spider_climb_y1jt",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The flesh meld can climb difficult surfaces, including ceilings, without needing to make an ability check.</p>",
@@ -3574,7 +3611,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_91ru",
+        "id": "act_multiattack_9a1f",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The flesh meld makes two Bite attacks.</p>",
@@ -3594,7 +3631,7 @@
         }
       },
       {
-        "id": "act_bite_tstg",
+        "id": "act_bite_fe3c",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 30 ft., one target. Hit: 16 (2d10 + 5) piercing damage, and if the target is a Large or smaller creature, it has the grappled condition (escape DC 15) and is pulled up to 15 feet toward the flesh meld.</p>",
@@ -3615,7 +3652,8 @@
           "damages": [
             {
               "formula": "2d10 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3624,7 +3662,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_consume_creature_38pc",
+        "id": "act_consume_creature_9vt7",
         "name": "Consume Creature",
         "actionType": "bonus",
         "descriptionHtml": "<p>The flesh meld targets one Large or smaller creature within 5 feet of itself that it's grappling. The target must succeed on a DC 15 Dexterity saving throw or be swallowed by the flesh meld. The flesh meld can have one creature swallowed at a time.</p><p>A swallowed creature no longer has the grappled condition. While swallowed, it has the blinded and restrained conditions, has Cover against attacks and other effects outside the flesh meld, and takes 10 (3d6) necrotic damage at the start of each of the flesh meld's turns. If this damage reduces a swallowed creature to 0 hit points, the creature dies, and the flesh meld consumes its body.</p><p>If the flesh meld takes 30 damage or more on a single turn from the swallowed creature, the flesh meld must succeed on a DC 15 Constitution saving throw at the end of that turn or regurgitate the creature, which falls with the prone condition in a space within 5 feet of the flesh meld. If the flesh meld dies, the swallowed creature is no longer restrained by it and can escape from the corpse by using 10 feet of movement, exiting with the prone condition.</p>",
@@ -3647,7 +3685,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -3770,7 +3809,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_nimble_escape_d34t",
+        "id": "act_nimble_escape_eezx",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>The goblin can take the Disengage or Hide action as a bonus action on each of its turns.</p>",
@@ -3792,7 +3831,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dm0d",
+        "id": "act_multiattack_xy8z",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The goblin makes two attacks with its scimitar. The second attack has disadvantage.</p>",
@@ -3812,7 +3851,7 @@
         }
       },
       {
-        "id": "act_scimitar_3fj3",
+        "id": "act_scimitar_nqy8",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage.</p>",
@@ -3830,14 +3869,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_y0ea",
+        "id": "act_shortbow_8zbp",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80 ft./320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -3855,7 +3895,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3865,7 +3906,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_redirect_attack_54c5",
+        "id": "act_redirect_attack_tcb6",
         "name": "Redirect Attack",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature the goblin can see targets it with an attack, the goblin chooses another goblin within 5 feet of it. The two goblins swap places, and the chosen goblin becomes the target instead.</p>",
@@ -4009,7 +4050,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_mental_burst_cn0y",
+        "id": "act_mental_burst_y2pl",
         "name": "Mental Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>When the goblin dies, its pent-up mental energy explodes in a psychic blast. Each creature within 5 feet of it must succeed on a DC 13 Intelligence saving throw or take 5 (2d4) psychic damage.</p>",
@@ -4030,14 +4071,15 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mental_fortitude_cvzw",
+        "id": "act_mental_fortitude_uybr",
         "name": "Mental Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>The goblin has advantage on saving throws against effects that would make it have the charmed or frightened condition.</p>",
@@ -4059,7 +4101,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ldhr",
+        "id": "act_multiattack_w8zd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The goblin makes two Unarmed Strike attacks.</p>",
@@ -4079,7 +4121,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_p4mv",
+        "id": "act_unarmed_strike_dbf1",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) bludgeoning damage plus 3 (1d6) psychic damage.</p>",
@@ -4097,11 +4139,13 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4110,7 +4154,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_60x5",
+        "id": "act_nimble_escape_eoqp",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The goblin takes the Disengage or Hide action.</p>",
@@ -4130,7 +4174,7 @@
         }
       },
       {
-        "id": "act_telekinetic_shove_4c6p",
+        "id": "act_telekinetic_shove_1ies",
         "name": "Telekinetic Shove",
         "actionType": "bonus",
         "descriptionHtml": "<p>The goblin targets one creature it can see within 30 feet of itself with a thrust of telekinetic force. The target must succeed on a DC 13 Strength saving throw or have the prone condition.</p>",
@@ -4418,7 +4462,7 @@
     ],
     "traits": [
       {
-        "id": "act_mental_burst_avx6",
+        "id": "act_mental_burst_k036",
         "name": "Mental Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>When the goblin dies, its pent-up mental energy explodes in a psychic blast. Each creature within 5 feet of it must succeed on a DC 13 Intelligence saving throw or take 10 (4d4) psychic damage.</p>",
@@ -4439,14 +4483,15 @@
           "damages": [
             {
               "formula": "4d4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mental_fortitude_eq4j",
+        "id": "act_mental_fortitude_a5u0",
         "name": "Mental Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>The goblin has advantage on saving throws against effects that would make it have the charmed or frightened conditions.</p>",
@@ -4468,7 +4513,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_x2vg",
+        "id": "act_multiattack_qq5k",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The goblin makes three Psychic Blade attacks.</p>",
@@ -4488,7 +4533,7 @@
         }
       },
       {
-        "id": "act_psychic_blade_1gzh",
+        "id": "act_psychic_blade_9syu",
         "name": "Psychic Blade",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 60 ft., one creature. Hit: 11 (2d6 + 4) psychic damage, and the target must subtract 1d4 from the next attack roll or saving throw it makes before the end of the goblin's next turn.</p>",
@@ -4506,14 +4551,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_synaptic_rend__recharge_5__snm4",
+        "id": "act_synaptic_rend__recharge_5__wzcm",
         "name": "Synaptic Rend (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The goblin unleashes a 30-foot-radius sphere of psychic energy, centered on a point the goblin can see within 60 feet of itself. Each creature in that area must make a DC 13 Intelligence saving throw. On a failed save, a creature takes 14 (4d6) psychic damage and has the incapacitated condition until the end of the goblin's next turn. On a successful save, a creature takes half as much damage only.</p>",
@@ -4534,7 +4580,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -4543,7 +4590,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_gcfh",
+        "id": "act_nimble_escape_p06r",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The goblin takes the Disengage or Hide action.</p>",
@@ -4565,7 +4612,7 @@
     ],
     "reactions": [
       {
-        "id": "act_psionic_shield_jqgh",
+        "id": "act_psionic_shield_5thu",
         "name": "Psionic Shield",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the goblin or one of its allies within 15 feet of it is hit by an attack roll, the goblin conjures a shield of force. The target of the attack gains a +3 bonus to its AC against the triggering attack roll, potentially causing it to miss.</p>",
@@ -4697,7 +4744,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_d79s",
+        "id": "act_hold_breath_f8z5",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>Grandlejaw can hold its breath for 1 hour.</p>",
@@ -4717,7 +4764,7 @@
         }
       },
       {
-        "id": "act_multiple_heads_hvjs",
+        "id": "act_multiple_heads_bmct",
         "name": "Multiple Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>Grandlejaw has five heads. While it has more than one head, the hydra has advantage on saving throws against being blinded, charmed, deafened, frightened, stunned, and knocked unconscious.</p><p>Whenever Grandlejaw takes 25 or more damage in a single turn, one of its heads dies. If all its heads die, the hydra dies.</p><p>At the end of its turn, it grows two heads for each of its heads that died since its last turn, unless it has taken fire damage since its last turn. Grandlejaw regains 10 hit points for each head regrown in this way.</p>",
@@ -4739,7 +4786,7 @@
         }
       },
       {
-        "id": "act_reactive_heads_hi8n",
+        "id": "act_reactive_heads_8wap",
         "name": "Reactive Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>For each head Grandlejaw has beyond one, it gets an extra reaction that can be used only for opportunity attacks.</p>",
@@ -4759,7 +4806,7 @@
         }
       },
       {
-        "id": "act_wakeful_o7l9",
+        "id": "act_wakeful_o36i",
         "name": "Wakeful",
         "actionType": "trait",
         "descriptionHtml": "<p>While Grandlejaw sleeps, at least one of its heads is awake.</p>",
@@ -4781,7 +4828,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_87ps",
+        "id": "act_multiattack_x540",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Grandlejaw makes as many bite attacks as it has heads.</p>",
@@ -4801,7 +4848,7 @@
         }
       },
       {
-        "id": "act_bite_p8up",
+        "id": "act_bite_5334",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 10 (1d10 + 5) piercing damage.</p>",
@@ -4819,7 +4866,8 @@
           "damages": [
             {
               "formula": "1d10 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5085,7 +5133,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_tl10",
+        "id": "act_multiattack_vn6x",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The grell psychic makes one Tentacle attack and one Beak attack.</p>",
@@ -5105,7 +5153,7 @@
         }
       },
       {
-        "id": "act_beak_ttz5",
+        "id": "act_beak_irad",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (3d4 + 3) piercing damage.</p>",
@@ -5123,14 +5171,15 @@
           "damages": [
             {
               "formula": "3d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tentacle_qu8j",
+        "id": "act_tentacle_x1kb",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 8 (1d10 + 3) piercing damage, and the target must succeed on a DC 11 Constitution saving throw or have the poisoned condition for 1 minute. While the target is poisoned, it also has the paralyzed condition. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. The target also has the grappled condition (escape DC 16). While grappling the target, the grell can't make Tentacle attacks against other targets. When the grell moves, any Medium or smaller target it is grappling moves with it.</p>",
@@ -5151,7 +5200,8 @@
           "damages": [
             {
               "formula": "1d10 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5271,7 +5321,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_oeea",
+        "id": "act_club_m40o",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -5289,7 +5339,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5574,7 +5625,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_huhm",
+        "id": "act_club_k077",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -5592,7 +5643,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5891,7 +5943,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__fjn7",
+        "id": "act_legendary_resistance__3_day__topq",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Hashutu fails a saving throw, it can choose to succeed instead.</p>",
@@ -5911,7 +5963,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_0odm",
+        "id": "act_magic_resistance_yhyk",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Hashutu has advantage on saving throws against spells and other magical effects.</p>",
@@ -5933,7 +5985,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_z599",
+        "id": "act_multiattack_r596",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Hashutu makes two Tentacle attacks.</p>",
@@ -5953,7 +6005,7 @@
         }
       },
       {
-        "id": "act_tentacle_c5m1",
+        "id": "act_tentacle_0flv",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 21 (3d10 + 5) psychic damage. If the target is Medium or smaller, it has the grappled condition (escape DC 17) and must succeed on a DC 17 Intelligence saving throw or have the incapacitated condition until the grapple ends.</p>",
@@ -5974,14 +6026,15 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_extract_brain_6rwj",
+        "id": "act_extract_brain_7cj9",
         "name": "Extract Brain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one incapacitated Humanoid grappled by Hashutu. Hit: 55 (10d10) piercing damage. If this damage reduces the target to 0 hit points, the mind flayer kills it by extracting and devouring its brain.</p>",
@@ -5999,14 +6052,15 @@
           "damages": [
             {
               "formula": "10d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_unleash_void__recharge_5__xxna",
+        "id": "act_unleash_void__recharge_5__xrd5",
         "name": "Unleash Void (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Hashutu opens a rift into the Far Realm, centered on a point the mind flayer can see within 60 feet of itself, and a tentacle lashes across creatures near the rift. Each creature other than mind flayers within 30 feet of the rift must make a DC 17 Intelligence saving throw, after which the tentacle disappears and the rift closes. On a failed save, a creature takes 18 (4d8) cold damage from the rift plus 18 (4d8) psychic damage from the tentacle and has the stunned condition for 1 minute. On a successful save, a creature takes half as much damage only. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -6027,11 +6081,13 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             },
             {
               "formula": "4d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -6041,7 +6097,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_warp_reality_pyxv",
+        "id": "act_warp_reality_zejf",
         "name": "Warp Reality",
         "actionType": "reaction",
         "descriptionHtml": "<p>When hit by an attack roll, Hashutu gains a +4 bonus to its AC against that attack roll, potentially causing it to miss. Then the mind flayer, along with any equipment it is wearing or carrying, magically teleports up to 60 feet to an unoccupied space it can see.</p>",
@@ -6260,7 +6316,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_k5fn",
+        "id": "act_multiattack_xkxu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Hjoldak makes two Necrotic Shard attacks. It also uses Psionic Crown if available.</p>",
@@ -6280,7 +6336,7 @@
         }
       },
       {
-        "id": "act_necrotic_shard_k342",
+        "id": "act_necrotic_shard_4g1z",
         "name": "Necrotic Shard",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +7 to hit, reach 5 ft. or range 60 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 9 (2d8) necrotic damage. If the target is a creature, it has disadvantage on the next attack roll it makes before the end of its next turn.</p>",
@@ -6298,18 +6354,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_psionic_crown__recharge_5__ckv4",
+        "id": "act_psionic_crown__recharge_5__jmii",
         "name": "Psionic Crown (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Hjoldak wreathes the head of a creature it can see within 60 feet of itself with a crown of jagged, spectral crystals. The target must succeed on a DC 14 Wisdom saving throw or have the charmed condition for 1 minute. While charmed in this way, the target's thoughts are sluggish; it can't take reactions, its speed is halved, and it takes 9 (2d8) psychic damage at the start of each of its turns. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -6330,7 +6388,8 @@
           "damages": [
             {
               "formula": "2d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -6459,7 +6518,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_petrifying_gaze_pz7o",
+        "id": "act_petrifying_gaze_x8hy",
         "name": "Petrifying Gaze",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature that can see Honna's eyes starts its turn within 30 feet of the medusa, the medusa can force it to make a DC 14 Constitution saving throw if the medusa isn't incapacitated and can see the creature. If the saving throw fails by 5 or more, the creature is instantly petrified. Otherwise, a creature that fails the save begins to turn to stone and is restrained. The restrained creature must repeat the saving throw at the end of its next turn, becoming petrified on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the greater restoration spell or other magic.</p><p>Unless surprised, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see Honna until the start of its next turn, when it can avert its eyes again. If the creature looks at the medusa in the meantime, it must immediately make the save.</p><p>If Honna sees itself reflected on a polished surface within 30 feet of it and in an area of bright light, the medusa is, due to its curse, affected by its own gaze.</p>",
@@ -6486,7 +6545,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_s2g1",
+        "id": "act_multiattack_tims",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Honna makes either three melee attacks—one with its snake hair and two with its shortsword—or two ranged attacks with its longbow.</p>",
@@ -6506,7 +6565,7 @@
         }
       },
       {
-        "id": "act_snake_hair_1k4p",
+        "id": "act_snake_hair_yrzt",
         "name": "Snake Hair",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 4 (1d4 + 2) piercing damage plus 14 (4d6) poison damage.</p>",
@@ -6524,18 +6583,20 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "4d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword_jnw4",
+        "id": "act_shortsword_sst2",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -6553,14 +6614,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_syr5",
+        "id": "act_longbow_2ai8",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage plus 7 (2d6) poison damage.</p>",
@@ -6578,11 +6640,13 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6713,7 +6777,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_sensitivity_vbg7",
+        "id": "act_sunlight_sensitivity_pc91",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the mutate has disadvantage on attack rolls.</p>",
@@ -6735,7 +6799,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_sybv",
+        "id": "act_multiattack_a9qa",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mutate makes two Unarmed Strike or Nightmare Blast attacks.</p>",
@@ -6755,7 +6819,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_nqzm",
+        "id": "act_unarmed_strike_8o60",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 10 (3d6) psychic damage.</p>",
@@ -6773,18 +6837,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_nightmare_blast_nb9j",
+        "id": "act_nightmare_blast_05ls",
         "name": "Nightmare Blast",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 60 ft., one creature. Hit: 7 (2d6) psychic damage, and the target must succeed on a DC 12 Wisdom saving throw or have the frightened condition until the start of the mutate's next turn.</p>",
@@ -6805,7 +6871,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6815,7 +6882,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_defensive_flight_og15",
+        "id": "act_defensive_flight_kddh",
         "name": "Defensive Flight",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after taking damage, the mutate flies up to its speed. This movement doesn't provoke opportunity attacks.</p>",
@@ -7104,7 +7171,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_ou4v",
+        "id": "act_special_equipment_fpv5",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Glasstaff wields a staff of defense (see appendix B). With the staff in hand, he can use an action to cast the mage armor spell and use his reaction to cast the shield spell.</p>",
@@ -7126,7 +7193,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ib3z",
+        "id": "act_multiattack_4m7d",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Glasstaff makes two Shocking Burst attacks.</p>",
@@ -7146,7 +7213,7 @@
         }
       },
       {
-        "id": "act_shocking_burst_ldjg",
+        "id": "act_shocking_burst_go1c",
         "name": "Shocking Burst",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +5 to hit, reach 5 ft. or range 120 ft., one target. Hit: 6 (1d6 + 3) lightning damage.</p>",
@@ -7164,7 +7231,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7173,7 +7241,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_teleport__2_day__52nz",
+        "id": "act_teleport__2_day__sjxc",
         "name": "Teleport (2/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Glasstaff magically teleports, along with any equipment he is wearing or carrying, up to 30 feet to an unoccupied space he can see.</p>",
@@ -7382,7 +7450,7 @@
     ],
     "traits": [
       {
-        "id": "act_creature_sense_08fp",
+        "id": "act_creature_sense_xchv",
         "name": "Creature Sense",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder brain is aware of creatures within 1 mile of itself that have an Intelligence score of 4 or higher. It knows the distance and direction to each creature, as well as each one's Intelligence score, but can't sense anything else about it. A creature protected by a mind blank spell, a nondetection spell, or similar magic can't be perceived in this manner.</p>",
@@ -7402,7 +7470,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_4hqq",
+        "id": "act_magic_resistance_7ksw",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder brain has advantage on saving throws against spells and other magical effects.</p>",
@@ -7422,7 +7490,7 @@
         }
       },
       {
-        "id": "act_telepathic_hub_lzrv",
+        "id": "act_telepathic_hub_tcnu",
         "name": "Telepathic Hub",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder brain can use its telepathy to initiate and maintain telepathic conversations with up to ten creatures at a time. The elder brain can let those creatures telepathically hear each other while connected in this way.</p>",
@@ -7444,7 +7512,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_x0tf",
+        "id": "act_multiattack_f3dz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elder brain makes two Tentacle attacks.</p>",
@@ -7464,7 +7532,7 @@
         }
       },
       {
-        "id": "act_tentacle_85e1",
+        "id": "act_tentacle_6mdu",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 30 ft., one target. Hit: 15 (3d8 + 2) bludgeoning damage. If the target is a Huge or smaller creature, it has the grappled condition (escape DC 14) and takes 9 (1d8 + 5) psychic damage at the start of each of its turns until the grapple ends. The elder brain can have up to four targets grappled at a time.</p>",
@@ -7485,18 +7553,20 @@
           "damages": [
             {
               "formula": "3d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mind_blast__recharge_5__j8i1",
+        "id": "act_mind_blast__recharge_5__ahq4",
         "name": "Mind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Creatures of the elder brain's choice within 60 feet of itself must succeed on a DC 17 Intelligence saving throw or take 32 (5d10 + 5) psychic damage and have the stunned condition for 1 minute. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -7517,7 +7587,8 @@
           "damages": [
             {
               "formula": "5d10 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -7526,7 +7597,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_psychic_link_cwpw",
+        "id": "act_psychic_link_o4ua",
         "name": "Psychic Link",
         "actionType": "bonus",
         "descriptionHtml": "<p>The elder brain targets one creature with the incapacitated condition that the elder brain senses with its Creature Sense trait and establishes a psychic link with the target. Until the link ends, the elder brain can perceive everything the target senses. The target becomes aware that something is linked to its mind once it no longer has the incapacitated condition, and the elder brain can terminate the link at any time (no action required). The target can use an action on its turn to attempt to break the link, doing so with a successful DC 17 Charisma check. If the target breaks the link this way, the target takes 10 (3d6) psychic damage. The link also ends if the target and the elder brain are more than 1 mile apart. The elder brain can form psychic links with up to ten creatures at a time.</p>",
@@ -7547,7 +7618,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -7665,7 +7737,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reckless_dvb4",
+        "id": "act_reckless_21fr",
         "name": "Reckless",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of its turn, the townsperson can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against it have advantage until the start of its next turn.</p>",
@@ -7687,7 +7759,7 @@
     ],
     "actions": [
       {
-        "id": "act_psychic_slam_5e43",
+        "id": "act_psychic_slam_278b",
         "name": "Psychic Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage plus 3 (1d6) psychic damage.</p>",
@@ -7705,11 +7777,13 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7844,7 +7918,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cacophony_of_minds_tekq",
+        "id": "act_cacophony_of_minds_1ssc",
         "name": "Cacophony of Minds",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that starts its turn within 30 feet of the intellect snare must succeed on a DC 17 Wisdom saving throw or have the incapacitated condition for 1 minute. An incapacitated creature can repeat the saving throw at the start of each of its turns, ending the effect on itself on a success. A creature that succeeds on the saving throw is immune to this intellect snare's Cacophony of Minds for 24 hours.</p>",
@@ -7867,7 +7941,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_swc8",
+        "id": "act_magic_resistance_65ny",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The intellect snare has advantage on saving throws against spells and other magical effects.</p>",
@@ -7889,7 +7963,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xsat",
+        "id": "act_multiattack_o1my",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The intellect snare makes two Tentacle attacks.</p>",
@@ -7909,7 +7983,7 @@
         }
       },
       {
-        "id": "act_tentacle_ctk0",
+        "id": "act_tentacle_kz5z",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 15 ft., one target. Hit: 10 (1d8 + 6) force damage, and if the target is a Medium or smaller creature, the target has the grappled condition (escape DC 17).</p>",
@@ -7930,7 +8004,8 @@
           "damages": [
             {
               "formula": "1d8 + 6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7939,7 +8014,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_siphon_thoughts_aqq5",
+        "id": "act_siphon_thoughts_tksi",
         "name": "Siphon Thoughts",
         "actionType": "bonus",
         "descriptionHtml": "<p>The intellect snare targets one creature it is grappling. The target must make a DC 17 Intelligence saving throw, taking 21 (6d6) psychic damage on a failed save, or half as much damage on a successful one. The intellect snare then regains a number of hit points equal to the amount of damage taken.</p>",
@@ -7960,7 +8035,8 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -8099,7 +8175,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_invisible_in_water_ergh",
+        "id": "act_invisible_in_water_hnms",
         "name": "Invisible in Water",
         "actionType": "trait",
         "descriptionHtml": "<p>Kellikilli is invisible while fully immersed in water.</p>",
@@ -8119,7 +8195,7 @@
         }
       },
       {
-        "id": "act_water_bound_v18l",
+        "id": "act_water_bound_wps2",
         "name": "Water Bound",
         "actionType": "trait",
         "descriptionHtml": "<p>Kellikilli dies if it leaves the water to which it is bound or if that water is destroyed.</p>",
@@ -8141,7 +8217,7 @@
     ],
     "actions": [
       {
-        "id": "act_constrict_4its",
+        "id": "act_constrict_6dn6",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 10 ft., one creature. Hit: 13 (3d6 + 3) bludgeoning damage. If the target is Medium or smaller, it is grappled (escape DC 13) and pulled 5 feet toward Kellikilli. Until this grapple ends, the target is restrained, the water weird tries to drown it, and the water weird can't constrict another target.</p>",
@@ -8162,7 +8238,8 @@
           "damages": [
             {
               "formula": "3d6 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8418,7 +8495,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_8sft",
+        "id": "act_amphibious_caib",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Lowarnizel can breathe both air and water.</p>",
@@ -8440,7 +8517,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5efq",
+        "id": "act_multiattack_vse2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Lowarnizel makes one Bite attack and two Claw attacks.</p>",
@@ -8460,7 +8537,7 @@
         }
       },
       {
-        "id": "act_bite_t74f",
+        "id": "act_bite_s6dx",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 16 (2d10 + 5) piercing damage plus 4 (1d8) force damage.</p>",
@@ -8478,18 +8555,20 @@
           "damages": [
             {
               "formula": "2d10 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_nytp",
+        "id": "act_claw_1ai4",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 9 (1d8 + 5) slashing damage.</p>",
@@ -8507,14 +8586,15 @@
           "damages": [
             {
               "formula": "1d8 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_singularity_breath__recharge_5__naww",
+        "id": "act_singularity_breath__recharge_5__xirb",
         "name": "Singularity Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Lowarnizel creates a shining bead of gravitational force, then releases the energy in a 30-foot cone. Each creature in that area must make a DC 17 Strength saving throw. On a failed save, a creature takes 36 (8d8) force damage, and its speed becomes 0 until the start of the dragon's next turn. On a successful save, a creature takes half as much damage only.</p>",
@@ -8535,7 +8615,8 @@
           "damages": [
             {
               "formula": "8d8",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -8544,7 +8625,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape_t40k",
+        "id": "act_change_shape_e33s",
         "name": "Change Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Lowarnizel magically transforms into any creature that is Medium or Small, while retaining his game statistics (other than his size). This transformation ends if the dragon is reduced to 0 hit points or uses a bonus action to end it.</p>",
@@ -8687,7 +8768,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_sensitivity_8dvf",
+        "id": "act_sunlight_sensitivity_crp6",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Malinia has disadvantage on attack rolls.</p>",
@@ -8709,7 +8790,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rh2r",
+        "id": "act_multiattack_upp2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Malinia makes two Unarmed Strike or Nightmare Blast attacks.</p>",
@@ -8729,7 +8810,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_v6h6",
+        "id": "act_unarmed_strike_4ykl",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 10 (3d6) psychic damage.</p>",
@@ -8747,18 +8828,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_nightmare_blast_1dyb",
+        "id": "act_nightmare_blast_17hf",
         "name": "Nightmare Blast",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 60 ft., one creature. Hit: 7 (2d6) psychic damage, and the target must succeed on a DC 12 Wisdom saving throw or have the frightened condition until the start of Malinia's next turn.</p>",
@@ -8779,7 +8862,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8789,7 +8873,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_defensive_flight_45w6",
+        "id": "act_defensive_flight_g8c4",
         "name": "Defensive Flight",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after taking damage, Malinia flies up to its speed. This movement doesn't provoke opportunity attacks.</p>",
@@ -9099,7 +9183,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__e4w1",
+        "id": "act_legendary_resistance__3_day__kn7u",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the mind flayer fails a saving throw, it can choose to succeed instead.</p>",
@@ -9119,7 +9203,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_ll2w",
+        "id": "act_magic_resistance_xh48",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The mind flayer has advantage on saving throws against spells and other magical effects.</p>",
@@ -9141,7 +9225,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ty60",
+        "id": "act_multiattack_qg9w",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mind flayer makes two Tentacle attacks.</p>",
@@ -9161,7 +9245,7 @@
         }
       },
       {
-        "id": "act_tentacle_8pvt",
+        "id": "act_tentacle_ak17",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 21 (3d10 + 5) psychic damage. If the target is Medium or smaller, it has the grappled condition (escape DC 17) and must succeed on a DC 17 Intelligence saving throw or have the incapacitated condition until the grapple ends.</p>",
@@ -9182,14 +9266,15 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_extract_brain_jd7f",
+        "id": "act_extract_brain_ztzw",
         "name": "Extract Brain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one incapacitated Humanoid grappled by the mind flayer. Hit: 55 (10d10) piercing damage. If this damage reduces the target to 0 hit points, the mind flayer kills it by extracting and devouring its brain.</p>",
@@ -9207,14 +9292,15 @@
           "damages": [
             {
               "formula": "10d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_unleash_void__recharge_5__k4e6",
+        "id": "act_unleash_void__recharge_5__dlix",
         "name": "Unleash Void (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The mind flayer opens a rift into the Far Realm, centered on a point the mind flayer can see within 60 feet of itself, and a tentacle lashes across creatures near the rift. Each creature other than mind flayers within 30 feet of the rift must make a DC 17 Intelligence saving throw, after which the tentacle disappears and the rift closes. On a failed save, a creature takes 18 (4d8) cold damage from the rift plus 18 (4d8) psychic damage from the tentacle and has the stunned condition for 1 minute. On a successful save, a creature takes half as much damage only. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -9235,11 +9321,13 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             },
             {
               "formula": "4d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -9249,7 +9337,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_warp_reality_r58p",
+        "id": "act_warp_reality_pkxa",
         "name": "Warp Reality",
         "actionType": "reaction",
         "descriptionHtml": "<p>When hit by an attack roll, the mind flayer gains a +4 bonus to its AC against that attack roll, potentially causing it to miss. Then the mind flayer, along with any equipment it is wearing or carrying, magically teleports up to 60 feet to an unoccupied space it can see.</p>",
@@ -9389,7 +9477,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_xmhc",
+        "id": "act_keen_sight_s3gf",
         "name": "Keen Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The nothic has advantage on Wisdom (Perception) checks that rely on sight.</p>",
@@ -9411,7 +9499,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_crsa",
+        "id": "act_multiattack_6c4w",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The nothic makes two claw attacks.</p>",
@@ -9431,7 +9519,7 @@
         }
       },
       {
-        "id": "act_claw_r7c8",
+        "id": "act_claw_yth5",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.</p>",
@@ -9449,14 +9537,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mind_blast__recharge_5__p9qn",
+        "id": "act_mind_blast__recharge_5__eqst",
         "name": "Mind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The nothic magically emits psychic energy in a 30-foot cone. Each creature in that area must succeed on a DC 12 Intelligence saving throw or take 10 (2d8 + 1) psychic damage and have the stunned condition until the end of its next turn.</p>",
@@ -9477,14 +9566,15 @@
           "damages": [
             {
               "formula": "2d8 + 1",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_weird_insight_bgz9",
+        "id": "act_weird_insight_qvng",
         "name": "Weird Insight",
         "actionType": "action",
         "descriptionHtml": "<p>The nothic targets one creature it can see within 30 feet of it. The target must contest its Charisma (Deception) check against the nothic's Wisdom (Insight) check. If the nothic wins, it magically learns one fact or secret about the target. The target automatically wins if it is immune to being charmed.</p>",
@@ -9791,7 +9881,7 @@
     ],
     "traits": [
       {
-        "id": "act_awareness_caek",
+        "id": "act_awareness_ksty",
         "name": "Awareness",
         "actionType": "trait",
         "descriptionHtml": "<p>The mind flayer has advantage on initiative rolls and can't be surprised as long as it doesn't have the incapacitated condition.</p>",
@@ -9811,7 +9901,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_59yw",
+        "id": "act_magic_resistance_djn2",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The mind flayer has advantage on saving throws against spells and other magical effects.</p>",
@@ -9833,7 +9923,7 @@
     ],
     "actions": [
       {
-        "id": "act_tentacles_73ab",
+        "id": "act_tentacles_4ok5",
         "name": "Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one creature. Hit: 16 (2d10 + 5) psychic damage. If the target is Medium or smaller, it has the grappled condition (escape DC 16) and must succeed on a DC 16 Intelligence saving throw or have the stunned condition until the grapple ends.</p>",
@@ -9854,14 +9944,15 @@
           "damages": [
             {
               "formula": "2d10 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_extract_brain_u00b",
+        "id": "act_extract_brain_6ywk",
         "name": "Extract Brain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one Humanoid grappled by the mind flayer. Hit: 55 (10d10) piercing damage. If this damage reduces the target to 0 hit points, the mind flayer kills it by extracting and devouring its brain.</p>",
@@ -9879,14 +9970,15 @@
           "damages": [
             {
               "formula": "10d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mind_whip__recharge_5__l9az",
+        "id": "act_mind_whip__recharge_5__1evw",
         "name": "Mind Whip (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The mind flayer lashes out with psychic energy, targeting up to two creatures it can see within 60 feet of itself. Each target must succeed on a DC 16 Intelligence saving throw or take 23 (4d8 + 5) psychic damage and have the stunned condition for 1 minute. A stunned target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -9907,7 +9999,8 @@
           "damages": [
             {
               "formula": "4d8 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -10053,7 +10146,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_z70z",
+        "id": "act_incorporeal_movement_8qz9",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>Mormesk can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -10071,14 +10164,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sunlight_sensitivity_zgbo",
+        "id": "act_sunlight_sensitivity_4wg6",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Mormesk has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -10100,7 +10194,7 @@
     ],
     "actions": [
       {
-        "id": "act_life_drain_50dq",
+        "id": "act_life_drain_jbeq",
         "name": "Life Drain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one creature. Hit: 21 (4d8 + 3) necrotic damage. The target must succeed on a DC 14 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. This reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.</p>",
@@ -10121,14 +10215,15 @@
           "damages": [
             {
               "formula": "4d8 + 3",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_create_specter_jq3d",
+        "id": "act_create_specter_u0tj",
         "name": "Create Specter",
         "actionType": "action",
         "descriptionHtml": "<p>Mormesk targets a humanoid within 10 feet of it that has been dead for no longer than 1 minute and died violently. The target's spirit rises as a specter in the space of its corpse or in the nearest unoccupied space. The specter is under the wraith's control. The wraith can have no more than seven specters under its control at one time.</p>",
@@ -10413,7 +10508,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_73ir",
+        "id": "act_magic_resistance_hr8k",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Nellik has advantage on saving throws against spells and other magical effects.</p>",
@@ -10433,7 +10528,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_5ko5",
+        "id": "act_magic_weapons_gt0w",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>Nellik's weapon attacks are magical.</p>",
@@ -10455,7 +10550,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_h6hk",
+        "id": "act_multiattack_mpeq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Nellik makes two melee attacks, or it makes one melee attack and teleports before or after the attack.</p>",
@@ -10475,7 +10570,7 @@
         }
       },
       {
-        "id": "act_claw_9x4y",
+        "id": "act_claw_vafw",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) slashing damage. If the target is a creature, it must succeed on a DC 16 Constitution saving throw or take 5 (2d4) slashing damage at the start of each of its turns due to a fiendish wound. Each time Nellik hits the wounded target with this attack, the damage dealt by the wound increases by 5 (2d4). Any creature can take an action to stanch the wound with a successful DC 13 Wisdom (Medicine) check. The wound also closes if the target receives magical healing.</p>",
@@ -10496,22 +10591,25 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": true
             },
             {
               "formula": "2d4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_greataxe_ury6",
+        "id": "act_greataxe_kx8n",
         "name": "Greataxe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 19 (2d12 + 6) slashing damage; if the target is an Aberration, it takes an additional 6 (1d12) slashing damage, and if it is grappling a creature, it must succeed on a DC 15 Strength saving throw or its grapple ends.</p>",
@@ -10532,18 +10630,20 @@
           "damages": [
             {
               "formula": "2d12 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d12",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_teleport_d4gm",
+        "id": "act_teleport_3rp9",
         "name": "Teleport",
         "actionType": "action",
         "descriptionHtml": "<p>Nellik magically teleports, along with any equipment it is wearing or carrying, up to 60 feet to an unoccupied space it can see.</p>",
@@ -10969,7 +11069,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_8hys",
+        "id": "act_special_equipment_r7vf",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has a fully charged spider staff (see appendix B).</p>",
@@ -10989,7 +11089,7 @@
         }
       },
       {
-        "id": "act_fey_ancestry_x8tj",
+        "id": "act_fey_ancestry_jcsa",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has advantage on saving throws to avoid or end the charmed condition on himself, and magic can't put him to sleep.</p>",
@@ -11009,7 +11109,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_9elc",
+        "id": "act_sunlight_sensitivity_6ytr",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has disadvantage on attack rolls while he or his target is in sunlight.</p>",
@@ -11031,7 +11131,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_rq7a",
+        "id": "act_multiattack_vhd9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Nezznar makes two Poison Blast attacks.</p>",
@@ -11051,7 +11151,7 @@
         }
       },
       {
-        "id": "act_poison_blast_p5ep",
+        "id": "act_poison_blast_m4a7",
         "name": "Poison Blast",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +5 to hit, reach 5 ft. or range 120 ft., one creature. Hit: 9 (2d8) poison damage.</p>",
@@ -11069,7 +11169,8 @@
           "damages": [
             {
               "formula": "2d8",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -11189,7 +11290,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_ra9f",
+        "id": "act_club_gybz",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -11207,7 +11308,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -11451,7 +11553,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_82ws",
+        "id": "act_fey_ancestry_ept3",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Nythalyn has advantage on saving throws against being charmed, and magic can't put the drow to sleep.</p>",
@@ -11471,7 +11573,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_l6gf",
+        "id": "act_sunlight_sensitivity_mgri",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Nythalyn has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -11493,7 +11595,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_r9qj",
+        "id": "act_multiattack_a62a",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Nythalyn makes two shortsword attacks.</p>",
@@ -11513,7 +11615,7 @@
         }
       },
       {
-        "id": "act_shortsword_f039",
+        "id": "act_shortsword_ocpw",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 10 (3d6) poison damage.</p>",
@@ -11531,18 +11633,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow_ozrh",
+        "id": "act_hand_crossbow_rut8",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +7 to hit, range 30/120 ft., one target. Hit: 7 (1d6 + 4) piercing damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 hour. If the saving throw fails by 5 or more, the target is also unconscious while poisoned in this way. The target wakes up if it takes damage or if another creature takes an action to shake it awake.</p>",
@@ -11563,7 +11667,8 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -11573,7 +11678,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_fsea",
+        "id": "act_parry_omd7",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Nythalyn adds 3 to its AC against one melee attack that would hit it. To do so, the drow must see the attacker and be wielding a melee weapon.</p>",
@@ -11738,7 +11843,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_nvpo",
+        "id": "act_magic_resistance_ybew",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The oculorb has advantage on saving throws against spells and other magical effects.</p>",
@@ -11758,7 +11863,7 @@
         }
       },
       {
-        "id": "act_watchful_eyes_2qp8",
+        "id": "act_watchful_eyes_gyup",
         "name": "Watchful Eyes",
         "actionType": "trait",
         "descriptionHtml": "<p>The oculorb has advantage on initiative rolls and can't be surprised.</p>",
@@ -11780,7 +11885,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_h5ea",
+        "id": "act_multiattack_b7f6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The oculorb makes two Dreadful Contact attacks or four Eye Beam attacks.</p>",
@@ -11800,7 +11905,7 @@
         }
       },
       {
-        "id": "act_dreadful_contact_thgf",
+        "id": "act_dreadful_contact_393b",
         "name": "Dreadful Contact",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 14 (3d6 + 4) psychic damage, or 25 (6d6 + 4) psychic damage if the target has the frightened condition.</p>",
@@ -11818,18 +11923,20 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             },
             {
               "formula": "6d6 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_eye_beam_go7y",
+        "id": "act_eye_beam_b6sa",
         "name": "Eye Beam",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +8 to hit, range 120 ft., one creature. Hit: 14 (3d6 + 4) psychic damage.</p>",
@@ -11847,14 +11954,15 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_antipathic_flood__recharge_5__rgtx",
+        "id": "act_antipathic_flood__recharge_5__ycxc",
         "name": "Antipathic Flood (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The oculorb releases a wave of negative emotions, choosing one of the following options:</p>",
@@ -11874,7 +11982,7 @@
         }
       },
       {
-        "id": "act_weeping_eyes_cvwt",
+        "id": "act_weeping_eyes_w2k9",
         "name": "Weeping Eyes",
         "actionType": "action",
         "descriptionHtml": "<p>The oculorb weeps, releasing a wave of crushing despair. Each creature within 30 feet of the oculorb must make a DC 16 Constitution saving throw. On a failed save, a creature's speed is reduced to 0 feet until the end of the oculorb's next turn, and if the creature was concentration, its concentration is broken.</p>",
@@ -11897,7 +12005,7 @@
         }
       },
       {
-        "id": "act_withering_glare_zgx5",
+        "id": "act_withering_glare_1txg",
         "name": "Withering Glare",
         "actionType": "action",
         "descriptionHtml": "<p>The oculorb's eyes unleash furious scarlet energy in a 60-foot cone. Each creature in that area must make a DC 16 Wisdom saving throw. On a failed save, a creature takes 33 (6d10) necrotic damage and has the frightened condition for 1 minute. On a successful save, a creature takes half as much damage and isn't frightened. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a successful save.</p>",
@@ -11918,7 +12026,8 @@
           "damages": [
             {
               "formula": "6d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -11928,7 +12037,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_obsessive_rebuke_fs1p",
+        "id": "act_obsessive_rebuke_1xyr",
         "name": "Obsessive Rebuke",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the oculorb is damaged by a creature it can see within 60 feet of itself, it forces the creature to make a DC 16 Wisdom saving throw. The creature takes 10 (3d6) psychic damage on a failed save, or half as much damage on a successful one.</p>",
@@ -11949,7 +12058,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -12078,7 +12188,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_sensitivity_u2gr",
+        "id": "act_sunlight_sensitivity_mpp9",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Ontharyx has disadvantage on attack rolls.</p>",
@@ -12100,7 +12210,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_gya1",
+        "id": "act_multiattack_sd3o",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ontharyx makes two Unarmed Strike or Nightmare Blast attacks.</p>",
@@ -12120,7 +12230,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike_z18h",
+        "id": "act_unarmed_strike_0dtn",
         "name": "Unarmed Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 10 (3d6) psychic damage.</p>",
@@ -12138,18 +12248,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_nightmare_blast_t0m0",
+        "id": "act_nightmare_blast_9yf9",
         "name": "Nightmare Blast",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 60 ft., one creature. Hit: 7 (2d6) psychic damage, and the target must succeed on a DC 12 Wisdom saving throw or have the frightened condition until the start of Ontharyx's next turn.</p>",
@@ -12170,7 +12282,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -12180,7 +12293,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_defensive_flight_u0ol",
+        "id": "act_defensive_flight_4l24",
         "name": "Defensive Flight",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after taking damage, Ontharyx flies up to its speed. This movement doesn't provoke opportunity attacks.</p>",
@@ -12628,7 +12741,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_rjn6",
+        "id": "act_magic_resistance_171d",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Oshundo has advantage on saving throws against spells and other magical effects.</p>",
@@ -12650,7 +12763,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_gqrm",
+        "id": "act_multiattack_1pbr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Oshundo makes two Chilling Grasp or Arcane Bolt attacks.</p>",
@@ -12670,7 +12783,7 @@
         }
       },
       {
-        "id": "act_chilling_grasp_97tg",
+        "id": "act_chilling_grasp_ot3p",
         "name": "Chilling Grasp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Spell Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (4d6) cold damage, and Oshundo regains 14 hit points if the target is a creature.</p>",
@@ -12688,14 +12801,15 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_arcane_bolt_nk24",
+        "id": "act_arcane_bolt_awkl",
         "name": "Arcane Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +8 to hit, range 120 ft., one target. Hit: 28 (8d6) force damage.</p>",
@@ -12713,14 +12827,15 @@
           "damages": [
             {
               "formula": "8d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_thundering_blast__recharge_5__xgm5",
+        "id": "act_thundering_blast__recharge_5__ozyu",
         "name": "Thundering Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Oshundo emits a wave of domineering energy in a 60-foot cone. Each creature in that area must succeed on a DC 16 Intelligence saving throw or take 22 (4d8 + 4) thunder damage and have the stunned condition for 1 minute. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -12741,7 +12856,8 @@
           "damages": [
             {
               "formula": "4d8 + 4",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -12751,7 +12867,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_negate_spell__3_day__2lf2",
+        "id": "act_negate_spell__3_day__92vm",
         "name": "Negate Spell (3/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>Oshundo targets one creature it can perceive within 60 feet of itself that is casting a spell. If the spell is 3rd level or lower, the spell fails, but any spell slots or charges aren't wasted.</p>",
@@ -12892,7 +13008,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_virulent_breath_111a",
+        "id": "act_virulent_breath_f4uu",
         "name": "Virulent Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>Noxious gas from the mutate's digestion of previous meals spews from its mouth. At the start of the mutate's turn, each creature within 5 feet of it must succeed on a DC 15 Constitution saving throw or take 3 (1d6) poison damage.</p>",
@@ -12913,7 +13029,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -12922,7 +13039,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7i7m",
+        "id": "act_multiattack_nm1y",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mutate makes two Bite or Tentacle attacks. It can replace one of these attacks with Chitin Slam.</p>",
@@ -12942,7 +13059,7 @@
         }
       },
       {
-        "id": "act_bite_s3k2",
+        "id": "act_bite_xt31",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) piercing damage. If the target is a creature, it must succeed on a DC 15 Constitution saving throw or have the poisoned condition. Every 24 hours that elapse, the target must repeat the saving throw, reducing its hit point maximum by 5 (1d10) on a failure. On a successful save, the target is no longer poisoned. The target dies if its hit point maximum is reduced to 0. This reduction to the target's hit point maximum lasts until it no longer has the poisoned condition.</p>",
@@ -12963,14 +13080,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tentacle_pmrl",
+        "id": "act_tentacle_njn3",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage, and if the target is a Medium or smaller creature, it has the grappled condition (escape DC 15) and the restrained condition until this grapple ends. The mutate has two tentacles that can grapple one target each.</p>",
@@ -12991,14 +13109,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_chitin_slam_jzk0",
+        "id": "act_chitin_slam_wrkj",
         "name": "Chitin Slam",
         "actionType": "action",
         "descriptionHtml": "<p>The mutate targets one creature it is grappling, slamming the creature against its chitinous plating. The creature must succeed on a DC 15 Constitution saving throw or take 16 (3d10) bludgeoning damage and have the stunned condition until the end of the mutate's next turn.</p>",
@@ -13019,7 +13138,8 @@
           "damages": [
             {
               "formula": "3d10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -13227,7 +13347,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_srnx",
+        "id": "act_multiattack_1e7r",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ashenwight makes two Necrotic Shard attacks. It also uses Psionic Crown if available.</p>",
@@ -13247,7 +13367,7 @@
         }
       },
       {
-        "id": "act_necrotic_shard_8tp4",
+        "id": "act_necrotic_shard_h0b5",
         "name": "Necrotic Shard",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +7 to hit, reach 5 ft. or range 60 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 9 (2d8) necrotic damage. If the target is a creature, it has disadvantage on the next attack roll it makes before the end of its next turn.</p>",
@@ -13265,18 +13385,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_psionic_crown__recharge_5__be57",
+        "id": "act_psionic_crown__recharge_5__0pr8",
         "name": "Psionic Crown (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The ashenwight wreathes the head of a creature it can see within 60 feet of itself with a crown of jagged, spectral crystals. The target must succeed on a DC 14 Wisdom saving throw or have the charmed condition for 1 minute. While charmed in this way, the target's thoughts are sluggish; it can't take reactions, its speed is halved, and it takes 9 (2d8) psychic damage at the start of each of its turns. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -13297,7 +13419,8 @@
           "damages": [
             {
               "formula": "2d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -13493,7 +13616,7 @@
     ],
     "traits": [
       {
-        "id": "act_lightning_absorption_2hen",
+        "id": "act_lightning_absorption_n5ub",
         "name": "Lightning Absorption",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the shambling mound is subjected to lightning damage, it takes no damage and regains a number of hit points equal to the lightning damage dealt.</p>",
@@ -13515,7 +13638,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_o4l0",
+        "id": "act_multiattack_omsc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The shambling mound makes two slam attacks. If both attacks hit a Medium or smaller target, the target is grappled (escape DC 14), and the shambling mound uses its Engulf on it.</p>",
@@ -13538,7 +13661,7 @@
         }
       },
       {
-        "id": "act_slam_3c9w",
+        "id": "act_slam_0v4j",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage.</p>",
@@ -13556,14 +13679,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_engulf_achp",
+        "id": "act_engulf_udec",
         "name": "Engulf",
         "actionType": "action",
         "descriptionHtml": "<p>The shambling mound engulfs a Medium or smaller creature grappled by it. The engulfed target is blinded, restrained, and unable to breathe, and it must succeed on a DC 14 Constitution saving throw at the start of each of the mound's turns or take 13 (2d8 + 4) bludgeoning damage. If the mound moves, the engulfed target moves with it. The mound can have only one creature engulfed at a time.</p>",
@@ -13584,7 +13708,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -13988,7 +14113,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_9hf0",
+        "id": "act_magic_resistance_xhe5",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Qunbraxel has advantage on saving throws against spells and other magical effects.</p>",
@@ -14010,7 +14135,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dsio",
+        "id": "act_multiattack_33ni",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Qunbraxel makes two Eldritch Bolt attacks, or one Eldritch Bolt attack and one Tentacle attack.</p>",
@@ -14030,7 +14155,7 @@
         }
       },
       {
-        "id": "act_tentacle_2mcw",
+        "id": "act_tentacle_4gva",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one creature. Hit: 15 (2d10 + 4) psychic damage. If the target is Medium or smaller, it has the grappled condition (escape DC 16) and must succeed on a DC 16 Intelligence saving throw or have the stunned condition until the grapple ends.</p>",
@@ -14051,14 +14176,15 @@
           "damages": [
             {
               "formula": "2d10 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_eldritch_bolt_8pvd",
+        "id": "act_eldritch_bolt_slz9",
         "name": "Eldritch Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +8 to hit, range 120 ft., one target. Hit: 20 (3d10 + 4) force damage.</p>",
@@ -14076,14 +14202,15 @@
           "damages": [
             {
               "formula": "3d10 + 4",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_extract_brain_1gap",
+        "id": "act_extract_brain_ijq1",
         "name": "Extract Brain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one Humanoid with the stunned condition who is grappled by Qunbraxel. Hit: 55 (10d10) piercing damage. If this damage reduces the target to 0 hit points, Qunbraxel kills it by extracting and devouring its brain.</p>",
@@ -14101,14 +14228,15 @@
           "damages": [
             {
               "formula": "10d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mind_blast__recharge_5__pi8x",
+        "id": "act_mind_blast__recharge_5__g94h",
         "name": "Mind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Qunbraxel magically emits psychic energy in a 60-foot cone. Each creature in that area must succeed on a DC 16 Intelligence saving throw or take 26 (5d8 + 4) psychic damage and have the stunned condition for 1 minute. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -14129,7 +14257,8 @@
           "damages": [
             {
               "formula": "5d8 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -14253,7 +14382,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_shortsword_p9l1",
+        "id": "act_shortsword_egau",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -14271,7 +14400,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -14594,7 +14724,7 @@
     ],
     "traits": [
       {
-        "id": "act_creature_sense_l1vu",
+        "id": "act_creature_sense_85ow",
         "name": "Creature Sense",
         "actionType": "trait",
         "descriptionHtml": "<p>The refraction is aware of creatures within 100 miles of it that have an Intelligence score of 4 or higher. It knows the distance and direction to each creature, as well as each one's Intelligence score, but can't sense anything else about it. A creature protected by a mind blank spell, a nondetection spell, or similar magic can't be perceived in this manner.</p>",
@@ -14614,7 +14744,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_7gi8",
+        "id": "act_incorporeal_movement_y5lo",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The refraction can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -14632,14 +14762,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_legendary_resistance__5_day__1j6h",
+        "id": "act_legendary_resistance__5_day__8s0y",
         "name": "Legendary Resistance (5/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the refraction fails a saving throw, it can choose to succeed instead.</p>",
@@ -14659,7 +14790,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_t53q",
+        "id": "act_magic_resistance_anrh",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The refraction has advantage on saving throws against spells and other magical effects.</p>",
@@ -14681,7 +14812,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jcfd",
+        "id": "act_multiattack_vd0c",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The refraction makes two Dissonant Claw attacks.</p>",
@@ -14701,7 +14832,7 @@
         }
       },
       {
-        "id": "act_dissonant_claw_wuva",
+        "id": "act_dissonant_claw_lio9",
         "name": "Dissonant Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 10 ft. or range 120 ft., one creature. Hit: 25 (3d12 + 6) psychic damage. If the target is a creature concentration on a spell, its concentration is broken.</p>",
@@ -14719,14 +14850,15 @@
           "damages": [
             {
               "formula": "3d12 + 6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mind_blast__recharge_5__u7ea",
+        "id": "act_mind_blast__recharge_5__tage",
         "name": "Mind Blast (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Creatures of the refraction's choice within 60 feet of it must succeed on a DC 19 Intelligence saving throw or take 33 (5d10 + 6) psychic damage and have the stunned condition for 1 minute. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -14747,14 +14879,15 @@
           "damages": [
             {
               "formula": "5d10 + 6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_teleport_2lex",
+        "id": "act_teleport_vmc4",
         "name": "Teleport",
         "actionType": "action",
         "descriptionHtml": "<p>The refraction teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied place that it can see.</p>",
@@ -14781,7 +14914,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_mindbreaker_99c2",
+          "id": "act_mindbreaker_5iph",
           "name": "Mindbreaker",
           "actionType": "legendary",
           "descriptionHtml": "<p>The refraction targets a creature within 120 feet of itself and disrupts its mental processes, causing the target to have disadvantage on all ability checks, attack rolls, and saving throws until the end of the target's next turn.</p>",
@@ -14801,7 +14934,7 @@
           }
         },
         {
-          "id": "act_projected_claw__costs_2_actions__4mbq",
+          "id": "act_projected_claw__costs_2_actions__xlpy",
           "name": "Projected Claw (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The refraction makes one Dissonant Claw attack.</p>",
@@ -15047,7 +15180,7 @@
     ],
     "traits": [
       {
-        "id": "act_stone_camouflage_como",
+        "id": "act_stone_camouflage_jurt",
         "name": "Stone Camouflage",
         "actionType": "trait",
         "descriptionHtml": "<p>Rivibiddel has advantage on Dexterity (Stealth) checks made to hide in rocky terrain.</p>",
@@ -15067,7 +15200,7 @@
         }
       },
       {
-        "id": "act_gnome_cunning_l3dv",
+        "id": "act_gnome_cunning_6zbw",
         "name": "Gnome Cunning",
         "actionType": "trait",
         "descriptionHtml": "<p>Rivibiddel has advantage on Intelligence, Wisdom, and Charisma saving throws against magic.</p>",
@@ -15089,7 +15222,7 @@
     ],
     "actions": [
       {
-        "id": "act_war_pick_mlad",
+        "id": "act_war_pick_uy9o",
         "name": "War Pick",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
@@ -15107,14 +15240,15 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_poisoned_dart_i8gq",
+        "id": "act_poisoned_dart_07dk",
         "name": "Poisoned Dart",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one creature. Hit: 4 (1d4 + 2) piercing damage, and the target must succeed on a DC 12 Constitution saving throw or be poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success</p>",
@@ -15135,7 +15269,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -15272,7 +15407,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__2_day__vg0j",
+        "id": "act_legendary_resistance__2_day__s1ks",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>When Ruxithid fails a saving throw, he can choose to succeed instead.</p>",
@@ -15292,7 +15427,7 @@
         }
       },
       {
-        "id": "act_mental_fortitude_i4x7",
+        "id": "act_mental_fortitude_go24",
         "name": "Mental Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>Ruxithid has advantage on saving throws against the charmed and frightened conditions.</p>",
@@ -15314,7 +15449,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_d2n3",
+        "id": "act_multiattack_dwds",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ruxithid makes two Psi-Charged Scimitar attacks.</p>",
@@ -15334,7 +15469,7 @@
         }
       },
       {
-        "id": "act_psi_charged_scimitar_fqpq",
+        "id": "act_psi_charged_scimitar_oxpx",
         "name": "Psi-Charged Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage plus 7 (2d6) psychic damage.</p>",
@@ -15352,11 +15487,13 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -15365,7 +15502,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_brain_tendrils__recharge_5__m0eo",
+        "id": "act_brain_tendrils__recharge_5__zx5g",
         "name": "Brain Tendrils (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Ruxithid unleashes a flurry of crystalline psychic tendrils from his brain, targeting one creature that he can see within 30 feet of himself. The target must succeed on a DC 15 Dexterity saving throw or take 9 (2d8) psychic damage and have the stunned condition until the start of Ruxithid's next turn.</p>",
@@ -15386,14 +15523,15 @@
           "damages": [
             {
               "formula": "2d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_combat_command_st9l",
+        "id": "act_combat_command_nt5l",
         "name": "Combat Command",
         "actionType": "bonus",
         "descriptionHtml": "<p>Ruxithid commands one allied creature he can see within 60 feet of himself to strike. The creature can immediately use its reaction to make one melee weapon attack against a target within its reach.</p>",
@@ -15667,7 +15805,7 @@
     ],
     "traits": [
       {
-        "id": "act_aberrant_form_hv2q",
+        "id": "act_aberrant_form_yubs",
         "name": "Aberrant Form",
         "actionType": "trait",
         "descriptionHtml": "<p>Shalfi exudes the chaos of the Far Realm. Any non-Aberration creature that starts its turn within 5 feet of the zealot must succeed on a DC 15 Wisdom saving throw or take 7 (2d6) psychic damage.</p>",
@@ -15688,14 +15826,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_weirdly_pliable_9pw1",
+        "id": "act_weirdly_pliable_c97v",
         "name": "Weirdly Pliable",
         "actionType": "trait",
         "descriptionHtml": "<p>Shalfi, along with any equipment it is wearing or carrying, is unnaturally flexible. The zealot can move through any space as narrow as 1 inch without squeezing.</p>",
@@ -15717,7 +15856,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_eqga",
+        "id": "act_multiattack_51lc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Shalfi makes one Psychic Rend attack and two Shortsword attacks.</p>",
@@ -15737,7 +15876,7 @@
         }
       },
       {
-        "id": "act_psychic_rend_btdi",
+        "id": "act_psychic_rend_y3sz",
         "name": "Psychic Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +7 to hit, reach 15 ft. or range 120 ft., one target. Hit: 14 (3d6 + 4) psychic damage, and the target must succeed on a DC 15 Wisdom saving throw or have the stunned condition until the start of Shalfi's next turn.</p>",
@@ -15758,14 +15897,15 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword_jku0",
+        "id": "act_shortsword_x4vn",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 15 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 7 (2d6) psychic damage.</p>",
@@ -15783,11 +15923,13 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -15796,7 +15938,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_void_warp__recharge_5__tz5u",
+        "id": "act_void_warp__recharge_5__isg4",
         "name": "Void Warp (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Shalfi teleports, along with any equipment it is wearing or carrying, to an unoccupied space it can see within 120 feet of itself, leaving a churning void in the space it left. Immediately after it teleports, each creature within 30 feet of the void other than the zealot must make a DC 15 Strength saving throw. On a failed save, a creature takes 18 (4d8) force damage and is pulled to the unoccupied space closest to the void. On a successful save, the creature takes half as much damage only. The void then disappears.</p>",
@@ -15817,7 +15959,8 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -15946,7 +16089,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_943p",
+        "id": "act_multiattack_wfms",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Sildar makes two Longsword attacks.</p>",
@@ -15966,7 +16109,7 @@
         }
       },
       {
-        "id": "act_longsword_8fxw",
+        "id": "act_longsword_1stm",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage, or 6 (1d10 + 1) slashing damage if used with two hands.</p>",
@@ -15984,18 +16127,20 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heavy_crossbow_hadz",
+        "id": "act_heavy_crossbow_6djb",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +2 to hit, range 100/400 ft., one target. Hit: 5 (1d10) piercing damage.</p>",
@@ -16013,7 +16158,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -16023,7 +16169,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_rtz9",
+        "id": "act_parry_ybld",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>When an attacker Sildar can see would hit him with a melee attack, he can roll a d6 and add the number rolled to his AC against the triggering attack, provided he's wielding a melee weapon.</p>",
@@ -16340,7 +16486,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_9fe6",
+        "id": "act_multiattack_gdn1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Varakkta makes two silver greatsword attacks.</p>",
@@ -16360,7 +16506,7 @@
         }
       },
       {
-        "id": "act_silver_greatsword_uag4",
+        "id": "act_silver_greatsword_ndxl",
         "name": "Silver Greatsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 13 (2d6 + 6) slashing damage plus 10 (3d6) psychic damage. This is a magic weapon attack. On a critical hit against a target in an astral body (as with the astral projection spell), Varakkta can cut the silvery cord that tethers the target to its material body, instead of dealing damage.</p>",
@@ -16378,11 +16524,13 @@
           "damages": [
             {
               "formula": "2d6 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -16682,7 +16830,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__f9dy",
+        "id": "act_legendary_resistance__3_day__ay3n",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Voalsh fails a saving throw, it can choose to succeed instead.</p>",
@@ -16702,7 +16850,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_56po",
+        "id": "act_magic_resistance_2odv",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Voalsh has advantage on saving throws against spells and other magical effects.</p>",
@@ -16724,7 +16872,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0ofb",
+        "id": "act_multiattack_yy3j",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Voalsh makes two Tentacle attacks.</p>",
@@ -16744,7 +16892,7 @@
         }
       },
       {
-        "id": "act_tentacle_93m2",
+        "id": "act_tentacle_dj9t",
         "name": "Tentacle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one creature. Hit: 21 (3d10 + 5) psychic damage. If the target is Medium or smaller, it has the grappled condition (escape DC 17) and must succeed on a DC 17 Intelligence saving throw or have the incapacitated condition until the grapple ends.</p>",
@@ -16765,14 +16913,15 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_extract_brain_xi6j",
+        "id": "act_extract_brain_7bk3",
         "name": "Extract Brain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one incapacitated Humanoid grappled by Voalsh. Hit: 55 (10d10) piercing damage. If this damage reduces the target to 0 hit points, the mind flayer kills it by extracting and devouring its brain.</p>",
@@ -16790,14 +16939,15 @@
           "damages": [
             {
               "formula": "10d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_unleash_void__recharge_5__1pw6",
+        "id": "act_unleash_void__recharge_5__81el",
         "name": "Unleash Void (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Voalsh opens a rift into the Far Realm, centered on a point the mind flayer can see within 60 feet of itself, and a tentacle lashes across creatures near the rift. Each creature other than mind flayers within 30 feet of the rift must make a DC 17 Intelligence saving throw, after which the tentacle disappears and the rift closes. On a failed save, a creature takes 18 (4d8) cold damage from the rift plus 18 (4d8) psychic damage from the tentacle and has the stunned condition for 1 minute. On a successful save, a creature takes half as much damage only. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -16818,11 +16968,13 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             },
             {
               "formula": "4d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -16832,7 +16984,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_warp_reality_m83w",
+        "id": "act_warp_reality_m76l",
         "name": "Warp Reality",
         "actionType": "reaction",
         "descriptionHtml": "<p>When hit by an attack roll, Voalsh gains a +4 bonus to its AC against that attack roll, potentially causing it to miss. Then the mind flayer, along with any equipment it is wearing or carrying, magically teleports up to 60 feet to an unoccupied space it can see.</p>",
@@ -17087,7 +17239,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_0rtw",
+        "id": "act_fey_ancestry_pb6w",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Yanthdel has advantage on saving throws against being charmed, and magic can't put the drow to sleep.</p>",
@@ -17107,7 +17259,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_aocu",
+        "id": "act_sunlight_sensitivity_apwm",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Yanthdel has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -17129,7 +17281,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_p528",
+        "id": "act_multiattack_bw75",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Yanthdel makes two shortsword attacks.</p>",
@@ -17149,7 +17301,7 @@
         }
       },
       {
-        "id": "act_shortsword_2xvu",
+        "id": "act_shortsword_ce1s",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) piercing damage plus 10 (3d6) poison damage.</p>",
@@ -17167,18 +17319,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow_cwid",
+        "id": "act_hand_crossbow_435v",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +7 to hit, range 30/120 ft., one target. Hit: 7 (1d6 + 4) piercing damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 hour. If the saving throw fails by 5 or more, the target is also unconscious while poisoned in this way. The target wakes up if it takes damage or if another creature takes an action to shake it awake.</p>",
@@ -17199,7 +17353,8 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -17209,7 +17364,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_zv5s",
+        "id": "act_parry_sgll",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Yanthdel adds 3 to its AC against one melee attack that would hit it. To do so, the drow must see the attacker and be wielding a melee weapon.</p>",
@@ -17375,7 +17530,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_7wgm",
+        "id": "act_shapechanger_8oyr",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>Zeond can use its action to polymorph into a beast form that resembles a bat (speed 10 ft. fly 40 ft.), a centipede (40 ft., climb 40 ft.), or a toad (40 ft., swim 40 ft.), or back into its true form. Its statistics are the same in each form, except for the speed changes noted. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -17395,7 +17550,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_ijj4",
+        "id": "act_magic_resistance_2bu9",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Zeond has advantage on saving throws against spells and other magical effects.</p>",
@@ -17417,7 +17572,7 @@
     ],
     "actions": [
       {
-        "id": "act_claw__bite_in_beast_form__bhkw",
+        "id": "act_claw__bite_in_beast_form__po8z",
         "name": "Claw (Bite in Beast Form)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) piercing damage, and the target must succeed on a DC 10 Constitution saving throw or take 5 (2d4) poison damage and become poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -17438,18 +17593,20 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d4",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_scare__1_day__ja1r",
+        "id": "act_scare__1_day__fr6o",
         "name": "Scare (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>One creature of Zeond's choice within 20 feet of it must succeed on a DC 10 Wisdom saving throw or be frightened for 1 minute. The target can repeat the saving throw at the end of each of its turns, with disadvantage if the quasit is within line of sight, ending the effect on itself on a success.</p>",
@@ -17472,7 +17629,7 @@
         }
       },
       {
-        "id": "act_invisibility_u981",
+        "id": "act_invisibility_p3ko",
         "name": "Invisibility",
         "actionType": "action",
         "descriptionHtml": "<p>Zeond magically turns invisible until it attacks or uses Scare, or until its concentration ends (as if concentration on a spell). Any equipment the quasit wears or carries is invisible with it.</p>",

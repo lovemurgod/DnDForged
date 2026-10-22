@@ -112,7 +112,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pact_bond_6md3",
+        "id": "act_pact_bond_dxde",
         "name": "Pact Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add your Proficiency to any ability check or saving throw the vestige makes.</p>",
@@ -134,7 +134,7 @@
     ],
     "actions": [
       {
-        "id": "act_vestige_s_strike_tse3",
+        "id": "act_vestige_s_strike_j4na",
         "name": "Vestige's Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: Bonus equals your spell attack modifier, reach 5 ft. or range 60 ft. Hit: 1d6 + 3 plus your Charisma modifier Fire (Fiend), Necrotic (Undead), or Radiant (Celestial) damage.</p>",
@@ -152,7 +152,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -161,7 +162,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_divine_power__1_day__u6lj",
+        "id": "act_divine_power__1_day__gvvf",
         "name": "Divine Power (1/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Your vestige manifests a remnant of its divine power in one of the following ways, based on its form:</p><ul><li><strong><em>Cursed Invocation (Undead Only).</em></strong> <p>The vestige places a curse on a creature you can see within 30 feet of the vestige for 1 minute. While cursed, the target has Disadvantage on attack rolls against you and the vestige.</p></li><li><strong><em>Fiendish Swap (Fiend Only).</em></strong> <p>If you and the vestige are within 60 feet of each other, you both teleport, swapping places.</p></li><li><strong><em>Healing Touch (Celestial Only).</em></strong> <p>The vestige touches another creature. The target regains Hit Points equal to 2d8 plus your Charisma modifier and ends one condition on it: Blinded, Deafened, or Poisoned.</p></li></ul>",

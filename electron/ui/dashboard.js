@@ -8,7 +8,10 @@ import {
   parsePlaintextStatblock,
   CR_BENCHMARKS,
   VTTEntryResolver,
-  toCommaSeparatedString
+  toCommaSeparatedString,
+  formatDefensesToString,
+  parseDefenseString,
+  formatDefenseEntry
 } from './builder-schemas.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -2801,6 +2804,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setVal('bf-beast-languages', entity.languages || '');
     setVal('bf-beast-resist', entity.resistances || '');
     setVal('bf-beast-immune', entity.immunities || '');
+    setVal('bf-beast-vuln', entity.vulnerabilities || '');
     setVal('bf-beast-cond-immune', entity.conditionImmunities || '');
 
     // Token & avatar
@@ -2877,7 +2881,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       languages: getVal('bf-beast-languages'),
       resistances: getVal('bf-beast-resist'),
       immunities: getVal('bf-beast-immune'),
+      vulnerabilities: getVal('bf-beast-vuln'),
       conditionImmunities: getVal('bf-beast-cond-immune'),
+      _rawDefenses: current?._rawDefenses,
       tokenUrl: getVal('bf-beast-token-url'),
       traits,
       actions,
@@ -2964,6 +2970,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     setVal('bf-item-base-ac', entity.baseAc ?? 0);
     setVal('bf-item-ac-bonus', entity.acBonus ?? 0);
     setVal('bf-item-weapon-properties', entity.weaponProperties || '');
+    setCheck('bf-item-is-magic', entity.isMagic !== undefined ? !!entity.isMagic : true);
+    setCheck('bf-item-is-silvered', !!entity.isSilvered);
+    setCheck('bf-item-is-adamantine', !!entity.isAdamantine);
     setVal('bf-item-value', entity.valueGp ?? 100);
     setVal('bf-item-weight', entity.weightLbs ?? 1);
     setVal('bf-item-charges', entity.charges ?? 0);
@@ -2988,6 +2997,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       baseAc: getNum('bf-item-base-ac', 0),
       acBonus: getNum('bf-item-ac-bonus', 0),
       weaponProperties: getVal('bf-item-weapon-properties'),
+      isMagic: getCheck('bf-item-is-magic'),
+      isSilvered: getCheck('bf-item-is-silvered'),
+      isAdamantine: getCheck('bf-item-is-adamantine'),
       valueGp: getNum('bf-item-value', 100),
       weightLbs: getNum('bf-item-weight', 1),
       charges: getNum('bf-item-charges', 0),
@@ -3407,6 +3419,337 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
   });
+
+  // Configure Defenses Button in Bestiary Form
+  const btnConfigDefenses = document.getElementById('btn-beast-config-defenses');
+  if (btnConfigDefenses) {
+    btnConfigDefenses.addEventListener('click', () => {
+      if (activeEntityIndex < 0 || !activeSourceEntities[activeEntityIndex]) return;
+      const entity = activeSourceEntities[activeEntityIndex];
+
+      function defenseToEditableRows(list) {
+        if (!list) return [];
+        const arr = Array.isArray(list) ? list : [list];
+        const rows = [];
+        arr.forEach(item => {
+          if (!item) return;
+          if (typeof item === 'string') {
+            rows.push({ types: [item.trim().toLowerCase()], bypasses: [], note: '' });
+          } else if (typeof item === 'object') {
+            if (Array.isArray(item.types)) {
+              rows.push({
+                types: item.types.map(t => String(t).trim().toLowerCase()).filter(Boolean),
+                bypasses: Array.isArray(item.bypasses) ? item.bypasses.map(b => String(b).trim().toLowerCase()).filter(Boolean) : [],
+                note: item.note || ''
+              });
+            } else {
+              const inner = item.immune || item.resist || item.vulnerable || [];
+              const types = (Array.isArray(inner) ? inner : [inner]).map(t => String(t).trim().toLowerCase()).filter(Boolean);
+              const note = item.note || '';
+              const bypasses = [];
+              if (/nonmagical/i.test(note)) bypasses.push('magic');
+              if (/silver/i.test(note)) bypasses.push('silver');
+              if (/adamantine/i.test(note)) bypasses.push('adamantine');
+              rows.push({ types, bypasses, note });
+            }
+          }
+        });
+        return rows;
+      }
+
+      function editableRowsToDefenses(rows) {
+        if (!rows || !Array.isArray(rows)) return [];
+        const list = [];
+        rows.forEach(r => {
+          const types = (r.types || []).map(t => t.trim().toLowerCase()).filter(Boolean);
+          if (types.length === 0) return;
+          const bypasses = (r.bypasses || []).map(b => b.trim().toLowerCase()).filter(Boolean);
+          const note = (r.note || '').trim();
+          if (bypasses.length > 0 || note) {
+            list.push({ types, bypasses, note });
+          } else {
+            types.forEach(t => list.push(t));
+          }
+        });
+        return list;
+      }
+
+      const curRaw = entity._rawDefenses || {};
+      const curResist = curRaw.resist?.length ? curRaw.resist : parseDefenseString(document.getElementById('bf-beast-resist')?.value);
+      const curImmune = curRaw.immune?.length ? curRaw.immune : parseDefenseString(document.getElementById('bf-beast-immune')?.value);
+      const curVuln = curRaw.vulnerable?.length ? curRaw.vulnerable : parseDefenseString(document.getElementById('bf-beast-vuln')?.value);
+
+      const state = {
+        resist: defenseToEditableRows(curResist),
+        immune: defenseToEditableRows(curImmune),
+        vulnerable: defenseToEditableRows(curVuln)
+      };
+
+      const ALL_TYPES = ['acid', 'bludgeoning', 'cold', 'fire', 'force', 'lightning', 'necrotic', 'piercing', 'poison', 'psychic', 'radiant', 'slashing', 'thunder'];
+      const BPS_TYPES = ['bludgeoning', 'piercing', 'slashing'];
+      const ELEM_TYPES = ['acid', 'cold', 'fire', 'lightning', 'thunder'];
+
+      let activeTab = 'resist';
+
+      let overlay = document.getElementById('modal-builder-defenses-overlay');
+      if (overlay) overlay.remove();
+
+      overlay = document.createElement('div');
+      overlay.id = 'modal-builder-defenses-overlay';
+      overlay.style.cssText = "position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.7); z-index:9999; display:flex; justify-content:center; align-items:center;";
+
+      const modal = document.createElement('div');
+      modal.style.cssText = "width:620px; max-width:92vw; max-height:88vh; background:var(--bg-main, #11151f); border:1px solid var(--gold-primary, #c5a059); border-radius:8px; display:flex; flex-direction:column; box-shadow:0 8px 32px rgba(0,0,0,0.9);";
+
+      modal.innerHTML = `
+        <div style="padding:14px 18px; border-bottom:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); border-radius:8px 8px 0 0;">
+          <h3 style="margin:0; font-family:var(--font-heading); color:var(--gold-primary, #c5a059); font-size:1.1rem; display:flex; align-items:center; gap:8px;">
+            🛡️ Configure Creature Defenses
+          </h3>
+          <button type="button" id="bf-def-close-btn" style="background:none; border:none; color:var(--text-muted, #888); cursor:pointer; font-size:1.1rem;">✖</button>
+        </div>
+        <div style="display:flex; border-bottom:1px solid rgba(255,255,255,0.1); background:rgba(0,0,0,0.2);">
+          <button type="button" class="bf-def-tab-btn" data-tab="resist" style="flex:1; padding:10px 8px; background:transparent; border:none; border-bottom:2px solid transparent; color:var(--text-muted, #888); font-size:0.85rem; font-weight:600; cursor:pointer;">Resistances</button>
+          <button type="button" class="bf-def-tab-btn" data-tab="immune" style="flex:1; padding:10px 8px; background:transparent; border:none; border-bottom:2px solid transparent; color:var(--text-muted, #888); font-size:0.85rem; font-weight:600; cursor:pointer;">Immunities</button>
+          <button type="button" class="bf-def-tab-btn" data-tab="vulnerable" style="flex:1; padding:10px 8px; background:transparent; border:none; border-bottom:2px solid transparent; color:var(--text-muted, #888); font-size:0.85rem; font-weight:600; cursor:pointer;">Vulnerabilities</button>
+        </div>
+        <div id="bf-def-tab-content" style="flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px;"></div>
+        <div style="padding:12px 18px; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.3); border-radius:0 0 8px 8px;">
+          <button type="button" class="btn btn-xs btn-outline" id="bf-def-add-row-btn">➕ Add Defense Rule</button>
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn btn-xs btn-outline" id="bf-def-cancel-btn">Cancel</button>
+            <button type="button" class="btn btn-xs btn-primary" id="bf-def-apply-btn">Apply Defenses</button>
+          </div>
+        </div>
+      `;
+
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+
+      function updateTabStyles() {
+        modal.querySelectorAll('.bf-def-tab-btn').forEach(btn => {
+          const isActive = btn.dataset.tab === activeTab;
+          btn.style.borderBottomColor = isActive ? 'var(--gold-primary, #c5a059)' : 'transparent';
+          btn.style.color = isActive ? 'var(--gold-primary, #c5a059)' : 'var(--text-muted, #888)';
+          btn.style.background = isActive ? 'rgba(197, 160, 89, 0.1)' : 'transparent';
+        });
+      }
+
+      function renderRows() {
+        const container = modal.querySelector('#bf-def-tab-content');
+        container.innerHTML = '';
+        const rows = state[activeTab] || [];
+
+        if (rows.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center; padding:32px 16px; color:var(--text-muted, #888); font-size:0.85rem;">
+              No ${activeTab} configured yet.<br>Click <strong>"Add Defense Rule"</strong> below to create one.
+            </div>
+          `;
+          return;
+        }
+
+        rows.forEach((row, rIdx) => {
+          const rowCard = document.createElement('div');
+          rowCard.style.cssText = "background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:12px; display:flex; flex-direction:column; gap:10px;";
+
+          const cardHeader = document.createElement('div');
+          cardHeader.style.cssText = "display:flex; justify-content:space-between; align-items:center;";
+          cardHeader.innerHTML = `
+            <span style="font-size:0.8rem; font-weight:600; color:var(--text-secondary, #aaa); text-transform:uppercase;">Rule #${rIdx + 1}</span>
+            <button type="button" class="btn btn-danger btn-xxs bf-def-del-row" data-idx="${rIdx}" style="padding:2px 6px;">🗑️</button>
+          `;
+          rowCard.appendChild(cardHeader);
+
+          const typesSection = document.createElement('div');
+          typesSection.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span style="font-size:0.75rem; color:var(--text-muted, #888);">Damage Types:</span>
+              <div style="display:flex; gap:4px;">
+                <button type="button" class="btn btn-xs btn-outline bf-def-preset-bps" data-idx="${rIdx}" style="font-size:0.7rem; padding:1px 5px;">BPS</button>
+                <button type="button" class="btn btn-xs btn-outline bf-def-preset-elem" data-idx="${rIdx}" style="font-size:0.7rem; padding:1px 5px;">Elemental</button>
+                <button type="button" class="btn btn-xs btn-outline bf-def-preset-clear" data-idx="${rIdx}" style="font-size:0.7rem; padding:1px 5px;">Clear</button>
+              </div>
+            </div>
+          `;
+
+          const chipsGrid = document.createElement('div');
+          chipsGrid.style.cssText = "display:flex; flex-wrap:wrap; gap:4px;";
+          ALL_TYPES.forEach(t => {
+            const isSelected = (row.types || []).map(x => x.toLowerCase()).includes(t);
+            const chip = document.createElement('button');
+            chip.type = 'button';
+            chip.className = 'bf-def-type-chip';
+            chip.dataset.type = t;
+            chip.dataset.idx = rIdx;
+            chip.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+            chip.style.cssText = isSelected
+              ? "padding:2px 8px; font-size:0.75rem; border-radius:12px; border:1px solid var(--gold-primary, #c5a059); background:var(--gold-primary, #c5a059); color:#000; font-weight:600; cursor:pointer;"
+              : "padding:2px 8px; font-size:0.75rem; border-radius:12px; border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.2); color:var(--text-muted, #888); cursor:pointer;";
+            
+            chip.addEventListener('click', () => {
+              row.types = row.types || [];
+              const curIdx = row.types.findIndex(x => x.toLowerCase() === t);
+              if (curIdx >= 0) row.types.splice(curIdx, 1);
+              else row.types.push(t);
+              renderRows();
+            });
+            chipsGrid.appendChild(chip);
+          });
+          typesSection.appendChild(chipsGrid);
+          rowCard.appendChild(typesSection);
+
+          const bypassSection = document.createElement('div');
+          bypassSection.style.cssText = "background:rgba(0,0,0,0.2); padding:8px; border-radius:4px; display:flex; flex-direction:column; gap:4px;";
+          const bypasses = (row.bypasses || []).map(b => b.toLowerCase());
+          const isMagicBypass = bypasses.includes('magic') || bypasses.includes('nonmagical');
+          const isSilverBypass = bypasses.includes('silver') || bypasses.includes('silvered');
+          const isAdamBypass = bypasses.includes('adamantine');
+
+          bypassSection.innerHTML = `
+            <span style="font-size:0.72rem; color:var(--gold-primary, #c5a059); font-weight:600; text-transform:uppercase;">Bypassed by attacks that are:</span>
+            <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:2px;">
+              <label style="font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--text-secondary, #aaa);">
+                <input type="checkbox" class="bf-def-bypass-magic" data-idx="${rIdx}" ${isMagicBypass ? 'checked' : ''}> Magical (Nonmagical bypasses)
+              </label>
+              <label style="font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--text-secondary, #aaa);">
+                <input type="checkbox" class="bf-def-bypass-silver" data-idx="${rIdx}" ${isSilverBypass ? 'checked' : ''}> Silvered
+              </label>
+              <label style="font-size:0.75rem; display:inline-flex; align-items:center; gap:5px; cursor:pointer; color:var(--text-secondary, #aaa);">
+                <input type="checkbox" class="bf-def-bypass-adam" data-idx="${rIdx}" ${isAdamBypass ? 'checked' : ''}> Adamantine
+              </label>
+            </div>
+          `;
+          rowCard.appendChild(bypassSection);
+
+          const noteSection = document.createElement('div');
+          noteSection.innerHTML = `
+            <div style="display:flex; align-items:center; gap:6px;">
+              <span style="font-size:0.75rem; color:var(--text-muted, #888); white-space:nowrap;">Note:</span>
+              <input type="text" class="bf-def-note-input" data-idx="${rIdx}" value="${(row.note || '').replace(/"/g, '&quot;')}" placeholder="e.g. while in dim light or darkness" style="width:100%; font-size:0.75rem; padding:3px 6px;">
+            </div>
+          `;
+          rowCard.appendChild(noteSection);
+
+          container.appendChild(rowCard);
+        });
+
+        container.querySelectorAll('.bf-def-del-row').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.idx);
+            state[activeTab].splice(idx, 1);
+            renderRows();
+          });
+        });
+
+        container.querySelectorAll('.bf-def-preset-bps').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.idx);
+            const r = state[activeTab][idx];
+            r.types = [...new Set([...(r.types || []), ...BPS_TYPES])];
+            renderRows();
+          });
+        });
+
+        container.querySelectorAll('.bf-def-preset-elem').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.idx);
+            const r = state[activeTab][idx];
+            r.types = [...new Set([...(r.types || []), ...ELEM_TYPES])];
+            renderRows();
+          });
+        });
+
+        container.querySelectorAll('.bf-def-preset-clear').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.idx);
+            state[activeTab][idx].types = [];
+            renderRows();
+          });
+        });
+
+        container.querySelectorAll('.bf-def-bypass-magic').forEach(cb => {
+          cb.addEventListener('change', () => {
+            const idx = parseInt(cb.dataset.idx);
+            const r = state[activeTab][idx];
+            r.bypasses = r.bypasses || [];
+            r.bypasses = r.bypasses.filter(b => b !== 'magic' && b !== 'nonmagical');
+            if (cb.checked) r.bypasses.push('magic');
+          });
+        });
+
+        container.querySelectorAll('.bf-def-bypass-silver').forEach(cb => {
+          cb.addEventListener('change', () => {
+            const idx = parseInt(cb.dataset.idx);
+            const r = state[activeTab][idx];
+            r.bypasses = r.bypasses || [];
+            r.bypasses = r.bypasses.filter(b => b !== 'silver' && b !== 'silvered');
+            if (cb.checked) r.bypasses.push('silver');
+          });
+        });
+
+        container.querySelectorAll('.bf-def-bypass-adam').forEach(cb => {
+          cb.addEventListener('change', () => {
+            const idx = parseInt(cb.dataset.idx);
+            const r = state[activeTab][idx];
+            r.bypasses = r.bypasses || [];
+            r.bypasses = r.bypasses.filter(b => b !== 'adamantine');
+            if (cb.checked) r.bypasses.push('adamantine');
+          });
+        });
+
+        container.querySelectorAll('.bf-def-note-input').forEach(inp => {
+          inp.addEventListener('input', () => {
+            const idx = parseInt(inp.dataset.idx);
+            state[activeTab][idx].note = inp.value;
+          });
+        });
+      }
+
+      modal.querySelectorAll('.bf-def-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          activeTab = btn.dataset.tab;
+          updateTabStyles();
+          renderRows();
+        });
+      });
+
+      modal.querySelector('#bf-def-add-row-btn').addEventListener('click', () => {
+        state[activeTab] = state[activeTab] || [];
+        state[activeTab].push({ types: [], bypasses: [], note: '' });
+        renderRows();
+      });
+
+      const closeFn = () => overlay.remove();
+      modal.querySelector('#bf-def-close-btn').addEventListener('click', closeFn);
+      modal.querySelector('#bf-def-cancel-btn').addEventListener('click', closeFn);
+
+      modal.querySelector('#bf-def-apply-btn').addEventListener('click', () => {
+        const compiled = {
+          resist: editableRowsToDefenses(state.resist),
+          immune: editableRowsToDefenses(state.immune),
+          vulnerable: editableRowsToDefenses(state.vulnerable)
+        };
+        entity._rawDefenses = compiled;
+        entity.resistances = formatDefensesToString(compiled.resist);
+        entity.immunities = formatDefensesToString(compiled.immune);
+        entity.vulnerabilities = formatDefensesToString(compiled.vulnerable);
+
+        const rInput = document.getElementById('bf-beast-resist');
+        if (rInput) rInput.value = entity.resistances;
+        const iInput = document.getElementById('bf-beast-immune');
+        if (iInput) iInput.value = entity.immunities;
+        const vInput = document.getElementById('bf-beast-vuln');
+        if (vInput) vInput.value = entity.vulnerabilities;
+
+        closeFn();
+        updateLivePreviewThrottled();
+      });
+
+      updateTabStyles();
+      renderRows();
+    });
+  }
 
   // Token asset picker
   const btnBrowseToken = document.getElementById('btn-browse-token');

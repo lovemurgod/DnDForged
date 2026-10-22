@@ -81,7 +81,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_k6z3",
+        "id": "act_occupation_e0vy",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Champion Smoker</p>",
@@ -101,7 +101,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_dvix",
+        "id": "act_distinctive_features_ifmq",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Bold, Honourable</p>",
@@ -257,7 +257,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_strength_of_will_va5k",
+        "id": "act_strength_of_will_qkuf",
         "name": "Strength of Will",
         "actionType": "trait",
         "descriptionHtml": "<p>Arin has advantage on saving throws against being frightened, and she gains a bonus to these saving throws equal to her Wisdom modifier.</p>",
@@ -277,7 +277,7 @@
         }
       },
       {
-        "id": "act_occupation_k3wz",
+        "id": "act_occupation_6zyo",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Ranger</p>",
@@ -297,7 +297,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_qez4",
+        "id": "act_distinctive_features_z1nk",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Faithful, Fair-spoken</p>",
@@ -319,7 +319,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wfjc",
+        "id": "act_multiattack_2q15",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Arin makes two melee attacks, or one melee attack and one ranged attack.</p>",
@@ -339,7 +339,7 @@
         }
       },
       {
-        "id": "act_long_sword_mk2r",
+        "id": "act_long_sword_pyr9",
         "name": "Long Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) if used with two hands to make a melee attack.</p>",
@@ -357,14 +357,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_nmzy",
+        "id": "act_spear_94a8",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 6 (1d6 + 3) piercing damage, or 7 (1d8 + 3) piercing damage if used with two hands to make a melee attack.</p>",
@@ -382,11 +383,13 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -396,7 +399,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_m3gp",
+        "id": "act_parry_df4i",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Arin adds 2 to her AC against one melee attack that would hit her. To do so, she must see the attacker and be wielding a melee weapon.</p>",
@@ -534,7 +537,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fear_of_fire_hfy8",
+        "id": "act_fear_of_fire_c8y9",
         "name": "Fear of Fire",
         "actionType": "trait",
         "descriptionHtml": "<p>If Ash takes fire or radiant damage, it must succeed on a Charisma (Intimidation) check (DC 10 + damage taken) or be frightened until the end of its next turn.</p>",
@@ -557,7 +560,7 @@
         }
       },
       {
-        "id": "act_keen_hearing_and_smell_e0jt",
+        "id": "act_keen_hearing_and_smell_1sol",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>Ash has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
@@ -577,7 +580,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_nehf",
+        "id": "act_pack_tactics_g46o",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>Ash has advantage on an attack roll against a creature if at least one of the Wolf-chieftain's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -599,7 +602,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_jp77",
+        "id": "act_bite_nqov",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) piercing damage. If the target is a creature, it must make a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -620,7 +623,8 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -735,7 +739,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_457s",
+        "id": "act_occupation_wszu",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Adventurer, Envoy</p>",
@@ -755,7 +759,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_diph",
+        "id": "act_distinctive_features_mvvx",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Eager, Honourable</p>",
@@ -891,7 +895,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_txib",
+        "id": "act_occupation_mtol",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Innkeeper</p>",
@@ -911,7 +915,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_wbzk",
+        "id": "act_distinctive_features_wokh",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Patient, Rustic</p>",
@@ -1069,7 +1073,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_deathless_6sbr",
+        "id": "act_deathless_gdsr",
         "name": "Deathless",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the Barrow-wight to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant, from a critical hit, or from a weapon enchanted with spells for the Bane of the Undead. On a success, the Barrow-wight drops to 1 hit point instead.</p>",
@@ -1089,7 +1093,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_a01r",
+        "id": "act_sunlight_sensitivity_6w0e",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Barrow-wight has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -1111,7 +1115,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zd2q",
+        "id": "act_multiattack_xh7s",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Barrow-wight can use its Strike Fear or its Wight Song. It then makes two long sword attacks. It can use its icy touch in place of one long sword attack.</p>",
@@ -1131,7 +1135,7 @@
         }
       },
       {
-        "id": "act_long_sword_mz1b",
+        "id": "act_long_sword_fiv2",
         "name": "Long Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.</p>",
@@ -1149,18 +1153,20 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_icy_touch_z249",
+        "id": "act_icy_touch_hxoi",
         "name": "Icy Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) necrotic damage, and the target must make a DC 13 Constitution saving throw, taking 5 (1d10) necrotic damage on a failed save.</p>",
@@ -1181,18 +1187,20 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             },
             {
               "formula": "1d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_strike_fear_xef0",
+        "id": "act_strike_fear_bmcq",
         "name": "Strike Fear",
         "actionType": "action",
         "descriptionHtml": "<p>Each non-undead creature of the Barrow-wight's choice that is within 60 feet of the Barrow-wight and aware of it gains 1 Shadow point from Dread, resisted by a DC 13 Charisma saving throw. On a failed save, a target becomes frightened for 1 minute. If the save fails by 5 or more, the target is also stunned while frightened in this way. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the Barrow-wight's Strike Fear for the next 24 hours.</p>",
@@ -1215,7 +1223,7 @@
         }
       },
       {
-        "id": "act_wight_song_n6lh",
+        "id": "act_wight_song_tpcd",
         "name": "Wight Song",
         "actionType": "action",
         "descriptionHtml": "<p>The Barrow-wight chants a low, chilling song to subdue a creature other than an Elf or a Wizard within 30 feet of it that can hear it with the dark enchantment of its voice. The target gains 2 Shadow points from Sorcery, resisted by a DC 13 Intelligence saving throw. On a failed save, the target succumbs to a magical slumber, falling unconscious for 1 minute or until it takes damage, or someone uses an action to shake it awake. If the save fails by 5 or more, the target is unconscious for 1 hour instead and cannot be shaken awake. A creature that successfully saves against the effect is stunned until the end of the Barrow-wight's next turn unless it succeeds by 5 or more, and is immune to the Barrow-wight's song for the next 24 hours.</p>",
@@ -1373,7 +1381,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_strength_of_will_vwt6",
+        "id": "act_strength_of_will_zj22",
         "name": "Strength of Will",
         "actionType": "trait",
         "descriptionHtml": "<p>Beinion has advantage on saving throws against being frightened, and he gain a bonus to these saving throws equal to his Wisdom modifier.</p>",
@@ -1393,7 +1401,7 @@
         }
       },
       {
-        "id": "act_occupation_xtb9",
+        "id": "act_occupation_zr6w",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Ranger</p>",
@@ -1413,7 +1421,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_68wu",
+        "id": "act_distinctive_features_ybba",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Faithful, True-hearted</p>",
@@ -1435,7 +1443,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_w875",
+        "id": "act_multiattack_vhd9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Beinion makes two melee attacks, or one melee attack and one ranged attack.</p>",
@@ -1455,7 +1463,7 @@
         }
       },
       {
-        "id": "act_long_sword_anxo",
+        "id": "act_long_sword_jxqw",
         "name": "Long Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) if used with two hands to make a melee attack.</p>",
@@ -1473,14 +1481,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_3w52",
+        "id": "act_spear_yjyg",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 6 (1d6 + 3) piercing damage, or 7 (1d8 + 3) piercing damage if used with two hands to make a melee attack.</p>",
@@ -1498,11 +1507,13 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1512,7 +1523,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_kybg",
+        "id": "act_parry_sxax",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Beinion adds 2 to his AC against one melee attack that would hit him. To do so, he must see the attacker and be wielding a melee weapon.</p>",
@@ -1637,7 +1648,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_viqz",
+        "id": "act_occupation_si7y",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Retired adventurer, Burglar</p>",
@@ -1657,7 +1668,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_6078",
+        "id": "act_distinctive_features_kw5y",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Cunning, Fair-spoken</p>",
@@ -1797,7 +1808,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sneak_attack__1_turn__bijw",
+        "id": "act_sneak_attack__1_turn__eduu",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>Búrzgul deals an extra 10 (3d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of Búrzgul that isn't incapacitated and Búrzgul doesn't have disadvantage on the attack roll.</p>",
@@ -1815,14 +1826,15 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sunlight_sensitivity_tcdm",
+        "id": "act_sunlight_sensitivity_chhx",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Búrzgul has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -1844,7 +1856,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5ow7",
+        "id": "act_multiattack_v8ig",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Búrzgul makes two melee attacks, or one melee attack and one ranged attack.</p>",
@@ -1864,7 +1876,7 @@
         }
       },
       {
-        "id": "act_scimitar_2w29",
+        "id": "act_scimitar_ajrh",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.</p>",
@@ -1882,14 +1894,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shield_bash_83z8",
+        "id": "act_shield_bash_280t",
         "name": "Shield Bash",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 5 (1d4 + 3) bludgeoning damage. If the target is Medium or smaller, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -1910,14 +1923,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_nt8t",
+        "id": "act_spear_o3ql",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 6 (1d6 + 3) piercing damage, or 7 (1d8 + 3) piercing damage if used with two hands to make a melee attack.</p>",
@@ -1935,18 +1949,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_yell_of_triumph__recharges_after_a_long_rest__oqb6",
+        "id": "act_yell_of_triumph__recharges_after_a_long_rest__g4ds",
         "name": "Yell of Triumph (Recharges after a Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of Búrzgul's choice that is within 30 feet of it and can hear it gain advantage on attack rolls and Charisma (Intimidation) checks until the start of Búrzgul's next turn. Búrzgul can then make one attack as a bonus action.</p>",
@@ -1969,7 +1985,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_p6dx",
+        "id": "act_parry_ddd2",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Búrzgul adds 2 to its AC against one melee attack that would hit it. To do so, Búrzgul must see the attacker and be wielding a melee weapon.</p>",
@@ -2122,7 +2138,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__jvzv",
+        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__oaio",
         "name": "Hideous Toughness (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Cave-troll Slinker takes 7 damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead.</p>",
@@ -2142,7 +2158,7 @@
         }
       },
       {
-        "id": "act_keen_smell_0heo",
+        "id": "act_keen_smell_ac5e",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The Cave-troll Slinker has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -2164,7 +2180,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hklo",
+        "id": "act_multiattack_qnw2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Cave-troll Slinker makes two melee attacks: one with its bite and one with its great club.</p>",
@@ -2184,7 +2200,7 @@
         }
       },
       {
-        "id": "act_bite_vtqv",
+        "id": "act_bite_7ebt",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (2d4 + 3) piercing damage.</p>",
@@ -2202,14 +2218,15 @@
           "damages": [
             {
               "formula": "2d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_great_club_qq5f",
+        "id": "act_great_club_kdff",
         "name": "Great Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 12 (2d8 + 3) bludgeoning damage. If the target is Medium or smaller, it must succeed on a DC 15 Strength saving throw or be knocked prone.</p>",
@@ -2230,7 +2247,8 @@
           "damages": [
             {
               "formula": "2d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2344,7 +2362,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_ted9",
+        "id": "act_occupation_z4cl",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Emissary, Lore-master</p>",
@@ -2364,7 +2382,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_hqfd",
+        "id": "act_distinctive_features_r22t",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Lordly, Patient</p>",
@@ -2527,7 +2545,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_deathless_n1zv",
+        "id": "act_deathless_k5kz",
         "name": "Deathless",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the Fell Wraith to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant, from a critical hit, or from a weapon enchanted with spells for the Bane of the Undead. On a success, the Fell Wraith drops to 1 hit point instead.</p>",
@@ -2547,7 +2565,7 @@
         }
       },
       {
-        "id": "act_sunlight_weakness_iqr0",
+        "id": "act_sunlight_weakness_4yb5",
         "name": "Sunlight Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Fell Wraith has disadvantage on attack rolls, ability checks, and saving throws.</p>",
@@ -2569,7 +2587,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_965d",
+        "id": "act_multiattack_h7rw",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Fell Wraith can use its Strike Fear. It then makes a melee attack.</p>",
@@ -2589,7 +2607,7 @@
         }
       },
       {
-        "id": "act_sword_d33g",
+        "id": "act_sword_cr55",
         "name": "Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage, or 7 (1d8 + 3) slashing damage if used with two hands to make a melee attack.</p>",
@@ -2607,18 +2625,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_strike_fear_b9bq",
+        "id": "act_strike_fear_xqq4",
         "name": "Strike Fear",
         "actionType": "action",
         "descriptionHtml": "<p>Each non-undead creature of the Fell Wraith's choice that is within 60 feet of the Fell Wraith and aware of it gains 1 Shadow point from Dread, resisted by a DC 12 Charisma saving throw. On a failed save, a target becomes frightened for 1 minute. If the save fails by 5 or more, the target is also stunned while frightened in this way. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the Fell Wraith's Strike Fear for the next 24 hours.</p>",
@@ -2769,7 +2789,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_qtdw",
+        "id": "act_occupation_043p",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Forester</p>",
@@ -2789,7 +2809,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_g5r7",
+        "id": "act_distinctive_features_yujy",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Fierce, Rustic</p>",
@@ -2811,7 +2831,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_oda6",
+        "id": "act_multiattack_xdup",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Fitch Talltree makes two melee attacks or two ranged attacks.</p>",
@@ -2831,7 +2851,7 @@
         }
       },
       {
-        "id": "act_archet_hunting_bow_w4zj",
+        "id": "act_archet_hunting_bow_ys7o",
         "name": "Archet Hunting Bow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 80/320 ft., one target. Hit: 6 (1d6 + 3) piercing damage. If Fitch Talltree scores a critical hit, he rolls damage dice three times, instead of twice.</p>",
@@ -2849,14 +2869,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_hqk6",
+        "id": "act_dagger_4ivb",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -2874,7 +2895,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2883,7 +2905,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_defiance_w4o2",
+        "id": "act_defiance_wfyo",
         "name": "Defiance",
         "actionType": "bonus",
         "descriptionHtml": "<p>As a bonus action, Fitch Talltree can spend one Hit Die to heal himself.</p>",
@@ -3014,7 +3036,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_gang_tactics_nbhg",
+        "id": "act_gang_tactics_8nsk",
         "name": "Gang Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The Footpad has advantage on an attack roll against a creature if at least one of the Footpad's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -3036,7 +3058,7 @@
     ],
     "actions": [
       {
-        "id": "act_great_club_9jrw",
+        "id": "act_great_club_6yof",
         "name": "Great Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) bludgeoning damage.</p>",
@@ -3054,14 +3076,15 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_cmvc",
+        "id": "act_dagger_oj1u",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 3 (1d4 + 1) piercing damage.</p>",
@@ -3079,7 +3102,8 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3193,7 +3217,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_u2ah",
+        "id": "act_occupation_3aac",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Adventurer, Wizard</p>",
@@ -3213,7 +3237,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_won2",
+        "id": "act_distinctive_features_s115",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Bold, Cunning</p>",
@@ -3342,7 +3366,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_wb69",
+        "id": "act_occupation_d1jf",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Counsellor, Seer</p>",
@@ -3362,7 +3386,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_enhs",
+        "id": "act_distinctive_features_phk7",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Grim, Wary</p>",
@@ -3502,7 +3526,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_nimble_escape_k7iy",
+        "id": "act_nimble_escape_ergp",
         "name": "Nimble Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>The Goblin Archer can take the Disengage or Hide action as a bonus action on each of its turns.</p>",
@@ -3522,7 +3546,7 @@
         }
       },
       {
-        "id": "act_sneak_attack__1_turn__r2m0",
+        "id": "act_sneak_attack__1_turn__6kyr",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>The Goblin Archer deals an extra 3 (1d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the Goblin Archer that isn't incapacitated and the Goblin Archer doesn't have disadvantage on the attack roll.</p>",
@@ -3540,14 +3564,15 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sunlight_sensitivity_amy5",
+        "id": "act_sunlight_sensitivity_mwi7",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Goblin Archer has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -3569,7 +3594,7 @@
     ],
     "actions": [
       {
-        "id": "act_jagged_knife_hupc",
+        "id": "act_jagged_knife_u4f2",
         "name": "Jagged Knife",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) slashing damage.</p>",
@@ -3587,14 +3612,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bow_of_horn_j5ib",
+        "id": "act_bow_of_horn_cbmq",
         "name": "Bow of Horn",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 hour. If the saving throw fails by 5 or more, the target cannot regain hit points and has disadvantage on death saving throws while poisoned in this way.</p>",
@@ -3615,7 +3641,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3750,7 +3777,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_fwag",
+        "id": "act_occupation_9qpp",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>River-daughter</p>",
@@ -3770,7 +3797,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_s2ne",
+        "id": "act_distinctive_features_aiak",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Absent-minded, Fair-spoken</p>",
@@ -3924,7 +3951,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__vxm6",
+        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__6y70",
         "name": "Hideous Toughness (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Great Cave-troll takes 14 damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead.</p>",
@@ -3946,7 +3973,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_e1ut",
+        "id": "act_multiattack_od7t",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Great Cave-troll makes two melee attacks, only one of which can be with its bite. It can use its Strike Fear instead of its bite.</p>",
@@ -3966,7 +3993,7 @@
         }
       },
       {
-        "id": "act_bite_y3m0",
+        "id": "act_bite_e7x8",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) piercing damage.</p>",
@@ -3984,14 +4011,15 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slam_w9z3",
+        "id": "act_slam_u72c",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 10 (2d4 + 5) bludgeoning damage. If the target is Medium or smaller, it is grappled (escape DC 16). If the target is Small or smaller, it is also restrained until this grapple ends. While grappling the target, the Great Cave-troll has advantage on attack rolls against it and cannot use this attack against other targets.</p>",
@@ -4012,14 +4040,15 @@
           "damages": [
             {
               "formula": "2d4 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_strike_fear_ofrs",
+        "id": "act_strike_fear_511g",
         "name": "Strike Fear",
         "actionType": "action",
         "descriptionHtml": "<p>Each non-undead creature of the Great Cave-troll's choice that is within 60 feet of the Great Cave-troll and aware of it gains 2 Shadow points from Dread, resisted by a DC 16 Charisma saving throw. On a failed save, a target becomes frightened for 1 minute. If the save fails by 5 or more, the target is also stunned while frightened in this way. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the Great Cave-troll's Strike Fear for the next 24 hours.</p>",
@@ -4161,7 +4190,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__ma5v",
+        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__4l3i",
         "name": "Hideous Toughness (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Great Orc Bodyguard takes 7 damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead.</p>",
@@ -4181,7 +4210,7 @@
         }
       },
       {
-        "id": "act_horrible_strength_te5t",
+        "id": "act_horrible_strength_ws53",
         "name": "Horrible Strength",
         "actionType": "trait",
         "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when the Great Orc Bodyguard hits with it (included in the attack).</p>",
@@ -4201,7 +4230,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_f6td",
+        "id": "act_sunlight_sensitivity_72c8",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Great Orc Bodyguard has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -4223,7 +4252,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_n91c",
+        "id": "act_multiattack_kxyo",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Great Orc Bodyguard makes two melee attacks, or one melee attack and one ranged attack.</p>",
@@ -4243,7 +4272,7 @@
         }
       },
       {
-        "id": "act_battle_axe_l5nn",
+        "id": "act_battle_axe_cjhr",
         "name": "Battle Axe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 12 (2d8 + 3) slashing damage or 14 (2d10 + 3) slashing damage if used with two hands.</p>",
@@ -4261,18 +4290,20 @@
           "damages": [
             {
               "formula": "2d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_hr8s",
+        "id": "act_spear_y7ur",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 10 (2d6 + 3) piercing damage, or 12 (2d8 + 3) piercing damage if used with two hands to make a melee attack.</p>",
@@ -4290,11 +4321,13 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4303,7 +4336,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_aggressive_n71i",
+        "id": "act_aggressive_9llx",
         "name": "Aggressive",
         "actionType": "bonus",
         "descriptionHtml": "<p>As a bonus action, the Great Orc Bodyguard can move up to its speed toward a hostile creature that it can see.</p>",
@@ -4462,7 +4495,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_horrible_strength_pw07",
+        "id": "act_horrible_strength_k1b6",
         "name": "Horrible Strength",
         "actionType": "trait",
         "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when the Great Orc Chief hits with it (included in the attack).</p>",
@@ -4482,7 +4515,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_g7lp",
+        "id": "act_sunlight_sensitivity_ubdu",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Great Orc Chief has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -4504,7 +4537,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yybr",
+        "id": "act_multiattack_ick7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Great Orc Chief makes two melee attacks, or one melee attack and one ranged attack.</p>",
@@ -4524,7 +4557,7 @@
         }
       },
       {
-        "id": "act_heavy_scimitar_qte5",
+        "id": "act_heavy_scimitar_2xmz",
         "name": "Heavy Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) slashing damage, or 15 (2d10 + 4) slashing damage if used with two hands to make a melee attack.</p>",
@@ -4542,18 +4575,20 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d10 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_kf47",
+        "id": "act_spear_hdai",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 11 (2d6 + 4) piercing damage, or 13 (2d8 + 4) piercing damage if used with two hands to make a melee attack.</p>",
@@ -4571,18 +4606,20 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shield_bash_yn80",
+        "id": "act_shield_bash_aapc",
         "name": "Shield Bash",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one creature. Hit: 9 (2d4 + 4) bludgeoning damage. If the target is Medium or smaller, it must succeed on a DC 15 Strength saving throw or be knocked prone.</p>",
@@ -4603,14 +4640,15 @@
           "damages": [
             {
               "formula": "2d4 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_yell_of_triumph__recharges_after_a_short_or_long_rest__g0qe",
+        "id": "act_yell_of_triumph__recharges_after_a_short_or_long_rest__1tf4",
         "name": "Yell of Triumph (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the Great Orc Chief's choice that is within 30 feet of it and can hear it gain advantage on attack rolls and Charisma (Intimidation) checks until the start of the Great Orc Chief's next turn. The Great Orc Chief can then make one attack as a bonus action.</p>",
@@ -4632,7 +4670,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_aggressive_2v8b",
+        "id": "act_aggressive_d9vv",
         "name": "Aggressive",
         "actionType": "bonus",
         "descriptionHtml": "<p>As a bonus action, the Great Orc Chief can move up to its speed toward a hostile creature that it can see.</p>",
@@ -4654,7 +4692,7 @@
     ],
     "reactions": [
       {
-        "id": "act_parry_iu7n",
+        "id": "act_parry_5qjd",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>The Great Orc Chief adds 2 to its AC against one melee attack that would hit it. To do so, the Great Orc Chief must see the attacker and be wielding a melee weapon.</p>",
@@ -4674,7 +4712,7 @@
         }
       },
       {
-        "id": "act_redirect_attack_2688",
+        "id": "act_redirect_attack_laic",
         "name": "Redirect Attack",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature the Great Orc Chief can see hits it with an attack, the Great Orc Chief chooses another Orc within 5 feet of it. The two Orcs swap places, and the chosen Orc becomes the target instead.</p>",
@@ -4831,7 +4869,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ambusher_muw0",
+        "id": "act_ambusher_5xh2",
         "name": "Ambusher",
         "actionType": "trait",
         "descriptionHtml": "<p>In the first round of combat, the Highway Robber has advantage on attack rolls against any creature it has surprised.</p>",
@@ -4851,7 +4889,7 @@
         }
       },
       {
-        "id": "act_surprise_attack_ou41",
+        "id": "act_surprise_attack_6umc",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Highway Robber surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
@@ -4869,7 +4907,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4878,7 +4917,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2wye",
+        "id": "act_multiattack_21xm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Highway Robber makes two melee attacks or two ranged attacks.</p>",
@@ -4898,7 +4937,7 @@
         }
       },
       {
-        "id": "act_short_sword_wjmh",
+        "id": "act_short_sword_v65y",
         "name": "Short Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -4916,14 +4955,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bow_ztua",
+        "id": "act_bow_617w",
         "name": "Bow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 80/320 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -4941,7 +4981,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5080,7 +5121,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_hearing_and_smell_6ue6",
+        "id": "act_keen_hearing_and_smell_by3k",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The Hound of Sauron has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
@@ -5100,7 +5141,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_pu9q",
+        "id": "act_pack_tactics_vnna",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The Hound of Sauron has advantage on an attack roll against a creature if at least one of the Hound of Sauron's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -5122,7 +5163,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_tso2",
+        "id": "act_multiattack_tp0m",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Hound of Sauron makes two attacks: one with its bite and one with its claws.</p>",
@@ -5142,7 +5183,7 @@
         }
       },
       {
-        "id": "act_bite_yzcu",
+        "id": "act_bite_1jx7",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage. If the target is a creature, it must make a DC 14 Strength saving throw or be knocked prone.</p>",
@@ -5163,14 +5204,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_wqt7",
+        "id": "act_claws_0b97",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (2d4 + 4) slashing damage. If the target is Medium or smaller, it is grappled (escape DC 14) and the Hound of Sauron cannot use its claws on another target.</p>",
@@ -5191,7 +5233,8 @@
           "damages": [
             {
               "formula": "2d4 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5315,7 +5358,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_anguished_0gh9",
+        "id": "act_anguished_ksy9",
         "name": "Anguished",
         "actionType": "trait",
         "descriptionHtml": "<p>Jalin is miserable, and has disadvantage on all ability checks, attack rolls, and saving throws.</p><p>If a Jalin's d20 roll is a 1 or 2, the roll is a failure regardless of the DC for any ability check, attack roll, or saving throw.</p>",
@@ -5336,7 +5379,7 @@
         }
       },
       {
-        "id": "act_reckless_hate_btr0",
+        "id": "act_reckless_hate_x5jb",
         "name": "Reckless Hate",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of its turn, Jalin can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against it have advantage until the start of its next turn.</p>",
@@ -5358,7 +5401,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3xel",
+        "id": "act_multiattack_vuw1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Jalin makes two melee attacks, or one melee attack and one ranged attack.</p>",
@@ -5378,7 +5421,7 @@
         }
       },
       {
-        "id": "act_battle_axe_2szh",
+        "id": "act_battle_axe_agwk",
         "name": "Battle Axe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands to make a melee attack.</p>",
@@ -5396,18 +5439,20 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_1mxq",
+        "id": "act_spear_ytyb",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 6 (1d6 + 3) piercing damage, or 7 (1d8 + 3) piercing damage if used with two hands to make a melee attack.</p>",
@@ -5425,11 +5470,13 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5553,7 +5600,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_ntbq",
+        "id": "act_occupation_kvv8",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Horse-trader, Ostler</p>",
@@ -5573,7 +5620,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_l1r4",
+        "id": "act_distinctive_features_hckq",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Cunning, Secretive</p>",
@@ -5740,7 +5787,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_deathless_tayl",
+        "id": "act_deathless_5vup",
         "name": "Deathless",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces Lady Elwen to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant, from a critical hit, or from a weapon enchanted with spells for the Bane of the Undead. On a success, the Fell Wraith drops to 1 hit point instead.</p>",
@@ -5760,7 +5807,7 @@
         }
       },
       {
-        "id": "act_sunlight_weakness_08zx",
+        "id": "act_sunlight_weakness_3inm",
         "name": "Sunlight Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Lady Elwen has disadvantage on attack rolls, ability checks, and saving throws.</p>",
@@ -5782,7 +5829,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_im1b",
+        "id": "act_multiattack_0ip7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Lady Elwen can use its Strike Fear. It then makes a melee attack.</p>",
@@ -5802,7 +5849,7 @@
         }
       },
       {
-        "id": "act_sword_tolq",
+        "id": "act_sword_lwvt",
         "name": "Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage, or 7 (1d8 + 3) slashing damage if used with two hands to make a melee attack.</p>",
@@ -5820,18 +5867,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_strike_fear_wg8i",
+        "id": "act_strike_fear_z4vh",
         "name": "Strike Fear",
         "actionType": "action",
         "descriptionHtml": "<p>Each non-undead creature of Lady Elwen's choice that is within 60 feet of the Fell Wraith and aware of it gains 1 Shadow point from Dread, resisted by a DC 12 Charisma saving throw. On a failed save, a target becomes frightened for 1 minute. If the save fails by 5 or more, the target is also stunned while frightened in this way. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the Fell Wraith's Strike Fear for the next 24 hours.</p>",
@@ -5980,7 +6029,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_deathless_g8a3",
+        "id": "act_deathless_6pl6",
         "name": "Deathless",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the Marsh-dweller to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant, from a critical hit, or from a weapon enchanted with spells for the Bane of the Undead. On a success, the Marsh-dweller drops to 1 hit point instead.</p>",
@@ -6000,7 +6049,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_95wl",
+        "id": "act_sunlight_sensitivity_mag9",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Marsh-dweller has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -6022,7 +6071,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zqna",
+        "id": "act_multiattack_vup6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Marsh-dweller makes two attacks: one with its bite and one with its claws.</p>",
@@ -6042,7 +6091,7 @@
         }
       },
       {
-        "id": "act_bite_la5j",
+        "id": "act_bite_w62f",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -6060,14 +6109,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_a061",
+        "id": "act_claws_sp0k",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) slashing damage. If the target is Medium or smaller, it is grappled (escape DC 11) and the Marsh-dweller cannot use its claws on another target.</p>",
@@ -6088,7 +6138,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6222,7 +6273,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_xv8f",
+        "id": "act_amphibious_qzmg",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The Nameless Thing can breathe air and water.</p>",
@@ -6242,7 +6293,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_h3kp",
+        "id": "act_sunlight_sensitivity_k6n1",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Nameless Thing has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -6264,7 +6315,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6cux",
+        "id": "act_multiattack_rznb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Nameless Thing makes two attacks: one with its primary natural weapon and one with its secondary natural weapon.</p>",
@@ -6401,7 +6452,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sneak_attack__1_turn__txhi",
+        "id": "act_sneak_attack__1_turn__53hv",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>The Orc Guard deals an extra 3 (1d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the Orc Guard that isn't incapacitated and the Orc Guard doesn't have disadvantage on the attack roll.</p>",
@@ -6419,14 +6470,15 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sunlight_sensitivity_2gh4",
+        "id": "act_sunlight_sensitivity_df9n",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Orc Guard has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -6448,7 +6500,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wa90",
+        "id": "act_multiattack_8u9u",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Orc Guard makes two melee attacks, or one melee attack and one ranged attack.</p>",
@@ -6468,7 +6520,7 @@
         }
       },
       {
-        "id": "act_scimitar_cnun",
+        "id": "act_scimitar_ebwl",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage.</p>",
@@ -6486,14 +6538,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_u21y",
+        "id": "act_spear_hjoj",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d6 + 2) piercing damage, or 6 (1d8 + 2) piercing damage if used with two hands to make a melee attack.</p>",
@@ -6511,11 +6564,13 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6656,7 +6711,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sneak_attack__1_turn__ebj0",
+        "id": "act_sneak_attack__1_turn__k2fq",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>The Orc Soldier deals an extra 3 (1d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the Orc Soldier that isn't incapacitated and the Orc Soldier doesn't have disadvantage on the attack roll.</p>",
@@ -6674,14 +6729,15 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sunlight_sensitivity_bfbb",
+        "id": "act_sunlight_sensitivity_jvcv",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Orc Soldier has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -6703,7 +6759,7 @@
     ],
     "actions": [
       {
-        "id": "act_scimitar_vgkc",
+        "id": "act_scimitar_cnzw",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage.</p>",
@@ -6721,14 +6777,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_m95t",
+        "id": "act_spear_pnzb",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +3 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d6 + 1) piercing damage, or 5 (1d8 + 1) piercing damage if used with two hands to make a melee attack.</p>",
@@ -6746,11 +6803,13 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6895,7 +6954,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sneak_attack__1_turn__7pp2",
+        "id": "act_sneak_attack__1_turn__vltz",
         "name": "Sneak Attack (1/Turn)",
         "actionType": "trait",
         "descriptionHtml": "<p>The Orc-chieftain deals an extra 7 (2d6) damage when it hits a target with a weapon attack and has advantage on the attack roll, or when the target is within 5 feet of an ally of the Orc-chieftain that isn't incapacitated and the Orc-chieftain doesn't have disadvantage on the attack roll.</p>",
@@ -6913,14 +6972,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sunlight_sensitivity_tnsj",
+        "id": "act_sunlight_sensitivity_1ubh",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Orc-chieftain has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -6942,7 +7002,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vmx7",
+        "id": "act_multiattack_y6lq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Orc-chieftain makes two melee attacks, or one melee attack and one ranged attack.</p>",
@@ -6962,7 +7022,7 @@
         }
       },
       {
-        "id": "act_scimitar_taqd",
+        "id": "act_scimitar_bmdr",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.</p>",
@@ -6980,14 +7040,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shield_bash_prc6",
+        "id": "act_shield_bash_3i2t",
         "name": "Shield Bash",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 5 (1d4 + 3) bludgeoning damage. If the target is Medium or smaller, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -7008,14 +7069,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_0moy",
+        "id": "act_spear_n2m1",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 6 (1d6 + 3) piercing damage, or 7 (1d8 + 3) piercing damage if used with two hands to make a melee attack.</p>",
@@ -7033,18 +7095,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_yell_of_triumph__recharges_after_a_short_or_long_rest__u3to",
+        "id": "act_yell_of_triumph__recharges_after_a_short_or_long_rest__jtwr",
         "name": "Yell of Triumph (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the Orc-chieftain's choice that is within 30 feet of it and can hear it gain advantage on attack rolls and Charisma (Intimidation) checks until the start of the Orc-chieftain's next turn. The Orc-chieftain can then make one attack as a bonus action.</p>",
@@ -7067,7 +7131,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_pmc7",
+        "id": "act_parry_j7l9",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>The Orc-chieftain adds 2 to its AC against one melee attack that would hit it. To do so, the Orc-chieftain must see the attacker and be wielding a melee weapon.</p>",
@@ -7223,7 +7287,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_3bvc",
+        "id": "act_occupation_w0dt",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>Wealthy landowner</p>",
@@ -7243,7 +7307,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_s9do",
+        "id": "act_distinctive_features_rla9",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Grim, Secretive</p>",
@@ -7380,7 +7444,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_gang_tactics_q71i",
+        "id": "act_gang_tactics_2641",
         "name": "Gang Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The Ruffian Leader has advantage on an attack roll against a creature if at least one of the Ruffian Leader's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -7402,7 +7466,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uhck",
+        "id": "act_multiattack_mwo9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Ruffian Leader makes two melee attacks.</p>",
@@ -7422,7 +7486,7 @@
         }
       },
       {
-        "id": "act_great_club_n81z",
+        "id": "act_great_club_olhz",
         "name": "Great Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) bludgeoning damage.</p>",
@@ -7440,14 +7504,15 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_0xh7",
+        "id": "act_dagger_9k3r",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -7465,14 +7530,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_yell_of_triumph__recharges_after_a_short_or_long_rest__0y3i",
+        "id": "act_yell_of_triumph__recharges_after_a_short_or_long_rest__ai6e",
         "name": "Yell of Triumph (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the Ruffian Leader's choice that is within 30 feet of it and can hear it gain advantage on attack rolls and Charisma (Intimidation) checks until the start of the Ruffian Leader's next turn. The Ruffian Leader can then make one attack as a bonus action.</p>",
@@ -7610,7 +7676,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ambusher_t0gn",
+        "id": "act_ambusher_f18v",
         "name": "Ambusher",
         "actionType": "trait",
         "descriptionHtml": "<p>In the first round of combat, Sabian has advantage on attack rolls against any creature it has surprised.</p>",
@@ -7630,7 +7696,7 @@
         }
       },
       {
-        "id": "act_surprise_attack_8sy9",
+        "id": "act_surprise_attack_2ocx",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If Sabian surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
@@ -7648,7 +7714,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7657,7 +7724,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ao6p",
+        "id": "act_multiattack_v9of",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Sabian makes two melee attacks or two ranged attacks.</p>",
@@ -7677,7 +7744,7 @@
         }
       },
       {
-        "id": "act_short_sword_zfnn",
+        "id": "act_short_sword_u02b",
         "name": "Short Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -7695,14 +7762,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bow_bs6b",
+        "id": "act_bow_zx72",
         "name": "Bow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 80/320 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -7720,7 +7788,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7844,7 +7913,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reckless_hate_0rlf",
+        "id": "act_reckless_hate_ki19",
         "name": "Reckless Hate",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of its turn, the Southerner Champion can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against it have advantage until the start of its next turn.</p>",
@@ -7866,7 +7935,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_f6ef",
+        "id": "act_multiattack_hpcu",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Southerner Champion makes two melee attacks, or one melee attack and one ranged attack.</p>",
@@ -7886,7 +7955,7 @@
         }
       },
       {
-        "id": "act_battle_axe_0c6j",
+        "id": "act_battle_axe_tzm9",
         "name": "Battle Axe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands to make a melee attack.</p>",
@@ -7904,18 +7973,20 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_zn76",
+        "id": "act_spear_zg1t",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 6 (1d6 + 3) piercing damage, or 7 (1d8 + 3) piercing damage if used with two hands to make a melee attack.</p>",
@@ -7933,11 +8004,13 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8061,7 +8134,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reckless_hate_ecwa",
+        "id": "act_reckless_hate_gxvp",
         "name": "Reckless Hate",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of its turn, the Southerner Raider can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against it have advantage until the start of its next turn.</p>",
@@ -8083,7 +8156,7 @@
     ],
     "actions": [
       {
-        "id": "act_axe_o28q",
+        "id": "act_axe_bcim",
         "name": "Axe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) slashing damage, or 6 (1d8 + 2) slashing damage if used with two hands to make a melee attack.</p>",
@@ -8101,18 +8174,20 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear_vimr",
+        "id": "act_spear_czxb",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d6 + 2) piercing damage, or 6 (1d8 + 2) piercing damage if used with two hands to make a melee attack.</p>",
@@ -8130,11 +8205,13 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8276,7 +8353,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__71tc",
+        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__tivn",
         "name": "Hideous Toughness (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Stone-troll Chief takes 14 damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead.</p>",
@@ -8296,7 +8373,7 @@
         }
       },
       {
-        "id": "act_sunlight_curse_i4w2",
+        "id": "act_sunlight_curse_z99y",
         "name": "Sunlight Curse",
         "actionType": "trait",
         "descriptionHtml": "<p>The Stone-troll Chief becomes petrified if it ends its turn in sunlight.</p>",
@@ -8318,7 +8395,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9k31",
+        "id": "act_multiattack_wa3t",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Stone-troll Chief makes two melee attacks. It cannot use its great club if it is grappling a creature.</p>",
@@ -8338,7 +8415,7 @@
         }
       },
       {
-        "id": "act_great_club_a6xb",
+        "id": "act_great_club_b2fl",
         "name": "Great Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage. If the target is Medium or smaller, it must succeed on a DC 16 Strength saving throw or be knocked prone.</p>",
@@ -8359,14 +8436,15 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slam_g8vm",
+        "id": "act_slam_recp",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 10 (2d4 + 5) bludgeoning damage. If the target is Medium or smaller, it is grappled (escape DC 16). If the target is Small or smaller, it is also restrained until this grapple ends. While grappling the target, the Stone-troll Chief has advantage on attack rolls against it and cannot use this attack against other targets.</p>",
@@ -8387,14 +8465,15 @@
           "damages": [
             {
               "formula": "2d4 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_yell_of_triumph__recharges_after_a_short_or_long_rest__2xs9",
+        "id": "act_yell_of_triumph__recharges_after_a_short_or_long_rest__3oum",
         "name": "Yell of Triumph (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the Stone-troll Chief's choice that is within 30 feet of it and can hear it gains advantage on attack rolls and Charisma (Intimidation) checks until the start of the Stone-troll Chief's next turn. The Stone-troll Chief can then make one attack as a bonus action.</p>",
@@ -8549,7 +8628,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__qr3b",
+        "id": "act_hideous_toughness__recharges_after_a_short_or_long_rest__x6aq",
         "name": "Hideous Toughness (Recharges after a Short or Long Rest)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Stone-troll Robber takes 7 damage or less that would reduce it to 0 hit points, it is reduced to 1 hit point instead.</p>",
@@ -8569,7 +8648,7 @@
         }
       },
       {
-        "id": "act_sunlight_curse_puzw",
+        "id": "act_sunlight_curse_w14y",
         "name": "Sunlight Curse",
         "actionType": "trait",
         "descriptionHtml": "<p>The Stone-troll Robber becomes petrified if it ends its turn in sunlight.</p>",
@@ -8591,7 +8670,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wel8",
+        "id": "act_multiattack_ibyx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Stone-troll Robber makes two melee attacks. It cannot use its great club if it is grappling a creature.</p>",
@@ -8611,7 +8690,7 @@
         }
       },
       {
-        "id": "act_great_club_e5ib",
+        "id": "act_great_club_hlmk",
         "name": "Great Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage. If the target is Medium or smaller, it must succeed on a DC 14 Strength saving throw or be knocked prone.</p>",
@@ -8632,14 +8711,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slam_9ylm",
+        "id": "act_slam_26bu",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (2d4 + 4) bludgeoning damage. If the target is Medium or smaller, it is grappled (escape DC 14). If the target is Small or smaller, it is also restrained until this grapple ends. While grappling the target, the Stone-troll Robber has advantage on attack rolls against it and cannot use this attack against other targets.</p>",
@@ -8660,7 +8740,8 @@
           "damages": [
             {
               "formula": "2d4 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8808,7 +8889,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_deathless_5zxv",
+        "id": "act_deathless_82xn",
         "name": "Deathless",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the Wight-king to 0 hit points, he must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant, from a critical hit, or from a weapon enchanted with spells for the Bane of the Undead. On a success, the Wight-king drops to 1 hit point instead.</p>",
@@ -8828,7 +8909,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_tb9h",
+        "id": "act_sunlight_sensitivity_ypgl",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Wight-king has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -8850,7 +8931,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8t2f",
+        "id": "act_multiattack_hs2i",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Wight-king can use its Strike Fear or its Wight Song. It then makes two long sword attacks. It can use its Icy Touch in place of one long sword attack.</p>",
@@ -8870,7 +8951,7 @@
         }
       },
       {
-        "id": "act_long_sword_bvu8",
+        "id": "act_long_sword_jaus",
         "name": "Long Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands.</p>",
@@ -8888,18 +8969,20 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_icy_touch_h36r",
+        "id": "act_icy_touch_ll80",
         "name": "Icy Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) necrotic damage, and the target must make a DC 15 Constitution saving throw, taking 6 (1d12) necrotic damage on a failed save.</p>",
@@ -8920,18 +9003,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             },
             {
               "formula": "1d12",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_strike_fear_wlj1",
+        "id": "act_strike_fear_rplf",
         "name": "Strike Fear",
         "actionType": "action",
         "descriptionHtml": "<p>Each non-undead creature of the Wight-king's choice that is within 60 feet of the Wight-king and aware of him gains 2 Shadow points from Dread, resisted by a DC 15 Charisma saving throw. On a failed save, a target becomes frightened for 1 minute. If the save fails by 5 or more, the target is also stunned while frightened in this way. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the Wight-king's Strike Fear for the next 24 hours.</p>",
@@ -8954,7 +9039,7 @@
         }
       },
       {
-        "id": "act_wight_song_bua6",
+        "id": "act_wight_song_8oea",
         "name": "Wight Song",
         "actionType": "action",
         "descriptionHtml": "<p>The Wight-king chants a low, chilling song to subdue a creature other than an Elf or a Wizard within 30 feet of him who can hear him with the dark enchantment of his voice. The target gains 3 Shadow points from Sorcery, resisted by a DC 15 Intelligence saving throw. On a failed save, the target succumbs to a magical slumber, falling unconscious for 1 minute or until it takes damage, or someone uses an action to shake it awake. If the save fails by 5 or more, the target is unconscious for 1 hour instead and cannot be shaken awake. A creature that successfully saves against the effect is stunned until the end of the Wight-king's next turn unless it succeeds by 5 or more, and is immune to the Wight-king's song for the next 24 hours.</p>",
@@ -8979,7 +9064,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_darker_than_darkness___recharge__uhvu",
+        "id": "act_darker_than_darkness___recharge__12mw",
         "name": "Darker than Darkness {@recharge}",
         "actionType": "bonus",
         "descriptionHtml": "<p>As a bonus action, the Wight-king can summon a magical darkness spreading from a point of the Wight-king's choice to fill a 30-foot-radius sphere for 1 minute. The darkness spreads around corners. Non-magical light cannot illuminate this darkness.</p>",
@@ -9105,7 +9190,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_occupation_ul52",
+        "id": "act_occupation_z4kv",
         "name": "Occupation",
         "actionType": "trait",
         "descriptionHtml": "<p>The Master</p>",
@@ -9125,7 +9210,7 @@
         }
       },
       {
-        "id": "act_distinctive_features_gvms",
+        "id": "act_distinctive_features_xvrv",
         "name": "Distinctive Features",
         "actionType": "trait",
         "descriptionHtml": "<p>Absent-minded, Merry</p>",
@@ -9266,7 +9351,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fear_of_fire_ssam",
+        "id": "act_fear_of_fire_zrhx",
         "name": "Fear of Fire",
         "actionType": "trait",
         "descriptionHtml": "<p>If a Wild Wolf takes fire or radiant damage, it must succeed on a Charisma (Intimidation) check (DC 10 + damage taken) or be frightened until the end of its next turn.</p>",
@@ -9289,7 +9374,7 @@
         }
       },
       {
-        "id": "act_keen_hearing_and_smell_umff",
+        "id": "act_keen_hearing_and_smell_3o5o",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The Wild Wolf has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
@@ -9309,7 +9394,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_0180",
+        "id": "act_pack_tactics_wt18",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The Wild Wolf has advantage on an attack roll against a creature if at least one of the Wild Wolf's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -9331,7 +9416,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_djcg",
+        "id": "act_bite_fbxa",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage. If the target is a creature, it must make a DC 12 Strength saving throw or be knocked prone.</p>",
@@ -9352,7 +9437,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -9479,7 +9565,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fear_of_fire_9nw8",
+        "id": "act_fear_of_fire_xqk0",
         "name": "Fear of Fire",
         "actionType": "trait",
         "descriptionHtml": "<p>If a Wolf-chieftain takes fire or radiant damage, it must succeed on a Charisma (Intimidation) check (DC 10 + damage taken) or be frightened until the end of its next turn.</p>",
@@ -9502,7 +9588,7 @@
         }
       },
       {
-        "id": "act_keen_hearing_and_smell_kgns",
+        "id": "act_keen_hearing_and_smell_ta2w",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The Wolf-chieftain has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
@@ -9522,7 +9608,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_zo9v",
+        "id": "act_pack_tactics_f22n",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The Wolf-chieftain has advantage on an attack roll against a creature if at least one of the Wolf-chieftain's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -9544,7 +9630,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_nne8",
+        "id": "act_bite_ywmy",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) piercing damage. If the target is a creature, it must make a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -9565,7 +9651,8 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

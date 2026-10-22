@@ -362,7 +362,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_radiant_flame_f2ni",
+        "id": "act_radiant_flame_ft3j",
         "name": "Radiant Flame",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +6, range 60 ft. Hit: 11 (2d10) Radiant damage.</p>",
@@ -380,7 +380,8 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -673,7 +674,7 @@
     ],
     "traits": [
       {
-        "id": "act_fiendish_infusion_5etj",
+        "id": "act_fiendish_infusion_fksu",
         "name": "Fiendish Infusion",
         "actionType": "trait",
         "descriptionHtml": "<p>Attacks and spells that deal Fire damage instead deal Necrotic or Poison damage (his choice).</p>",
@@ -695,7 +696,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ottp",
+        "id": "act_multiattack_9oyq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Tharian makes three Pact Axe attacks.</p>",
@@ -715,7 +716,7 @@
         }
       },
       {
-        "id": "act_pact_axe_vdte",
+        "id": "act_pact_axe_4tz1",
         "name": "Pact Axe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +7, reach 5 ft. Hit: 10 (1d12 + 4) Slashing damage plus 13 (3d8) Necroticor Poisondamage.</p>",
@@ -733,7 +734,8 @@
           "damages": [
             {
               "formula": "1d12 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1053,7 +1055,7 @@
     ],
     "traits": [
       {
-        "id": "act_demonic_restoration_5spc",
+        "id": "act_demonic_restoration_x4y5",
         "name": "Demonic Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If Xarashtar dies outside the Abyss, his body dissolves into ichor, and he gains a new body instantly, reviving with all of his Hit Points somewhere in the Abyss.</p>",
@@ -1073,7 +1075,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_fzg2",
+        "id": "act_magic_resistance_mwy9",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Xarashtar has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1095,7 +1097,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9tt3",
+        "id": "act_multiattack_w3dd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Xarashtar makes two Pincer attacks and uses Pummel or Spellcasting.</p>",
@@ -1115,7 +1117,7 @@
         }
       },
       {
-        "id": "act_pincer_2s23",
+        "id": "act_pincer_asbr",
         "name": "Pincer",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 16 (2d10 + 5) Slashing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 15) from one of two pincers.</p>",
@@ -1136,14 +1138,15 @@
           "damages": [
             {
               "formula": "2d10 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_pummel_dhl4",
+        "id": "act_pummel_6enu",
         "name": "Pummel",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 17, one creature Grappled by Xarashtar. {@actSaveFail} 15 (3d6 + 5) Bludgeoning damage. {@actSaveSuccess} Half damage.</p>",
@@ -1164,7 +1167,8 @@
           "damages": [
             {
               "formula": "3d6 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null

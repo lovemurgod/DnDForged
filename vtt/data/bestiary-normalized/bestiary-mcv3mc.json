@@ -104,7 +104,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blaze_rod_yuw8",
+        "id": "act_blaze_rod_swej",
         "name": "Blaze Rod",
         "actionType": "trait",
         "descriptionHtml": "<p>When the blaze drops to 0 hit points, it disappears in a cloud of smoke and has a 50 percent chance of leaving behind a glowing rod worth 100 gp. The rod sheds dim light in a 5-foot radius. As an action, a creature can try to snap the rod, doing so with a successful DC 14 Strength check. The snapped rod releases its fiery energy in a 5-foot-radius sphere centered on itself. Each creature in that area must make a DC 14 Dexterity saving throw, taking 6 (1d12) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -125,14 +125,15 @@
           "damages": [
             {
               "formula": "1d12",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heat_aura_v800",
+        "id": "act_heat_aura_821s",
         "name": "Heat Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>Any creature that starts its turn within 5 feet of the blaze takes 3 (1d6) fire damage.</p>",
@@ -150,14 +151,15 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_illumination_7jhd",
+        "id": "act_illumination_apz5",
         "name": "Illumination",
         "actionType": "trait",
         "descriptionHtml": "<p>The blaze sheds bright light in a 20-foot radius and dim light for an additional 20 feet.</p>",
@@ -177,7 +179,7 @@
         }
       },
       {
-        "id": "act_water_susceptibility_4plh",
+        "id": "act_water_susceptibility_63qy",
         "name": "Water Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>The blaze takes 1 cold damage for every 5 feet it moves in water, for every gallon of water splashed on it, or whenever it starts its turn in the rain.</p>",
@@ -199,7 +201,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yutj",
+        "id": "act_multiattack_xx06",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The blaze makes three Fiery Doom attacks.</p>",
@@ -219,7 +221,7 @@
         }
       },
       {
-        "id": "act_fiery_doom_19j0",
+        "id": "act_fiery_doom_vjc0",
         "name": "Fiery Doom",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +6 to hit; reach 5 ft. or ranged 60 ft., one target. Hit: 8 (1d10 + 3) fire damage, and the target catches fire if it's a creature or a flammable object. Until a creature takes an action to extinguish the fire, the burning target takes 3 (1d6) fire damage at the end of each of its turns.</p>",
@@ -237,11 +239,13 @@
           "damages": [
             {
               "formula": "1d10 + 3",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -368,7 +372,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_bizarre_physiology_8slx",
+        "id": "act_bizarre_physiology_ot1z",
         "name": "Bizarre Physiology",
         "actionType": "trait",
         "descriptionHtml": "<p>The creeper can't take actions except for Dash, Disengage, Hide, and Search. It can't take bonus actions or reactions.</p>",
@@ -388,7 +392,7 @@
         }
       },
       {
-        "id": "act_creeper_head_u8v5",
+        "id": "act_creeper_head_3yvk",
         "name": "Creeper Head",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creeper drops to 0 hit points from a charged creeper's explosion (see the Destruction trait), it dies and its head falls off. A creeper's fallen head is hollow and can be worn as a mask with eye and mouth openings.</p>",
@@ -408,7 +412,7 @@
         }
       },
       {
-        "id": "act_destruction_ny7k",
+        "id": "act_destruction_23be",
         "name": "Destruction",
         "actionType": "trait",
         "descriptionHtml": "<p>When it ends its turn within 10 feet of a Humanoid that it can see, the creeper stops moving and emits a hiss loud enough to be heard by creatures within 30 feet of itself.</p><p>If the creeper drops to 0 hit points before the start of its next turn, the hissing stops, and the creeper dies. Otherwise, at the start of the creeper's next turn, one of following things happens:</p><ul><li>If there are no Humanoids within 10 feet of the hissing creeper, it stops hissing. It then uses any available movement to approach the nearest Humanoid it can see.</li><li>If there are one or more Humanoids within 10 feet of the hissing creeper, the creeper explodes in a ball of energy that fills a 20-foot-radius sphere centered on itself. This energy spreads around corners. The creeper is destroyed, and every other creature in the explosion's area must make a DC 12 Dexterity saving throw, taking 14 (4d6) lightning damage on a failed save, or half as much damage on a successful one. Increase this damage by 7 (2d6) if the creeper is charged (see \"Electrical Charge\" below). Objects in the area that aren't being worn or carried take 14 (4d6) lightning damage, or 21 (6d6) lightning damage if the creeper is charged.</li></ul>",
@@ -437,22 +441,25 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             },
             {
               "formula": "2d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             },
             {
               "formula": "6d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_electrical_charge_x40e",
+        "id": "act_electrical_charge_gh7a",
         "name": "Electrical Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the creeper is subjected to lightning damage, it takes no damage and instead becomes charged for 1 minute. While charged, the creeper emits dim blue light in a 5-foot radius.</p>",
@@ -472,7 +479,7 @@
         }
       },
       {
-        "id": "act_fear_of_felines_r1qm",
+        "id": "act_fear_of_felines_am30",
         "name": "Fear of Felines",
         "actionType": "trait",
         "descriptionHtml": "<p>The creeper has the frightened condition whenever it starts its turn within 60 feet of a feline creature it can see. The condition lasts until the start of the creeper's next turn.</p>",
@@ -626,7 +633,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dragon_egg_7zng",
+        "id": "act_dragon_egg_xcnr",
         "name": "Dragon Egg",
         "actionType": "trait",
         "descriptionHtml": "<p>When the Ender Dragon drops to 0 hit points, it radiates beams of purple light and then disappears, leaving behind an inert, jet-black dragon egg worth 5,000 gp.</p>",
@@ -646,7 +653,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__4_day__uv68",
+        "id": "act_legendary_resistance__4_day__132p",
         "name": "Legendary Resistance (4/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the dragon fails a saving throw, it can choose to succeed instead.</p>",
@@ -668,7 +675,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dcfl",
+        "id": "act_multiattack_came",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon makes one Bite attack and uses Beating Wings.</p>",
@@ -688,7 +695,7 @@
         }
       },
       {
-        "id": "act_bite_s7bz",
+        "id": "act_bite_4oqg",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit; reach 15 ft., one target. Hit: 18 (3d6 + 8) piercing damage plus 7 (2d6) necrotic damage.</p>",
@@ -706,18 +713,20 @@
           "damages": [
             {
               "formula": "3d6 + 8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_beating_wings_1qfz",
+        "id": "act_beating_wings_qx9k",
         "name": "Beating Wings",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon beats its great wings. Each creature within 15 feet of the dragon must succeed on a DC 21 Dexterity saving throw or take 10 (1d4 + 8) bludgeoning damage, be pushed 10 feet away from the dragon, and have the prone condition.</p>",
@@ -738,14 +747,15 @@
           "damages": [
             {
               "formula": "1d4 + 8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_harmful_breath__recharge_5__wlsn",
+        "id": "act_harmful_breath__recharge_5__e1ct",
         "name": "Harmful Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales putrid gas in a 60-foot cone. Each creature in that area must make a DC 21 Constitution saving throw, taking 52 (15d6) necrotic damage on a failed save, or half as much damage on a successful one. The dragon then chooses a point it can see where the cone makes contact with the ground. That point becomes the center of a 10-foot-high, 10-foot-radius cylinder of lingering gas that disappears at the start of the dragon's next turn. Any creature that starts its turn in the cylinder takes 10 (3d6) necrotic damage.</p>",
@@ -766,11 +776,13 @@
           "damages": [
             {
               "formula": "15d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             },
             {
               "formula": "3d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -905,7 +917,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_evasive_teleportation_ae6r",
+        "id": "act_evasive_teleportation_nln8",
         "name": "Evasive Teleportation",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever it takes damage or is the target of a ranged attack, the Enderman can teleport, along with any equipment it is wearing or carrying, to an unoccupied space it can see within 20 feet of itself (no action required). If this effect is triggered by a ranged attack, the Enderman teleports just before the attack hits, causing the attack to miss it. This trait is suppressed while the Enderman has the incapacitated condition.</p>",
@@ -925,7 +937,7 @@
         }
       },
       {
-        "id": "act_implosion_tkcd",
+        "id": "act_implosion_os17",
         "name": "Implosion",
         "actionType": "trait",
         "descriptionHtml": "<p>When the Enderman drops to 0 hit points, it dies as its body implodes. Roll a d10. On a roll of 9 or less, the Enderman leaves no remains. On a roll of 10, the Enderman leaves behind a glowing, purple orb called an Ender pearl, worth 500 gp. A creature can throw the pearl up to 60 feet; if the pearl lands in an unoccupied space big enough to contain the creature, the creature teleports to that space, along with any equipment it is wearing or carrying, and the pearl disappears.</p>",
@@ -945,7 +957,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_blze",
+        "id": "act_sunlight_sensitivity_f7ec",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the Enderman has disadvantage on attack rolls.</p>",
@@ -965,7 +977,7 @@
         }
       },
       {
-        "id": "act_water_susceptibility_8o2w",
+        "id": "act_water_susceptibility_za7x",
         "name": "Water Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>The Enderman takes 1 cold damage for every 5 feet it moves in water, for every gallon of water splashed on it, or whenever it starts its turn in the rain.</p>",
@@ -987,7 +999,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ppts",
+        "id": "act_multiattack_6blo",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Enderman makes two Slam attacks.</p>",
@@ -1007,7 +1019,7 @@
         }
       },
       {
-        "id": "act_slam_vf02",
+        "id": "act_slam_u242",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit; reach 10 ft., one target. Hit: 8 (1d8 + 4) bludgeoning damage plus 9 (2d8) necrotic damage.</p>",
@@ -1025,11 +1037,13 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1152,7 +1166,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_bz4v",
+        "id": "act_pack_tactics_s43k",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The wolf has advantage on attack rolls against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally doesn't have the incapacitated condition.</p>",
@@ -1174,7 +1188,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_2im2",
+        "id": "act_bite_2awd",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit; reach 5 ft., one target. Hit: 7 (2d4 + 2) piercing damage. If the target is a creature, it must succeed on a DC 11 Strength saving throw or have the prone condition.</p>",
@@ -1195,7 +1209,8 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

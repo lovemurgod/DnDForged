@@ -101,7 +101,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_y6y2",
+        "id": "act_magic_resistance_4usr",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The icon has Advantage on saving throws against spells and other magical effects.</p>",
@@ -123,7 +123,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_phk9",
+        "id": "act_multiattack_m93w",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The icon makes two Slam attacks and uses Fiery Eruption.</p>",
@@ -143,7 +143,7 @@
         }
       },
       {
-        "id": "act_slam_g80a",
+        "id": "act_slam_518j",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 4 (1d4 + 2) Bludgeoning damage.</p>",
@@ -161,14 +161,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fiery_eruption_1j2w",
+        "id": "act_fiery_eruption_iw1k",
         "name": "Fiery Eruption",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 11, each creature in a 5-foot Emanation [Area of Effect] originating from the icon. {@actSaveFail} 7 (2d6) Fire damage.</p>",
@@ -189,7 +190,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -331,7 +333,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_diabolic_ward_65w9",
+        "id": "act_diabolic_ward_6vkm",
         "name": "Diabolic Ward",
         "actionType": "trait",
         "descriptionHtml": "<p>Attack rolls against the devil have Disadvantage. If the devil makes an attack roll, this trait is suppressed until the start of its next turn.</p>",
@@ -351,7 +353,7 @@
         }
       },
       {
-        "id": "act_diabolical_restoration_m41y",
+        "id": "act_diabolical_restoration_qrd8",
         "name": "Diabolical Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells.</p>",
@@ -371,7 +373,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_8owh",
+        "id": "act_magic_resistance_bg4g",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
@@ -393,7 +395,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zd45",
+        "id": "act_multiattack_n47n",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The devil makes two attacks, using Infernal Blade or Confounding Ray in any combination.</p>",
@@ -413,7 +415,7 @@
         }
       },
       {
-        "id": "act_infernal_blade_mx3q",
+        "id": "act_infernal_blade_jlw9",
         "name": "Infernal Blade",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 6 (1d6 + 3) Slashing damage and 7 (2d6) Fire damage.</p>",
@@ -431,18 +433,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_confounding_ray_lt92",
+        "id": "act_confounding_ray_zq6y",
         "name": "Confounding Ray",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +5, range 120 ft. Hit: 13 (2d12) Psychic damage. If the target is a creature, it can't make Opportunity Attack until the start of the devil's next turn.</p>",
@@ -460,14 +464,15 @@
           "damages": [
             {
               "formula": "2d12",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_compelling_contract__1_day__utro",
+        "id": "act_compelling_contract__1_day__hmbu",
         "name": "Compelling Contract (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>cha DC 14, one creature within 30 feet of the devil. {@actSaveFail} The target has the Charmed condition. While it is Charmed, it has the Stunned condition, except the target can speak. If the target agrees to the devil's contract, the effect ends. Otherwise, the target repeats the save whenever it takes damage and at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
@@ -745,7 +750,7 @@
     ],
     "traits": [
       {
-        "id": "act_diabolical_restoration_02nm",
+        "id": "act_diabolical_restoration_uysz",
         "name": "Diabolical Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells.</p>",
@@ -765,7 +770,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_29xc",
+        "id": "act_magic_resistance_6bjv",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
@@ -787,7 +792,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uv3a",
+        "id": "act_multiattack_0vrp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The devil makes two Thundering Halberd attacks.</p>",
@@ -807,7 +812,7 @@
         }
       },
       {
-        "id": "act_thundering_halberd_anw5",
+        "id": "act_thundering_halberd_z1cj",
         "name": "Thundering Halberd",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 10 ft. Hit: 16 (2d10 + 5) Slashing damage plus 14 (4d6) Thunder damage.</p>",
@@ -825,11 +830,13 @@
           "damages": [
             {
               "formula": "2d10 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "4d6",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -838,7 +845,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_utterance_of_pain_72ld",
+        "id": "act_utterance_of_pain_f4ot",
         "name": "Utterance of Pain",
         "actionType": "bonus",
         "descriptionHtml": "<p>wis DC 18, each creature in a 20-foot Emanation [Area of Effect] originating from the devil. {@actSaveFail} The target has the Stunned condition until the end of the devil's next turn.</p>",
@@ -861,7 +868,7 @@
         }
       },
       {
-        "id": "act_utterance_of_unmaking_axf0",
+        "id": "act_utterance_of_unmaking_g975",
         "name": "Utterance of Unmaking",
         "actionType": "bonus",
         "descriptionHtml": "<p>con DC 18, each creature in a 20-foot Emanation [Area of Effect] originating from the devil. {@actSaveFail} 22 (4d10) Force damage. {@actSaveSuccess} Half damage.</p>",
@@ -882,7 +889,8 @@
           "damages": [
             {
               "formula": "4d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1247,7 +1255,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__uihb",
+        "id": "act_legendary_resistance__3_day__or_4_day_in_lair__4aug",
         "name": "Legendary Resistance (3/Day, or 4/Day in Lair)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the vampire fails a saving throw, it can choose to succeed instead.</p>",
@@ -1267,7 +1275,7 @@
         }
       },
       {
-        "id": "act_misty_escape_3hm8",
+        "id": "act_misty_escape_eodi",
         "name": "Misty Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>If the vampire drops to 0 Hit Points outside its resting place, the vampire uses Shape-Shift to become mist (no action required). If it can't use Shape-Shift, it is destroyed.</p><p>While it has 0 Hit Points in mist form, it can't return to its vampire form, and it must reach its resting place within 2 hours or be destroyed. Once in its resting place, it returns to its vampire form and has the Paralyzed condition until it regains any Hit Points, and it regains 1 Hit Points after spending 1 hour there.</p>",
@@ -1288,7 +1296,7 @@
         }
       },
       {
-        "id": "act_vampire_weakness_ywkw",
+        "id": "act_vampire_weakness_as2m",
         "name": "Vampire Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire has these weaknesses:</p><ul><li><strong><em>Forbiddance.</em></strong> <p>The vampire can't enter a residence without an invitation from an occupant.</p></li><li><strong><em>Running Water.</em></strong> <p>The vampire takes 20 Acid damage if it ends its turn in running water.</p></li><li><strong><em>Stake to the Heart.</em></strong> <p>If a weapon that deals Piercing damage is driven into the vampire's heart while the vampire has the Incapacitated condition in its resting place, the vampire has the Paralyzed condition until the weapon is removed.</p></li><li><strong><em>Sunlight.</em></strong> <p>The vampire takes 20 Radiant damage if it starts its turn in sunlight. While in sunlight, it has Disadvantage on attack rolls and ability checks.</p></li></ul>",
@@ -1344,7 +1352,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__vampire_form_only__yops",
+        "id": "act_multiattack__vampire_form_only__a9sn",
         "name": "Multiattack (Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire makes two Hellfire Claw attacks and uses Bite.</p>",
@@ -1364,7 +1372,7 @@
         }
       },
       {
-        "id": "act_hellfire_claw__vampire_form_only__i9t4",
+        "id": "act_hellfire_claw__vampire_form_only__jvrd",
         "name": "Hellfire Claw (Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 5 ft. Hit: 13 (2d8 + 4) Slashing damage plus 10 (3d6) Fire damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 17) from one of two claws.</p>",
@@ -1385,18 +1393,20 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite__imp_or_vampire_form_only__fqna",
+        "id": "act_bite__imp_or_vampire_form_only__ggql",
         "name": "Bite (Imp or Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 18, one creature within 5 feet that is willing or that has the Grappled, Incapacitated, or Restrained condition. {@actSaveFail} 6 (1d4 + 4) Piercing damage plus 16 (3d10) Necrotic damage and the creature loses its highest-level available spell slot (if any). The target's Hit Points maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains Hit Points equal to that amount. A Humanoid reduced to 0 Hit Points by this damage and then buried rises the following sunset as a Vampire Spawn under the vampire's control.</p>",
@@ -1417,11 +1427,13 @@
           "damages": [
             {
               "formula": "1d4 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             },
             {
               "formula": "3d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1430,7 +1442,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_vyi0",
+        "id": "act_shape_shift_gi83",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>If the vampire isn't in sunlight or running water, it shape-shifts into a Tiny imp (Speed 20 ft., Fly Speed 40 ft.), or a Medium cloud of mist (Speed 5 ft., Fly Speed 20 ft. [hover]), or it returns to its vampire form. Anything it is wearing transforms with it.</p><p>While in imp form, the vampire's game statistics, other than its size and Speed, are unchanged.</p><p>While in mist form, the vampire can't take any actions, speak, or manipulate objects. It is weightless and can enter an enemy's space and stop there. If air can pass through a space, the mist can do so, but it can't pass through liquid. It has Resistance to all damage, except the damage it takes from sunlight.</p>",
@@ -1458,7 +1470,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_hellfire_strike_cdut",
+          "id": "act_hellfire_strike_0lam",
           "name": "Hellfire Strike",
           "actionType": "legendary",
           "descriptionHtml": "<p>The vampire moves up to half its Speed, and it makes one Hellfire Claw attack.</p>",
@@ -1478,7 +1490,7 @@
           }
         },
         {
-          "id": "act_infernal_majesty_z6de",
+          "id": "act_infernal_majesty_tam0",
           "name": "Infernal Majesty",
           "actionType": "legendary",
           "descriptionHtml": "<p>cha DC 17, each creature in a 20-foot Emanation [Area of Effect] originating from the vampire. {@actSaveFail} 9 (2d8) Psychic damage, and the target has the Frightened condition until the start of its next turn. {@actSaveSuccess} Half damage only. {@actSaveSuccessOrFail} The vampire can't take this action again until the start of its next turn.</p>",
@@ -1499,14 +1511,15 @@
             "damages": [
               {
                 "formula": "2d8",
-                "type": "Psychic"
+                "type": "Psychic",
+                "saveRider": true
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_teleport_5gwx",
+          "id": "act_teleport_ouoi",
           "name": "Teleport",
           "actionType": "legendary",
           "descriptionHtml": "<p>The vampire teleports up to 30 feet to an unoccupied space it can see.</p>",
@@ -1533,7 +1546,7 @@
     "lairActionsDesc": "",
     "regionalEffects": [
       {
-        "id": "act_diabolic_beasts_iop0",
+        "id": "act_diabolic_beasts_b9i8",
         "name": "Diabolic Beasts",
         "actionType": "regional",
         "descriptionHtml": "<p>Animals in the vampire's domain serve the vampire's will. From dusk until dawn, Medium or smaller Beasts have the Charmed condition while within 1 mile of the lair.</p>",
@@ -1553,7 +1566,7 @@
         }
       },
       {
-        "id": "act_drained_essence_w8bd",
+        "id": "act_drained_essence_8ysh",
         "name": "Drained Essence",
         "actionType": "regional",
         "descriptionHtml": "<p>Grasping shadows within 1 mile of the lair sap the body and mind. Creatures (excluding the vampire and its allies) that finish a Short or Long Rest while within 1 mile of the lair make a DC 15 Wisdom saving throw. On a failed save, a creature can't spend Hit Point Dice at the end of the rest and doesn't regain Hit Points, Hit Point Dice, or spell slots at the end of the rest.</p>",
@@ -1576,7 +1589,7 @@
         }
       },
       {
-        "id": "act_tenacious_lore_bks8",
+        "id": "act_tenacious_lore_2y2w",
         "name": "Tenacious Lore",
         "actionType": "regional",
         "descriptionHtml": "<p>Within 1 mile of the lair, flame doesn't burn written material.</p>",
@@ -1760,7 +1773,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_p0d3",
+        "id": "act_magic_resistance_hzf2",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire has Advantage on saving throws against spells and other magical effects.</p>",
@@ -1780,7 +1793,7 @@
         }
       },
       {
-        "id": "act_vampire_weakness_wlxn",
+        "id": "act_vampire_weakness_ti5b",
         "name": "Vampire Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire has these weaknesses:</p><ul><li><strong><em>Forbiddance.</em></strong> <p>The vampire can't enter a residence without an invitation from an occupant.</p></li><li><strong><em>Running Water.</em></strong> <p>The vampire takes 20 Acid damage if it ends its turn in running water.</p></li><li><strong><em>Stake to the Heart.</em></strong> <p>If a weapon that deals Piercing damage is driven into the vampire's heart while the vampire has the Incapacitated condition, the vampire has the Paralyzed condition until the weapon is removed.</p></li><li><strong><em>Sunlight.</em></strong> <p>The vampire takes 20 Radiant damage if it starts its turn in sunlight. While in sunlight, it has Disadvantage on attack rolls and ability checks.</p></li><li><strong><em>Immobile Restoration.</em></strong> <p>If the vampire drops to 0 Hit Points while it doesn't have the Petrified condition, it turns to stone, regains 50 Hit Points, and has the Petrified condition for 1 hour.</p></li></ul>",
@@ -1843,7 +1856,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0ohm",
+        "id": "act_multiattack_6kid",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire makes two Claw attacks and uses Bite or Guardian's Command.</p>",
@@ -1863,7 +1876,7 @@
         }
       },
       {
-        "id": "act_claw_it5a",
+        "id": "act_claw_q0az",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 5 ft. Hit: 14 (2d8 + 5) Slashing damage plus 7 (2d6) Necrotic damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 16) from one of two claws.</p>",
@@ -1884,18 +1897,20 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_whrm",
+        "id": "act_bite_sq7l",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 16, one creature within 5 feet that is willing or that has the Grappled, Incapacitated, or Restrained condition. {@actSaveFail} 7 (1d4 + 5) Piercing damage plus 7 (2d6) Necrotic damage. The target's Hit Points maximum decreases by an amount equal to the Necrotic damage taken, and the vampire regains Hit Points equal to that amount.</p>",
@@ -1916,11 +1931,13 @@
           "damages": [
             {
               "formula": "1d4 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             },
             {
               "formula": "2d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1930,7 +1947,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_resilient_flesh_6kd0",
+        "id": "act_resilient_flesh_ed95",
         "name": "Resilient Flesh",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The vampire is hit by a melee attack roll from an attacker the vampire can see. {@actResponse} The vampire reduces the damage it takes from the attack by 11 (2d6 + 4).</p>",

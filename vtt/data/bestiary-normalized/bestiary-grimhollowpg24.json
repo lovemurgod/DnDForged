@@ -97,7 +97,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_strangle_xy7d",
+        "id": "act_strangle_bdtu",
         "name": "Strangle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 2d8 + summonSpellLevel Bludgeoning damage, and the target has the Grappled condition (escape DC equals your spell save DC) and can't speak. Until the grapple ends, the target has the Restrained condition and is Suffocation.</p>",
@@ -115,14 +115,15 @@
           "damages": [
             {
               "formula": "2d8 + summonSpellLevel",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_constrict_v6g3",
+        "id": "act_constrict_0hzw",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>The fleshling construct constricts a target that it is grappling, doing 2d8 + summonSpellLevel Bludgeoning damage.</p>",
@@ -140,7 +141,8 @@
           "damages": [
             {
               "formula": "2d8 + summonSpellLevel",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -266,7 +268,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_three_heads_vrtn",
+        "id": "act_three_heads_davm",
         "name": "Three Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>The gasdra has Advantage on Wisdom (Perception) checks and on saving throws to avoid or end the Blinded, Charmed, Deafened, Frightened, Stunned, or Unconscious conditions. The gasdra can take one Reaction for each of its heads. The extra Reaction can be used only for Opportunity Attack.</p>",
@@ -286,7 +288,7 @@
         }
       },
       {
-        "id": "act_wakeful_nsvl",
+        "id": "act_wakeful_kn94",
         "name": "Wakeful",
         "actionType": "trait",
         "descriptionHtml": "<p>While the gasdra sleeps, at least one of its heads is awake.</p>",
@@ -308,7 +310,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_h2ap",
+        "id": "act_multiattack_1kd9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The gasdra makes three Beak attacks.</p>",
@@ -328,7 +330,7 @@
         }
       },
       {
-        "id": "act_beak_np58",
+        "id": "act_beak_3jzy",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Bludgeoning damage.</p>",
@@ -346,7 +348,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -470,7 +473,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sylvan_regeneration_xm71",
+        "id": "act_sylvan_regeneration_qvjm",
         "name": "Sylvan Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit regains 1 Hit Points at the start of its turn if it has at least 1 Hit Points and is in direct sunlight.</p>",
@@ -492,7 +495,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qfy8",
+        "id": "act_multiattack_316z",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The plant makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -512,7 +515,7 @@
         }
       },
       {
-        "id": "act_petal_burst__blooming_only__ard8",
+        "id": "act_petal_burst__blooming_only__q0wg",
         "name": "Petal Burst (Blooming Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The plant causes a burst of petals to fill the air within a 10-foot Emanation [Area of Effect]. The area is Heavily Obscured for 1 minute.</p>",
@@ -532,7 +535,7 @@
         }
       },
       {
-        "id": "act_slam_yew5",
+        "id": "act_slam_hb2e",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d8 + 3 + summonSpellLevel Bludgeoning or Piercing damage (Thorny Only).</p>",
@@ -550,7 +553,8 @@
           "damages": [
             {
               "formula": "1d8 + 3 + summonSpellLevel",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -560,7 +564,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_oaken_shield__oaken_only__d20i",
+        "id": "act_oaken_shield__oaken_only__9cns",
         "name": "Oaken Shield (Oaken Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature within 5 feet of the plant takes damage from an attack, the plant takes the damage instead.</p>",
@@ -580,7 +584,7 @@
         }
       },
       {
-        "id": "act_prickly_protection__thorny_only__awlr",
+        "id": "act_prickly_protection__thorny_only__3lv3",
         "name": "Prickly Protection (Thorny Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature within 5 feet of the plant attacks it, the plant makes a Slam attack with Advantage against the creature.</p>",
@@ -710,7 +714,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_protective_instinct_szvn",
+        "id": "act_protective_instinct_jg4d",
         "name": "Protective Instinct",
         "actionType": "trait",
         "descriptionHtml": "<p>When the guardian becomes Bloodied, it gains Temporary Hit Points equal to half of its maximum Hit Points and is enraged for 10 minutes. While enraged, Hostile [Attitude] creatures within 5 feet have Disadvantage on attack rolls against creatures other than the guardian.</p>",
@@ -730,7 +734,7 @@
         }
       },
       {
-        "id": "act_vigilant_ad52",
+        "id": "act_vigilant_5fok",
         "name": "Vigilant",
         "actionType": "trait",
         "descriptionHtml": "<p>The guardian can't be surprised.</p>",
@@ -750,7 +754,7 @@
         }
       },
       {
-        "id": "act_wild_bond_ymwh",
+        "id": "act_wild_bond_50hx",
         "name": "Wild Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add your Proficiency to any ability check, attack roll, or saving throw the beast makes.</p>",
@@ -772,7 +776,7 @@
     ],
     "actions": [
       {
-        "id": "act_natural_weapon_qkb9",
+        "id": "act_natural_weapon_b6p5",
         "name": "Natural Weapon",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your attack modifier using Strength, reach 5 ft. Hit: 1d4 + 2 plus your Rage Damage bonus Bludgeoning, Piercing, or Slashing damage (your choice when you summon the beast).</p>",
@@ -790,7 +794,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -800,7 +805,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_body_block_q2qr",
+        "id": "act_body_block_mqwi",
         "name": "Body Block",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} When a creature the beast can see attacks a target other than itself that is within 5 feet of it. {@actResponse} The guardian takes the damage instead of the target.</p>",
@@ -930,7 +935,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_aquatic_assault__sea_only__b4jh",
+        "id": "act_aquatic_assault__sea_only__r7oi",
         "name": "Aquatic Assault (Sea Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>While the beast is submerged in water, it has Advantage on attack rolls against creatures without a Swim Speed submerged in water.</p>",
@@ -950,7 +955,7 @@
         }
       },
       {
-        "id": "act_enraged_strikes_a2xt",
+        "id": "act_enraged_strikes_18mu",
         "name": "Enraged Strikes",
         "actionType": "trait",
         "descriptionHtml": "<p>While your Rage is active, the beast's attack rolls have Advantage.</p>",
@@ -970,7 +975,7 @@
         }
       },
       {
-        "id": "act_flyby__sky_only__wbib",
+        "id": "act_flyby__sky_only__qd8g",
         "name": "Flyby (Sky Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast doesn't provoke Opportunity Attack when it flies out of an enemy's reach.</p>",
@@ -990,7 +995,7 @@
         }
       },
       {
-        "id": "act_wild_bond_z4o8",
+        "id": "act_wild_bond_72ga",
         "name": "Wild Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add your Proficiency to any ability check, attack roll, or saving throw the beast makes.</p>",
@@ -1012,7 +1017,7 @@
     ],
     "actions": [
       {
-        "id": "act_natural_weapon_66q4",
+        "id": "act_natural_weapon_qy5k",
         "name": "Natural Weapon",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your attack modifier using Strength, reach 5 ft. Hit: 1d8 + 2 plus your Rage Damage bonus Bludgeoning, Piercing, or Slashing damage (your choice when you summon the beast).</p>",
@@ -1030,7 +1035,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1040,7 +1046,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_harry__land_only__6tqn",
+        "id": "act_harry__land_only__nmek",
         "name": "Harry (Land Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} When a creature the beast can see within 5 feet of it makes an attack roll. {@actResponse} The triggering attack roll has Advantage.</p>",
@@ -1174,7 +1180,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby__scaled_wings_only__92gu",
+        "id": "act_flyby__scaled_wings_only__861c",
         "name": "Flyby (Scaled Wings only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The sea serpent doesn't provoke Opportunity Attack when it flies out of an enemy's reach.</p>",
@@ -1196,7 +1202,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_f7cw",
+        "id": "act_multiattack_m7sp",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sea serpent makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -1216,7 +1222,7 @@
         }
       },
       {
-        "id": "act_allure__glowing_lantern_only__i6rj",
+        "id": "act_allure__glowing_lantern_only__l2ay",
         "name": "Allure (Glowing Lantern only)",
         "actionType": "action",
         "descriptionHtml": "<p>The sea serpent causes a lantern hanging from one of its fins to glow eerily. wis DC equals your spell save DC, each creature in a 30-foot Emanation [Area of Effect] originating from the sea serpent. {@actSaveFail} The target is Charmed by the sea serpent until the start of its next turn. Creatures have Advantage on the saving throw if the sea serpent has dealt damage to them already this turn, and the Charmed condition ends immediately if the sea serpent deals damage to a creature Charmed by this ability.</p>",
@@ -1236,7 +1242,7 @@
         }
       },
       {
-        "id": "act_inhale__enormous_mouth_only__7asm",
+        "id": "act_inhale__enormous_mouth_only__2cm4",
         "name": "Inhale (Enormous Mouth only)",
         "actionType": "action",
         "descriptionHtml": "<p>str DC equals your spell save DC, each creature in a 15-foot Cone [Area of Effect]. {@actSaveFail} 1d6 + summonSpellLevel Psychic damage and the creature is pulled 5 feet straight toward it or, if the creature is already within 5 feet of the sea serpent, it takes an additional 2d6 Piercing damage. {@actSaveSuccess} Half damage.</p>",
@@ -1254,18 +1260,20 @@
           "damages": [
             {
               "formula": "1d6 + summonSpellLevel",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_t96b",
+        "id": "act_bite_5adx",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d6 + 3 + summonSpellLevel Piercing damage and the creature has the Grappled condition (escape DC equals your spell save DC). The Grappled condition ends if the sea serpent bites a different creature.</p>",
@@ -1283,14 +1291,15 @@
           "damages": [
             {
               "formula": "1d6 + 3 + summonSpellLevel",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_thrash_e6k3",
+        "id": "act_thrash_zbxg",
         "name": "Thrash",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 10 ft. Hit: 1d10 + 3 + summonSpellLevel Bludgeoning damage and the target is pushed 5 feet away from the sea serpent.</p>",
@@ -1308,7 +1317,8 @@
           "damages": [
             {
               "formula": "1d10 + 3 + summonSpellLevel",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1440,7 +1450,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_j5gs",
+        "id": "act_pack_tactics_sba4",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm has Advantage on an attack roll against a creature if at least one of the swarm's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
@@ -1460,7 +1470,7 @@
         }
       },
       {
-        "id": "act_swarm_djqr",
+        "id": "act_swarm_spf7",
         "name": "Swarm",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can enter and occupy the space of another creature and vice versa, and the swarm can move through any opening large enough for a Tiny Beast.</p>",
@@ -1482,7 +1492,7 @@
     ],
     "actions": [
       {
-        "id": "act_bites_mdes",
+        "id": "act_bites_m644",
         "name": "Bites",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 0 ft. Hit: 2d6 + 1 + summonSpellLevel Piercing damage.</p>",
@@ -1500,7 +1510,8 @@
           "damages": [
             {
               "formula": "2d6 + 1 + summonSpellLevel",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

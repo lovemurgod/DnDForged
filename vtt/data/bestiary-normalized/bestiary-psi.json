@@ -304,7 +304,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_6e5j",
+        "id": "act_angelic_weapons_g9bl",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The Avacyn's weapon attacks are magical. When the solar hits with any weapon, the weapon deals an extra 6d8 radiant damage (included in the attack).</p>",
@@ -322,14 +322,15 @@
           "damages": [
             {
               "formula": "6d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_divine_awareness_jxym",
+        "id": "act_divine_awareness_iqa5",
         "name": "Divine Awareness",
         "actionType": "trait",
         "descriptionHtml": "<p>The Avacyn knows if it hears a lie.</p>",
@@ -349,7 +350,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_75tp",
+        "id": "act_magic_resistance_nnyu",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Avacyn has advantage on saving throws against spells and other magical effects.</p>",
@@ -369,7 +370,7 @@
         }
       },
       {
-        "id": "act_moonsilver_spear_o5ln",
+        "id": "act_moonsilver_spear_s2xp",
         "name": "Moonsilver Spear",
         "actionType": "trait",
         "descriptionHtml": "<p>An angel of the Flight of Moonsilver wields a spear made from a shard of the Helvault. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means. Once per turn, when the angel hits a creature with an attack using this weapon, it can wound the target. At the start of each of the wounded creature's turns, it takes 1d4 necrotic damage for each time the angel has wounded it, and it can then make a DC 15 Constitution saving throw, ending the effect of all such wounds on itself on a success. Alternatively, the wounded creature, or a creature within 5 feet of it, can use an action to make a DC 15 Wisdom (Medicine) check, ending the effect of such wounds on it on a success.</p>",
@@ -390,7 +391,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -399,7 +401,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ygds",
+        "id": "act_multiattack_hb7o",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Avacyn makes two greatsword attacks.</p>",
@@ -419,7 +421,7 @@
         }
       },
       {
-        "id": "act_greatsword_bi3w",
+        "id": "act_greatsword_sfzw",
         "name": "Greatsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +15 to hit, reach 5 ft., one target. Hit: 22 (4d6 + 8) slashing damage plus 27 (6d8) radiant damage.</p>",
@@ -437,18 +439,20 @@
           "damages": [
             {
               "formula": "4d6 + 8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "6d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slaying_longbow_i7e1",
+        "id": "act_slaying_longbow_2so3",
         "name": "Slaying Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +13 to hit, range 150/600 ft., one target. Hit: 15 (2d8 + 6) piercing damage plus 27 (6d8) radiant damage. If the target is a creature that has 100 hit points or fewer, it must succeed on a DC 15 Constitution saving throw or die.</p>",
@@ -469,18 +473,20 @@
           "damages": [
             {
               "formula": "2d8 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "6d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_flying_sword_7f18",
+        "id": "act_flying_sword_r2fh",
         "name": "Flying Sword",
         "actionType": "action",
         "descriptionHtml": "<p>The Avacyn releases its greatsword to hover magically in an unoccupied space within 5 feet of it. If the solar can see the sword, the solar can mentally command it as a bonus action to fly up to 50 feet and either make one attack against a target or return to the solar's hands. If the hovering sword is targeted by any effect, the solar is considered to be holding it. The hovering sword falls if the solar dies.</p>",
@@ -500,7 +506,7 @@
         }
       },
       {
-        "id": "act_healing_touch__4_day__g5kt",
+        "id": "act_healing_touch__4_day__e45x",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The Avacyn touches another creature. The target magically regains 40 (8d8 + 4) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -527,7 +533,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_teleport_mb4q",
+          "id": "act_teleport_b1p6",
           "name": "Teleport",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Avacyn magically teleports, along with any equipment it is wearing or carrying, up to 120 feet to an unoccupied space it can see.</p>",
@@ -547,7 +553,7 @@
           }
         },
         {
-          "id": "act_searing_burst__costs_2_actions__58w3",
+          "id": "act_searing_burst__costs_2_actions__jhwn",
           "name": "Searing Burst (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Avacyn emits magical, divine energy. Each creature of its choice in a 10-foot radius must make a DC 23 Dexterity saving throw, taking 14 (4d6) fire damage plus 14 (4d6) radiant damage on a failed save, or half as much damage on a successful one.</p>",
@@ -568,18 +574,20 @@
             "damages": [
               {
                 "formula": "4d6",
-                "type": "Fire"
+                "type": "Fire",
+                "saveRider": true
               },
               {
                 "formula": "4d6",
-                "type": "Radiant"
+                "type": "Radiant",
+                "saveRider": true
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_blinding_gaze__costs_3_actions__hwa4",
+          "id": "act_blinding_gaze__costs_3_actions__l3zy",
           "name": "Blinding Gaze (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The Avacyn targets one creature it can see within 30 feet of it. If the target can see it, the target must succeed on a DC 15 Constitution saving throw or be blinded until magic such as the lesser restoration spell removes the blindness.</p>",
@@ -990,7 +998,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_6kuu",
+        "id": "act_angelic_weapons_m1uk",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The Bruna's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
@@ -1008,14 +1016,15 @@
           "damages": [
             {
               "formula": "5d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_divine_awareness_7ao0",
+        "id": "act_divine_awareness_yxhz",
         "name": "Divine Awareness",
         "actionType": "trait",
         "descriptionHtml": "<p>The Bruna knows if it hears a lie.</p>",
@@ -1035,7 +1044,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_rf1e",
+        "id": "act_magic_resistance_4t9m",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Bruna has advantage on saving throws against spells and other magical effects.</p>",
@@ -1057,7 +1066,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_a6y5",
+        "id": "act_multiattack_n181",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Bruna makes two melee attacks.</p>",
@@ -1077,7 +1086,7 @@
         }
       },
       {
-        "id": "act_greatsword_d0z3",
+        "id": "act_greatsword_i4m1",
         "name": "Greatsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
@@ -1095,18 +1104,20 @@
           "damages": [
             {
               "formula": "4d6 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "5d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__4_day__a1zp",
+        "id": "act_healing_touch__4_day__8g9g",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The Bruna touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -1259,7 +1270,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_o8er",
+        "id": "act_false_appearance_74cm",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the creepy doll remains motionless, it is indistinguishable from an ordinary, inanimate doll.</p>",
@@ -1281,7 +1292,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ac9e",
+        "id": "act_multiattack_p9is",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The creepy doll makes one attack with its scissors and uses Psychic Assault.</p>",
@@ -1301,7 +1312,7 @@
         }
       },
       {
-        "id": "act_scissors_7u35",
+        "id": "act_scissors_xn52",
         "name": "Scissors",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage.</p>",
@@ -1319,14 +1330,15 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_psychic_assault_vb6f",
+        "id": "act_psychic_assault_dr2p",
         "name": "Psychic Assault",
         "actionType": "action",
         "descriptionHtml": "<p>The creepy doll targets one creature it can see within 10 feet of it that has a brain. The target must succeed on a DC 12 Intelligence saving throw or take 11 (2d10) psychic damage. Also on a failure, roll 3d6. If the total equals or exceeds the target's Intelligence score, that score is reduced to 0. The target is stunned until it regains at least one point of Intelligence, as from the greater restoration spell or similar magic.</p>",
@@ -1347,14 +1359,15 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_body_exchange_5da7",
+        "id": "act_body_exchange_j24k",
         "name": "Body Exchange",
         "actionType": "action",
         "descriptionHtml": "<p>The creepy doll initiates an Intelligence contest with an incapacitated humanoid within 5 feet of it. If it wins the contest, the creepy doll's spirit inhabits the target's body while the target's spirit is placed into the creepy doll's body. The creepy doll controls the target's body completely. It retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being charmed and frightened. It otherwise uses the possessed target's statistics, but doesn't gain access to the target's knowledge, class features, or proficiencies. The target retains its alignment, Intelligence, Wisdom, and Charisma while inhabiting the creepy doll's body.</p><p>The body exchange lasts until the doll's spirit is forced out by magic. (The dispel evil and good spell will accomplish this, though the doll is not one of the creature types whose possession that spell normally ends.) The body and the doll must be within 5 feet of each other for such an effect to work. The target is immune to this doll's Body Exchange for 24 hours after winning the Intelligence contest or after the exchange ends.</p>",
@@ -1514,7 +1527,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_devil_s_sight_dz1q",
+        "id": "act_devil_s_sight_gap7",
         "name": "Devil's Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>Magical darkness doesn't impede the demon's darkvision.</p>",
@@ -1534,7 +1547,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_dc6r",
+        "id": "act_magic_resistance_j95d",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The demon has advantage on saving throws against spells and other magical effects.</p>",
@@ -1556,7 +1569,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xyur",
+        "id": "act_multiattack_i6ss",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The demon makes three melee attacks: two with its battleaxe and one with its tail. It can use Hurl Flame in place of any melee attack.</p>",
@@ -1576,7 +1589,7 @@
         }
       },
       {
-        "id": "act_battleaxe_dpck",
+        "id": "act_battleaxe_ur7l",
         "name": "Battleaxe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 15 (2d8 + 6) slashing damage, or 17 (2d10 + 6) slashing damage if used with two hands.</p>",
@@ -1594,18 +1607,20 @@
           "damages": [
             {
               "formula": "2d8 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d10 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_dkqg",
+        "id": "act_tail_f2px",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 10 (1d8 + 6) piercing damage. If the target is a creature other than an undead or a construct, it must succeed on a DC 17 Constitution saving throw or lose 10 (3d6) hit points at the start of each of its turns due to an infernal wound. Each time the demon hits the wounded target with this attack, the damage dealt by the wound increases by 10 (3d6). Any creature can take an action to stanch the wound with a successful DC 12 Wisdom (Medicine) check. The wound also closes if the target receives magical healing.</p>",
@@ -1626,18 +1641,20 @@
           "damages": [
             {
               "formula": "1d8 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hurl_flame_b65b",
+        "id": "act_hurl_flame_tvz7",
         "name": "Hurl Flame",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +7 to hit, range 150 ft., one target. Hit: 14 (4d6) fire damage. If the target is a flammable object that isn't being worn or carried, it also catches fire.</p>",
@@ -1655,7 +1672,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1900,7 +1918,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_2cd7",
+        "id": "act_angelic_weapons_s6ea",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
@@ -1918,14 +1936,15 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_wi0n",
+        "id": "act_magic_resistance_5sfs",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
@@ -1947,7 +1966,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_xzoi",
+        "id": "act_multiattack_2kwq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
@@ -1967,7 +1986,7 @@
         }
       },
       {
-        "id": "act_mace_3by0",
+        "id": "act_mace_zvwo",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
@@ -1985,18 +2004,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__3_day__zz18",
+        "id": "act_healing_touch__3_day__58ho",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -2016,7 +2037,7 @@
         }
       },
       {
-        "id": "act_change_shape_t8wj",
+        "id": "act_change_shape_f8o6",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
@@ -2265,7 +2286,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_6w7k",
+        "id": "act_angelic_weapons_gxjl",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
@@ -2283,14 +2304,15 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_725k",
+        "id": "act_magic_resistance_vodh",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
@@ -2310,7 +2332,7 @@
         }
       },
       {
-        "id": "act_goldnight_menace_d3lv",
+        "id": "act_goldnight_menace_d75s",
         "name": "Goldnight Menace",
         "actionType": "trait",
         "descriptionHtml": "<p>As an action, an angel of Flight Goldnight can strike fear into the hearts of its enemies. Each creature of the angel's choice that is within 120 feet of it and is aware of it must succeed on a Wisdom saving throw or become frightened for 1 minute. The DC for this saving throw is the same as for the angel's Innate Spellcasting trait. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to that angel's Goldnight Menace for the next 24 hours.</p>",
@@ -2332,7 +2354,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_syor",
+        "id": "act_multiattack_f7bj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
@@ -2352,7 +2374,7 @@
         }
       },
       {
-        "id": "act_mace_k61r",
+        "id": "act_mace_pkxq",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
@@ -2370,18 +2392,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__3_day__6ymg",
+        "id": "act_healing_touch__3_day__iqpa",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -2401,7 +2425,7 @@
         }
       },
       {
-        "id": "act_change_shape_ra8g",
+        "id": "act_change_shape_9drd",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
@@ -2650,7 +2674,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_byaj",
+        "id": "act_angelic_weapons_dq4h",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
@@ -2668,14 +2692,15 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_rwbv",
+        "id": "act_magic_resistance_efhp",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
@@ -2695,7 +2720,7 @@
         }
       },
       {
-        "id": "act_moonsilver_spear_6hpr",
+        "id": "act_moonsilver_spear_hs92",
         "name": "Moonsilver Spear",
         "actionType": "trait",
         "descriptionHtml": "<p>An angel of the Flight of Moonsilver wields a spear made from a shard of the Helvault. Hit points lost to this weapon's damage can be regained only through a short or long rest, rather than by regeneration, magic, or any other means. Once per turn, when the angel hits a creature with an attack using this weapon, it can wound the target. At the start of each of the wounded creature's turns, it takes 1d4 necrotic damage for each time the angel has wounded it, and it can then make a DC 15 Constitution saving throw, ending the effect of all such wounds on itself on a success. Alternatively, the wounded creature, or a creature within 5 feet of it, can use an action to make a DC 15 Wisdom (Medicine) check, ending the effect of such wounds on it on a success.</p>",
@@ -2716,7 +2741,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -2725,7 +2751,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3seh",
+        "id": "act_multiattack_25q4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
@@ -2745,7 +2771,7 @@
         }
       },
       {
-        "id": "act_mace_20wk",
+        "id": "act_mace_u0hj",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
@@ -2763,18 +2789,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__3_day__odk2",
+        "id": "act_healing_touch__3_day__9aaj",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -2794,7 +2822,7 @@
         }
       },
       {
-        "id": "act_change_shape_v8c2",
+        "id": "act_change_shape_r2yd",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
@@ -2942,7 +2970,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ethereal_sight_hc7g",
+        "id": "act_ethereal_sight_40fx",
         "name": "Ethereal Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The geist can see 60 feet into the Ethereal Plane when it is on the Material Plane, and vice versa.</p>",
@@ -2962,7 +2990,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_rn9v",
+        "id": "act_incorporeal_movement_h3qx",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The geist can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -2980,7 +3008,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2989,7 +3018,7 @@
     ],
     "actions": [
       {
-        "id": "act_withering_touch_oaep",
+        "id": "act_withering_touch_d8o1",
         "name": "Withering Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target Hit: 17 (4d6 + 3) necrotic damage.</p>",
@@ -3007,14 +3036,15 @@
           "damages": [
             {
               "formula": "4d6 + 3",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_etherealness_y8d1",
+        "id": "act_etherealness_7hvp",
         "name": "Etherealness",
         "actionType": "action",
         "descriptionHtml": "<p>The geist enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can't affect or be affected by anything on the other plane.</p>",
@@ -3034,7 +3064,7 @@
         }
       },
       {
-        "id": "act_possession___recharge__1vfp",
+        "id": "act_possession___recharge__tjnp",
         "name": "Possession {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>One creature that the geist can see within 5 feet of it must succeed on a DC 13 Charisma saving throw or be possessed by the geist; the geist then disappears, and the target is incapacitated and loses control of its body. The geist now controls the body but doesn't deprive the target of awareness. The geist can't be targeted by any attack, spell, or other effect, except ones that turn undead, and it retains its alignment, Intelligence, Wisdom, Charisma, and immunity to being charmed and frightened. It otherwise uses the possessed target's statistics, but doesn't gain access to the target's knowledge, class features, or proficiencies. The possession lasts until the body drops to 0 hit points, the geist ends it as a bonus action, or the geist is turned or forced out by an effect like the dispel evil and good spell. When the possession ends, the geist reappears in an unoccupied space within 5 feet of the body. The target is immune to this geist's Possession for 24 hours after succeeding on the saving throw or after the possession ends. The geist can instead target the corpse of a creature, effectively using its own life force to animate the corpse as a zombie. The animated corpse uses zombie statistics and returns to death if the geist ends the possession.</p>",
@@ -3473,7 +3503,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_kuz6",
+        "id": "act_angelic_weapons_40fx",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The Gisela's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
@@ -3491,14 +3521,15 @@
           "damages": [
             {
               "formula": "5d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_divine_awareness_ae73",
+        "id": "act_divine_awareness_mzaj",
         "name": "Divine Awareness",
         "actionType": "trait",
         "descriptionHtml": "<p>The Gisela knows if it hears a lie.</p>",
@@ -3518,7 +3549,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_gj1w",
+        "id": "act_magic_resistance_1u6h",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Gisela has advantage on saving throws against spells and other magical effects.</p>",
@@ -3538,7 +3569,7 @@
         }
       },
       {
-        "id": "act_goldnight_menace_hvdo",
+        "id": "act_goldnight_menace_z0yw",
         "name": "Goldnight Menace",
         "actionType": "trait",
         "descriptionHtml": "<p>As an action, an angel of Flight Goldnight can strike fear into the hearts of its enemies. Each creature of the angel's choice that is within 120 feet of it and is aware of it must succeed on a Wisdom saving throw or become frightened for 1 minute. The DC for this saving throw is the same as for the angel's Innate Spellcasting trait. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to that angel's Goldnight Menace for the next 24 hours.</p>",
@@ -3560,7 +3591,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qvg5",
+        "id": "act_multiattack_73b3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Gisela makes two melee attacks.</p>",
@@ -3580,7 +3611,7 @@
         }
       },
       {
-        "id": "act_greatsword_u6gx",
+        "id": "act_greatsword_aluj",
         "name": "Greatsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
@@ -3598,18 +3629,20 @@
           "damages": [
             {
               "formula": "4d6 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "5d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__4_day__360t",
+        "id": "act_healing_touch__4_day__5mhl",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The Gisela touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -3857,7 +3890,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_kg33",
+        "id": "act_angelic_weapons_ik94",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel's weapon attacks are magical. When the angel hits with any weapon, the weapon deals an extra 4d8 radiant damage (included in the attack).</p>",
@@ -3875,14 +3908,15 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_ul0w",
+        "id": "act_magic_resistance_f5wo",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The angel has advantage on saving throws against spells and other magical effects.</p>",
@@ -3902,7 +3936,7 @@
         }
       },
       {
-        "id": "act_heron_protection_62tp",
+        "id": "act_heron_protection_1hqm",
         "name": "Heron Protection",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever an angel of the Host of Herons or a friendly creature within 10 feet of it makes a saving throw, the creature gains a bonus to the saving throw equal to the angel's Charisma modifier. The angel must be conscious to receive or grant this bonus.</p>",
@@ -3924,7 +3958,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_m5xm",
+        "id": "act_multiattack_vo4r",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The angel makes two melee attacks.</p>",
@@ -3944,7 +3978,7 @@
         }
       },
       {
-        "id": "act_mace_wnl4",
+        "id": "act_mace_map2",
         "name": "Mace",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 7 (1d6 + 4) bludgeoning damage plus 18 (4d8) radiant damage.</p>",
@@ -3962,18 +3996,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "4d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__3_day__pcgl",
+        "id": "act_healing_touch__3_day__jm1q",
         "name": "Healing Touch (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The angel touches another creature. The target magically regains 20 (4d8 + 2) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -3993,7 +4029,7 @@
         }
       },
       {
-        "id": "act_change_shape_qryi",
+        "id": "act_change_shape_mqkn",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The angel magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the angel's choice).</p><p>In a new form, the angel retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and special senses are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks.</p>",
@@ -4354,7 +4390,7 @@
     ],
     "traits": [
       {
-        "id": "act_shapechanger_kffk",
+        "id": "act_shapechanger_zxiq",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The keeper can use its action to polymorph into a raven-humanoid hybrid or into a raven, or back into its human form. Its statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its human form if it dies.</p>",
@@ -4374,7 +4410,7 @@
         }
       },
       {
-        "id": "act_mimicry_h3vs",
+        "id": "act_mimicry_bqos",
         "name": "Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The keeper can mimic simple sounds it has heard, such as a person whispering, a baby crying, or an animal chittering. A creature that hears the sounds can tell they are imitations with a successful DC 10 Wisdom (Insight) check.</p>",
@@ -4397,7 +4433,7 @@
         }
       },
       {
-        "id": "act_regeneration_klii",
+        "id": "act_regeneration_48rh",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The keeper regains 10 hit points at the start of its turn. If the keeper takes damage from a silvered weapon or a spell, this trait doesn't function at the start of the keeper's next turn. The keeper dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
@@ -4419,7 +4455,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__human_or_hybrid_form_only__7xt7",
+        "id": "act_multiattack__human_or_hybrid_form_only__jzlb",
         "name": "Multiattack (Human or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The keeper makes two weapon attacks, one of which can be with its hand crossbow.</p>",
@@ -4439,7 +4475,7 @@
         }
       },
       {
-        "id": "act_beak__raven_or_hybrid_form_only__jxbf",
+        "id": "act_beak__raven_or_hybrid_form_only__eqxu",
         "name": "Beak (Raven or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1 piercing damage in raven form, or 4 (1d4 + 2) piercing damage in hybrid form.</p>",
@@ -4457,14 +4493,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword__human_or_hybrid_form_only__4nxb",
+        "id": "act_shortsword__human_or_hybrid_form_only__ikpp",
         "name": "Shortsword (Human or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -4482,14 +4519,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow__human_or_hybrid_form_only__toyu",
+        "id": "act_hand_crossbow__human_or_hybrid_form_only__quxa",
         "name": "Hand Crossbow (Human or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -4507,7 +4545,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5046,7 +5085,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_dagger_iufi",
+        "id": "act_dagger_fp5t",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -5064,7 +5103,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5473,7 +5513,7 @@
     ],
     "traits": [
       {
-        "id": "act_angelic_weapons_0s7w",
+        "id": "act_angelic_weapons_5901",
         "name": "Angelic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The Sigarda's weapon attacks are magical. When the planetar hits with any weapon, the weapon deals an extra 5d8 radiant damage (included in the attack).</p>",
@@ -5491,14 +5531,15 @@
           "damages": [
             {
               "formula": "5d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_divine_awareness_goks",
+        "id": "act_divine_awareness_tbt4",
         "name": "Divine Awareness",
         "actionType": "trait",
         "descriptionHtml": "<p>The Sigarda knows if it hears a lie.</p>",
@@ -5518,7 +5559,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_0lx3",
+        "id": "act_magic_resistance_n8ce",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Sigarda has advantage on saving throws against spells and other magical effects.</p>",
@@ -5538,7 +5579,7 @@
         }
       },
       {
-        "id": "act_heron_protection_1hte",
+        "id": "act_heron_protection_77s1",
         "name": "Heron Protection",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever an angel of the Host of Herons or a friendly creature within 10 feet of it makes a saving throw, the creature gains a bonus to the saving throw equal to the angel's Charisma modifier. The angel must be conscious to receive or grant this bonus.</p>",
@@ -5560,7 +5601,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_o8iy",
+        "id": "act_multiattack_en6i",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Sigarda makes two melee attacks.</p>",
@@ -5580,7 +5621,7 @@
         }
       },
       {
-        "id": "act_greatsword_a1i3",
+        "id": "act_greatsword_0qzt",
         "name": "Greatsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 21 (4d6 + 7) slashing damage plus 22 (5d8) radiant damage.</p>",
@@ -5598,18 +5639,20 @@
           "damages": [
             {
               "formula": "4d6 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "5d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healing_touch__4_day__q4s5",
+        "id": "act_healing_touch__4_day__m7bz",
         "name": "Healing Touch (4/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The Sigarda touches another creature. The target magically regains 30 (6d8 + 3) hit points and is freed from any curse, disease, poison, blindness, or deafness.</p>",
@@ -5760,7 +5803,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_berserk_m4z6",
+        "id": "act_berserk_bruk",
         "name": "Berserk",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the skaab starts its turn with 40 hit points or fewer, roll a d6. On a 6, the golem goes berserk. On each of its turns while berserk, the golem attacks the nearest creature it can see. If no creature is near enough to move to and attack, the golem attacks an object, with preference for an object smaller than itself. Once the golem goes berserk, it continues to do so until it is destroyed or regains all its hit points.</p><p>The skaab's creator, if within 60 feet of the berserk golem, can try to calm it by speaking firmly and persuasively. The golem must be able to hear its creator, who must take an action to make a DC 15 Charisma (Persuasion) check. If the check succeeds, the golem ceases being berserk. If it takes damage while still at 40 hit points or fewer, the golem might go berserk again.</p>",
@@ -5784,7 +5827,7 @@
         }
       },
       {
-        "id": "act_aversion_of_fire_zgd1",
+        "id": "act_aversion_of_fire_r1ic",
         "name": "Aversion of Fire",
         "actionType": "trait",
         "descriptionHtml": "<p>If the skaab takes fire damage, it has disadvantage on attack rolls and ability checks until the end of its next turn.</p>",
@@ -5804,7 +5847,7 @@
         }
       },
       {
-        "id": "act_immutable_form_ciea",
+        "id": "act_immutable_form_7qpr",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The skaab is immune to any spell or effect that would alter its form.</p>",
@@ -5824,7 +5867,7 @@
         }
       },
       {
-        "id": "act_lightning_absorption_h2bg",
+        "id": "act_lightning_absorption_brdo",
         "name": "Lightning Absorption",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the skaab is subjected to lightning damage, it takes no damage and instead regains a number of hit points equal to the lightning damage dealt.</p>",
@@ -5844,7 +5887,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_0wgl",
+        "id": "act_magic_resistance_ih2m",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The skaab has advantage on saving throws against spells and other magical effects.</p>",
@@ -5864,7 +5907,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_ows8",
+        "id": "act_magic_weapons_rt50",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The skaab's weapon attacks are magical.</p>",
@@ -5886,7 +5929,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_c2qo",
+        "id": "act_multiattack_inwi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The skaab makes two slam attacks.</p>",
@@ -5906,7 +5949,7 @@
         }
       },
       {
-        "id": "act_slam_rv06",
+        "id": "act_slam_541u",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage.</p>",
@@ -5924,7 +5967,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6534,7 +6578,7 @@
     ],
     "traits": [
       {
-        "id": "act_shapechanger_r2h6",
+        "id": "act_shapechanger_7wbz",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>If Strefan isn't in running water or sunlight, he can use his action to polymorph into a Tiny bat, a Medium wolf, or a Medium cloud of mist, or back into his true form.</p><p>While in bat or wolf form, Strefan can't speak. In bat form, his walking speed is 5 feet, and he has a flying speed of 30 feet. In wolf form, his walking speed is 40 feet. His statistics, other than his size and speed, are unchanged. Anything he is wearing transforms with him, but nothing he is carrying does. He reverts to his true form if he dies.</p><p>While in mist form, Strefan can't take any actions, speak, or manipulate objects. He is weightless, has a flying speed of 20 feet, can hover, and can enter a hostile creature's space and stop there. In addition, if air can pass through a space, the mist can do so without squeezing, and he can't pass through water. He has advantage on Strength, Dexterity, and Constitution saving throws, and he is immune to all nonmagical damage, except the damage he takes from sunlight.</p>",
@@ -6556,7 +6600,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__vly1",
+        "id": "act_legendary_resistance__3_day__d5eq",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Strefan fails a saving throw, he can choose to succeed instead.</p>",
@@ -6576,7 +6620,7 @@
         }
       },
       {
-        "id": "act_misty_escape_q67q",
+        "id": "act_misty_escape_9mxs",
         "name": "Misty Escape",
         "actionType": "trait",
         "descriptionHtml": "<p>When Strefan drops to 0 hit points outside his coffin, he transforms into a cloud of mist (as in the Shapechanger trait) instead of falling unconscious, provided that he isn't in running water or sunlight. If he can't transform, he is destroyed.</p><p>While he has 0 hit points in mist form, he can't revert to his vampire form, and he must reach his coffin within 2 hours or be destroyed. Once in his coffin, he reverts to his vampire form. He is then paralyzed until he regains at least 1 hit point. After 1 hour in his coffin with 0 hit points, he regains 1 hit point.</p>",
@@ -6597,7 +6641,7 @@
         }
       },
       {
-        "id": "act_regeneration_euu1",
+        "id": "act_regeneration_g6g8",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>Strefan regains 20 hit points at the start of his turn if he has at least 1 hit point and isn't in running water or sunlight. If he takes radiant damage or damage from Holy Water (Flask), this trait doesn't function at the start of his next turn.</p>",
@@ -6617,7 +6661,7 @@
         }
       },
       {
-        "id": "act_spider_climb_ct79",
+        "id": "act_spider_climb_qnrn",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>Strefan can climb difficult surfaces, including upside down on ceilings, without having to make an ability check.</p>",
@@ -6637,7 +6681,7 @@
         }
       },
       {
-        "id": "act_vampire_vulnerabilities_jebq",
+        "id": "act_vampire_vulnerabilities_jxiv",
         "name": "Vampire Vulnerabilities",
         "actionType": "trait",
         "descriptionHtml": "<p>Weapons cut from living wood are particularly effective against vampires, though any weapon can harm or kill them. A vampire can't cross running water that shows the reflection of the moon, and water blessed by Avacyn (Holy Water (flask)) burns vampire flesh like acid. A vampire's reflection in silver (including a silver-backed glass mirror) appears as the vampire would have looked without the vampiric condition—neither its true appearance nor its glamer, but a normal human, flaws and all. For that reason, vampires go to great lengths to avoid mirrors, and the presence of silver in any form is unsettling to them.</p>",
@@ -6659,7 +6703,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__vampire_form_only__11zn",
+        "id": "act_multiattack__vampire_form_only__hbx8",
         "name": "Multiattack (Vampire Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Strefan makes two attacks, only one of which can be a bite attack.</p>",
@@ -6679,7 +6723,7 @@
         }
       },
       {
-        "id": "act_unarmed_strike__vampire_or_wolf_form_only__dog8",
+        "id": "act_unarmed_strike__vampire_or_wolf_form_only__v399",
         "name": "Unarmed Strike (Vampire or Wolf Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage, plus 14 (4d6) necrotic damage. If the target is a creature, Strefan can grapple it (escape DC 18) instead of dealing the slashing damage.</p>",
@@ -6700,18 +6744,20 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "4d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_4iph",
+        "id": "act_bite_x10l",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one willing creature, or a creature that is grappled by Strefan, incapacitated, or restrained. Hit: 7 (1d6 + 4) piercing damage plus 10 (3d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and Strahd regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if its hit point maximum is reduced to 0. A humanoid slain in this way and then buried in the ground rises the following night as a vampire spawn under Strahd's control.</p>",
@@ -6729,18 +6775,20 @@
           "damages": [
             {
               "formula": "1d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_charm_seeo",
+        "id": "act_charm_fn7b",
         "name": "Charm",
         "actionType": "action",
         "descriptionHtml": "<p>Strefan targets one humanoid he can see within 30 feet of him. If the target can see Strahd, the target must succeed on a DC 17 Wisdom saving throw against this magic or be charmed. The charmed target regards Strahd as a trusted friend to be heeded and protected. The target isn't under Strahd's control, but it takes Strahd's requests and actions in the most favorable way and lets Strahd bite it.</p><p>Each time Strefan or his companions do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until Strahd is destroyed, is on a different plane of existence than the target, or takes a bonus action to end the effect.</p>",
@@ -6764,7 +6812,7 @@
         }
       },
       {
-        "id": "act_children_of_the_night__1_day__hqcz",
+        "id": "act_children_of_the_night__1_day__03vo",
         "name": "Children of the Night (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Strefan magically calls 2d4 swarm of bats or swarm of rats, provided that the sun isn't up. While outdoors, Strahd can call 3d6 wolf instead. The called creatures arrive in 1d4 rounds, acting as allies of Strahd and obeying his spoken commands. The beasts remain for 1 hour, until Strahd dies, or until he dismisses them as a bonus action.</p>",
@@ -6791,7 +6839,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_move_d62z",
+          "id": "act_move_ips5",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>Strefan moves up to his speed without provoking opportunity attacks.</p>",
@@ -6811,7 +6859,7 @@
           }
         },
         {
-          "id": "act_unarmed_strike_51tr",
+          "id": "act_unarmed_strike_uedh",
           "name": "Unarmed Strike",
           "actionType": "legendary",
           "descriptionHtml": "<p>Strefan makes one unarmed strike.</p>",
@@ -6831,7 +6879,7 @@
           }
         },
         {
-          "id": "act_bite__costs_2_actions__czph",
+          "id": "act_bite__costs_2_actions__2wuv",
           "name": "Bite (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Strefan makes one bite attack.</p>",
@@ -6983,7 +7031,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration_tens",
+        "id": "act_regeneration_p4jd",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The vampire regains 10 hit points at the start of its turn if it has at least 1 hit point. If the vampire takes radiant damage or damage from Holy Water (Flask), this trait doesn't function at the start of the vampire's next turn.</p>",
@@ -7005,7 +7053,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_d5f6",
+        "id": "act_multiattack_ha1n",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire makes two attacks, only one of which can be a bite attack.</p>",
@@ -7025,7 +7073,7 @@
         }
       },
       {
-        "id": "act_claws_lvsa",
+        "id": "act_claws_a394",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one creature. Hit: 8 (2d4 + 3) slashing damage. Instead of dealing damage, the vampire can grapple the target (escape DC 13).</p>",
@@ -7046,14 +7094,15 @@
           "damages": [
             {
               "formula": "2d4 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_n5ae",
+        "id": "act_bite_tj81",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one willing creature, or a creature that is grappled by the vampire, incapacitated, or restrained. Hit: 6 (1d6 + 3) piercing damage plus 7 (2d6) necrotic damage. The target's hit point maximum is reduced by an amount equal to the necrotic damage taken, and the vampire regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.</p>",
@@ -7071,18 +7120,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_vampiric_glamer_7hns",
+        "id": "act_vampiric_glamer_c3sq",
         "name": "Vampiric Glamer",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire obscures its form with mind-affecting magic that makes others perceive it as a beautiful human of the same size and shape. The illusion ends if the vampire takes a bonus action to end it or if the vampire dies. A creature that can see the vampire can take an action to visually inspect it, ending the mental effect on itself and seeing the vampire's true form with a successful DC 20 Wisdom (Perception) check.</p>",
@@ -7105,7 +7156,7 @@
         }
       },
       {
-        "id": "act_aura_of_silence_7951",
+        "id": "act_aura_of_silence_qbkf",
         "name": "Aura of Silence",
         "actionType": "action",
         "descriptionHtml": "<p>The vampire shrouds itself in a cloak of silence to a radius of 2 feet. Within that radius, the effect is the same as the silence spell.</p>",
@@ -7300,7 +7351,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_8wrd",
+        "id": "act_shapechanger_mmbj",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The werewolf polymorphs into a wolf-humanoid canid form, or back into its true human form. This change is dictated by the moon, but can also be induced by trauma or strong emotion. Its statistics, other than its AC, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -7320,7 +7371,7 @@
         }
       },
       {
-        "id": "act_keen_hearing_and_smell_pmcj",
+        "id": "act_keen_hearing_and_smell_5uu8",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The werewolf has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
@@ -7340,7 +7391,7 @@
         }
       },
       {
-        "id": "act_howlpack__vildin_dgqg",
+        "id": "act_howlpack__vildin_2k6r",
         "name": "Howlpack: Vildin",
         "actionType": "trait",
         "descriptionHtml": "<p>Vildin Rampage (Canid Form Only). When the werewolf reduces a creature to 0 hit points with a melee attack on its turn, it can take a bonus action to move up to half its speed and make a bite attack.</p>",
@@ -7362,7 +7413,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack__canid_form_only__8eha",
+        "id": "act_multiattack__canid_form_only__i5o6",
         "name": "Multiattack (Canid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The werewolf makes two attacks: one with its bite and one with its claws or spear.</p>",
@@ -7382,7 +7433,7 @@
         }
       },
       {
-        "id": "act_bite__canid_form_only__etqx",
+        "id": "act_bite__canid_form_only__8129",
         "name": "Bite (Canid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
@@ -7400,14 +7451,15 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws__canid_form_only__5huu",
+        "id": "act_claws__canid_form_only__9t7r",
         "name": "Claws (Canid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) slashing damage.</p>",
@@ -7425,14 +7477,15 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear__human_form_only__kxlk",
+        "id": "act_spear__human_form_only__dp7a",
         "name": "Spear (Human Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d6 + 2) piercing damage, or 6 (1d8 + 2) piercing damage if used with two hands to make a melee attack.</p>",
@@ -7450,11 +7503,13 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7606,7 +7661,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_lozf",
+        "id": "act_undead_fortitude_dh82",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the cat to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the cat drops to 1 hit point instead.</p>",
@@ -7628,7 +7683,7 @@
     ],
     "actions": [
       {
-        "id": "act_claws_hqk5",
+        "id": "act_claws_h5ak",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 slashing damage.</p>",
@@ -7758,7 +7813,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_fpwe",
+        "id": "act_undead_fortitude_tfly",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the rat to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the rat drops to 1 hit point instead.</p>",
@@ -7780,7 +7835,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_jha2",
+        "id": "act_bite_jvo8",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 piercing damage.</p>",
@@ -7910,7 +7965,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_g1dr",
+        "id": "act_undead_fortitude_882q",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the snake to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the snake drops to 1 hit point instead.</p>",
@@ -7932,7 +7987,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_7sis",
+        "id": "act_bite_hmlb",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1 piercing damage, and the target must make a DC 10 Constitution saving throw, taking 5 (2d4) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -7953,7 +8008,8 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null

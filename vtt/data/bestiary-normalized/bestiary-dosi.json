@@ -92,7 +92,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_burst_9aup",
+        "id": "act_death_burst_e1j2",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>When the fume drake dies, it explodes in a cloud of noxious fumes. Each creature within 5 feet of the fume drake must succeed on a DC 11 Constitution saving throw or take 4 (1d8) poison damage.</p>",
@@ -113,14 +113,15 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_unusual_nature_gy89",
+        "id": "act_unusual_nature_8neb",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The fume drake doesn't require food, drink, or sleep.</p>",
@@ -142,7 +143,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_to83",
+        "id": "act_bite_rs7i",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) fire damage.</p>",
@@ -160,14 +161,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_scalding_breath___recharge__x38f",
+        "id": "act_scalding_breath___recharge__5qpn",
         "name": "Scalding Breath {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The fume drake exhales a 15-foot cone of scalding steam. Each creature in that area must make a DC 11 Dexterity saving throw, taking 4 (1d8) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -188,7 +190,8 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -314,7 +317,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inquiring_mind__1_day__395f",
+        "id": "act_inquiring_mind__1_day__ewd0",
         "name": "Inquiring Mind (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The kobold can cast detect magic, requiring no spell components and using Intelligence as the spellcasting ability.</p>",
@@ -334,7 +337,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_3on5",
+        "id": "act_pack_tactics_f48l",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The kobold has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -354,7 +357,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_jrr8",
+        "id": "act_sunlight_sensitivity_86y5",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the kobold has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -376,7 +379,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_j3ue",
+        "id": "act_dagger_istd",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -394,14 +397,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_alchemical_flame___recharge__gqfo",
+        "id": "act_alchemical_flame___recharge__psj2",
         "name": "Alchemical Flame {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The kobold unleashes fire in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 10 (3d6) fire damage on a failed saving throw, or half as much damage on a successful one.</p>",
@@ -422,7 +426,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -543,7 +548,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_59ei",
+        "id": "act_amphibious_3g8z",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can breathe air and water.</p>",
@@ -565,7 +570,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_dzdj",
+        "id": "act_multiattack_2o6e",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The merrow makes two Rend attacks.</p>",
@@ -585,7 +590,7 @@
         }
       },
       {
-        "id": "act_rend_f3sp",
+        "id": "act_rend_rmfv",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 8 (2d4 + 3) piercing damage.</p>",
@@ -603,7 +608,8 @@
           "damages": [
             {
               "formula": "2d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -729,7 +735,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inquiring_mind__1_day__hzqy",
+        "id": "act_inquiring_mind__1_day__m7b0",
         "name": "Inquiring Mind (1/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>Myla can cast detect magic, requiring no spell components and using Intelligence as the spellcasting ability.</p>",
@@ -749,7 +755,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_js4p",
+        "id": "act_pack_tactics_xp9r",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>Myla has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -769,7 +775,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_1t2k",
+        "id": "act_sunlight_sensitivity_03sr",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Myla has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -791,7 +797,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_2djm",
+        "id": "act_dagger_vb8h",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -809,14 +815,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_alchemical_flame___recharge__eduh",
+        "id": "act_alchemical_flame___recharge__wzq5",
         "name": "Alchemical Flame {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>Myla unleashes fire in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 10 (3d6) fire damage on a failed saving throw, or half as much damage on a successful one.</p>",
@@ -837,7 +844,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -977,7 +985,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_7g9f",
+        "id": "act_amphibious_yet3",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Runara can breathe air and water.</p>",
@@ -997,7 +1005,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__503a",
+        "id": "act_legendary_resistance__3_day__25vb",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Runara fails a saving throw, it can choose to succeed instead.</p>",
@@ -1019,7 +1027,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9j0e",
+        "id": "act_multiattack_klqb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Runara can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
@@ -1039,7 +1047,7 @@
         }
       },
       {
-        "id": "act_bite_ojgh",
+        "id": "act_bite_oq6d",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 10 ft., one target. Hit: 18 (2d10 + 7) piercing damage.</p>",
@@ -1057,14 +1065,15 @@
           "damages": [
             {
               "formula": "2d10 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_2w1g",
+        "id": "act_claw_xx48",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 14 (2d6 + 7) slashing damage.</p>",
@@ -1082,14 +1091,15 @@
           "damages": [
             {
               "formula": "2d6 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_frightful_presence_lyqw",
+        "id": "act_frightful_presence_nc4p",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of Runara's choice that is within 120 feet of the dragon and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the dragon's Frightful Presence for the next 24 hours.</p>",
@@ -1112,7 +1122,7 @@
         }
       },
       {
-        "id": "act_breath_weapons__recharge_5__u93g",
+        "id": "act_breath_weapons__recharge_5__p9e8",
         "name": "Breath Weapons (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Runara uses one of the following breath weapons.</p><ul><li><strong><em>Lightning Breath.</em></strong> <p>Runara exhales lightning in a 90-foot line that is 5 feet wide. Each creature in that line must make a DC 19 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p></li><li><strong><em>Repulsion Breath.</em></strong> <p>Runara exhales repulsion energy in a 30-foot cone. Each creature in that area must succeed on a DC 19 Strength saving throw. On a failed save, the creature is pushed 60 feet away from the dragon.</p></li></ul>",
@@ -1149,14 +1159,15 @@
           "damages": [
             {
               "formula": "12d10",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_change_shape_634h",
+        "id": "act_change_shape_zd0e",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>Runara magically transforms into a Humanoid or Beast that is Medium or Small, while retaining her game statistics (other than her size). This transformation ends if Runara is reduced to 0 hit points or uses a bonus action to end it.</p>",
@@ -1186,7 +1197,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_dragon_creates_fog_ll8l",
+        "id": "act_dragon_creates_fog_vqlc",
         "name": "Dragon Creates Fog",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon creates fog as though it had cast the fog cloud spell. The fog lasts until initiative count 20 on the next round.</p>",
@@ -1206,7 +1217,7 @@
         }
       },
       {
-        "id": "act_thunderclap_originates_igt1",
+        "id": "act_thunderclap_originates_xwki",
         "name": "Thunderclap Originates",
         "actionType": "lair",
         "descriptionHtml": "<p>A thunderclap originates at a point the dragon can see within 120 feet of it. Each creature within a 20-foot radius centered on that point must make a DC 15 Constitution saving throw or take 5 (1d10) thunder damage and be deafened until the end of its next turn.</p>",
@@ -1227,14 +1238,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_ocean_s_call_2iw9",
+        "id": "act_ocean_s_call_533o",
         "name": "Ocean's Call",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon conjures a swarm of spectral dolphins. Each creature in the water within 120 feet of the dragon must succeed on a DC 15 Dexterity saving throw or take 5 (1d10) slashing damage; then the swarm vanishes.</p>",
@@ -1255,14 +1267,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_salt_burst_ou82",
+        "id": "act_salt_burst_4gld",
         "name": "Salt Burst",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon chooses a point it can see in the lair. The air in a 20-foot-radius sphere centered on that point bursts with abrasive salt crystals. Each creature in that area must succeed on a DC 15 Dexterity saving throw or take 10 (3d6) slashing damage.</p>",
@@ -1283,14 +1296,15 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_whelming_water_z5ie",
+        "id": "act_whelming_water_eawm",
         "name": "Whelming Water",
         "actionType": "lair",
         "descriptionHtml": "<p>The dragon causes a strong current to course through the water in its lair. The dragon chooses any number of creatures it can see that are standing or swimming in water within 120 feet of it. Each chosen creature must succeed on a DC 15 Strength saving throw or be knocked prone.</p>",
@@ -1317,7 +1331,7 @@
     "lairActionsDesc": "On initiative count 20 (losing initiative ties), the dragon takes a lair action to cause one of the following effects:",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_w4rg",
+        "id": "act_regional_effect_030c",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Once per day, the dragon can alter the weather in a 6-mile radius centered on its lair. The dragon doesn't need to be outdoors; otherwise the effect is identical to the control weather spell.</p>",
@@ -1337,7 +1351,7 @@
         }
       },
       {
-        "id": "act_regional_effect_m953",
+        "id": "act_regional_effect_kbqz",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Underwater plants within 6 miles of the dragon's lair take on dazzlingly brilliant hues.</p>",
@@ -1357,7 +1371,7 @@
         }
       },
       {
-        "id": "act_regional_effect_bx6c",
+        "id": "act_regional_effect_tsek",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Within its lair, the dragon can set illusory sounds, such as soft music and strange echoes, so that they can be heard in various parts of the lair.</p>",
@@ -1377,7 +1391,7 @@
         }
       },
       {
-        "id": "act_additional_regional_effects_clsf",
+        "id": "act_additional_regional_effects_guk0",
         "name": "Additional Regional Effects",
         "actionType": "regional",
         "descriptionHtml": "<p>Any of these effects might appear in the area around a bronze dragon's lair, in addition to or instead of the effects described in the <em>Monster Manual</em>:</p><ul><li><strong><em>Phantom Escort.</em></strong> <p>Ghostly naval ships from an ancient armada appear, escorting well-meaning creatures in need of the dragon's help toward the dragon's lair.</p></li><li><strong><em>Underwater Pursuit.</em></strong> <p>Sailors glimpse the shadowy, illusory form of a dragon in the depths below them, keeping pace with their vessel.</p></li><li><strong><em>Unfailing Faithfulness.</em></strong> <p>Sapient creatures that spend a year within 10 miles of the dragon's lair find it nearly impossible to break a promise.</p></li></ul>",
@@ -1601,7 +1615,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_distress_spores_3fe7",
+        "id": "act_distress_spores_l81j",
         "name": "Distress Spores",
         "actionType": "trait",
         "descriptionHtml": "<p>When Sinensa takes damage, all other myconids within 240 feet of it can sense its pain.</p>",
@@ -1621,7 +1635,7 @@
         }
       },
       {
-        "id": "act_sun_sickness_m8xe",
+        "id": "act_sun_sickness_y6w9",
         "name": "Sun Sickness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Sinensa has disadvantage on ability checks, attack rolls, and saving throws. The myconid dies if it spends more than 1 hour in direct sunlight.</p>",
@@ -1643,7 +1657,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5ijq",
+        "id": "act_multiattack_77d3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The myconid makes one Fist attack and uses its Hallucination Spores.</p>",
@@ -1663,7 +1677,7 @@
         }
       },
       {
-        "id": "act_fist_gx39",
+        "id": "act_fist_g8rb",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 8 (3d4 + 1) bludgeoning damage plus 7 (2d4) poison damage.</p>",
@@ -1681,18 +1695,20 @@
           "damages": [
             {
               "formula": "3d4 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "2d4",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hallucination_spores_27pe",
+        "id": "act_hallucination_spores_fdsj",
         "name": "Hallucination Spores",
         "actionType": "action",
         "descriptionHtml": "<p>Sinensa ejects spores at one creature it can see within 5 feet of it. The target must succeed on a DC 12 Constitution saving throw or be poisoned for 1 minute. The poisoned target is incapacitated while it hallucinates. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -1715,7 +1731,7 @@
         }
       },
       {
-        "id": "act_rapport_spores_823r",
+        "id": "act_rapport_spores_l79l",
         "name": "Rapport Spores",
         "actionType": "action",
         "descriptionHtml": "<p>A 30-foot radius of spores extends from Sinensa. These spores can go around corners and affect only creatures with an Intelligence of 2 or higher that aren't undead, constructs, or elementals. Affected creatures can communicate telepathically with one another while they are within 30 feet of each other. The effect lasts for 1 hour.</p>",
@@ -1879,7 +1895,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_lwox",
+        "id": "act_hold_breath_vgne",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>While out of water, the octopus can hold its breath for 1 hour.</p>",
@@ -1899,7 +1915,7 @@
         }
       },
       {
-        "id": "act_water_breathing_05fu",
+        "id": "act_water_breathing_lp6h",
         "name": "Water Breathing",
         "actionType": "trait",
         "descriptionHtml": "<p>The octopus can breathe only underwater.</p>",
@@ -1921,7 +1937,7 @@
     ],
     "actions": [
       {
-        "id": "act_tentacles_g38b",
+        "id": "act_tentacles_6jbx",
         "name": "Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 15 ft., one target Hit: 7 (1d8 + 3) bludgeoning damage.</p>",
@@ -1939,7 +1955,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2071,7 +2088,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_chb1",
+        "id": "act_multiattack_7675",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Tarak makes three Dagger attacks.</p>",
@@ -2091,7 +2108,7 @@
         }
       },
       {
-        "id": "act_dagger_a44z",
+        "id": "act_dagger_4ls4",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
@@ -2109,7 +2126,8 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2118,7 +2136,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_cunning_action_8dt9",
+        "id": "act_cunning_action_7xo1",
         "name": "Cunning Action",
         "actionType": "bonus",
         "descriptionHtml": "<p>Tarak takes the Dash, Disengage, or Hide action.</p>",
@@ -2260,7 +2278,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_qn2y",
+        "id": "act_multiattack_a134",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Varnoth makes three Shortsword attacks.</p>",
@@ -2280,7 +2298,7 @@
         }
       },
       {
-        "id": "act_shortsword_wzz6",
+        "id": "act_shortsword_ncau",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -2298,7 +2316,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2419,7 +2438,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_3eim",
+        "id": "act_false_appearance_h8jv",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>If the violet fungus is motionless at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the fungus move or act, that creature must succeed on a DC 18 Intelligence (Investigation) check to discern that the violet fungus isn't ordinary fungus.</p>",
@@ -2444,7 +2463,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kpbu",
+        "id": "act_multiattack_7x46",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fungus makes 1d4 Rotting Touch attacks.</p>",
@@ -2464,7 +2483,7 @@
         }
       },
       {
-        "id": "act_rotting_touch_buj8",
+        "id": "act_rotting_touch_htqv",
         "name": "Rotting Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 10 ft., one creature. Hit: 4 (1d8) necrotic damage.</p>",
@@ -2482,7 +2501,8 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null

@@ -106,7 +106,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_soul_bond_xq9s",
+        "id": "act_soul_bond_fded",
         "name": "Soul Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>The following numbers increase by 1 when your proficiency bonus increases by 1: the spirit's skill and saving throw bonuses above, the bonuses to hit and damage of its Flame Seed, and the bonus to damage of its Fiery Teleportation.</p>",
@@ -128,7 +128,7 @@
     ],
     "actions": [
       {
-        "id": "act_flame_seed_jgpr",
+        "id": "act_flame_seed_md43",
         "name": "Flame Seed",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30 ft., one target you can see. Hit: 1d6 + 2 fire damage.</p>",
@@ -146,14 +146,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fiery_teleportation__recharges_after_a_short_or_long_rest__ozgl",
+        "id": "act_fiery_teleportation__recharges_after_a_short_or_long_rest__33fw",
         "name": "Fiery Teleportation (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit and each willing creature of your choice within 5 feet of it teleport up to 30 feet to unoccupied spaces you can see. Each creature within 10 feet of the space that the spirit left must succeed on a Dexterity saving throw against your spell save DC or take 1d6 + 2 fire damage.</p>",

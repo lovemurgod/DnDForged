@@ -103,7 +103,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_helpful_d1q0",
+        "id": "act_helpful_o213",
         "name": "Helpful",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert can take the Help action as a bonus action, and the creature who receives the help gains a 1d6 bonus to the d20 roll. If that roll is an attack roll, the creature can forgo adding the bonus to it, and then if the attack hits, the creature can add the bonus to the attack's damage roll against one target.</p>",
@@ -123,7 +123,7 @@
         }
       },
       {
-        "id": "act_tools_n1r1",
+        "id": "act_tools_iwyv",
         "name": "Tools",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert has thieves' tools and a musical instrument.</p>",
@@ -145,7 +145,7 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_o3x4",
+        "id": "act_extra_attack_hdhj",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The expert can attack twice, instead of once, whenever it takes the Attack action on its turn.</p>",
@@ -165,7 +165,7 @@
         }
       },
       {
-        "id": "act_shortsword_rzw5",
+        "id": "act_shortsword_u59y",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -183,14 +183,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_xr0m",
+        "id": "act_dagger_hu3b",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
@@ -208,14 +209,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_j6mi",
+        "id": "act_shortbow_xmsv",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 80/320 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -233,7 +235,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -360,7 +363,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_sting_5usr",
+        "id": "act_sting_06i5",
         "name": "Sting",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 5 (1d6 + 2) piercing damage, and the target must make a DC 11 Constitution saving throw, taking 10 (3d6) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",
@@ -381,11 +384,13 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -805,7 +810,7 @@
     ],
     "traits": [
       {
-        "id": "act_potent_cantrip_yepw",
+        "id": "act_potent_cantrip_88sl",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
@@ -827,7 +832,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_8skp",
+        "id": "act_quarterstaff_5dem",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
@@ -845,11 +850,13 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1305,7 +1312,7 @@
     ],
     "traits": [
       {
-        "id": "act_potent_cantrip_awh8",
+        "id": "act_potent_cantrip_uh3v",
         "name": "Potent Cantrip",
         "actionType": "trait",
         "descriptionHtml": "<p>The spellcaster can add its spellcasting ability modifier to the damage it deals with any cantrip.</p>",
@@ -1327,7 +1334,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_1l99",
+        "id": "act_quarterstaff_bzqr",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
@@ -1345,11 +1352,13 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1492,7 +1501,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_pg34",
+        "id": "act_false_appearance_fskb",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the statue remains motionless, it is indistinguishable from an inanimate statue.</p>",
@@ -1514,7 +1523,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3s4m",
+        "id": "act_multiattack_n36g",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The statue makes five attacks: one with its headbutt and four with its lightning bolt blades.</p>",
@@ -1534,7 +1543,7 @@
         }
       },
       {
-        "id": "act_headbutt_lttg",
+        "id": "act_headbutt_2u8c",
         "name": "Headbutt",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage.</p>",
@@ -1552,14 +1561,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_lightning_bolt_blades_1dgg",
+        "id": "act_lightning_bolt_blades_an5d",
         "name": "Lightning Bolt Blades",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 9 (2d4 + 4) slashing damage.</p>",
@@ -1577,7 +1587,8 @@
           "damages": [
             {
               "formula": "2d4 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1702,7 +1713,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_hearing_and_smell_igd0",
+        "id": "act_keen_hearing_and_smell_u5pl",
         "name": "Keen Hearing and Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>Tooth-N-Claw has advantage on Wisdom (Perception) checks that rely on hearing or smell.</p>",
@@ -1722,7 +1733,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_9hic",
+        "id": "act_pack_tactics_rf7w",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>Tooth-N-Claw has advantage on an attack roll against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -1744,7 +1755,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_3dre",
+        "id": "act_bite_vfuh",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage plus 7 (2d6) cold damage.</p>",
@@ -1762,18 +1773,20 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_freezing_breath__recharge_5__czhb",
+        "id": "act_freezing_breath__recharge_5__xgna",
         "name": "Freezing Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Tooth-N-Claw exhales an icy blast in a 15-foot cone. Each creature in that area must make a DC 12 Dexterity saving throw, taking 21 (6d6) cold damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1794,7 +1807,8 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -1929,7 +1943,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_battle_readiness_0xam",
+        "id": "act_battle_readiness_aehu",
         "name": "Battle Readiness",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has advantage on initiative rolls.</p>",
@@ -1949,7 +1963,7 @@
         }
       },
       {
-        "id": "act_improved_critical_006z",
+        "id": "act_improved_critical_tf95",
         "name": "Improved Critical",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior's attack rolls score a critical hit on a roll of 19 or 20 on the d20.</p>",
@@ -1969,7 +1983,7 @@
         }
       },
       {
-        "id": "act_martial_role_8des",
+        "id": "act_martial_role_lbt3",
         "name": "Martial Role",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has one of the following traits of your choice:</p><ul><li><strong><em>Attacker.</em></strong> <p>The warrior gains a +2 bonus to attack rolls.</p></li><li><strong><em>Defender.</em></strong> <p>The warrior gains the Protection reaction below.</p></li></ul>",
@@ -2007,7 +2021,7 @@
     ],
     "actions": [
       {
-        "id": "act_extra_attack_3fth",
+        "id": "act_extra_attack_424h",
         "name": "Extra Attack",
         "actionType": "action",
         "descriptionHtml": "<p>The warrior can attack twice, instead of once, whenever it takes the Attack action on its turn.</p>",
@@ -2027,7 +2041,7 @@
         }
       },
       {
-        "id": "act_longsword_anad",
+        "id": "act_longsword_7j8p",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands.</p>",
@@ -2045,18 +2059,20 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_9o64",
+        "id": "act_longbow_vqe9",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
@@ -2074,7 +2090,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2084,7 +2101,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_protection__defender_only__5dxx",
+        "id": "act_protection__defender_only__5qrz",
         "name": "Protection (Defender Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>The warrior imposes disadvantage on the attack roll of a creature within 5 feet of it whose target isn't the warrior. The warrior must be able to see the attacker.</p>",

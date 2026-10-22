@@ -84,7 +84,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_tunneler_z4qk",
+        "id": "act_tunneler_3egb",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The ankheg can burrow through solid rock at half its Burrow Speed and leaves a 10-foot-diameter tunnel in its wake.</p>",
@@ -106,7 +106,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_iu6a",
+        "id": "act_bite_x012",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5 (with Advantage if the target is Grappled by the ankheg), reach 5 ft. Hit: 10 (2d6 + 3) Slashing damage plus 3 (1d6) Acid damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 13).</p>",
@@ -127,18 +127,20 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_acid_spray___recharge__43hx",
+        "id": "act_acid_spray___recharge__9c0z",
         "name": "Acid Spray {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 12, each creature in a 30-foot-long, 5-foot-wide Line [Area of Effect]. {@actSaveFail} 14 (4d6) Acid damage. {@actSaveSuccess} Half damage.</p>",
@@ -159,7 +161,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -303,7 +306,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_barbed_hide_autc",
+        "id": "act_barbed_hide_cc83",
         "name": "Barbed Hide",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of its turns, the devil deals 5 (1d10) Piercing damage to any creature it is grappling or any creature grappling it.</p>",
@@ -321,14 +324,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_diabolical_restoration_v81r",
+        "id": "act_diabolical_restoration_s2v3",
         "name": "Diabolical Restoration",
         "actionType": "trait",
         "descriptionHtml": "<p>If the devil dies outside the Nine Hells, its body disappears in sulfurous smoke, and it gains a new body instantly, reviving with all its Hit Points somewhere in the Nine Hells.</p>",
@@ -348,7 +352,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_w6kz",
+        "id": "act_magic_resistance_6vq6",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
@@ -370,7 +374,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_b0o5",
+        "id": "act_multiattack_tigt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The devil makes one Claws attack and one Tail attack, or it makes two Hurl Flame attacks.</p>",
@@ -390,7 +394,7 @@
         }
       },
       {
-        "id": "act_claws_icen",
+        "id": "act_claws_x8w7",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 10 (2d6 + 3) Piercing damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 13) from both claws.</p>",
@@ -411,14 +415,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_umq3",
+        "id": "act_tail_wjq6",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 10 ft. Hit: 14 (2d10 + 3) Slashing damage.</p>",
@@ -436,14 +441,15 @@
           "damages": [
             {
               "formula": "2d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hurl_flame_82ui",
+        "id": "act_hurl_flame_wexg",
         "name": "Hurl Flame",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +5, range 150 ft. Hit: 17 (5d6) Fire damage. If the target is a flammable object that isn't being worn or carried, it starts burning.</p>",
@@ -461,7 +467,8 @@
           "damages": [
             {
               "formula": "5d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -596,7 +603,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_tk8l",
+        "id": "act_magic_resistance_5m4d",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The devil has Advantage on saving throws against spells and other magical effects.</p>",
@@ -618,7 +625,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_wwrh",
+        "id": "act_multiattack_rkb8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The devil makes one Beard attack and one Infernal Glaive attack.</p>",
@@ -638,7 +645,7 @@
         }
       },
       {
-        "id": "act_beard_qelp",
+        "id": "act_beard_9noo",
         "name": "Beard",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Piercing damage, and the target has the Poisoned condition until the start of the devil's next turn. Until this poison ends, the target can't regain Hit Points.</p>",
@@ -656,14 +663,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_infernal_glaive_zuta",
+        "id": "act_infernal_glaive_dk9y",
         "name": "Infernal Glaive",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 10 ft. Hit: 8 (1d10 + 3) Slashing damage. If the target is a creature and doesn't already have an infernal wound, it is subjected to the following effect. con DC 12. {@actSaveFail} The target receives an infernal wound. While wounded, the target loses 5 (1d10) Hit Points at the start of each of its turns. The wound closes after 1 minute, after a spell restores Hit Points to the target, or after the target or a creature within 5 feet of it takes an action to stanch the wound, doing so by succeeding on a DC 12 Wisdom (Medicine) check.</p>",
@@ -684,7 +692,8 @@
           "damages": [
             {
               "formula": "1d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -803,7 +812,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_training_co20",
+        "id": "act_training_fl01",
         "name": "Training",
         "actionType": "trait",
         "descriptionHtml": "<p>The commoner has proficiency in one skill of the DM's choice and has Advantage whenever it makes an ability check using that skill.</p>",
@@ -825,7 +834,7 @@
     ],
     "actions": [
       {
-        "id": "act_club_lei7",
+        "id": "act_club_wa9w",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +2, reach 5 ft. Hit: 2 (1d4) Bludgeoning damage.</p>",
@@ -843,7 +852,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -966,7 +976,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_agile_a61f",
+        "id": "act_agile_ufxx",
         "name": "Agile",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat doesn't provoke Opportunity Attacks when it moves out of an enemy's reach.</p>",
@@ -986,7 +996,7 @@
         }
       },
       {
-        "id": "act_death_burst_39kw",
+        "id": "act_death_burst_ftmz",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat explodes when it dies. con DC 9, each creature in a 5-foot Emanation [Area of Effect] originating from the rat. {@actSaveFail} 1 Acid damage.</p>",
@@ -1011,7 +1021,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_mn74",
+        "id": "act_bite_5gt6",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +2, reach 5 ft. Hit: 1 Piercing damage.</p>",
@@ -1154,7 +1164,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_ritual_sickle_so9p",
+        "id": "act_ritual_sickle_mx23",
         "name": "Ritual Sickle",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 1d4 + 2 Slashing damage plus 1 Necrotic damage.</p>",
@@ -1172,7 +1182,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1315,7 +1326,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_j8oz",
+        "id": "act_multiattack_yqjf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Dardew makes two attacks, using Fiery Claw or Power Chord in any combination.</p>",
@@ -1335,7 +1346,7 @@
         }
       },
       {
-        "id": "act_fiery_claw_bp83",
+        "id": "act_fiery_claw_0l5z",
         "name": "Fiery Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +7, reach 5 ft. Hit: 8 (1d8 + 4) Slashing damage plus 7 (2d6) Fire damage.</p>",
@@ -1353,18 +1364,20 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_power_chord_j5qg",
+        "id": "act_power_chord_9iye",
         "name": "Power Chord",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 14, one creature Dardew can see within 120 ft. {@actSaveFail} 13 (3d6 + 3) Thunder damage.</p>",
@@ -1385,7 +1398,8 @@
           "damages": [
             {
               "formula": "3d6 + 3",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1394,7 +1408,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_silver_tongue_3ifq",
+        "id": "act_silver_tongue_kqfk",
         "name": "Silver Tongue",
         "actionType": "bonus",
         "descriptionHtml": "<p>cha DC 14, one creature Dardew can see within 60 feet. {@actSaveFail} The creature has the Charmed condition until the start of Dardew's next turn.</p>",
@@ -1534,7 +1548,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_8yvt",
+        "id": "act_bite_49m5",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5 (with Advantage if the target is Grappled by a Demobat), reach 5 ft. Hit: 10 (2d6 + 3) Piercing damage.</p>",
@@ -1552,14 +1566,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tentacles_1c7o",
+        "id": "act_tentacles_eg78",
         "name": "Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Slashing damage. If the target is a Medium or smaller creature, the target has the Grappled condition (escape DC 13) from all four tentacles.</p>",
@@ -1580,7 +1595,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1708,7 +1724,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_4f29",
+        "id": "act_pack_tactics_rlhu",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The demodog has Advantage on an attack roll against a creature if at least one of the demodog's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
@@ -1730,7 +1746,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_ptre",
+        "id": "act_bite_i8gi",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 8 (1d10 + 3) Piercing damage. If the target is a Medium or smaller creature, it has the Prone condition.</p>",
@@ -1748,7 +1764,8 @@
           "damages": [
             {
               "formula": "1d10 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1884,7 +1901,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_baleful_presence_mkpz",
+        "id": "act_baleful_presence_oatf",
         "name": "Baleful Presence",
         "actionType": "trait",
         "descriptionHtml": "<p>Sources of light in a 120-foot Emanation [Area of Effect] originating from the demodragon flicker wildly. Nonmagical sources of Bright Light in that area instead shed Dim Light.</p>",
@@ -1904,7 +1921,7 @@
         }
       },
       {
-        "id": "act_regeneration_136u",
+        "id": "act_regeneration_vs60",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The demodragon regains 10 Hit Points at the start of each of its turns if it has at least 1 Hit Points</p>",
@@ -1926,7 +1943,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uej0",
+        "id": "act_multiattack_bt3w",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The demodragon makes two Bite attacks.</p>",
@@ -1946,7 +1963,7 @@
         }
       },
       {
-        "id": "act_bite_7hgb",
+        "id": "act_bite_x556",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +7, reach 10 ft. Hit: 11 (2d6 + 4) Piercing damage plus 4 (1d8) Acid damage.</p>",
@@ -1964,18 +1981,20 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_acid_breath__recharge_5__1z5a",
+        "id": "act_acid_breath__recharge_5__30ju",
         "name": "Acid Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 13, each creature in a 30-foot-long, 5-foot-wide Line [Area of Effect]. {@actSaveFail} 22 (4d10) Acid damage. {@actSaveSuccess} Half damage.</p>",
@@ -1996,7 +2015,8 @@
           "damages": [
             {
               "formula": "4d10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -2128,7 +2148,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_baleful_presence_2hfm",
+        "id": "act_baleful_presence_gz0m",
         "name": "Baleful Presence",
         "actionType": "trait",
         "descriptionHtml": "<p>Sources of light in a 60-foot Emanation [Area of Effect] originating from the spawn flicker wildly. Nonmagical sources of Bright Light in that area instead shed Dim Light.</p>",
@@ -2148,7 +2168,7 @@
         }
       },
       {
-        "id": "act_regeneration_p25c",
+        "id": "act_regeneration_35rl",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The spawn regains 5 Hit Points at the start of each of its turns if it has at least 1 Hit Points.</p>",
@@ -2168,7 +2188,7 @@
         }
       },
       {
-        "id": "act_running_leap_6aah",
+        "id": "act_running_leap_g4lw",
         "name": "Running Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>With a 10-foot running start, the spawn can Long Jump up to 30 feet.</p>",
@@ -2190,7 +2210,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ly1v",
+        "id": "act_multiattack_j5h2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spawn makes two Claw attacks.</p>",
@@ -2210,7 +2230,7 @@
         }
       },
       {
-        "id": "act_claw_l0l0",
+        "id": "act_claw_6vnf",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 10 ft. Hit: 6 (1d6 + 3) Slashing damage.</p>",
@@ -2228,14 +2248,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_bwcq",
+        "id": "act_bite_5xq8",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 5 (1d4 + 3) Piercing damage. If the target is a Medium or smaller creature, it has the Grappled condition (escape DC 13). While Grappled, the target has the Blinded condition.</p>",
@@ -2256,7 +2277,8 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2384,7 +2406,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_rend_1ld7",
+        "id": "act_rend_br0v",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Slashing damage.</p>",
@@ -2402,14 +2424,15 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fetid_cloud__1_day__3ioy",
+        "id": "act_fetid_cloud__1_day__722c",
         "name": "Fetid Cloud (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 11, each creature in a 10-foot Emanation [Area of Effect] originating from the dretch. {@actSaveFail} The target has the Poisoned condition until the end of its next turn. While Poisoned, the creature can take either an action or a Bonus Action on its turn, not both, and it can't take Reactions.</p>",
@@ -2552,7 +2575,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_tm1t",
+        "id": "act_magic_resistance_qv0z",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Flizzlebin has Advantage on saving throws against spells and other magical effects.</p>",
@@ -2572,7 +2595,7 @@
         }
       },
       {
-        "id": "act_ventriloquist_u0lr",
+        "id": "act_ventriloquist_gz8n",
         "name": "Ventriloquist",
         "actionType": "trait",
         "descriptionHtml": "<p>Flizzlebin can project his voice from anywhere within 1 mile of himself.</p>",
@@ -2594,7 +2617,7 @@
     ],
     "actions": [
       {
-        "id": "act_dazzling_confetti_ed2g",
+        "id": "act_dazzling_confetti_5vhn",
         "name": "Dazzling Confetti",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +5, reach 5 ft. or range 60 ft. Hit: 10 (2d6 + 3) Radiant damage.</p>",
@@ -2612,14 +2635,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_vanishing_trick__3_day__2ijb",
+        "id": "act_vanishing_trick__3_day__3xe2",
         "name": "Vanishing Trick (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>Flizzlebin has the Invisible condition for 10 minutes. This effect ends early immediately after Flizzlebin makes an attack roll, deals damage, or has the Incapacitated condition, or if his hat is removed.</p>",
@@ -2642,7 +2666,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_distracting_glitter_jbzj",
+        "id": "act_distracting_glitter_1m5t",
         "name": "Distracting Glitter",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} Flizzlebin is hit by an attack roll. {@actResponse} Flizzlebin adds 2 to his AC against that attack, possibly causing it to miss.</p>",
@@ -2776,7 +2800,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_burst_09m2",
+        "id": "act_death_burst_gvtx",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat explodes when it dies. Constitution Saving Throw DC 11, each creature in a 5-foot Emanation [Area of Effect] originating from the rat. {@actSaveFail} 5 (2d4) Acid damage. {@actSaveSuccess} Half damage.</p>",
@@ -2797,7 +2821,8 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -2806,7 +2831,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_bxy3",
+        "id": "act_bite_z8pl",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, Reach 5 ft. Hit: 6 (1d6 + 3) Piercing damage plus 5 (2d4) Acid damage.</p>",
@@ -2824,11 +2849,13 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d4",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2951,7 +2978,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_spider_climb_bmb2",
+        "id": "act_spider_climb_40b1",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The spider can climb difficult surfaces, including along ceilings, without needing to make an ability check.</p>",
@@ -2971,7 +2998,7 @@
         }
       },
       {
-        "id": "act_web_walker_ef2p",
+        "id": "act_web_walker_ms3e",
         "name": "Web Walker",
         "actionType": "trait",
         "descriptionHtml": "<p>The spider ignores movement restrictions caused by webs, and it knows the location of any other creature in contact with the same web.</p>",
@@ -2993,7 +3020,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_z0b5",
+        "id": "act_bite_74dp",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Piercing damage plus 7 (2d6) Poison damage.</p>",
@@ -3011,18 +3038,20 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_web__recharge_5__za2m",
+        "id": "act_web__recharge_5__96vy",
         "name": "Web (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 13, one creature the spider can see within 60 feet. {@actSaveFail} The target has the Restrained condition until the web is destroyed (AC 10; HP 5; Vulnerability to Fire damage; Immunity to Poison and Psychic damage).</p>",
@@ -3158,7 +3187,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_rend_ih4y",
+        "id": "act_rend_0sb6",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Piercing damage.</p>",
@@ -3176,14 +3205,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bone_bow_vsk0",
+        "id": "act_bone_bow_ictx",
         "name": "Bone Bow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +3, range 150/600 ft. Hit: 6 (1d10 + 1) Piercing damage.</p>",
@@ -3201,7 +3231,8 @@
           "damages": [
             {
               "formula": "1d10 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3210,7 +3241,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_rampage__1_day__nxnu",
+        "id": "act_rampage__1_day__crri",
         "name": "Rampage (1/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Immediately after dealing damage to a creature that is already Bloodied, the gnoll moves up to half its Speed, and it makes one Rend attack.</p>",
@@ -3347,7 +3378,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_scimitar_hydw",
+        "id": "act_scimitar_e9hc",
         "name": "Scimitar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Slashing damage, plus 2 (1d4) Slashing damage if the attack roll had Advantage.</p>",
@@ -3365,18 +3396,20 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_isur",
+        "id": "act_shortbow_6wul",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +4, range 80/320 ft. Hit: 5 (1d6 + 2) Piercing damage, plus 2 (1d4) Piercing damage if the attack roll had Advantage.</p>",
@@ -3394,11 +3427,13 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3407,7 +3442,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_1nf4",
+        "id": "act_nimble_escape_9dvn",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The goblin takes the Disengage or Hide action.</p>",
@@ -3543,7 +3578,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_spear_kgel",
+        "id": "act_spear_l5m0",
         "name": "Spear",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +3, reach 5 ft. or range 20/60 ft. Hit: 4 (1d6 + 1) Piercing damage.</p>",
@@ -3561,7 +3596,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3686,7 +3722,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_tactics_udrr",
+        "id": "act_pack_tactics_egb9",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The hound has Advantage on an attack roll against a creature if at least one of the hound's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p>",
@@ -3708,7 +3744,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ywdt",
+        "id": "act_multiattack_o1c8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hound makes two Bite attacks.</p>",
@@ -3728,7 +3764,7 @@
         }
       },
       {
-        "id": "act_bite_0k56",
+        "id": "act_bite_omls",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 7 (1d8 + 3) Piercing damage plus 3 (1d6) Fire damage.</p>",
@@ -3746,18 +3782,20 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fire_breath__recharge_5__at5b",
+        "id": "act_fire_breath__recharge_5__cen8",
         "name": "Fire Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 12, each creature in a 15-foot Cone [Area of Effect]. {@actSaveFail} 17 (5d6) Fire damage. {@actSaveSuccess} Half damage.</p>",
@@ -3778,7 +3816,8 @@
           "damages": [
             {
               "formula": "5d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -3913,7 +3952,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_0yc7",
+        "id": "act_magic_resistance_mwby",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The imp has Advantage on saving throws against spells and other magical effects.</p>",
@@ -3935,7 +3974,7 @@
     ],
     "actions": [
       {
-        "id": "act_sting_82pq",
+        "id": "act_sting_4byk",
         "name": "Sting",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 1d6 + 3 Piercing damage plus 2d6 Poison damage.</p>",
@@ -3953,18 +3992,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_invisibility_c1n0",
+        "id": "act_invisibility_zh8z",
         "name": "Invisibility",
         "actionType": "action",
         "descriptionHtml": "<p>The imp has the Invisible condition for 1 minute. This effect ends early immediately after the imp makes an attack roll or deals damage, or if the imp has the Incapacitated condition.</p>",
@@ -3984,7 +4025,7 @@
         }
       },
       {
-        "id": "act_shape_shift_s7mk",
+        "id": "act_shape_shift_nyv0",
         "name": "Shape-Shift",
         "actionType": "action",
         "descriptionHtml": "<p>The imp shape-shifts to resemble a rat (Speed 20 ft.), a raven (20 ft., Fly 60 ft.), or a spider (20 ft., Climb 20 ft.), or it returns to its true form. Its game statistics are the same in each form, except for its Speed. Any equipment it is wearing or carrying isn't transformed.</p>",
@@ -4129,7 +4170,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sewer_speech_qwzj",
+        "id": "act_sewer_speech_4a8w",
         "name": "Sewer Speech",
         "actionType": "trait",
         "descriptionHtml": "<p>Korex can comprehend and verbally communicate with Monstrosities.</p>",
@@ -4151,7 +4192,7 @@
     ],
     "actions": [
       {
-        "id": "act_rancid_knife_i0sa",
+        "id": "act_rancid_knife_04wv",
         "name": "Rancid Knife",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 8 (2d4 + 3) Piercing damage plus 7 (2d6) Poison damage, and the target has the Poisoned condition until the start of Korex's next turn.</p>",
@@ -4169,18 +4210,20 @@
           "damages": [
             {
               "formula": "2d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_entrancing_pipes_u44e",
+        "id": "act_entrancing_pipes_jbbk",
         "name": "Entrancing Pipes",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 12, one creature Korex can see within 120 feet. {@actSaveFail} 14 (4d6) Psychic damage, and the target has the Charmed condition until the start of Korex's next turn. {@actSaveSuccess} Half damage only.</p>",
@@ -4201,7 +4244,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -4210,7 +4254,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_skitter_6wfj",
+        "id": "act_skitter_2qk1",
         "name": "Skitter",
         "actionType": "bonus",
         "descriptionHtml": "<p>Korex takes the Dash or Disengage action.</p>",
@@ -4357,7 +4401,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_325g",
+        "id": "act_multiattack_s9qg",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The medusa makes two Claw attacks and one Snake Hair attack, or it makes three Poison Ray attacks.</p>",
@@ -4377,7 +4421,7 @@
         }
       },
       {
-        "id": "act_claw_xrlk",
+        "id": "act_claw_6d46",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 10 (2d6 + 3) Slashing damage.</p>",
@@ -4395,14 +4439,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_snake_hair_d0il",
+        "id": "act_snake_hair_3eou",
         "name": "Snake Hair",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 5 (1d4 + 3) Piercing damage plus 14 (4d6) Poison damage.</p>",
@@ -4420,18 +4465,20 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "4d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_poison_ray_52fl",
+        "id": "act_poison_ray_e8ge",
         "name": "Poison Ray",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +5, range 150 ft. Hit: 11 (2d8 + 2) Poison damage.</p>",
@@ -4449,7 +4496,8 @@
           "damages": [
             {
               "formula": "2d8 + 2",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4458,7 +4506,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_petrifying_gaze__recharge_5__q8xs",
+        "id": "act_petrifying_gaze__recharge_5__142y",
         "name": "Petrifying Gaze (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>con DC 13, each creature in a 30-foot Cone [Area of Effect]. If the medusa sees its reflection in the Cone [Area of Effect], the medusa must make this save. 1 The target has the Restrained condition and repeats the save at the end of its next turn if it is still Restrained, ending the effect on itself on a success. 2 The target has the Petrified condition instead of the Restrained condition.</p>",
@@ -4592,7 +4640,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sun_sickness_8x3t",
+        "id": "act_sun_sickness_eqxx",
         "name": "Sun Sickness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the myconid has Disadvantage on D20 Test. The myconid dies if it spends more than 1 hour in sunlight.</p>",
@@ -4614,7 +4662,7 @@
     ],
     "actions": [
       {
-        "id": "act_slam_50i4",
+        "id": "act_slam_exk7",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +2, reach 5 ft. Hit: 4 (1d8) Bludgeoning damage plus 3 (1d6) Poison damage.</p>",
@@ -4632,18 +4680,20 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_pacifying_spores__1_day__5ont",
+        "id": "act_pacifying_spores__1_day__c3sc",
         "name": "Pacifying Spores (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 11, one creature the myconid can see within 10 feet. {@actSaveFail} The target has the Stunned condition and repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
@@ -4666,7 +4716,7 @@
         }
       },
       {
-        "id": "act_rapport_spores_dwo1",
+        "id": "act_rapport_spores_shod",
         "name": "Rapport Spores",
         "actionType": "action",
         "descriptionHtml": "<p>The myconid expels spores in a 30-foot Emanation [Area of Effect] originating from itself. Creatures in that area with an Intelligence score of 2 or higher that aren't Constructs, Elementals, or Undead gain telepathy with a range of 30 feet for 1 hour.</p>",
@@ -4801,7 +4851,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_claw_0qdp",
+        "id": "act_claw_z7ae",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 6 (2d4 + 1) Slashing damage.</p>",
@@ -4819,14 +4869,15 @@
           "damages": [
             {
               "formula": "2d4 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_needles_ujnv",
+        "id": "act_needles_gsut",
         "name": "Needles",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +3, range 30/60 ft. Hit: 6 (2d4 + 1) Piercing damage.</p>",
@@ -4844,7 +4895,8 @@
           "damages": [
             {
               "formula": "2d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4977,7 +5029,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_dgax",
+        "id": "act_multiattack_dq7x",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Rilly June makes two Hayfork attacks.</p>",
@@ -4997,7 +5049,7 @@
         }
       },
       {
-        "id": "act_hayfork_bspn",
+        "id": "act_hayfork_kqyv",
         "name": "Hayfork",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 6 (1d8 + 2) Piercing damage.</p>",
@@ -5015,14 +5067,15 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_g_wan__git___1_day__80y1",
+        "id": "act_g_wan__git___1_day__500j",
         "name": "G'wan, Git! (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 11, one creature Rilly June can see within 60 feet. {@actSaveFail} 10 (3d6) Psychic damage, and the target has the Frightened condition until the end of its next turn. {@actSaveSuccess} Half damage only.</p>",
@@ -5043,7 +5096,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -5178,7 +5232,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_fearsome_claw_6rnn",
+        "id": "act_fearsome_claw_fska",
         "name": "Fearsome Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 6 (2d4 + 1) Slashing damage, and the target has the Frightened condition until the end of the scarecrow's next turn.</p>",
@@ -5196,14 +5250,15 @@
           "damages": [
             {
               "formula": "2d4 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_terrifying_glare_6mjr",
+        "id": "act_terrifying_glare_199a",
         "name": "Terrifying Glare",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 11, one creature the scarecrow can see within 30 feet. {@actSaveFail} The target has the Frightened condition until the end of the scarecrow's next turn. While Frightened, the target has the Paralyzed condition.</p>",
@@ -5361,7 +5416,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amorphous_537x",
+        "id": "act_amorphous_jhy8",
         "name": "Amorphous",
         "actionType": "trait",
         "descriptionHtml": "<p>The shadow can move through a space as narrow as 1 inch without expending extra movement to do so.</p>",
@@ -5381,7 +5436,7 @@
         }
       },
       {
-        "id": "act_sunlight_weakness_iv9u",
+        "id": "act_sunlight_weakness_y6tn",
         "name": "Sunlight Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the shadow has Disadvantage on D20 Test.</p>",
@@ -5403,7 +5458,7 @@
     ],
     "actions": [
       {
-        "id": "act_draining_swipe_7146",
+        "id": "act_draining_swipe_tc84",
         "name": "Draining Swipe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Necrotic damage, and the target's Strength score decreases by 1d4. The target dies if this reduces that score to 0. If a Humanoid is slain by this attack, a Shadow rises from the corpse 1d4 hours later.</p>",
@@ -5421,7 +5476,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5430,7 +5486,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_stealth_81fa",
+        "id": "act_shadow_stealth_4co3",
         "name": "Shadow Stealth",
         "actionType": "bonus",
         "descriptionHtml": "<p>While in Dim Light or Darkness, the shadow takes the Hide action.</p>",
@@ -5567,7 +5623,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shriek_a8bj",
+        "id": "act_shriek_pari",
         "name": "Shriek",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} A creature or a source of Bright Light moves within 30 feet of the shrieker. {@actResponse} The shrieker emits a shriek audible within 300 feet of itself for 1 minute or until the shrieker dies.</p>",
@@ -5712,7 +5768,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_burst_znd8",
+        "id": "act_death_burst_slwn",
         "name": "Death Burst",
         "actionType": "trait",
         "descriptionHtml": "<p>The rat explodes when it dies. con DC 10, each creature in a 10-foot Emanation [Area of Effect] originating from the rat. {@actSaveFail} 2d4 Acid Damage. {@actSaveSuccess} Half damage.</p>",
@@ -5733,14 +5789,15 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_swarm_28vq",
+        "id": "act_swarm_ixlz",
         "name": "Swarm",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny rat. The swarm can't regain Hit Points.</p>",
@@ -5762,7 +5819,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_w6c3",
+        "id": "act_bite_8xpw",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, Reach 5 ft. Hit: 6 (2d4 + 2) Piercing damage or 1d4 + 2 Piercing damage if the swarm is Bloodied.</p>",
@@ -5780,11 +5837,13 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5910,7 +5969,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_constricting_vine_ng4j",
+        "id": "act_constricting_vine_kqvk",
         "name": "Constricting Vine",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 10 ft. Hit: 1d10 + 2 Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 12) from one of three vines.</p>",
@@ -5931,14 +5990,15 @@
           "damages": [
             {
               "formula": "1d10 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_entangling_vines__recharge_5__znoj",
+        "id": "act_entangling_vines__recharge_5__gc8o",
         "name": "Entangling Vines (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Grasping vines momentarily appear on each enemy in a 10-foot-radius Sphere [Area of Effect] centered on a point of the blight's choice within 60 feet of it. Each target must succeed on a DC 12 Strength saving throw or have the Restrained condition until the start of the blight's next turn.</p>",
@@ -6077,7 +6137,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_s5m8",
+        "id": "act_multiattack_1n04",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fungus makes two Rotting Touch attacks.</p>",
@@ -6097,7 +6157,7 @@
         }
       },
       {
-        "id": "act_rotting_touch_0s98",
+        "id": "act_rotting_touch_6rjj",
         "name": "Rotting Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +2, reach 10 ft. Hit: 4 (1d8) Necrotic damage.</p>",
@@ -6115,7 +6175,8 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null

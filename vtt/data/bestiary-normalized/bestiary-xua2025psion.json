@@ -88,7 +88,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_passage__ectoplasmic_entity_and_ghostly_entity_only__uorc",
+        "id": "act_incorporeal_passage__ectoplasmic_entity_and_ghostly_entity_only__6cuj",
         "name": "Incorporeal Passage (Ectoplasmic Entity and Ghostly Entity Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can move through other creatures and objects as if they were Difficult Terrain. If the spirit ends its turn in such a space, it is shunted to the nearest unoccupied space and takes 1d10 Force damage for every 5 feet traveled.</p>",
@@ -106,7 +106,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -115,7 +116,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yb28",
+        "id": "act_multiattack_oix3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes a number of attacks equal to half this spell's level (round down).</p>",
@@ -135,7 +136,7 @@
         }
       },
       {
-        "id": "act_crystal_strike__crystal_entity_only__misi",
+        "id": "act_crystal_strike__crystal_entity_only__jxfd",
         "name": "Crystal Strike (Crystal Entity Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your spell attack modifier, reach 5 ft. Hit: 1d10 + 3 + the spell's level Piercing damage.</p>",
@@ -153,14 +154,15 @@
           "damages": [
             {
               "formula": "1d10 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_ectoplasmic_splash__ectoplasmic_entity_only__e1vm",
+        "id": "act_ectoplasmic_splash__ectoplasmic_entity_only__poz2",
         "name": "Ectoplasmic Splash (Ectoplasmic Entity Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: Bonus equals your spell attack modifier, range 30 feet. Hit: 1d6 + 3 + the spell's level Psychic damage. Hit or Miss: Each creature in a 5-foot Emanation [Area of Effect] originating from and including the target has its Speed reduced by 5 feet until the end of its next turn.</p>",
@@ -178,14 +180,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_ephemeral_ray__ghostly_entity_only__czf1",
+        "id": "act_ephemeral_ray__ghostly_entity_only__zgar",
         "name": "Ephemeral Ray (Ghostly Entity Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: Bonus equals your spell attack modifier, range 120 ft. Hit: 1d8 + 3 + the spell's level Psychic damage.</p>",
@@ -203,7 +206,8 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -213,7 +217,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shard_swarm__crystal_entity_only__fqb4",
+        "id": "act_shard_swarm__crystal_entity_only__t439",
         "name": "Shard Swarm (Crystal Entity Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The spirit is hit by a melee attack roll. {@actResponse} The spirit halves the damage (round down) it takes from that attack. The spirit can then teleport to an unoccupied space it can see within 30 feet of itself.</p>",

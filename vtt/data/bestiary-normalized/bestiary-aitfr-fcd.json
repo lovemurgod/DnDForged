@@ -98,7 +98,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_inspired_courage_d88c",
+        "id": "act_inspired_courage_i0pk",
         "name": "Inspired Courage",
         "actionType": "trait",
         "descriptionHtml": "<p>The mercenary has advantage on savings throws against being charmed, frightened, grappled, or restrained while within 5 feet of at least one ally.</p>",
@@ -118,7 +118,7 @@
         }
       },
       {
-        "id": "act_martial_advantage_5r0f",
+        "id": "act_martial_advantage_g8qo",
         "name": "Martial Advantage",
         "actionType": "trait",
         "descriptionHtml": "<p>Once per turn, the mercenary can deal an extra 7 (2d6) damage to a creature it hits with a weapon attack if that creature is within 5 feet of an ally of the mercenary that isn't incapacitated.</p>",
@@ -136,7 +136,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -145,7 +146,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_i8dl",
+        "id": "act_multiattack_fb1z",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mercenary makes two longsword attacks.</p>",
@@ -165,7 +166,7 @@
         }
       },
       {
-        "id": "act_longsword_1esd",
+        "id": "act_longsword_116s",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage.</p>",
@@ -183,14 +184,15 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heavy_crossbow_uzuc",
+        "id": "act_heavy_crossbow_foaz",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range</p><p>100/400 ft., one target. Hit: 7 (1d10 + 2) piercing damage.</p>",
@@ -209,7 +211,8 @@
           "damages": [
             {
               "formula": "1d10 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -990,7 +993,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__rm6h",
+        "id": "act_legendary_resistance__3_day__zrus",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Tyreus fails a saving throw, he can choose to succeed instead.</p>",
@@ -1010,7 +1013,7 @@
         }
       },
       {
-        "id": "act_illusory_reality_hxdv",
+        "id": "act_illusory_reality_5hv5",
         "name": "Illusory Reality",
         "actionType": "trait",
         "descriptionHtml": "<p>When Tyreus casts an illusion spell of 1st level or higher, he can choose one inanimate, nonmagical object that is part of the illusion and make that object real. He can do this on his turn as a bonus action while the spell is ongoing.</p><p>The object remains real for 1 minute. The object can't deal damage or otherwise directly harm anyone.</p>",
@@ -1031,7 +1034,7 @@
         }
       },
       {
-        "id": "act_displacement__recharges_after_tyreus_casts_an_illusion_spell_of_1st_level_or_higher__thj1",
+        "id": "act_displacement__recharges_after_tyreus_casts_an_illusion_spell_of_1st_level_or_higher__blqb",
         "name": "Displacement (Recharges after Tyreus Casts an Illusion Spell of 1st Level or Higher)",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, Tyreus projects an illusion that makes him appear to be standing a few inches from his actual location, causing any creature to have disadvantage on attack rolls against Tyreus. The effect ends if Tyreus takes damage, he is incapacitated, or his speed becomes 0.</p>",
@@ -1053,7 +1056,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_zro7",
+        "id": "act_dagger_ymk9",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +8 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
@@ -1071,14 +1074,15 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_modify_illusion_v9yk",
+        "id": "act_modify_illusion_xrfb",
         "name": "Modify Illusion",
         "actionType": "action",
         "descriptionHtml": "<p>When Tyreus casts an illusion spell that has a duration of 1 minute or longer, he can use his action to change the nature of that illusion (using the spell's normal parameters for the illusion), provided that he can see the illusion.</p>",
@@ -1105,7 +1109,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_scrutinize_v1di",
+          "id": "act_scrutinize_nz6j",
           "name": "Scrutinize",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tyreus makes an Intelligence (Investigation) or Wisdom (Perception) check.</p>",
@@ -1125,7 +1129,7 @@
           }
         },
         {
-          "id": "act_cast_cantrip_hylt",
+          "id": "act_cast_cantrip_4d19",
           "name": "Cast Cantrip",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tyreus casts a cantrip from his spell list.</p>",
@@ -1145,7 +1149,7 @@
           }
         },
         {
-          "id": "act_cast_spell__costs_1_3_actions__cv0k",
+          "id": "act_cast_spell__costs_1_3_actions__hjot",
           "name": "Cast Spell (Costs 1-3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Tyreus uses a spell slot to cast a 1st-, 2nd-, or 3rd-level spell that he has prepared. Doing so costs 1 legendary action per level of the spell.</p>",

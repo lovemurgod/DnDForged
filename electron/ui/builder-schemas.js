@@ -24,13 +24,85 @@ export function calcAbilityModifier(score) {
   return mod >= 0 ? `+${mod}` : `${mod}`;
 }
 
+export function formatDefenseEntry(item) {
+  if (!item) return '';
+  if (typeof item === 'string') return item;
+  if (typeof item !== 'object') return String(item);
+  
+  if (Array.isArray(item.types) && item.types.length > 0) {
+    const typeStr = item.types.join(', ');
+    const parts = [];
+    if (Array.isArray(item.bypasses) && item.bypasses.length > 0) {
+      const hasMagic = item.bypasses.includes('magic') || item.bypasses.includes('nonmagical');
+      const hasSilver = item.bypasses.includes('silver') || item.bypasses.includes('silvered');
+      const hasAdamantine = item.bypasses.includes('adamantine');
+      
+      if (hasMagic && hasSilver) parts.push("from nonmagical attacks that aren't silvered");
+      else if (hasMagic && hasAdamantine) parts.push("from nonmagical attacks that aren't adamantine");
+      else if (hasMagic) parts.push("from nonmagical attacks");
+      else if (hasSilver) parts.push("from attacks that aren't silvered");
+      else if (hasAdamantine) parts.push("from attacks that aren't adamantine");
+      else parts.push(`except ${item.bypasses.join(', ')}`);
+    }
+    if (item.note) parts.push(item.note);
+    if (parts.length > 0) return `${typeStr} (${parts.join('; ')})`;
+    return typeStr;
+  }
+  const innerList = item.immune || item.resist || item.vulnerable;
+  const innerStr = Array.isArray(innerList) ? innerList.join(', ') : (innerList || '');
+  if (item.note && innerStr) return `${innerStr} (${item.note})`;
+  if (item.note) return item.note;
+  if (innerStr) return innerStr;
+  return JSON.stringify(item);
+}
+
+export function formatDefensesToString(val) {
+  if (!val) return '';
+  if (typeof val === 'string') return val;
+  if (Array.isArray(val)) return val.map(formatDefenseEntry).filter(Boolean).join('; ');
+  return formatDefenseEntry(val);
+}
+
+export function parseDefenseString(val) {
+  if (!val) return undefined;
+  if (Array.isArray(val)) return val;
+  if (typeof val === 'object') return [val];
+  if (typeof val !== 'string') return [String(val)];
+  
+  const entries = val.split(/;|\,(?![^\(]*\))/).map(s => s.trim()).filter(Boolean);
+  if (entries.length === 0) return undefined;
+  
+  const result = [];
+  entries.forEach(entry => {
+    const parenMatch = entry.match(/^([^\(]+)(?:\((.*)\))?$/);
+    if (parenMatch) {
+      const typePart = parenMatch[1].trim();
+      const notePart = (parenMatch[2] || '').trim();
+      const types = typePart.split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+      if (notePart) {
+        const bypasses = [];
+        if (/nonmagical/i.test(notePart)) bypasses.push('magic');
+        if (/silver/i.test(notePart)) bypasses.push('silver');
+        if (/adamantine/i.test(notePart)) bypasses.push('adamantine');
+        result.push({ types, bypasses, note: notePart });
+      } else {
+        types.forEach(t => result.push(t));
+      }
+    } else {
+      result.push(entry.toLowerCase());
+    }
+  });
+  return result.length > 0 ? result : undefined;
+}
+
 export function toCommaSeparatedString(val) {
   if (!val) return '';
   if (typeof val === 'string') return val;
   if (Array.isArray(val)) {
-    return val.map(v => (typeof v === 'string' ? v : (v.sensesString || v.name || v.special || JSON.stringify(v)))).join(', ');
+    return val.map(v => (typeof v === 'string' ? v : (v.types || v.immune || v.resist || v.vulnerable ? formatDefenseEntry(v) : (v.sensesString || v.name || v.special || JSON.stringify(v))))).join(', ');
   }
   if (typeof val === 'object') {
+    if (val.types || val.immune || val.resist || val.vulnerable) return formatDefenseEntry(val);
     if (val.sensesString) return val.sensesString;
     if (val.special) return val.special;
     return Object.values(val).filter(v => typeof v === 'string').join(', ');
@@ -117,6 +189,7 @@ export function createBlankEntity(category, sourceCode = 'MYBREW') {
         tokenUrl: '',
         resistances: '',
         immunities: '',
+        vulnerabilities: '',
         conditionImmunities: '',
         traits: [
           { name: 'Keen Sight', text: 'The creature has advantage on Wisdom (Perception) checks that rely on sight.' }
@@ -168,6 +241,9 @@ export function createBlankEntity(category, sourceCode = 'MYBREW') {
         damageType: 'Slashing',
         weaponProperties: 'Versatile',
         bonusHitDmg: 1,
+        isMagic: true,
+        isSilvered: false,
+        isAdamantine: false,
         baseAc: 0,
         acBonus: 0,
         maxDexBonus: '',
@@ -307,8 +383,9 @@ export function entityToJson(category, entity) {
         senses: toCleanStringArray(entity.senses),
         languages: toCleanStringArray(entity.languages) || ['Common'],
         tokenUrl: entity.tokenUrl || undefined,
-        resist: toCleanStringArray(entity.resistances),
-        immune: toCleanStringArray(entity.immunities),
+        resist: entity._rawDefenses?.resist || parseDefenseString(entity.resistances),
+        immune: entity._rawDefenses?.immune || parseDefenseString(entity.immunities),
+        vulnerable: entity._rawDefenses?.vulnerable || parseDefenseString(entity.vulnerabilities),
         conditionImmune: toCleanStringArray(entity.conditionImmunities),
         trait: (entity.traits || []).filter(t => t.name && t.text).map(t => ({
           name: t.name,
@@ -418,6 +495,9 @@ export function entityToJson(category, entity) {
         rarity: entity.rarity || 'uncommon',
         reqAttune: !!entity.reqAttune ? (entity.attuneDetails || true) : undefined,
         bonusWeapon: entity.bonusHitDmg ? `+${entity.bonusHitDmg}` : undefined,
+        isMagic: entity.isMagic !== undefined ? !!entity.isMagic : (entity.rarity && entity.rarity !== 'none'),
+        isSilvered: !!entity.isSilvered,
+        isAdamantine: !!entity.isAdamantine,
         dmg1: entity.dmg1 || entity.damageDice || undefined,
         dmg2: entity.dmg2 || undefined,
         dmgType: entity.dmgType || (entity.damageType ? entity.damageType.charAt(0).toLowerCase() : undefined),
@@ -644,9 +724,15 @@ export function jsonToEntity(category, raw) {
         senses: toCommaSeparatedString(raw.senses),
         languages: toCommaSeparatedString(raw.languages) || 'Common',
         tokenUrl: raw.tokenUrl || raw.tokenImg || '',
-        resistances: toCommaSeparatedString(raw.resist),
-        immunities: toCommaSeparatedString(raw.immune),
+        resistances: formatDefensesToString(raw.resist),
+        immunities: formatDefensesToString(raw.immune),
+        vulnerabilities: formatDefensesToString(raw.vulnerable),
         conditionImmunities: toCommaSeparatedString(raw.conditionImmune),
+        _rawDefenses: {
+          resist: raw.resist || [],
+          immune: raw.immune || [],
+          vulnerable: raw.vulnerable || []
+        },
         traits,
         actions,
         bonusActions,
@@ -734,6 +820,9 @@ export function jsonToEntity(category, raw) {
         properties: raw.properties || (Array.isArray(raw.property) ? raw.property : []),
         weaponProperties: Array.isArray(raw.properties || raw.property) ? (raw.properties || raw.property).join(', ') : '',
         bonusHitDmg: raw.bonusWeapon ? parseInt(raw.bonusWeapon.replace('+', ''), 10) : 0,
+        isMagic: raw.isMagic !== undefined ? !!raw.isMagic : (raw.magic === 1 || (raw.rarity && raw.rarity !== 'none')),
+        isSilvered: raw.isSilvered !== undefined ? !!raw.isSilvered : (Array.isArray(raw.property) && raw.property.includes('S')),
+        isAdamantine: raw.isAdamantine !== undefined ? !!raw.isAdamantine : (Array.isArray(raw.property) && raw.property.includes('A')),
         ac: raw.ac || 0,
         baseAc: raw.ac || 0,
         acBonus: raw.bonusAc ? parseInt(raw.bonusAc.replace('+', ''), 10) : 0,

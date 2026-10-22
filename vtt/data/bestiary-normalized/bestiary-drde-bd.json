@@ -88,7 +88,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_greatclub_3tlb",
+        "id": "act_greatclub_j4uj",
         "name": "Greatclub",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 13 (2d8 + 4) Bludgeoning damage.</p>",
@@ -106,14 +106,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_javelin_u4ed",
+        "id": "act_javelin_otdc",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +6, reach 5 ft. or range 30/120 ft. Hit: 11 (2d6 + 4) Piercing damage.</p>",
@@ -131,7 +132,8 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

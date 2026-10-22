@@ -99,7 +99,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_utb2",
+        "id": "act_multiattack_orir",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The brawler makes two attacks, using Grasping Strike or Punch Down in any combination.</p>",
@@ -119,7 +119,7 @@
         }
       },
       {
-        "id": "act_grasping_strike_g0wu",
+        "id": "act_grasping_strike_sdyk",
         "name": "Grasping Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 8 (1d8 + 4) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 16).</p>",
@@ -140,14 +140,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_punch_down_1b8b",
+        "id": "act_punch_down_rb2e",
         "name": "Punch Down",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 8 (1d8 + 4) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -165,7 +166,8 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -174,7 +176,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_brace_up_dn7c",
+        "id": "act_brace_up_vjqp",
         "name": "Brace Up",
         "actionType": "bonus",
         "descriptionHtml": "<p>The brawler gains 13 (3d8) Temporary Hit Points.</p>",
@@ -194,7 +196,7 @@
         }
       },
       {
-        "id": "act_combo_u30z",
+        "id": "act_combo_297t",
         "name": "Combo",
         "actionType": "bonus",
         "descriptionHtml": "<p>The brawler makes one Grasping Strike or Punch Down attack.</p>",
@@ -214,7 +216,7 @@
         }
       },
       {
-        "id": "act_enraging_insult_ijth",
+        "id": "act_enraging_insult_ebay",
         "name": "Enraging Insult",
         "actionType": "bonus",
         "descriptionHtml": "<p>wis DC 12, one creature that can see or hear the brawler within 30 feet. {@actSaveFail} 6 (1d8 + 2) Psychic damage, and the target has Disadvantage on attack rolls against creatures other than the brawler until the start of the brawler's next turn.</p>",
@@ -235,7 +237,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -364,7 +367,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_bbir",
+        "id": "act_multiattack_viaq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The boxer makes three attacks, using Grasping Strike or Punch Down in any combination.</p>",
@@ -384,7 +387,7 @@
         }
       },
       {
-        "id": "act_grasping_strike_xaqz",
+        "id": "act_grasping_strike_29zi",
         "name": "Grasping Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 8 (1d8 + 4) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 16).</p>",
@@ -405,14 +408,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_punch_down_gs68",
+        "id": "act_punch_down_8qht",
         "name": "Punch Down",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 8 (1d8 + 4) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -430,7 +434,8 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -439,7 +444,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_brace_up_yl1q",
+        "id": "act_brace_up_pcnu",
         "name": "Brace Up",
         "actionType": "bonus",
         "descriptionHtml": "<p>The boxer gains 18 (4d8) Temporary Hit Points.</p>",
@@ -459,7 +464,7 @@
         }
       },
       {
-        "id": "act_combo_oomr",
+        "id": "act_combo_7dvt",
         "name": "Combo",
         "actionType": "bonus",
         "descriptionHtml": "<p>The boxer makes one Grasping Strike or Punch Down attack.</p>",
@@ -481,7 +486,7 @@
     ],
     "reactions": [
       {
-        "id": "act_cross_counter_ng22",
+        "id": "act_cross_counter_slqk",
         "name": "Cross Counter",
         "actionType": "reaction",
         "descriptionHtml": "<p>{@actTrigger} The boxer is hit by a melee attack made by a creature. {@actResponse} The boxer reduces the damage it takes by 18 (4d8) and deals that much Bludgeoning damage to the target if it is within 5 feet.</p>",
@@ -625,7 +630,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pack_bond_m60h",
+        "id": "act_pack_bond_uov4",
         "name": "Pack Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add your Proficiency to any ability check or saving throw the beast makes.</p>",
@@ -647,7 +652,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_yvq9",
+        "id": "act_bite_mrmh",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: Bonus equals your Constitution modifier plus your Proficiency, reach 5 ft. Hit: 2d4 + 2 plus your Constitution modifier Piercing damage. If the target is a creature Large or smaller, it must succeed on a Strength saving throw (DC equals 8 plus your Constitution modifier and Proficiency) or one of the following effects of your choice occur: the target has the Grappled condition, it has the Prone condition, or it is pushed 5 feet away from the hound.</p>",
@@ -665,7 +670,8 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -789,7 +795,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_fisticuffs_gz8t",
+        "id": "act_fisticuffs_jyio",
         "name": "Fisticuffs",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 6 (1d8 + 2) Bludgeoning damage.</p>",
@@ -807,7 +813,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -816,7 +823,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_brace_up_6ykw",
+        "id": "act_brace_up_o8d5",
         "name": "Brace Up",
         "actionType": "bonus",
         "descriptionHtml": "<p>The streetfighter gains 9 (2d8) Temporary Hit Points.</p>",
@@ -836,7 +843,7 @@
         }
       },
       {
-        "id": "act_combo_1i2l",
+        "id": "act_combo_yfmc",
         "name": "Combo",
         "actionType": "bonus",
         "descriptionHtml": "<p>The streetfighter makes one Fisticuffs attack.</p>",
@@ -978,7 +985,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_grasping_strike_6gtv",
+        "id": "act_grasping_strike_0yyn",
         "name": "Grasping Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 8 (1d8 + 4) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 16).</p>",
@@ -999,14 +1006,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_punch_down_jbst",
+        "id": "act_punch_down_xj2j",
         "name": "Punch Down",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 8 (1d8 + 4) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -1024,7 +1032,8 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1033,7 +1042,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_brace_up_e4vq",
+        "id": "act_brace_up_xc79",
         "name": "Brace Up",
         "actionType": "bonus",
         "descriptionHtml": "<p>The wrestler gains 9 (2d8) Temporary Hit Points.</p>",
@@ -1053,7 +1062,7 @@
         }
       },
       {
-        "id": "act_combo_di8n",
+        "id": "act_combo_j4s1",
         "name": "Combo",
         "actionType": "bonus",
         "descriptionHtml": "<p>The wrestler makes one Grasping Strike or Punch Down attack.</p>",

@@ -94,7 +94,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_4ilg",
+        "id": "act_incorporeal_movement_hkki",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The reaper can move through other creatures and objects as if they were difficult terrain. If it ends its turn inside an object, it is shunted to the nearest unoccupied space and takes 1d10 force damage for every 5 feet traveled.</p>",
@@ -112,14 +112,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_haunting_tracker_9vqr",
+        "id": "act_haunting_tracker_npkv",
         "name": "Haunting Tracker",
         "actionType": "trait",
         "descriptionHtml": "<p>You and the reaper can sense the direction and distance to the haunted creature if it's on the same plane of existence as you.</p>",
@@ -141,7 +142,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7kmq",
+        "id": "act_multiattack_c7yc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The reaper makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -161,7 +162,7 @@
         }
       },
       {
-        "id": "act_reaping_scythe_cunw",
+        "id": "act_reaping_scythe_udmg",
         "name": "Reaping Scythe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: your spell attack modifier to hit (with advantage), reach 5 ft., one target. Hit: 1d10 + 3 + the spell's level necrotic damage.</p>",
@@ -179,14 +180,15 @@
           "damages": [
             {
               "formula": "1d10 + 3",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_paralyzing_fear__1_day__l4e9",
+        "id": "act_paralyzing_fear__1_day__76qa",
         "name": "Paralyzing Fear (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The reaper attempts to instill fear into the haunted creature it can see within 60 feet of itself. The creature must succeed on a Wisdom saving throw against your spell save DC or be frightened of the reaper for 1 minute. While frightened this way, the creature's speed is 0, and it can't benefit from any bonus to its speed. The frightened creature can repeat the saving throw at the end of each of its turns, or immediately after it takes damage, ending the effect on itself on a success.</p>",
@@ -331,7 +333,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_ese7",
+        "id": "act_multiattack_m2np",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The warrior makes a number of attacks equal to half this spell's level (rounded down).</p>",
@@ -351,7 +353,7 @@
         }
       },
       {
-        "id": "act_reckless_strike__barbarian_only__i7w6",
+        "id": "act_reckless_strike__barbarian_only__5drk",
         "name": "Reckless Strike (Barbarian Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: your spell attack modifier to hit (with advantage), reach 5 ft., one target. Hit: 1d12 + 3 + the spell's level slashing damage, and attacks made against the warrior until the start of its next turn are made with advantage.</p>",
@@ -369,14 +371,15 @@
           "damages": [
             {
               "formula": "1d12 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rallying_strike__fighter_only__qity",
+        "id": "act_rallying_strike__fighter_only__892h",
         "name": "Rallying Strike (Fighter Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: your spell attack modifier to hit, reach 5 ft., or range 20/60 ft., one target. Hit: 1d6 + 3 + the spell's level piercing damage, and the warrior can choose another creature it can see within 20 feet of itself. The chosen creature gains 1d6 temporary hit points.</p>",
@@ -394,14 +397,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_unarmed_strike__monk_only__ownu",
+        "id": "act_unarmed_strike__monk_only__qa4m",
         "name": "Unarmed Strike (Monk Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: your spell attack modifier to hit, reach 5 ft., one target. Hit: 1d4 + 3 + the spell's level bludgeoning damage, and the target must succeed on a Strength saving throw against your spell save DC or be knocked prone.</p>",
@@ -419,7 +423,8 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -428,7 +433,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_flurry_of_blows__monk_only__odv3",
+        "id": "act_flurry_of_blows__monk_only__v6y6",
         "name": "Flurry of Blows (Monk Only)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The monk makes one Unarmed Strike attack.</p>",

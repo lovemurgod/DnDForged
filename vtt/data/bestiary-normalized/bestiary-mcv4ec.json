@@ -167,7 +167,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__gfdv",
+        "id": "act_legendary_resistance__3_day__f8tt",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the archon fails a saving throw, it can choose to succeed instead.</p>",
@@ -187,7 +187,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_hj03",
+        "id": "act_magic_resistance_xdcs",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The archon has advantage on saving throws against spells and other magical effects.</p>",
@@ -209,7 +209,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2tjh",
+        "id": "act_multiattack_cud3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The archon makes one Hooves attack and one Radiant Lance attack.</p>",
@@ -229,7 +229,7 @@
         }
       },
       {
-        "id": "act_hooves_9sjk",
+        "id": "act_hooves_7mlo",
         "name": "Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 5 ft., one target. Hit: 20 (4d6 + 6) bludgeoning damage plus 10 (3d6) radiant damage. If the target is a Medium or smaller creature, it must succeed on a DC 19 Strength saving throw or have the prone condition.</p>",
@@ -250,18 +250,20 @@
           "damages": [
             {
               "formula": "4d6 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_radiant_lance_oq4i",
+        "id": "act_radiant_lance_p4f7",
         "name": "Radiant Lance",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 12 (1d12 + 6) piercing damage plus 28 (8d6) radiant damage, and the target is marked until the start of the archon's next turn. While it is marked, the target has disadvantage on attack rolls against creatures other than the archon.</p>",
@@ -279,11 +281,13 @@
           "damages": [
             {
               "formula": "1d12 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "8d6",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -293,7 +297,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_archon_s_pursuit_svr4",
+        "id": "act_archon_s_pursuit_fphp",
         "name": "Archon's Pursuit",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature marked by the archon's Radiant Lance ends its turn within 120 feet of the archon, the archon teleports to an unoccupied space it can see within 5 feet of the creature.</p>",
@@ -313,7 +317,7 @@
         }
       },
       {
-        "id": "act_haunting_radiance_po03",
+        "id": "act_haunting_radiance_ybwe",
         "name": "Haunting Radiance",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after a creature within 120 feet of the archon forces it to make a saving throw, the archon responds with a burst of light. The creature must succeed on a DC 17 Constitution saving throw or have the blinded condition until the end of the creature's next turn.</p>",
@@ -336,7 +340,7 @@
         }
       },
       {
-        "id": "act_parry_jgyt",
+        "id": "act_parry_5hqw",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>The archon adds 5 to its AC against one melee attack that would hit it, provided it can see the attacker.</p>",
@@ -470,7 +474,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_o6zw",
+        "id": "act_false_appearance_b89i",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>If the wurm is motionless at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the wurm move or act, that creature must succeed on a DC 18 Intelligence (Investigation) check to discern that the wurm is animate.</p>",
@@ -493,7 +497,7 @@
         }
       },
       {
-        "id": "act_leafy_handholds_tbkk",
+        "id": "act_leafy_handholds_kxki",
         "name": "Leafy Handholds",
         "actionType": "trait",
         "descriptionHtml": "<p>Creatures have advantage on ability checks made to climb the wurm.</p>",
@@ -513,7 +517,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__gxqz",
+        "id": "act_legendary_resistance__3_day__0ndv",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the wurm fails a saving throw, it can choose to succeed instead.</p>",
@@ -533,7 +537,7 @@
         }
       },
       {
-        "id": "act_regeneration_c0oq",
+        "id": "act_regeneration_8url",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The wurm regains 20 hit points at the start of its turn if it has at least 1 hit point. If the wurm takes fire or lightning damage, this trait doesn't function at the start of the wurm's next turn.</p>",
@@ -555,7 +559,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_fnqs",
+        "id": "act_multiattack_y167",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The wurm makes two Bite attacks.</p>",
@@ -575,7 +579,7 @@
         }
       },
       {
-        "id": "act_bite_x5rk",
+        "id": "act_bite_4369",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 15 ft., one target. Hit: 30 (5d8 + 8) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 22 Dexterity saving throw or be swallowed by the wurm. A swallowed creature has the restrained condition, has Cover against attacks and other effects outside the wurm, and takes 28 (8d6) piercing damage at the start of each of the wurm's turns from thorns in the wurm's gullet.</p><p>The wurm's stomach can hold up to two creatures at a time. If the wurm takes 30 damage or more on a single turn from a creature inside it, the wurm must succeed on a DC 22 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, each of which falls in a space within 10 feet of the wurm and has the prone condition. If the wurm dies, a swallowed creature no longer has the restrained condition and can escape from the corpse by using 10 feet of movement, exiting with the prone condition.</p>",
@@ -597,11 +601,13 @@
           "damages": [
             {
               "formula": "5d8 + 8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "8d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -739,7 +745,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_mounted_adept_dny4",
+        "id": "act_mounted_adept_67om",
         "name": "Mounted Adept",
         "actionType": "trait",
         "descriptionHtml": "<p>While mounted and without the incapacitated condition, the rider has advantage on melee attack rolls against any unmounted creature smaller than its mount, the rider and its mount have advantage on Dexterity saving throws, and the rider can force an attack targeted at its mount to target the rider instead.</p>",
@@ -759,7 +765,7 @@
         }
       },
       {
-        "id": "act_undead_fortitude_ppov",
+        "id": "act_undead_fortitude_g9fk",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the rider to 0 hit points, it must make a Constitution saving throw with a DC equal to 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the rider drops to 1 hit point instead.</p>",
@@ -781,7 +787,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_x7xw",
+        "id": "act_multiattack_2e8f",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The rider makes two Axe attacks. It can replace one of these attacks with Fell Glare.</p>",
@@ -801,7 +807,7 @@
         }
       },
       {
-        "id": "act_axe_io8q",
+        "id": "act_axe_ulk5",
         "name": "Axe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) slashing damage.</p>",
@@ -819,14 +825,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fell_glare_jics",
+        "id": "act_fell_glare_m6wl",
         "name": "Fell Glare",
         "actionType": "action",
         "descriptionHtml": "<p>The rider gazes at a creature within 30 feet of itself. The creature must succeed on a DC 13 Wisdom saving throw or have the frightened condition for 1 minute. The frightened creature can repeat the saving throw at the end of each of its turns, with disadvantage if it can see the rider, ending the condition on itself on a success.</p>",
@@ -1166,7 +1173,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_sykl",
+        "id": "act_multiattack_ehxm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The witch makes two Poison Dagger attacks. It can replace one of these attacks with Spellcasting.</p>",
@@ -1186,7 +1193,7 @@
         }
       },
       {
-        "id": "act_poison_dagger_2lnb",
+        "id": "act_poison_dagger_008h",
         "name": "Poison Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage plus 21 (6d6) poison damage.</p>",
@@ -1204,18 +1211,20 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "6d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_polymorph_concoction__1_day__n7kd",
+        "id": "act_polymorph_concoction__1_day__77yi",
         "name": "Polymorph Concoction (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The witch hurls a bottle of liquid at a point up to 20 feet away from itself, which shatters into a cloud of magical smoke that fills a 10-foot-radius sphere. Each creature in that area must succeed on a DC 16 Wisdom saving throw or transform into a creature, as if under the effects of a polymorph spell, transforming into one of the following forms (roll a d4): 1, bat; 2, frog; 3, lizard; or 4, rat. This transformation lasts for 1 hour or until the creature drops to 0 hit points in its new form.</p>",
@@ -1238,7 +1247,7 @@
         }
       },
       {
-        "id": "act_shattered_shards_853b",
+        "id": "act_shattered_shards_dj5v",
         "name": "Shattered Shards",
         "actionType": "action",
         "descriptionHtml": "<p>The witch targets a point it can see within 30 feet of itself. The air there magically solidifies into a mirrorlike pane, then shatters in a 15-foot cone originating from that point. Each creature in that area must make a DC 16 Dexterity saving throw, taking 25 (10d4) force damage on a failed save, or half as much damage on a successful one.</p>",
@@ -1259,7 +1268,8 @@
           "damages": [
             {
               "formula": "10d4",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1451,7 +1461,7 @@
     ],
     "traits": [
       {
-        "id": "act_flyby_pa8r",
+        "id": "act_flyby_y3xr",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The faerie doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -1473,7 +1483,7 @@
     ],
     "actions": [
       {
-        "id": "act_needle_blade_nzjt",
+        "id": "act_needle_blade_56a8",
         "name": "Needle Blade",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 7 (1d4 + 5) piercing damage.</p>",
@@ -1491,14 +1501,15 @@
           "damages": [
             {
               "formula": "1d4 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_mockery_ymw7",
+        "id": "act_magic_mockery_qw0t",
         "name": "Magic Mockery",
         "actionType": "action",
         "descriptionHtml": "<p>The faerie hurls magical taunts at one creature it can see within 60 feet of itself. The creature must succeed on a DC 13 Wisdom saving throw or take 3 (1d6) psychic damage and have disadvantage on attack rolls and ability checks until the start of the faerie's next turn.</p>",
@@ -1519,7 +1530,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1529,7 +1541,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_tricksy_parry_kac0",
+        "id": "act_tricksy_parry_khf6",
         "name": "Tricksy Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after taking damage, the faerie reduces the damage taken by 2 (1d4).</p>",
@@ -1776,7 +1788,7 @@
     ],
     "traits": [
       {
-        "id": "act_faerie_illumination_zlag",
+        "id": "act_faerie_illumination_h5yf",
         "name": "Faerie Illumination",
         "actionType": "trait",
         "descriptionHtml": "<p>The faerie sheds dim light in a 15-foot radius.</p>",
@@ -1798,7 +1810,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_hwla",
+        "id": "act_multiattack_2htj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The faerie makes two Shining Strike attacks.</p>",
@@ -1818,7 +1830,7 @@
         }
       },
       {
-        "id": "act_shining_strike_kaam",
+        "id": "act_shining_strike_pdas",
         "name": "Shining Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +6 to hit, reach 5 ft. or range 30 ft., one target. Hit: 7 (2d6) radiant damage, and if the target is a creature, it must succeed on a DC 14 Dexterity saving throw or be wreathed in light until the end of the faerie's next turn. While a creature is wreathed in light, attack rolls against the creature have advantage, and the creature can't benefit from the invisible condition.</p>",
@@ -1839,7 +1851,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1848,7 +1861,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_guiding_light__2_day__pq2s",
+        "id": "act_guiding_light__2_day__wubf",
         "name": "Guiding Light (2/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The faerie summons a 30-foot-radius sphere of magical light centered on itself, which lasts for 1 minute or until the faerie has the incapacitated condition. Each creature of the faerie's choice (other than the faerie) that starts its turn in that area gains 5 temporary hit points and has advantage on Wisdom saving throws and Wisdom checks until the start of its next turn.</p><p>The sphere is bright light, sheds dim light for an additional 30 feet, and moves with the faerie. If any of the sphere's area overlaps with an area of darkness created by a spell of 3rd level or lower, the spell that created the darkness is dispelled.</p>",
@@ -2077,7 +2090,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_stingblade_hmtq",
+        "id": "act_stingblade_gtpv",
         "name": "Stingblade",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage plus 5 (2d4) poison damage. If the faerie had advantage on the attack roll, the target takes an additional 3 (1d6) slashing damage.</p>",
@@ -2095,22 +2108,25 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d4",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_theft_of_nerves__1_day__1vie",
+        "id": "act_theft_of_nerves__1_day__hdr7",
         "name": "Theft of Nerves (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The faerie unleashes a burst of mind-muddling magic in a 15-foot cone. Each creature in that area must succeed on a DC 12 Intelligence saving throw or have the frightened condition for 1 minute. A frightened creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -2135,7 +2151,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_mischievous_stealth_72eq",
+        "id": "act_mischievous_stealth_np14",
         "name": "Mischievous Stealth",
         "actionType": "bonus",
         "descriptionHtml": "<p>The faerie takes the Hide action.</p>",
@@ -2276,7 +2292,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_can_t_catch_me_0ejn",
+        "id": "act_can_t_catch_me_p5bf",
         "name": "Can't Catch Me",
         "actionType": "trait",
         "descriptionHtml": "<p>The gingerbrute has advantage on any ability checks or saving throws it makes to avoid or end the grappled or the restrained condition on itself.</p>",
@@ -2296,7 +2312,7 @@
         }
       },
       {
-        "id": "act_sweet_victory_wmys",
+        "id": "act_sweet_victory_0f0t",
         "name": "Sweet Victory",
         "actionType": "trait",
         "descriptionHtml": "<p>Once the gingerbrute is destroyed, a creature can use its action to eat all the remains and gain 5 temporary hit points. The remains crumble away after 24 hours if not eaten.</p>",
@@ -2318,7 +2334,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_c6de",
+        "id": "act_multiattack_mzsn",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The gingerbrute makes two Fork attacks, two Gumdrop Slingshot attacks, or one of each.</p>",
@@ -2338,7 +2354,7 @@
         }
       },
       {
-        "id": "act_fork_l1ot",
+        "id": "act_fork_vi9m",
         "name": "Fork",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d4 + 4) piercing damage.</p>",
@@ -2356,14 +2372,15 @@
           "damages": [
             {
               "formula": "1d4 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_gumdrop_slingshot_qhy6",
+        "id": "act_gumdrop_slingshot_bzvq",
         "name": "Gumdrop Slingshot",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 30/120 ft., one target. Hit: 6 (1d4 + 4) bludgeoning damage.</p>",
@@ -2381,7 +2398,8 @@
           "damages": [
             {
               "formula": "1d4 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2519,7 +2537,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__5kjp",
+        "id": "act_legendary_resistance__3_day__xkax",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Goose Mother fails a saving throw, it can choose to succeed instead.</p>",
@@ -2539,7 +2557,7 @@
         }
       },
       {
-        "id": "act_multiple_heads_13pa",
+        "id": "act_multiple_heads_swma",
         "name": "Multiple Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>The Goose Mother has five heads. Whenever the Goose Mother takes 25 or more damage in a single turn, one of its heads dies. If all its heads die, the Goose Mother dies.</p><p>At the end of its turn, the Goose Mother grows two heads for each of its heads that died since its last turn, unless it has taken poison damage since its last turn. The Goose Mother regains 10 hit points for each head when it regrows.</p>",
@@ -2560,7 +2578,7 @@
         }
       },
       {
-        "id": "act_reactive_heads_l2gc",
+        "id": "act_reactive_heads_lyfk",
         "name": "Reactive Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>For each head the Goose Mother has beyond one, it gets an extra reaction that can be used only for opportunity attacks.</p>",
@@ -2580,7 +2598,7 @@
         }
       },
       {
-        "id": "act_wakeful_labt",
+        "id": "act_wakeful_sn56",
         "name": "Wakeful",
         "actionType": "trait",
         "descriptionHtml": "<p>While the Goose Mother sleeps, at least one of its heads is awake.</p>",
@@ -2602,7 +2620,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_t2d8",
+        "id": "act_multiattack_a07b",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Goose Mother makes as many Beak attacks as it has heads and one Wing attack.</p>",
@@ -2622,7 +2640,7 @@
         }
       },
       {
-        "id": "act_beak_w3p3",
+        "id": "act_beak_cpc7",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 6 (1d6 + 3) bludgeoning damage.</p>",
@@ -2640,14 +2658,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wing_x19p",
+        "id": "act_wing_vq5g",
         "name": "Wing",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 9 (1d12 + 3) bludgeoning damage. If the target is a Large or smaller creature, it must succeed on a DC 15 Strength saving throw or have the prone condition.</p>",
@@ -2668,14 +2687,15 @@
           "damages": [
             {
               "formula": "1d12 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_lullaby_of_honks__recharge_5__8xu9",
+        "id": "act_lullaby_of_honks__recharge_5__u9lu",
         "name": "Lullaby of Honks (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The Goose Mother's heads honk a discordant lullaby. Each creature of the Goose Mother's choice within 10 feet of it must make a DC 15 Constitution saving throw. On a failed save, a creature takes 7 (2d6) thunder damage and falls into a magical slumber. On a successful save, the target takes half as much damage only. The honks can be heard up to 300 feet away.</p><p>A creature under magical slumber has the unconscious condition for 8 hours. This effect ends early for a creature if it takes damage or another creature uses an action to shake it awake.</p>",
@@ -2697,7 +2717,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -2950,7 +2971,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_iili",
+        "id": "act_magic_resistance_xvz1",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The high fae has advantage on saving throws against spells and other magical effects.</p>",
@@ -2972,7 +2993,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vt4q",
+        "id": "act_multiattack_qmkd",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The high fae makes two Fae Blade attacks and uses Vexing Prank once.</p>",
@@ -2992,7 +3013,7 @@
         }
       },
       {
-        "id": "act_fae_blade_6asm",
+        "id": "act_fae_blade_9f3a",
         "name": "Fae Blade",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 18 (3d8 + 5) force damage.</p>",
@@ -3010,14 +3031,15 @@
           "damages": [
             {
               "formula": "3d8 + 5",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_vexing_prank_wiav",
+        "id": "act_vexing_prank_mpnf",
         "name": "Vexing Prank",
         "actionType": "action",
         "descriptionHtml": "<p>The high fae targets one creature it can see within 60 feet of itself with a magical trick. The target must make a DC 18 Wisdom saving throw. On a failed save, the target takes 21 (6d6) psychic damage and has the frightened condition until the start of the high fae's next turn. On a successful save, the target takes half as much damage only.</p>",
@@ -3038,7 +3060,8 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -3047,7 +3070,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_loot_likeness_d02z",
+        "id": "act_loot_likeness_zo2t",
         "name": "Loot Likeness",
         "actionType": "bonus",
         "descriptionHtml": "<p>The high fae magically transforms into a duplicate of a Small or Medium creature it can see. While transformed, the high fae retains its game statistics (other than its size) but gains access to enough general information about the imitated creature, such as background and personality, to reasonably pass itself off as the creature. This transformation ends if the high fae is reduced to 0 hit points, uses this bonus action again, or uses a bonus action to revert to its true form.</p>",
@@ -3203,7 +3226,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_evasion_fjsd",
+        "id": "act_evasion_o5af",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>If the high fae is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw and only half damage if it fails, provided it doesn't have the incapacitated condition.</p>",
@@ -3223,7 +3246,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_35d8",
+        "id": "act_magic_resistance_eogv",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The high fae has advantage on saving throws against spells and other magical effects.</p>",
@@ -3245,7 +3268,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1sjh",
+        "id": "act_multiattack_l28y",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The high fae makes two Fae Claymore attacks and uses Tripping Feint.</p>",
@@ -3265,7 +3288,7 @@
         }
       },
       {
-        "id": "act_fae_claymore_8fb1",
+        "id": "act_fae_claymore_zkg2",
         "name": "Fae Claymore",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 20 (4d6 + 6) force damage, and the target's speed is reduced by 10 feet, to a minimum speed of 5 feet. The reduction lasts until the start of the high fae's next turn.</p>",
@@ -3283,14 +3306,15 @@
           "damages": [
             {
               "formula": "4d6 + 6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tripping_feint_1g33",
+        "id": "act_tripping_feint_1nsr",
         "name": "Tripping Feint",
         "actionType": "action",
         "descriptionHtml": "<p>The high fae targets one Large or smaller creature it can see within 10 feet of itself. The target must succeed on a DC 18 Dexterity saving throw or have the prone condition.</p>",
@@ -3315,7 +3339,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_darting_flight_dmw3",
+        "id": "act_darting_flight_gybx",
         "name": "Darting Flight",
         "actionType": "bonus",
         "descriptionHtml": "<p>The high fae moves up to its speed. This movement doesn't provoke opportunity attacks.</p>",
@@ -3337,7 +3361,7 @@
     ],
     "reactions": [
       {
-        "id": "act_parry_and_riposte_6bbk",
+        "id": "act_parry_and_riposte_f8s9",
         "name": "Parry and Riposte",
         "actionType": "reaction",
         "descriptionHtml": "<p>The high fae adds 4 to its AC against one melee attack roll that would hit it, provided it can see the attacker. After the attack hits or misses, the high fae then makes one Fae Claymore attack against the attacker.</p>",
@@ -3671,7 +3695,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_qqnq",
+        "id": "act_magic_resistance_rtcv",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The high fae has advantage on saving throws against spells and other magical effects.</p>",
@@ -3693,7 +3717,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kur1",
+        "id": "act_multiattack_ci8m",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The high fae makes two Elemental Strike attacks.</p>",
@@ -3713,7 +3737,7 @@
         }
       },
       {
-        "id": "act_elemental_strike_fhdc",
+        "id": "act_elemental_strike_yasx",
         "name": "Elemental Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +11 to hit, reach 5 ft. or range 60 ft., one target. Hit: 18 (2d10 + 7) acid, cold, fire, force, lightning, or thunder damage (the high fae's choice).</p>",
@@ -3731,14 +3755,15 @@
           "damages": [
             {
               "formula": "2d10 + 7",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_negotiate_life__recharge_5__0jv2",
+        "id": "act_negotiate_life__recharge_5__2oka",
         "name": "Negotiate Life (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The high fae enacts a magical bargain, siphoning energy from its opponents to heal its wounds. The high fae targets up to three creatures it can see within 60 feet of itself. Each target must make a DC 19 Constitution saving throw, taking 26 (4d12) necrotic damage on a failed save, or half as much damage on a successful one. The high fae then regains 30 hit points.</p>",
@@ -3759,7 +3784,8 @@
           "damages": [
             {
               "formula": "4d12",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -3769,7 +3795,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_fae_counterspell_70ih",
+        "id": "act_fae_counterspell_5eie",
         "name": "Fae Counterspell",
         "actionType": "reaction",
         "descriptionHtml": "<p>The high fae interrupts a creature it can see that is casting a spell with verbal, somatic, or material components. The caster takes 10 (3d6) psychic damage and must make a DC 19 Charisma saving throw. On a failed save, the spell fails and has no effect, but the spell slot used to cast it is not expended.</p>",
@@ -3790,7 +3816,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -4071,7 +4098,7 @@
     ],
     "traits": [
       {
-        "id": "act_aura_of_overwhelming_splendor_tuvn",
+        "id": "act_aura_of_overwhelming_splendor_zuk8",
         "name": "Aura of Overwhelming Splendor",
         "actionType": "trait",
         "descriptionHtml": "<p>The high fae radiates dazzling and mollifying magic. Each creature of the high fae's choice that starts its turn within 5 feet of the high fae must succeed on a DC 19 Wisdom saving throw or have the charmed condition until the start of its next turn. While charmed, the creature also has the incapacitated condition.</p>",
@@ -4094,7 +4121,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__b40q",
+        "id": "act_legendary_resistance__3_day__tg4c",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the high fae fails a saving throw, it can choose to succeed instead.</p>",
@@ -4114,7 +4141,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_d1dw",
+        "id": "act_magic_resistance_j1cs",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The high fae has advantage on saving throws against spells and other magical effects.</p>",
@@ -4136,7 +4163,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4244",
+        "id": "act_multiattack_t02r",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The high fae makes two Fae Blade attacks. It can replace one of these attacks with Stunning Soliloquy if available.</p>",
@@ -4156,7 +4183,7 @@
         }
       },
       {
-        "id": "act_fae_blade_baxu",
+        "id": "act_fae_blade_q73w",
         "name": "Fae Blade",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 20 (3d8 + 7) force damage.</p>",
@@ -4174,14 +4201,15 @@
           "damages": [
             {
               "formula": "3d8 + 7",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stunning_soliloquy__recharge_5__4weu",
+        "id": "act_stunning_soliloquy__recharge_5__15gb",
         "name": "Stunning Soliloquy (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The high fae unleashes a string of magical words. Each creature of the high fae's choice within 30 feet of itself must succeed on a DC 19 Wisdom saving throw or have the stunned condition for 1 minute. A stunned creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -4207,7 +4235,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_capricious_step_qktx",
+        "id": "act_capricious_step_htln",
         "name": "Capricious Step",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after taking damage, the high fae magically has the invisible condition and teleports, along with any equipment it is wearing or carrying, to an unoccupied space it can see within 30 feet of itself. The invisibility lasts until the end of the high fae's next turn.</p>",
@@ -4227,7 +4255,7 @@
         }
       },
       {
-        "id": "act_ridicule_ti48",
+        "id": "act_ridicule_i4rv",
         "name": "Ridicule",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature misses the high fae with an attack roll, the high fae magically mocks the creature, dealing 5 (2d4) psychic damage to the attacker.</p>",
@@ -4245,7 +4273,8 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4368,7 +4397,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_knightly_virtue_r0ae",
+        "id": "act_knightly_virtue_t9ly",
         "name": "Knightly Virtue",
         "actionType": "trait",
         "descriptionHtml": "<p>The knight has one of the following traits, depending on the court it serves:</p><ul><li><strong><em>Courage (Embereth).</em></strong> <p>The knight has advantage on Wisdom checks and Wisdom saving throws.</p></li><li><strong><em>Knowledge (Vantress).</em></strong> <p>The knight has advantage on Intelligence checks and Intelligence saving throws.</p></li><li><strong><em>Loyalty (Ardenvale).</em></strong> <p>The knight has advantage on Charisma checks and Charisma saving throws.</p></li><li><strong><em>Persistence (Locthwain).</em></strong> <p>The knight has advantage on Constitution saving throws.</p></li><li><strong><em>Strength (Garenbrig).</em></strong> <p>The knight has advantage on Strength checks and Strength saving throws.</p></li></ul>",
@@ -4431,7 +4460,7 @@
     ],
     "actions": [
       {
-        "id": "act_lance_jeg9",
+        "id": "act_lance_0jfi",
         "name": "Lance",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 9 (1d12 + 3) piercing damage plus 9 (2d8) radiant damage.</p>",
@@ -4449,18 +4478,20 @@
           "damages": [
             {
               "formula": "1d12 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longsword_43ct",
+        "id": "act_longsword_ofof",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) slashing damage, or 8 (1d10 + 3) slashing damage if used with two hands, plus 9 (2d8) radiant damage.</p>",
@@ -4478,22 +4509,25 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heavy_crossbow_nzo7",
+        "id": "act_heavy_crossbow_2ecx",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +3 to hit, range 100/400 ft., one target. Hit: 6 (1d10 + 1) piercing damage plus 9 (2d8) radiant damage.</p>",
@@ -4511,11 +4545,13 @@
           "damages": [
             {
               "formula": "1d10 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4642,7 +4678,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_wrco",
+        "id": "act_magic_resistance_wtkf",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The nightmare haunt has advantage on saving throws against spells and other magical effects.</p>",
@@ -4662,7 +4698,7 @@
         }
       },
       {
-        "id": "act_somnophage_9km5",
+        "id": "act_somnophage_urix",
         "name": "Somnophage",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of its turn, the nightmare haunt gains a number of temporary hit points equal to 5 times the number of unconscious creatures within 30 feet of itself.</p>",
@@ -4684,7 +4720,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_er2e",
+        "id": "act_multiattack_3z3n",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The nightmare haunt makes two Claw attacks.</p>",
@@ -4704,7 +4740,7 @@
         }
       },
       {
-        "id": "act_claw_zoy6",
+        "id": "act_claw_9hvj",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage plus 9 (2d8) psychic damage.</p>",
@@ -4722,18 +4758,20 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tendrils_of_slumber__recharge_5__v9b2",
+        "id": "act_tendrils_of_slumber__recharge_5__5wfn",
         "name": "Tendrils of Slumber (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The nightmare haunt creates spectral tendrils that cover the ground in a 20-foot square that it can see within 30 feet of itself for 1 minute or until it uses this action again. When a creature other than the nightmare haunt enters the affected area for the first time or starts its turn there, the creature must succeed on a DC 14 Strength saving throw or take 11 (2d10) necrotic damage and have the restrained condition. The affected ground is also considered difficult terrain for creatures other than the nightmare haunt for the duration of its effect.</p><p>A creature that starts its turn in the area and is already restrained by the tendrils must repeat the saving throw. On a failed save, it has the unconscious condition and instead of the restrained condition caused by the tendrils. On a successful save, the effect ends on the creature. An unconscious creature remains asleep until it is no longer in the area with tendrils, takes any damage, or is targeted by a remove curse spell or similar magic.</p>",
@@ -4755,7 +4793,8 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -4764,7 +4803,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shadow_stealth_3kw1",
+        "id": "act_shadow_stealth_hsac",
         "name": "Shadow Stealth",
         "actionType": "bonus",
         "descriptionHtml": "<p>While in dim light or darkness, the nightmare haunt takes the Hide action.</p>",
@@ -5036,7 +5075,7 @@
     ],
     "traits": [
       {
-        "id": "act_speak_with_rats_bosh",
+        "id": "act_speak_with_rats_bak8",
         "name": "Speak with Rats",
         "actionType": "trait",
         "descriptionHtml": "<p>The ogre can verbally communicate simple concepts to ordinary rats and giant rats.</p>",
@@ -5058,7 +5097,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_a7in",
+        "id": "act_multiattack_o791",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ogre makes two Club attacks, two Rat-Tail Whip attacks, or one of each.</p>",
@@ -5078,7 +5117,7 @@
         }
       },
       {
-        "id": "act_club_09uw",
+        "id": "act_club_2dk8",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 15 (2d10 + 4) bludgeoning damage.</p>",
@@ -5096,14 +5135,15 @@
           "damages": [
             {
               "formula": "2d10 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rat_tail_whip_m2tb",
+        "id": "act_rat_tail_whip_37iy",
         "name": "Rat-Tail Whip",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 13 (2d8 + 4) slashing damage, and if the target is Large or smaller, it is pulled 5 feet toward the ogre.</p>",
@@ -5121,7 +5161,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5130,7 +5171,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_call_rats__1_day__psjg",
+        "id": "act_call_rats__1_day__xj4m",
         "name": "Call Rats (1/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The ogre magically calls 1d4 giant rats. Each rat appears in an unoccupied space within 30 feet of the ogre that the ogre can see. The rats act as the ogre's allies, obey its spoken commands, and take their turns immediately after the ogre's turn on the same initiative count. The rats remain for 1 hour, until the ogre dies, or until the ogre dismisses them as a bonus action.</p>",
@@ -5271,7 +5312,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_4tl6",
+        "id": "act_multiattack_n8jf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The werefox makes two Bite attacks, two Lance attacks, or one Bite attack and one Lance attack.</p>",
@@ -5291,7 +5332,7 @@
         }
       },
       {
-        "id": "act_bite__fox_or_hybrid_form_only__yto5",
+        "id": "act_bite__fox_or_hybrid_form_only__lnxn",
         "name": "Bite (Fox or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (1d10 + 3) piercing damage. If the werefox moved at least 20 feet straight toward the target immediately before the hit and the target is a Medium or smaller creature, the target must succeed on a DC 13 Strength saving throw or have the prone condition.</p>",
@@ -5312,14 +5353,15 @@
           "damages": [
             {
               "formula": "1d10 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_lance__elf_or_hybrid_form_only__rsjv",
+        "id": "act_lance__elf_or_hybrid_form_only__9bq9",
         "name": "Lance (Elf or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 10 ft., one target. Hit: 9 (1d12 + 3) piercing damage.</p>",
@@ -5337,14 +5379,15 @@
           "damages": [
             {
               "formula": "1d12 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_entangling_arrow__elf_or_hybrid_form_only__qivj",
+        "id": "act_entangling_arrow__elf_or_hybrid_form_only__hm0b",
         "name": "Entangling Arrow (Elf or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 150/600 ft., one target. Hit: 10 (2d6 + 3) piercing damage, and the target must succeed on a DC 11 Dexterity saving throw or have the restrained condition until the start of the werefox's next turn.</p>",
@@ -5365,7 +5408,8 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5374,7 +5418,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_change_shape_8ffp",
+        "id": "act_change_shape_rak7",
         "name": "Change Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The werefox polymorphs into a fox-elf hybrid, into a fox, or back into its elf form. Its game statistics, other than its speed, are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its elf form if it dies.</p>",
@@ -5394,7 +5438,7 @@
         }
       },
       {
-        "id": "act_vulpine_nimbleness__fox_or_hybrid_form_only__2sme",
+        "id": "act_vulpine_nimbleness__fox_or_hybrid_form_only__cgn5",
         "name": "Vulpine Nimbleness (Fox or Hybrid Form Only)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The werefox takes the Dash or Disengage action.</p>",
@@ -5536,7 +5580,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_beast_speech_rdhs",
+        "id": "act_beast_speech_bvtj",
         "name": "Beast Speech",
         "actionType": "trait",
         "descriptionHtml": "<p>The sewer king can comprehend and verbally communicate with any Beast.</p>",
@@ -5558,7 +5602,7 @@
     ],
     "actions": [
       {
-        "id": "act_rancid_bite_h97p",
+        "id": "act_rancid_bite_z6yp",
         "name": "Rancid Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) piercing damage plus 7 (2d6) acid damage. If the target is a creature, it must succeed on a DC 12 Constitution saving throw or have the poisoned condition until the start of the sewer king's next turn.</p>",
@@ -5579,18 +5623,20 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_summon_swarm__1_day__y0fw",
+        "id": "act_summon_swarm__1_day__20ck",
         "name": "Summon Swarm (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The sewer king chitters and summons a swarm of rats to its aid. The swarm appears in an unoccupied space within 30 feet of the sewer king that the sewer king can see. It acts as the sewer king's ally, obeys the sewer king's commands, and takes its turn immediately after the sewer king's. The swarm remains until it dies, the sewer king dies, or until the sewer king dismisses it as an action.</p>",
@@ -5612,7 +5658,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_skitter_dfmc",
+        "id": "act_skitter_ridl",
         "name": "Skitter",
         "actionType": "bonus",
         "descriptionHtml": "<p>The sewer king moves up to its speed without provoking opportunity attacks.</p>",
@@ -5752,7 +5798,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_clb6",
+        "id": "act_amphibious_eams",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The hydra can breathe air and water.</p>",
@@ -5772,7 +5818,7 @@
         }
       },
       {
-        "id": "act_multiple_heads_05oq",
+        "id": "act_multiple_heads_n2sn",
         "name": "Multiple Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>The hydra has five heads. Whenever the hydra takes 30 or more damage in a single turn, one of its heads dies. If all its heads die, the hydra dies.</p><p>At the end of its turn, the hydra grows two heads for each of its heads that died since its last turn, unless it has taken cold damage since its last turn. The hydra regains 10 hit points for each head regrown this way.</p>",
@@ -5793,7 +5839,7 @@
         }
       },
       {
-        "id": "act_reactive_heads_uqzo",
+        "id": "act_reactive_heads_j75i",
         "name": "Reactive Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>For each head the hydra has beyond one, it gets an extra reaction that can be used only for opportunity attacks.</p>",
@@ -5813,7 +5859,7 @@
         }
       },
       {
-        "id": "act_wakeful_05xn",
+        "id": "act_wakeful_5jq0",
         "name": "Wakeful",
         "actionType": "trait",
         "descriptionHtml": "<p>While the hydra sleeps, at least one of its heads is awake.</p>",
@@ -5835,7 +5881,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_e1qh",
+        "id": "act_multiattack_1op9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hydra makes as many Bite attacks as it has heads.</p>",
@@ -5855,7 +5901,7 @@
         }
       },
       {
-        "id": "act_bite_zlcf",
+        "id": "act_bite_cnq6",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 10 ft., one target. Hit: 14 (2d8 + 5) piercing damage.</p>",
@@ -5873,14 +5919,15 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shell_defense_h3kb",
+        "id": "act_shell_defense_e3gr",
         "name": "Shell Defense",
         "actionType": "action",
         "descriptionHtml": "<p>The hydra withdraws its limbs and heads into its shell. Until it emerges as a bonus action, it gains a +4 bonus to AC and has advantage on Strength and Constitution saving throws. While in its shell, the hydra has the prone condition, its speed is 0 and can't increase, its heads can't die, it has disadvantage on Dexterity saving throws, and it can't take any other actions or reactions.</p>",
@@ -6029,7 +6076,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__csrh",
+        "id": "act_legendary_resistance__3_day__edtp",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the specter fails a saving throw, it can choose to succeed instead.</p>",
@@ -6049,7 +6096,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_eaaz",
+        "id": "act_magic_resistance_my2o",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The specter has advantage on saving throws against spells and other magical effects.</p>",
@@ -6071,7 +6118,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_lvkp",
+        "id": "act_multiattack_stn0",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The specter uses Mournful Keening if available, then makes one Hooves attack and one Reaping Scythe attack.</p>",
@@ -6091,7 +6138,7 @@
         }
       },
       {
-        "id": "act_hooves_frxp",
+        "id": "act_hooves_5hb9",
         "name": "Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 16 (3d6 + 6) bludgeoning damage plus 28 (8d6) necrotic damage. If the target is a Medium or smaller creature, it must succeed on a DC 18 Strength saving throw or have the prone condition.</p>",
@@ -6112,18 +6159,20 @@
           "damages": [
             {
               "formula": "3d6 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "8d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mournful_keening___recharge__9azo",
+        "id": "act_mournful_keening___recharge__e48z",
         "name": "Mournful Keening {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The specter utters a keening wail, calling to those close to death. Each non-Undead creature within 120 feet of the specter must make a DC 15 Constitution saving throw. On a failure, the creature hears the wail and is marked for death.</p><p>A creature marked for death can't regain hit points, has disadvantage on death saving throws, and all attack rolls against it are made with advantage. This effect lasts for 1 minute or until the creature is targeted by a remove curse spell or similar magic.</p>",
@@ -6147,7 +6196,7 @@
         }
       },
       {
-        "id": "act_reaping_scythe_4wkb",
+        "id": "act_reaping_scythe_9e4q",
         "name": "Reaping Scythe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 12 (1d12 + 6) slashing damage plus 28 (8d6) necrotic damage. If the target is a creature, it must succeed on a DC 15 Constitution saving throw or gain a level of exhaustion.</p>",
@@ -6168,11 +6217,13 @@
           "damages": [
             {
               "formula": "1d12 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "8d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6297,7 +6348,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_caramelization_0faw",
+        "id": "act_caramelization_6d57",
         "name": "Caramelization",
         "actionType": "trait",
         "descriptionHtml": "<p>If the horror takes fire damage, it releases a sweet, mesmerizing scent. Each creature within 30 feet of the horror must succeed on a DC 11 Wisdom saving throw or have the charmed condition. A charmed creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -6320,7 +6371,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_m0xj",
+        "id": "act_magic_resistance_xv8v",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The horror has advantage on saving throws against spells and other magical effects.</p>",
@@ -6342,7 +6393,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_s0z3",
+        "id": "act_multiattack_0trq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The horror makes one Bite attack and two Candy Cane attacks.</p>",
@@ -6362,7 +6413,7 @@
         }
       },
       {
-        "id": "act_bite_zbj2",
+        "id": "act_bite_qxo9",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) piercing damage plus 10 (3d6) acid damage.</p>",
@@ -6380,18 +6431,20 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_candy_cane_6els",
+        "id": "act_candy_cane_dlko",
         "name": "Candy Cane",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 8 (1d8 + 4) bludgeoning damage. If the target is a Large or smaller creature, the horror can choose to deal no damage; instead, the target has the prone condition, and the horror can pull the target up to 5 feet toward itself.</p>",
@@ -6409,7 +6462,8 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6551,7 +6605,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__cxjq",
+        "id": "act_legendary_resistance__3_day__w17w",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the hart fails a saving throw, it can choose to succeed instead.</p>",
@@ -6573,7 +6627,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_sqka",
+        "id": "act_multiattack_5vzo",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hart makes a Lightning Antlers attack and a Thunder Hooves attack.</p>",
@@ -6593,7 +6647,7 @@
         }
       },
       {
-        "id": "act_lightning_antlers_he3a",
+        "id": "act_lightning_antlers_yl8c",
         "name": "Lightning Antlers",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 15 ft., one target. Hit: 16 (2d10 + 5) lightning damage. If the target is a creature, it must succeed on a DC 16 Constitution saving throw or have the stunned condition until the start of the hart's next turn.</p>",
@@ -6614,14 +6668,15 @@
           "damages": [
             {
               "formula": "2d10 + 5",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_thunder_hooves_hsbx",
+        "id": "act_thunder_hooves_kiap",
         "name": "Thunder Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) thunder damage.</p>",
@@ -6639,7 +6694,8 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6649,7 +6705,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_entangling_growth_ykyh",
+        "id": "act_entangling_growth_ij50",
         "name": "Entangling Growth",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after a creature the hart can see within 120 feet of itself hits it with an attack roll, the hart reduces the damage to itself by half. The attacker must immediately make a DC 16 Strength saving throw as beanstalks coil around it in its space. On a failed save, the creature has the grappled condition (escape DC 16) and has the restrained condition as long as it is grappled. The beanstalks vanish after 1 minute, if the hart has the incapacitated condition, or when the hart dies.</p>",
@@ -6672,7 +6728,7 @@
         }
       },
       {
-        "id": "act_lightning_call_zsew",
+        "id": "act_lightning_call_tv23",
         "name": "Lightning Call",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to making a saving throw, the hart calls down a bolt of lightning that targets a creature it can see within 120 feet of itself. The target must make a DC 16 Dexterity saving throw, taking 19 (3d12) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -6693,7 +6749,8 @@
           "damages": [
             {
               "formula": "3d12",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -6966,7 +7023,7 @@
     ],
     "traits": [
       {
-        "id": "act_plant_camouflage_f6le",
+        "id": "act_plant_camouflage_52mp",
         "name": "Plant Camouflage",
         "actionType": "trait",
         "descriptionHtml": "<p>The treefolk has advantage on Dexterity (Stealth) checks it makes in forest terrain.</p>",
@@ -6986,7 +7043,7 @@
         }
       },
       {
-        "id": "act_tree_stride_307e",
+        "id": "act_tree_stride_84d1",
         "name": "Tree Stride",
         "actionType": "trait",
         "descriptionHtml": "<p>Once on each of its turns, the treefolk can use 10 feet of its movement to step magically into one living tree within 5 feet of itself and emerge from a second living tree within 60 feet of itself that it can see, appearing in an unoccupied space within 5 feet of the second tree. Both trees must be at least as large as the treefolk.</p>",
@@ -7008,7 +7065,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_v37w",
+        "id": "act_multiattack_ymaa",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The treefolk makes two Crushing Vine attacks, two Nightshade Bolt attacks, or one of each.</p>",
@@ -7028,7 +7085,7 @@
         }
       },
       {
-        "id": "act_crushing_vine_dp0k",
+        "id": "act_crushing_vine_kwzv",
         "name": "Crushing Vine",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 25 (3d12 + 6) bludgeoning damage. If the target is a creature, it has the grappled condition (escape DC 18). While grappled, the creature also has the restrained condition. The treefolk can grapple up to six creatures this way.</p>",
@@ -7049,14 +7106,15 @@
           "damages": [
             {
               "formula": "3d12 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_nightshade_bolt_pbo1",
+        "id": "act_nightshade_bolt_5y0x",
         "name": "Nightshade Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +9 to hit, range 60 ft., one target. Hit: 33 (6d10) poison damage.</p>",
@@ -7074,7 +7132,8 @@
           "damages": [
             {
               "formula": "6d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7083,7 +7142,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_oaken_boon_s0io",
+        "id": "act_oaken_boon_dnh3",
         "name": "Oaken Boon",
         "actionType": "bonus",
         "descriptionHtml": "<p>The treefolk blesses one creature other than itself that it can see within 60 feet of itself with the might and wisdom of the forest. While blessed in this way, a creature can use the treefolk's Tree Stride trait and gains 5 (2d4) temporary hit points at the start of each of its turns. This blessing lasts for 1 minute, until the treefolk has the incapacitated condition, or until the treefolk uses this bonus action again.</p>",
@@ -7394,7 +7453,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__yvu8",
+        "id": "act_legendary_resistance__3_day__dv89",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the witchkite fails a saving throw, it can choose to succeed instead.</p>",
@@ -7416,7 +7475,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8kzg",
+        "id": "act_multiattack_thjx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The witchkite makes two Rend attacks and uses Malevolent Flare once.</p>",
@@ -7436,7 +7495,7 @@
         }
       },
       {
-        "id": "act_rend_ft54",
+        "id": "act_rend_zncm",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 16 (3d6 + 6) slashing damage.</p>",
@@ -7454,14 +7513,15 @@
           "damages": [
             {
               "formula": "3d6 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_malevolent_flare_2nia",
+        "id": "act_malevolent_flare_4ney",
         "name": "Malevolent Flare",
         "actionType": "action",
         "descriptionHtml": "<p>The witchkite spits magical, green-tinged flame at one creature it can see within 60 feet of itself. The target must make a DC 17 Dexterity saving throw. On a failed save, the target takes 22 (5d8) fire damage and suffers one of the following effects of the witchkite's choice:</p><ul><li>The target must use its reaction to make a melee attack against another creature of the witchkite's choice that is within the target's reach.</li><li>The target takes 13 (2d12) psychic damage.</li></ul><p>On a successful save, the target takes half as much damage only.</p>",
@@ -7490,11 +7550,13 @@
           "damages": [
             {
               "formula": "5d8",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             },
             {
               "formula": "2d12",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -7504,7 +7566,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_enchanting_gaze_pqf2",
+        "id": "act_enchanting_gaze_awjp",
         "name": "Enchanting Gaze",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature the witchkite can see moves within 10 feet of it, the witchkite emits an enchanting gaze at the creature. The creature must succeed on a DC 17 Wisdom saving throw or take 10 (3d6) psychic damage and have the charmed condition until the end of its next turn.</p>",
@@ -7525,14 +7587,15 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_retribution_r8fz",
+        "id": "act_retribution_wbc5",
         "name": "Retribution",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after taking damage from a melee attack, the witchkite makes one Rend attack against the attacker.</p>",
@@ -7674,7 +7737,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_j4cf",
+        "id": "act_magic_resistance_4il9",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The witchstalker has advantage on saving throws against spells and other magical effects.</p>",
@@ -7694,7 +7757,7 @@
         }
       },
       {
-        "id": "act_smell_magic_stc8",
+        "id": "act_smell_magic_4no1",
         "name": "Smell Magic",
         "actionType": "trait",
         "descriptionHtml": "<p>The witchstalker can sense the presence and location of magic within 120 feet of itself. It also has advantage on attack rolls against creatures that have cast a spell since the end of the witchstalker's last turn.</p>",
@@ -7716,7 +7779,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_scdk",
+        "id": "act_multiattack_wjra",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The witchstalker makes two Bite attacks.</p>",
@@ -7736,7 +7799,7 @@
         }
       },
       {
-        "id": "act_bite_0fhm",
+        "id": "act_bite_nxlv",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 14 (3d6 + 4) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 15 Strength saving throw or have the prone condition.</p>",
@@ -7757,14 +7820,15 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_mind_wracking_howl__recharge_5__7ple",
+        "id": "act_mind_wracking_howl__recharge_5__48w3",
         "name": "Mind-Wracking Howl (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The witchstalker unleashes a terrible howl, and each creature within 30 feet of it that isn't a Monstrosity must make a DC 13 Wisdom saving throw. On a failed save, a creature takes 24 (7d6) psychic damage and has disadvantage on Constitution saving throws to maintain concentration on spells until the end of its next turn. On a successful save, a creature takes half as much damage only.</p>",
@@ -7785,7 +7849,8 @@
           "damages": [
             {
               "formula": "7d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -7795,7 +7860,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_spell_stalk_b68v",
+        "id": "act_spell_stalk_593i",
         "name": "Spell Stalk",
         "actionType": "reaction",
         "descriptionHtml": "<p>Immediately after a creature within 120 feet of the witchstalker casts a spell, the witchstalker magically teleports to an unoccupied space within 5 feet of the creature and can make one Bite attack against the creature.</p>",

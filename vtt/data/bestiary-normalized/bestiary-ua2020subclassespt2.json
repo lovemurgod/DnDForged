@@ -93,7 +93,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_endless_waltz_edqj",
+        "id": "act_endless_waltz_jsrb",
         "name": "Endless Waltz",
         "actionType": "trait",
         "descriptionHtml": "<p>Immediately after the item makes a slam attack, it can take the Dodge action as a bonus action.</p>",
@@ -113,7 +113,7 @@
         }
       },
       {
-        "id": "act_immutable_form_fx01",
+        "id": "act_immutable_form_xpta",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The item is immune to any spell or effect that would alter its form.</p>",
@@ -135,7 +135,7 @@
     ],
     "actions": [
       {
-        "id": "act_force_empowered_slam_a1dn",
+        "id": "act_force_empowered_slam_0e0w",
         "name": "Force-Empowered Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: your spell attack modifier to hit, reach 5 ft., one target you can see. Hit: 1d10 + your Charisma modifier force damage.</p>",
@@ -153,7 +153,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null

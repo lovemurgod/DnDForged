@@ -103,7 +103,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_helpful_pz19",
+        "id": "act_helpful_qcvx",
         "name": "Helpful",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert can take the Help action as a bonus action.</p>",
@@ -123,7 +123,7 @@
         }
       },
       {
-        "id": "act_tools_58se",
+        "id": "act_tools_4wzi",
         "name": "Tools",
         "actionType": "trait",
         "descriptionHtml": "<p>The expert has thieves' tools and a musical instrument.</p>",
@@ -145,7 +145,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_tfus",
+        "id": "act_shortsword_ovmy",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -163,14 +163,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dagger_1uuq",
+        "id": "act_dagger_gazr",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -188,14 +189,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_ppsk",
+        "id": "act_shortbow_qtia",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -213,7 +215,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -540,7 +543,7 @@
     ],
     "traits": [
       {
-        "id": "act_magical_role_z62k",
+        "id": "act_magical_role_ohj7",
         "name": "Magical Role",
         "actionType": "trait",
         "descriptionHtml": "<p>Choose a role for the spellcaster: healer or mage. Your choice determines which Spellcasting trait to use below.</p>",
@@ -562,7 +565,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_5d5p",
+        "id": "act_quarterstaff_z6cv",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage if used with two hands.</p>",
@@ -580,11 +583,13 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -716,7 +721,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_martial_role_ijue",
+        "id": "act_martial_role_i7jv",
         "name": "Martial Role",
         "actionType": "trait",
         "descriptionHtml": "<p>The warrior has one of the following traits of your choice:</p><ul><li><strong><em>Attacker.</em></strong> <p>The warrior gains a +2 bonus to attack rolls.</p></li><li><strong><em>Defender.</em></strong> <p>The warrior gains the Protection reaction below.</p></li></ul>",
@@ -754,7 +759,7 @@
     ],
     "actions": [
       {
-        "id": "act_longsword_d87w",
+        "id": "act_longsword_aho8",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) slashing damage, or 7 (1d10 + 2) slashing damage if used with two hands.</p>",
@@ -772,18 +777,20 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_hd1u",
+        "id": "act_longbow_775v",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +3 to hit, range 150/600 ft., one target. Hit: 5 (1d8 + 1) piercing damage.</p>",
@@ -801,7 +808,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -811,7 +819,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_protection__defender_only__9256",
+        "id": "act_protection__defender_only__t7bt",
         "name": "Protection (Defender Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>The warrior imposes disadvantage on the attack roll of a creature within 5 feet of it whose target isn't the warrior. The warrior must be able to see the attacker.</p>",

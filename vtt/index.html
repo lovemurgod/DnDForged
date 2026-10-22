@@ -173,6 +173,7 @@
         
         <button id="vtt-mobile-tools-fab" title="Tabletop Tools">
             <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span id="mobile-fab-eco-badge" class="vtt-hidden" title="Eco Mode Active"><i class="fa-solid fa-leaf"></i></span>
         </button>
 
         <div id="vtt-mobile-tools-menu">
@@ -201,6 +202,10 @@
                 <i class="fa-solid fa-layer-group"></i> <span>Switch Layers</span>
             </button>
             <div class="mobile-tool-divider"></div>
+            <button class="mobile-tool-item" data-tool="eco" id="mobile-tool-eco" title="One-Tap Eco / Battery Mode">
+                <i class="fa-solid fa-leaf"></i> <span>Eco / Battery Mode</span>
+            </button>
+            <div class="mobile-tool-divider"></div>
             <button class="mobile-tool-item" data-tool="fit">
                 <i class="fa-solid fa-crosshairs"></i> <span>Focus</span>
             </button>
@@ -209,6 +214,42 @@
             </button>
             <button class="mobile-tool-item" data-tool="zoom-out">
                 <i class="fa-solid fa-magnifying-glass-minus"></i> <span>Zoom Out (-10%)</span>
+            </button>
+        </div>
+
+        <!-- Mobile Floating Combat Initiative Pill -->
+        <div id="vtt-mobile-combat-pill" class="vtt-hidden" title="Active Turn (Tap to expand combat roster)">
+            <div class="mobile-combat-pill-left">
+                <img id="mobile-combat-pill-avatar" src="favicon.svg" alt="Combatant" class="mobile-combat-pill-avatar">
+                <div class="mobile-combat-pill-info">
+                    <span id="mobile-combat-pill-name" class="mobile-combat-pill-name">Initiative</span>
+                    <div class="mobile-combat-pill-sub">
+                        <span id="mobile-combat-pill-round" class="mobile-combat-pill-round">Round 1</span>
+                        <span id="mobile-combat-pill-hp" class="mobile-combat-pill-hp vtt-hidden">HP: --</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mobile-combat-pill-actions gm-only">
+                <button id="btn-mobile-combat-prev" class="mobile-combat-pill-btn" title="Previous Turn">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button id="btn-mobile-combat-next" class="mobile-combat-pill-btn" title="Next Turn">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Tap-to-Place Action Banner -->
+        <div id="vtt-mobile-placement-banner" class="vtt-hidden">
+            <div class="placement-banner-content">
+                <i class="fa-solid fa-location-crosshairs text-gradient-gold"></i>
+                <div class="placement-banner-text">
+                    <span class="placement-banner-title">Tap map to place:</span>
+                    <span id="mobile-placement-target-name" class="placement-banner-target">Token</span>
+                </div>
+            </div>
+            <button id="btn-mobile-placement-cancel" class="btn btn-secondary btn-xs">
+                <i class="fa-solid fa-xmark"></i> Cancel
             </button>
         </div>
 
@@ -231,16 +272,48 @@
             <span id="vtt-mobile-drag-dist">0 ft</span>
         </div>
 
-        <!-- Mobile Token Quick Action Bar -->
-        <div id="vtt-mobile-token-actions" class="vtt-hidden">
-            <button id="vtt-mobile-action-sheet" class="vtt-token-action-btn" title="Open Sheet">
-                <i class="fa-solid fa-user-shield"></i> <span>Sheet</span>
+        <!-- Mobile Unified Radial Touch Dial for Tokens -->
+        <div id="vtt-mobile-radial-dial" class="vtt-hidden">
+            <div class="radial-dial-ring"></div>
+            <!-- Center Hub Badge: displays current token size (e.g. 1x1, 2x2) or tap to dismiss -->
+            <button id="radial-hub-btn" class="radial-center-hub" title="Close Dial">
+                <span id="radial-hub-size" class="radial-hub-size">1x1</span>
+                <i class="fa-solid fa-xmark radial-hub-close"></i>
             </button>
-            <button id="vtt-mobile-action-cond" class="vtt-token-action-btn" title="Set Condition">
-                <i class="fa-solid fa-heart-pulse"></i> <span>Status</span>
+            <!-- Node: Sheet (Top) -->
+            <button id="radial-node-sheet" class="radial-node node-top" title="Open Sheet">
+                <i class="fa-solid fa-address-card"></i>
+                <span class="radial-node-label">Sheet</span>
             </button>
-            <button id="vtt-mobile-action-edit" class="vtt-token-action-btn" title="Edit Token">
-                <i class="fa-solid fa-pen"></i> <span>Edit</span>
+            <!-- Node: Rotate +45° (Top-Right) -->
+            <button id="radial-node-rot-cw" class="radial-node node-top-right" title="Rotate +45° Clockwise">
+                <i class="fa-solid fa-rotate-right"></i>
+                <span class="radial-node-label">+45°</span>
+            </button>
+            <!-- Node: Size + (Right) -->
+            <button id="radial-node-size-plus" class="radial-node node-right" title="Increase Size">
+                <i class="fa-solid fa-expand"></i>
+                <span class="radial-node-label">Size +</span>
+            </button>
+            <!-- Node: Token Edit (Bottom-Right) -->
+            <button id="radial-node-edit" class="radial-node node-bottom-right" title="Token Settings">
+                <i class="fa-solid fa-gear"></i>
+                <span class="radial-node-label">Edit</span>
+            </button>
+            <!-- Node: Conditions & Status (Bottom-Left) -->
+            <button id="radial-node-cond" class="radial-node node-bottom-left" title="Status & Conditions">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <span class="radial-node-label">Status</span>
+            </button>
+            <!-- Node: Size − (Left) -->
+            <button id="radial-node-size-minus" class="radial-node node-left" title="Decrease Size">
+                <i class="fa-solid fa-compress"></i>
+                <span class="radial-node-label">Size −</span>
+            </button>
+            <!-- Node: Rotate −45° (Top-Left) -->
+            <button id="radial-node-rot-ccw" class="radial-node node-top-left" title="Rotate −45° Counter-Clockwise">
+                <i class="fa-solid fa-rotate-left"></i>
+                <span class="radial-node-label">−45°</span>
             </button>
         </div>
 
@@ -291,7 +364,7 @@
         <div id="vtt-mobile-maptools-sheet" class="vtt-mobile-bottom-sheet vtt-hidden">
             <div class="vtt-sheet-handle"></div>
             <div class="vtt-sheet-header">
-                <h4><i class="fa-solid fa-dungeon text-gradient-gold"></i> Map Tools</h4>
+                <h4><i class="fa-solid fa-dungeon text-gradient-gold"></i> <span id="mobile-maptools-header-title">Map Tools</span></h4>
                 <button id="btn-close-maptools-sheet" class="vtt-sheet-close"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="vtt-sheet-body">
@@ -303,29 +376,138 @@
                         <i class="fa-solid fa-archway"></i> Portals
                     </button>
                 </div>
-                <div class="vtt-shape-grid" id="mobile-maptools-shape-grid">
-                    <button class="vtt-shape-opt active" data-shape="rect" title="Box">
-                        <i class="fa-regular fa-square"></i>
-                        <span>Box</span>
-                    </button>
-                    <button class="vtt-shape-opt" data-shape="circle" title="Circle">
-                        <i class="fa-regular fa-circle"></i>
-                        <span>Circle</span>
-                    </button>
-                    <button class="vtt-shape-opt" data-shape="line" title="Line">
-                        <i class="fa-solid fa-slash"></i>
-                        <span>Line</span>
-                    </button>
-                    <button class="vtt-shape-opt" data-shape="polygon" title="Polygon">
-                        <i class="fa-solid fa-draw-polygon"></i>
-                        <span>Poly</span>
-                    </button>
+                
+                <!-- Shape Selection Section (visible when ready to draw) -->
+                <div id="mobile-maptools-shape-section">
+                    <div style="font-size: 0.78rem; color: #94a3b8; margin-bottom: 6px; font-weight: 600;">Shape to Draw</div>
+                    <div class="vtt-shape-grid" id="mobile-maptools-shape-grid">
+                        <button class="vtt-shape-opt active" data-shape="rect" title="Box">
+                            <i class="fa-regular fa-square"></i>
+                            <span>Box</span>
+                        </button>
+                        <button class="vtt-shape-opt" data-shape="circle" title="Circle">
+                            <i class="fa-regular fa-circle"></i>
+                            <span>Circle</span>
+                        </button>
+                        <button class="vtt-shape-opt" data-shape="line" title="Line">
+                            <i class="fa-solid fa-slash"></i>
+                            <span>Line</span>
+                        </button>
+                        <button class="vtt-shape-opt" data-shape="polygon" title="Polygon">
+                            <i class="fa-solid fa-draw-polygon"></i>
+                            <span>Poly</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="mobile-maptools-quick-actions" style="margin-top: 12px; display: flex; gap: 8px;">
+
+                <!-- Trap Settings Section (slides in after drawing or when selected) -->
+                <div id="mobile-maptools-trap-form" class="vtt-hidden" style="margin-top: 10px;">
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #f5c242; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                        <span><i class="fa-solid fa-pen-to-square"></i> Trap Configuration</span>
+                        <span id="mobile-trap-status-badge" style="font-size: 0.7rem; color: #4ade80; background: rgba(74, 222, 128, 0.15); padding: 2px 6px; border-radius: 4px;">Active</span>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label for="mobile-trap-name-input" style="font-size: 0.78rem; color: #94a3b8;">Trap Name</label>
+                        <input type="text" id="mobile-trap-name-input" value="Spike Pit" class="form-control" style="font-size: 0.9rem; padding: 8px 10px; width: 100%;">
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                        <div class="form-group" style="flex: 1.2;">
+                            <label for="mobile-trap-ability-select" style="font-size: 0.78rem; color: #94a3b8;">Save Ability</label>
+                            <select id="mobile-trap-ability-select" style="width: 100%; height: 42px; border-radius: 8px; font-size: 0.88rem;">
+                                <option value="DEX" selected>DEX (Dexterity)</option>
+                                <option value="CON">CON (Constitution)</option>
+                                <option value="WIS">WIS (Wisdom)</option>
+                                <option value="STR">STR (Strength)</option>
+                                <option value="INT">INT (Intelligence)</option>
+                                <option value="CHA">CHA (Charisma)</option>
+                                <option value="NONE">None</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="flex: 1;">
+                            <label style="font-size: 0.78rem; color: #94a3b8;">Save DC</label>
+                            <div class="mobile-stepper" style="display: flex; align-items: center; gap: 4px; height: 42px;">
+                                <button type="button" id="btn-mobile-trap-dc-minus" class="btn btn-secondary mobile-stepper-btn" style="min-width: 36px; height: 100%; padding: 0;">-</button>
+                                <span id="mobile-trap-dc-val" style="flex: 1; text-align: center; font-weight: 700; font-size: 1rem; color: #f1f5f9;">15</span>
+                                <button type="button" id="btn-mobile-trap-dc-plus" class="btn btn-secondary mobile-stepper-btn" style="min-width: 36px; height: 100%; padding: 0;">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label for="mobile-trap-damage-input" style="font-size: 0.78rem; color: #94a3b8;">Damage / Effect</label>
+                        <input type="text" id="mobile-trap-damage-input" value="4d6 piercing" class="form-control" style="font-size: 0.9rem; padding: 8px 10px; width: 100%; margin-bottom: 6px;">
+                        <!-- Quick Damage Chips -->
+                        <div class="mobile-damage-chips" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;">
+                            <button type="button" class="mobile-chip-btn" data-damage="2d6 piercing">2d6</button>
+                            <button type="button" class="mobile-chip-btn" data-damage="3d6 fire">3d6 Fire</button>
+                            <button type="button" class="mobile-chip-btn" data-damage="4d6 piercing">4d6</button>
+                            <button type="button" class="mobile-chip-btn" data-damage="2d10 poison">2d10</button>
+                            <button type="button" class="mobile-chip-btn" data-damage="4d10 force">4d10</button>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; cursor: pointer;">
+                            <input type="checkbox" id="mobile-trap-auto-check" checked style="width: 18px; height: 18px;">
+                            <span>Auto-Trigger</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; cursor: pointer;">
+                            <input type="checkbox" id="mobile-trap-repeat-check" style="width: 18px; height: 18px;">
+                            <span>Repeatable</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Portal Settings Section (slides in after drawing or when selected) -->
+                <div id="mobile-maptools-portal-form" class="vtt-hidden" style="margin-top: 10px;">
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #a855f7; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                        <span><i class="fa-solid fa-archway"></i> Portal Configuration</span>
+                        <span id="mobile-portal-status-badge" style="font-size: 0.7rem; color: #a855f7; background: rgba(168, 85, 247, 0.15); padding: 2px 6px; border-radius: 4px;">Gateway</span>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label for="mobile-portal-name-input" style="font-size: 0.78rem; color: #94a3b8;">Portal Name</label>
+                        <input type="text" id="mobile-portal-name-input" value="Mystic Gateway" class="form-control" style="font-size: 0.9rem; padding: 8px 10px; width: 100%;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label for="mobile-portal-target-map-select" style="font-size: 0.78rem; color: #94a3b8;">Target Map</label>
+                        <select id="mobile-portal-target-map-select" style="width: 100%; height: 42px; border-radius: 8px; font-size: 0.88rem;">
+                            <option value="">-- Active Map (Intra-Map) --</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label for="mobile-portal-target-portal-select" style="font-size: 0.78rem; color: #94a3b8;">Destination Portal</label>
+                        <select id="mobile-portal-target-portal-select" style="width: 100%; height: 42px; border-radius: 8px; font-size: 0.88rem;">
+                            <option value="">-- None (Unlinked) --</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin: 10px 0;">
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; cursor: pointer;">
+                            <input type="checkbox" id="mobile-portal-walkthrough-check" checked style="width: 18px; height: 18px;">
+                            <span>Walk Through (Instant Teleport)</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; cursor: pointer;">
+                            <input type="checkbox" id="mobile-portal-revealed-check" checked style="width: 18px; height: 18px;">
+                            <span>Visible to Players</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mobile-maptools-quick-actions" style="margin-top: 14px; display: flex; gap: 8px;">
+                    <button type="button" id="btn-mobile-maptools-done" class="btn btn-primary flex-1 vtt-hidden" style="min-height: 44px; font-weight: 700;">
+                        <i class="fa-solid fa-check"></i> Done
+                    </button>
+                    <button type="button" id="btn-mobile-maptools-delete" class="btn btn-danger vtt-hidden" title="Delete this item" style="min-height: 44px; padding: 0 16px;">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                     <button type="button" id="btn-mobile-maptools-cancel" class="btn btn-secondary btn-block vtt-hidden">
                         <i class="fa-solid fa-xmark"></i> Cancel Drawing
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Sheet Switcher Carousel (Persistent Avatar Dock) -->
+        <div id="vtt-mobile-sheet-carousel" class="vtt-hidden">
+            <div id="vtt-mobile-sheet-track" class="mobile-sheet-track">
+                <!-- Dynamically populated with circular avatar chips -->
             </div>
         </div>
 

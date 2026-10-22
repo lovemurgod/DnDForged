@@ -466,6 +466,10 @@ export function buildItemsDatabase() {
 
         const descriptionMarkdown = descParts.join('\n\n');
 
+        const isMagic = !!(it.magic === 1 || (rarity && rarity !== 'none' && rarity !== 'unknown') || (bonusWeapon && parseInt(bonusWeapon) > 0) || (name && /\+\d+/.test(name)));
+        const isSilvered = !!(name.toLowerCase().includes('silvered') || propertyList.some(p => p.toLowerCase().includes('silver')));
+        const isAdamantine = !!(name.toLowerCase().includes('adamantine') || propertyList.some(p => p.toLowerCase().includes('adamantine')));
+
         // Pre-compile Zero-Parsing Macro Template for Weapons
         let macroTemplate = null;
         if (isWeapon) {
@@ -513,7 +517,10 @@ export function buildItemsDatabase() {
                 range: rangeStr,
                 target: '1 target',
                 damageRows,
-                versatile: dmg2 || null
+                versatile: dmg2 || null,
+                isMagic,
+                isSilvered,
+                isAdamantine
             };
         }
 
@@ -537,6 +544,9 @@ export function buildItemsDatabase() {
             properties: propertyList,
             isWeapon,
             isArmor,
+            isMagic,
+            isSilvered,
+            isAdamantine,
             packContents,
             attachedSpells,
             macroTemplate,

@@ -85,7 +85,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_tail_iv3j",
+        "id": "act_tail_wile",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 18 (4d6 + 4) bludgeoning damage. If the target is a creature, it must succeed on a DC 14 Strength saving throw or be knocked prone.</p>",
@@ -106,7 +106,8 @@
           "damages": [
             {
               "formula": "4d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -227,7 +228,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_dive_attack_w9da",
+        "id": "act_dive_attack_hze1",
         "name": "Dive Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If the aerosaur is flying and dives at least 30 feet toward a target and then hits with a bite attack, the attack deals an extra 10 (3d6) damage to the target.</p>",
@@ -245,14 +246,15 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_flyby_ugb6",
+        "id": "act_flyby_c2dx",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The aerosaur doesn't provoke an opportunity attack when it flies out of an enemy's reach.</p>",
@@ -274,7 +276,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_ruxv",
+        "id": "act_bite_89ix",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 10 ft., one creature. Hit: 12 (3d6 + 2) piercing damage.</p>",
@@ -292,7 +294,8 @@
           "damages": [
             {
               "formula": "3d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -413,7 +416,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_0z7r",
+        "id": "act_flyby_ywht",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The aerosaur doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -435,7 +438,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_kboc",
+        "id": "act_bite_2bru",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 6 (2d4 + 1) piercing damage.</p>",
@@ -453,7 +456,8 @@
           "damages": [
             {
               "formula": "2d4 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -595,7 +599,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_air_form_1rfs",
+        "id": "act_air_form_36lm",
         "name": "Air Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The totem elemental can enter a hostile creature's space and stop there. It can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -617,7 +621,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_45cq",
+        "id": "act_multiattack_51zg",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The totem elemental makes two slam attacks.</p>",
@@ -637,7 +641,7 @@
         }
       },
       {
-        "id": "act_slam_wl7t",
+        "id": "act_slam_lopf",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage.</p>",
@@ -655,14 +659,15 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_whirlwind__recharge_4__143m",
+        "id": "act_whirlwind__recharge_4__3j5f",
         "name": "Whirlwind (Recharge 4)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature in the totem elemental's space must make a DC 13 Strength saving throw. On a failure, a target takes 15 (3d8 + 2) bludgeoning damage and is flung up 20 feet away from the totem elemental in a random direction and knocked prone. If a thrown target strikes an object, such as a wall or floor, the target takes 3 (1d6) bludgeoning damage for every 10 feet it was thrown. If the target is thrown at another creature, that creature must succeed on a DC 13 Dexterity saving throw or take the same damage and be knocked prone.</p><p>If the saving throw is successful, the target takes half the bludgeoning damage and isn't flung away or knocked prone.</p>",
@@ -684,11 +689,13 @@
           "damages": [
             {
               "formula": "3d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             },
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": "4"
@@ -810,7 +817,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_stomp_82yt",
+        "id": "act_stomp_wnlm",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 20 ft., one target. Hit: 27 (5d8 + 5) bludgeoning damage, and the target must succeed on a DC 14 Strength saving throw or be knocked prone.</p>",
@@ -831,14 +838,15 @@
           "damages": [
             {
               "formula": "5d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_6fkd",
+        "id": "act_tail_7gad",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 20 ft., one target. Hit: 32 (6d8 + 5) bludgeoning damage.</p>",
@@ -856,7 +864,8 @@
           "damages": [
             {
               "formula": "6d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -974,7 +983,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_tail_2lp5",
+        "id": "act_tail_b62t",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 26 (6d6 + 5) piercing damage.</p>",
@@ -992,7 +1001,8 @@
           "damages": [
             {
               "formula": "6d6 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1115,7 +1125,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_uu52",
+        "id": "act_false_appearance_1yzr",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the shrub totem remains motionless, it is indistinguishable from a normal shrub totem.</p>",
@@ -1137,7 +1147,7 @@
     ],
     "actions": [
       {
-        "id": "act_rake_mdna",
+        "id": "act_rake_kawi",
         "name": "Rake",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 1 (1d4 - 1) slashing damage.</p>",
@@ -1155,7 +1165,8 @@
           "damages": [
             {
               "formula": "1d4 - 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1281,7 +1292,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_mqlx",
+        "id": "act_false_appearance_7kgq",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the blight totem remains motionless, it is indistinguishable from a tangle of vines.</p>",
@@ -1303,7 +1314,7 @@
     ],
     "actions": [
       {
-        "id": "act_constrict_1biv",
+        "id": "act_constrict_tdig",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 9 (2d6 + 2) bludgeoning damage, and a Large or smaller target is grappled (escape DC 12). Until this grapple ends, the target is restrained, and the blight totem can't constrict another target.</p>",
@@ -1324,14 +1335,15 @@
           "damages": [
             {
               "formula": "2d6 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_entangling_plants__recharge_5__vomj",
+        "id": "act_entangling_plants__recharge_5__s34m",
         "name": "Entangling Plants (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Grasping roots and vines sprout in a 15-foot radius centered on the blight totem, withering away after 1 minute. For the duration, that area is difficult terrain for nonplant creatures. In addition, each creature of the blight totem's choice in that area when the plants appear must succeed on a DC 12 Strength saving throw or become restrained. A creature can use its action to make a DC 12 Strength check, freeing itself or another entangled creature within reach on a success.</p>",
@@ -1469,7 +1481,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_stomp_0w9n",
+        "id": "act_stomp_wlcv",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 20 ft., one target. Hit: 27 (5d8 + 5) bludgeoning damage, and the target must succeed on a DC 14 Strength saving throw or be knocked prone.</p>",
@@ -1490,14 +1502,15 @@
           "damages": [
             {
               "formula": "5d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_pbsg",
+        "id": "act_tail_mdqa",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 20 ft., one target. Hit: 32 (6d8 + 5) bludgeoning damage.</p>",
@@ -1515,7 +1528,8 @@
           "damages": [
             {
               "formula": "6d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1632,7 +1646,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_trampling_charge_vixq",
+        "id": "act_trampling_charge_ipbi",
         "name": "Trampling Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the ceratops moves at least 20 feet straight toward a creature and then hits it with a gore attack on the same turn, that target must succeed on a DC 13 Strength saving throw or be knocked prone. If the target is prone, the ceratops can make one stomp attack against it as a bonus action.</p>",
@@ -1657,7 +1671,7 @@
     ],
     "actions": [
       {
-        "id": "act_gore_b0ip",
+        "id": "act_gore_o5o6",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 24 (4d8 + 6) piercing damage.</p>",
@@ -1675,14 +1689,15 @@
           "damages": [
             {
               "formula": "4d8 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stomp_r8lu",
+        "id": "act_stomp_fjnl",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one prone creature. Hit: 22 (3d10 + 6) bludgeoning damage.</p>",
@@ -1700,7 +1715,8 @@
           "damages": [
             {
               "formula": "3d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1833,7 +1849,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_sensitivity_oj7m",
+        "id": "act_sunlight_sensitivity_el41",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the chupacabra has disadvantage on attack rolls, as well as on Wisdom (Perception) checks that rely on sight.</p>",
@@ -1855,7 +1871,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_2rim",
+        "id": "act_bite_zo2y",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) piercing damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -1876,14 +1892,15 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_drain_blood_q9eg",
+        "id": "act_drain_blood_16fm",
         "name": "Drain Blood",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature that is prone, incapacitated, or restrained. Hit: 5 (1d6 + 2) necrotic damage. The target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken, and the chupacabra regains hit points equal to that amount. The reduction lasts until the target finishes a long rest. The target dies if this effect reduces its hit point maximum to 0.</p>",
@@ -1904,7 +1921,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1914,7 +1932,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_pin_dy75",
+        "id": "act_pin_jsm0",
         "name": "Pin",
         "actionType": "reaction",
         "descriptionHtml": "<p>If a creature within 5 feet of the chupacabra stands up, the chupacabra can use its reaction to make a bite attack.</p>",
@@ -2391,7 +2409,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_weapons_hl2o",
+        "id": "act_magic_weapons_vcos",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The coatl's weapon attacks are magical.</p>",
@@ -2411,7 +2429,7 @@
         }
       },
       {
-        "id": "act_shielded_mind_iwyp",
+        "id": "act_shielded_mind_j54y",
         "name": "Shielded Mind",
         "actionType": "trait",
         "descriptionHtml": "<p>The coatl is immune to scrying and to any effect that would sense its emotions, read its thoughts, or detect its location.</p>",
@@ -2433,7 +2451,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_2enn",
+        "id": "act_bite_14tp",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one creature. Hit: 8 (1d6 + 5) piercing damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 24 hours. Until this poison ends, the target is unconscious. Another creature can use an action to shake the target awake.</p>",
@@ -2454,14 +2472,15 @@
           "damages": [
             {
               "formula": "1d6 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_constrict_iylh",
+        "id": "act_constrict_9h6s",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one Medium or smaller creature. Hit: 10 (2d6 + 3) bludgeoning damage, and the target is grappled (escape DC 15). Until this grapple ends, the target is restrained, and the coatl can't constrict another target.</p>",
@@ -2482,14 +2501,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_change_shape_m2ta",
+        "id": "act_change_shape_9etz",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The coatl magically polymorphs into a humanoid or beast that has a challenge rating equal to or less than its own, or back into its true form. It reverts to its true form if it dies. Any equipment it is wearing or carrying is absorbed or borne by the new form (the coatl's choice).</p><p>In a new form, the coatl retains its game statistics and ability to speak, but its AC, movement modes, Strength, Dexterity, and other actions are replaced by those of the new form, and it gains any statistics and capabilities (except class features, legendary actions, and lair actions) that the new form has but that it lacks. If the new form has a bite attack, the coatl can use its bite in that form.</p>",
@@ -2648,7 +2668,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_xgt4",
+        "id": "act_magic_resistance_zo6s",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The demon has advantage on saving throws against spells and other magical effects.</p>",
@@ -2670,7 +2690,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_c5px",
+        "id": "act_multiattack_jfro",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The demon makes two attacks: one with its beak and one with its talons.</p>",
@@ -2690,7 +2710,7 @@
         }
       },
       {
-        "id": "act_beak_sbr9",
+        "id": "act_beak_apds",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) piercing damage.</p>",
@@ -2708,14 +2728,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_talons_q8eg",
+        "id": "act_talons_i13c",
         "name": "Talons",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 14 (2d10 + 3) slashing damage.</p>",
@@ -2733,14 +2754,15 @@
           "damages": [
             {
               "formula": "2d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spores___recharge__ab97",
+        "id": "act_spores___recharge__7y97",
         "name": "Spores {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>A 15-foot-radius cloud of toxic spores extends out from the demon. The spores spread around corners. Each creature in that area must succeed on a DC 14 Constitution saving throw or become poisoned. While poisoned in this way, a target takes 5 (1d10) poison damage at the start of each of its turns. A target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. Emptying a Holy Water (Flask) on the target also ends the effect on it.</p>",
@@ -2761,14 +2783,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stunning_screech__1_day__4qed",
+        "id": "act_stunning_screech__1_day__o3ap",
         "name": "Stunning Screech (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The demon emits a horrific screech. Each creature within 20 feet of it that can hear it and that isn't a demon must succeed on a DC 14 Constitution saving throw or be stunned until the end of the demon's next turn.</p>",
@@ -3080,7 +3103,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_mham",
+        "id": "act_magic_resistance_dokw",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The dryad has advantage on saving throws against spells and other magical effects.</p>",
@@ -3100,7 +3123,7 @@
         }
       },
       {
-        "id": "act_speak_with_beasts_and_plants_m0mu",
+        "id": "act_speak_with_beasts_and_plants_ersx",
         "name": "Speak with Beasts and Plants",
         "actionType": "trait",
         "descriptionHtml": "<p>The dryad can communicate with beasts and plants as if they shared a language.</p>",
@@ -3120,7 +3143,7 @@
         }
       },
       {
-        "id": "act_tree_stride_2ne7",
+        "id": "act_tree_stride_19mg",
         "name": "Tree Stride",
         "actionType": "trait",
         "descriptionHtml": "<p>Once on her turn, the dryad can use 10 feet of her movement to step magically into one living tree within her reach and emerge from a second living tree within 60 feet of the first tree, appearing in an unoccupied space within 5 feet of the second tree. Both trees must be large or bigger.</p>",
@@ -3142,7 +3165,7 @@
     ],
     "actions": [
       {
-        "id": "act_club_b4qn",
+        "id": "act_club_ntua",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit (+6 to hit with shillelagh), reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage, or 8 (1d8 + 4) bludgeoning damage with shillelagh.</p>",
@@ -3160,18 +3183,20 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fey_charm_yvhv",
+        "id": "act_fey_charm_qwje",
         "name": "Fey Charm",
         "actionType": "action",
         "descriptionHtml": "<p>The dryad targets one humanoid or beast that she can see within 30 feet of her. If the target can see the dryad, it must succeed on a DC 14 Wisdom saving throw or be magically charmed. The charmed creature regards the dryad as a trusted friend to be heeded and protected. Although the target isn't under the dryad's control, it takes the dryad's requests or actions in the most favorable way it can.</p><p>Each time the dryad or its allies do anything harmful to the target, it can repeat the saving throw, ending the effect on itself on a success. Otherwise, the effect lasts 24 hours or until the dryad dies, is on a different plane of existence from the target, or ends the effect as a bonus action. If a target's saving throw is successful, the target is immune to the dryad's Fey Charm for the next 24 hours.</p><p>The dryad can have no more than one humanoid and up to three beasts charmed at a time.</p>",
@@ -3328,7 +3353,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_earth_glide_pjf5",
+        "id": "act_earth_glide_h5o0",
         "name": "Earth Glide",
         "actionType": "trait",
         "descriptionHtml": "<p>The totem elemental can burrow through nonmagical, unworked earth and stone. While doing so, the totem elemental doesn't disturb the material it moves through.</p>",
@@ -3348,7 +3373,7 @@
         }
       },
       {
-        "id": "act_siege_monster_q0hh",
+        "id": "act_siege_monster_rgdu",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The totem elemental deals double damage to objects and structures.</p>",
@@ -3370,7 +3395,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_u2hv",
+        "id": "act_multiattack_1bat",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The totem elemental makes two slam attacks.</p>",
@@ -3390,7 +3415,7 @@
         }
       },
       {
-        "id": "act_slam_5ql2",
+        "id": "act_slam_sikj",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 14 (2d8 + 5) bludgeoning damage.</p>",
@@ -3408,7 +3433,8 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3550,7 +3576,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__z2vk",
+        "id": "act_legendary_resistance__3_day__1gb2",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -3570,7 +3596,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_q5y4",
+        "id": "act_magic_resistance_cph8",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -3590,7 +3616,7 @@
         }
       },
       {
-        "id": "act_siege_monster_3g25",
+        "id": "act_siege_monster_y4g7",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -3610,7 +3636,7 @@
         }
       },
       {
-        "id": "act_uniqueness_hztk",
+        "id": "act_uniqueness_utcj",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -3632,7 +3658,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_8jr0",
+        "id": "act_frightful_presence_jzce",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -3655,7 +3681,7 @@
         }
       },
       {
-        "id": "act_swallow_89hi",
+        "id": "act_swallow_dzb4",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -3676,7 +3702,8 @@
           "damages": [
             {
               "formula": "16d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -3690,7 +3717,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_04en",
+          "id": "act_attack_qbwf",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -3710,7 +3737,7 @@
           }
         },
         {
-          "id": "act_move_4kr2",
+          "id": "act_move_rhrv",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -3730,7 +3757,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__eirr",
+          "id": "act_chomp__costs_2_actions__t8tb",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -3879,7 +3906,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__ul7s",
+        "id": "act_legendary_resistance__3_day__3gln",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -3899,7 +3926,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_duwh",
+        "id": "act_magic_resistance_2qfr",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -3919,7 +3946,7 @@
         }
       },
       {
-        "id": "act_siege_monster_jgzq",
+        "id": "act_siege_monster_t37h",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -3939,7 +3966,7 @@
         }
       },
       {
-        "id": "act_uniqueness_cvsg",
+        "id": "act_uniqueness_tt1h",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -3959,7 +3986,7 @@
         }
       },
       {
-        "id": "act_lightning_storm_bf8q",
+        "id": "act_lightning_storm_kz68",
         "name": "Lightning Storm",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur is always accompanied by a raging thunderstorm similar to the effect of a call lightning spell. A storm cloud in the shape of a cylinder that is 10 feet tall with a 60-foot radius instantly forms 100 feet in the air over the elder dinosaur when it is angered or becomes violent, as long as it is outdoors. On each of its turns, as an action, the elder dinosaur can choose a point it can see within 120 feet of it. A bolt of lightning flashes down from the cloud to that point. Each creature within 10 feet of that point must make a DC 20 Dexterity saving throw, taking 21 (6d6) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -3980,7 +4007,8 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -3989,7 +4017,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_3hfz",
+        "id": "act_frightful_presence_a5yq",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -4012,7 +4040,7 @@
         }
       },
       {
-        "id": "act_swallow_xztv",
+        "id": "act_swallow_aybd",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -4033,14 +4061,15 @@
           "damages": [
             {
               "formula": "16d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_multiattack_45jy",
+        "id": "act_multiattack_fs9v",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur can use its Frightful Presence and call down two lightning strikes from its Lightning Storm. It then makes three attacks: one with its bite and two with its claws.</p>",
@@ -4060,7 +4089,7 @@
         }
       },
       {
-        "id": "act_bite_c2gz",
+        "id": "act_bite_g2cs",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 10 ft., one target. Hit: 36 (4d12 + 10) piercing damage. If the target is a creature, it is grappled (escape DC 20). Until this grapple ends, the target is restrained, and the elder dinosaur can't bite another target.</p>",
@@ -4081,14 +4110,15 @@
           "damages": [
             {
               "formula": "4d12 + 10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_htls",
+        "id": "act_claw_1qhq",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 15 ft., one target. Hit: 28 (4d8 + 10) slashing damage.</p>",
@@ -4106,7 +4136,8 @@
           "damages": [
             {
               "formula": "4d8 + 10",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4120,7 +4151,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_8q97",
+          "id": "act_attack_n77e",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -4140,7 +4171,7 @@
           }
         },
         {
-          "id": "act_move_yqgb",
+          "id": "act_move_djrl",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -4160,7 +4191,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__3o23",
+          "id": "act_chomp__costs_2_actions__0mie",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -4309,7 +4340,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__1kkr",
+        "id": "act_legendary_resistance__3_day__ay11",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -4329,7 +4360,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_dfmu",
+        "id": "act_magic_resistance_jbdn",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -4349,7 +4380,7 @@
         }
       },
       {
-        "id": "act_siege_monster_bg6i",
+        "id": "act_siege_monster_5hvg",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -4369,7 +4400,7 @@
         }
       },
       {
-        "id": "act_uniqueness_27hq",
+        "id": "act_uniqueness_k329",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -4391,7 +4422,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_1pnc",
+        "id": "act_frightful_presence_spxv",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -4414,7 +4445,7 @@
         }
       },
       {
-        "id": "act_swallow_iuex",
+        "id": "act_swallow_qs94",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -4435,14 +4466,15 @@
           "damages": [
             {
               "formula": "16d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_multiattack_hsd3",
+        "id": "act_multiattack_0ikh",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur can use its Frightful Presence. It then makes three attacks: one with its bite, one with its stomp, and one with its tail. It can use its Swallow instead of its bite.</p>",
@@ -4462,7 +4494,7 @@
         }
       },
       {
-        "id": "act_bite_tzv3",
+        "id": "act_bite_p50b",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 10 ft., one target. Hit: 62 (8d12 + 10) piercing damage. If the target is a creature, it is grappled (escape DC 20). Until this grapple ends, the target is restrained, and the elder dinosaur can't bite another target.</p>",
@@ -4483,14 +4515,15 @@
           "damages": [
             {
               "formula": "8d12 + 10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stomp_ldvw",
+        "id": "act_stomp_dgbf",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 5 ft., one target. Hit: 46 (8d8 + 10) bludgeoning damage.</p>",
@@ -4508,14 +4541,15 @@
           "damages": [
             {
               "formula": "8d8 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_cgxz",
+        "id": "act_tail_srnp",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 20 ft., one target. Hit: 38 (8d6 + 10) bludgeoning damage. If the target is a creature, it must succeed on a DC 20 Strength saving throw or be knocked prone.</p>",
@@ -4536,7 +4570,8 @@
           "damages": [
             {
               "formula": "8d6 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4550,7 +4585,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_d99c",
+          "id": "act_attack_g7z9",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -4570,7 +4605,7 @@
           }
         },
         {
-          "id": "act_move_6hgj",
+          "id": "act_move_7m4m",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -4590,7 +4625,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__u53e",
+          "id": "act_chomp__costs_2_actions__xua2",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -4739,7 +4774,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__j30q",
+        "id": "act_legendary_resistance__3_day__bibx",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -4759,7 +4794,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_afwo",
+        "id": "act_magic_resistance_d2g5",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -4779,7 +4814,7 @@
         }
       },
       {
-        "id": "act_siege_monster_krei",
+        "id": "act_siege_monster_2s5y",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -4799,7 +4834,7 @@
         }
       },
       {
-        "id": "act_uniqueness_cdml",
+        "id": "act_uniqueness_2cy2",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -4819,7 +4854,7 @@
         }
       },
       {
-        "id": "act_hold_breath_9dxs",
+        "id": "act_hold_breath_5f0m",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur can hold its breath for 4 hours.</p>",
@@ -4841,7 +4876,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_qgqn",
+        "id": "act_frightful_presence_93ce",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -4864,7 +4899,7 @@
         }
       },
       {
-        "id": "act_swallow_n0y3",
+        "id": "act_swallow_kdnc",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -4885,14 +4920,15 @@
           "damages": [
             {
               "formula": "16d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_multiattack_9rht",
+        "id": "act_multiattack_3wyx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur can use its Frightful Presence. It then makes five attacks: one with its bite and four with its flippers. No two flipper attacks can target the same creature. It can use its Swallow instead of its bite.</p>",
@@ -4912,7 +4948,7 @@
         }
       },
       {
-        "id": "act_bite_za33",
+        "id": "act_bite_cucq",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 10 ft., one target. Hit: 36 (4d12 + 10) piercing damage. If the target is a creature, it is grappled (escape DC 20). Until this grapple ends, the target is restrained, and the elder dinosaur can't bite another target.</p>",
@@ -4933,14 +4969,15 @@
           "damages": [
             {
               "formula": "4d12 + 10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_flipper_suv0",
+        "id": "act_flipper_20ik",
         "name": "Flipper",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 5 ft., one target. Hit: 28 (4d8 + 10) bludgeoning damage.</p>",
@@ -4958,7 +4995,8 @@
           "damages": [
             {
               "formula": "4d8 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4972,7 +5010,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_7ssj",
+          "id": "act_attack_op3p",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -4992,7 +5030,7 @@
           }
         },
         {
-          "id": "act_move_6nvh",
+          "id": "act_move_7293",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -5012,7 +5050,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__2f2i",
+          "id": "act_chomp__costs_2_actions__y857",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -5161,7 +5199,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__07yz",
+        "id": "act_legendary_resistance__3_day__mbhs",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -5181,7 +5219,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_5nqj",
+        "id": "act_magic_resistance_fv9r",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -5201,7 +5239,7 @@
         }
       },
       {
-        "id": "act_siege_monster_3geg",
+        "id": "act_siege_monster_f99j",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -5221,7 +5259,7 @@
         }
       },
       {
-        "id": "act_uniqueness_ed0x",
+        "id": "act_uniqueness_mlq5",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -5241,7 +5279,7 @@
         }
       },
       {
-        "id": "act_spiny_carapace_5kjr",
+        "id": "act_spiny_carapace_0xq4",
         "name": "Spiny Carapace",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur is covered in an armored carapace bristling with thick, sharp spines. Any creature that hits or misses Tetzimoc with a melee attack takes 7 (2d6) piercing damage.</p>",
@@ -5259,14 +5297,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_spike_regrowth_ah5x",
+        "id": "act_tail_spike_regrowth_ney4",
         "name": "Tail Spike Regrowth",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has forty tail spikes. Used spikes regrow when the elder dinosaur finishes a long rest.</p>",
@@ -5288,7 +5327,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_dn2f",
+        "id": "act_frightful_presence_fedb",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -5311,7 +5350,7 @@
         }
       },
       {
-        "id": "act_swallow_8otw",
+        "id": "act_swallow_ezj8",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -5332,14 +5371,15 @@
           "damages": [
             {
               "formula": "16d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_multiattack_2kon",
+        "id": "act_multiattack_kder",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur can use its Frightful Presence. It then makes five attacks: one with its bite, two with its claws, one with its horns, and one with its tail. It can use its tail spikes in place of any or all of those attacks, and it can use its Swallow instead of its bite.</p>",
@@ -5359,7 +5399,7 @@
         }
       },
       {
-        "id": "act_bite_zjd2",
+        "id": "act_bite_w4k0",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 10 ft., one target. Hit: 36 (4d12 + 10) piercing damage. If the target is a creature, it is grappled (escape DC 20). Until this grapple ends, the target is restrained, and the elder dinosaur can't bite another target.</p>",
@@ -5380,14 +5420,15 @@
           "damages": [
             {
               "formula": "4d12 + 10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_o5s7",
+        "id": "act_claw_o2nk",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 15 ft., one target. Hit: 28 (4d8 + 10) slashing damage.</p>",
@@ -5405,14 +5446,15 @@
           "damages": [
             {
               "formula": "4d8 + 10",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_horns_gth1",
+        "id": "act_horns_on9g",
         "name": "Horns",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 10 ft., one target. Hit: 32 (4d10 + 10) piercing damage.</p>",
@@ -5430,14 +5472,15 @@
           "damages": [
             {
               "formula": "4d10 + 10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_5lsj",
+        "id": "act_tail_16bb",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 20 ft., one target. Hit: 24 (4d6 + 10) piercing damage. If the target is a creature, it must succeed on a DC 20 Strength saving throw or be knocked prone.</p>",
@@ -5458,14 +5501,15 @@
           "damages": [
             {
               "formula": "4d6 + 10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_spikes_52zb",
+        "id": "act_tail_spikes_gh5u",
         "name": "Tail Spikes",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +9 to hit, range 100/300 ft., two targets. Hit: 7 (2d6) piercing damage.</p>",
@@ -5483,7 +5527,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5497,7 +5542,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_k98p",
+          "id": "act_attack_bczx",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -5517,7 +5562,7 @@
           }
         },
         {
-          "id": "act_move_19l9",
+          "id": "act_move_d3so",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -5537,7 +5582,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__esy4",
+          "id": "act_chomp__costs_2_actions__zejm",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -5686,7 +5731,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__guql",
+        "id": "act_legendary_resistance__3_day__z99p",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -5706,7 +5751,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_cvcd",
+        "id": "act_magic_resistance_crkr",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -5726,7 +5771,7 @@
         }
       },
       {
-        "id": "act_siege_monster_wfcf",
+        "id": "act_siege_monster_xj12",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -5746,7 +5791,7 @@
         }
       },
       {
-        "id": "act_uniqueness_4ffl",
+        "id": "act_uniqueness_qp4m",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -5768,7 +5813,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_ch20",
+        "id": "act_frightful_presence_ry6k",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -5791,7 +5836,7 @@
         }
       },
       {
-        "id": "act_swallow_cibm",
+        "id": "act_swallow_fv71",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -5812,14 +5857,15 @@
           "damages": [
             {
               "formula": "16d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_multiattack_okjr",
+        "id": "act_multiattack_0kcj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur can use its Frightful Presence. It then makes five attacks: three with its bite, one with its stomp, and one with its tail. It can use its Swallow instead of a bite.</p>",
@@ -5839,7 +5885,7 @@
         }
       },
       {
-        "id": "act_bite_cw3b",
+        "id": "act_bite_z0ei",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 10 ft., one target. Hit: 36 (4d12 + 10) piercing damage. If the target is a creature, it is grappled (escape DC 20). Until this grapple ends, the target is restrained. If the elder dinosaur has three targets restrained in this way, it can't bite another target.</p>",
@@ -5860,7 +5906,8 @@
           "damages": [
             {
               "formula": "4d12 + 10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5874,7 +5921,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_v7wn",
+          "id": "act_attack_shlc",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -5894,7 +5941,7 @@
           }
         },
         {
-          "id": "act_move_3xkf",
+          "id": "act_move_dhvk",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -5914,7 +5961,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__k8mi",
+          "id": "act_chomp__costs_2_actions__gtqs",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -6065,7 +6112,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__r38y",
+        "id": "act_legendary_resistance__3_day__lsd0",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the elder dinosaur fails a saving throw, it can choose to succeed instead.</p>",
@@ -6085,7 +6132,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_v71m",
+        "id": "act_magic_resistance_9e1z",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur has advantage on saving throws against spells and other magical effects.</p>",
@@ -6105,7 +6152,7 @@
         }
       },
       {
-        "id": "act_siege_monster_hp0z",
+        "id": "act_siege_monster_54en",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The elder dinosaur deals double damage to objects and structures.</p>",
@@ -6125,7 +6172,7 @@
         }
       },
       {
-        "id": "act_uniqueness_i71x",
+        "id": "act_uniqueness_kf58",
         "name": "Uniqueness",
         "actionType": "trait",
         "descriptionHtml": "<p>These statistics are shared by all six elder dinosaurs: Elder Dinosaur (Etali, Primal Storm), Elder Dinosaur (Ghalta, Primal Hunger), Elder Dinosaur (Nezahal, Primal Tide), Elder Dinosaur (Tetzimoc, Primal Death), Elder Dinosaur (Zacama, Primal Calamity), Elder Dinosaur (Zetalpa, Primal Dawn)</p>",
@@ -6147,7 +6194,7 @@
     ],
     "actions": [
       {
-        "id": "act_frightful_presence_8jgy",
+        "id": "act_frightful_presence_6dsq",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of the elder dinosaur's choice within 120 feet of it and aware of it must succeed on a DC 17 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, with disadvantage if the elder dinosaur is within line of sight, ending the effect on itself ona success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the elder dinosaur's Frightful Presence for the next 24 hours.</p>",
@@ -6170,7 +6217,7 @@
         }
       },
       {
-        "id": "act_swallow_ipcr",
+        "id": "act_swallow_prnl",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage, the target is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside the elder dinosaur, and it takes 56 (16d6) acid damage at the start of each of the elder dinosaur's turns. If the elder dinosaur takes 60 damage or more on a single turn from a creature inside it, it must succeed on a DC 20 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If the elder dinosaur dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -6191,14 +6238,15 @@
           "damages": [
             {
               "formula": "16d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_multiattack_5q1c",
+        "id": "act_multiattack_1efz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The elder dinosaur can use its Frightful Presence. It then makes five attacks: one with its bite, two with its claws, and two with its wings. It can use its Swallow instead of its bite.</p>",
@@ -6218,7 +6266,7 @@
         }
       },
       {
-        "id": "act_bite_4gyt",
+        "id": "act_bite_kfn7",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 10 ft., one target. Hit: 36 (4d12 + 10) piercing damage. If the target is a creature, it is grappled (escape DC 20). Until this grapple ends, the target is restrained, and the elder dinosaur can't bite another target.</p>",
@@ -6239,14 +6287,15 @@
           "damages": [
             {
               "formula": "4d12 + 10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_72xa",
+        "id": "act_claw_39fg",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 15 ft., one target. Hit: 28 (4d8 + 10) slashing damage.</p>",
@@ -6264,14 +6313,15 @@
           "damages": [
             {
               "formula": "4d8 + 10",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wing_i5t9",
+        "id": "act_wing_ykh6",
         "name": "Wing",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +19 to hit, reach 20 ft., one target. Hit: 28 (4d8 + 10) bludgeoning damage.</p>",
@@ -6289,7 +6339,8 @@
           "damages": [
             {
               "formula": "4d8 + 10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6303,7 +6354,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_qys1",
+          "id": "act_attack_n7q7",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one claw attack, tail attack, wing attack, or flipper attack.</p>",
@@ -6323,7 +6374,7 @@
           }
         },
         {
-          "id": "act_move_w5df",
+          "id": "act_move_mkks",
           "name": "Move",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur moves up to half its speed.</p>",
@@ -6343,7 +6394,7 @@
           }
         },
         {
-          "id": "act_chomp__costs_2_actions__6h0d",
+          "id": "act_chomp__costs_2_actions__ifrb",
           "name": "Chomp (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The elder dinosaur makes one bite attack or uses its Swallow.</p>",
@@ -6471,7 +6522,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_pounce_q2cd",
+        "id": "act_pounce_tk9e",
         "name": "Pounce",
         "actionType": "trait",
         "descriptionHtml": "<p>If the ferocidon moves at least 30 feet straight toward a creature and then hits it with a claw attack on the same turn, that target must succeed on a DC 13 Strength saving throw or be knocked prone. If the target is prone, the ferocidon can make one bite attack against it as a bonus action.</p>",
@@ -6496,7 +6547,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_x6tn",
+        "id": "act_bite_qd6i",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 15 (2d10 + 4) piercing damage.</p>",
@@ -6514,14 +6565,15 @@
           "damages": [
             {
               "formula": "2d10 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_n79l",
+        "id": "act_claw_wllo",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage.</p>",
@@ -6539,7 +6591,8 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6680,7 +6733,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fire_form_0c6k",
+        "id": "act_fire_form_0ouh",
         "name": "Fire Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The fire guardian can move through a space as narrow as 1 inch wide without squeezing. A creature that touches the fire guardian or hits it with a melee attack while within 5 feet of it takes 5 (1d10) fire damage. In addition, the fire guardian can enter a hostile creature's space and stop there. The first time it enters a creature's space on a turn, that creature takes 5 (1d10) fire damage and catches fire; until someone takes an action to douse the fire, the creature takes 5 (1d10) fire damage at the start of each of its turns.</p>",
@@ -6698,22 +6751,25 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "1d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "1d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_illumination_16js",
+        "id": "act_illumination_74ow",
         "name": "Illumination",
         "actionType": "trait",
         "descriptionHtml": "<p>The fire guardian sheds bright light in a 30-foot radius and dim light in an additional 30 feet.</p>",
@@ -6733,7 +6789,7 @@
         }
       },
       {
-        "id": "act_water_susceptibility_4ugp",
+        "id": "act_water_susceptibility_g50b",
         "name": "Water Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>For every 5 feet the fire guardian moves in water, or for every gallon of water splashed on it, it takes 1 cold damage.</p>",
@@ -6755,7 +6811,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_z3ez",
+        "id": "act_multiattack_nqmm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fire guardian makes two touch attacks.</p>",
@@ -6775,7 +6831,7 @@
         }
       },
       {
-        "id": "act_touch_p8gr",
+        "id": "act_touch_x9na",
         "name": "Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) fire damage. If the target is a creature or a flammable object, it ignites. Until a creature takes an action to douse the fire, the target takes 5 (1d10) fire damage at the start of each of its turns.</p>",
@@ -6793,11 +6849,13 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "1d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6919,7 +6977,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_uls5",
+        "id": "act_multiattack_8zkq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The deathspitter makes three attacks: one with its bite and two with its claws.</p>",
@@ -6939,7 +6997,7 @@
         }
       },
       {
-        "id": "act_bite_z6hy",
+        "id": "act_bite_7xap",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage.</p>",
@@ -6957,14 +7015,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_d3uw",
+        "id": "act_claw_p7h4",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) slashing damage.</p>",
@@ -6982,14 +7041,15 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spit_poison_4btp",
+        "id": "act_spit_poison_c9is",
         "name": "Spit Poison",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 15/30 ft., one creature. Hit: The target must make a DC 13 Constitution saving throw, taking 18 (4d8) poison damage on a failed save, or half as much damage on a successful one. In addition, a creature that fails its saving throw is blinded until the end of the deathspitter's next turn.</p>",
@@ -7010,7 +7070,8 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -7141,7 +7202,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__k8w2",
+        "id": "act_legendary_resistance__3_day__si0x",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Gishath fails a saving throw, it can choose to succeed instead.</p>",
@@ -7163,7 +7224,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qvhm",
+        "id": "act_multiattack_wvnt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Gishath makes two attacks: one with its bite and one with its stomp or tail. It can't make both attacks against the same target.</p>",
@@ -7183,7 +7244,7 @@
         }
       },
       {
-        "id": "act_bite_ibr7",
+        "id": "act_bite_hlj4",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 15 ft., one target. Hit: 39 (5d12 + 7) piercing damage. If the target is a Large or smaller creature, it must succeed on a DC 19 Dexterity saving throw or it is grappled (escape DC 19). Until this grapple ends, the target is restrained, and Gishath can't bite another target.</p>",
@@ -7204,14 +7265,15 @@
           "damages": [
             {
               "formula": "5d12 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_swallow_00m8",
+        "id": "act_swallow_4koo",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>Gishath makes one bite attack against a Large or smaller creature it is grappling. If the attack hits, that creature takes the bite's damage and is swallowed, and the grapple ends. While swallowed, the creature is blinded and restrained, it has Cover against attacks and other effects outside Gishath, and it takes 21 (6d6) acid damage at the start of each of Gishath's turns.</p><p>If Gishath takes 30 damage or more on a single turn from a creature inside it, it must succeed on a DC 18 Constitution saving throw at the end of that turn or regurgitate all swallowed creatures, which fall prone in a space within 10 feet of it. If Gishath dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 20 feet of movement, exiting prone.</p>",
@@ -7233,14 +7295,15 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stomp_st4z",
+        "id": "act_stomp_y2wo",
         "name": "Stomp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 10 ft., one target. Hit: 29 (5d8 + 7) bludgeoning damage, and the target must succeed on a DC 19 Strength saving throw or be knocked prone.</p>",
@@ -7261,14 +7324,15 @@
           "damages": [
             {
               "formula": "5d8 + 7",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_y4ll",
+        "id": "act_tail_7wq6",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +11 to hit, reach 15 ft., one target. Hit: 25 (4d8 + 7) bludgeoning damage.</p>",
@@ -7286,7 +7350,8 @@
           "damages": [
             {
               "formula": "4d8 + 7",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7300,7 +7365,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_y78k",
+          "id": "act_attack_mdvq",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>Gishath makes one stomp or tail attack.</p>",
@@ -7320,7 +7385,7 @@
           }
         },
         {
-          "id": "act_roar__costs_2_actions__2msg",
+          "id": "act_roar__costs_2_actions__zvgs",
           "name": "Roar (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Each creature that is within 120 feet of Gishath and can hear it must succeed on a DC 19 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to Gishath's Roar for the next 24 hours.</p>",
@@ -7451,7 +7516,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_sight_ua89",
+        "id": "act_keen_sight_7p5b",
         "name": "Keen Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The griffin has advantage on Wisdom (Perception) checks that rely on sight.</p>",
@@ -7473,7 +7538,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_j5yi",
+        "id": "act_multiattack_16pj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The griffin makes two attacks: one with its beak and one with its claws.</p>",
@@ -7493,7 +7558,7 @@
         }
       },
       {
-        "id": "act_beak_kgyo",
+        "id": "act_beak_nqlm",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) piercing damage.</p>",
@@ -7511,14 +7576,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_m6gl",
+        "id": "act_claws_tv81",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
@@ -7536,7 +7602,8 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7658,7 +7725,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_tail_gg3w",
+        "id": "act_tail_c341",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (1d10 + 2) bludgeoning damage.</p>",
@@ -7676,7 +7743,8 @@
           "damages": [
             {
               "formula": "1d10 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7793,7 +7861,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_hiae",
+        "id": "act_charge_nq6n",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the hammerskull moves at least 20 feet straight toward a target and then hits it with a ram attack on the same turn, the target takes an extra 5 (2d4) bludgeoning damage. If the target is a creature, it must succeed on a DC 13 Strength saving throw or be knocked prone.</p>",
@@ -7814,14 +7882,15 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sure_footed_115e",
+        "id": "act_sure_footed_t0eh",
         "name": "Sure-Footed",
         "actionType": "trait",
         "descriptionHtml": "<p>The hammerskull has advantage on Strength and Dexterity saving throws made against effects that would knock it prone.</p>",
@@ -7843,7 +7912,7 @@
     ],
     "actions": [
       {
-        "id": "act_ram_qikf",
+        "id": "act_ram_8ayt",
         "name": "Ram",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 8 (2d4 + 3) bludgeoning damage.</p>",
@@ -7861,7 +7930,8 @@
           "damages": [
             {
               "formula": "2d4 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -7981,7 +8051,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_vyk3",
+        "id": "act_multiattack_efv2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The harpy makes two attacks: one with its claws and one with its bite.</p>",
@@ -8001,7 +8071,7 @@
         }
       },
       {
-        "id": "act_claws_wkb0",
+        "id": "act_claws_8423",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 6 (2d4 + 1) slashing damage.</p>",
@@ -8019,14 +8089,15 @@
           "damages": [
             {
               "formula": "2d4 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_nx5v",
+        "id": "act_bite_q4y1",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) slashing damage. If the target is a creature, it must succeed on a DC 11 Constitution saving throw or contract a disease. Until the disease is cured, the target can't regain hit points except by magical means, and the target's hit point maximum decreases by 3 (1d6) every 24 hours. If the target's hit point maximum drops to 0 as a result of this disease, the target dies.</p>",
@@ -8047,14 +8118,15 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_luring_song_9g8e",
+        "id": "act_luring_song_rsaa",
         "name": "Luring Song",
         "actionType": "action",
         "descriptionHtml": "<p>The harpy sings a magical melody. Every humanoid and giant within 300 feet of the harpy that can hear the song must succeed on a DC 11 Wisdom saving throw or be charmed until the song ends. The harpy must take a bonus action on its subsequent turns to continue singing. It can stop singing at any time. The song ends if the harpy is incapacitated.</p><p>While charmed by the harpy, a target is incapacitated and ignores the songs of other harpies. If the charmed target is more than 5 feet away from the harpy, the target must move on its turn toward the harpy by the most direct route. It doesn't avoid opportunity attacks, but before moving into damaging terrain, such as lava or a pit, and whenever it takes damage from a source other than the harpy, a target can repeat the saving throw. A creature can also repeat the saving throw at the end of each of its turns. If a creature's saving throw is successful, the effect ends on it.</p><p>A target that successfully saves is immune to this harpy's song for the next 24 hours.</p>",
@@ -8195,7 +8267,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_zgag",
+        "id": "act_amphibious_cldb",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The frog can breathe air and water.</p>",
@@ -8215,7 +8287,7 @@
         }
       },
       {
-        "id": "act_standing_leap_3dhr",
+        "id": "act_standing_leap_k8zr",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>The frog's long jump is up to 20 feet and its high jump is up to 10 feet, with or without a running start.</p>",
@@ -8237,7 +8309,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_5ijj",
+        "id": "act_bite_jd8k",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) piercing damage, and the target is grappled (escape DC 11). Until this grapple ends, the target is restrained, and the frog can't bite another target.</p>",
@@ -8258,14 +8330,15 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_swallow_5x1x",
+        "id": "act_swallow_h2rb",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The frog makes one bite attack against a Small or smaller target it is grappling. If the attack hits, the target is swallowed, and the grapple ends. The swallowed target is blinded and restrained, it has Cover against attacks and other effects outside the frog, and it takes 5 (2d4) acid damage at the start of each of the frog's turns. The frog can have only one target swallowed at a time. If the frog dies, a swallowed creature is no longer restrained by it and can escape from the corpse using 5 feet of movement, exiting prone.</p>",
@@ -8283,7 +8356,8 @@
           "damages": [
             {
               "formula": "2d4",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8404,7 +8478,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_mimicry_94y9",
+        "id": "act_mimicry_wrj4",
         "name": "Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The macaw can mimic simple sounds it has heard, such as a person whispering, a baby crying, or an animal chittering. A creature that hears the sounds can tell they are imitations with a successful DC 10 Wisdom (Insight) check.</p>",
@@ -8429,7 +8503,7 @@
     ],
     "actions": [
       {
-        "id": "act_beak_036b",
+        "id": "act_beak_5p03",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1 piercing damage.</p>",
@@ -8563,7 +8637,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_mimicry_abd3",
+        "id": "act_mimicry_sufp",
         "name": "Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The parrot can mimic simple sounds it has heard, such as a person whispering, a baby crying, or an animal chittering. A creature that hears the sounds can tell they are imitations with a successful DC 10 Wisdom (Insight) check.</p>",
@@ -8588,7 +8662,7 @@
     ],
     "actions": [
       {
-        "id": "act_beak_etzd",
+        "id": "act_beak_v7r3",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1 piercing damage.</p>",
@@ -8718,7 +8792,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blood_frenzy_h4k7",
+        "id": "act_blood_frenzy_b0r5",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The piranha has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
@@ -8738,7 +8812,7 @@
         }
       },
       {
-        "id": "act_water_breathing_xypq",
+        "id": "act_water_breathing_j95i",
         "name": "Water Breathing",
         "actionType": "trait",
         "descriptionHtml": "<p>The piranha can breathe only underwater.</p>",
@@ -8760,7 +8834,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_khju",
+        "id": "act_bite_bch9",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1 piercing damage.</p>",
@@ -8894,7 +8968,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_o6h8",
+        "id": "act_hold_breath_bqvj",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The sailback can hold its breath for 30 minutes.</p>",
@@ -8916,7 +8990,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ef4b",
+        "id": "act_multiattack_yv5t",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sailback makes two attacks: one with its bite and one with its tail.</p>",
@@ -8936,7 +9010,7 @@
         }
       },
       {
-        "id": "act_bite_hkr6",
+        "id": "act_bite_4foz",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 21 (3d10 + 5) piercing damage, and the target is grappled (escape DC 16). Until this grapple ends, the target is restrained, and the sailback can't bite another target.</p>",
@@ -8957,14 +9031,15 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_ike1",
+        "id": "act_tail_5v4q",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target not grappled by the sailback. Hit: 14 (2d8 + 5) bludgeoning damage. If the target is a creature, it must succeed on a DC 16 Strength saving throw or be knocked prone.</p>",
@@ -8985,7 +9060,8 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -9115,7 +9191,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_lightning_absorption_e9rm",
+        "id": "act_lightning_absorption_uuow",
         "name": "Lightning Absorption",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the shambling mound totem is subjected to lightning damage, it takes no damage and regains a number of hit points equal to the lightning damage dealt.</p>",
@@ -9137,7 +9213,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uysb",
+        "id": "act_multiattack_jc5g",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The shambling mound totem makes two slam attacks. If both attacks hit a Medium or smaller target, the target is grappled (escape DC 14), and the shambling mound totem uses its Engulf on it.</p>",
@@ -9160,7 +9236,7 @@
         }
       },
       {
-        "id": "act_slam_gk5y",
+        "id": "act_slam_kile",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage.</p>",
@@ -9178,14 +9254,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_engulf_f0bc",
+        "id": "act_engulf_bcnv",
         "name": "Engulf",
         "actionType": "action",
         "descriptionHtml": "<p>The shambling mound totem engulfs a Medium or smaller creature grappled by it. The engulfed target is blinded, restrained, and unable to breathe, and it must succeed on a DC 14 Constitution saving throw at the start of each of the mound's turns or take 13 (2d8 + 4) bludgeoning damage. If the mound moves, the engulfed target moves with it. The mound can have only one creature engulfed at a time.</p>",
@@ -9206,7 +9283,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -9335,7 +9413,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_antimagic_susceptibility_de1t",
+        "id": "act_antimagic_susceptibility_apow",
         "name": "Antimagic Susceptibility",
         "actionType": "trait",
         "descriptionHtml": "<p>The stone guardian is incapacitated while in the area of an antimagic field. If targeted by dispel magic, the stone guardian must succeed on a Constitution saving throw against the caster's spell save DC or fall unconscious for 1 minute.</p>",
@@ -9355,7 +9433,7 @@
         }
       },
       {
-        "id": "act_false_appearance_hrm6",
+        "id": "act_false_appearance_5jti",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the stone guardian remains motionless, it is indistinguishable from a normal suit of stone guardian.</p>",
@@ -9377,7 +9455,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_uq9i",
+        "id": "act_multiattack_03w1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The stone guardian makes two melee attacks.</p>",
@@ -9397,7 +9475,7 @@
         }
       },
       {
-        "id": "act_slam_ahxi",
+        "id": "act_slam_zxzo",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) bludgeoning damage.</p>",
@@ -9415,7 +9493,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -9561,7 +9640,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_magic_resistance_mfrf",
+        "id": "act_magic_resistance_k6fg",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The stone guardian has advantage on saving throws against spells and other magical effects.</p>",
@@ -9581,7 +9660,7 @@
         }
       },
       {
-        "id": "act_spell_immunity_gsfn",
+        "id": "act_spell_immunity_msz3",
         "name": "Spell Immunity",
         "actionType": "trait",
         "descriptionHtml": "<p>The stone guardian is immune to three spells chosen by its creator. Typical immunities include fireball, heat metal, and lightning bolt.</p>",
@@ -9603,7 +9682,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_ztp8",
+        "id": "act_multiattack_3yd8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The stone guardian makes two longsword attacks.</p>",
@@ -9623,7 +9702,7 @@
         }
       },
       {
-        "id": "act_longsword_f25c",
+        "id": "act_longsword_gw6i",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) slashing damage, or 9 (1d10 + 4) slashing damage if used with two hands.</p>",
@@ -9641,11 +9720,13 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d10 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -9772,7 +9853,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_bound_usxo",
+        "id": "act_bound_socn",
         "name": "Bound",
         "actionType": "trait",
         "descriptionHtml": "<p>The stone guardian is magically bound to an amulet. As long as the guardian and its amulet are on the same plane of existence, the amulet's wearer can telepathically call the guardian to travel to it, and the guardian knows the distance and direction to the amulet. If the guardian is within 60 feet of the amulet's wearer, half of any damage the wearer takes (rounded up) is transferred to the guardian.</p>",
@@ -9792,7 +9873,7 @@
         }
       },
       {
-        "id": "act_regeneration_vomc",
+        "id": "act_regeneration_0pmd",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The stone guardian regains 10 hit points at the start of its turn if it has at least 1 hit point.</p>",
@@ -9812,7 +9893,7 @@
         }
       },
       {
-        "id": "act_spell_storing_u8oe",
+        "id": "act_spell_storing_deq1",
         "name": "Spell Storing",
         "actionType": "trait",
         "descriptionHtml": "<p>A spellcaster who wears the stone guardian's amulet can cause the guardian to store one spell of 4th level or lower. To do so, the wearer must cast the spell on the guardian. The spell has no effect but is stored within the guardian. When commanded to do so by the wearer or when a situation arises that was predefined by the spellcaster, the guardian casts the stored spell with any parameters set by the original caster, requiring no components. When the spell is cast or a new spell is stored, any previously stored spell is lost.</p>",
@@ -9834,7 +9915,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kjva",
+        "id": "act_multiattack_6pxv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The guardian makes two fist attacks.</p>",
@@ -9854,7 +9935,7 @@
         }
       },
       {
-        "id": "act_fist_237r",
+        "id": "act_fist_fvdw",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage.</p>",
@@ -9872,7 +9953,8 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -9882,7 +9964,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shield_7kpx",
+        "id": "act_shield_n1ji",
         "name": "Shield",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature makes an attack against the wearer of the guardian's amulet, the guardian grants a +2 bonus to the wearer's AC if the guardian is within 5 feet of the wearer.</p>",
@@ -10031,7 +10113,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_immutable_form_alv0",
+        "id": "act_immutable_form_5878",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The stone guardian is immune to any spell or effect that would alter its form.</p>",
@@ -10051,7 +10133,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_qfnh",
+        "id": "act_magic_resistance_k4o9",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The stone guardian has advantage on saving throws against spells and other magical effects.</p>",
@@ -10071,7 +10153,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_d22i",
+        "id": "act_magic_weapons_lqp7",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The stone guardian's weapon attacks are magical.</p>",
@@ -10093,7 +10175,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qmgr",
+        "id": "act_multiattack_pyhb",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The stone guardian makes two slam attacks.</p>",
@@ -10113,7 +10195,7 @@
         }
       },
       {
-        "id": "act_slam_k55k",
+        "id": "act_slam_bmz3",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 19 (3d8 + 6) bludgeoning damage.</p>",
@@ -10131,14 +10213,15 @@
           "damages": [
             {
               "formula": "3d8 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slow__recharge_5__ttfr",
+        "id": "act_slow__recharge_5__medz",
         "name": "Slow (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The stone guardian targets one or more creatures it can see within 10 feet of it. Each target must make a DC 17 Wisdom saving throw against this magic. On a failed save, a target can't use reactions, its speed is halved, and it can't make more than one attack on its turn. In addition, the target can take either an action or a bonus action on its turn, not both. These effects last for 1 minute. A target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -10300,7 +10383,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_throes_tte9",
+        "id": "act_death_throes_stdu",
         "name": "Death Throes",
         "actionType": "trait",
         "descriptionHtml": "<p>When the sunbird dies, it explodes, and each creature within 30 feet of it must make a DC 18 Dexterity saving throw, taking 42 (12d6) fire damage on a failed save, or half as much damage on a successful one. The explosion ignites flammable objects in that area that aren't being worn or carried. The sunbird's body turns to ash, but an egg is left where the sunbird was.</p>",
@@ -10321,14 +10404,15 @@
           "damages": [
             {
               "formula": "12d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fire_aura_m7j8",
+        "id": "act_fire_aura_zsee",
         "name": "Fire Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of each of the sunbird's turns, each creature within 5 feet of it takes 11 (2d10) fire damage, and flammable objects in the area that aren't being worn or carried ignite. A creature that touches the sunbird or hits it with a melee attack while within 5 feet of it takes 11 (2d10) fire damage. The aura also sheds bright light in a 60-foot radius and dim light for an additional 60 feet.</p>",
@@ -10346,18 +10430,20 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "2d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_flyby_qwsv",
+        "id": "act_flyby_1we5",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The sunbird doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -10377,7 +10463,7 @@
         }
       },
       {
-        "id": "act_keen_hearing_and_sight_x1lh",
+        "id": "act_keen_hearing_and_sight_8pst",
         "name": "Keen Hearing and Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The sunbird has advantage on Wisdom (Perception) checks that rely on hearing or sight.</p>",
@@ -10399,7 +10485,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_o4qc",
+        "id": "act_multiattack_w396",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The sunbird makes two talon attacks.</p>",
@@ -10419,7 +10505,7 @@
         }
       },
       {
-        "id": "act_talon_510h",
+        "id": "act_talon_br1s",
         "name": "Talon",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 5 ft., one target. Hit: 16 (2d6 + 9) slashing damage plus 14 (4d6) fire damage, and the target is grappled (escape DC 18). Until this grapple ends, the target is restrained, and the sunbird can't attack another target with that talon. A grappled creature takes 11 (2d10) fire damage at the start of each of the sunbird's turns.</p>",
@@ -10440,15 +10526,18 @@
           "damages": [
             {
               "formula": "2d6 + 9",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "4d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             },
             {
               "formula": "2d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -10578,7 +10667,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blood_frenzy_g4rw",
+        "id": "act_blood_frenzy_4yek",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
@@ -10598,7 +10687,7 @@
         }
       },
       {
-        "id": "act_swarm_kn1q",
+        "id": "act_swarm_46fg",
         "name": "Swarm",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a Tiny piranha. The swarm can't regain hit points or gain temporary hit points.</p>",
@@ -10618,7 +10707,7 @@
         }
       },
       {
-        "id": "act_water_breathing_ur0p",
+        "id": "act_water_breathing_e5hf",
         "name": "Water Breathing",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can breathe only underwater.</p>",
@@ -10640,7 +10729,7 @@
     ],
     "actions": [
       {
-        "id": "act_bites_dvtk",
+        "id": "act_bites_xpzk",
         "name": "Bites",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 0 ft., one creature in the swarm's space. Hit: 14 (4d6) piercing damage, or 7 (2d6) piercing damage if the swarm has half of its hit points or fewer.</p>",
@@ -10658,11 +10747,13 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -10789,7 +10880,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_appearance_41oy",
+        "id": "act_false_appearance_5wwk",
         "name": "False Appearance",
         "actionType": "trait",
         "descriptionHtml": "<p>While the treant totem remains motionless, it is indistinguishable from a normal tree.</p>",
@@ -10809,7 +10900,7 @@
         }
       },
       {
-        "id": "act_siege_monster_sihr",
+        "id": "act_siege_monster_0ytq",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The treant totem deals double damage to objects and structures.</p>",
@@ -10831,7 +10922,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bxdx",
+        "id": "act_multiattack_bmxr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The treant totem makes two slam attacks.</p>",
@@ -10851,7 +10942,7 @@
         }
       },
       {
-        "id": "act_slam_x417",
+        "id": "act_slam_5p1o",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 16 (3d6 + 6) bludgeoning damage.</p>",
@@ -10869,14 +10960,15 @@
           "damages": [
             {
               "formula": "3d6 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rock_vcfr",
+        "id": "act_rock_rbtd",
         "name": "Rock",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +10 to hit, range 60/180 ft., one target. Hit: 28 (4d10 + 6) bludgeoning damage.</p>",
@@ -10894,14 +10986,15 @@
           "damages": [
             {
               "formula": "4d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_animate_trees__1_day__vyuv",
+        "id": "act_animate_trees__1_day__uu7i",
         "name": "Animate Trees (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The treant totem magically animates one or two trees it can see within 60 feet of it. These trees have the same statistics as a treant totem, except they have Intelligence and Charisma scores of 1, they can't speak, and they have only the Slam action option. An animated tree acts as an ally of the treant totem. The tree remains animate for 1 day or until it dies; until the treant totem dies or is more than 120 feet from the tree; or until the treant totem takes a bonus action to turn it back into an inanimate tree. The tree then takes root if possible.</p>",
@@ -11035,7 +11128,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_16x0",
+        "id": "act_amphibious_hji3",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The trilobite can breathe air and water.</p>",
@@ -11057,7 +11150,7 @@
     ],
     "actions": [
       {
-        "id": "act_claw_5sch",
+        "id": "act_claw_cgt7",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +0 to hit, reach 5 ft., one target. Hit: 1 bludgeoning damage.</p>",
@@ -11191,7 +11284,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_9naj",
+        "id": "act_amphibious_c977",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The trilobite can breathe air and water.</p>",
@@ -11213,7 +11306,7 @@
     ],
     "actions": [
       {
-        "id": "act_claw_cl9m",
+        "id": "act_claw_a4bv",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage, and the target is grappled (escape DC 11). The trilobite has two claws, each of which can grapple only one target.</p>",
@@ -11234,7 +11327,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -11356,7 +11450,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_bc2s",
+        "id": "act_multiattack_ecp6",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The tyrant makes two attacks: one with its bite and one with its tail. It can't make both attacks against the same target.</p>",
@@ -11376,7 +11470,7 @@
         }
       },
       {
-        "id": "act_bite_k2i3",
+        "id": "act_bite_l9wf",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 33 (4d12 + 7) piercing damage. If the target is a Medium or smaller creature, it is grappled (escape DC 17). Until this grapple ends, the target is restrained, and the tyrant can't bite another target.</p>",
@@ -11397,14 +11491,15 @@
           "damages": [
             {
               "formula": "4d12 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_f5n8",
+        "id": "act_tail_6uwd",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 20 (3d8 + 7) bludgeoning damage.</p>",
@@ -11422,7 +11517,8 @@
           "damages": [
             {
               "formula": "3d8 + 7",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -11563,7 +11659,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_water_form_z9ce",
+        "id": "act_water_form_pqz0",
         "name": "Water Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The totem elemental can enter a hostile creature's space and stop there. It can move through a space as narrow as 1 inch wide without squeezing.</p>",
@@ -11583,7 +11679,7 @@
         }
       },
       {
-        "id": "act_freeze_uudv",
+        "id": "act_freeze_oh57",
         "name": "Freeze",
         "actionType": "trait",
         "descriptionHtml": "<p>If the totem elemental takes cold damage, it partially freezes; its speed is reduced by 20 feet until the end of its next turn.</p>",
@@ -11605,7 +11701,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4ccv",
+        "id": "act_multiattack_9xsr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The totem elemental makes two slam attacks.</p>",
@@ -11625,7 +11721,7 @@
         }
       },
       {
-        "id": "act_slam_3ybd",
+        "id": "act_slam_q42f",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) bludgeoning damage.</p>",
@@ -11643,14 +11739,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_whelm__recharge_4__vqqg",
+        "id": "act_whelm__recharge_4__qk55",
         "name": "Whelm (Recharge 4)",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature in the totem elemental's space must make a DC 15 Strength saving throw. On a failure, a target takes 13 (2d8 + 4) bludgeoning damage. If it is Large or smaller, it is also grappled (escape DC 14). Until this grapple ends, the target is restrained and unable to breathe unless it can breathe water. If the saving throw is successful, the target is pushed out of the totem elemental's space.</p><p>The totem elemental can grapple one Large creature or up to two Medium or smaller creatures at one time. At the start of each of the totem elemental's turns, each target grappled by it takes 13 (2d8 + 4) bludgeoning damage. A creature within 5 feet of the totem elemental can pull a creature or object out of it by taking an action to make a DC 14 Strength check and succeeding.</p>",
@@ -11672,11 +11769,13 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             },
             {
               "formula": "2d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": "4"

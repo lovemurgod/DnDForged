@@ -99,7 +99,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_might_of_the_master_rh7f",
+        "id": "act_might_of_the_master_wlkh",
         "name": "Might of the Master",
         "actionType": "trait",
         "descriptionHtml": "<p>The following numbers increase by 1 when your proficiency bonus increases by 1: the homunculus's skill bonuses and the bonuses to hit and damage of its Acidic Spittle.</p>",
@@ -121,7 +121,7 @@
     ],
     "actions": [
       {
-        "id": "act_acidic_spittle_i10l",
+        "id": "act_acidic_spittle_18qb",
         "name": "Acidic Spittle",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30 ft., one target you can see. Hit: 1d6 + 2 acid damage.</p>",
@@ -139,14 +139,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_alchemical_salve__3_day__hndh",
+        "id": "act_alchemical_salve__3_day__xn88",
         "name": "Alchemical Salve (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The homunculus produces a salve and touches one creature you designate. The target receives one of the following magical benefits of your choice:</p><ul><li><strong><em>Buoyancy.</em></strong> <p>The target gains a flying speed of 10 feet for 10 minutes.</p></li><li><strong><em>Inspiration.</em></strong> <p>The target feels giddy and effective, gaining advantage on certain ability checks in the next hour. The target chooses the checks before or after rolling. The magic runs out after the target has used it on a number of checks equal to your Intelligence modifier (minimum of 1).</p></li><li><strong><em>Resilience.</em></strong> <p>The target gains a number of temporary hit points equal to 2d6 + your Intelligence modifier.</p></li></ul>",
@@ -309,7 +310,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_might_of_the_master_fvoo",
+        "id": "act_might_of_the_master_hp62",
         "name": "Might of the Master",
         "actionType": "trait",
         "descriptionHtml": "<p>The following numbers increase by 1 when your proficiency bonus increases by 1: the iron defender's skill bonuses, the bonuses to hit and damage of its bite, and the number of hit points restored by its Repair action.</p>",
@@ -329,7 +330,7 @@
         }
       },
       {
-        "id": "act_vigilant_0ife",
+        "id": "act_vigilant_w74t",
         "name": "Vigilant",
         "actionType": "trait",
         "descriptionHtml": "<p>The iron defender can't be Surprise.</p>",
@@ -351,7 +352,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_tbhl",
+        "id": "act_bite_wtvw",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target you can see. Hit: 1d8 + 2 piercing damage.</p>",
@@ -369,14 +370,15 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_repair__3_day__e92c",
+        "id": "act_repair__3_day__145c",
         "name": "Repair (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The magical mechanisms inside the iron defender restore 2d8 + 2 hit points to itself or to one construct or object within 5 feet of it.</p>",
@@ -399,7 +401,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_defensive_pounce_w1au",
+        "id": "act_defensive_pounce_5im6",
         "name": "Defensive Pounce",
         "actionType": "reaction",
         "descriptionHtml": "<p>The iron defender imposes disadvantage on the attack roll of one creature it can see that is within 5 feet of it, provided the attack roll is against a creature other than the iron defender.</p>",

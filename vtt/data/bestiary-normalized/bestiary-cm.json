@@ -97,7 +97,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_object_x2pw",
+        "id": "act_false_object_e4mo",
         "name": "False Object",
         "actionType": "trait",
         "descriptionHtml": "<p>If the broom is motionless at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the broom move or act, that creature must succeed on a DC 15 Wisdom (Perception) check to discern that the broom is animate.</p>",
@@ -120,7 +120,7 @@
         }
       },
       {
-        "id": "act_flyby_vb85",
+        "id": "act_flyby_kfgb",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The broom doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -142,7 +142,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_530w",
+        "id": "act_multiattack_dwzt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The broom makes two melee attacks.</p>",
@@ -162,7 +162,7 @@
         }
       },
       {
-        "id": "act_broomstick_kvbv",
+        "id": "act_broomstick_gfqs",
         "name": "Broomstick",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 5 (1d4 + 3) bludgeoning damage.</p>",
@@ -180,7 +180,8 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -310,7 +311,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_object_1e4t",
+        "id": "act_false_object_v85s",
         "name": "False Object",
         "actionType": "trait",
         "descriptionHtml": "<p>If the library is motionless at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the library move or act, that creature must succeed on a DC 15 Wisdom (Perception) check to discern that the library is animate.</p>",
@@ -335,7 +336,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0h3a",
+        "id": "act_multiattack_912h",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The library makes two attacks.</p>",
@@ -355,7 +356,7 @@
         }
       },
       {
-        "id": "act_chained_book_xp97",
+        "id": "act_chained_book_ifr0",
         "name": "Chained Book",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 6 (1d8 + 2) bludgeoning damage, and if the target is a creature, it is grappled (escape DC 12).</p>",
@@ -376,7 +377,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -746,7 +748,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_zral",
+        "id": "act_multiattack_7u5q",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Quill makes two attacks with his dagger and uses Supreme Mockery.</p>",
@@ -766,7 +768,7 @@
         }
       },
       {
-        "id": "act_dagger_zwzp",
+        "id": "act_dagger_8g2g",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +8 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 6 (1d4 + 4) piercing damage.</p>",
@@ -784,14 +786,15 @@
           "damages": [
             {
               "formula": "1d4 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_quill_s_fable___recharge__gbyu",
+        "id": "act_quill_s_fable___recharge__c6wn",
         "name": "Quill's Fable {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>Quill utters a short fable while targeting up to five creatures within 30 feet of him that he can see. Each target that can hear Quill's magical fable must make a DC 17 Wisdom saving throw, taking 36 (8d8) psychic damage on a failed save, or half as much damage on a successful one.</p>",
@@ -812,14 +815,15 @@
           "damages": [
             {
               "formula": "8d8",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_supreme_mockery_4b19",
+        "id": "act_supreme_mockery_09j2",
         "name": "Supreme Mockery",
         "actionType": "action",
         "descriptionHtml": "<p>Quill hurls a string of insults laced with enchantments at a creature he can see within 60 feet of him. If the creature can hear Quill (though it need not understand him), it must succeed on a DC 17 Wisdom saving throw or take 66 (12d10) psychic damage and have disadvantage on the next attack roll it makes before the end of its next turn.</p>",
@@ -840,7 +844,8 @@
           "damages": [
             {
               "formula": "12d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -993,7 +998,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__2_day__vxxf",
+        "id": "act_legendary_resistance__2_day__n472",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Bak Mei fails a saving throw, he can choose to succeed instead.</p>",
@@ -1013,7 +1018,7 @@
         }
       },
       {
-        "id": "act_special_equipment_kpb5",
+        "id": "act_special_equipment_pzic",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Bak Mei carries a staff of striking with 10 charges.</p>",
@@ -1033,7 +1038,7 @@
         }
       },
       {
-        "id": "act_unarmored_defense_1i5w",
+        "id": "act_unarmored_defense_mb7t",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While Bak Mei is wearing no armor and wielding no shield, his AC includes his Wisdom modifier.</p>",
@@ -1055,7 +1060,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yrny",
+        "id": "act_multiattack_ek5z",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Bak Mei attacks three times: twice with Thunder Strike and once with his staff of striking.</p>",
@@ -1075,7 +1080,7 @@
         }
       },
       {
-        "id": "act_thunder_strike_zrr9",
+        "id": "act_thunder_strike_0jav",
         "name": "Thunder Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 15 (2d10 + 4) thunder damage, and if the target is a creature, it must succeed on a DC 17 Constitution saving throw or be deafened and stunned until the start of Bak Mei's next turn.</p>",
@@ -1096,14 +1101,15 @@
           "damages": [
             {
               "formula": "2d10 + 4",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_staff_of_striking_wto5",
+        "id": "act_staff_of_striking_h6b1",
         "name": "Staff of Striking",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, or 4 (1d8) bludgeoning damage when used with two hands, and Bak Mei can expend up to 3 of the staff's charges. For each expended charge, the target takes an extra 1d6 force damage.</p>",
@@ -1121,22 +1127,25 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heal_self__recharges_after_a_long_rest__hjei",
+        "id": "act_heal_self__recharges_after_a_long_rest__kvem",
         "name": "Heal Self (Recharges after a Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Bak Mei regains 2d8 + 4 hit points, and all levels of exhaustion end on him.</p>",
@@ -1158,7 +1167,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_hdxw",
+        "id": "act_nimble_escape_mwnh",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Bak Mei takes the Disengage or Hide action.</p>",
@@ -1180,7 +1189,7 @@
     ],
     "reactions": [
       {
-        "id": "act_deflect_missile_bd3p",
+        "id": "act_deflect_missile_ew2y",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, Bak Mei deflects the missile. The damage he takes from the attack is reduced by 1d10 + 12. If the damage is reduced to 0, Bak Mei catches the missile if it's small enough to hold in one hand and Bak Mei has a hand free.</p>",
@@ -1205,7 +1214,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_crane_dance_v1ne",
+          "id": "act_crane_dance_7ocr",
           "name": "Crane Dance",
           "actionType": "legendary",
           "descriptionHtml": "<p>Bak Mei moves up to 20 feet. This movement does not provoke opportunity attacks.</p>",
@@ -1225,7 +1234,7 @@
           }
         },
         {
-          "id": "act_thunder_strike__costs_2_actions__pog5",
+          "id": "act_thunder_strike__costs_2_actions__q5cb",
           "name": "Thunder Strike (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Bak Mei uses Thunder Strike.</p>",
@@ -1368,7 +1377,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_limited_spell_immunity_vq3q",
+        "id": "act_limited_spell_immunity_n432",
         "name": "Limited Spell Immunity",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem automatically succeeds on saving throws against spells of 7th level or lower, and the attack rolls of such spells always miss it.</p>",
@@ -1388,7 +1397,7 @@
         }
       },
       {
-        "id": "act_unusual_nature_qrbu",
+        "id": "act_unusual_nature_bb8c",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem doesn't require air, food, drink, or sleep.</p>",
@@ -1410,7 +1419,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_puj4",
+        "id": "act_multiattack_wdfv",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The golem makes two attacks.</p>",
@@ -1430,7 +1439,7 @@
         }
       },
       {
-        "id": "act_slam_yapt",
+        "id": "act_slam_3sjm",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 27 (4d10 + 5) force damage.</p>",
@@ -1448,14 +1457,15 @@
           "damages": [
             {
               "formula": "4d10 + 5",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_crystal_dart_wc45",
+        "id": "act_crystal_dart_rxow",
         "name": "Crystal Dart",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +10 to hit, range 120 ft., one target. Hit: 14 (2d8 + 5) force damage.</p>",
@@ -1473,7 +1483,8 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1483,7 +1494,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_spell_deflection_pqt6",
+        "id": "act_spell_deflection_pyv6",
         "name": "Spell Deflection",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to a spell attack missing the golem, it causes that spell to hit another creature within 120 feet of it that it can see.</p>",
@@ -1723,7 +1734,7 @@
     ],
     "traits": [
       {
-        "id": "act_unusual_nature_95zn",
+        "id": "act_unusual_nature_s508",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The chwinga doesn't require air, food, or drink. When it dies, it turns into a handful of flower petals, a cloud of pollen, a stone statuette resembling its former self, a tiny sphere of smooth stone, or a puddle of fresh water (your choice).</p>",
@@ -1743,7 +1754,7 @@
         }
       },
       {
-        "id": "act_evasion_mlk6",
+        "id": "act_evasion_4qyh",
         "name": "Evasion",
         "actionType": "trait",
         "descriptionHtml": "<p>When the chwinga is subjected to an effect that allows it to make a Dexterity saving throw to take only half damage, it instead takes no damage if it succeeds on the saving throw, and only half damage if it fails.</p>",
@@ -1765,7 +1776,7 @@
     ],
     "actions": [
       {
-        "id": "act_magical_gift__1_day__4deo",
+        "id": "act_magical_gift__1_day__n823",
         "name": "Magical Gift (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The chwinga targets a humanoid it can see within 5 feet of it. The target gains a supernatural charm of the DM's choice. See chapter 7 of the Dungeon Masters Guide for more information on supernatural charms.</p>",
@@ -1785,7 +1796,7 @@
         }
       },
       {
-        "id": "act_natural_shelter_5shs",
+        "id": "act_natural_shelter_ps6n",
         "name": "Natural Shelter",
         "actionType": "action",
         "descriptionHtml": "<p>The chwinga magically takes shelter inside a rock, a living plant, or a natural source of fresh water in its space. The chwinga can't be targeted by any attack, spell, or other effect while inside this shelter, and the shelter doesn't impair the chwinga's blindsight. The chwinga can use its action to emerge from a shelter. If its shelter is destroyed, the chwinga is forced out and appears in the shelter's space, but is otherwise unharmed.</p>",
@@ -2033,7 +2044,7 @@
     ],
     "traits": [
       {
-        "id": "act_ethereal_sight_vc5z",
+        "id": "act_ethereal_sight_1qxx",
         "name": "Ethereal Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>The ghost can see 120 feet into the Ethereal Plane when it is on the Material Plane, and vice versa.</p>",
@@ -2053,7 +2064,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_nj5v",
+        "id": "act_incorporeal_movement_yfrr",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The ghost can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -2071,14 +2082,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_regeneration_p3xn",
+        "id": "act_regeneration_k1vl",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The ghost regains 10 hit points at the start of its turn. If the ghost takes radiant damage or damage from a magic weapon, this trait doesn't function at the start of the ghost's next turn. The ghost dies only if it starts its turn with 0 hit points and doesn't regenerate.</p>",
@@ -2100,7 +2112,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_bmsv",
+        "id": "act_multiattack_whep",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ghost makes two melee attacks.</p>",
@@ -2120,7 +2132,7 @@
         }
       },
       {
-        "id": "act_spectral_weapon_t166",
+        "id": "act_spectral_weapon_r54i",
         "name": "Spectral Weapon",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 10 ft., one target. Hit: 21 (3d8 + 8) force damage.</p>",
@@ -2138,14 +2150,15 @@
           "damages": [
             {
               "formula": "3d8 + 8",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_etherealness_9492",
+        "id": "act_etherealness_j0tj",
         "name": "Etherealness",
         "actionType": "action",
         "descriptionHtml": "<p>The ghost enters the Ethereal Plane from the Material Plane, or vice versa. It is visible on the Material Plane while it is in the Border Ethereal, and vice versa, yet it can't affect or be affected by anything on the other plane.</p>",
@@ -2165,7 +2178,7 @@
         }
       },
       {
-        "id": "act_wind_howl___recharge__n5oa",
+        "id": "act_wind_howl___recharge__xa1x",
         "name": "Wind Howl {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>The ghost emits a dreadful howl that summons a cold, biting wind. This wind engulfs up to three creatures of the ghost's choice that it can see within 60 feet of it. Each target is pulled up to 20 feet toward the ghost and must make a DC 15 Constitution saving throw, taking 16 (3d10) cold damage on a failed save, or half as much damage on a successful one.</p>",
@@ -2186,7 +2199,8 @@
           "damages": [
             {
               "formula": "3d10",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -2310,7 +2324,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unusual_nature_vqfy",
+        "id": "act_unusual_nature_zsed",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The commoner doesn't require air, food, drink, or sleep, and it gains no benefit from finishing a short or long rest. When it drops to 0 hit points, it becomes a lifeless object.</p>",
@@ -2332,7 +2346,7 @@
     ],
     "actions": [
       {
-        "id": "act_club_2jnh",
+        "id": "act_club_189m",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -2350,7 +2364,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2487,7 +2502,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_ufja",
+        "id": "act_multiattack_tqwj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The avatar makes two attacks: one with its hooves and one with its horn.</p>",
@@ -2507,7 +2522,7 @@
         }
       },
       {
-        "id": "act_hooves_c6j9",
+        "id": "act_hooves_ashe",
         "name": "Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 32 (8d6 + 4) necrotic damage.</p>",
@@ -2525,14 +2540,15 @@
           "damages": [
             {
               "formula": "8d6 + 4",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_horn_0ags",
+        "id": "act_horn_ptim",
         "name": "Horn",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 32 (8d6 + 4) necrotic damage. If the target is a humanoid, it must succeed on a DC 13 Wisdom saving throw or be transformed into a wolf under the avatar's control. This transformation lasts for 1 hour, or until the target drops to 0 hit points or dies. The target's game statistics are replaced by the wolf's statistics, but it retains its hit points. The target is limited in the actions it can perform by the nature of its wolf form, and it can't speak, cast spells, or take any other action that requires hands or speech. The target's gear melds into the new form, and it can't activate, use, wield, or otherwise benefit from any of its equipment.</p>",
@@ -2553,7 +2569,8 @@
           "damages": [
             {
               "formula": "8d6 + 4",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2684,7 +2701,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_ib6h",
+        "id": "act_multiattack_qmut",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon tortoise makes three attacks: one with its bite and two with its claws. It can make one tail attack in place of its two claw attacks.</p>",
@@ -2704,7 +2721,7 @@
         }
       },
       {
-        "id": "act_bite_yf7j",
+        "id": "act_bite_nc95",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 15 ft., one target. Hit: 26 (3d12 + 7) piercing damage.</p>",
@@ -2722,14 +2739,15 @@
           "damages": [
             {
               "formula": "3d12 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_6pas",
+        "id": "act_claw_6gan",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 10 ft., one target. Hit: 16 (2d8 + 7) slashing damage.</p>",
@@ -2747,14 +2765,15 @@
           "damages": [
             {
               "formula": "2d8 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_3xi1",
+        "id": "act_tail_ozdt",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 15 ft., one target. Hit: 26 (3d12 + 7) bludgeoning damage. If the target is a creature, it must succeed on a DC 20 Strength saving throw or be pushed up to 10 feet away from the dragon tortoise and knocked prone.</p>",
@@ -2775,14 +2794,15 @@
           "damages": [
             {
               "formula": "3d12 + 7",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_sand_breath__recharge_5__kr86",
+        "id": "act_sand_breath__recharge_5__g423",
         "name": "Sand Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon tortoise exhales abrasive sand in a 60-foot cone. Each creature in that area must make a DC 18 Constitution saving throw, taking 52 (15d6) slashing damage on a failed save, or half as much damage on a successful one.</p>",
@@ -2803,7 +2823,8 @@
           "damages": [
             {
               "formula": "15d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -2931,7 +2952,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fey_ancestry_jblb",
+        "id": "act_fey_ancestry_v4fs",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Faerl has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
@@ -2953,7 +2974,7 @@
     ],
     "actions": [
       {
-        "id": "act_rapier_hr51",
+        "id": "act_rapier_8my7",
         "name": "Rapier",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) piercing damage.</p>",
@@ -2971,7 +2992,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2981,7 +3003,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_l0kt",
+        "id": "act_parry_nshx",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Faerl adds 2 to his AC against one melee attack that would hit it. To do so, he must see the attacker and be wielding a melee weapon.</p>",
@@ -3530,7 +3552,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_72bd",
+        "id": "act_magic_resistance_ft4h",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The fungal servant has advantage on saving throws against spells and other magical effects.</p>",
@@ -3550,7 +3572,7 @@
         }
       },
       {
-        "id": "act_rejuvenation_ur54",
+        "id": "act_rejuvenation_nuxr",
         "name": "Rejuvenation",
         "actionType": "trait",
         "descriptionHtml": "<p>A destroyed fungal servant gains a new body in 24 hours if its heart is intact, regaining all its hit points and becoming active again. The new body appears within 5 feet of the fungal servant's heart.</p>",
@@ -3572,7 +3594,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_vfzg",
+        "id": "act_multiattack_lt8g",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The fungal servant can use its Dreadful Glare and makes one attack with its rotting fist.</p>",
@@ -3592,7 +3614,7 @@
         }
       },
       {
-        "id": "act_rotting_fist_u75n",
+        "id": "act_rotting_fist_u8dj",
         "name": "Rotting Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 14 (3d6 + 4) bludgeoning damage plus 21 (6d6) necrotic damage. If the target is a creature, it must succeed on a DC 16 Constitution saving throw or be cursed with mummy rot. The cursed target can't regain hit points, and its hit point maximum decreases by 10 (3d6) for every 24 hours that elapse. If the curse reduces the target's hit point maximum to 0, the target dies, and its body turns to spores. The curse lasts until removed by the remove curse spell or other magic.</p>",
@@ -3613,18 +3635,20 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "6d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dreadful_glare_nkd7",
+        "id": "act_dreadful_glare_flzf",
         "name": "Dreadful Glare",
         "actionType": "action",
         "descriptionHtml": "<p>The fungal servant targets one creature it can see within 60 feet of it. If the target can see the fungal servant, it must succeed on a DC 16 Wisdom saving throw against this magic or become frightened until the end of the fungal servant's next turn. If the target fails the saving throw by 5 or more, it is also paralyzed for the same duration. A target that succeeds on the saving throw is immune to the Dreadful Glare of all fungal servants for the next 24 hours.</p>",
@@ -3654,7 +3678,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_bg7p",
+          "id": "act_attack_2q79",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The fungal servant makes one attack with its rotting fist or uses its Dreadful Glare.</p>",
@@ -3674,7 +3698,7 @@
           }
         },
         {
-          "id": "act_blinding_spores_6jmh",
+          "id": "act_blinding_spores_5baz",
           "name": "Blinding Spores",
           "actionType": "legendary",
           "descriptionHtml": "<p>Blinding spores swirls magically around the fungal servant. Each creature within 5 feet of the fungal servant must succeed on a DC 16 Constitution saving throw or be blinded until the end of the creature's next turn.</p>",
@@ -3697,7 +3721,7 @@
           }
         },
         {
-          "id": "act_blasphemous_word__costs_2_actions__9e0p",
+          "id": "act_blasphemous_word__costs_2_actions__7xhz",
           "name": "Blasphemous Word (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The fungal servant utters a blasphemous word. Each non-undead creature within 10 feet of the fungal servant that can hear the magical utterance must succeed on a DC 16 Constitution saving throw or be stunned until the end of the fungal servant's next turn.</p>",
@@ -3720,7 +3744,7 @@
           }
         },
         {
-          "id": "act_channel_negative_energy__costs_2_actions__tar0",
+          "id": "act_channel_negative_energy__costs_2_actions__ji0n",
           "name": "Channel Negative Energy (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The fungal servant magically unleashes negative energy. Creatures within 60 feet of the fungal servant, including ones behind barriers and around corners, can't regain hit points until the end of the fungal servant's next turn.</p>",
@@ -3740,7 +3764,7 @@
           }
         },
         {
-          "id": "act_whirlwind_of_spores__costs_2_actions__k2up",
+          "id": "act_whirlwind_of_spores__costs_2_actions__k1r0",
           "name": "Whirlwind of Spores (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The fungal servant magically transforms into a whirlwind of spores, moves up to 60 feet, and reverts to its normal form. While in whirlwind form, the fungal servant is immune to all damage, and it can't be grappled, petrified, knocked prone, restrained, or stunned. Equipment worn or carried by the fungal servant remain in its possession.</p>",
@@ -3870,7 +3894,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_alternate_forms_kxgy",
+        "id": "act_alternate_forms_6wzl",
         "name": "Alternate Forms",
         "actionType": "trait",
         "descriptionHtml": "<p>The gingwatzim has two alternate forms, both of which are chosen by its creator when the gingwatzim comes into being. One form is an exact duplicate of a Tiny nonmagical object (such as a book, dagger, or gemstone) that its creator is carrying or wearing when the gingwatzim is conjured. The other form can be any Tiny beast. Once these alternate forms are chosen, they can't be changed.</p>",
@@ -3892,7 +3916,7 @@
     ],
     "actions": [
       {
-        "id": "act_energy_drain__true_form_only__chii",
+        "id": "act_energy_drain__true_form_only__lsg9",
         "name": "Energy Drain (True Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature. Hit: 16 (4d6 + 2) necrotic damage, and the target must succeed on a DC 12 Constitution saving throw or gain 1 level of exhaustion. When the target finishes a short or long rest, the target loses every level of exhaustion gained from this attack.</p>",
@@ -3913,14 +3937,15 @@
           "damages": [
             {
               "formula": "4d6 + 2",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_change_shape_4wah",
+        "id": "act_change_shape_cae0",
         "name": "Change Shape",
         "actionType": "action",
         "descriptionHtml": "<p>The gingwatzim changes from its true form—a 3-foot-diameter sphere of luminous ectoplasm—into one of its two alternate forms, or from one of those forms back into its true form. In object form, it can't move or make attacks but otherwise retains its statistics, and it is indistinguishable from the thing it is imitating. In beast form, it retains its hit points but otherwise uses the stat block of the beast it is imitating. When it dies, the gingwatzim reverts to its true form and then vanishes.</p>",
@@ -4060,7 +4085,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_gehr",
+        "id": "act_hold_breath_9i76",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The grippli can hold its breath for 20 minutes.</p>",
@@ -4080,7 +4105,7 @@
         }
       },
       {
-        "id": "act_standing_leap_mg0i",
+        "id": "act_standing_leap_fofr",
         "name": "Standing Leap",
         "actionType": "trait",
         "descriptionHtml": "<p>The grippli can leap 30 feet horizontally or 20 feet vertically from a standing position.</p>",
@@ -4102,7 +4127,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_waxz",
+        "id": "act_multiattack_qv78",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The grippli makes one attack with its tongue. If this attack hits, the grippli can make a melee attack using its trident against the same target.</p>",
@@ -4122,7 +4147,7 @@
         }
       },
       {
-        "id": "act_tongue_xtal",
+        "id": "act_tongue_zf6g",
         "name": "Tongue",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one Medium or smaller creature. Hit: The target is grappled (escape DC 12). Until this grapple ends, the target is restrained, and the grippli can't grab another creature.</p>",
@@ -4145,7 +4170,7 @@
         }
       },
       {
-        "id": "act_trident_sspl",
+        "id": "act_trident_w16i",
         "name": "Trident",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 5 (1d6 + 2) piercing damage, or 6 (1d8 + 2) piercing damage if used with two hands to make a melee attack, plus 2 (1d4) piercing damage if the grippli had advantage on the attack roll.</p>",
@@ -4163,22 +4188,25 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortbow_v6mh",
+        "id": "act_shortbow_zbcw",
         "name": "Shortbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 80/320 ft., one target. Hit: 5 (1d6 + 2) piercing damage, plus 2 (1d4) piercing damage if the grippli had advantage on the attack roll.</p>",
@@ -4196,11 +4224,13 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4740,7 +4770,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_i5r6",
+        "id": "act_amphibious_ktc8",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The hag can breathe air and water.</p>",
@@ -4760,7 +4790,7 @@
         }
       },
       {
-        "id": "act_mimicry_00mq",
+        "id": "act_mimicry_tloi",
         "name": "Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The hag can mimic animal sounds and humanoid voices. A creature that hears the sounds can tell they are imitations with a successful DC 14 Wisdom (Insight) check.</p>",
@@ -4785,7 +4815,7 @@
     ],
     "actions": [
       {
-        "id": "act_claws_0jod",
+        "id": "act_claws_01vg",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) slashing damage.</p>",
@@ -4803,14 +4833,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_illusory_appearance_xlb9",
+        "id": "act_illusory_appearance_cbdw",
         "name": "Illusory Appearance",
         "actionType": "action",
         "descriptionHtml": "<p>The hag covers herself and anything she is wearing or carrying with a magical illusion that makes her look like another creature of her general size and humanoid shape. The illusion ends if the hag takes a bonus action to end it or if she dies.</p><p>The changes wrought by this effect fail to hold up to physical inspection. For example, the hag could appear to have smooth skin, but someone touching her would feel her rough flesh. Otherwise, a creature must take an action to visually inspect the illusion and succeed on a DC 20 Intelligence (Investigation) check to discern that the hag is disguised.</p>",
@@ -4834,7 +4865,7 @@
         }
       },
       {
-        "id": "act_invisible_passage_h4o3",
+        "id": "act_invisible_passage_ztj9",
         "name": "Invisible Passage",
         "actionType": "action",
         "descriptionHtml": "<p>The hag magically turns invisible until she attacks or casts a spell, or until her concentration ends (as if concentration on a spell). While invisible, she leaves no physical evidence of her passage, so she can be tracked only by magic. Any equipment she wears or carries is invisible with her.</p>",
@@ -4864,7 +4895,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_following_lair_actions_otcq",
+        "id": "act_following_lair_actions_vpa3",
         "name": "Following Lair Actions",
         "actionType": "lair",
         "descriptionHtml": "<p>The following lair actions are options for grandmothers and powerful aunties. Grandmothers usually have three to five lair actions, aunties usually only one (if they have any at all). Unless otherwise noted, any lair action that requires a creature to make a saving throw uses the save DC of the hag's most powerful ability.</p>",
@@ -4884,7 +4915,7 @@
         }
       },
       {
-        "id": "act_until_initiative_count_fsns",
+        "id": "act_until_initiative_count_5mkl",
         "name": "Until Initiative Count",
         "actionType": "lair",
         "descriptionHtml": "<p>Until initiative count 20 on the next round, the hag can pass through solid walls, doors, ceilings, and floors as if the surfaces weren't there.</p>",
@@ -4904,7 +4935,7 @@
         }
       },
       {
-        "id": "act_hag_targets_any_4qmn",
+        "id": "act_hag_targets_any_86dh",
         "name": "Hag Targets Any",
         "actionType": "lair",
         "descriptionHtml": "<p>The hag targets any number of doors and windows that she can see, causing each one to either open or close as she wishes. Closed doors can be magically locked (requiring a successful DC 20 Strength check to force open) until she chooses to make them unlocked, or until she uses this lair action again to open them.</p>",
@@ -4927,7 +4958,7 @@
         }
       },
       {
-        "id": "act_powerful_green_hag_nuyy",
+        "id": "act_powerful_green_hag_lmvn",
         "name": "Powerful Green Hag",
         "actionType": "lair",
         "descriptionHtml": "<p>A powerful green hag might have the following additional lair action:</p>",
@@ -4947,7 +4978,7 @@
         }
       },
       {
-        "id": "act_hag_creates_ilkx",
+        "id": "act_hag_creates_ja7v",
         "name": "Hag Creates",
         "actionType": "lair",
         "descriptionHtml": "<p>The hag creates an illusory duplicate of herself, which appears in its own space. As long as she can see her duplicate, the hag can move it a distance equal to her walking speed as well as make the illusion speak on her turn (no action required). The illusion has the same statistics as the hag but can't take actions or reactions. It can interact with its environment and even pick up and hold real objects. The illusion seems real in every way but disappears if it takes any amount of damage. Otherwise, it lasts until the hag dismisses it (no action required) or can no longer see it. If the hag uses this lair action to create a new duplicate, the previous one vanishes, dropping any real objects in its possession.</p>",
@@ -4971,7 +5002,7 @@
     "lairActionsDesc": "On initiative count 20 (losing initiative ties), the hag can take a lair action to cause one of the following effects, but can't use the same effect two rounds in a row:",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_zhph",
+        "id": "act_regional_effect_bo0s",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Birds, rodents, snakes, spiders, or toads (or some other creatures appropriate to the hag) are found in great profusion.</p>",
@@ -4991,7 +5022,7 @@
         }
       },
       {
-        "id": "act_regional_effect_ft0j",
+        "id": "act_regional_effect_3ml0",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Beasts that have an Intelligence score of 2 or lower are charmed by the hag and directed to be aggressive toward intruders in the area.</p>",
@@ -5011,7 +5042,7 @@
         }
       },
       {
-        "id": "act_regional_effect_1snb",
+        "id": "act_regional_effect_vttz",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Strange carved figurines, twig fetishes, or rag dolls magically appear in trees.</p>",
@@ -5031,7 +5062,7 @@
         }
       },
       {
-        "id": "act_regional_effect_p3ww",
+        "id": "act_regional_effect_c77a",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Illusory duplicates of the hag appear in random places at random times (but never more than one in any given location). An illusory duplicate has no substance, but it looks, sounds, and moves like the hag. The hag can sense when one or more creatures are within 60 feet of her duplicate and can interact with them as if she were present and standing in the duplicate's space. If the illusory duplicate takes any damage, it disappears.</p>",
@@ -5051,7 +5082,7 @@
         }
       },
       {
-        "id": "act_regional_effect_me8c",
+        "id": "act_regional_effect_kd33",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>The region takes twice as long as normal to traverse, since the plants grow thick and twisted, and the swamps are thick with reeking mud.</p>",
@@ -5071,7 +5102,7 @@
         }
       },
       {
-        "id": "act_regional_effect_c9ma",
+        "id": "act_regional_effect_z69v",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Trees transform into awakened tree and attack when hostile intruders are near.</p>",
@@ -5273,7 +5304,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unarmored_defense_q83k",
+        "id": "act_unarmored_defense_g15v",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While the monk is wearing no armor and wielding no shield, its AC includes its Wisdom modifier.</p>",
@@ -5295,7 +5326,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_102v",
+        "id": "act_multiattack_qxn9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The monk makes two attacks.</p>",
@@ -5315,7 +5346,7 @@
         }
       },
       {
-        "id": "act_force_strike_n79t",
+        "id": "act_force_strike_zc5x",
         "name": "Force Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) force damage, and if the target is a creature, it must succeed on a DC 14 Dexterity saving throw or be knocked prone.</p>",
@@ -5336,14 +5367,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dart_u46u",
+        "id": "act_dart_y6r5",
         "name": "Dart",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +6 to hit, range 20/60 ft., one target. Hit: 5 (1d4 + 3) piercing damage.</p>",
@@ -5361,7 +5393,8 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -5501,7 +5534,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unarmored_defense_q064",
+        "id": "act_unarmored_defense_4ei8",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While Jade Tigress is wearing no armor and wielding no shield, her AC includes her Wisdom modifier.</p>",
@@ -5523,7 +5556,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_n77r",
+        "id": "act_multiattack_t1tq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Jade Tigress makes three attacks.</p>",
@@ -5543,7 +5576,7 @@
         }
       },
       {
-        "id": "act_force_strike_8exa",
+        "id": "act_force_strike_ip5p",
         "name": "Force Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) force damage, and if the target is a creature, it must succeed on a DC 15 Constitution saving throw or be stunned until the end of Jade Tigress's next turn.</p>",
@@ -5564,14 +5597,15 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_poisoned_dart_fn8k",
+        "id": "act_poisoned_dart_1gkb",
         "name": "Poisoned Dart",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage plus 7 (3d4) poison damage, and the target must succeed on a DC 15 Constitution saving throw or gain 1 level of exhaustion.</p>",
@@ -5592,18 +5626,20 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d4",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heal_self__recharges_after_a_long_rest__lm66",
+        "id": "act_heal_self__recharges_after_a_long_rest__h45y",
         "name": "Heal Self (Recharges after a Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Jade Tigress regains 2d8 + 2 hit points, and all levels of exhaustion end on her.</p>",
@@ -5625,7 +5661,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_75i3",
+        "id": "act_nimble_escape_v3og",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Jade Tigress takes the Disengage or Hide action.</p>",
@@ -5647,7 +5683,7 @@
     ],
     "reactions": [
       {
-        "id": "act_deflect_missile_k6rd",
+        "id": "act_deflect_missile_gg3p",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, Jade Tigress deflects the missile. The damage she takes from the attack is reduced by 1d10 + 9. If the damage is reduced to 0, Jade Tigress catches the missile if it's small enough to hold in one hand and Jade Tigress has a hand free.</p>",
@@ -6008,7 +6044,7 @@
     ],
     "traits": [
       {
-        "id": "act_feline_agility_ja7b",
+        "id": "act_feline_agility_6kdd",
         "name": "Feline Agility",
         "actionType": "trait",
         "descriptionHtml": "<p>When K'Tulah moves on her turn in combat, she can double her speed until the end of the turn. Once she uses this ability, K'Tulah can't use it again until she moves 0 feet on one of her turns.</p>",
@@ -6030,7 +6066,7 @@
     ],
     "actions": [
       {
-        "id": "act_quarterstaff_697i",
+        "id": "act_quarterstaff_bgd7",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit (+4 to hit with shillelagh), reach 5 ft., one target. Hit: 3 (1d6) bludgeoning damage, 4 (1d8) bludgeoning damage if wielded with two hands, or 6 (1d8 + 2) bludgeoning damage with shillelagh.</p>",
@@ -6048,22 +6084,25 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claws_xuoh",
+        "id": "act_claws_zcwy",
         "name": "Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) slashing damage.</p>",
@@ -6081,7 +6120,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6211,7 +6251,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_keen_hearing_and_sight_l0ji",
+        "id": "act_keen_hearing_and_sight_fe0s",
         "name": "Keen Hearing and Sight",
         "actionType": "trait",
         "descriptionHtml": "<p>Kharbek has advantage on Wisdom (Perception) checks that rely on hearing or sight.</p>",
@@ -6231,7 +6271,7 @@
         }
       },
       {
-        "id": "act_exhaustion_06ud",
+        "id": "act_exhaustion_x3z0",
         "name": "Exhaustion",
         "actionType": "trait",
         "descriptionHtml": "<p>Kharbek has 5 levels of exhaustion.</p>",
@@ -6253,7 +6293,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2vba",
+        "id": "act_multiattack_gote",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Kharbek makes two melee attacks or two ranged attacks.</p>",
@@ -6273,7 +6313,7 @@
         }
       },
       {
-        "id": "act_shortsword_ri2f",
+        "id": "act_shortsword_aw7a",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -6291,14 +6331,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_qctv",
+        "id": "act_longbow_x59v",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, ranged 150/600 ft., one target. Hit: 6 (1d8 + 2) piercing damage.</p>",
@@ -6316,7 +6357,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6445,7 +6487,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unusual_nature_svf1",
+        "id": "act_unusual_nature_f4j7",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The kiddywidget doesn't require air, food, drink, or sleep.</p>",
@@ -6467,7 +6509,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_n3li",
+        "id": "act_multiattack_tsrn",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The kiddywidget makes two attacks: one with its bite and one with its tail.</p>",
@@ -6487,7 +6529,7 @@
         }
       },
       {
-        "id": "act_bite_zcwy",
+        "id": "act_bite_uvo2",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage. If the target is a creature, it is grappled by the kiddywidget (escape DC 8).</p>",
@@ -6508,14 +6550,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_2acs",
+        "id": "act_tail_dpk8",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) piercing damage plus 2 (1d4) lightning damage.</p>",
@@ -6533,11 +6576,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -6912,7 +6957,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__amz3",
+        "id": "act_legendary_resistance__3_day__ot21",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the lich fails a saving throw, it can choose to succeed instead.</p>",
@@ -6932,7 +6977,7 @@
         }
       },
       {
-        "id": "act_rejuvenation_75ae",
+        "id": "act_rejuvenation_7t4m",
         "name": "Rejuvenation",
         "actionType": "trait",
         "descriptionHtml": "<p>If it has a phylactery, a destroyed lich gains a new body in 1d10 days, regaining all its hit points and becoming active again. The new body appears within 5 feet of the phylactery.</p>",
@@ -6954,7 +6999,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_pdcw",
+        "id": "act_multiattack_j4qj",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The lich makes four attacks.</p>",
@@ -6974,7 +7019,7 @@
         }
       },
       {
-        "id": "act_poisonous_touch_io0c",
+        "id": "act_poisonous_touch_2w2a",
         "name": "Poisonous Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 10 ft., one creature. Hit: 17 (5d6) poison damage, and the target must succeed on a DC 19 Constitution saving throw or be poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -6995,14 +7040,15 @@
           "damages": [
             {
               "formula": "5d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wither_tnax",
+        "id": "act_wither_m78g",
         "name": "Wither",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +9 to hit, range 60 ft., one target. Hit: 14 (4d6) necrotic damage.</p>",
@@ -7020,14 +7066,15 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fire_storm__7th_level_spell__1_day__zfwf",
+        "id": "act_fire_storm__7th_level_spell__1_day__bc2x",
         "name": "Fire Storm (7th-Level Spell; 1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The lich fills up to ten 10-foot cubes with fire. Every cube must be within 150 feet of the lich and occupy a space the lich can see, and each cube must have at least one face adjacent to the face of another cube. Each creature in the area must make a DC 19 Dexterity saving throw, taking 38 (7d10) fire damage on a failed save, or half as much damage on a successful one. The fire ignites flammable objects in the area that aren't being worn or carried. If the lich chooses, plant life in the area is unaffected by the spell.</p>",
@@ -7048,7 +7095,8 @@
           "damages": [
             {
               "formula": "7d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -7062,7 +7110,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_xibu",
+          "id": "act_attack_s44y",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lich makes an attack.</p>",
@@ -7082,7 +7130,7 @@
           }
         },
         {
-          "id": "act_poison_prick__cost_2_actions__nxkp",
+          "id": "act_poison_prick__cost_2_actions__q3yk",
           "name": "Poison Prick (Cost 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lich targets one poisoned creature it can see within 30 feet of it. The target must succeed on a DC 19 Constitution saving throw or fall unconscious until the poisoned condition ends on it.</p>",
@@ -7105,7 +7153,7 @@
           }
         },
         {
-          "id": "act_sap_life__costs_2_actions__77dv",
+          "id": "act_sap_life__costs_2_actions__1h25",
           "name": "Sap Life (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>The lich targets one creature it can see within 30 feet of it. The target must succeed on a DC 19 Constitution saving throw or take 11 (2d10) necrotic damage. The lich regains a number of hit points equal to the amount of damage that the creature takes.</p>",
@@ -7126,7 +7174,8 @@
             "damages": [
               {
                 "formula": "2d10",
-                "type": "Necrotic"
+                "type": "Necrotic",
+                "saveRider": true
               }
             ],
             "recharge": null
@@ -7137,7 +7186,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_poisonous_spores_fill_n01h",
+        "id": "act_poisonous_spores_fill_kigg",
         "name": "Poisonous Spores Fill",
         "actionType": "lair",
         "descriptionHtml": "<p>Poisonous spores fill a 10-foot cube that the lich can see within 120 feet of it. Any creature that enters the cloud for the first time on a turn or starts its turn there must succeed on a DC 19 Constitution saving throw or be poisoned until the end of its next turn. The cloud lasts for 1 minute or until it is dispersed by a strong wind.</p>",
@@ -7160,7 +7209,7 @@
         }
       },
       {
-        "id": "act_lich_commands_l3ff",
+        "id": "act_lich_commands_ni1c",
         "name": "Lich Commands",
         "actionType": "lair",
         "descriptionHtml": "<p>The lich commands the might of its diseased grove, creating a shambling mound. The shambling mound appears in an unoccupied space within 30 feet of the lich, acts on its own initiative count, and obeys the lich's commands. The shambling mound dies after 1 hour or when the lich uses this lair action again.</p>",
@@ -7180,7 +7229,7 @@
         }
       },
       {
-        "id": "act_rotten_roots_and_0en8",
+        "id": "act_rotten_roots_and_x72e",
         "name": "Rotten Roots And",
         "actionType": "lair",
         "descriptionHtml": "<p>Rotten roots and vines magically erupt in a 20-foot radius centered on a point on the ground that the lich can see within 120 feet of it. The lich is unaffected by the roots and vines. For all other creatures, the area becomes difficult terrain, and each creature in the area must succeed on a DC 19 Strength saving throw or be restrained by the roots. As an action, a creature can try to free itself or another creature within its reach, doing so with a successful DC 19 Strength (Athletics) check. The roots and vines wilt away when the lich uses this lair action again or when the lich dies.</p>",
@@ -7328,7 +7377,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_berserk_v7gv",
+        "id": "act_berserk_ht09",
         "name": "Berserk",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the golem starts its turn with 40 hit points or fewer, roll a d6. On a 6, the golem goes berserk. On each of its turns while berserk, the golem attacks the nearest creature it can see. If no creature is near enough to move to and attack, the golem attacks an object, with preference for an object smaller than itself. Once the golem goes berserk, it continues to do so until it is destroyed or regains all its hit points.</p><p>The golem's creator, if within 60 feet of the berserk golem, can try to calm it by speaking firmly and persuasively. The golem must be able to hear its creator, who must take an action to make a DC 15 Charisma (Persuasion) check. If the check succeeds, the golem ceases being berserk. If it takes damage while still at 40 hit points or fewer, the golem might go berserk again.</p>",
@@ -7352,7 +7401,7 @@
         }
       },
       {
-        "id": "act_immutable_form_3pwd",
+        "id": "act_immutable_form_ppsq",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem is immune to any spell or effect that would alter its form.</p>",
@@ -7372,7 +7421,7 @@
         }
       },
       {
-        "id": "act_lightning_absorption_lsi7",
+        "id": "act_lightning_absorption_jvbd",
         "name": "Lightning Absorption",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the golem is subjected to lightning damage, it takes no damage and instead regains a number of hit points equal to the lightning damage dealt.</p>",
@@ -7392,7 +7441,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_uzkw",
+        "id": "act_magic_resistance_ttee",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem has advantage on saving throws against spells and other magical effects.</p>",
@@ -7412,7 +7461,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_34eg",
+        "id": "act_magic_weapons_bjpt",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem's weapon attacks are magical.</p>",
@@ -7434,7 +7483,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_p9y4",
+        "id": "act_multiattack_8vub",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The golem makes two slam attacks.</p>",
@@ -7454,7 +7503,7 @@
         }
       },
       {
-        "id": "act_slam_o8fc",
+        "id": "act_slam_uopy",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (2d8 + 4) lightning damage.</p>",
@@ -7472,7 +7521,8 @@
           "damages": [
             {
               "formula": "2d8 + 4",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -8187,7 +8237,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_shocking_grasp__cantrip__l6bh",
+        "id": "act_shocking_grasp__cantrip__28rv",
         "name": "Shocking Grasp (Cantrip)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Spell Attack: +8 to hit (with advantage if the target is wearing armor made of metal), reach 5 ft., one creature. Hit: 13 (3d8) lightning damage, and the target can't take reactions until the start of its next turn.</p>",
@@ -8205,14 +8255,15 @@
           "damages": [
             {
               "formula": "3d8",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_lightning_eruption__3_day__gr67",
+        "id": "act_lightning_eruption__3_day__fm4a",
         "name": "Lightning Eruption (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The sage creates an eruption of magical lightning centered on a point it can see within 150 feet of it. Each creature in a 20-foot-radius sphere centered on that point must make a DC 16 Dexterity saving throw, taking 28 (8d6) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -8233,7 +8284,8 @@
           "damages": [
             {
               "formula": "8d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -8243,7 +8295,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shield__1st_level_spell__3_day__te1u",
+        "id": "act_shield__1st_level_spell__3_day__p1ee",
         "name": "Shield (1st-Level Spell; 3/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the sage is hit by an attack or targeted by a magic missile spell, it calls forth an invisible barrier of magical force that protects it. Until the start of its next turn, the sage has a +5 bonus to AC, including against the triggering attack, and it takes no damage from magic missile.</p>",
@@ -8613,7 +8665,7 @@
     ],
     "traits": [
       {
-        "id": "act_bound_to_candlekeep_ecan",
+        "id": "act_bound_to_candlekeep_o605",
         "name": "Bound to Candlekeep",
         "actionType": "trait",
         "descriptionHtml": "<p>Miirym can't leave Candlekeep and is immune to any effect that would place her in a location outside it, including an extradimensional space. If she dies, Miirym regains her form and all her hit points after 1d10 days, reappearing in the location where she died or in the nearest unoccupied space.</p>",
@@ -8633,7 +8685,7 @@
         }
       },
       {
-        "id": "act_regeneration_t0cn",
+        "id": "act_regeneration_itqx",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>Miirym regains 40 hit points at the start of her turn. If Miirym takes damage from a magic weapon or a spell, this trait doesn't function at the start of Miirym's next turn. Miirym dies only if she starts her turn with 0 hit points and doesn't regenerate.</p>",
@@ -8653,7 +8705,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_rw7b",
+        "id": "act_incorporeal_movement_1s22",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>Miirym can move through other creatures and objects as if they were difficult terrain. She takes 5 (1d10) force damage if she ends her turn inside an object.</p>",
@@ -8671,14 +8723,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__8l8k",
+        "id": "act_legendary_resistance__3_day__2fr7",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Miirym fails a saving throw, she can choose to succeed instead.</p>",
@@ -8698,7 +8751,7 @@
         }
       },
       {
-        "id": "act_x_ray_vision_0ou1",
+        "id": "act_x_ray_vision_seru",
         "name": "X-Ray Vision",
         "actionType": "trait",
         "descriptionHtml": "<p>Miirym can see through solid matter out to a range of 60 feet. To her, opaque creatures, objects, and obstacles within that distance appear transparent and don't prevent light from passing through them. This vision can penetrate 5 feet of stone, 3 inches of common metal, and up to 10 feet of wood or dirt. Thicker substances block this vision, as does a thin sheet of lead.</p>",
@@ -8720,7 +8773,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_buu3",
+        "id": "act_bite_9lno",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 34 (9d6 + 3) force damage.</p>",
@@ -8738,14 +8791,15 @@
           "damages": [
             {
               "formula": "9d6 + 3",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_breath_weapon__recharge_5__zlml",
+        "id": "act_breath_weapon__recharge_5__lfad",
         "name": "Breath Weapon (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Miirym uses one of the following breath weapons:</p>",
@@ -8765,7 +8819,7 @@
         }
       },
       {
-        "id": "act_cold_breath_x8fg",
+        "id": "act_cold_breath_f2z8",
         "name": "Cold Breath",
         "actionType": "action",
         "descriptionHtml": "<p>Miirym exhales an icy blast in a 90-foot cone. Each creature in that area must make a DC 21 Constitution saving throw, taking 67 (15d8) cold damage on a failed save, or half as much damage on a successful one.</p>",
@@ -8786,14 +8840,15 @@
           "damages": [
             {
               "formula": "15d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_necrotic_breath_d1hs",
+        "id": "act_necrotic_breath_d4ch",
         "name": "Necrotic Breath",
         "actionType": "action",
         "descriptionHtml": "<p>Miirym exhales a bolt of necrotic energy in a 120-foot line that is 10 feet wide. Each creature in that line must make a DC 21 Dexterity saving throw, taking 82 (15d10) necrotic damage on a failed save, or half as much damage on a successful one.</p>",
@@ -8814,14 +8869,15 @@
           "damages": [
             {
               "formula": "15d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_paralyzing_breath_dyev",
+        "id": "act_paralyzing_breath_pylt",
         "name": "Paralyzing Breath",
         "actionType": "action",
         "descriptionHtml": "<p>Miirym exhales paralyzing gas in a 90-foot cone. Each creature in that area must succeed on a DC 21 Constitution saving throw or be paralyzed for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -8844,7 +8900,7 @@
         }
       },
       {
-        "id": "act_frightful_presence_ocxr",
+        "id": "act_frightful_presence_ppt2",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of Miirym's choice that is within 120 feet of her and aware of her must succeed on a DC 21 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to Miirym's Frightful Presence for the next 24 hours.</p>",
@@ -8874,7 +8930,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_bite_0w4j",
+          "id": "act_bite_bt5c",
           "name": "Bite",
           "actionType": "legendary",
           "descriptionHtml": "<p>Miirym makes a bite attack.</p>",
@@ -8894,7 +8950,7 @@
           }
         },
         {
-          "id": "act_teleport__costs_2_actions__w92z",
+          "id": "act_teleport__costs_2_actions__k569",
           "name": "Teleport (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Miirym magically teleports up to 120 feet to an unoccupied space she can see.</p>",
@@ -9026,7 +9082,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shapechanger_wbhw",
+        "id": "act_shapechanger_ghka",
         "name": "Shapechanger",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic can use its action to polymorph into an object or back into its true, amorphous form. Its statistics are the same in each form. Any equipment it is wearing or carrying isn't transformed. It reverts to its true form if it dies.</p>",
@@ -9046,7 +9102,7 @@
         }
       },
       {
-        "id": "act_adhesive__object_form_only__fu09",
+        "id": "act_adhesive__object_form_only__y102",
         "name": "Adhesive (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic adheres to anything that touches it. A Huge or smaller creature adhered to the mimic is also grappled by it (escape DC 10). Ability checks made to escape this grapple have disadvantage.</p>",
@@ -9069,7 +9125,7 @@
         }
       },
       {
-        "id": "act_false_appearance__object_form_only__i7cb",
+        "id": "act_false_appearance__object_form_only__78i7",
         "name": "False Appearance (Object Form Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>While the mimic remains motionless, it is indistinguishable from an ordinary object.</p>",
@@ -9089,7 +9145,7 @@
         }
       },
       {
-        "id": "act_grappler_39t3",
+        "id": "act_grappler_6yn5",
         "name": "Grappler",
         "actionType": "trait",
         "descriptionHtml": "<p>The mimic has advantage on attack rolls against any creature grappled by it.</p>",
@@ -9111,7 +9167,7 @@
     ],
     "actions": [
       {
-        "id": "act_pseudopod_ctjx",
+        "id": "act_pseudopod_9ofo",
         "name": "Pseudopod",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) bludgeoning damage. If the mimic is in object form, the target is subjected to its Adhesive trait.</p>",
@@ -9129,14 +9185,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_eog2",
+        "id": "act_bite_tzrv",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 7 (1d8 + 3) piercing damage plus 4 (1d8) acid damage.</p>",
@@ -9154,11 +9211,13 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -9413,7 +9472,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_tm9z",
+        "id": "act_amphibious_seop",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The naiad can breathe air and water.</p>",
@@ -9433,7 +9492,7 @@
         }
       },
       {
-        "id": "act_invisible_in_water_z2gf",
+        "id": "act_invisible_in_water_78qn",
         "name": "Invisible in Water",
         "actionType": "trait",
         "descriptionHtml": "<p>The naiad is invisible while fully immersed in water.</p>",
@@ -9453,7 +9512,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_rwrr",
+        "id": "act_magic_resistance_8v50",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The naiad has advantage on saving throws against spells and other magical effects.</p>",
@@ -9475,7 +9534,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_n2g1",
+        "id": "act_multiattack_66gz",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The naiad makes two psychic touch attacks.</p>",
@@ -9495,7 +9554,7 @@
         }
       },
       {
-        "id": "act_psychic_touch_dqx8",
+        "id": "act_psychic_touch_shpm",
         "name": "Psychic Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Spell Attack: +6 to hit, reach 5 ft., one target. Hit: 9 (1d10 + 4) psychic damage.</p>",
@@ -9513,7 +9572,8 @@
           "damages": [
             {
               "formula": "1d10 + 4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -9741,7 +9801,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__ch6x",
+        "id": "act_legendary_resistance__3_day__0z9l",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Nintra fails a saving throw, she can choose to succeed instead.</p>",
@@ -9763,7 +9823,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_62sw",
+        "id": "act_multiattack_ozxi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Nintra makes two attacks.</p>",
@@ -9783,7 +9843,7 @@
         }
       },
       {
-        "id": "act_claw_idvi",
+        "id": "act_claw_bbch",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +12 to hit, reach 5 ft., one target. Hit: 12 (2d4 + 7) piercing damage.</p>",
@@ -9801,14 +9861,15 @@
           "damages": [
             {
               "formula": "2d4 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shard_of_shadow_kuh1",
+        "id": "act_shard_of_shadow_7j3l",
         "name": "Shard of Shadow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +12 to hit, range 120 ft., one target. Hit: 10 (1d6 + 7) necrotic damage, and if the target is a creature, it must succeed on a DC 20 Constitution saving throw or be poisoned until the end of its next turn.</p>",
@@ -9829,14 +9890,15 @@
           "damages": [
             {
               "formula": "1d6 + 7",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_storm_of_shattered_glass___recharge__hh9t",
+        "id": "act_storm_of_shattered_glass___recharge__jzic",
         "name": "Storm of Shattered Glass {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>Nintra targets a point she can see within 60 feet of her and creates a 20-foot-radius sphere of swirling glass shards centered on that point. Each creature in the sphere must make a DC 20 Dexterity saving throw, taking 28 (8d6) slashing damage on a failed save, or half as much damage on a successful save. If Nintra is in the sphere, the shards deal no damage to her.</p>",
@@ -9857,7 +9919,8 @@
           "damages": [
             {
               "formula": "8d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -9871,7 +9934,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_tdyf",
+          "id": "act_attack_wt77",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>Nintra makes one attack.</p>",
@@ -9891,7 +9954,7 @@
           }
         },
         {
-          "id": "act_fey_step_kagk",
+          "id": "act_fey_step_xqzb",
           "name": "Fey Step",
           "actionType": "legendary",
           "descriptionHtml": "<p>Nintra teleports to an unoccupied space she can see within 30 feet of her.</p>",
@@ -9911,7 +9974,7 @@
           }
         },
         {
-          "id": "act_shadow_strikes__costs_2_actions__knkr",
+          "id": "act_shadow_strikes__costs_2_actions__9gfu",
           "name": "Shadow Strikes (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Provided she is in bright or dim light, Nintra causes her shadow to attack a creature within 10 feet of her. Her shadow makes two claw attacks, each attack identical to Nintra's claw attack except that it deals psychic damage instead of piercing damage.</p>",
@@ -9935,7 +9998,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_nintra_targets_one_xnpp",
+        "id": "act_nintra_targets_one_gpaq",
         "name": "Nintra Targets One",
         "actionType": "lair",
         "descriptionHtml": "<p>Nintra targets one pane of shadow glass in her lair, causing it to explode into shards. Each creature within 20 feet of the exploding pane must make a DC 18 Dexterity saving throw, taking 13 (3d8) piercing damage on a failed save, or half as much damage on a successful one. The shards fade away to vapor and the pane is restored to normal at the next initiative count 20.</p>",
@@ -9956,14 +10019,15 @@
           "damages": [
             {
               "formula": "3d8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_nintra_targets_one_0cuq",
+        "id": "act_nintra_targets_one_9ze2",
         "name": "Nintra Targets One",
         "actionType": "lair",
         "descriptionHtml": "<p>Nintra targets one pane of shadow glass in her lair, briefly transforming it into a swirling vortex. One creature of her choice within 20 feet of the pane must succeed on a DC 20 Strength saving throw or be drawn into the vortex, taking 11 (2d10) necrotic damage. The creature is then teleported to an unoccupied space within 5 feet of another pane of shadow glass in Nintra's lair (determined randomly).</p>",
@@ -9984,7 +10048,8 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -10214,7 +10279,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_xde7",
+        "id": "act_multiattack_wpbi",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes two attacks: one with its bite and one to constrict.</p>",
@@ -10234,7 +10299,7 @@
         }
       },
       {
-        "id": "act_bite_xv81",
+        "id": "act_bite_nzte",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 10 ft., one target. Hit: 22 (3d10 + 6) piercing damage.</p>",
@@ -10252,14 +10317,15 @@
           "damages": [
             {
               "formula": "3d10 + 6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_constrict_287f",
+        "id": "act_constrict_eo8c",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one Large or smaller creature. Hit: 17 (2d10 + 6) bludgeoning damage plus 17 (2d10 + 6) slashing damage. The target is grappled (escape DC 16) if the behir isn't already constricting a creature, and the target is restrained until this grapple ends.</p>",
@@ -10280,18 +10346,20 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "2d10 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_lightning_breath__recharge_5__4vfw",
+        "id": "act_lightning_breath__recharge_5__qqyr",
         "name": "Lightning Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The behir exhales a line of lightning that is 20 feet long and 5 feet wide. Each creature in that line must make a DC 16 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -10312,14 +10380,15 @@
           "damages": [
             {
               "formula": "12d10",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_swallow_fd8v",
+        "id": "act_swallow_yz2y",
         "name": "Swallow",
         "actionType": "action",
         "descriptionHtml": "<p>The behir makes one bite attack against a Medium or smaller target it is grappling. If the attack hits, the target is also swallowed, and the grapple ends. While swallowed, the target is blinded and restrained, it has Cover against attacks and other effects outside the behir, and it takes 21 (6d6) acid damage at the start of each of the behir's turns. A behir can have only one creature swallowed at a time.</p><p>Any creature swallowed by a parasite-infested behir must succeed on a DC 19 Constitution saving throw at the start of each of the behir's turns or be feasted upon by blood parasites, taking 36 (8d8) necrotic damage on a failed save, or half as much damage on a successful save. This damage is in addition to the damage caused by the behir's digestive acids.</p><p>If the behir takes 30 damage or more on a single turn from the swallowed creature, the behir must succeed on a DC 14 Constitution saving throw at the end of that turn or regurgitate the creature, which falls prone in a space within 10 feet of the behir. If the behir dies, a swallowed creature is no longer restrained by it and can escape from the corpse by using 15 feet of movement, exiting prone.</p>",
@@ -10342,11 +10411,13 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             },
             {
               "formula": "8d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -10688,7 +10759,7 @@
     ],
     "traits": [
       {
-        "id": "act_dark_devotion_344l",
+        "id": "act_dark_devotion_lkqi",
         "name": "Dark Devotion",
         "actionType": "trait",
         "descriptionHtml": "<p>Ram Sugar has advantage on saving throws against being charmed or frightened.</p>",
@@ -10710,7 +10781,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_p6vt",
+        "id": "act_multiattack_4jcr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ram Sugar makes two melee attacks.</p>",
@@ -10730,7 +10801,7 @@
         }
       },
       {
-        "id": "act_dagger_t2lh",
+        "id": "act_dagger_58rk",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +4 to hit, reach 5 ft. or range 20/60 ft., one creature. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -10748,14 +10819,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_breath_weapon__recharges_after_a_short_or_long_rest__79ci",
+        "id": "act_breath_weapon__recharges_after_a_short_or_long_rest__6s6x",
         "name": "Breath Weapon (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Ram Sugar exhales fire in a 30-foot-long line that is 5 feet wide. Any creature in the line must make a DC 11 Dexterity saving throw, taking 7 (2d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -10776,7 +10848,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -11263,7 +11336,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_shocking_grasp__cantrip__snh0",
+        "id": "act_shocking_grasp__cantrip__n810",
         "name": "Shocking Grasp (Cantrip)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Spell Attack: +6 to hit (with advantage if the target is wearing armor made of metal), reach 5 ft., one creature. Hit: 9 (2d8) lightning damage, and the target can't take reactions until the start of its next turn.</p>",
@@ -11281,7 +11354,8 @@
           "damages": [
             {
               "formula": "2d8",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -11291,7 +11365,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_shield__1st_level_spell__3_day__b1hw",
+        "id": "act_shield__1st_level_spell__3_day__jo1x",
         "name": "Shield (1st-Level Spell; 3/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the sage is hit by an attack or targeted by a magic missile spell, it calls forth an invisible barrier of magical force that protects it. Until the start of its next turn, the sage has a +5 bonus to AC, including against the triggering attack, and it takes no damage from magic missile.</p>",
@@ -11440,7 +11514,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_immutable_form_ubyx",
+        "id": "act_immutable_form_ks6z",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem is immune to any spell or effect that would alter its form.</p>",
@@ -11460,7 +11534,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_ltdf",
+        "id": "act_magic_resistance_a7pq",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem has advantage on saving throws against spells and other magical effects.</p>",
@@ -11480,7 +11554,7 @@
         }
       },
       {
-        "id": "act_magic_weapons_g7vt",
+        "id": "act_magic_weapons_yehl",
         "name": "Magic Weapons",
         "actionType": "trait",
         "descriptionHtml": "<p>The golem's weapon attacks are magical.</p>",
@@ -11502,7 +11576,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_38rv",
+        "id": "act_multiattack_ixyc",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The golem makes two slam attacks.</p>",
@@ -11522,7 +11596,7 @@
         }
       },
       {
-        "id": "act_slam_qrl9",
+        "id": "act_slam_ebkh",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +10 to hit, reach 5 ft., one target. Hit: 19 (3d8 + 6) bludgeoning damage.</p>",
@@ -11540,14 +11614,15 @@
           "damages": [
             {
               "formula": "3d8 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_slow__recharge_5__7qpy",
+        "id": "act_slow__recharge_5__ztoj",
         "name": "Slow (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The golem targets one or more creatures it can see within 10 feet of it. Each target must make a DC 17 Wisdom saving throw against this magic. On a failed save, a target can't use reactions, its speed is halved, and it can't make more than one attack on its turn. In addition, the target can take either an action or a bonus action on its turn, not both. These effects last for 1 minute. A target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -11570,7 +11645,7 @@
         }
       },
       {
-        "id": "act_sapphire_vsih",
+        "id": "act_sapphire_3lcl",
         "name": "Sapphire",
         "actionType": "action",
         "descriptionHtml": "<p>The sapphire has 3 charges. As an action, the golem can expend 1 charge to cast dispel magic (as a 9th-level spell) from the sapphire using Constitution as its spellcasting ability. The sapphire ceases to glow if all its charges are expended, but it regains 1d3 expended charges daily at dawn and glows again once it has 1 or more charges.</p>",
@@ -11736,7 +11811,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_crushing_end_rcfo",
+        "id": "act_crushing_end_a3te",
         "name": "Crushing End",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces Shemshime to 0 hit points, Shemshime instead drops to 1 hit point unless the damage is the result of Shemshime being crushed by an object weighing at least 1,000 pounds.</p>",
@@ -11756,7 +11831,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_xqrr",
+        "id": "act_incorporeal_movement_l2sx",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>Shemshime can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -11774,7 +11849,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -11783,7 +11859,7 @@
     ],
     "actions": [
       {
-        "id": "act_maddening_touch_8fyt",
+        "id": "act_maddening_touch_i9jy",
         "name": "Maddening Touch",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Spell Attack: +5 to hit, reach 5 ft., one target. Hit: 17 (4d6 + 3) psychic damage.</p>",
@@ -11801,14 +11877,15 @@
           "damages": [
             {
               "formula": "4d6 + 3",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_whispers_of_violence_ldlv",
+        "id": "act_whispers_of_violence_xyza",
         "name": "Whispers of Violence",
         "actionType": "action",
         "descriptionHtml": "<p>Shemshime chooses up to two creatures it can see within 60 feet of it. Each target must succeed on a DC 13 Wisdom saving throw, or that target takes 7 (1d8 + 3) psychic damage and must use its reaction to make a melee weapon attack against one creature it can reach (Shemshime's choice) that Shemshime can see.</p>",
@@ -11829,14 +11906,15 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_howling_babble___recharge__qw3e",
+        "id": "act_howling_babble___recharge__nhao",
         "name": "Howling Babble {@recharge}",
         "actionType": "action",
         "descriptionHtml": "<p>Shemshime targets one creature it can see within 30 feet of it. The creature must make a DC 13 Wisdom saving throw. On a failed save, it takes 21 (4d8 + 3) psychic damage and is stunned until the end of its next turn. On a successful save, it takes half as much damage and isn't stunned.</p>",
@@ -11857,7 +11935,8 @@
           "damages": [
             {
               "formula": "4d8 + 3",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -11986,7 +12065,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_lightning_absorption_inv3",
+        "id": "act_lightning_absorption_ur9l",
         "name": "Lightning Absorption",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever the skitterwidget is subjected to lightning damage, it takes no damage and instead regains a number of hit points equal to the lightning damage dealt.</p>",
@@ -12006,7 +12085,7 @@
         }
       },
       {
-        "id": "act_unusual_nature_7o2w",
+        "id": "act_unusual_nature_9hf7",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The skitterwidget doesn't require air, food, drink, or sleep.</p>",
@@ -12028,7 +12107,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6dkh",
+        "id": "act_multiattack_8kes",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The skitterwidget makes two attacks: one with its bite and one with its tail.</p>",
@@ -12048,7 +12127,7 @@
         }
       },
       {
-        "id": "act_bite_a411",
+        "id": "act_bite_umyd",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 10 (2d6 + 3) piercing damage. If the target is a creature, it is grappled by the skitterwidget (escape DC 13).</p>",
@@ -12069,14 +12148,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_9m4y",
+        "id": "act_tail_d2vq",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d6 + 3) piercing damage plus 10 (3d6) lightning damage, and if the target is a creature, it must succeed on a DC 15 Constitution saving throw or be stunned until the end of its next turn.</p>",
@@ -12097,11 +12177,13 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -12111,7 +12193,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_good_parent_io3t",
+        "id": "act_good_parent_n2e7",
         "name": "Good Parent",
         "actionType": "reaction",
         "descriptionHtml": "<p>The skitterwidget imposes disadvantage on one attack roll made against a kiddywidget it can see within 5 feet of it.</p>",
@@ -12260,7 +12342,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_unarmored_defense_aazz",
+        "id": "act_unarmored_defense_r5xl",
         "name": "Unarmored Defense",
         "actionType": "trait",
         "descriptionHtml": "<p>While Steel Crane is wearing no armor and wielding no shield, his AC includes his Wisdom modifier.</p>",
@@ -12282,7 +12364,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_4h7h",
+        "id": "act_multiattack_uyp9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Steel Crane makes three attacks.</p>",
@@ -12302,7 +12384,7 @@
         }
       },
       {
-        "id": "act_force_strike_3m1i",
+        "id": "act_force_strike_hlym",
         "name": "Force Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 8 (1d8 + 4) force damage, and if the target is a creature, it must succeed on a DC 15 Constitution saving throw or be stunned until the start of Steel Crane's next turn.</p>",
@@ -12323,14 +12405,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_whip_mf51",
+        "id": "act_whip_pbtr",
         "name": "Whip",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 6 (1d4 + 4) slashing damage or, if the target is a creature, Steel Crane can grapple the target instead (escape DC 15). Steel Crane can't make attacks with the whip while using it to grapple a creature. Anytime on his turn, he can release a creature grappled by the whip (no action required).</p>",
@@ -12351,14 +12434,15 @@
           "damages": [
             {
               "formula": "1d4 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heal_self__recharges_after_a_long_rest__l76h",
+        "id": "act_heal_self__recharges_after_a_long_rest__inc5",
         "name": "Heal Self (Recharges after a Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Steel Crane regains 2d8 + 4 hit points, and all levels of exhaustion end on him.</p>",
@@ -12381,7 +12465,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_deflect_missile_n3ea",
+        "id": "act_deflect_missile_aik4",
         "name": "Deflect Missile",
         "actionType": "reaction",
         "descriptionHtml": "<p>In response to being hit by a ranged weapon attack, Steel Crane deflects the missile. The damage he takes from the attack is reduced by 1d10 + 10. If the damage is reduced to 0, Steel Crane catches the missile if it's small enough to hold in one hand and Steel Crane has a hand free.</p>",
@@ -12401,7 +12485,7 @@
         }
       },
       {
-        "id": "act_slow_descent__3_day__2xqk",
+        "id": "act_slow_descent__3_day__qk3u",
         "name": "Slow Descent (3/Day)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When Steel Crane falls, he can slow his descent, taking no damage from the fall.</p>",
@@ -12551,7 +12635,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_365s",
+        "id": "act_multiattack_trg8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes two attacks with its greatsword or hurls two rocks.</p>",
@@ -12571,7 +12655,7 @@
         }
       },
       {
-        "id": "act_greatsword_rb2v",
+        "id": "act_greatsword_3uc1",
         "name": "Greatsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +14 to hit, reach 10 ft., one target. Hit: 30 (6d6 + 9) slashing damage plus 18 (4d8) necrotic damage.</p>",
@@ -12589,18 +12673,20 @@
           "damages": [
             {
               "formula": "6d6 + 9",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "4d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rock_98iz",
+        "id": "act_rock_xn7q",
         "name": "Rock",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +14 to hit, reach 60/240 ft., one target. Hit: 35 (4d12 + 9) bludgeoning damage.</p>",
@@ -12618,14 +12704,15 @@
           "damages": [
             {
               "formula": "4d12 + 9",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_lightning_strike__recharge_5__uvxz",
+        "id": "act_lightning_strike__recharge_5__72ms",
         "name": "Lightning Strike (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The giant hurls a magical lightning bolt at a point it can see within 500 feet of it. Each creature within 10 feet of that point must make a DC 15 Dexterity saving throw, taking 54 (12d8) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -12646,7 +12733,8 @@
           "damages": [
             {
               "formula": "12d8",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -12779,7 +12867,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_false_objects_1akp",
+        "id": "act_false_objects_nd6n",
         "name": "False Objects",
         "actionType": "trait",
         "descriptionHtml": "<p>If the swarm is motionless at the start of combat, it has advantage on its initiative roll. Moreover, if a creature hasn't observed the swarm move or act, that creature must succeed on a DC 15 Wisdom (Perception) check to discern that the swarm is animate.</p>",
@@ -12802,7 +12890,7 @@
         }
       },
       {
-        "id": "act_swarm_3zkk",
+        "id": "act_swarm_7z0s",
         "name": "Swarm",
         "actionType": "trait",
         "descriptionHtml": "<p>The swarm can occupy another creature's space and vice versa, and the swarm can move through any opening large enough for a 1-foot-tall, 8-inch-wide, 2-inch-thick object. The swarm can't regain hit points or gain temporary hit points.</p>",
@@ -12824,7 +12912,7 @@
     ],
     "actions": [
       {
-        "id": "act_book_club_rihl",
+        "id": "act_book_club_svtu",
         "name": "Book Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 0 ft., one target in the swarm's space. Hit: 6 (2d4 + 1) bludgeoning damage, or 3 (1d4 + 1) bludgeoning damage if the swarm has half its hit points or fewer.</p>",
@@ -12842,11 +12930,13 @@
           "damages": [
             {
               "formula": "2d4 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d4 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -13384,7 +13474,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_8p46",
+        "id": "act_magic_resistance_awao",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Valin has advantage on saving throws against spells and other magical effects.</p>",
@@ -13404,7 +13494,7 @@
         }
       },
       {
-        "id": "act_rejuvenation_9s0j",
+        "id": "act_rejuvenation_i5ri",
         "name": "Rejuvenation",
         "actionType": "trait",
         "descriptionHtml": "<p>While her heart remains in Alessia's body, Valin re-forms inside her sarcophagus, regaining all her hit points and becoming active again.</p>",
@@ -13426,7 +13516,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_5pkl",
+        "id": "act_multiattack_ukxl",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Valin can use her Dreadful Glare and makes one attack with her rotting fist.</p>",
@@ -13446,7 +13536,7 @@
         }
       },
       {
-        "id": "act_rotting_fist_yx2l",
+        "id": "act_rotting_fist_wyoi",
         "name": "Rotting Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 14 (3d6 + 4) bludgeoning damage plus 21 (6d6) necrotic damage. If the target is a creature, it must succeed on a DC 16 Constitution saving throw or be cursed with mummy rot. The cursed target can't regain hit points, and its hit point maximum decreases by 10 (3d6) for every 24 hours that elapse. If the curse reduces the target's hit point maximum to 0, the target dies, and its body turns to dust. The curse lasts until removed by the remove curse spell or other magic.</p>",
@@ -13467,18 +13557,20 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "6d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_dreadful_glare_slpg",
+        "id": "act_dreadful_glare_axpl",
         "name": "Dreadful Glare",
         "actionType": "action",
         "descriptionHtml": "<p>Valin targets one creature she can see within 60 feet of her. If the target can see Valin, it must succeed on a DC 16 Wisdom saving throw against this magic or become frightened until the end of Valin's next turn. If the target fails the saving throw by 5 or more, it is also paralyzed for the same duration. A target that succeeds on the saving throw is immune to the Dreadful Glare of all mummies and mummy lords for the next 24 hours.</p>",
@@ -13508,7 +13600,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_attack_zm1r",
+          "id": "act_attack_tmnm",
           "name": "Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>Valin makes one attack with her rotting fist or uses her Dreadful Glare.</p>",
@@ -13528,7 +13620,7 @@
           }
         },
         {
-          "id": "act_blinding_dust_qzvb",
+          "id": "act_blinding_dust_8rkd",
           "name": "Blinding Dust",
           "actionType": "legendary",
           "descriptionHtml": "<p>Blinding dust and sand swirls magically around Valin. Each creature within 5 feet of Valin must succeed on a DC 16 Constitution saving throw or be blinded until the end of her next turn.</p>",
@@ -13551,7 +13643,7 @@
           }
         },
         {
-          "id": "act_blasphemous_word__costs_2_actions__h60j",
+          "id": "act_blasphemous_word__costs_2_actions__943z",
           "name": "Blasphemous Word (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Valin utters a blasphemous word. Each non-undead creature within 10 feet of Valin that can hear the magical utterance must succeed on a DC 16 Constitution saving throw or be stunned until the end of Valin's next turn.</p>",
@@ -13574,7 +13666,7 @@
           }
         },
         {
-          "id": "act_channel_negative_energy__costs_2_actions__asmp",
+          "id": "act_channel_negative_energy__costs_2_actions__ok7g",
           "name": "Channel Negative Energy (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Valin magically unleashes negative energy. Creatures within 60 feet of Valin, including ones behind barriers and around corners, can't regain hit points until the end of Valin's next turn.</p>",
@@ -13594,7 +13686,7 @@
           }
         },
         {
-          "id": "act_whirlwind_of_sand__costs_2_actions__uia8",
+          "id": "act_whirlwind_of_sand__costs_2_actions__mfgi",
           "name": "Whirlwind of Sand (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Valin magically transforms into a whirlwind of sand, moves up to 60 feet, and reverts to her normal form. While in whirlwind form, Valin is immune to all damage, and it can't be grappled, petrified, knocked prone, restrained, or stunned. Equipment worn or carried by Valin remain in her possession.</p>",
@@ -13618,7 +13710,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_each_undead_creature_ocmi",
+        "id": "act_each_undead_creature_rpf0",
         "name": "Each Undead Creature",
         "actionType": "lair",
         "descriptionHtml": "<p>Each undead creature in the lair can pinpoint the location of each living creature within 120 feet of it until initiative count 20 on the next round.</p>",
@@ -13638,7 +13730,7 @@
         }
       },
       {
-        "id": "act_each_undead_rzbp",
+        "id": "act_each_undead_dr3f",
         "name": "Each Undead",
         "actionType": "lair",
         "descriptionHtml": "<p>Each undead in the lair has advantage on saving throws against effects that turn undead until initiative count 20 on the next round.</p>",
@@ -13658,7 +13750,7 @@
         }
       },
       {
-        "id": "act_until_initiative_count_85zs",
+        "id": "act_until_initiative_count_dj6f",
         "name": "Until Initiative Count",
         "actionType": "lair",
         "descriptionHtml": "<p>Until initiative count 20 on the next round, any non-undead creature that tries to cast a spell of 4th level or lower in Valin's lair is wracked with pain. The creature can choose another action, but if it tries to cast the spell, it must make a DC 16 Constitution saving throw. On a failed save, it takes 1d6 necrotic damage per level of the spell, and the spell has no effect and is wasted.</p>",
@@ -13679,7 +13771,8 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -13690,7 +13783,7 @@
     "lairActionsDesc": "On initiative count 20 (losing initiative ties), Valin takes a lair action to cause one of the following effects; Valin can't use the same effect two rounds in a row.",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_le2y",
+        "id": "act_regional_effect_jqey",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Food instantly molders and water instantly evaporates when brought into the lair. Other nonmagical drinks are spoiled—wine turning to vinegar, for instance.</p>",
@@ -13710,7 +13803,7 @@
         }
       },
       {
-        "id": "act_regional_effect_2ruj",
+        "id": "act_regional_effect_w267",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Divination spells cast within the lair by creatures other than Valin have a 25% chance to provide misleading results, as determined by the DM. If a divination spell already has a chance to fail or become unreliable when cast multiple times, that chance increases by 25 percent.</p>",
@@ -13730,7 +13823,7 @@
         }
       },
       {
-        "id": "act_regional_effect_4vjt",
+        "id": "act_regional_effect_s01s",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>A creature that takes treasure from the lair is cursed until the treasure is returned. The cursed target has disadvantage on all saving throws. The curse lasts until removed by a remove curse spell or other magic.</p>",
@@ -13862,7 +13955,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_fey_ancestry_wiuz",
+        "id": "act_fey_ancestry_ui2u",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Varnyr has advantage on saving throws against being charmed, and magic can't put Varnyr to sleep.</p>",
@@ -13884,7 +13977,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_7znk",
+        "id": "act_multiattack_shu1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Varnyr makes two attacks.</p>",
@@ -13904,7 +13997,7 @@
         }
       },
       {
-        "id": "act_cane_egus",
+        "id": "act_cane_a687",
         "name": "Cane",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -13922,7 +14015,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -13932,7 +14026,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_3b3t",
+        "id": "act_parry_19cm",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Varnyr adds 2 to their AC against one melee attack that would hit it. To do so, Varnyr must see the attacker and be wielding a melee weapon.</p>",
@@ -14633,7 +14727,7 @@
     ],
     "traits": [
       {
-        "id": "act_fey_ancestry_wlh8",
+        "id": "act_fey_ancestry_0c70",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>The wood elf has advantage on saving throws against being charmed, and magic can't put the wood elf to sleep.</p>",
@@ -14655,7 +14749,7 @@
     ],
     "actions": [
       {
-        "id": "act_staff_gt0y",
+        "id": "act_staff_3hld",
         "name": "Staff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d6 - 1) bludgeoning damage, or 3 (1d8 - 1) bludgeoning damage if used with two hands, plus 3 (1d6) poison damage.</p>",
@@ -14673,22 +14767,25 @@
           "damages": [
             {
               "formula": "1d6 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d8 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_summon_demon__1_day__f7st",
+        "id": "act_summon_demon__1_day__zqf3",
         "name": "Summon Demon (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The wood elf magically summons a quasit, or attempts to summon a shadow demon with a 50% chance of success. The summoned demon appears in an unoccupied space within 60 feet of its summoner, acts as an ally of its summoner, and can't summon other demons. It remains for 10 minutes, until it or its summoner dies, or until its summoner dismisses it as an action.</p>",
@@ -15509,7 +15606,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_f4k6",
+        "id": "act_magic_resistance_vnbs",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Zikran has advantage on saving throws against spells and other magical effects.</p>",
@@ -15531,7 +15628,7 @@
     ],
     "actions": [
       {
-        "id": "act_dagger_txd5",
+        "id": "act_dagger_deig",
         "name": "Dagger",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +6 to hit, reach 5 ft. or range 20/60 ft., one target. Hit: 4 (1d4 + 2) piercing damage.</p>",
@@ -15549,7 +15646,8 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -15704,7 +15802,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_legendary_resistance__3_day__dc3i",
+        "id": "act_legendary_resistance__3_day__ufw0",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Zikzokrishka fails a saving throw, it can choose to succeed instead.</p>",
@@ -15724,7 +15822,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_ayvn",
+        "id": "act_magic_resistance_tsi0",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>Zikzokrishka has advantage on saving throws against spells and other magical effects.</p>",
@@ -15746,7 +15844,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_x170",
+        "id": "act_multiattack_cdo2",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Zikzokrishka can use its Frightful Presence. It then makes three attacks: one with its bite and two with its claws.</p>",
@@ -15766,7 +15864,7 @@
         }
       },
       {
-        "id": "act_bite_y9uw",
+        "id": "act_bite_2lws",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 10 ft., one target. Hit: 18 (2d10 + 7) piercing damage plus 5 (1d10) lightning damage.</p>",
@@ -15784,18 +15882,20 @@
           "damages": [
             {
               "formula": "2d10 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d10",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_lakh",
+        "id": "act_claw_f9qd",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 5 ft., one target. Hit: 14 (2d6 + 7) slashing damage.</p>",
@@ -15813,14 +15913,15 @@
           "damages": [
             {
               "formula": "2d6 + 7",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tail_5xyw",
+        "id": "act_tail_yeuz",
         "name": "Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +13 to hit, reach 15 ft., one target. Hit: 16 (2d8 + 7) bludgeoning damage.</p>",
@@ -15838,14 +15939,15 @@
           "damages": [
             {
               "formula": "2d8 + 7",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_frightful_presence_dvki",
+        "id": "act_frightful_presence_wqgk",
         "name": "Frightful Presence",
         "actionType": "action",
         "descriptionHtml": "<p>Each creature of Zikzokrishka's choice that is within 120 feet of the Zikzokrishka and aware of it must succeed on a DC 18 Wisdom saving throw or become frightened for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success. If a creature's saving throw is successful or the effect ends for it, the creature is immune to the Zikzokrishka's Frightful Presence for the next 24 hours.</p>",
@@ -15868,7 +15970,7 @@
         }
       },
       {
-        "id": "act_lightning_breath__recharge_5__n8vb",
+        "id": "act_lightning_breath__recharge_5__rp1u",
         "name": "Lightning Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Zikzokrishka exhales lightning in a 90-foot line that is 5 feet wide. Each creature in that line must make a DC 20 Dexterity saving throw, taking 66 (12d10) lightning damage on a failed save, or half as much damage on a successful one.</p>",
@@ -15889,7 +15991,8 @@
           "damages": [
             {
               "formula": "12d10",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -15903,7 +16006,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_detect_l08k",
+          "id": "act_detect_2why",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>Zikzokrishka makes a Wisdom (Perception) check.</p>",
@@ -15923,7 +16026,7 @@
           }
         },
         {
-          "id": "act_tail_attack_4jd8",
+          "id": "act_tail_attack_jebp",
           "name": "Tail Attack",
           "actionType": "legendary",
           "descriptionHtml": "<p>Zikzokrishka makes a tail attack.</p>",
@@ -15943,7 +16046,7 @@
           }
         },
         {
-          "id": "act_wing_attack__costs_2_actions__7w0m",
+          "id": "act_wing_attack__costs_2_actions__pv9f",
           "name": "Wing Attack (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Zikzokrishka beats its tattered wings. Each creature within 10 feet of Zikzokrishka must succeed on a DC 21 Dexterity saving throw or take 14 (2d6 + 7) bludgeoning damage and be knocked prone. After beating its wings this way, Zikzokrishka can fly up to half its flying speed.</p>",
@@ -15964,7 +16067,8 @@
             "damages": [
               {
                 "formula": "2d6 + 7",
-                "type": "Bludgeoning"
+                "type": "Bludgeoning",
+                "saveRider": true
               }
             ],
             "recharge": null
@@ -15975,7 +16079,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_part_bzy3",
+        "id": "act_part_2ogn",
         "name": "Part",
         "actionType": "lair",
         "descriptionHtml": "<p>Part of the ceiling collapses above one creature that Zikzokrishka can see. The creature must succeed on a DC 15 Dexterity saving throw or take 21 (6d6) bludgeoning damage and be knocked prone and buried under rubble. A buried creature is restrained and unable to stand up. A creature can use an action to try to pull itself or another creature out of the rubble, doing so with a successful DC 10 Strength (Athletics) check.</p>",
@@ -15996,14 +16100,15 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_cloud_of_sand_a258",
+        "id": "act_cloud_of_sand_gi2u",
         "name": "Cloud Of Sand",
         "actionType": "lair",
         "descriptionHtml": "<p>A cloud of sand swirls in a 20-foot-radius sphere centered on a point Zikzokrishka can see within 60 feet of it. The cloud spreads around corners. Each creature in the cloud must succeed on a DC 15 Constitution saving throw or be blinded for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p>",
@@ -16026,7 +16131,7 @@
         }
       },
       {
-        "id": "act_zikzokrishka_chooses_two_1jj6",
+        "id": "act_zikzokrishka_chooses_two_9xw1",
         "name": "Zikzokrishka Chooses Two",
         "actionType": "lair",
         "descriptionHtml": "<p>Zikzokrishka chooses two points that it can see, each of which must be on a solid surface, and creates a 5-foot-wide line of lightning between them. The two points must be within 60 feet of Zikzokrishka and 60 feet of each other. Each creature in the line must succeed on a DC 15 Dexterity saving throw or take 10 (3d6) lightning damage.</p>",
@@ -16047,7 +16152,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Lightning"
+              "type": "Lightning",
+              "saveRider": true
             }
           ],
           "recharge": null

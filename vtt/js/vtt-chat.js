@@ -228,6 +228,59 @@ export function initVttChat(vtt, chatHistory) {
             }
         });
 
+        vtt.socket.on('chat:save_resolved', (data) => {
+            if (!data || !data.id) return;
+            const msgEl = chatMessages.querySelector(`[data-msg-id="${data.id}"]`);
+            if (msgEl) {
+                if (!msgEl._saveResolveCardData) {
+                    const row = msgEl.querySelector('.save-resolve-actions-row');
+                    if (row && row.dataset.cardData) {
+                        try { msgEl._saveResolveCardData = JSON.parse(decodeURIComponent(row.dataset.cardData)); } catch(e) {}
+                    }
+                }
+                if (msgEl._saveResolveCardData) {
+                    msgEl._saveResolveCardData.resolved = data.resolution;
+                    if (data.results) msgEl._saveResolveCardData.results = data.results;
+                    const cardContainer = msgEl.querySelector('.save-resolve-chat-card');
+                    if (cardContainer) {
+                        const newHtml = renderSaveResolveCardHtml(msgEl._saveResolveCardData, false, data.id);
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = newHtml;
+                        cardContainer.replaceWith(tempDiv.firstElementChild);
+                    }
+                }
+            }
+        });
+
+        vtt.socket.on('chat:mass_attack_resolved', (data) => {
+            if (!data || !data.id) return;
+            const msgEl = chatMessages.querySelector(`[data-msg-id="${data.id}"]`);
+            if (msgEl) {
+                if (!msgEl._massAttackCardData) {
+                    const row = msgEl.querySelector('.mass-attack-actions-row');
+                    if (row && row.dataset.cardData) {
+                        try { msgEl._massAttackCardData = JSON.parse(decodeURIComponent(row.dataset.cardData)); } catch(e) {}
+                    }
+                }
+                if (data.massAttackCard) {
+                    msgEl._massAttackCardData = data.massAttackCard;
+                } else if (msgEl._massAttackCardData) {
+                    msgEl._massAttackCardData.resolved = data.resolution || true;
+                    if (data.attacks) msgEl._massAttackCardData.attacks = data.attacks;
+                    if (data.summary) msgEl._massAttackCardData.summary = data.summary;
+                }
+                if (msgEl._massAttackCardData) {
+                    const cardContainer = msgEl.querySelector('.mass-attack-chat-card');
+                    if (cardContainer) {
+                        const newHtml = renderMassAttackCardHtml(msgEl._massAttackCardData, false, data.id);
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = newHtml;
+                        cardContainer.replaceWith(tempDiv.firstElementChild);
+                    }
+                }
+            }
+        });
+
         vtt.socket.on('initiative:updated', (data) => {
             if (data.initiative) {
                 if (!vtt.campaignState) vtt.campaignState = {};
@@ -382,6 +435,47 @@ export function initVttChat(vtt, chatHistory) {
                     if (window.VTT?.canvasEngine?.handleCardAction) {
                         window.VTT.canvasEngine.handleCardAction(cardData, action);
                     }
+                }
+                e.stopPropagation();
+                return;
+            }
+
+            // Save resolution chatcard buttons (GM only)
+            const saveResolveBtn = e.target.closest('.btn-save-resolve-action');
+            if (saveResolveBtn) {
+                if (vtt.role !== 'GM') return;
+                const msgEl = saveResolveBtn.closest('.chat-message');
+                let cardData = msgEl?._saveResolveCardData;
+                const rowEl = saveResolveBtn.closest('.save-resolve-actions-row');
+                const msgId = msgEl?.dataset?.msgId || rowEl?.dataset?.msgId;
+                if (!cardData && rowEl && rowEl.dataset.cardData) {
+                    try { cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData)); } catch(err) {}
+                }
+                const action = saveResolveBtn.dataset.action;
+                if (cardData && action && window.VTT?.canvasEngine?.resolveSaveFromChat) {
+                    saveResolveBtn.disabled = true;
+                    const sibling = rowEl?.querySelector(`.btn-save-resolve-action:not([data-action="${action}"])`);
+                    if (sibling) sibling.disabled = true;
+                    window.VTT.canvasEngine.resolveSaveFromChat(cardData, action === 'half', msgId);
+                }
+                e.stopPropagation();
+                return;
+            }
+
+            // Mass attack resolution process button (GM only)
+            const massAttackBtn = e.target.closest('.btn-mass-attack-process');
+            if (massAttackBtn) {
+                if (vtt.role !== 'GM') return;
+                const msgEl = massAttackBtn.closest('.chat-message');
+                let cardData = msgEl?._massAttackCardData;
+                const rowEl = massAttackBtn.closest('.mass-attack-actions-row');
+                const msgId = msgEl?.dataset?.msgId || rowEl?.dataset?.msgId;
+                if (!cardData && rowEl && rowEl.dataset.cardData) {
+                    try { cardData = JSON.parse(decodeURIComponent(rowEl.dataset.cardData)); } catch(err) {}
+                }
+                if (cardData && window.VTT?.canvasEngine?.processMassAttackFromChat) {
+                    massAttackBtn.disabled = true;
+                    window.VTT.canvasEngine.processMassAttackFromChat(cardData, msgId);
                 }
                 e.stopPropagation();
                 return;
@@ -852,11 +946,14 @@ export function initVttChat(vtt, chatHistory) {
             const labelText = dr.label && dr.label.trim() && dr.label.trim().toLowerCase() !== normalizedType.toLowerCase()
                 ? ` <span style="font-size:0.75rem; opacity:0.8; font-weight:normal; margin-left:4px;">(${dr.label.trim()})</span>`
                 : '';
+            const riderBadge = dr.saveRider
+                ? ` <span class="macro-row-rider-badge" style="font-size:0.68rem; font-weight:700; color:#ffd54f; background:rgba(255,213,79,0.15); border:1px solid rgba(255,213,79,0.3); padding:1px 5px; border-radius:3px; margin-left:4px;" title="Damage requires saving throw">Save Rider</span>`
+                : '';
             return `
                 <div class="macro-card-row">
                     <div class="macro-row-label">
                         <i class="${icon} macro-row-icon" style="color:${color};"></i>
-                        <span>${normalizedType}</span>${labelText}
+                        <span>${normalizedType}</span>${labelText}${riderBadge}
                     </div>
                     <div class="macro-row-right" style="display:flex; flex-direction:column; align-items:flex-end; gap:2px;">
                         <span class="macro-row-total" style="color:${color}; cursor:help;" data-tooltip="${tooltipText.replace(/"/g, '&quot;')}">${total}</span>
@@ -928,6 +1025,233 @@ export function initVttChat(vtt, chatHistory) {
                 </div>
                 <div class="macro-card-desc" style="font-size:0.9rem; color:var(--color-text-secondary);">
                     ${descHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderSaveResolveCardHtml(src, isHistorical = false, msgId = '') {
+        const isResolved = !!src.resolved;
+        const ability = (src.ability || 'DEX').toUpperCase();
+        const dc = src.dc || 10;
+        const results = src.results || [];
+
+        const rowsHtml = results.map(r => {
+            const badge = r.passed
+                ? `<span class="save-status-badge save-status-pass"><i class="fa-solid fa-check"></i> Succeeded</span>`
+                : `<span class="save-status-badge save-status-fail"><i class="fa-solid fa-xmark"></i> Failed</span>`;
+            
+            let dmgInfo = '';
+            if (isResolved && r.deductedHp !== undefined) {
+                dmgInfo = `<span class="save-token-damage" style="font-size:0.82rem; font-weight:700; color:${r.deductedHp > 0 ? '#ef5350' : '#81c784'}; margin-left:6px;">(${r.deductedHp > 0 ? `-${r.deductedHp} HP` : '0 DMG'})</span>`;
+            }
+
+            return `
+                <div class="save-resolve-row">
+                    <span class="save-token-name">${escapeHtml(r.tokenName || 'Token')}</span>
+                    <div class="save-token-stats">
+                        <span class="save-roll-breakdown">Roll: ${r.d20}${r.mod >= 0 ? '+' : ''}${r.mod} = <strong>${r.total}</strong></span>
+                        ${badge}
+                        ${dmgInfo}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        let footerHtml = '';
+        if (isResolved) {
+            const halfText = src.resolved.applyHalf ? 'Half Damage Applied on Save' : '0 Damage Applied on Save';
+            footerHtml = `
+                <div class="save-resolve-resolved-badge">
+                    <i class="fa-solid fa-circle-check"></i> Resolved: ${halfText}
+                </div>
+            `;
+        } else {
+            let encodedData = '';
+            try { encodedData = encodeURIComponent(JSON.stringify(src)); } catch(err) {}
+            footerHtml = `
+                <div class="save-resolve-prompt">Apply half damage to tokens that succeeded on the save?</div>
+                <div class="save-resolve-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
+                    <button type="button" class="btn-save-resolve-action btn-save-half" data-action="half" title="Apply half damage to successful saves, full damage to failures">
+                        <i class="fa-solid fa-shield-halved"></i> Yes (Half Damage)
+                    </button>
+                    <button type="button" class="btn-save-resolve-action btn-save-zero" data-action="zero" title="Apply 0 damage to successful saves, full damage to failures">
+                        <i class="fa-solid fa-ban"></i> No (0 Damage)
+                    </button>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="save-resolve-chat-card ${isResolved ? 'is-resolved' : ''}">
+                <div class="save-resolve-header">
+                    <div class="save-resolve-header-left">
+                        <i class="fa-solid fa-shield-halved save-resolve-icon"></i>
+                        <div>
+                            <span class="save-resolve-title">DC ${dc} ${ability} Saving Throw Resolution</span>
+                            <span class="save-resolve-subtitle">${results.length} Target Token${results.length === 1 ? '' : 's'}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="save-resolve-body">
+                    <div class="save-resolve-token-list scroll-styled">
+                        ${rowsHtml}
+                    </div>
+                    ${footerHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    function renderMassAttackCardHtml(mac, isHistorical = false, msgId = '') {
+        const isResolved = !!mac.resolved;
+        const attacks = mac.attacks || [];
+        const creatureName = mac.creatureName || 'Creature';
+        const abilityName = mac.abilityName || 'Attack';
+        const rollMode = mac.rollMode || 'normal';
+
+        let modeBadge = '';
+        if (rollMode === 'adv') {
+            modeBadge = `<span class="mass-attack-mode-badge mode-adv"><i class="fa-solid fa-angles-up"></i> Adv</span>`;
+        } else if (rollMode === 'dis') {
+            modeBadge = `<span class="mass-attack-mode-badge mode-dis"><i class="fa-solid fa-angles-down"></i> Dis</span>`;
+        }
+
+        // Damage type color map
+        const dmgColors = {
+            Fire: '#ff6b35', Cold: '#64b5f6', Lightning: '#ffd54f', Thunder: '#b39ddb',
+            Poison: '#81c784', Acid: '#aed581', Necrotic: '#9e9e9e', Radiant: '#fff176',
+            Force: '#ce93d8', Psychic: '#f48fb1', Slashing: '#ef9a9a', Piercing: '#ffcc80',
+            Bludgeoning: '#bcaaa4', Healing: '#a5d6a7', 'Temp HP': '#80cbc4'
+        };
+
+        let hasAnySaveRider = false;
+        let saveRiderText = '';
+
+        const rowsHtml = attacks.map((atk, idx) => {
+            const num = atk.index || (idx + 1);
+            let rollCol = '';
+
+            if (atk.atkRoll) {
+                const total = atk.atkRoll.total;
+                let critClass = '';
+                let critTag = '';
+                if (atk.atkRoll.isCritSuccess) {
+                    critClass = 'roll-crit-success';
+                    critTag = `<span style="font-size:0.75rem; color:#81c784; font-weight:bold; margin-left:4px;">(Crit!)</span>`;
+                } else if (atk.atkRoll.isCritFail) {
+                    critClass = 'roll-crit-fail';
+                    critTag = `<span style="font-size:0.75rem; color:#e57373; font-weight:bold; margin-left:4px;">(Miss!)</span>`;
+                }
+
+                const tooltip = atk.atkRoll.breakdownStr ? `${atk.atkRoll.formula} → ${atk.atkRoll.breakdownStr}` : atk.atkRoll.formula;
+                rollCol = `<span class="mass-attack-roll-total ${critClass}" style="cursor:help;" data-tooltip="${escapeHtml(tooltip || '')}">${total}</span>${critTag} <span style="font-size:0.75rem; color:#777;">to hit</span>`;
+            } else {
+                rollCol = `<span style="font-size:0.75rem; color:#888;">Damage Roll</span>`;
+            }
+
+            // Damage tags
+            const dmgTags = (atk.dmgRolls || []).map(d => {
+                const type = d.type || 'Damage';
+                const color = dmgColors[type] || '#ef9a9a';
+                const total = d.roll?.total ?? 0;
+                const tooltip = d.roll?.breakdownStr ? `${d.formula} → ${d.roll.breakdownStr}` : d.formula;
+                return `<span class="mass-attack-dmg-tag" style="cursor:help; border-left: 2px solid ${color};" data-tooltip="${escapeHtml(tooltip || '')}"><strong style="color:${color};">${total}</strong> ${type}</span>`;
+            }).join(' ');
+
+            if (atk.saveInfo && atk.saveInfo.dc) {
+                hasAnySaveRider = true;
+                const ab = atk.saveInfo.ability || '';
+                saveRiderText = `DC ${atk.saveInfo.dc} ${ab} Save required on hit`;
+            }
+
+            // Resolved status columns
+            let resCol = '';
+            if (isResolved && atk.resolution) {
+                const hit = atk.resolution.hit;
+                const tokenName = atk.resolution.tokenName || 'Target';
+                const dmgDealt = atk.resolution.damageDealt ?? 0;
+
+                const hitBadge = hit
+                    ? `<span class="mass-attack-hit-badge hit"><i class="fa-solid fa-check"></i> Hit</span>`
+                    : `<span class="mass-attack-hit-badge miss"><i class="fa-solid fa-xmark"></i> Miss</span>`;
+
+                const dmgText = hit
+                    ? `<span class="mass-attack-token-damage" style="color:#ef5350;">-${dmgDealt} HP</span>`
+                    : `<span class="mass-attack-token-damage" style="color:#888;">0 DMG</span>`;
+
+                resCol = `
+                    <div class="mass-attack-row-right">
+                        <span class="mass-attack-token-name" title="${escapeHtml(tokenName)}">${escapeHtml(tokenName)}</span>
+                        ${hitBadge}
+                        ${dmgText}
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="mass-attack-row">
+                    <div class="mass-attack-row-left">
+                        <span class="mass-attack-idx">#${num}</span>
+                        <div>${rollCol}</div>
+                        <div style="display:flex; gap:4px; flex-wrap:wrap; margin-left:6px;">${dmgTags}</div>
+                    </div>
+                    ${resCol}
+                </div>
+            `;
+        }).join('');
+
+        let footerHtml = '';
+        if (isResolved) {
+            const summary = mac.summary || {};
+            const hits = summary.hitsCount ?? attacks.filter(a => a.resolution?.hit).length;
+            const totalDmg = summary.totalDamageDealt ?? attacks.reduce((sum, a) => sum + (a.resolution?.damageDealt || 0), 0);
+
+            footerHtml = `
+                <div class="mass-attack-resolved-badge">
+                    <i class="fa-solid fa-circle-check"></i> Resolved: ${hits}/${attacks.length} Attacks Hit (${totalDmg} Total Damage)
+                </div>
+            `;
+
+            if (hasAnySaveRider && (summary.saveRidersTriggered || summary.saveRidersTriggered === undefined)) {
+                footerHtml += `
+                    <div class="mass-attack-save-rider-notice">
+                        <i class="fa-solid fa-shield-halved"></i> ${escapeHtml(saveRiderText || 'Saving throw rider triggered for hit target(s)')}
+                    </div>
+                `;
+            }
+        } else {
+            let encodedData = '';
+            try { encodedData = encodeURIComponent(JSON.stringify(mac)); } catch(err) {}
+            footerHtml = `
+                <div class="mass-attack-prompt">Select target token(s) on canvas and click Process</div>
+                <div class="mass-attack-actions-row" data-card-data="${encodedData}" data-msg-id="${msgId}">
+                    <button type="button" class="btn-mass-attack-process" title="Evaluate target AC and apply damage on hit">
+                        <i class="fa-solid fa-play"></i> Process
+                    </button>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="mass-attack-chat-card ${isResolved ? 'is-resolved' : ''}">
+                <div class="mass-attack-header">
+                    <div class="mass-attack-header-left">
+                        <i class="fa-solid fa-crosshairs mass-attack-icon"></i>
+                        <div>
+                            <span class="mass-attack-title">${escapeHtml(creatureName)}: ${escapeHtml(abilityName)}</span>
+                            <span class="mass-attack-subtitle">
+                                <span>${attacks.length} Attack Roll${attacks.length === 1 ? '' : 's'}</span>
+                                ${modeBadge}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mass-attack-body">
+                    <div class="mass-attack-roll-list scroll-styled">
+                        ${rowsHtml}
+                    </div>
+                    ${footerHtml}
                 </div>
             </div>
         `;
@@ -1081,6 +1405,16 @@ export function initVttChat(vtt, chatHistory) {
         // Stylized item card for pinging inventory items
         else if (msg.itemCard) {
             bodyText = renderItemCardHtml(msg.itemCard);
+        }
+        // Saving throw resolution card (GM only)
+        else if (msg.saveResolveCard) {
+            messageDiv._saveResolveCardData = msg.saveResolveCard;
+            bodyText = renderSaveResolveCardHtml(msg.saveResolveCard, isHistorical, msg.id);
+        }
+        // Mass attack summary card (GM only)
+        else if (msg.massAttackCard) {
+            messageDiv._massAttackCardData = msg.massAttackCard;
+            bodyText = renderMassAttackCardHtml(msg.massAttackCard, isHistorical, msg.id);
         }
 
         messageDiv.innerHTML = headerText + bodyText;

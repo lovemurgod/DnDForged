@@ -94,7 +94,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_undead_fortitude_ekbw",
+        "id": "act_undead_fortitude_hscp",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the zombie to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, the zombie drops to 1 hit point instead.</p>",
@@ -114,7 +114,7 @@
         }
       },
       {
-        "id": "act_ash_puff_wlx3",
+        "id": "act_ash_puff_n90m",
         "name": "Ash Puff",
         "actionType": "trait",
         "descriptionHtml": "<p>The first time the zombie takes damage, any living creature within 5 feet of the zombie must succeed on a DC 10 Constitution saving throw or gain disadvantage on attack rolls, saving throws, and ability checks for 1 minute. A creature can repeat the saving throw at the end of each of its turns, ending the effect on it early with a successful save.</p>",
@@ -139,7 +139,7 @@
     ],
     "actions": [
       {
-        "id": "act_slam_39do",
+        "id": "act_slam_w2cz",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 4 (1d6 + 1) bludgeoning damage.</p>",
@@ -157,7 +157,8 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -476,7 +477,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_quarterstaff_1xlj",
+        "id": "act_quarterstaff_yi50",
         "name": "Quarterstaff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 3 (1d8 - 1) bludgeoning damage.</p>",
@@ -494,7 +495,8 @@
           "damages": [
             {
               "formula": "1d8 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -614,7 +616,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_niv2",
+        "id": "act_club_52uu",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -632,7 +634,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -778,7 +781,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_l11v",
+        "id": "act_incorporeal_movement_ixae",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The wraith can move through an object or another creature, but can't stop there.</p>",
@@ -798,7 +801,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_zins",
+        "id": "act_sunlight_sensitivity_nkau",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the wraith has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight.</p>",
@@ -820,7 +823,7 @@
     ],
     "actions": [
       {
-        "id": "act_life_drain_ytfs",
+        "id": "act_life_drain_nlv6",
         "name": "Life Drain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one creature. Hit: 16 (3d8 + 3) necrotic damage, and the target must succeed on a DC 13 Constitution saving throw or its hit point maximum is reduced by an amount equal to the damage taken. If this attack reduces the target's hit point maximum to 0, the target dies. This reduction to the target's hit point maximum lasts until the target finishes a long rest.</p>",
@@ -841,7 +844,8 @@
           "damages": [
             {
               "formula": "3d8 + 3",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1277,7 +1281,7 @@
     ],
     "traits": [
       {
-        "id": "act_special_equipment_f9xf",
+        "id": "act_special_equipment_qk29",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has a spider staff.</p>",
@@ -1297,7 +1301,7 @@
         }
       },
       {
-        "id": "act_fey_ancestry_x2qp",
+        "id": "act_fey_ancestry_tnof",
         "name": "Fey Ancestry",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has advantage on saving throws against being charmed, and magic can't put him to sleep.</p>",
@@ -1317,7 +1321,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_ssox",
+        "id": "act_sunlight_sensitivity_neqs",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>Nezznar has disadvantage on attack rolls when he or his target is in sunlight.</p>",
@@ -1339,7 +1343,7 @@
     ],
     "actions": [
       {
-        "id": "act_spider_staff_6n4e",
+        "id": "act_spider_staff_y8kl",
         "name": "Spider Staff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 2 (1d6 - 1) bludgeoning damage plus 3 (1d6) poison damage.</p>",
@@ -1357,11 +1361,13 @@
           "damages": [
             {
               "formula": "1d6 - 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1481,7 +1487,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_club_zanf",
+        "id": "act_club_6d15",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +2 to hit, reach 5 ft., one target. Hit: 2 (1d4) bludgeoning damage.</p>",
@@ -1499,7 +1505,8 @@
           "damages": [
             {
               "formula": "1d4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1623,7 +1630,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_93d3",
+        "id": "act_multiattack_6ab9",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The ruffian makes two melee attacks.</p>",
@@ -1643,7 +1650,7 @@
         }
       },
       {
-        "id": "act_shortsword_x4vu",
+        "id": "act_shortsword_x8vx",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -1661,7 +1668,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1791,7 +1799,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_b0lf",
+        "id": "act_multiattack_ujwq",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Sildar makes two melee attacks.</p>",
@@ -1811,7 +1819,7 @@
         }
       },
       {
-        "id": "act_longsword_mima",
+        "id": "act_longsword_yij7",
         "name": "Longsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 5 (1d8 + 1) slashing damage.</p>",
@@ -1829,14 +1837,15 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heavy_crossbow_yymp",
+        "id": "act_heavy_crossbow_zh18",
         "name": "Heavy Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +2 to hit, range 100/400 ft., one target. Hit: 5 (1d10) piercing damage.</p>",
@@ -1854,7 +1863,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1864,7 +1874,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_cqw4",
+        "id": "act_parry_zdcp",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>When an attacker hits Sildar with a melee attack and Sildar can see the attacker, he can roll 1d6 and add the number rolled to his AC against the triggering attack, provided that he's wielding a melee weapon.</p>",
@@ -2017,7 +2027,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_5m36",
+        "id": "act_amphibious_mhgf",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>Venomfang can breathe air and water.</p>",
@@ -2039,7 +2049,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_s6lr",
+        "id": "act_multiattack_mzm5",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Venomfang makes three attacks: one with its bite and two with its claws.</p>",
@@ -2059,7 +2069,7 @@
         }
       },
       {
-        "id": "act_bite_ayki",
+        "id": "act_bite_o0tq",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 15 (2d10 + 4) piercing damage plus 7 (2d6) poison damage.</p>",
@@ -2077,18 +2087,20 @@
           "damages": [
             {
               "formula": "2d10 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_plew",
+        "id": "act_claw_i902",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) slashing damage.</p>",
@@ -2106,14 +2118,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_poison_breath__recharge_5__zmds",
+        "id": "act_poison_breath__recharge_5__hsdj",
         "name": "Poison Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Venomfang exhales poisonous gas in a 30-foot cone. Each creature in that area must make a DC 14 Constitution saving throw, taking 42 (12d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -2134,7 +2147,8 @@
           "damages": [
             {
               "formula": "12d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": "5"

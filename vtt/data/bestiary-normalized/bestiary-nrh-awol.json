@@ -90,7 +90,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_spider_climb_041v",
+        "id": "act_spider_climb_c4be",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>Szikzith can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -110,7 +110,7 @@
         }
       },
       {
-        "id": "act_web_sense_cgp2",
+        "id": "act_web_sense_ch4y",
         "name": "Web Sense",
         "actionType": "trait",
         "descriptionHtml": "<p>While in contact with a web, Szikzith knows the exact location of any other creature in contact with the same web.</p>",
@@ -130,7 +130,7 @@
         }
       },
       {
-        "id": "act_web_walker_54ma",
+        "id": "act_web_walker_d0k1",
         "name": "Web Walker",
         "actionType": "trait",
         "descriptionHtml": "<p>Szikzith ignores movement restrictions caused by webbing.</p>",
@@ -152,7 +152,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_jic2",
+        "id": "act_bite_ob53",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one creature. Hit: 4 (1d6 + 1) piercing damage, and the target must make a DC 11 Constitution saving throw, taking 7 (2d6) poison damage on a failed save, or half as much damage on a successful one. If the poison damage reduces the target to 0 hit points, the target is stable but poisoned for 1 hour, even after regaining hit points, and is paralyzed while poisoned in this way.</p>",
@@ -173,11 +173,13 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null

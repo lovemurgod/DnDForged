@@ -170,12 +170,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (mobileSpawnBtn) {
                     mobileSpawnBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        if (window.VTT?.spawnAssetAtCenter) {
-                            window.VTT.spawnAssetAtCenter({
-                                name: item.name,
-                                url: item.url,
-                                assetType: isVideo ? 'video' : 'image'
+                        const assetPayload = {
+                            name: item.name,
+                            url: item.url,
+                            assetType: isVideo ? 'video' : 'image'
+                        };
+                        if (window.VTT?.mobileAdapter?.startTapToPlaceMode && window.VTT?.mobileAdapter?.isMobileViewport?.()) {
+                            window.VTT.mobileAdapter.startTapToPlaceMode({
+                                type: 'asset',
+                                title: item.name,
+                                asset: assetPayload
                             });
+                        } else if (window.VTT?.spawnAssetAtCenter) {
+                            window.VTT.spawnAssetAtCenter(assetPayload);
                         }
                     });
                 }

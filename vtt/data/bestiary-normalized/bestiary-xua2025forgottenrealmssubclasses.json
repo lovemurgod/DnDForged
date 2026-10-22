@@ -86,7 +86,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_cf42",
+        "id": "act_amphibious_vpop",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The dragon can breathe both air and water.</p>",
@@ -106,7 +106,7 @@
         }
       },
       {
-        "id": "act_stalwart_bond_n0ud",
+        "id": "act_stalwart_bond_j1mb",
         "name": "Stalwart Bond",
         "actionType": "trait",
         "descriptionHtml": "<p>Add half your Proficiency (round down) to any ability check or saving throw the dragon makes.</p>",
@@ -128,7 +128,7 @@
     ],
     "actions": [
       {
-        "id": "act_rend_w2ab",
+        "id": "act_rend_82l3",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3 plus your Intelligence modifier, reach 5 ft. Hit: 1d6 plus your Intelligence modifier Force damage.</p>",
@@ -146,14 +146,15 @@
           "damages": [
             {
               "formula": "1d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_gravity_breath__2_day__dp6b",
+        "id": "act_gravity_breath__2_day__bmjo",
         "name": "Gravity Breath (2/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 8 plus your Proficiency plus your Intelligence modifier, each creature in a 15-foot Cone [Area of Effect]. {@actSaveFail} The target is either pulled up to 15 feet straight toward the dragon or pushed 15 feet straight away from the dragon (your choice).</p>",

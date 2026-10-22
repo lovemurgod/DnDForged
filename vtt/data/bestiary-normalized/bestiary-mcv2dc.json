@@ -107,7 +107,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ghastly_visions_j1sh",
+        "id": "act_ghastly_visions_j9sh",
         "name": "Ghastly Visions",
         "actionType": "trait",
         "descriptionHtml": "<p>Each creature that starts its turn within 30 feet of the dream eater must make a DC 16 Wisdom saving throw. On a failed save, the creature is frightened of the dream eater until the start of the creature's next turn. If a creature's saving throw is successful, the creature is immune to this dream eater's Ghastly Visions trait for the next 24 hours.</p>",
@@ -130,7 +130,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_e5to",
+        "id": "act_incorporeal_movement_xk7k",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The dream eater can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -148,14 +148,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_7hgv",
+        "id": "act_magic_resistance_9oqr",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The dream eater has advantage on saving throws against spells and other magical effects.</p>",
@@ -177,7 +178,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_6eqc",
+        "id": "act_multiattack_5s33",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dream eater makes two Ensnaring Shriek attacks.</p>",
@@ -197,7 +198,7 @@
         }
       },
       {
-        "id": "act_ensnaring_shriek_p4uq",
+        "id": "act_ensnaring_shriek_3bn5",
         "name": "Ensnaring Shriek",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +8 to hit, reach 15 ft. or range 60 ft., one target. Hit: 12 (2d6 + 5) psychic damage, and if the target is a Medium or smaller creature, the target must succeed on a DC 16 Charisma saving throw or be pulled up to 15 feet toward the dream eater.</p>",
@@ -218,7 +219,8 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -227,7 +229,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_engulfing_nightmare_oqgb",
+        "id": "act_engulfing_nightmare_k1t8",
         "name": "Engulfing Nightmare",
         "actionType": "bonus",
         "descriptionHtml": "<p>The dream eater targets one creature within 5 feet of itself. The target must succeed on a DC 16 Wisdom saving throw or be engulfed by the dream eater, as the dream eater envelops the creature in a miasma of its worst fears.</p><p>When the dream eater engulfs a target, the dream eater enters its space, and the target immediately takes 10 (3d6) psychic damage. An engulfed target is restrained and blinded, and it takes an additional 10 (3d6) psychic damage at the start of each of the dream eater's turns. When the dream eater moves, the engulfed target moves with it.</p><p>The dream eater can have only one target engulfed at a time. An engulfed target escapes at the start of its turn by making a DC 16 Wisdom saving throw. On a successful save, the target escapes; the target is no longer engulfed, and it enters a space of its choice within 5 feet of the dream eater. A creature within 15 feet of the dream eater also can use its action to attempt to free an engulfed target. Doing so requires the creature to use its action to make a DC 16 Charisma (Persuasion) check to convince the engulfed target the nightmare isn't real, with the target escaping on a success. The creature making the check takes 10 (3d6) psychic damage, regardless of the check's success or failure, as its mind brushes against the nightmare.</p>",
@@ -250,15 +252,18 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             },
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             },
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -398,7 +403,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_calescent_aura_bmke",
+        "id": "act_calescent_aura_z3w4",
         "name": "Calescent Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of Ember's turn, Ember can force any number of creatures of his choice within 10 feet of himself to make a DC 22 Constitution saving throw. On a failed save, a creature takes 7 (2d6) fire damage and is frightened of Ember until the start of its next turn.</p>",
@@ -419,14 +424,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_legendary_resistance__5_day__edgp",
+        "id": "act_legendary_resistance__5_day__njls",
         "name": "Legendary Resistance (5/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Ember fails a saving throw, he can choose to succeed instead.</p>",
@@ -446,7 +452,7 @@
         }
       },
       {
-        "id": "act_special_equipment_6vc7",
+        "id": "act_special_equipment_vqc6",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>In battle, Ember dons magical plate armor custom-forged for his use. While wearing the armor, Ember adds his Charisma modifier to his weapon damage rolls (included in the attack descriptions), and his AC can't be lower than 20.</p>",
@@ -468,7 +474,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8um6",
+        "id": "act_multiattack_jg23",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ember makes one Bite attack and two Claw attacks.</p>",
@@ -488,7 +494,7 @@
         }
       },
       {
-        "id": "act_bite_dg42",
+        "id": "act_bite_z07t",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +16 to hit, reach 10 ft., one target. Hit: 26 (2d10 + 15) piercing damage plus 13 (2d6 + 6) fire damage.</p>",
@@ -506,18 +512,20 @@
           "damages": [
             {
               "formula": "2d10 + 15",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6 + 6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_claw_vc3d",
+        "id": "act_claw_n89w",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +16 to hit, reach 5 ft., one target. Hit: 22 (2d6 + 15) slashing damage.</p>",
@@ -535,14 +543,15 @@
           "damages": [
             {
               "formula": "2d6 + 15",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_firestorm_breath__recharge_5__h74r",
+        "id": "act_firestorm_breath__recharge_5__3dyd",
         "name": "Firestorm Breath (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Ember exhales roiling flames and ash in a 90-foot cone. Each creature in that area must make a DC 22 Dexterity saving throw. On a failed save, a creature takes 56 (16d6) fire damage and is pushed up to 30 feet away from Ember and knocked prone. On a successful save, a creature takes half as much damage with no other effects. If a creature is reduced to 0 hit points by this effect, the creature immediately dies, and its body is reduced to ash.</p>",
@@ -563,7 +572,8 @@
           "damages": [
             {
               "formula": "16d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -572,7 +582,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_alter_shape_g1lq",
+        "id": "act_alter_shape_3mgq",
         "name": "Alter Shape",
         "actionType": "bonus",
         "descriptionHtml": "<p>Ember magically transforms into a vulture or a mage and retains his alignment, damage immunities, hit points, and Hit Dice, as well as his Intelligence, Wisdom, and Charisma scores. This transformation ends if Ember is reduced to 0 hit points or if he uses another bonus action to end it.</p>",
@@ -598,7 +608,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_pursuit_y4x4",
+          "id": "act_pursuit_3xr8",
           "name": "Pursuit",
           "actionType": "legendary",
           "descriptionHtml": "<p>Ember moves up to 40 feet in a straight line toward one creature he can see. This movement ignores opportunity attacks.</p>",
@@ -618,7 +628,7 @@
           }
         },
         {
-          "id": "act_searing_bite__costs_2_actions__n9jk",
+          "id": "act_searing_bite__costs_2_actions__ngdo",
           "name": "Searing Bite (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Ember makes one Bite attack. If the attack hits, it deals an additional 7 (2d6) fire damage.</p>",
@@ -636,7 +646,8 @@
             "damages": [
               {
                 "formula": "2d6",
-                "type": "Fire"
+                "type": "Fire",
+                "saveRider": false
               }
             ],
             "recharge": null
@@ -946,7 +957,7 @@
     ],
     "traits": [
       {
-        "id": "act_legendary_resistance__2_day__fe5x",
+        "id": "act_legendary_resistance__2_day__v0mn",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the Forest Master fails a saving throw, he can choose to succeed instead.</p>",
@@ -966,7 +977,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_ggvu",
+        "id": "act_magic_resistance_f29c",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The Forest Master has advantage on saving throws against spells and other magical effects.</p>",
@@ -986,7 +997,7 @@
         }
       },
       {
-        "id": "act_master_of_beasts_6zi5",
+        "id": "act_master_of_beasts_iyax",
         "name": "Master of Beasts",
         "actionType": "trait",
         "descriptionHtml": "<p>The Forest Master can comprehend and communicate with any Beast, even if the Beast knows no languages.</p>",
@@ -1008,7 +1019,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_zmec",
+        "id": "act_multiattack_ahim",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The Forest Master makes either two Hooves attacks, two Moon Bolt attacks, or one of each.</p>",
@@ -1028,7 +1039,7 @@
         }
       },
       {
-        "id": "act_hooves_kcfm",
+        "id": "act_hooves_j0ol",
         "name": "Hooves",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage.</p>",
@@ -1046,14 +1057,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_moon_bolt_l87a",
+        "id": "act_moon_bolt_6p3i",
         "name": "Moon Bolt",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Spell Attack: +7 to hit, range 60 ft., one target. Hit: 11 (2d6 + 4) radiant damage.</p>",
@@ -1071,7 +1083,8 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1080,7 +1093,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_erupting_briars__recharge_4__vf1b",
+        "id": "act_erupting_briars__recharge_4__cfxw",
         "name": "Erupting Briars (Recharge 4)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The Forest Master touches his horn to the earth and causes a 5-foot-tall wall of briars to erupt in a 90-foot line that is 10 feet wide. When the wall appears, each creature in its area is pushed into the nearest unoccupied space adjacent to the wall and must make a DC 15 Dexterity saving throw, taking 27 (6d8) piercing damage on a failed save or half as much damage on a successful one.</p><p>The wall of briars lasts until the start of the Forest Master's next turn. The wall blocks line of sight and counts as difficult terrain for all creatures except the Forest Master. The first time a creature enters the wall's area on a turn, that creature must succeed on a DC 15 Dexterity saving throw or take 13 (3d8) piercing damage.</p>",
@@ -1102,11 +1115,13 @@
           "damages": [
             {
               "formula": "6d8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             },
             {
               "formula": "3d8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": "4"
@@ -1115,7 +1130,7 @@
     ],
     "reactions": [
       {
-        "id": "act_misty_escape_6zzm",
+        "id": "act_misty_escape_h4t7",
         "name": "Misty Escape",
         "actionType": "reaction",
         "descriptionHtml": "<p>If the Forest Master takes damage from a melee attack, he, along with any equipment he is wearing or carrying, teleports to an unoccupied space within 30 feet that he can see.</p>",
@@ -1363,7 +1378,7 @@
     ],
     "traits": [
       {
-        "id": "act_duty_bound_adg0",
+        "id": "act_duty_bound_28xg",
         "name": "Duty-Bound",
         "actionType": "trait",
         "descriptionHtml": "<p>The foresworn is bound to enacting a singular duty it pledged itself to in life. While this duty is incomplete, whenever the foresworn is destroyed, it re-forms at its previous location after 3 (1d6) days, with all its hit points restored.</p>",
@@ -1383,7 +1398,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_csrs",
+        "id": "act_incorporeal_movement_oc6v",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The foresworn can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -1401,14 +1416,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_unusual_nature_kxm5",
+        "id": "act_unusual_nature_0yv7",
         "name": "Unusual Nature",
         "actionType": "trait",
         "descriptionHtml": "<p>The foresworn doesn't require air, food, drink, or sleep.</p>",
@@ -1430,7 +1446,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_3vl6",
+        "id": "act_multiattack_6mpy",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The foresworn makes three Spectral Polearm attacks.</p>",
@@ -1450,7 +1466,7 @@
         }
       },
       {
-        "id": "act_spectral_polearm_l5k0",
+        "id": "act_spectral_polearm_bago",
         "name": "Spectral Polearm",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 5 ft., one target. Hit: 12 (2d6 + 5) force damage.</p>",
@@ -1468,7 +1484,8 @@
           "damages": [
             {
               "formula": "2d6 + 5",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1477,7 +1494,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_phantasmic_battalion__recharge_5__iawt",
+        "id": "act_phantasmic_battalion__recharge_5__h0fq",
         "name": "Phantasmic Battalion (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The foresworn summons a battalion of ghostly soldiers to its aid. The ghostly soldiers fill a 10-foot-cube centered on the foresworn, move with the foresworn when the foresworn moves, and last until the start of the foresworn's next turn. While the ghostly soldiers are present, the area they occupy is considered difficult terrain for all creatures except the foresworn, and the foresworn's reach for melee weapon attacks increases by 10 feet.</p>",
@@ -1625,7 +1642,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_rdig",
+        "id": "act_multiattack_nrxl",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The seeker uses Augment Physicality, if available, and makes two Crystal Blade attacks.</p>",
@@ -1645,7 +1662,7 @@
         }
       },
       {
-        "id": "act_crystal_blade_w39v",
+        "id": "act_crystal_blade_jfro",
         "name": "Crystal Blade",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) force damage, plus 7 (2d6) force damage if the seeker is Large.</p>",
@@ -1663,18 +1680,20 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_augment_physicality__1_day__r9dd",
+        "id": "act_augment_physicality__1_day__q7t1",
         "name": "Augment Physicality (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>For 1 minute, the seeker magically heightens its physical ability and increases in size, along with anything it is wearing or carrying. While augmented, the seeker is Large, and makes Strength and Dexterity saving throws with advantage. If the seeker lacks the room to become Large, it attains the maximum size possible in the space available.</p>",
@@ -1694,7 +1713,7 @@
         }
       },
       {
-        "id": "act_change_shape__1_day__9hqy",
+        "id": "act_change_shape__1_day__ivlm",
         "name": "Change Shape (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The seeker magically transforms to look and feel like a Medium Humanoid it has seen. Any equipment the seeker is wearing or carrying isn't transformed, and the seeker's statistics don't change. The seeker reverts to its true form if the seeker is reduced to 0 hit points or if the seeker uses an action to end the transformation.</p>",
@@ -1716,7 +1735,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_veil_walk__recharge_4__obwb",
+        "id": "act_veil_walk__recharge_4__ojat",
         "name": "Veil Walk (Recharge 4)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The seeker, along with any equipment it is wearing or carrying, turns invisible and teleports to an unoccupied space it can see within 30 feet of itself. The seeker remains invisible until the start of its next turn or until immediately after the seeker makes an attack roll, whichever comes first.</p>",
@@ -2033,7 +2052,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_8tdw",
+        "id": "act_multiattack_dtme",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The veil keeper uses Augment Physicality, if available, and makes two Mirage Flare attacks.</p>",
@@ -2053,7 +2072,7 @@
         }
       },
       {
-        "id": "act_mirage_flare_yobj",
+        "id": "act_mirage_flare_mvbu",
         "name": "Mirage Flare",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +6 to hit, reach 5 ft. or range 60 ft., one target. Hit: 11 (2d6 + 4) radiant damage, and the target must succeed on a DC 14 Wisdom saving throw or be charmed by the veil keeper until the start of the veil keeper's next turn. While charmed in this way, a creature is incapacitated as it is beset by hypnotic, illusory visions.</p>",
@@ -2074,14 +2093,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_augment_physicality__1_day__q940",
+        "id": "act_augment_physicality__1_day__7d9v",
         "name": "Augment Physicality (1/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>For 1 minute, the veil keeper magically obscures it location, heightens its physical ability, and increases in size, along with anything it is wearing or carrying. While the veil keeper is augmented, attack rolls against it have disadvantage, it is Large, and it makes Strength and Dexterity saving throws with advantage. If the veil keeper lacks the room to become Large, it attains the maximum size possible in the space available. These augmentations end if the veil keeper is incapacitated.</p>",
@@ -2101,7 +2121,7 @@
         }
       },
       {
-        "id": "act_change_shape__3_day__cp9v",
+        "id": "act_change_shape__3_day__19hd",
         "name": "Change Shape (3/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The veil keeper magically transforms to look and feel like a Medium Humanoid it has seen. Any equipment the veil keeper is wearing or carrying isn't transformed, and the veil keeper's statistics don't change. The veil keeper reverts to its true form if the veil keeper is reduced to 0 hit points or if the veil keeper uses an action to end the transformation.</p>",
@@ -2124,7 +2144,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_obscuring_mist_rrix",
+        "id": "act_obscuring_mist_8sph",
         "name": "Obscuring Mist",
         "actionType": "reaction",
         "descriptionHtml": "<p>If a creature that the veil keeper can see within 30 feet of itself is targeted by an attack, the veil keeper surrounds the creature with illusory mist, granting the creature Cover until the start of the veil keeper's next turn.</p>",
@@ -2272,7 +2292,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_always_thinking_ahead_jk7f",
+        "id": "act_always_thinking_ahead_cdkx",
         "name": "Always Thinking Ahead",
         "actionType": "trait",
         "descriptionHtml": "<p>The inventor has advantage on initiative rolls.</p>",
@@ -2294,7 +2314,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_82gp",
+        "id": "act_multiattack_0y80",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The inventor makes two Flying Fangtrap attacks. It can replace one of these attacks with Thunderscream Gadget if it's available.</p>",
@@ -2314,7 +2334,7 @@
         }
       },
       {
-        "id": "act_flying_fangtrap_gw71",
+        "id": "act_flying_fangtrap_77hh",
         "name": "Flying Fangtrap",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 60 ft., one target. Hit: 8 (1d10 + 3) piercing damage, and the creature must succeed on a DC 14 Dexterity saving throw or have its speed reduced to 0 until the start of the inventor's next turn.</p>",
@@ -2335,14 +2355,15 @@
           "damages": [
             {
               "formula": "1d10 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_thunderscream_gadget__recharge_5__4lma",
+        "id": "act_thunderscream_gadget__recharge_5__quwv",
         "name": "Thunderscream Gadget (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The inventor produces a gadget that emits a screeching wave of sound in a 30-foot cone originating from the inventor. Each creature in that area must make a DC 14 Constitution saving throw, taking 10 (3d6) thunder damage on a failed save or half as much damage on a successful one.</p>",
@@ -2363,7 +2384,8 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -2373,7 +2395,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_flash_powder_9j6a",
+        "id": "act_flash_powder_1k94",
         "name": "Flash Powder",
         "actionType": "reaction",
         "descriptionHtml": "<p>If the inventor is damaged by a creature it can see within 15 feet of itself, the inventor retaliates by flinging brilliantly explosive powder at the creature. The creature must succeed on a DC 14 Dexterity saving throw or be blinded until the end of its next turn.</p>",
@@ -2526,7 +2548,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_always_thinking_ahead_dqff",
+        "id": "act_always_thinking_ahead_rz0q",
         "name": "Always Thinking Ahead",
         "actionType": "trait",
         "descriptionHtml": "<p>The mastermind has advantage on initiative rolls.</p>",
@@ -2546,7 +2568,7 @@
         }
       },
       {
-        "id": "act_spider_climb_e99w",
+        "id": "act_spider_climb_tcg3",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The mastermind can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check. This trait doesn't function if the mastermind is grappling creatures in both of its clockwork claws.</p>",
@@ -2568,7 +2590,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8iwk",
+        "id": "act_multiattack_diky",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The mastermind makes two Clockwork Claw attacks. The mastermind can replace one of these attacks with Generate Gadget if it's available.</p>",
@@ -2588,7 +2610,7 @@
         }
       },
       {
-        "id": "act_clockwork_claw_j8qh",
+        "id": "act_clockwork_claw_v6jl",
         "name": "Clockwork Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 20 ft., one target. Hit: 11 (2d6 + 4) piercing damage, and if the target is a Medium or smaller creature, the target is grappled (escape DC 15). Until this grapple ends, the target takes 10 (3d6) piercing damage at the start of each of the mastermind's turns. The mastermind has two claws, each of which can grapple only one target.</p>",
@@ -2609,18 +2631,20 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_generate_gadget__recharge_5__l1v2",
+        "id": "act_generate_gadget__recharge_5__zubn",
         "name": "Generate Gadget (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The mastermind quickly assembles a clockwork gadget, producing one of the following effects (the mastermind's choice):</p>",
@@ -2640,7 +2664,7 @@
         }
       },
       {
-        "id": "act_chattergrab_7l9w",
+        "id": "act_chattergrab_727n",
         "name": "Chattergrab",
         "actionType": "action",
         "descriptionHtml": "<p>Parts of this gadget look like gnashing metal teeth. This gadget hurtles toward a creature the mastermind can see within 60 feet of itself. The creature must succeed on a DC 16 Dexterity saving throw or take 31 (7d8) piercing damage and be incapacitated until the start of the mastermind's next turn.</p>",
@@ -2661,14 +2685,15 @@
           "damages": [
             {
               "formula": "7d8",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_phasmoball_ger0",
+        "id": "act_phasmoball_qkwh",
         "name": "Phasmoball",
         "actionType": "action",
         "descriptionHtml": "<p>The mastermind launches this gadget to a point the mastermind can see within 30 feet of itself, where the gadget unleashes a cloud of mind-warping gases in a 10-foot-radius sphere. Each creature within the sphere must succeed on a DC 16 Wisdom saving throw or take 11 (2d10) psychic damage and be frightened of the mastermind until the start of the mastermind's next turn.</p>",
@@ -2689,14 +2714,15 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_thunderscream_fi1y",
+        "id": "act_thunderscream_akkp",
         "name": "Thunderscream",
         "actionType": "action",
         "descriptionHtml": "<p>This gadget emits a screeching wave of sound in a 30-foot cone originating from the mastermind. Each creature in that area must make a DC 16 Constitution saving throw, taking 21 (6d6) thunder damage on a failed save or half as much damage on a successful one.</p>",
@@ -2717,7 +2743,8 @@
           "damages": [
             {
               "formula": "6d6",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -2853,7 +2880,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_hold_breath_vvtd",
+        "id": "act_hold_breath_q6k2",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The hunter can hold its breath for up to 10 minutes.</p>",
@@ -2873,7 +2900,7 @@
         }
       },
       {
-        "id": "act_pack_tactics_eyaq",
+        "id": "act_pack_tactics_lmqc",
         "name": "Pack Tactics",
         "actionType": "trait",
         "descriptionHtml": "<p>The hunter has advantage on an attack roll against a creature if at least one of the hunter's allies is within 5 feet of the creature and the ally isn't incapacitated.</p>",
@@ -2895,7 +2922,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_kib1",
+        "id": "act_multiattack_6lcf",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The hunter makes one Bone Harpoon attack and one Tusk attack.</p>",
@@ -2915,7 +2942,7 @@
         }
       },
       {
-        "id": "act_bone_harpoon_q062",
+        "id": "act_bone_harpoon_n5ot",
         "name": "Bone Harpoon",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +6 to hit, reach 10 ft. or range 20/60 ft., one target. Hit: 8 (1d8 + 4) piercing damage. Hit or Miss: The harpoon returns to the hunter's hand.</p>",
@@ -2933,14 +2960,15 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tusk_rr1n",
+        "id": "act_tusk_kuei",
         "name": "Tusk",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d4 + 4) slashing damage.</p>",
@@ -2958,7 +2986,8 @@
           "damages": [
             {
               "formula": "1d4 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3087,7 +3116,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blood_frenzy_1gpl",
+        "id": "act_blood_frenzy_tafk",
         "name": "Blood Frenzy",
         "actionType": "trait",
         "descriptionHtml": "<p>The draconian has advantage on melee attack rolls against any creature that doesn't have all its hit points.</p>",
@@ -3107,7 +3136,7 @@
         }
       },
       {
-        "id": "act_controlled_fall_ju82",
+        "id": "act_controlled_fall_bw19",
         "name": "Controlled Fall",
         "actionType": "trait",
         "descriptionHtml": "<p>If the draconian falls and isn't incapacitated, it subtracts up to 50 feet from the fall when calculating the fall's damage.</p>",
@@ -3127,7 +3156,7 @@
         }
       },
       {
-        "id": "act_death_throes_1g22",
+        "id": "act_death_throes_zfxf",
         "name": "Death Throes",
         "actionType": "trait",
         "descriptionHtml": "<p>If the draconian is reduced to 0 hit points, its body erupts into sludge that fills a 10-foot-radius sphere. Each creature within that area must succeed on a DC 14 Dexterity saving throw or be covered in the sludge for 1 minute. While covered in the sludge, a creature's speed is halved. A creature can use its action to scrape the sludge off itself or another creature within 5 feet of itself.</p>",
@@ -3152,7 +3181,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2xa3",
+        "id": "act_multiattack_d90f",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The draconian makes two Claw attacks.</p>",
@@ -3172,7 +3201,7 @@
         }
       },
       {
-        "id": "act_claw_ck3s",
+        "id": "act_claw_1c0w",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one target. Hit: 14 (2d8 + 5) slashing damage.</p>",
@@ -3190,14 +3219,15 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_flaming_carnage__recharge_5__1a02",
+        "id": "act_flaming_carnage__recharge_5__j335",
         "name": "Flaming Carnage (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The draconian indulges its rage, wreathing itself in fire and moving up to its speed. The draconian can enter creatures' spaces during this move. During this movement, when the draconian enters a creature's space, the creature must make a DC 14 Dexterity saving throw. On a failed save, the creature takes 22 (4d10) fire damage and is knocked prone. On a successful save, the creature takes half as much damage and is pushed to the nearest space out of the draconian's path. A creature can be affected by this draconian's Flaming Carnage only once during a turn.</p>",
@@ -3218,7 +3248,8 @@
           "damages": [
             {
               "formula": "4d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -3228,7 +3259,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_violent_retaliation_7b4n",
+        "id": "act_violent_retaliation_0tyk",
         "name": "Violent Retaliation",
         "actionType": "reaction",
         "descriptionHtml": "<p>If a creature within 10 feet of the draconian hits it with an attack, the draconian can make one Claw attack against that creature. If the Claw attack hits, it deals an additional 4 (1d8) slashing damage.</p>",
@@ -3246,7 +3277,8 @@
           "damages": [
             {
               "formula": "1d8",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3579,7 +3611,7 @@
     ],
     "traits": [
       {
-        "id": "act_draconic_command_xlmd",
+        "id": "act_draconic_command_ym2y",
         "name": "Draconic Command",
         "actionType": "trait",
         "descriptionHtml": "<p>Whenever a Dragon or a creature with the Draconic Devotion trait within 30 feet of Verminaard makes an attack roll, the creature can roll a d4 and add the number rolled to the attack roll.</p>",
@@ -3599,7 +3631,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__glfu",
+        "id": "act_legendary_resistance__3_day__nsdn",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If Verminaard fails a saving throw, he can choose to succeed instead.</p>",
@@ -3619,7 +3651,7 @@
         }
       },
       {
-        "id": "act_special_equipment_16e6",
+        "id": "act_special_equipment_lifi",
         "name": "Special Equipment",
         "actionType": "trait",
         "descriptionHtml": "<p>Verminaard wears +2 plate armor and wields the mace Nightbringer, which grants him darkvision as well as immunity to fire damage and to the charmed and frightened conditions (included above).</p>",
@@ -3641,7 +3673,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_8x88",
+        "id": "act_multiattack_ek8d",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Verminaard makes two Nightbringer attacks and uses Malediction.</p>",
@@ -3661,7 +3693,7 @@
         }
       },
       {
-        "id": "act_nightbringer_j6hm",
+        "id": "act_nightbringer_gsjs",
         "name": "Nightbringer",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +15 to hit, reach 5 ft., one target. Hit: 12 (1d6 + 9) bludgeoning damage plus 10 (4d4) radiant damage. If the target is a creature, the target must succeed on a DC 20 Constitution saving throw or be blinded until the start of Verminaard's next turn.</p>",
@@ -3682,18 +3714,20 @@
           "damages": [
             {
               "formula": "1d6 + 9",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "4d4",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_malediction_t7un",
+        "id": "act_malediction_zzqg",
         "name": "Malediction",
         "actionType": "action",
         "descriptionHtml": "<p>Verminaard utters an unholy word, causing profane fire to descend on one creature Verminaard can see within 60 feet of himself. The creature must make a DC 18 Dexterity saving throw, taking 11 (2d10) necrotic damage plus 11 (2d10) radiant damage on a failed save or half as much damage on a successful one.</p>",
@@ -3714,11 +3748,13 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             },
             {
               "formula": "2d10",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -3727,7 +3763,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_dragon_queen_s_favor__5_day__rfwn",
+        "id": "act_dragon_queen_s_favor__5_day__gxaz",
         "name": "Dragon Queen's Favor (5/Day)",
         "actionType": "bonus",
         "descriptionHtml": "<p>Verminaard or one creature he can see within 60 feet of himself magically regains 17 (2d12 + 4) hit points.</p>",
@@ -3753,7 +3789,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_tactical_movement_uafl",
+          "id": "act_tactical_movement_w8z3",
           "name": "Tactical Movement",
           "actionType": "legendary",
           "descriptionHtml": "<p>Verminaard moves up to his speed or commands a mount he is riding to move up to its speed. This movement doesn't provoke opportunity attacks.</p>",
@@ -3773,7 +3809,7 @@
           }
         },
         {
-          "id": "act_fervent_strike__costs_2_actions__8w8z",
+          "id": "act_fervent_strike__costs_2_actions__48zp",
           "name": "Fervent Strike (Costs 2 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Verminaard makes one Nightbringer attack. If this attack hits, it deals an additional 7 (2d6) bludgeoning damage.</p>",
@@ -3791,14 +3827,15 @@
             "damages": [
               {
                 "formula": "2d6",
-                "type": "Bludgeoning"
+                "type": "Bludgeoning",
+                "saveRider": false
               }
             ],
             "recharge": null
           }
         },
         {
-          "id": "act_cast_a_spell__costs_3_actions__443q",
+          "id": "act_cast_a_spell__costs_3_actions__5gsk",
           "name": "Cast a Spell (Costs 3 Actions)",
           "actionType": "legendary",
           "descriptionHtml": "<p>Verminaard uses Spellcasting.</p>",

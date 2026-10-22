@@ -92,7 +92,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_sunlight_vulnerability_3tfx",
+        "id": "act_sunlight_vulnerability_vy9r",
         "name": "Sunlight Vulnerability",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the snake has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight. When the snake begins its turn in sunlight, it immediately suffers 10 radiant damage.</p>",
@@ -112,7 +112,7 @@
         }
       },
       {
-        "id": "act_undead_fortitude_vi2s",
+        "id": "act_undead_fortitude_c2m2",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the snake to 0 hit points, it must make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is radiant or from a critical hit. On a success, the snake drops to 1 hit point instead.</p>",
@@ -134,7 +134,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_pxlc",
+        "id": "act_multiattack_7rid",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The snake makes two attacks: one with its bite and one with a constrict attack.</p>",
@@ -154,7 +154,7 @@
         }
       },
       {
-        "id": "act_bite_ubev",
+        "id": "act_bite_3s8s",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 10 ft., one target. Hit: 17 (3d8 + 4) piercing damage, and the target must make a DC 15 Constitution saving throw, taking 17 (5d6) poison damage on a failed save, or half as much damage on a successful one.</p>",
@@ -175,18 +175,20 @@
           "damages": [
             {
               "formula": "3d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "5d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_constrict_20gc",
+        "id": "act_constrict_35d6",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 17 (3d8 + 4) bludgeoning damage, and the target is grappled (escape DC 16). Until this grapple ends, the creature is restrained and the snake cannot constrict another target.</p>",
@@ -207,7 +209,8 @@
           "damages": [
             {
               "formula": "3d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -345,7 +348,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_u70e",
+        "id": "act_multiattack_bume",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Hamish makes two attacks with his axe or throws two rocks.</p>",
@@ -365,7 +368,7 @@
         }
       },
       {
-        "id": "act_axe_uosl",
+        "id": "act_axe_3382",
         "name": "Axe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +9 to hit, reach 5 ft., one target. Hit: 17 (2d10 + 6) slashing damage.</p>",
@@ -383,14 +386,15 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_rock_1uqa",
+        "id": "act_rock_ve1n",
         "name": "Rock",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +9 to hit, range 60/240 ft., one target. Hit: 17 (2d10 + 6) bludgeoning damage.</p>",
@@ -408,7 +412,8 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -418,7 +423,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_parry_6nnx",
+        "id": "act_parry_zxxs",
         "name": "Parry",
         "actionType": "reaction",
         "descriptionHtml": "<p>Hamish adds 2 to his AC against one melee attack that would hit him. To do so, he must see the attacker and be wielding a melee weapon or a shield.</p>",
@@ -580,7 +585,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_feed_on_pain__2_day__n66s",
+        "id": "act_feed_on_pain__2_day__nkto",
         "name": "Feed on Pain (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>The first time she hits with a weapon attack on her turn, Kyrilla can deal an extra 16 (3d10) poison damage to the target and regains a number of hit points equal to half the damage dealt.</p>",
@@ -598,14 +603,15 @@
           "damages": [
             {
               "formula": "3d10",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_legendary_resistance__2_day__tvyh",
+        "id": "act_legendary_resistance__2_day__sw5s",
         "name": "Legendary Resistance (2/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If she fails a saving throw, Kyrilla can choose to succeed instead.</p>",
@@ -625,7 +631,7 @@
         }
       },
       {
-        "id": "act_petrifying_gaze_at6j",
+        "id": "act_petrifying_gaze_riol",
         "name": "Petrifying Gaze",
         "actionType": "trait",
         "descriptionHtml": "<p>When a creature that can see Kyrilla's eyes starts its turn within 30 feet of her, Kyrilla can force it to make a DC 14 Constitution saving throw if Kyrilla isn't incapacitated and can see the creature. If the saving throw fails by 5 or more, the creature is instantly petrified. Otherwise, a creature that fails the save begins to turn to stone and is restrained. The restrained creature must repeat the saving throw at the end of its next turn, becoming petrified on a failure or ending the effect on a success. The petrification lasts until the creature is freed by the greater restoration spell or other magic.</p><p>Unless surprised, a creature can avert its eyes to avoid the saving throw at the start of its turn. If the creature does so, it can't see Kyrilla until the start of its next turn, when it can avert its eyes again. If the creature looks at Kyrilla in the meantime, it must immediately make the save.</p><p>Kyrilla's accursed gaze does not affect undead or constructs. If Kyrilla sees herself reflected on a polished surface within 30 feet of her and in an area of bright light, she is, due to her curse, affected by her own gaze.</p>",
@@ -650,7 +656,7 @@
         }
       },
       {
-        "id": "act_sunlight_sensitivity_g9o0",
+        "id": "act_sunlight_sensitivity_kqdm",
         "name": "Sunlight Sensitivity",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, Kyrilla has disadvantage on attack rolls and on Wisdom (Perception) checks that rely on sight.</p>",
@@ -672,7 +678,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_s0ue",
+        "id": "act_multiattack_j25o",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Kyrilla makes one attack to constrict and two attacks with her claws, or she makes three attacks with her longbow.</p>",
@@ -692,7 +698,7 @@
         }
       },
       {
-        "id": "act_claw_kmw8",
+        "id": "act_claw_pdxe",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 13 (3d6 + 3) slashing damage.</p>",
@@ -710,14 +716,15 @@
           "damages": [
             {
               "formula": "3d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_constrict_4bhu",
+        "id": "act_constrict_ry49",
         "name": "Constrict",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 10 (3d6) bludgeoning damage, and the target is grappled (escape DC 13) if it is a Large or smaller creature. Until this grapple ends, the target is restrained, and Kyrilla can't constrict another target.</p>",
@@ -738,14 +745,15 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_jm5d",
+        "id": "act_longbow_3vi7",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +7 to hit, range 150/600 ft., one target. Hit: 16 (3d8 + 3) piercing damage.</p>",
@@ -763,14 +771,15 @@
           "damages": [
             {
               "formula": "3d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_summon_swarm_of_poisonous_snakes__recharge_5__b8vk",
+        "id": "act_summon_swarm_of_poisonous_snakes__recharge_5__h51g",
         "name": "Summon Swarm of Poisonous Snakes (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>Kyrilla conjures a swarm of poisonous snakes into an empty space within 10 feet of her. The swarm is under Kyrilla's control and acts on her turn, immediately after her in the initiative order.</p><p>It remains in existence for up to 1 hour. She can summon no more than three swarms per day. Kyrilla can banish any or all of her summoned swarms with a bonus action.</p>",
@@ -798,7 +807,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_claw_nkvy",
+          "id": "act_claw_wpa5",
           "name": "Claw",
           "actionType": "legendary",
           "descriptionHtml": "<p>Kyrilla or a swarm of poisonous snakes makes a weapon attack.</p>",
@@ -818,7 +827,7 @@
           }
         },
         {
-          "id": "act_detect_yz0y",
+          "id": "act_detect_jviv",
           "name": "Detect",
           "actionType": "legendary",
           "descriptionHtml": "<p>Kyrilla makes a Wisdom (Perception) check.</p>",
@@ -838,7 +847,7 @@
           }
         },
         {
-          "id": "act_slither_4by9",
+          "id": "act_slither_obyz",
           "name": "Slither",
           "actionType": "legendary",
           "descriptionHtml": "<p>Kyrilla moves up to her speed without provoking opportunity attacks.</p>",
@@ -862,7 +871,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_cast_moonbeam_8ao4",
+        "id": "act_cast_moonbeam_q3x9",
         "name": "Cast Moonbeam",
         "actionType": "lair",
         "descriptionHtml": "<p>Kyrilla casts moonbeam (no components required). While maintaining concentration on this effect, she can't take other lair actions.</p>",
@@ -882,7 +891,7 @@
         }
       },
       {
-        "id": "act_cast_cloud_of_daggers_513v",
+        "id": "act_cast_cloud_of_daggers_54iv",
         "name": "Cast Cloud Of Daggers",
         "actionType": "lair",
         "descriptionHtml": "<p>Kyrilla casts cloud of daggers (no components required), except the daggers are flying snakes and the spell deals piercing damage. While maintaining concentration on this effect, she can't take other lair actions.</p>",
@@ -902,7 +911,7 @@
         }
       },
       {
-        "id": "act_pools_of_liquid_umzb",
+        "id": "act_pools_of_liquid_tbmt",
         "name": "Pools Of Liquid",
         "actionType": "lair",
         "descriptionHtml": "<p>Pools of liquid within 60 feet of Kyrilla surge and froth, splashing and soaking any creature on the ground within 5 feet of such pools. Creatures that succeed on a DC 14 Dexterity saving throw avoid getting liquid in their eyes and mouths. Kyrilla can't use this lair action again until she has used a different one.</p>",
@@ -929,7 +938,7 @@
     "lairActionsDesc": "When fighting inside her lair, Kyrilla can invoke the ambient magic there to take lair actions. On initiative count 20 (losing initiative ties), she takes a lair action to cause one of the following effects:",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_02a7",
+        "id": "act_regional_effect_6gfz",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Water sources within the lair are supernaturally fouled and poisonous. Creatures that drink these waters must make a DC 14 Constitution saving throw or be poisoned for 1 minute. Afflicted creatures can make a new saving throw at the end of each of their turns, ending the condition on a success.</p>",
@@ -952,7 +961,7 @@
         }
       },
       {
-        "id": "act_regional_effect_i9ki",
+        "id": "act_regional_effect_6ryp",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Plants within 1 mile of the lair suffer from a calcifying mold that dries and hardens leaves, killing many otherwise hearty thistles and heather.</p>",
@@ -972,7 +981,7 @@
         }
       },
       {
-        "id": "act_regional_effect_v8zd",
+        "id": "act_regional_effect_8lf6",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Fog lightly obscures the land within 3 miles of the lair.</p>",
@@ -1105,7 +1114,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_wz8y",
+        "id": "act_multiattack_mzch",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The horror makes two attacks with its claws.</p>",
@@ -1125,7 +1134,7 @@
         }
       },
       {
-        "id": "act_claw_6p82",
+        "id": "act_claw_nm7v",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 19 (3d10 + 3) slashing damage.</p>",
@@ -1143,14 +1152,15 @@
           "damages": [
             {
               "formula": "3d10 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wave_of_bones__recharge_5__hau2",
+        "id": "act_wave_of_bones__recharge_5__7nsh",
         "name": "Wave of Bones (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The horror crashes into foes like a wave before quickly reforming. Each creature within 10 feet of the horror must make a DC 15 Dexterity saving throw, taking 18 (4d8) bludgeoning damage on a failed save, or half as much damage on a successful one. A creature that fails this saving throw is also knocked prone.</p>",
@@ -1171,7 +1181,8 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": "5"

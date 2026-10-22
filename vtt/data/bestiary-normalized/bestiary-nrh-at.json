@@ -101,7 +101,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_antimagic_cone_v0jm",
+        "id": "act_antimagic_cone_cpby",
         "name": "Antimagic Cone",
         "actionType": "trait",
         "descriptionHtml": "<p>Emo's central eye creates an area of antimagic, as in the antimagic field spell, in a 150-foot cone. At the start of each of its turns, the beholder decides which way the cone faces and whether the cone is active. The area works against the beholder's own eye rays.</p>",
@@ -123,7 +123,7 @@
     ],
     "actions": [
       {
-        "id": "act_bite_233e",
+        "id": "act_bite_xd8y",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 14 (4d6) piercing damage.</p>",
@@ -141,14 +141,15 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_eye_rays_srdf",
+        "id": "act_eye_rays_xhtx",
         "name": "Eye Rays",
         "actionType": "action",
         "descriptionHtml": "<p>Emo shoots three of the following magical eye rays at random (reroll duplicates), choosing one to three targets it can see within 120 feet of it:</p><ul><li><strong><em>1. Happiness Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Wisdom saving throw or fall prone with laughter, becoming incapacitated and unable to stand up for 1 minute or until Emo harms the creature. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>2. Sadness Ray.</em></strong> <p>The targeted creature must succeed on a DC 15 Intelligence saving throw. On a failed save, the target is overcome by sorrow and takes 3d6 psychic damage, and it can't take a reaction until the end of its next turn. On its next turn, it can use either an action or a bonus action, not both. On a successful save, the target takes half as much damage and suffers none of the other effects.</p></li><li><strong><em>3. Anger Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Wisdom saving throw or be compelled to duel with Emo for 1 minute. The target has disadvantage on attack rolls against creatures other than Emo and must make a Wisdom saving throw each time it attempts to move more than 30 feet away from Emo.</p></li><li><strong><em>4. Anxiety Ray.</em></strong> <p>The targeted creature must succeed on a DC 15 Intelligence saving throw or lose the ability to distinguish friend from foe, regarding all creatures it can see as enemies for 1 minute. Each time the target takes damage, it can repeat the saving throw, ending the effect on itself on a success.</p><p>Whenever the affected creature targets another creature with an attack, spell, or other ability, it must choose the target at random from among the creatures it can see within range of the attack, spell, or other ability it's using. If an enemy provokes an opportunity attack from the affected creature, the creature must make that attack if it is able to.</p></li><li><strong><em>5. Fear Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Wisdom saving throw or be frightened for 1 minute.</p><p>The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>6. Desolation Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Intelligence saving throw. On a successful save, the target takes 5d10 psychic damage, and the spell ends. On a failed save, the target takes 5d10 psychic damage and perceives itself to be confined within an illusory stone cell for 1 minute. The target can't see or hear anything beyond the cell and is restrained.</p></li><li><strong><em>7. Jealousy Ray.</em></strong> <p>The targeted creature must succeed on a DC 14 Wisdom saving throw or become charmed for 1 minute. While the target is charmed in this way, it must use its action before moving on each of its turns to make a melee attack against a creature that Emo chooses. The target can repeat the saving throw at the end of each of its turns, ending the effect on itself on a success.</p></li><li><strong><em>8. Disgusting Ray.</em></strong> <p>The targeted creature must succeed on a DC 15 Constitution saving throw against poison. On a failed save, the target is enveloped in sphere of yellow, nauseating gas and spends its action on its next turn retching and reeling.</p></li><li><strong><em>9. Surprise Ray.</em></strong> <p>The targeted creature must succeed on a</p><p>DC 15 Dexterity saving throw or be blinded by a spray of color until the end of its next turn.</p></li><li><strong><em>10. Trust Ray.</em></strong> <p>The targeted creature must succeed on a</p><p>DC 16 Wisdom saving throw or be charmed by Emo for 1 hour or until Emo harms the creature.</p></li></ul>",
@@ -249,15 +250,18 @@
           "damages": [
             {
               "formula": "3d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             },
             {
               "formula": "5d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             },
             {
               "formula": "5d10",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -271,7 +275,7 @@
       "description": "Emo can take 3 legendary actions, using the Eye Ray option below. It can take only one legendary action at a time and only at the end of another creature's turn. The beholder regains spent legendary actions at the start of its turn.",
       "entries": [
         {
-          "id": "act_eye_ray_bfvm",
+          "id": "act_eye_ray_xifl",
           "name": "Eye Ray",
           "actionType": "legendary",
           "descriptionHtml": "<p>Emo uses one random eye ray.</p>",
@@ -295,7 +299,7 @@
     "legendaryActionsLair": null,
     "lairActions": [
       {
-        "id": "act_50_foot_square_area_wo46",
+        "id": "act_50_foot_square_area_19cm",
         "name": "50-foot-square Area",
         "actionType": "lair",
         "descriptionHtml": "<p>A 50-foot-square area of ground within 120 feet of the beholder becomes slimy; that area is difficult terrain until initiative count 20 on the next round.</p>",
@@ -315,7 +319,7 @@
         }
       },
       {
-        "id": "act_walls_within_120_tr02",
+        "id": "act_walls_within_120_5orl",
         "name": "Walls Within 120",
         "actionType": "lair",
         "descriptionHtml": "<p>Walls within 120 feet of the beholder sprout grasping appendages until initiative count 20 on the round after next. Each creature of the beholder's choice that starts its turn within 10 feet of such a wall must succeed on a DC 15 Dexterity saving throw or be grappled. Escaping requires a successful DC 15 Strength (Athletics) or Dexterity (Acrobatics) check.</p>",
@@ -338,7 +342,7 @@
         }
       },
       {
-        "id": "act_eye_opens_787h",
+        "id": "act_eye_opens_xkye",
         "name": "Eye Opens",
         "actionType": "lair",
         "descriptionHtml": "<p>An eye opens on a solid surface within 60 feet of the beholder. One random eye ray of the beholder shoots from that eye at a target of the beholder's choice that it can see. The eye then closes and disappears.</p>",
@@ -358,7 +362,7 @@
         }
       },
       {
-        "id": "act_beholder_can_t_repeat_rco2",
+        "id": "act_beholder_can_t_repeat_84zl",
         "name": "Beholder Can't Repeat",
         "actionType": "lair",
         "descriptionHtml": "<p>The beholder can't repeat an effect until they have all been used, and it can't use the same effect two rounds in a row.</p>",
@@ -382,7 +386,7 @@
     "lairActionsDesc": "When fighting inside its lair, a beholder can invoke the ambient magic to take lair actions. On initiative count 20 (losing initiative ties), the beholder can take one lair action to cause one of the following effects:",
     "regionalEffects": [
       {
-        "id": "act_regional_effect_7ck5",
+        "id": "act_regional_effect_4i6l",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>Creatures within 1 mile of the beholder's lair sometimes feel as if they're being watched when they aren't.</p>",
@@ -402,7 +406,7 @@
         }
       },
       {
-        "id": "act_regional_effect_3h6y",
+        "id": "act_regional_effect_fv66",
         "name": "Regional Effect",
         "actionType": "regional",
         "descriptionHtml": "<p>When the beholder sleeps, minor warps in reality occur within 1 mile of its lair and then vanish 24 hours later. Marks on cave walls might change subtly, an eerie trinket might appear where none existed before, harmless slime might coat a statue, and so on. These effects apply only to natural surfaces and to nonmagical objects that aren't on anyone's person.</p>",
@@ -605,7 +609,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brute_p56m",
+        "id": "act_brute_6jis",
         "name": "Brute",
         "actionType": "trait",
         "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when Maude hits with it (included in the attack).</p>",
@@ -625,7 +629,7 @@
         }
       },
       {
-        "id": "act_surprise_attack_u405",
+        "id": "act_surprise_attack_djmh",
         "name": "Surprise Attack",
         "actionType": "trait",
         "descriptionHtml": "<p>If Maude surprises a creature and hits it with an attack during the first round of combat, the target takes an extra 7 (2d6) damage from the attack.</p>",
@@ -643,14 +647,15 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_heart_of_hruggek_q7sc",
+        "id": "act_heart_of_hruggek_frek",
         "name": "Heart of Hruggek",
         "actionType": "trait",
         "descriptionHtml": "<p>Maude has advantage on saving throws against being charmed, frightened, paralyzed, poisoned, stunned, or put to sleep.</p>",
@@ -672,7 +677,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_fkuo",
+        "id": "act_multiattack_gpxm",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Maude makes two melee attacks.</p>",
@@ -692,7 +697,7 @@
         }
       },
       {
-        "id": "act_morningstar_havs",
+        "id": "act_morningstar_kt9n",
         "name": "Morningstar",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 11 (2d8 + 3) piercing damage.</p>",
@@ -710,14 +715,15 @@
           "damages": [
             {
               "formula": "2d8 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_javelin_qytr",
+        "id": "act_javelin_3uc4",
         "name": "Javelin",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Weapon Attack: +5 to hit, reach 5 ft. or range 30/120 ft., one target. Hit: 9 (2d6 + 3) piercing damage in melee or 5 (1d6 + 3) piercing damage at range.</p>",
@@ -735,11 +741,13 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d6 + 3",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -873,7 +881,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_brave_cip7",
+        "id": "act_brave_nagi",
         "name": "Brave",
         "actionType": "trait",
         "descriptionHtml": "<p>Mr. Greystone has advantage on saving throws against being frightened.</p>",
@@ -893,7 +901,7 @@
         }
       },
       {
-        "id": "act_brute_imx5",
+        "id": "act_brute_k8uj",
         "name": "Brute",
         "actionType": "trait",
         "descriptionHtml": "<p>A melee weapon deals one extra die of its damage when Mr. Greystone hits with it (included in the attack).</p>",
@@ -915,7 +923,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_2nci",
+        "id": "act_multiattack_lg9u",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Mr. Greystone makes two melee attacks or two ranged attacks.</p>",
@@ -935,7 +943,7 @@
         }
       },
       {
-        "id": "act_club_9mcp",
+        "id": "act_club_m7vd",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +7 to hit, reach 5 ft., one target. Hit: 11 (2d6 + 4) bludgeoning damage.</p>",
@@ -953,14 +961,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow_gzlm",
+        "id": "act_hand_crossbow_67h4",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +5 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -978,7 +987,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

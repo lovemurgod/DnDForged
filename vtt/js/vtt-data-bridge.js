@@ -529,7 +529,15 @@ export function initVttDataBridge(vtt) {
             spawnBtn.innerHTML = '<i class="fa-solid fa-plus pointer-events-none"></i>';
             spawnBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                spawnMonsterAtCenter(monster);
+                if (window.VTT?.mobileAdapter?.startTapToPlaceMode && window.VTT?.mobileAdapter?.isMobileViewport?.()) {
+                    window.VTT.mobileAdapter.startTapToPlaceMode({
+                        type: 'monster',
+                        title: monster.name,
+                        monster: monster
+                    });
+                } else {
+                    spawnMonsterAtCenter(monster);
+                }
             });
             item.appendChild(spawnBtn);
 
@@ -1144,7 +1152,7 @@ export function initVttDataBridge(vtt) {
         return { x: snapX, y: snapY };
     }
 
-    function spawnMonsterAtCenter(monsterOrName, optHp, optSize, optImg, optMonsterData) {
+    function spawnMonsterAtCenter(monsterOrName, optHp, optSize, optImg, optMonsterData, targetWorldX, targetWorldY) {
         const canvasEngine = window.VTT?.canvasEngine;
         if (!canvasEngine) return;
 
@@ -1174,7 +1182,9 @@ export function initVttDataBridge(vtt) {
 
         const viewportEl = document.getElementById('vtt-canvas-viewport');
         const vr = viewportEl ? viewportEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-        const mouse = canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
+        const mouse = (targetWorldX !== undefined && targetWorldY !== undefined)
+            ? { x: targetWorldX, y: targetWorldY }
+            : canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
         const grid = canvasEngine.getGrid();
         const sizePx = size * grid.size * grid.scale;
 
@@ -1229,7 +1239,7 @@ export function initVttDataBridge(vtt) {
         }
     }
 
-    function spawnCustomNpcAtCenter(npc) {
+    function spawnCustomNpcAtCenter(npc, targetWorldX, targetWorldY) {
         if (!npc) return;
         const canvasEngine = window.VTT?.canvasEngine;
         if (!canvasEngine) return;
@@ -1253,7 +1263,9 @@ export function initVttDataBridge(vtt) {
 
         const viewportEl = document.getElementById('vtt-canvas-viewport');
         const vr = viewportEl ? viewportEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-        const mouse = canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
+        const mouse = (targetWorldX !== undefined && targetWorldY !== undefined)
+            ? { x: targetWorldX, y: targetWorldY }
+            : canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
         const sizePx = size * grid.size * grid.scale;
 
         let targetLayer = canvasEngine.getActiveLayer();
@@ -1296,7 +1308,7 @@ export function initVttDataBridge(vtt) {
         }
     }
 
-    function spawnCharacterAtCenter(characterIdOrChar) {
+    function spawnCharacterAtCenter(characterIdOrChar, targetWorldX, targetWorldY) {
         if (!characterIdOrChar) return;
         const canvasEngine = window.VTT?.canvasEngine;
         if (!canvasEngine) return;
@@ -1334,7 +1346,9 @@ export function initVttDataBridge(vtt) {
 
         const viewportEl = document.getElementById('vtt-canvas-viewport');
         const vr = viewportEl ? viewportEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-        const mouse = canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
+        const mouse = (targetWorldX !== undefined && targetWorldY !== undefined)
+            ? { x: targetWorldX, y: targetWorldY }
+            : canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
         const grid = canvasEngine.getGrid();
         const sizePx = size * grid.size * grid.scale;
 
@@ -1380,14 +1394,16 @@ export function initVttDataBridge(vtt) {
         }
     }
 
-    function spawnAssetAtCenter(data) {
+    function spawnAssetAtCenter(data, targetWorldX, targetWorldY) {
         if (!data || !data.url) return;
         const canvasEngine = window.VTT?.canvasEngine;
         if (!canvasEngine) return;
 
         const viewportEl = document.getElementById('vtt-canvas-viewport');
         const vr = viewportEl ? viewportEl.getBoundingClientRect() : { left: 0, top: 0, width: window.innerWidth, height: window.innerHeight };
-        const mouse = canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
+        const mouse = (targetWorldX !== undefined && targetWorldY !== undefined)
+            ? { x: targetWorldX, y: targetWorldY }
+            : canvasEngine.getCanvasMouseCoords({ clientX: vr.left + vr.width / 2, clientY: vr.top + vr.height / 2 });
         const grid = canvasEngine.getGrid();
 
         const spawnAsset = (pixelWidth, pixelHeight) => {
@@ -1788,7 +1804,15 @@ export function initVttDataBridge(vtt) {
                 const id = btn.dataset.id;
                 const npc = customNpcs.find(c => c.id === id);
                 if (npc) {
-                    spawnCustomNpcAtCenter(npc);
+                    if (window.VTT?.mobileAdapter?.startTapToPlaceMode && window.VTT?.mobileAdapter?.isMobileViewport?.()) {
+                        window.VTT.mobileAdapter.startTapToPlaceMode({
+                            type: 'customNpc',
+                            title: npc.name,
+                            npc: npc
+                        });
+                    } else {
+                        spawnCustomNpcAtCenter(npc);
+                    }
                 }
             });
         });
@@ -2226,11 +2250,20 @@ export function initVttDataBridge(vtt) {
         }
     }
 
+    const spawnMonsterAtCoords = (m, x, y) => spawnMonsterAtCenter(m, null, null, null, null, x, y);
+    const spawnCustomNpcAtCoords = (n, x, y) => spawnCustomNpcAtCenter(n, x, y);
+    const spawnCharacterAtCoords = (c, x, y) => spawnCharacterAtCenter(c, x, y);
+    const spawnAssetAtCoords = (a, x, y) => spawnAssetAtCenter(a, x, y);
+
     window.VTT = window.VTT || {};
     window.VTT.spawnMonsterAtCenter = spawnMonsterAtCenter;
     window.VTT.spawnCustomNpcAtCenter = spawnCustomNpcAtCenter;
     window.VTT.spawnCharacterAtCenter = spawnCharacterAtCenter;
     window.VTT.spawnAssetAtCenter = spawnAssetAtCenter;
+    window.VTT.spawnMonsterAtCoords = spawnMonsterAtCoords;
+    window.VTT.spawnCustomNpcAtCoords = spawnCustomNpcAtCoords;
+    window.VTT.spawnCharacterAtCoords = spawnCharacterAtCoords;
+    window.VTT.spawnAssetAtCoords = spawnAssetAtCoords;
 
     return {
         loadBestiaryData,
@@ -2246,6 +2279,10 @@ export function initVttDataBridge(vtt) {
         spawnMonsterAtCenter,
         spawnCustomNpcAtCenter,
         spawnCharacterAtCenter,
-        spawnAssetAtCenter
+        spawnAssetAtCenter,
+        spawnMonsterAtCoords,
+        spawnCustomNpcAtCoords,
+        spawnCharacterAtCoords,
+        spawnAssetAtCoords
     };
 }

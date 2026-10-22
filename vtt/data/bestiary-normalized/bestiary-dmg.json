@@ -96,7 +96,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_incorporeal_movement_h9zt",
+        "id": "act_incorporeal_movement_qnnp",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The avatar can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object.</p>",
@@ -114,14 +114,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_turn_immunity_ewt6",
+        "id": "act_turn_immunity_fzkx",
         "name": "Turn Immunity",
         "actionType": "trait",
         "descriptionHtml": "<p>The avatar is immune to features that turn undead.</p>",
@@ -143,7 +144,7 @@
     ],
     "actions": [
       {
-        "id": "act_reaping_scythe_x5mf",
+        "id": "act_reaping_scythe_f5o2",
         "name": "Reaping Scythe",
         "actionType": "action",
         "descriptionHtml": "<p>The avatar sweeps its spectral scythe through a creature within 5 feet of it, dealing 7 (1d8 + 3) slashing damage plus 4 (1d8) necrotic damage.</p>",
@@ -161,11 +162,13 @@
           "damages": [
             {
               "formula": "1d8 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -395,7 +398,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_bite_1lnb",
+        "id": "act_bite_3chp",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +1 to hit, reach 5 ft., one target. Hit: 1 (1d4 - 1) piercing damage.</p>",
@@ -413,7 +416,8 @@
           "damages": [
             {
               "formula": "1d4 - 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

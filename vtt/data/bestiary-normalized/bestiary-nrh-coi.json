@@ -91,7 +91,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_colorful_club_derr",
+        "id": "act_colorful_club_paq4",
         "name": "Colorful Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
@@ -109,7 +109,8 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -232,7 +233,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_reckless_3rce",
+        "id": "act_reckless_d0nv",
         "name": "Reckless",
         "actionType": "trait",
         "descriptionHtml": "<p>At the start of her turn, Imelda can gain advantage on all melee weapon attack rolls during that turn, but attack rolls against her have advantage until the start of her next turn.</p>",
@@ -254,7 +255,7 @@
     ],
     "actions": [
       {
-        "id": "act_fist_zjcu",
+        "id": "act_fist_gmxe",
         "name": "Fist",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 5 ft., one target. Hit: 6 (1d4 + 4) bludgeoning damage.</p>",
@@ -272,7 +273,8 @@
           "damages": [
             {
               "formula": "1d4 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -407,7 +409,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_cunning_action_xnhw",
+        "id": "act_cunning_action_8qvo",
         "name": "Cunning Action",
         "actionType": "trait",
         "descriptionHtml": "<p>On each of his turns, Magnifico can use a bonus action to take the Dash, Disengage, or Hide action.</p>",
@@ -429,7 +431,7 @@
     ],
     "actions": [
       {
-        "id": "act_shortsword_0w5l",
+        "id": "act_shortsword_46ue",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -447,14 +449,15 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_hand_crossbow_8jkh",
+        "id": "act_hand_crossbow_1s0g",
         "name": "Hand Crossbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Weapon Attack: +4 to hit, range 30/120 ft., one target. Hit: 5 (1d6 + 2) piercing damage.</p>",
@@ -472,7 +475,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

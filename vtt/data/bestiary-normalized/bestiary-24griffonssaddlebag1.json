@@ -95,7 +95,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ice_walk_2sgp",
+        "id": "act_ice_walk_lovv",
         "name": "Ice Walk",
         "actionType": "trait",
         "descriptionHtml": "<p>The bulette can move across and climb icy surfaces without needing to make an ability check. Additionally, Difficult Terrain composed of ice or snow doesn't cost it extra movement.</p>",
@@ -115,7 +115,7 @@
         }
       },
       {
-        "id": "act_steam_aura_m66w",
+        "id": "act_steam_aura_q8sq",
         "name": "Steam Aura",
         "actionType": "trait",
         "descriptionHtml": "<p>At the end of each of the bulette's turns, each creature of the bulette's choice in a 5-foot Emanation [Area of Effect] originating from the bulette takes 5 (1d10) Fire damage unless the bulette has the Incapacitated condition.</p>",
@@ -133,14 +133,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tunneler_9cst",
+        "id": "act_tunneler_lxnu",
         "name": "Tunneler",
         "actionType": "trait",
         "descriptionHtml": "<p>The bulette can burrow through solid ice and leaves a slick, 10-foot-diameter tunnel in its wake.</p>",
@@ -162,7 +163,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9961",
+        "id": "act_multiattack_adol",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The bulette makes two Bite attacks.</p>",
@@ -182,7 +183,7 @@
         }
       },
       {
-        "id": "act_bite_aapl",
+        "id": "act_bite_u08n",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +7, reach 5 ft. Hit: 17 (2d12 + 4) Piercing damage plus 3 (1d6) Fire damage.</p>",
@@ -200,18 +201,20 @@
           "damages": [
             {
               "formula": "2d12 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "1d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_steam_eruption__recharge_5__b388",
+        "id": "act_steam_eruption__recharge_5__a1y9",
         "name": "Steam Eruption (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>If the bulette is burrowed no more than 20 feet deep in solid ice, it spends 5 feet of movement to burrow directly upward, emerging from the ice and jumping to a space within 5 feet of where it emerged. dex DC 15, each creature in the space where the bulette emerged or its destination space. {@actSaveFail} 11 (2d10) Bludgeoning damage plus 7 (2d6) Fire damage, and the target has the Prone condition. {@actSaveSuccess} Half damage. {@actSaveSuccessOrFail} The target is pushed to the nearest unoccupied space within 5 feet of where the bulette emerged or its destination space.</p>",
@@ -232,11 +235,13 @@
           "damages": [
             {
               "formula": "2d10",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             },
             {
               "formula": "2d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -371,7 +376,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_7u8h",
+        "id": "act_multiattack_nlg4",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The winged wretch makes three Rend attacks.</p>",
@@ -391,7 +396,7 @@
         }
       },
       {
-        "id": "act_rend_xdp5",
+        "id": "act_rend_k8pr",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6, reach 5 ft. Hit: 11 (2d6 + 4) Slashing damage.</p>",
@@ -409,14 +414,15 @@
           "damages": [
             {
               "formula": "2d6 + 4",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_thunderous_shriek__recharge_5__t9is",
+        "id": "act_thunderous_shriek__recharge_5__sofm",
         "name": "Thunderous Shriek (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The winged wretch emits a cacophonous wave of energy. con DC 12, each creature in a 30-foot Cone [Area of Effect]. {@actSaveFail} 17 (5d6) Thunder damage, and the target has the Deafened condition for 1 minute. {@actSaveSuccess} Half damage only.</p>",
@@ -437,7 +443,8 @@
           "damages": [
             {
               "formula": "5d6",
-              "type": "Thunder"
+              "type": "Thunder",
+              "saveRider": true
             }
           ],
           "recharge": "5"
@@ -575,7 +582,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_tvri",
+        "id": "act_flyby_ye4m",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The gargoyle doesn't provoke an Opportunity Attack when it flies out of an enemy's reach.</p>",
@@ -597,7 +604,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_yh2a",
+        "id": "act_multiattack_aibg",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The gargoyle makes two attacks, using Claw or Ice Dart in any combination.</p>",
@@ -617,7 +624,7 @@
         }
       },
       {
-        "id": "act_claw_idrr",
+        "id": "act_claw_3san",
         "name": "Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 7 (1d10 + 2) Slashing damage.</p>",
@@ -635,14 +642,15 @@
           "damages": [
             {
               "formula": "1d10 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_ice_dart_axhj",
+        "id": "act_ice_dart_j61u",
         "name": "Ice Dart",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +4, range 30/60 ft. Hit: 7 (2d4 + 2) Piercing damage.</p>",
@@ -660,7 +668,8 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -784,7 +793,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_death_flash_v7cw",
+        "id": "act_death_flash_rb5q",
         "name": "Death Flash",
         "actionType": "trait",
         "descriptionHtml": "<p>The invisiboar emits a bright flash of light when it dies. con DC 13, each creature in a 10-foot Emanation [Area of Effect] originating from the invisiboar. {@actSaveFail} The target has the Blinded condition. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
@@ -807,7 +816,7 @@
         }
       },
       {
-        "id": "act_invisible_vzet",
+        "id": "act_invisible_ek5m",
         "name": "Invisible",
         "actionType": "trait",
         "descriptionHtml": "<p>The invisiboar always has the Invisible condition unless it's in the area of an Antimagic Field spell or similar effect.</p>",
@@ -829,7 +838,7 @@
     ],
     "actions": [
       {
-        "id": "act_gore_h0q1",
+        "id": "act_gore_0rmf",
         "name": "Gore",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 10 (2d6 + 3) Slashing damage. If the target is a Large or smaller creature and the boar moved 20+ feet straight toward it immediately before the hit, the target takes an extra 7 (2d6) Piercing damage and has the Prone condition.</p>",
@@ -847,11 +856,13 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1514,7 +1525,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_sha5",
+        "id": "act_multiattack_52k8",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Dendallen makes four attacks, using Staff or Chilling Ray in any combination. He can (A) replace one attack with a use of Spellcasting to cast Magic Missile or (B) replace two attacks with a use of Spellcasting to cast Blight (level 5 version).</p>",
@@ -1534,7 +1545,7 @@
         }
       },
       {
-        "id": "act_staff_bkbx",
+        "id": "act_staff_gpmk",
         "name": "Staff",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 5 ft. Hit: 8 (1d6 + 5) Force damage. If the target is a creature, it is subjected to the following effect. con DC 17. {@actSaveFail} 11 (2d10) Necrotic damage, and the target has Disadvantage on any ability check or saving throw that uses Strength or Constitution. It repeats the save at the end of each of its turns, ending the effect on itself on a success. After 1 minute, it succeeds automatically.</p>",
@@ -1555,18 +1566,20 @@
           "damages": [
             {
               "formula": "1d6 + 5",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             },
             {
               "formula": "2d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_chilling_ray_0mva",
+        "id": "act_chilling_ray_o6sw",
         "name": "Chilling Ray",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +9, range 120 ft. Hit: 18 (4d8) Cold damage.</p>",
@@ -1584,7 +1597,8 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1711,7 +1725,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration_na3r",
+        "id": "act_regeneration_q6z4",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The sporehusk regains 5 Hit Points at the start of its turn. If the sporehusk takes Fire or Radiant damage, this trait doesn't function on the sporehusk's next turn. The sporehusk dies only if it starts its turn with 0 Hit Points and doesn't regenerate.</p>",
@@ -1731,7 +1745,7 @@
         }
       },
       {
-        "id": "act_sunlight_weakness_1al6",
+        "id": "act_sunlight_weakness_z7ue",
         "name": "Sunlight Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the sporehusk has Disadvantage on D20 Tests.</p>",
@@ -1753,7 +1767,7 @@
     ],
     "actions": [
       {
-        "id": "act_grab_lrrp",
+        "id": "act_grab_yr28",
         "name": "Grab",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 5 (1d6 + 2) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 11).</p>",
@@ -1774,7 +1788,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1783,7 +1798,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_bite_wu8k",
+        "id": "act_bite_g066",
         "name": "Bite",
         "actionType": "bonus",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. (must target a creature Grappled by the sporehusk). Hit: 6 (1d8 + 2) Piercing damage.</p>",
@@ -1801,7 +1816,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1932,7 +1948,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_regeneration_kdn9",
+        "id": "act_regeneration_lnau",
         "name": "Regeneration",
         "actionType": "trait",
         "descriptionHtml": "<p>The sporehusk regains 5 Hit Points at the start of each of its turns. If it takes Fire or Radiant damage, this trait doesn't function on the sporehusk's next turn. The sporehusk dies only if it starts its turn with 0 Hit Points and doesn't regenerate.</p>",
@@ -1952,7 +1968,7 @@
         }
       },
       {
-        "id": "act_sunlight_weakness_4vpr",
+        "id": "act_sunlight_weakness_ot34",
         "name": "Sunlight Weakness",
         "actionType": "trait",
         "descriptionHtml": "<p>While in sunlight, the sporehusk has Disadvantage on D20 Tests.</p>",
@@ -1974,7 +1990,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_i98v",
+        "id": "act_multiattack_086d",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The scout makes two attacks, using Shortsword and Longbow in any combination.</p>",
@@ -1994,7 +2010,7 @@
         }
       },
       {
-        "id": "act_grab_evia",
+        "id": "act_grab_7amz",
         "name": "Grab",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Bludgeoning damage. If the target is a Large or smaller creature, it has the Grappled condition (escape DC 11).</p>",
@@ -2015,14 +2031,15 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_shortsword_ost7",
+        "id": "act_shortsword_d3rk",
         "name": "Shortsword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 4 (1d6 + 1) Piercing damage.</p>",
@@ -2040,14 +2057,15 @@
           "damages": [
             {
               "formula": "1d6 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_longbow_og7c",
+        "id": "act_longbow_66yv",
         "name": "Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +3, range 150/600 ft. Hit: 5 (1d8 + 1) Piercing damage.</p>",
@@ -2065,7 +2083,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2074,7 +2093,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_bite_dmeq",
+        "id": "act_bite_0vgc",
         "name": "Bite",
         "actionType": "bonus",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. (must target a creature Grappled by the sporehusk). Hit: 5 (1d8 + 1) Piercing damage.</p>",
@@ -2092,7 +2111,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -2790,7 +2810,7 @@
     ],
     "traits": [
       {
-        "id": "act_attuned_thrall_urbm",
+        "id": "act_attuned_thrall_ziah",
         "name": "Attuned Thrall",
         "actionType": "trait",
         "descriptionHtml": "<p>cha DC 21, the creature that attuned to three Remnants of Dendallen (if the creature has Immunity to the Charmed condition or can't be possessed, it can still be affected, but it makes its saves against this effect with Advantage). {@actSaveFail} The target has the Charmed condition, becoming the host to the Spirit of Dendallen. On the spirit's turn, it can issue verbal or telepathic commands to the target (no action required). The target does its best to obey on its turn. If it completes an order and doesn't receive further direction from the spirit, it acts and moves as it likes, seemingly unaware of or unbothered by the presence of the spirit. The spirit can also command the target to take a Reaction but must take its own Reaction to do so.</p><p>The target repeats the save at the end of each of its turns, ending the effect and dismissing the spirit on a success. The DC for this save decreases when the spirit drops to certain Hit Points thresholds, reducing by 1 at 150 HP (DC 20), 100 HP (DC 19), and 50 HP (DC 18).</p>",
@@ -2814,7 +2834,7 @@
         }
       },
       {
-        "id": "act_immutable_form_ozkm",
+        "id": "act_immutable_form_f0ip",
         "name": "Immutable Form",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can't shape-shift.</p>",
@@ -2834,7 +2854,7 @@
         }
       },
       {
-        "id": "act_incorporeal_tether_ntqu",
+        "id": "act_incorporeal_tether_v407",
         "name": "Incorporeal Tether",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit can't move on its own. Instead, as the spirit's host moves, the spirit is moved with it (remaining centered on the host), even through other creatures and objects. The spirit can occupy another creature's space and vice versa.</p>",
@@ -2854,7 +2874,7 @@
         }
       },
       {
-        "id": "act_legendary_resistance__3_day__4bbh",
+        "id": "act_legendary_resistance__3_day__bvu1",
         "name": "Legendary Resistance (3/Day)",
         "actionType": "trait",
         "descriptionHtml": "<p>If the spirit fails a saving throw, it can choose to succeed instead.</p>",
@@ -2874,7 +2894,7 @@
         }
       },
       {
-        "id": "act_magic_resistance_jx3i",
+        "id": "act_magic_resistance_nzg3",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The spirit has advantage on saving throws against spells and other magical effects.</p>",
@@ -2894,7 +2914,7 @@
         }
       },
       {
-        "id": "act_persistent_tendrils_ot27",
+        "id": "act_persistent_tendrils_txd9",
         "name": "Persistent Tendrils",
         "actionType": "trait",
         "descriptionHtml": "<p>If the spirit doesn't have any tendrils at the end of its turn, one Tendril of Dendallen is created, as if by the Create Tendrils action.</p>",
@@ -2914,7 +2934,7 @@
         }
       },
       {
-        "id": "act_unstable_conduit_mw1t",
+        "id": "act_unstable_conduit_hgm9",
         "name": "Unstable Conduit",
         "actionType": "trait",
         "descriptionHtml": "<p>If the spirit's host dies, the spirit is destroyed in an explosion of necromantic energy, and the host is disintegrated into gray dust, leaving behind any Remnants of Dendallen it was wearing or carrying. The host can be revived only by a True Resurrection or a Wish spell. dex DC 16, each creature in a 30-foot Emanation [Area of Effect] originating from the host. {@actSaveFail} 33 (6d10) Necrotic damage. {@actSaveSuccess} Half damage.</p>",
@@ -2935,7 +2955,8 @@
           "damages": [
             {
               "formula": "6d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -2944,7 +2965,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_jv9b",
+        "id": "act_multiattack_zyih",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit makes two attacks, using Slam or Decaying Ray in any combination. It can (A) replace one attack with a use of Spellcasting to cast Magic Missile (level 2 version) or (B) replace two attacks with a use of Spellcasting to cast Blight (level 9 version).</p>",
@@ -2964,7 +2985,7 @@
         }
       },
       {
-        "id": "act_slam_hfia",
+        "id": "act_slam_s8sn",
         "name": "Slam",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +13, reach 10 ft. Hit: 15 (2d8 + 6) Force damage plus 11 (2d10) Acid damage.</p>",
@@ -2982,18 +3003,20 @@
           "damages": [
             {
               "formula": "2d8 + 6",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             },
             {
               "formula": "2d10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_decaying_ray_3zcj",
+        "id": "act_decaying_ray_2p0p",
         "name": "Decaying Ray",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +13, range 120 ft. Hit: 19 (3d8 + 6) Necrotic damage. If the target is a creature, it is subjected to the following effect. con DC 21. {@actSaveFail} The target gains 1 Exhaustion level. It repeats the save at the end of each of its turns, taking 5 (1d10) Necrotic damage on a failure or losing all Exhaustion levels caused by this effect on a success. After 1 minute, it succeeds automatically.</p>",
@@ -3014,18 +3037,20 @@
           "damages": [
             {
               "formula": "3d8 + 6",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             },
             {
               "formula": "1d10",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_create_tendrils__recharge_5__m6g0",
+        "id": "act_create_tendrils__recharge_5__4gm4",
         "name": "Create Tendrils (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>The spirit creates 1d4 + 2 Tendrils of Dendallen, each appearing in unoccupied spaces the spirit can see on solid surfaces within 150 feet of itself. The spirit can have no more than six tendrils at a time. The tendrils take their turns immediately after the spirit on the same Initiative count, and they obey the spirit. A tendril remains for 1 minute or until it's reduced to 0 Hit Points.</p>",
@@ -3052,7 +3077,7 @@
       "description": "The creature can take 3 legendary actions, choosing from the options below.",
       "entries": [
         {
-          "id": "act_accursed_magic_sjuw",
+          "id": "act_accursed_magic_hovb",
           "name": "Accursed Magic",
           "actionType": "legendary",
           "descriptionHtml": "<p>The spirit uses Spellcasting to cast Bestow Curse, False Life (level 3 version), or Hold Person (level 3 version). The spirit can't take this action again until the start of its next turn.</p>",
@@ -3072,7 +3097,7 @@
           }
         },
         {
-          "id": "act_command_tendrils_tjm1",
+          "id": "act_command_tendrils_x95u",
           "name": "Command Tendrils",
           "actionType": "legendary",
           "descriptionHtml": "<p>Up to two Tendrils of Dendallen the spirit can see each either make a Grasp attack or use Teleport. The spirit can't take this action again until the start of its next turn.</p>",
@@ -3092,7 +3117,7 @@
           }
         },
         {
-          "id": "act_sweep_ae11",
+          "id": "act_sweep_6jfv",
           "name": "Sweep",
           "actionType": "legendary",
           "descriptionHtml": "<p>The spirit sweeps out with its massive arm. dex DC 19, each creature in a 20-foot Cone [Area of Effect]. {@actSaveFail} 23 (3d12 + 4) Force damage, and the target is pushed up to 15 feet away from the spirit and has the Prone condition. {@actSaveSuccess} Half damage only.</p>",
@@ -3113,7 +3138,8 @@
             "damages": [
               {
                 "formula": "3d12 + 4",
-                "type": "Force"
+                "type": "Force",
+                "saveRider": true
               }
             ],
             "recharge": null
@@ -3236,7 +3262,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_beak_tcdq",
+        "id": "act_beak_rnjv",
         "name": "Beak",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +8, reach 15 ft. Hit: 21 (3d10 + 5) Slashing damage. If the swordbeak moved 30+ feet straight toward the target immediately before the hit, the target takes an extra 10 (3d6) Slashing damage.</p>",
@@ -3254,11 +3280,13 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "3d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3399,7 +3427,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_immovable_z1l4",
+        "id": "act_immovable_may6",
         "name": "Immovable",
         "actionType": "action",
         "descriptionHtml": "<p>The tendril can't move or be moved except via teleportation or interplanar travel.</p>",
@@ -3419,7 +3447,7 @@
         }
       },
       {
-        "id": "act_immutable_form_j3do",
+        "id": "act_immutable_form_ih4t",
         "name": "Immutable Form",
         "actionType": "action",
         "descriptionHtml": "<p>The tendril can't shape-shift.</p>",
@@ -3439,7 +3467,7 @@
         }
       },
       {
-        "id": "act_necromantic_demise_f754",
+        "id": "act_necromantic_demise_9o70",
         "name": "Necromantic Demise",
         "actionType": "action",
         "descriptionHtml": "<p>The tendril disappears if the Spirit of Dendallen is destroyed or dismissed.</p>",
@@ -3459,7 +3487,7 @@
         }
       },
       {
-        "id": "act_will_of_dendallen_rfcm",
+        "id": "act_will_of_dendallen_ut7u",
         "name": "Will of Dendallen",
         "actionType": "action",
         "descriptionHtml": "<p>The tendril has a telepathic link with the spirit and the spirit's host while it's on the same plane of existence as them. The tendril doesn't provide cover to enemies against attacks and effects that pass through its space.</p>",
@@ -3479,7 +3507,7 @@
         }
       },
       {
-        "id": "act_grasp_cuj4",
+        "id": "act_grasp_lzcf",
         "name": "Grasp",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +7, reach 10 ft. Hit: 16 (2d10 + 5) Force damage plus 4 (1d8) Acid damage. If the target is a Huge or smaller creature, it has the Grappled condition (escape DC 15) and is pulled up to 5 feet toward the tendril. The tendril can have only one target Grappled in this way at a time.</p>",
@@ -3500,18 +3528,20 @@
           "damages": [
             {
               "formula": "2d10 + 5",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             },
             {
               "formula": "1d8",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_fling_o7f5",
+        "id": "act_fling_4o2w",
         "name": "Fling",
         "actionType": "action",
         "descriptionHtml": "<p>The tendril throws a Medium or smaller creature Grappled by it to a space it can see within 60 feet of itself that isn't in the air. dex DC 15, the creature thrown and each creature in the destination space. {@actSaveFail} 18 (4d8) Bludgeoning damage, and the target has the Prone condition. {@actSaveSuccess} Half damage only.</p>",
@@ -3532,14 +3562,15 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": true
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_teleport_0syq",
+        "id": "act_teleport_0jv5",
         "name": "Teleport",
         "actionType": "action",
         "descriptionHtml": "<p>The tendril teleports up to 120 feet to an unoccupied space it can see on a solid surface.</p>",
@@ -3682,7 +3713,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_adapted_jqqt",
+        "id": "act_adapted_trqb",
         "name": "Adapted",
         "actionType": "trait",
         "descriptionHtml": "<p>The weremammoth can tolerate temperatures of 0 degrees Fahrenheit or lower without being subjected to the effects of extreme cold.</p>",
@@ -3704,7 +3735,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_0atr",
+        "id": "act_multiattack_fsim",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The weremammoth makes three attacks, using Spear or Trample in any combination. It can replace one attack with a Gore attack.</p>",
@@ -3724,7 +3755,7 @@
         }
       },
       {
-        "id": "act_gore__mammoth_or_hybrid_form_only__mszj",
+        "id": "act_gore__mammoth_or_hybrid_form_only__q3bc",
         "name": "Gore (Mammoth or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +10, reach 5 ft. Hit: 16 (2d8 + 7) Piercing damage. If the target is a Humanoid, it is subjected to the following effect. con DC 12. {@actSaveFail} The target is cursed. If the cursed target drops to 0 Hit Points, it instead becomes a Weremammoth under the GM's control and has 10 Hit Points. {@actSaveSuccess} The target is immune to this weremammoth's curse for 24 hours.</p>",
@@ -3745,14 +3776,15 @@
           "damages": [
             {
               "formula": "2d8 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spear__humanoid_or_hybrid_form_only__dzuq",
+        "id": "act_spear__humanoid_or_hybrid_form_only__ern3",
         "name": "Spear (Humanoid or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +10, reach 5 ft. or range 20/60 ft. Hit: 17 (3d6 + 7) Piercing damage.</p>",
@@ -3770,14 +3802,15 @@
           "damages": [
             {
               "formula": "3d6 + 7",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_trample__mammoth_or_hybrid_form_only__01td",
+        "id": "act_trample__mammoth_or_hybrid_form_only__7tn4",
         "name": "Trample (Mammoth or Hybrid Form Only)",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +10, reach 5 ft. Hit: 18 (2d10 + 7) Bludgeoning damage. If the target is a Large or smaller creature and the weremammoth moved 20+ feet straight toward it immediately before the hit, the target has the Prone condition.</p>",
@@ -3795,7 +3828,8 @@
           "damages": [
             {
               "formula": "2d10 + 7",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -3804,7 +3838,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_p15c",
+        "id": "act_shape_shift_sjf9",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>The werewolf shape-shifts into a Large mammoth-humanoid hybrid or a Huge mammoth, or it returns to its true humanoid form. Its game statistics, other than its size, are the same in each form. Any equipment it is wearing or carrying isn't transformed.</p>",
@@ -3968,7 +4002,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_blizzard_stalker_zrpc",
+        "id": "act_blizzard_stalker_6rf9",
         "name": "Blizzard Stalker",
         "actionType": "trait",
         "descriptionHtml": "<p>Inclement weather (such as fog, snow or wind) doesn't impede the wraith's vision, and it has Advantage on Dexterity (Stealth) checks it makes in such conditions.</p>",
@@ -3988,7 +4022,7 @@
         }
       },
       {
-        "id": "act_incorporeal_movement_g5pw",
+        "id": "act_incorporeal_movement_baea",
         "name": "Incorporeal Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The wraith can move through other creatures and objects as if they were Difficult Terrain. It takes 5 (1d10) Force damage if it ends its turn inside an object.</p>",
@@ -4006,7 +4040,8 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -4015,7 +4050,7 @@
     ],
     "actions": [
       {
-        "id": "act_life_drain_wupz",
+        "id": "act_life_drain_tujl",
         "name": "Life Drain",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +6 (with Advantage during the first round of each combat), reach 5 ft. Hit: 16 (3d8 + 3) Necrotic damage plus 16 (3d10) Cold damage. If the target is a creature, its Hit Points maximum decreases by an amount equal to the Necrotic damage taken.</p>",
@@ -4033,18 +4068,20 @@
           "damages": [
             {
               "formula": "3d8 + 3",
-              "type": "Necrotic"
+              "type": "Necrotic",
+              "saveRider": false
             },
             {
               "formula": "3d10",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_freezing_gale__recharge_5__bim2",
+        "id": "act_freezing_gale__recharge_5__431d",
         "name": "Freezing Gale (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 14, each creature in a 30-foot Cone [Area of Effect]. {@actSaveFail} 28 (8d6) Cold damage. {@actSaveSuccess} Half damage.</p>",
@@ -4065,14 +4102,15 @@
           "damages": [
             {
               "formula": "8d6",
-              "type": "Cold"
+              "type": "Cold",
+              "saveRider": true
             }
           ],
           "recharge": "5"
         }
       },
       {
-        "id": "act_create_walker__2_day__s0hg",
+        "id": "act_create_walker__2_day__xfsj",
         "name": "Create Walker (2/Day)",
         "actionType": "action",
         "descriptionHtml": "<p>The wraith targets a Humanoid corpse within 10 feet of itself that died from either Cold damage or exposure to extreme cold. The target's remains animate as either a Skeleton or a Zombie (depending on the state of the corpse, as determined by the GM) that has Immunity to Cold and Necrotic damage and shares the wraith's Blizzard Stalker trait. The animated creature is under the wraith's control. The wraith can have no more than ten animated creatures under its control at a time.</p>",
@@ -4209,7 +4247,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_atoi",
+        "id": "act_multiattack_wqmr",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The winged wretch makes two Rend attacks.</p>",
@@ -4229,7 +4267,7 @@
         }
       },
       {
-        "id": "act_rend_b0vg",
+        "id": "act_rend_k2gf",
         "name": "Rend",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +3, reach 5 ft. Hit: 5 (1d8 + 1) Slashing damage.</p>",
@@ -4247,7 +4285,8 @@
           "damages": [
             {
               "formula": "1d8 + 1",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null

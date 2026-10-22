@@ -13241,7 +13241,53 @@ window.emitTokenUpdates = function(currentTokens) {
         rollTrapSave: (trapId, tokenId, ability, dc) => rollTrapSave(trapId, tokenId, ability, dc),
         switchMapTo: (mapId, tokenId = null) => switchMapTo(mapId, tokenId),
         handleCardAction: (cardData, action) => handleCardAction(cardData, action),
-        triggerDamageFXAnimation: (x, y, radius, damageTypes) => triggerDamageFXAnimation(x, y, radius, damageTypes)
+        resolveSaveFromChat: (cardData, applyHalf, msgId) => resolveSaveFromChat(cardData, applyHalf, msgId),
+        processMassAttackFromChat: (massAttackCard, msgId) => processMassAttackFromChat(massAttackCard, msgId),
+        triggerDamageFXAnimation: (x, y, radius, damageTypes) => triggerDamageFXAnimation(x, y, radius, damageTypes),
+        stepTokenSize: (tokenId, delta) => {
+            const token = tokens[tokenId];
+            if (!token) return null;
+            const sizeLadder = [0.5, 1, 2, 3, 4];
+            const curSize = parseFloat(token.size) || 1;
+            let closestIdx = 1;
+            let minDiff = Infinity;
+            sizeLadder.forEach((s, idx) => {
+                const diff = Math.abs(s - curSize);
+                if (diff < minDiff) { minDiff = diff; closestIdx = idx; }
+            });
+            const nextIdx = Math.max(0, Math.min(sizeLadder.length - 1, closestIdx + delta));
+            token.size = sizeLadder[nextIdx];
+            delete token.customWidth;
+            delete token.customHeight;
+            window.emitTokenUpdates(tokens);
+            renderAll();
+            return token.size;
+        },
+        stepTokenRotation: (tokenId, angleDelta = 45) => {
+            const token = tokens[tokenId];
+            if (!token) return null;
+            let cur = (token.rotation || 0) + angleDelta;
+            cur = ((cur % 360) + 360) % 360;
+            token.rotation = cur;
+            window.emitTokenUpdates(tokens);
+            renderAll();
+            return token.rotation;
+        },
+        getTokenScreenCoords: (tokenId) => {
+            const token = tokens[tokenId];
+            if (!token) return null;
+            const { drawW, drawH } = getTokenDrawDimensions(token);
+            const renderPos = tokenAnimations[token.id]?.currentPos || { x: token.x, y: token.y };
+            const cx = renderPos.x + drawW / 2;
+            const cy = renderPos.y + drawH / 2;
+            const sc = canvasToScreen(cx, cy);
+            return {
+                x: sc.x,
+                y: sc.y,
+                width: drawW * zoom,
+                height: drawH * zoom
+            };
+        }
     };
 
     // =========================================================================
@@ -15507,19 +15553,52 @@ window.emitTokenUpdates = function(currentTokens) {
         });
     }
 
-    function _hasResistanceType(arr, dmgType) {
-        if (!arr || !Array.isArray(arr)) return false;
+    function _hasResistanceType(arr, dmgType, attackMeta = {}) {
+        if (!arr || !Array.isArray(arr) || !dmgType) return false;
+        const targetType = dmgType.toLowerCase().trim();
+        const isMagic = !!(attackMeta.isMagic || attackMeta.isSpell);
+        const isSilvered = !!attackMeta.isSilvered;
+        const isAdamantine = !!attackMeta.isAdamantine;
+
         return arr.some(r => {
-            if (typeof r === 'string') return r.toLowerCase() === dmgType.toLowerCase();
-            if (typeof r === 'object' && r.resist) {
-                return _hasResistanceType(r.resist, dmgType);
+            if (!r) return false;
+            // 1. Plain string defense e.g. "fire", "slashing"
+            if (typeof r === 'string') {
+                return r.toLowerCase().trim() === targetType;
             }
-            if (typeof r === 'object' && r.immune) {
-                return _hasResistanceType(r.immune, dmgType);
+
+            // 2. Structured defense object { types, bypasses, note }
+            if (typeof r === 'object' && Array.isArray(r.types)) {
+                const matchesType = r.types.some(t => String(t).toLowerCase().trim() === targetType);
+                if (!matchesType) return false;
+
+                // Check bypasses
+                const bypasses = Array.isArray(r.bypasses) ? r.bypasses : [];
+                if (bypasses.length > 0) {
+                    if (bypasses.includes('magic') && isMagic) return false; // Bypassed by magic
+                    if (bypasses.includes('silver') && isSilvered) return false; // Bypassed by silver
+                    if (bypasses.includes('adamantine') && isAdamantine) return false; // Bypassed by adamantine
+                }
+                return true;
             }
-            if (typeof r === 'object' && r.vulnerable) {
-                return _hasResistanceType(r.vulnerable, dmgType);
+
+            // 3. Legacy 5etools raw object { resist: [...], note: "..." }
+            const legacySub = r.resist || r.immune || r.vulnerable;
+            if (typeof r === 'object' && legacySub) {
+                const note = (r.note || r.special || '').toLowerCase();
+                const bypasses = [];
+                if (note.includes('nonmagical') || note.includes('non-magical')) bypasses.push('magic');
+                if (note.includes('silver')) bypasses.push('silver');
+                if (note.includes('adamant')) bypasses.push('adamantine');
+
+                if (bypasses.length > 0) {
+                    if (bypasses.includes('magic') && isMagic) return false;
+                    if (bypasses.includes('silver') && isSilvered) return false;
+                    if (bypasses.includes('adamantine') && isAdamantine) return false;
+                }
+                return _hasResistanceType(legacySub, dmgType, attackMeta);
             }
+
             return false;
         });
     }
@@ -15572,7 +15651,7 @@ window.emitTokenUpdates = function(currentTokens) {
         }
     }
 
-    function applyDamageToTokens(tokenIds, amount, type, mode) {
+    function applyDamageToTokens(tokenIds, amount, type, mode, attackMeta = {}) {
         if (!vtt.socket || tokenIds.length === 0) return;
 
         let appliedCount = 0;
@@ -15588,17 +15667,17 @@ window.emitTokenUpdates = function(currentTokens) {
                 const md = token.monsterData;
                 let multiplier = 1;
 
-                if (md.immune && _hasResistanceType(md.immune, type)) multiplier = 0;
-                else if (md.vulnerable && _hasResistanceType(md.vulnerable, type)) multiplier = 2;
-                else if (md.resist && _hasResistanceType(md.resist, type)) multiplier = 0.5;
+                if (md.immune && _hasResistanceType(md.immune, type, attackMeta)) multiplier = 0;
+                else if (md.vulnerable && _hasResistanceType(md.vulnerable, type, attackMeta)) multiplier = 2;
+                else if (md.resist && _hasResistanceType(md.resist, type, attackMeta)) multiplier = 0.5;
 
                 finalAmount = Math.floor(finalAmount * multiplier);
             } else if (mode !== 'heal' && type !== 'untyped' && token.isPlayer && token.characterId && window.VTT?.campaignState?.characters?.[token.characterId]) {
                 const char = window.VTT.campaignState.characters[token.characterId];
                 let multiplier = 1;
-                if (char.immune && char.immune.includes(type)) multiplier = 0;
-                else if (char.vulnerable && char.vulnerable.includes(type)) multiplier = 2;
-                else if (char.resist && char.resist.includes(type)) multiplier = 0.5;
+                if (char.immune && _hasResistanceType(char.immune, type, attackMeta)) multiplier = 0;
+                else if (char.vulnerable && _hasResistanceType(char.vulnerable, type, attackMeta)) multiplier = 2;
+                else if (char.resist && _hasResistanceType(char.resist, type, attackMeta)) multiplier = 0.5;
                 finalAmount = Math.floor(finalAmount * multiplier);
             }
 
@@ -15645,6 +15724,12 @@ window.emitTokenUpdates = function(currentTokens) {
             const rawAmount = dr.roll ? dr.roll.total : (parseInt(dr.formula) || 0);
             if (rawAmount <= 0) return;
             const type = dr.type || 'untyped';
+            const attackMeta = {
+                isMagic: !!dr.isMagic,
+                isSilvered: !!dr.isSilvered,
+                isAdamantine: !!dr.isAdamantine,
+                isSpell: !!dr.isSpell
+            };
 
             let finalAmount = rawAmount;
 
@@ -15652,16 +15737,16 @@ window.emitTokenUpdates = function(currentTokens) {
             if (type !== 'untyped' && token.monsterData) {
                 const md = token.monsterData;
                 let mult = 1;
-                if (md.immune && _hasResistanceType(md.immune, type)) mult = 0;
-                else if (md.vulnerable && _hasResistanceType(md.vulnerable, type)) mult = 2;
-                else if (md.resist && _hasResistanceType(md.resist, type)) mult = 0.5;
+                if (md.immune && _hasResistanceType(md.immune, type, attackMeta)) mult = 0;
+                else if (md.vulnerable && _hasResistanceType(md.vulnerable, type, attackMeta)) mult = 2;
+                else if (md.resist && _hasResistanceType(md.resist, type, attackMeta)) mult = 0.5;
                 finalAmount = Math.floor(finalAmount * mult);
             } else if (type !== 'untyped' && token.isPlayer && token.characterId && window.VTT?.campaignState?.characters?.[token.characterId]) {
                 const char = window.VTT.campaignState.characters[token.characterId];
                 let mult = 1;
-                if (char.immune && char.immune.includes(type)) mult = 0;
-                else if (char.vulnerable && char.vulnerable.includes(type)) mult = 2;
-                else if (char.resist && char.resist.includes(type)) mult = 0.5;
+                if (char.immune && _hasResistanceType(char.immune, type, attackMeta)) mult = 0;
+                else if (char.vulnerable && _hasResistanceType(char.vulnerable, type, attackMeta)) mult = 2;
+                else if (char.resist && _hasResistanceType(char.resist, type, attackMeta)) mult = 0.5;
                 finalAmount = Math.floor(finalAmount * mult);
             }
 
@@ -15749,77 +15834,512 @@ window.emitTokenUpdates = function(currentTokens) {
         return isNaN(totalMod) ? 0 : totalMod;
     }
 
-    function promptGMSaveHalf(saveSummary, onResolve) {
-        const oldModal = document.getElementById('vtt-save-resolve-modal');
-        if (oldModal) oldModal.remove();
+    function rollSavingThrowToken(formula, label, tokenId) {
+        const rollFn = window.vttPlayerSheetAPI?.simulateRoll || (typeof simulateRoll === 'function' ? simulateRoll : null);
+        let rollResult = rollFn ? rollFn(formula, 20) : null;
+        let d20 = 0;
+        let finalModifier = 0;
+        let total = 0;
 
-        const modal = document.createElement('div');
-        modal.id = 'vtt-save-resolve-modal';
-        modal.className = 'vtt-modal animated-fade-in';
-        modal.style.zIndex = '100005';
+        if (rollResult && rollResult.diceList && rollResult.diceList.length > 0) {
+            total = rollResult.total;
+            const d20Obj = rollResult.diceList.find(d => d.faces === 20) || rollResult.diceList[0];
+            d20 = d20Obj ? d20Obj.val : 10;
+            finalModifier = total - d20;
+        } else {
+            const regex = /(\d+)\s*d\s*(\d+)(?:\s*([+-])\s*(\d+))?/i;
+            const match = formula.match(regex);
+            let diceList = [];
+            let subtotal = 0;
+            if (match) {
+                const count = parseInt(match[1]) || 1;
+                const faces = parseInt(match[2]) || 20;
+                const sign = match[3] || '+';
+                const modifier = match[4] ? parseInt(match[4]) : 0;
+                for (let i = 0; i < count; i++) {
+                    const val = Math.floor(Math.random() * faces) + 1;
+                    diceList.push({ faces, val });
+                    subtotal += val;
+                }
+                finalModifier = sign === '-' ? -modifier : modifier;
+                total = subtotal + finalModifier;
+                d20 = diceList[0]?.val || 10;
+            } else {
+                d20 = Math.floor(Math.random() * 20) + 1;
+                diceList.push({ faces: 20, val: d20 });
+                total = d20;
+            }
 
-        const rowsHtml = saveSummary.results.map(r => {
-            const badge = r.passed
-                ? `<span style="color:#81c784; font-weight:700;"><i class="fa-solid fa-check"></i> Succeeded</span>`
-                : `<span style="color:#ef5350; font-weight:700;"><i class="fa-solid fa-xmark"></i> Failed</span>`;
-            return `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:7px 10px; border-bottom:1px solid rgba(255,255,255,0.06); font-size:0.88rem;">
-                    <span style="font-weight:600; color:var(--color-text-primary);">${r.token.name || 'Token'}</span>
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <span style="font-size:0.8rem; color:var(--color-text-muted);">Roll: ${r.d20}${r.mod >= 0 ? '+' : ''}${r.mod} = <strong>${r.total}</strong></span>
-                        ${badge}
-                    </div>
-                </div>
-            `;
-        }).join('');
+            rollResult = {
+                formula,
+                count: 1,
+                faces: 20,
+                diceList,
+                modifier: finalModifier,
+                total,
+                breakdownStr: `[${d20}]${finalModifier >= 0 ? '+' : ''}${finalModifier}`,
+                compactBreakdown: `[${d20}]${finalModifier >= 0 ? '+' : ''}${finalModifier}`,
+                isCritSuccess: d20 === 20,
+                isCritFail: d20 === 1
+            };
+        }
 
-        modal.innerHTML = `
-            <div class="vtt-modal-content" style="max-width: 440px; border-radius: 12px; border: 1px solid var(--color-border-active); box-shadow: 0 8px 32px rgba(0,0,0,0.65);">
-                <div class="vtt-modal-header" style="border-bottom: 1px solid rgba(212,175,55,0.2); padding: 10px 14px;">
-                    <h3 style="margin:0; font-size:1.05rem; display:flex; align-items:center; gap:8px; color:var(--color-gold-light);">
-                        <i class="fa-solid fa-shield-halved"></i> DC ${saveSummary.dc} ${saveSummary.ability} Save Resolution
-                    </h3>
-                    <button type="button" class="vtt-modal-close" id="btn-save-modal-close"><i class="fa-solid fa-times"></i></button>
+        const rollVisibility = document.getElementById('config-roll-visibility')?.value || 'public';
+        const msgText = `[${label}] rolls **${formula}**`;
+
+        if (rollVisibility === 'private' && vtt.role === 'GM') {
+            vtt.socket?.emit('chat:whisper', {
+                to: vtt.username,
+                text: msgText,
+                roll: rollResult
+            });
+        } else {
+            vtt.socket?.emit('chat:msg', {
+                text: msgText,
+                roll: rollResult
+            });
+        }
+
+        return { total, d20, mod: finalModifier, formula, rollResult };
+    }
+
+    function postSaveResolutionChatCard(saveResolveData) {
+        if (!vtt.socket) return;
+        vtt.socket.emit('chat:msg', {
+            whisperToGM: true,
+            saveResolveCard: {
+                dc: saveResolveData.dc,
+                ability: saveResolveData.ability,
+                results: saveResolveData.results,
+                cardData: saveResolveData.cardData,
+                resolved: null,
+                timestamp: Date.now()
+            }
+        });
+    }
+
+    function resolveSaveFromChat(saveResolveCard, applyHalf, msgId) {
+        if (vtt.role !== 'GM' || !saveResolveCard) return;
+        const cardData = saveResolveCard.cardData || {};
+        const dmgRolls = cardData.dmgRolls || [];
+        const damageTypes = dmgRolls.map(dr => dr.type || 'untyped').filter(Boolean);
+        const results = saveResolveCard.results || [];
+
+        let anyChanged = false;
+        const affectedIds = [];
+        const affectedTokens = [];
+
+        results.forEach(r => {
+            const token = tokens[r.tokenId];
+            if (!token) return;
+
+            const targetDmgRolls = (r.dmgRolls && r.dmgRolls.length > 0) ? r.dmgRolls : dmgRolls;
+            const targetDamageTypes = targetDmgRolls.map(dr => dr.type || 'untyped').filter(Boolean);
+
+            const multiplier = r.passed ? (applyHalf ? 0.5 : 0) : 1.0;
+            let deducted = 0;
+            if (multiplier > 0 && targetDmgRolls.length > 0) {
+                deducted = applyCardDamageToToken(token, targetDmgRolls, multiplier);
+                if (deducted > 0) {
+                    anyChanged = true;
+                    affectedTokens.push(token);
+                }
+                affectedIds.push(token.id);
+
+                const { drawW, drawH } = getTokenDrawDimensions(token);
+                triggerDamageFXAnimation(token.x + drawW / 2, token.y + drawH / 2, Math.max(drawW, drawH) / 2, targetDamageTypes.length > 0 ? targetDamageTypes : ['untyped']);
+            }
+            r.deductedHp = deducted;
+        });
+
+        if (anyChanged) {
+            syncTokensHpToCharacters(affectedTokens);
+            window.emitTokenUpdates(tokens);
+            renderAll();
+        }
+
+        if (affectedIds.length > 0 && vtt.socket) {
+            vtt.socket.emit('tokens:damage_fx', {
+                mapId: currentMapId,
+                tokenIds: affectedIds,
+                damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
+            });
+        }
+
+        if (vtt.socket && msgId) {
+            vtt.socket.emit('chat:save_resolved', {
+                id: msgId,
+                resolution: { applyHalf, timestamp: Date.now() },
+                results
+            });
+        }
+    }
+
+    function promptMassAttackDistribution(massAttackCard, selectedIds, onConfirm, onCancel) {
+        const existing = document.getElementById('vtt-distribute-attacks-backdrop');
+        if (existing) existing.remove();
+
+        function escapeTokenHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        const attacks = massAttackCard.attacks || [];
+        const targetTokens = selectedIds.map(id => tokens[id]).filter(Boolean);
+        if (targetTokens.length === 0) return;
+
+        function calcDistribution() {
+            const indices = attacks.map(a => a.index);
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+            const map = {};
+            targetTokens.forEach(t => { map[t.id] = []; });
+            indices.forEach((atkIdx, idx) => {
+                const tId = targetTokens[idx % targetTokens.length].id;
+                map[tId].push(atkIdx);
+            });
+            return targetTokens.map(t => ({
+                tokenId: t.id,
+                attackIndices: map[t.id]
+            }));
+        }
+
+        let currentDist = calcDistribution();
+
+        const backdrop = document.createElement('div');
+        backdrop.id = 'vtt-distribute-attacks-backdrop';
+        backdrop.className = 'vtt-modal-backdrop';
+
+        const dialog = document.createElement('div');
+        dialog.className = 'vtt-mass-roll-dialog';
+        dialog.style.width = '420px';
+
+        function renderRows() {
+            return currentDist.map(d => {
+                const token = tokens[d.tokenId];
+                if (!token) return '';
+                const ac = getTokenAC(token) ?? 10;
+                const avatar = token.img || token.avatar || 'img/tokens/unknown.png';
+                const count = d.attackIndices.length;
+                const badges = d.attackIndices.map(i => `#${i}`).join(', ');
+                return `
+                    <div class="distribute-token-row">
+                        <div class="distribute-token-info">
+                            <img src="${avatar}" class="distribute-token-avatar" alt="${escapeTokenHtml(token.name || 'Token')}">
+                            <span class="distribute-token-name" title="${escapeTokenHtml(token.name || 'Token')}">${escapeTokenHtml(token.name || 'Token')}</span>
+                            <span class="distribute-token-ac">AC ${ac}</span>
+                        </div>
+                        <span class="distribute-count-badge" title="Attacks: ${badges}">
+                            ${count} Attack${count === 1 ? '' : 's'} (${badges})
+                        </span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        dialog.innerHTML = `
+            <div class="mass-roll-header">
+                <div class="mass-roll-title">
+                    <i class="fa-solid fa-crosshairs"></i>
+                    <span>Distribute Attacks?</span>
                 </div>
-                <div class="vtt-modal-body" style="padding: 12px 14px;">
-                    <div style="max-height: 220px; overflow-y: auto; margin-bottom: 12px; background: rgba(0,0,0,0.25); border-radius: 6px; padding: 4px;">
-                        ${rowsHtml}
-                    </div>
-                    <div style="font-size: 0.9rem; color: var(--color-text-secondary); margin-bottom: 14px; text-align: center;">
-                        Apply half damage to tokens that succeeded on the save?
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        <button type="button" id="btn-save-apply-half" class="btn btn-primary" style="flex:1; padding:8px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px;">
-                            <i class="fa-solid fa-check"></i> Yes (Half Damage)
-                        </button>
-                        <button type="button" id="btn-save-apply-zero" class="btn btn-secondary" style="flex:1; padding:8px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px;">
-                            <i class="fa-solid fa-ban"></i> No (0 Damage)
-                        </button>
-                    </div>
+                <button type="button" class="mass-roll-close" id="btn-distribute-close" title="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="mass-roll-body">
+                <div class="mass-roll-creature-info">
+                    ${attacks.length} attacks distributed randomly and evenly across ${targetTokens.length} selected targets.
                 </div>
+                <div class="distribute-token-list scroll-styled" id="distribute-token-list-container">
+                    ${renderRows()}
+                </div>
+            </div>
+            <div class="mass-roll-footer">
+                <button type="button" class="btn-mass-roll-cancel" id="btn-distribute-reroll" title="Shuffle attack assignments">
+                    <i class="fa-solid fa-shuffle"></i> Shuffle
+                </button>
+                <button type="button" class="btn-mass-roll-cancel" id="btn-distribute-cancel">Cancel</button>
+                <button type="button" class="btn-mass-roll-confirm" id="btn-distribute-confirm">
+                    <i class="fa-solid fa-play"></i> Apply & Process
+                </button>
             </div>
         `;
 
-        document.body.appendChild(modal);
+        backdrop.appendChild(dialog);
+        document.body.appendChild(backdrop);
 
-        const closeModal = () => modal.remove();
-        modal.querySelector('#btn-save-modal-close').addEventListener('click', closeModal);
+        function closeDialog() {
+            window.removeEventListener('keydown', onKeyDown);
+            backdrop.remove();
+        }
 
-        modal.querySelector('#btn-save-apply-half').addEventListener('click', () => {
-            closeModal();
-            onResolve(true);
+        function onKeyDown(e) {
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeDialog();
+                if (typeof onCancel === 'function') onCancel();
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                doConfirm();
+            }
+        }
+
+        function doConfirm() {
+            closeDialog();
+            if (typeof onConfirm === 'function') {
+                onConfirm(currentDist);
+            }
+        }
+
+        window.addEventListener('keydown', onKeyDown);
+        dialog.querySelector('#btn-distribute-close').addEventListener('click', () => {
+            closeDialog();
+            if (typeof onCancel === 'function') onCancel();
+        });
+        dialog.querySelector('#btn-distribute-cancel').addEventListener('click', () => {
+            closeDialog();
+            if (typeof onCancel === 'function') onCancel();
+        });
+        dialog.querySelector('#btn-distribute-reroll').addEventListener('click', () => {
+            currentDist = calcDistribution();
+            dialog.querySelector('#distribute-token-list-container').innerHTML = renderRows();
+        });
+        dialog.querySelector('#btn-distribute-confirm').addEventListener('click', doConfirm);
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) {
+                closeDialog();
+                if (typeof onCancel === 'function') onCancel();
+            }
+        });
+    }
+
+    function processMassAttackFromChat(massAttackCard, msgId) {
+        if (vtt.role !== 'GM' || !massAttackCard) return;
+        const selectedIds = Array.from(selectedTokenIds);
+
+        if (selectedIds.length === 0) {
+            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                JqueryUtil.doToast({
+                    type: 'warning',
+                    content: 'No tokens selected. Select target token(s) on canvas first.'
+                });
+            }
+            if (msgId) {
+                const msgEl = document.querySelector(`[data-msg-id="${msgId}"]`);
+                const btn = msgEl?.querySelector('.btn-mass-attack-process');
+                if (btn) btn.disabled = false;
+            }
+            return;
+        }
+
+        const attacks = massAttackCard.attacks || [];
+        if (attacks.length === 0) return;
+
+        // If exactly 1 token is selected, assign all attacks to it
+        if (selectedIds.length === 1) {
+            const singleTokenId = selectedIds[0];
+            const distribution = [{
+                tokenId: singleTokenId,
+                attackIndices: attacks.map(a => a.index)
+            }];
+            executeMassAttackResolution(massAttackCard, distribution, msgId);
+            return;
+        }
+
+        // Multiple tokens selected -> Prompt "Distribute Attacks?" modal
+        promptMassAttackDistribution(massAttackCard, selectedIds, (distribution) => {
+            executeMassAttackResolution(massAttackCard, distribution, msgId);
+        }, () => {
+            if (msgId) {
+                const msgEl = document.querySelector(`[data-msg-id="${msgId}"]`);
+                const btn = msgEl?.querySelector('.btn-mass-attack-process');
+                if (btn) btn.disabled = false;
+            }
+        });
+    }
+
+    function executeMassAttackResolution(massAttackCard, distribution, msgId) {
+        const attacks = massAttackCard.attacks || [];
+        const attackMap = {};
+        attacks.forEach(a => { attackMap[a.index] = a; });
+
+        let anyChanged = false;
+        const affectedIds = [];
+        const affectedTokens = [];
+        const allDamageTypes = new Set();
+        const saveRiderTokens = [];
+
+        distribution.forEach(d => {
+            const token = tokens[d.tokenId];
+            if (!token) return;
+            const targetAC = getTokenAC(token) ?? 10;
+            let tokenTookDamage = false;
+
+            d.attackIndices.forEach(atkIdx => {
+                const attack = attackMap[atkIdx];
+                if (!attack) return;
+
+                let hit = false;
+                if (attack.atkRoll) {
+                    hit = attack.atkRoll.isCritSuccess || (!attack.atkRoll.isCritFail && attack.atkRoll.total >= targetAC);
+                } else {
+                    hit = true;
+                }
+
+                let deducted = 0;
+                if (hit) {
+                    const dmgRolls = attack.dmgRolls || [];
+                    const hitDamages = dmgRolls.filter(dr => !dr.saveRider);
+                    const riderDamages = dmgRolls.filter(dr => dr.saveRider);
+
+                    hitDamages.forEach(dr => { if (dr.type) allDamageTypes.add(dr.type); });
+
+                    if (hitDamages.length > 0) {
+                        deducted = applyCardDamageToToken(token, hitDamages, 1.0);
+                        if (deducted > 0) {
+                            anyChanged = true;
+                            tokenTookDamage = true;
+                        }
+                    }
+
+                    if (attack.saveInfo && attack.saveInfo.dc) {
+                        saveRiderTokens.push({
+                            token,
+                            attackIndex: attack.index,
+                            saveInfo: attack.saveInfo,
+                            riderDamages: riderDamages
+                        });
+                    }
+                }
+
+                attack.resolution = {
+                    tokenId: token.id,
+                    tokenName: token.name || 'Token',
+                    hit: hit,
+                    damageDealt: deducted
+                };
+            });
+
+            if (tokenTookDamage) {
+                affectedTokens.push(token);
+                affectedIds.push(token.id);
+                const { drawW, drawH } = getTokenDrawDimensions(token);
+                triggerDamageFXAnimation(token.x + drawW / 2, token.y + drawH / 2, Math.max(drawW, drawH) / 2, allDamageTypes.size > 0 ? Array.from(allDamageTypes) : ['untyped']);
+            }
         });
 
-        modal.querySelector('#btn-save-apply-zero').addEventListener('click', () => {
-            closeModal();
-            onResolve(false);
-        });
+        if (anyChanged) {
+            syncTokensHpToCharacters(affectedTokens);
+            window.emitTokenUpdates(tokens);
+            renderAll();
+        }
+
+        if (affectedIds.length > 0 && vtt.socket) {
+            vtt.socket.emit('tokens:damage_fx', {
+                mapId: currentMapId,
+                tokenIds: affectedIds,
+                damageTypes: allDamageTypes.size > 0 ? Array.from(allDamageTypes) : ['untyped']
+            });
+        }
+
+        const hitsCount = attacks.filter(a => a.resolution?.hit).length;
+        const totalDamageDealt = attacks.reduce((sum, a) => sum + (a.resolution?.damageDealt || 0), 0);
+        const summary = {
+            hitsCount,
+            totalDamageDealt,
+            saveRidersTriggered: saveRiderTokens.length > 0
+        };
+
+        massAttackCard.resolved = { timestamp: Date.now() };
+        massAttackCard.summary = summary;
+
+        if (vtt.socket && msgId) {
+            vtt.socket.emit('chat:mass_attack_resolved', {
+                id: msgId,
+                massAttackCard: massAttackCard,
+                resolution: { timestamp: Date.now() },
+                attacks: attacks,
+                summary: summary
+            });
+        }
+
+        // Trigger Save Riders if any hit token requires a saving throw
+        if (saveRiderTokens.length > 0) {
+            const results = [];
+            let sIdx = 0;
+
+            function rollNextRider() {
+                if (sIdx < saveRiderTokens.length) {
+                    const item = saveRiderTokens[sIdx];
+                    const token = item.token;
+                    const saveInfo = item.saveInfo;
+                    const ability = (saveInfo.ability || 'CON').toUpperCase();
+                    const dc = parseInt(saveInfo.dc) || 10;
+                    const abKey = ability.toLowerCase();
+
+                    let formula = '';
+                    if (token.isPlayer && token.characterId && window.VTT?.campaignState?.characters?.[token.characterId]) {
+                        const char = window.VTT.campaignState.characters[token.characterId];
+                        formula = getPcRollFormula(char, 'save', abKey);
+                    } else {
+                        const mData = getResolvedCreatureMonsterData(token) || getResolvedMonsterData(token);
+                        if (mData && mData.save && mData.save[abKey] !== undefined) {
+                            const mod = parseInt(mData.save[abKey]) || 0;
+                            formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                        } else if (mData && mData[abKey] !== undefined) {
+                            const mod = Math.floor(((mData[abKey] || 10) - 10) / 2);
+                            formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                        } else {
+                            const mod = getTokenSaveMod(token, ability);
+                            formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                        }
+                    }
+
+                    const label = `${token.name || 'Token'} (Attack #${item.attackIndex}): ${ability} Saving Throw (DC ${dc})`;
+                    const rollOutput = rollSavingThrowToken(formula, label, token.id);
+                    const passed = rollOutput.total >= dc;
+
+                    results.push({
+                        tokenId: token.id,
+                        tokenName: `${token.name || 'Token'} (Attack #${item.attackIndex})`,
+                        attackIndex: item.attackIndex,
+                        d20: rollOutput.d20,
+                        mod: rollOutput.mod,
+                        total: rollOutput.total,
+                        passed,
+                        formula: rollOutput.formula,
+                        dmgRolls: item.riderDamages || []
+                    });
+
+                    sIdx++;
+                    setTimeout(rollNextRider, 150);
+                } else {
+                    // All saving throws finished rolling! Post the Save Resolution Card for the GM
+                    const firstSave = saveRiderTokens[0]?.saveInfo || {};
+                    postSaveResolutionChatCard({
+                        dc: parseInt(firstSave.dc) || 10,
+                        ability: (firstSave.ability || 'CON').toUpperCase(),
+                        results,
+                        cardData: {
+                            dmgRolls: []
+                        }
+                    });
+                }
+            }
+
+            rollNextRider();
+        }
     }
 
     function processCardFullResolution(cardData, selectedIds) {
         if (!selectedIds || selectedIds.length === 0) return;
         const dmgRolls = cardData.dmgRolls || [];
-        const damageTypes = dmgRolls.map(dr => dr.type || 'untyped').filter(Boolean);
         const hasAttack = !!cardData.atkRoll;
         const saveObj = cardData.saveInfo || (cardData.saveDc ? { dc: cardData.saveDc, ability: cardData.saveAbility } : null);
 
@@ -15835,42 +16355,39 @@ window.emitTokenUpdates = function(currentTokens) {
             });
         }
 
-        if (saveObj) {
-            const ability = (saveObj.ability || 'DEX').toUpperCase();
-            const dc = parseInt(saveObj.dc) || 10;
-            const results = [];
+        const hitTargetIds = hasAttack ? selectedIds.filter(id => atkHitMap[id]) : selectedIds;
 
-            selectedIds.forEach(id => {
-                const token = tokens[id];
-                if (!token) return;
-                const mod = getTokenSaveMod(token, ability);
-                const d20 = Math.floor(Math.random() * 20) + 1;
-                const total = d20 + mod;
-                const passed = total >= dc;
-                results.push({ token, d20, mod, total, passed });
-            });
+        if (hasAttack && hitTargetIds.length === 0) {
+            if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                JqueryUtil.doToast({
+                    type: 'info',
+                    content: `Attack (${cardData.atkRoll.total}) missed selected token(s).`
+                });
+            }
+            return;
+        }
 
-            promptGMSaveHalf({ dc, ability, results }, (applyHalf) => {
+        // Apply on-hit damage immediately if this card is an attack
+        if (hasAttack) {
+            const hitDmgRolls = dmgRolls.filter(dr => !dr.saveRider);
+            if (hitDmgRolls.length > 0) {
                 let anyChanged = false;
                 const affectedIds = [];
                 const affectedTokens = [];
+                const hitDamageTypes = hitDmgRolls.map(dr => dr.type || 'untyped').filter(Boolean);
 
-                results.forEach(r => {
-                    const token = r.token;
-                    if (hasAttack && !atkHitMap[token.id]) return;
-
-                    const multiplier = r.passed ? (applyHalf ? 0.5 : 0) : 1.0;
-                    if (multiplier > 0) {
-                        const deducted = applyCardDamageToToken(token, dmgRolls, multiplier);
-                        if (deducted > 0) {
-                            anyChanged = true;
-                            affectedTokens.push(token);
-                        }
-                        affectedIds.push(token.id);
-
-                        const { drawW, drawH } = getTokenDrawDimensions(token);
-                        triggerDamageFXAnimation(token.x + drawW / 2, token.y + drawH / 2, Math.max(drawW, drawH) / 2, damageTypes.length > 0 ? damageTypes : ['untyped']);
+                hitTargetIds.forEach(id => {
+                    const token = tokens[id];
+                    if (!token) return;
+                    const deducted = applyCardDamageToToken(token, hitDmgRolls, 1.0);
+                    if (deducted > 0) {
+                        anyChanged = true;
+                        affectedTokens.push(token);
                     }
+                    affectedIds.push(token.id);
+
+                    const { drawW, drawH } = getTokenDrawDimensions(token);
+                    triggerDamageFXAnimation(token.x + drawW / 2, token.y + drawH / 2, Math.max(drawW, drawH) / 2, hitDamageTypes.length > 0 ? hitDamageTypes : ['untyped']);
                 });
 
                 if (anyChanged) {
@@ -15883,52 +16400,81 @@ window.emitTokenUpdates = function(currentTokens) {
                     vtt.socket.emit('tokens:damage_fx', {
                         mapId: currentMapId,
                         tokenIds: affectedIds,
-                        damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
+                        damageTypes: hitDamageTypes.length > 0 ? hitDamageTypes : ['untyped']
                     });
                 }
-            });
-        } else if (hasAttack) {
-            let anyChanged = false;
-            const affectedIds = [];
-            const affectedTokens = [];
+            }
+        }
 
-            selectedIds.forEach(id => {
-                const token = tokens[id];
-                if (!token) return;
-                if (atkHitMap[id]) {
-                    const deducted = applyCardDamageToToken(token, dmgRolls, 1.0);
-                    if (deducted > 0) {
-                        anyChanged = true;
-                        affectedTokens.push(token);
+        // Now handle saving throw (if saveObj exists)
+        if (saveObj) {
+            const ability = (saveObj.ability || 'DEX').toUpperCase();
+            const dc = parseInt(saveObj.dc) || 10;
+            const abKey = ability.toLowerCase();
+            const targetIds = hitTargetIds;
+
+            let riderDmgRolls = dmgRolls.filter(dr => dr.saveRider);
+            if (!hasAttack && riderDmgRolls.length === 0) {
+                riderDmgRolls = dmgRolls;
+            }
+
+            const results = [];
+            let index = 0;
+
+            function rollNextToken() {
+                if (index < targetIds.length) {
+                    const id = targetIds[index];
+                    const token = tokens[id];
+                    if (token) {
+                        let formula = '';
+                        if (token.isPlayer && token.characterId && window.VTT?.campaignState?.characters?.[token.characterId]) {
+                            const char = window.VTT.campaignState.characters[token.characterId];
+                            formula = getPcRollFormula(char, 'save', abKey);
+                        } else {
+                            const mData = getResolvedCreatureMonsterData(token) || getResolvedMonsterData(token);
+                            if (mData && mData.save && mData.save[abKey] !== undefined) {
+                                const mod = parseInt(mData.save[abKey]) || 0;
+                                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                            } else if (mData && mData[abKey] !== undefined) {
+                                const mod = Math.floor(((mData[abKey] || 10) - 10) / 2);
+                                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                            } else {
+                                const mod = getTokenSaveMod(token, ability);
+                                formula = `1d20${mod >= 0 ? '+' : ''}${mod}`;
+                            }
+                        }
+
+                        const label = `${token.name || 'Token'}: ${ability} Saving Throw`;
+                        const rollOutput = rollSavingThrowToken(formula, label, token.id);
+                        const passed = rollOutput.total >= dc;
+                        results.push({
+                            tokenId: token.id,
+                            tokenName: token.name || 'Token',
+                            d20: rollOutput.d20,
+                            mod: rollOutput.mod,
+                            total: rollOutput.total,
+                            passed,
+                            formula: rollOutput.formula,
+                            dmgRolls: riderDmgRolls
+                        });
                     }
-                    affectedIds.push(token.id);
-
-                    const { drawW, drawH } = getTokenDrawDimensions(token);
-                    triggerDamageFXAnimation(token.x + drawW / 2, token.y + drawH / 2, Math.max(drawW, drawH) / 2, damageTypes.length > 0 ? damageTypes : ['untyped']);
-                }
-            });
-
-            if (anyChanged) {
-                syncTokensHpToCharacters(affectedTokens);
-                window.emitTokenUpdates(tokens);
-                renderAll();
-            }
-
-            if (affectedIds.length > 0 && vtt.socket) {
-                vtt.socket.emit('tokens:damage_fx', {
-                    mapId: currentMapId,
-                    tokenIds: affectedIds,
-                    damageTypes: damageTypes.length > 0 ? damageTypes : ['untyped']
-                });
-            } else if (affectedIds.length === 0) {
-                if (typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
-                    JqueryUtil.doToast({
-                        type: 'info',
-                        content: `Attack (${cardData.atkRoll.total}) missed selected token(s).`
+                    index++;
+                    setTimeout(rollNextToken, 150);
+                } else {
+                    postSaveResolutionChatCard({
+                        dc,
+                        ability,
+                        results,
+                        cardData: {
+                            ...cardData,
+                            dmgRolls: riderDmgRolls
+                        }
                     });
                 }
             }
-        } else {
+
+            rollNextToken();
+        } else if (!hasAttack) {
             applyCompositeDamageToTokens(selectedIds, dmgRolls, 1.0);
         }
     }

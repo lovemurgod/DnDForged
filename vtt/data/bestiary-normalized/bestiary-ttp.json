@@ -93,7 +93,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_e7vd",
+        "id": "act_multiattack_oent",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The decapus makes two attacks: one with its bite and one with its tentacles.</p>",
@@ -113,7 +113,7 @@
         }
       },
       {
-        "id": "act_bite_2kg7",
+        "id": "act_bite_19dk",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one creature grappled by the decapus. Hit: 7 (2d4 + 2) piercing damage.</p>",
@@ -131,14 +131,15 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_tentacles_t8s4",
+        "id": "act_tentacles_2lm6",
         "name": "Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 10 ft., one target. Hit: 24 (9d4 + 2) bludgeoning damage or 14 (5d4 + 2) bludgeoning damage if the decapus is grappling a creature other than the target or if the decapus is on the ground or floor. The target is also grappled (escape DC 14) unless the decapus is already grappling a creature. Until this grapple ends, the target is restrained.</p>",
@@ -159,11 +160,13 @@
           "damages": [
             {
               "formula": "9d4 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "5d4 + 2",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -286,7 +289,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_boulder_guise_ci7r",
+        "id": "act_boulder_guise_14rb",
         "name": "Boulder Guise",
         "actionType": "trait",
         "descriptionHtml": "<p>While fully withdrawn into its shell, the geonid can't see and is indistinguishable from a small boulder</p>",
@@ -308,7 +311,7 @@
     ],
     "actions": [
       {
-        "id": "act_club_u3oe",
+        "id": "act_club_ygq8",
         "name": "Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +3 to hit, reach 5 ft., one target. Hit: 3 (1d4 + 1) bludgeoning damage.</p>",
@@ -326,14 +329,15 @@
           "damages": [
             {
               "formula": "1d4 + 1",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_stone_tell_jker",
+        "id": "act_stone_tell_d14p",
         "name": "Stone Tell",
         "actionType": "action",
         "descriptionHtml": "<p>The geonid touches a stone object or surface and knows what types of creatures have been within 10 feet of that stone in the past 24 hours. The geonid can also determine the number of creatures of each type, but not their identities.</p>",
@@ -576,7 +580,7 @@
     ],
     "traits": [
       {
-        "id": "act_keen_smell_refl",
+        "id": "act_keen_smell_k09r",
         "name": "Keen Smell",
         "actionType": "trait",
         "descriptionHtml": "<p>The slug has advantage on Wisdom (Perception) checks that rely on smell.</p>",
@@ -596,7 +600,7 @@
         }
       },
       {
-        "id": "act_spider_climb_s85u",
+        "id": "act_spider_climb_p8h3",
         "name": "Spider Climb",
         "actionType": "trait",
         "descriptionHtml": "<p>The slug can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</p>",
@@ -618,7 +622,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_qzxg",
+        "id": "act_multiattack_ly2r",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The slug makes two attacks: one with its tentacles and one with its bite.</p>",
@@ -638,7 +642,7 @@
         }
       },
       {
-        "id": "act_tentacles_z62x",
+        "id": "act_tentacles_8g1f",
         "name": "Tentacles",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +8 to hit, reach 10 ft., one creature. Hit: 4 (1d4 + 2) poison damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 minute. Until this poison ends, the target is paralyzed. The target can repeat the saving throw at the end of each of its turns, ending the poison on itself on a success.</p>",
@@ -659,14 +663,15 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_bite_ajnl",
+        "id": "act_bite_mo4i",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 7 (2d4 + 2) piercing damage.</p>",
@@ -684,7 +689,8 @@
           "damages": [
             {
               "formula": "2d4 + 2",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -694,7 +700,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_animate_tentacle_3lyu",
+        "id": "act_animate_tentacle_gcgu",
         "name": "Animate Tentacle",
         "actionType": "reaction",
         "descriptionHtml": "<p>When the slug takes damage in this cave (Shrine of Umberlee), it can use its reaction to animate one of the tentacles of the kraken statue and cause it to   make a melee weapon attack (+3 to hit) against one creature within 20 feet of the statue that the slug can see. The tentacle deals 8 (1d8 + 4) bludgeoning damage on a hit.</p>",
@@ -712,7 +718,8 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -835,7 +842,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_turn_resistance_4zoj",
+        "id": "act_turn_resistance_7qj0",
         "name": "Turn Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The topi has advantage on saving throws against any effect that turns undead.</p>",
@@ -855,7 +862,7 @@
         }
       },
       {
-        "id": "act_undead_fortitude_5bpg",
+        "id": "act_undead_fortitude_y87q",
         "name": "Undead Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the topi to 0 hit points, it must make a Constitution saving throw with a DC of 5+the damage taken, unless the damage is radiant or from a critical hit. On a success, the topi drops to 1 hit point instead.</p>",
@@ -877,7 +884,7 @@
     ],
     "actions": [
       {
-        "id": "act_venomous_claws_yq4f",
+        "id": "act_venomous_claws_3vwt",
         "name": "Venomous Claws",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 4 (1d4 + 2) slashing damage plus 2 (1d4) poison damage, and the target must succeed on a DC 11 Constitution saving throw or be poisoned until the end of the target's next turn.</p>",
@@ -898,11 +905,13 @@
           "damages": [
             {
               "formula": "1d4 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1025,7 +1034,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_two_heads_c72j",
+        "id": "act_two_heads_bp6m",
         "name": "Two Heads",
         "actionType": "trait",
         "descriptionHtml": "<p>The two-headed plesiosaurus has advantage on Wisdom (Perception) checks and on saving throws against being blinded, charmed, deafened, frightened, stunned, and knocked unconscious.</p>",
@@ -1045,7 +1054,7 @@
         }
       },
       {
-        "id": "act_hold_breath_8xy8",
+        "id": "act_hold_breath_lgcd",
         "name": "Hold Breath",
         "actionType": "trait",
         "descriptionHtml": "<p>The plesiosaurus can hold its breath for 1 hour.</p>",
@@ -1067,7 +1076,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_9m4e",
+        "id": "act_multiattack_gzxl",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The two-headed plesiosaurus makes two bite attacks.</p>",
@@ -1087,7 +1096,7 @@
         }
       },
       {
-        "id": "act_bite_cdys",
+        "id": "act_bite_bgo1",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +6 to hit, reach 10 ft., one target. Hit: 14 (3d6 + 4) piercing damage.</p>",
@@ -1105,7 +1114,8 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null

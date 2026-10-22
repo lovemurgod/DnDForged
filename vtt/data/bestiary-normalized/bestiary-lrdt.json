@@ -235,7 +235,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_jecv",
+        "id": "act_multiattack_kwko",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Alax makes two Fire Strike attacks.</p>",
@@ -255,7 +255,7 @@
         }
       },
       {
-        "id": "act_fire_strike_nnaa",
+        "id": "act_fire_strike_32qe",
         "name": "Fire Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +5 to hit, reach 5 ft. or range 60 ft., one target. Hit: 10 (2d6 + 3) fire damage.</p>",
@@ -273,14 +273,15 @@
           "damages": [
             {
               "formula": "2d6 + 3",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_breath_weapon__recharges_after_a_short_or_long_rest__mnp7",
+        "id": "act_breath_weapon__recharges_after_a_short_or_long_rest__sx45",
         "name": "Breath Weapon (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Alax exhales a 15-foot cone of fire. Each creature in that area must make a DC 12 Dexterity saving throw, taking 14 (4d6) fire damage on a failed save, or half as much damage on a successful one.</p>",
@@ -301,7 +302,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Fire"
+              "type": "Fire",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -596,7 +598,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_j9py",
+        "id": "act_multiattack_kyo1",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>Ervan uses his staff to make three Arcane Blast attacks.</p>",
@@ -616,7 +618,7 @@
         }
       },
       {
-        "id": "act_arcane_blast_lvkq",
+        "id": "act_arcane_blast_mgb9",
         "name": "Arcane Blast",
         "actionType": "action",
         "descriptionHtml": "<p>Attack: +6 to hit, reach 5 ft. or range 120 ft., one target. Hit: 13 (3d6 + 3) force damage.</p>",
@@ -634,14 +636,15 @@
           "damages": [
             {
               "formula": "3d6 + 3",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_acid_rain__recharges_after_a_short_or_long_rest__w6qw",
+        "id": "act_acid_rain__recharges_after_a_short_or_long_rest__lknu",
         "name": "Acid Rain (Recharges after a Short or Long Rest)",
         "actionType": "action",
         "descriptionHtml": "<p>Acid falls in a 10-foot-radius, 20-foot-high cylinder centered on a point Ervan can see within 120 feet of himself. Each creature in that area must make a DC 14 Dexterity saving throw, taking 22 (4d10) acid damage on a failed save, or half as much damage on a successful one.</p>",
@@ -662,7 +665,8 @@
           "damages": [
             {
               "formula": "4d10",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": true
             }
           ],
           "recharge": null

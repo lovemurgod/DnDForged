@@ -101,7 +101,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ephemeral_movement_twuo",
+        "id": "act_ephemeral_movement_bos8",
         "name": "Ephemeral Movement",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnation can move through other creatures and objects as if they were Difficult Terrain, and its movement doesn't provoke Opportunity Attack. It takes 5 (1d10) Force damage if it ends its turn inside an object.</p>",
@@ -119,14 +119,15 @@
           "damages": [
             {
               "formula": "1d10",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_magic_resistance_x180",
+        "id": "act_magic_resistance_7bp2",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnation has Advantage on saving throws against spells and other magical effects.</p>",
@@ -148,7 +149,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_nkud",
+        "id": "act_multiattack_b1c3",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnation makes three attacks, using Bite or Miasmic Globule in any combination.</p>",
@@ -168,7 +169,7 @@
         }
       },
       {
-        "id": "act_bite_2jwd",
+        "id": "act_bite_rdba",
         "name": "Bite",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +8, reach 5 ft. Hit: 14 (2d8 + 5) Piercing damage.</p>",
@@ -186,14 +187,15 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_miasmic_globule_ynwh",
+        "id": "act_miasmic_globule_ybbl",
         "name": "Miasmic Globule",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +8, range 60/120 ft. Hit: 15 (6d4) Acid damage, and the target's Speed is reduced by 10 feet until the end of the incarnation's next turn.</p>",
@@ -211,14 +213,15 @@
           "damages": [
             {
               "formula": "6d4",
-              "type": "Acid"
+              "type": "Acid",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_spectral_stampede_ybyx",
+        "id": "act_spectral_stampede_sjjk",
         "name": "Spectral Stampede",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnation moves up to 80 feet in a straight line. Each creature whose space the incarnation enters is targeted once by the following effect. dex DC 16. {@actSaveFail} 18 (4d8) Force damage. If the target is the incarnation's size or smaller, it has the Prone condition. {@actSaveSuccess} Half damage only.</p>",
@@ -239,7 +242,8 @@
           "damages": [
             {
               "formula": "4d8",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -248,7 +252,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_9gk1",
+        "id": "act_shape_shift_184i",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>The incarnation changes its size to Medium, Large, or Huge.</p>",
@@ -503,7 +507,7 @@
     ],
     "traits": [
       {
-        "id": "act_magic_resistance_g5wg",
+        "id": "act_magic_resistance_8fl0",
         "name": "Magic Resistance",
         "actionType": "trait",
         "descriptionHtml": "<p>The incarnation has Advantage on saving throws against spells and other magical effects.</p>",
@@ -525,7 +529,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_1zo4",
+        "id": "act_multiattack_25fs",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The incarnation makes two Vine attacks and uses Radiant Blast. It can replace one vine attack with a use of Spellcasting to cast Blindness/Deafness if available.</p>",
@@ -545,7 +549,7 @@
         }
       },
       {
-        "id": "act_vine_djbb",
+        "id": "act_vine_ay4t",
         "name": "Vine",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 20 ft. Hit: 18 (3d8 + 5) Bludgeoning damage. If the target is the incarnation's size or smaller, it has the Grappled condition (escape DC 15) from one of two vines.</p>",
@@ -566,14 +570,15 @@
           "damages": [
             {
               "formula": "3d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_radiant_blast_2ybt",
+        "id": "act_radiant_blast_p2ul",
         "name": "Radiant Blast",
         "actionType": "action",
         "descriptionHtml": "<p>con DC 17, each creature of the incarnation's choice in a 20-foot Emanation [Area of Effect] originating from the incarnation. {@actSaveFail} The creature takes 14 (2d8 + 5) Radiant damage. {@actSaveSuccess} Half damage.</p>",
@@ -594,7 +599,8 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Radiant"
+              "type": "Radiant",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -603,7 +609,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_shape_shift_ss29",
+        "id": "act_shape_shift_kf7x",
         "name": "Shape-Shift",
         "actionType": "bonus",
         "descriptionHtml": "<p>The incarnation changes its size to Medium, Large, or Huge.</p>",
@@ -623,7 +629,7 @@
         }
       },
       {
-        "id": "act_teleport_semt",
+        "id": "act_teleport_cywd",
         "name": "Teleport",
         "actionType": "bonus",
         "descriptionHtml": "<p>The incarnation teleports up to 60 feet to an unoccupied space it can see. The incarnation can't teleport while it has a creature Grappled.</p>",
@@ -762,7 +768,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_stod",
+        "id": "act_multiattack_3byx",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes two attacks, using Stone Sword or Boulder in any combination.</p>",
@@ -782,7 +788,7 @@
         }
       },
       {
-        "id": "act_stone_sword_3y4d",
+        "id": "act_stone_sword_kqzn",
         "name": "Stone Sword",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +8, reach 15 ft. Hit: 21 (3d10 + 5) Slashing damage.</p>",
@@ -800,14 +806,15 @@
           "damages": [
             {
               "formula": "3d10 + 5",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_boulder_8apk",
+        "id": "act_boulder_lmgd",
         "name": "Boulder",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +8, range 60/240 ft. Hit: 14 (2d8 + 5) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -825,7 +832,8 @@
           "damages": [
             {
               "formula": "2d8 + 5",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -834,7 +842,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_name_sleep__recharge_5__aalz",
+        "id": "act_name_sleep__recharge_5__yjvr",
         "name": "Name Sleep (Recharge 5)",
         "actionType": "bonus",
         "descriptionHtml": "<p>The giant falls into a deep, restorative slumber. The giant gains 20 Temporary Hit Points and has the Unconscious condition until it takes damage or the end of its next turn. The giant has Advantage on ability checks and saving throws for 1 minute.</p>",
@@ -1061,7 +1069,7 @@
     ],
     "traits": [
       {
-        "id": "act_amphibious_iou8",
+        "id": "act_amphibious_93ek",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can breathe air and water.</p>",
@@ -1081,7 +1089,7 @@
         }
       },
       {
-        "id": "act_mimicry_l4ga",
+        "id": "act_mimicry_gvkx",
         "name": "Mimicry",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can mimic voices and animal sounds. A creature that hears the mimicries can tell they are imitations with a successful DC 15 Wisdom (Insight) check.</p>",
@@ -1106,7 +1114,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_c91m",
+        "id": "act_multiattack_x56i",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The merrow makes three Spined Tail attacks. It can replace one of these attacks with a use of Spellcasting to cast Command.</p>",
@@ -1126,7 +1134,7 @@
         }
       },
       {
-        "id": "act_spined_tail_ntir",
+        "id": "act_spined_tail_trc9",
         "name": "Spined Tail",
         "actionType": "action",
         "descriptionHtml": "<p>Melee or Ranged Attack: +6, reach 5 ft. or range 20/60 ft. Hit: 14 (3d6 + 4) Piercing damage.</p>",
@@ -1144,7 +1152,8 @@
           "damages": [
             {
               "formula": "3d6 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1276,7 +1285,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_amphibious_h79t",
+        "id": "act_amphibious_j24i",
         "name": "Amphibious",
         "actionType": "trait",
         "descriptionHtml": "<p>The merrow can breathe air and water.</p>",
@@ -1298,7 +1307,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_td7a",
+        "id": "act_multiattack_23g7",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The merrow makes three attacks, using Coral Scepter and Poisoned Longbow in any combination.</p>",
@@ -1318,7 +1327,7 @@
         }
       },
       {
-        "id": "act_coral_scepter_pd5b",
+        "id": "act_coral_scepter_hlol",
         "name": "Coral Scepter",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +7, reach 5 ft. Hit: 14 (2d10 + 4) Bludgeoning damage.</p>",
@@ -1336,14 +1345,15 @@
           "damages": [
             {
               "formula": "2d10 + 4",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_poisoned_longbow_clgo",
+        "id": "act_poisoned_longbow_c5t4",
         "name": "Poisoned Longbow",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +7, range 150/600 ft. Hit: 8 (1d8 + 4) Piercing damage plus 7 (2d6) Poison damage.</p>",
@@ -1361,18 +1371,20 @@
           "damages": [
             {
               "formula": "1d8 + 4",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             },
             {
               "formula": "2d6",
-              "type": "Poison"
+              "type": "Poison",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_invective_ntb4",
+        "id": "act_invective_ihef",
         "name": "Invective",
         "actionType": "action",
         "descriptionHtml": "<p>wis DC 15, up to three creatures the merrow can see within 60 feet. {@actSaveFail} 14 (4d6) Psychic damage, and the creature has Disadvantage on its next attack roll before the end of the merrow's next turn. {@actSaveSuccess} Half damage only.</p>",
@@ -1393,7 +1405,8 @@
           "damages": [
             {
               "formula": "4d6",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": true
             }
           ],
           "recharge": null
@@ -1517,7 +1530,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_siege_monster_1ram",
+        "id": "act_siege_monster_7xii",
         "name": "Siege Monster",
         "actionType": "trait",
         "descriptionHtml": "<p>The noggle deals double damage to objects and structures.</p>",
@@ -1539,7 +1552,7 @@
     ],
     "actions": [
       {
-        "id": "act_sabotaging_swipe_fw0b",
+        "id": "act_sabotaging_swipe_4x10",
         "name": "Sabotaging Swipe",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +4, reach 5 ft. Hit: 6 (1d8 + 2) Slashing damage. If the target is wearing armor, it is subjected to the following effect. dex DC 12. {@actSaveFail} The armor takes a -1 penalty to the AC it offers. The target can take an action to remove the penalty from its armor.</p>",
@@ -1560,7 +1573,8 @@
           "damages": [
             {
               "formula": "1d8 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1569,7 +1583,7 @@
     ],
     "bonusActions": [
       {
-        "id": "act_nimble_escape_9z27",
+        "id": "act_nimble_escape_s30w",
         "name": "Nimble Escape",
         "actionType": "bonus",
         "descriptionHtml": "<p>The noggle takes the Disengage or Hide action.</p>",
@@ -1707,7 +1721,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_bloodied_wild_magic_5yrk",
+        "id": "act_bloodied_wild_magic_nj1u",
         "name": "Bloodied Wild Magic",
         "actionType": "trait",
         "descriptionHtml": "<p>While Bloodied, the noggle has a Fly Speed of 30 feet and it can choose for any damage it deals to be Force damage.</p>",
@@ -1729,7 +1743,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_y0w7",
+        "id": "act_multiattack_9v37",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The noggle makes two attacks, using Noggling Stick or Befuddling Ray in any combination.</p>",
@@ -1749,7 +1763,7 @@
         }
       },
       {
-        "id": "act_noggling_stick_h9vd",
+        "id": "act_noggling_stick_tuju",
         "name": "Noggling Stick",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +5, reach 5 ft. Hit: 5 (1d4 + 3) Bludgeoning damage plus 2 (1d4) Psychic damage.</p>",
@@ -1767,18 +1781,20 @@
           "damages": [
             {
               "formula": "1d4 + 3",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             },
             {
               "formula": "1d4",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_befuddling_ray_2c3h",
+        "id": "act_befuddling_ray_bkmm",
         "name": "Befuddling Ray",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +5, range 60 ft. Hit: 6 (1d6 + 3) Psychic damage, and the target subtracts 1d4 from the next saving throw it makes before the end of the noggle's next turn.</p>",
@@ -1796,7 +1812,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Psychic"
+              "type": "Psychic",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -1922,7 +1939,7 @@
     "traits": [],
     "actions": [
       {
-        "id": "act_multiattack_g3rt",
+        "id": "act_multiattack_uwwt",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The giant makes three attacks, using Tree Club or Boulder in any combination.</p>",
@@ -1942,7 +1959,7 @@
         }
       },
       {
-        "id": "act_tree_club_0kll",
+        "id": "act_tree_club_sp3b",
         "name": "Tree Club",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Attack: +9, reach 15 ft. Hit: 17 (2d10 + 6) Bludgeoning damage.</p>",
@@ -1960,14 +1977,15 @@
           "damages": [
             {
               "formula": "2d10 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_boulder_sagn",
+        "id": "act_boulder_gal6",
         "name": "Boulder",
         "actionType": "action",
         "descriptionHtml": "<p>Ranged Attack: +9, range 60/240 ft. Hit: 13 (2d6 + 6) Bludgeoning damage. If the target is a Large or smaller creature, it has the Prone condition.</p>",
@@ -1985,14 +2003,15 @@
           "damages": [
             {
               "formula": "2d6 + 6",
-              "type": "Bludgeoning"
+              "type": "Bludgeoning",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_wild_magic_cataclysm__recharge_5__bodt",
+        "id": "act_wild_magic_cataclysm__recharge_5__m0qa",
         "name": "Wild Magic Cataclysm (Recharge 5)",
         "actionType": "action",
         "descriptionHtml": "<p>dex DC 15, each creature in a 20-foot-radius Sphere [Area of Effect] centered on a point within 120 feet. {@actSaveFail} 28 (8d6) damage (roll 1d4 to determine damage type: 1—Acid; 2—Fire; 3—Lightning; 4—Thunder). {@actSaveSuccess} Half damage.</p>",
@@ -2013,7 +2032,8 @@
           "damages": [
             {
               "formula": "8d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": true
             }
           ],
           "recharge": "5"

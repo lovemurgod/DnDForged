@@ -114,7 +114,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_shared_resistances_yivt",
+        "id": "act_shared_resistances_amg7",
         "name": "Shared Resistances",
         "actionType": "trait",
         "descriptionHtml": "<p>When you summon the dragon, choose one of its damage resistances. You have resistance to the chosen damage type until the spell ends.</p>",
@@ -136,7 +136,7 @@
     ],
     "actions": [
       {
-        "id": "act_multiattack_624q",
+        "id": "act_multiattack_5mm0",
         "name": "Multiattack",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon uses its Breath Weapon, and it makes a number of Bite and Claw attacks equal to half the spell's level (rounded down).</p>",
@@ -156,7 +156,7 @@
         }
       },
       {
-        "id": "act_bite_and_claw_bzfn",
+        "id": "act_bite_and_claw_2stg",
         "name": "Bite and Claw",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: your spell attack modifier to hit, reach 10 ft., one target. Hit: 1d6 + 4 + summonSpellLevel piercing damage.</p>",
@@ -174,14 +174,15 @@
           "damages": [
             {
               "formula": "1d6 + 4 + summonSpellLevel",
-              "type": "Piercing"
+              "type": "Piercing",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_breath_weapon_6eap",
+        "id": "act_breath_weapon_vwin",
         "name": "Breath Weapon",
         "actionType": "action",
         "descriptionHtml": "<p>The dragon exhales a stream of multicolored energy in a 30-foot cone. Each creature in that area must make a Dexterity saving throw, taking 2d6 damage of your choice of a damage type this dragon has resistance to on a failed save, or half as much damage on a successful one.</p>",
@@ -199,7 +200,8 @@
           "damages": [
             {
               "formula": "2d6",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null

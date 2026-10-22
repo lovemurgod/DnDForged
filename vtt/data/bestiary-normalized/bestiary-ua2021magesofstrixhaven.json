@@ -105,7 +105,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_ancient_fortitude_yckq",
+        "id": "act_ancient_fortitude_qkaj",
         "name": "Ancient Fortitude",
         "actionType": "trait",
         "descriptionHtml": "<p>If damage reduces the companion to 0 hit points, it can make a Constitution saving throw with a DC of 5 + the damage taken, unless the damage is from a critical hit. On a success, the companion drops to 1 hit point instead.</p>",
@@ -125,7 +125,7 @@
         }
       },
       {
-        "id": "act_sage_s_counsel__sage_only__vmb9",
+        "id": "act_sage_s_counsel__sage_only__oiz4",
         "name": "Sage's Counsel (Sage Only)",
         "actionType": "trait",
         "descriptionHtml": "<p>While within 15 feet of the companion, you and your allies gain a +2 bonus to Intelligence and Wisdom checks.</p>",
@@ -147,7 +147,7 @@
     ],
     "actions": [
       {
-        "id": "act_spirit_strike_rnql",
+        "id": "act_spirit_strike_0oui",
         "name": "Spirit Strike",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: your spell attack modifier to hit, reach 5 ft., one target you can see. Hit: 1d8 + 2 + PB force damage.</p>",
@@ -165,14 +165,15 @@
           "damages": [
             {
               "formula": "1d8 + 2 + PB",
-              "type": "Force"
+              "type": "Force",
+              "saveRider": false
             }
           ],
           "recharge": null
         }
       },
       {
-        "id": "act_healer_s_light__healer_only__fehp",
+        "id": "act_healer_s_light__healer_only__jgfj",
         "name": "Healer's Light (Healer Only)",
         "actionType": "action",
         "descriptionHtml": "<p>The companion chooses a creature it can see within 15 feet of itself and flares with invigorating light. The creature gains 1d8 + PB temporary hit points.</p>",
@@ -195,7 +196,7 @@
     "bonusActions": [],
     "reactions": [
       {
-        "id": "act_warrior_s_protection__warrior_only__6c36",
+        "id": "act_warrior_s_protection__warrior_only__hsdy",
         "name": "Warrior's Protection (Warrior Only)",
         "actionType": "reaction",
         "descriptionHtml": "<p>When a creature within 5 feet of the companion makes a Strength or Dexterity saving throw, the companion imposes itself between the creature and the danger. The creature can roll a d4 and add the number rolled to the saving throw.</p>",

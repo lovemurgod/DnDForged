@@ -100,7 +100,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_flyby_xi1y",
+        "id": "act_flyby_dc3l",
         "name": "Flyby",
         "actionType": "trait",
         "descriptionHtml": "<p>The beast doesn't provoke opportunity attacks when it flies out of an enemy's reach.</p>",
@@ -120,7 +120,7 @@
         }
       },
       {
-        "id": "act_primal_rebirth_ta5d",
+        "id": "act_primal_rebirth_c64v",
         "name": "Primal Rebirth",
         "actionType": "trait",
         "descriptionHtml": "<p>If the beast has died within the last hour, you can use your action to touch it and expend a spell slot of 1st level or higher. The beast returns to life after 1 minute with all its hit points restored.</p>",
@@ -140,7 +140,7 @@
         }
       },
       {
-        "id": "act_ready_companion_uewi",
+        "id": "act_ready_companion_jjtv",
         "name": "Ready Companion",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, you can command the beast to make its shred attack or to Hide.</p>",
@@ -162,7 +162,7 @@
     ],
     "actions": [
       {
-        "id": "act_shred_k6na",
+        "id": "act_shred_b2zm",
         "name": "Shred",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +5 to hit, reach 5 ft., one target. Hit: 1d6 + 3 slashing damage.</p>",
@@ -180,7 +180,8 @@
           "damages": [
             {
               "formula": "1d6 + 3",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null
@@ -313,7 +314,7 @@
     "spellcasting": [],
     "traits": [
       {
-        "id": "act_charge_h048",
+        "id": "act_charge_8f1c",
         "name": "Charge",
         "actionType": "trait",
         "descriptionHtml": "<p>If the beast moves at least 20 feet straight toward a target and then hits it with a maul attack on the same turn, the target takes an extra 1d6 slashing damage. The DC equals your spell save DC. If the target is a creature, it must succeed on a Strength saving throw against your spell save DC or be knocked prone.</p>",
@@ -333,7 +334,7 @@
         }
       },
       {
-        "id": "act_primal_rebirth_jh4m",
+        "id": "act_primal_rebirth_1j6u",
         "name": "Primal Rebirth",
         "actionType": "trait",
         "descriptionHtml": "<p>If the beast has died within the last hour, you can use your action to touch it and expend a spell slot of 1st level or higher. The beast returns to life after 1 minute with all its hit points restored.</p>",
@@ -353,7 +354,7 @@
         }
       },
       {
-        "id": "act_ready_companion_xjlk",
+        "id": "act_ready_companion_akn3",
         "name": "Ready Companion",
         "actionType": "trait",
         "descriptionHtml": "<p>As a bonus action, you can command the beast to make its maul attack or to Hide.</p>",
@@ -375,7 +376,7 @@
     ],
     "actions": [
       {
-        "id": "act_maul_odpr",
+        "id": "act_maul_69ky",
         "name": "Maul",
         "actionType": "action",
         "descriptionHtml": "<p>Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 1d6 + 2 slashing damage.</p>",
@@ -393,7 +394,8 @@
           "damages": [
             {
               "formula": "1d6 + 2",
-              "type": "Slashing"
+              "type": "Slashing",
+              "saveRider": false
             }
           ],
           "recharge": null

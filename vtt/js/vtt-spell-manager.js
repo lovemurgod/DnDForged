@@ -132,6 +132,7 @@ export function parseSpellToMacro(spData, newSpell) {
     else if (newSpell.concentration === undefined) newSpell.concentration = false;
 
     if (spData.ritual !== undefined) newSpell.ritual = !!spData.ritual;
+    newSpell.isMagic = spData.isMagic !== undefined ? !!spData.isMagic : true;
     const isCantrip = spData.level === 0 || newSpell.level === 0 || newSpell.cantripScale;
     const isMultiAttackCantrip = /eldritch blast/i.test(newSpell.name || spData.name || '');
     if (isCantrip) {
@@ -1251,7 +1252,14 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
             } else if (typeof simulateRoll === 'function') {
                 res = simulateRoll(dform);
             }
-            dmgRolls.push({ formula: dform, type: d.type || (isHealingType(d.type) ? 'Healing' : 'Damage'), label: d.label || '', roll: res });
+            dmgRolls.push({
+                formula: dform,
+                type: d.type || (isHealingType(d.type) ? 'Healing' : 'Damage'),
+                label: d.label || '',
+                roll: res,
+                isMagic: sp.isMagic !== undefined ? !!sp.isMagic : true,
+                isSpell: true
+            });
         });
 
         // Add typed damage toggles
@@ -1267,7 +1275,13 @@ export function rollSpell(sp, slKey, casterObj = {}, options = {}) {
             } else if (typeof simulateRoll === 'function') {
                 res = simulateRoll(rollFormula);
             }
-            dmgRolls.push({ formula: cleanF, type: t.dmgType, roll: res });
+            dmgRolls.push({
+                formula: cleanF,
+                type: t.dmgType,
+                roll: res,
+                isMagic: sp.isMagic !== undefined ? !!sp.isMagic : true,
+                isSpell: true
+            });
         });
     }
 
@@ -1610,6 +1624,10 @@ export function initVttSpellManager(vtt) {
                                 <option value="CHA">CHA Save</option>
                             </select>
                         </div>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <input type="checkbox" id="modal-spell-is-magic" checked>
+                        <label for="modal-spell-is-magic" style="margin:0; font-size:0.85rem; cursor:pointer;">Magical Damage (Bypasses Nonmagical Resistance)</label>
                     </div>
                     <div id="modal-spell-damage-list" style="display:flex; flex-direction:column; gap:6px; margin-bottom:8px;"></div>
                     <button class="btn btn-secondary btn-xxs" id="btn-add-spell-damage" style="margin-bottom:8px;">+ Add Damage Row</button>
@@ -2212,6 +2230,10 @@ export function initVttSpellManager(vtt) {
             if (ritEl) {
                 ritEl.checked = sp.ritual !== undefined ? !!sp.ritual : !!(spData?.ritual);
             }
+            const isMagicEl = document.getElementById('modal-spell-is-magic');
+            if (isMagicEl) {
+                isMagicEl.checked = sp.isMagic !== undefined ? !!sp.isMagic : (spData?.isMagic !== undefined ? !!spData.isMagic : true);
+            }
 
             const usesTypeEl = document.getElementById('modal-spell-uses-type');
             if (usesTypeEl) usesTypeEl.value = sp.usesType || (sp.uses === 'at_will' ? 'at_will' : (sp.usesMax ? 'long_rest' : 'slot'));
@@ -2287,6 +2309,8 @@ export function initVttSpellManager(vtt) {
             if (concInput) concInput.checked = false;
             const ritInput = document.getElementById('modal-spell-ritual');
             if (ritInput) ritInput.checked = false;
+            const isMagicInput = document.getElementById('modal-spell-is-magic');
+            if (isMagicInput) isMagicInput.checked = true;
             const macroDescInput = document.getElementById('modal-spell-macro-desc');
             if (macroDescInput) macroDescInput.value = '';
 
@@ -2892,6 +2916,7 @@ export function initVttSpellManager(vtt) {
                 const saveDcExtra = parseInt(document.getElementById('modal-spell-save-dc-extra').value) || 0;
                 const saveDcCustom = document.getElementById('modal-spell-save-dc-custom').value !== '' ? parseInt(document.getElementById('modal-spell-save-dc-custom').value) : null;
                 const saveAbility = document.getElementById('modal-spell-save-ability').value;
+                const isMagic = document.getElementById('modal-spell-is-magic') ? document.getElementById('modal-spell-is-magic').checked : true;
                 const damageList = modalSpellDamageRows;
                 const cantripScale = damageList.some(d => d.cantripScale);
                 const upcastBonus = damageList.find(d => d.upcastBonus && d.upcastBonus.trim() !== '')?.upcastBonus || damageList[0]?.upcastBonus || '';
@@ -2915,6 +2940,7 @@ export function initVttSpellManager(vtt) {
                         duration,
                         concentration,
                         ritual,
+                        isMagic,
                         macroDescription,
                         attackStat,
                         attackProf,
@@ -2944,9 +2970,9 @@ export function initVttSpellManager(vtt) {
                 if (!char.spells[level]) char.spells[level] = [];
 
                 if (idx >= 0) {
-                    char.spells[level][idx] = { ...char.spells[level][idx], name, description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true };
+                    char.spells[level][idx] = { ...char.spells[level][idx], name, description, school, castingTime, range, components, duration, concentration, ritual, isMagic, macroDescription, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true };
                 } else {
-                    const newCustomSpell = { id: 'sp_' + Date.now() + Math.random(), name: toSpellTitleCase(name), description, school, castingTime, range, components, duration, concentration, ritual, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true };
+                    const newCustomSpell = { id: 'sp_' + Date.now() + Math.random(), name: toSpellTitleCase(name), description, school, castingTime, range, components, duration, concentration, ritual, isMagic, macroDescription, prepared: false, attackStat, attackProf, attackExtra, attackBonus, saveDcStat, saveDcExtra, saveDcCustom, saveAbility, damageList, cantripScale, upcastBonus, upcastScaleStep, usesType, usesMax, usesRemaining, macroPopulated: true };
                     char.spells[level].push(newCustomSpell);
 
                     if (activeSpellEditContext && char.spellcasting && Array.isArray(char.spellcasting)) {
