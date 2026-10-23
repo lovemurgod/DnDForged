@@ -384,39 +384,568 @@
                                 <div class="manual-section-icon"><i class="fa-solid fa-server"></i></div>
                                 <h3 class="manual-section-title">Game Master Setup & Hosting Guide</h3>
                             </div>
-                            <span class="manual-section-badge gm">Host Setup</span>
+                            <span class="manual-section-badge gm">5 Hosting Recipes</span>
                         </div>
-                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
-                            ForgeD VTT runs directly from your personal computer. You can host multiplayer campaigns securely over HTTPS with zero port-forwarding or router configuration using built-in Cloudflare Tunnels.
+                        <p style="color: var(--text-secondary); margin-bottom: 22px; font-size: 0.95rem;">
+                            ForgeD VTT runs directly from your personal computer with zero recurring subscription fees. Whether you want zero-configuration cloud tunnels, traditional router port forwarding, private encrypted mesh VPNs, or offline local Wi-Fi for in-person digital tables, select your preferred hosting method below.
                         </p>
 
-                        <div class="guide-step" style="margin-bottom: 16px;">
-                            <div class="step-number">1</div>
-                            <div class="step-content">
-                                <h3>Download & Launch Desktop App</h3>
-                                <p style="color: var(--text-secondary);">Download and run the 1-click Windows Desktop Setup installer:</p>
-                                <div style="margin: 10px 0;">
-                                    <a href="https://github.com/lovemurgod/DnDForged/releases/download/v1.0.0/ForgeDVTT-Setup-1.0.0.exe" class="btn-vtt-gold" style="font-size: 0.9rem; padding: 8px 18px; display: inline-flex; align-items: center; gap: 8px;">
-                                        <i class="fa-solid fa-download"></i> Download ForgeD VTT Setup (.exe)
-                                    </a>
+                        <!-- Overview Comparison Matrix -->
+                        <div class="hosting-matrix-container">
+                            <div class="hosting-matrix-header">
+                                <div class="hosting-matrix-title">
+                                    <i class="fa-solid fa-table-list"></i> Hosting Methods Comparison Matrix
                                 </div>
-                                <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">Or for Node.js / CLI self-hosting, open your terminal in the project directory and run: <code>node launcher.js</code></p>
+                                <span style="font-size: 0.8rem; color: var(--text-muted);"><i class="fa-solid fa-hand-pointer"></i> Click any row or tab to view detailed instructions</span>
+                            </div>
+                            <table class="hosting-matrix-table">
+                                <thead>
+                                    <tr>
+                                        <th>Method</th>
+                                        <th>Token Needed?</th>
+                                        <th>Port Forwarding?</th>
+                                        <th>Player Connection URL</th>
+                                        <th>Best For</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr onclick="switchHostingMethod('cloudflare')" style="cursor: pointer;" id="matrix-row-cloudflare" class="active-matrix-row">
+                                        <td><strong style="color: var(--color-gold-bright);"><i class="fa-solid fa-cloud"></i> 1. Cloudflare Tunnels</strong></td>
+                                        <td><span class="pill-badge pill-green"><i class="fa-solid fa-circle-check"></i> Optional (None for Quick Tunnel)</span></td>
+                                        <td><span class="pill-badge pill-green"><i class="fa-solid fa-shield"></i> No Port Forward</span></td>
+                                        <td><code>https://*.trycloudflare.com</code></td>
+                                        <td><span class="pill-badge pill-gold">Zero-Config Online Play</span></td>
+                                    </tr>
+                                    <tr onclick="switchHostingMethod('portforward')" style="cursor: pointer;" id="matrix-row-portforward">
+                                        <td><strong style="color: var(--color-vtt-blue-bright);"><i class="fa-solid fa-network-wired"></i> 2. Router Port Forwarding</strong></td>
+                                        <td><span class="pill-badge pill-green"><i class="fa-solid fa-circle-check"></i> None</span></td>
+                                        <td><span class="pill-badge pill-red"><i class="fa-solid fa-arrow-up-right-from-square"></i> Yes (Port 5050 TCP)</span></td>
+                                        <td><code>http://&lt;Public-IP&gt;:5050</code></td>
+                                        <td><span class="pill-badge pill-blue">Direct Connection & DDNS</span></td>
+                                    </tr>
+                                    <tr onclick="switchHostingMethod('meshvpn')" style="cursor: pointer;" id="matrix-row-meshvpn">
+                                        <td><strong style="color: #a78bfa;"><i class="fa-solid fa-shield-halved"></i> 3. Mesh VPN (Tailscale)</strong></td>
+                                        <td><span class="pill-badge pill-green"><i class="fa-solid fa-circle-check"></i> None</span></td>
+                                        <td><span class="pill-badge pill-green"><i class="fa-solid fa-shield"></i> No Port Forward</span></td>
+                                        <td><code>http://100.x.y.z:5050</code></td>
+                                        <td><span class="pill-badge pill-blue">Private Groups & CGNAT Bypass</span></td>
+                                    </tr>
+                                    <tr onclick="switchHostingMethod('alttunnels')" style="cursor: pointer;" id="matrix-row-alttunnels">
+                                        <td><strong style="color: #f472b6;"><i class="fa-solid fa-arrows-split-up-and-left"></i> 4. Alternative Tunnels</strong></td>
+                                        <td><span class="pill-badge pill-green"><i class="fa-solid fa-circle-check"></i> Optional (ngrok/bore)</span></td>
+                                        <td><span class="pill-badge pill-green"><i class="fa-solid fa-shield"></i> No Port Forward</span></td>
+                                        <td><code>https://*.ngrok-free.app</code></td>
+                                        <td><span class="pill-badge pill-neutral">Quick Testing & Custom Proxy</span></td>
+                                    </tr>
+                                    <tr onclick="switchHostingMethod('locallan')" style="cursor: pointer;" id="matrix-row-locallan">
+                                        <td><strong style="color: var(--color-green-bright);"><i class="fa-solid fa-wifi"></i> 5. Local Network (LAN)</strong></td>
+                                        <td><span class="pill-badge pill-green"><i class="fa-solid fa-circle-check"></i> None</span></td>
+                                        <td><span class="pill-badge pill-green"><i class="fa-solid fa-shield"></i> No Port Forward</span></td>
+                                        <td><code>http://192.168.1.X:5050</code></td>
+                                        <td><span class="pill-badge pill-green">In-Person Tabletop & TV Tables</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Method Tab Selector Pills -->
+                        <div class="hosting-tabs-nav" id="hosting-tabs-nav">
+                            <button type="button" class="hosting-tab-btn active" id="tab-btn-cloudflare" onclick="switchHostingMethod('cloudflare')">
+                                <i class="fa-solid fa-cloud"></i> 1. Cloudflare Tunnels <span class="tab-badge">Easiest</span>
+                            </button>
+                            <button type="button" class="hosting-tab-btn" id="tab-btn-portforward" onclick="switchHostingMethod('portforward')">
+                                <i class="fa-solid fa-network-wired"></i> 2. Port Forwarding <span class="tab-badge">Direct</span>
+                            </button>
+                            <button type="button" class="hosting-tab-btn" id="tab-btn-meshvpn" onclick="switchHostingMethod('meshvpn')">
+                                <i class="fa-solid fa-shield-halved"></i> 3. Mesh VPN <span class="tab-badge">Tailscale</span>
+                            </button>
+                            <button type="button" class="hosting-tab-btn" id="tab-btn-alttunnels" onclick="switchHostingMethod('alttunnels')">
+                                <i class="fa-solid fa-arrows-split-up-and-left"></i> 4. Other Tunnels <span class="tab-badge">ngrok</span>
+                            </button>
+                            <button type="button" class="hosting-tab-btn" id="tab-btn-locallan" onclick="switchHostingMethod('locallan')">
+                                <i class="fa-solid fa-wifi"></i> 5. Local LAN <span class="tab-badge">In-Person</span>
+                            </button>
+                        </div>
+
+                        <!-- ============================================== -->
+                        <!-- METHOD 1 PANEL: CLOUDFLARE TUNNELS (DEFAULT) -->
+                        <!-- ============================================== -->
+                        <div class="hosting-method-panel active" id="method-panel-cloudflare" data-keywords="cloudflare quick tunnel trycloudflare token subdomain zero config https ssl">
+                            <div class="method-panel-header">
+                                <div class="method-panel-title-wrap">
+                                    <h4><i class="fa-solid fa-cloud"></i> Method 1: Cloudflare Tunnels (Quick & Dedicated)</h4>
+                                    <p>Encrypted HTTPS edge tunnel with zero router configuration. Supports both zero-token Quick Tunnels and custom token subdomains.</p>
+                                </div>
+                                <div class="method-panel-badges">
+                                    <span class="pill-badge pill-green"><i class="fa-solid fa-check"></i> Zero Token Required</span>
+                                    <span class="pill-badge pill-blue"><i class="fa-solid fa-lock"></i> Free HTTPS SSL</span>
+                                    <span class="pill-badge pill-gold"><i class="fa-solid fa-bolt"></i> No Port Forward</span>
+                                </div>
+                            </div>
+
+                            <div class="method-prereqs-card">
+                                <div class="method-prereqs-title"><i class="fa-solid fa-list-check"></i> Prerequisites</div>
+                                <ul class="method-prereqs-list">
+                                    <li><i class="fa-solid fa-circle-check"></i> ForgeD VTT Desktop App or Node.js runtime</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Active broadband internet connection</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Bundled <code>cloudflared</code> binary (pre-packaged in Windows installer)</li>
+                                </ul>
+                            </div>
+
+                            <!-- Option A: Quick Tunnel (Zero Token) -->
+                            <div class="guide-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Zero-Token Quick Tunnel (TryCloudflare — Recommended)</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 12px;">
+                                        You <strong>do not need</strong> a Cloudflare account or tunnel token! ForgeD VTT automatically invokes Cloudflare's free Quick Tunnel:
+                                    </p>
+                                    <ol style="color: var(--color-steel-light); padding-left: 20px; line-height: 1.8; margin-bottom: 12px;">
+                                        <li>Open the <strong>ForgeDVTT Control Center</strong> desktop application (or run <code>node launcher.js</code> in CLI).</li>
+                                        <li>Leave the <strong>Cloudflare Tunnel Token</strong> field <strong>completely blank</strong>.</li>
+                                        <li>Click <strong>🚀 Start Online Tunnel</strong>.</li>
+                                        <li>ForgeD VTT launches <code>cloudflared tunnel --url http://127.0.0.1:5050</code> and automatically extracts your secure session URL (e.g. <code>https://ancient-dragon-tavern.trycloudflare.com</code>).</li>
+                                    </ol>
+                                    <div class="method-code-box">
+                                        <code>cloudflared --protocol http2 --no-prechecks tunnel --url http://127.0.0.1:5050</code>
+                                        <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'cloudflared --protocol http2 --no-prechecks tunnel --url http://127.0.0.1:5050')">
+                                            <i class="fa-solid fa-copy"></i> Copy Command
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Option B: Dedicated Subdomain with Token -->
+                            <div class="guide-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Optional / Advanced: Dedicated Subdomain with Token</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        If you want a <strong>permanent, unchanging URL</strong> (like <code>mycampaign.forgedvtt.com</code> or your own custom domain), paste your free Cloudflare Tunnel Token:
+                                    </p>
+                                    <ol style="color: var(--color-steel-light); padding-left: 20px; line-height: 1.8;">
+                                        <li>Create a free tunnel in your <a href="https://one.dash.cloudflare.com" target="_blank" style="color: var(--color-gold-bright);">Cloudflare Zero Trust Dashboard</a> (Networks &rarr; Tunnels).</li>
+                                        <li>Copy your Base64 tunnel token and paste it into the <strong>Cloudflare Tunnel Token</strong> input in the ForgeD VTT launcher.</li>
+                                        <li>Enter your custom subdomain slug (e.g. <code>cosmic</code>) and click <strong>🚀 Start Online Tunnel</strong>.</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <!-- Player Connection URL -->
+                            <div class="player-url-banner">
+                                <div class="player-url-label"><i class="fa-solid fa-share-nodes"></i> What to Send Your Players</div>
+                                <div class="player-url-display">
+                                    <code>https://&lt;session-slug&gt;.trycloudflare.com/vtt.html</code>
+                                    <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'https://<session-slug>.trycloudflare.com/vtt.html')">
+                                        <i class="fa-solid fa-copy"></i> Copy Link Template
+                                    </button>
+                                </div>
+                                <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px; margin-bottom: 0;">
+                                    Players click the link in Chrome, Edge, Safari, or Firefox on PC, Mac, iPad, or Android phone. No downloads or accounts required!
+                                </p>
+                            </div>
+
+                            <div class="method-callout tip">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <div>
+                                    <strong>Quick Tunnel Pro-Tip:</strong> The free <code>trycloudflare.com</code> URL is temporary and generates a new random name each time you restart the tunnel. If you want a consistent link for recurring weekly campaigns, consider Method 2 (Port Forwarding + DDNS) or Method 3 (Tailscale).
+                                </div>
                             </div>
                         </div>
 
-                        <div class="guide-step" style="margin-bottom: 16px;">
-                            <div class="step-number">2</div>
-                            <div class="step-content">
-                                <h3>Choose Campaign Subdomain</h3>
-                                <p style="color: var(--text-secondary);">Enter your session's unique subdomain slug (e.g. <code>mygame</code> or <code>tavern</code>) in the launcher and click <strong>🚀 Start Online Tunnel</strong>.</p>
+                        <!-- ============================================== -->
+                        <!-- METHOD 2 PANEL: ROUTER PORT FORWARDING -->
+                        <!-- ============================================== -->
+                        <div class="hosting-method-panel" id="method-panel-portforward" data-keywords="port forwarding router ip dynamic dns duckdns wan nat port 5050 direct">
+                            <div class="method-panel-header">
+                                <div class="method-panel-title-wrap">
+                                    <h4><i class="fa-solid fa-network-wired"></i> Method 2: Traditional Router Port Forwarding & Dynamic DNS</h4>
+                                    <p>Host directly from your computer with 100% data ownership and no cloud intermediaries. Open port 5050 on your router to allow direct peer connections.</p>
+                                </div>
+                                <div class="method-panel-badges">
+                                    <span class="pill-badge pill-blue"><i class="fa-solid fa-server"></i> Direct Host</span>
+                                    <span class="pill-badge pill-green"><i class="fa-solid fa-check"></i> Zero Third-Party Tunnels</span>
+                                    <span class="pill-badge pill-red"><i class="fa-solid fa-gear"></i> Router Config Required</span>
+                                </div>
+                            </div>
+
+                            <div class="method-prereqs-card">
+                                <div class="method-prereqs-title"><i class="fa-solid fa-list-check"></i> Prerequisites</div>
+                                <ul class="method-prereqs-list">
+                                    <li><i class="fa-solid fa-circle-check"></i> Access to your home Wi-Fi / Router Admin Page (e.g. <code>192.168.1.1</code>)</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Public IPv4 address from your ISP (not behind Carrier-Grade NAT / CGNAT)</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Windows Defender Firewall access on your host computer</li>
+                                </ul>
+                            </div>
+
+                            <!-- Step 1: Static LAN IP -->
+                            <div class="guide-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Reserve a Static Local IP for your PC</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        To ensure your router always forwards traffic to the right computer, give your machine a consistent internal IP address:
+                                    </p>
+                                    <ol style="color: var(--color-steel-light); padding-left: 20px; line-height: 1.8;">
+                                        <li>Log into your router admin interface in your browser (usually <code>http://192.168.1.1</code> or <code>http://192.168.0.1</code>).</li>
+                                        <li>Navigate to <strong>DHCP Settings</strong> or <strong>Address Reservation</strong>.</li>
+                                        <li>Assign a static local IP to your computer (e.g. <code>192.168.1.100</code>).</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Forward Port 5050 -->
+                            <div class="guide-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Create Port Forwarding Rule in Router</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        In your router's <strong>Port Forwarding / Virtual Server</strong> section, add an inbound rule:
+                                    </p>
+                                    <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 14px 18px; margin: 12px 0; border: 1px solid var(--border-subtle); font-size: 0.88rem;">
+                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+                                            <div><span style="color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase;">Rule Name:</span><br><strong style="color: var(--color-gold-bright);">ForgeDVTT</strong></div>
+                                            <div><span style="color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase;">External / WAN Port:</span><br><strong style="color: #fff;">5050</strong></div>
+                                            <div><span style="color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase;">Internal / LAN Port:</span><br><strong style="color: #fff;">5050</strong></div>
+                                            <div><span style="color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase;">Protocol:</span><br><strong style="color: var(--color-vtt-blue-bright);">TCP</strong></div>
+                                            <div><span style="color: var(--text-muted); font-size: 0.78rem; text-transform: uppercase;">Target Internal IP:</span><br><strong style="color: #fff;">192.168.1.100</strong></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Windows Firewall -->
+                            <div class="guide-step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Allow Port 5050 in Windows Firewall</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        Allow inbound connections to port 5050 by running this 1-click command in <strong>PowerShell as Administrator</strong>:
+                                    </p>
+                                    <div class="method-code-box">
+                                        <code>New-NetFirewallRule -DisplayName "ForgeDVTT Inbound Port 5050" -Direction Inbound -LocalPort 5050 -Protocol TCP -Action Allow</code>
+                                        <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'New-NetFirewallRule -DisplayName \"ForgeDVTT Inbound Port 5050\" -Direction Inbound -LocalPort 5050 -Protocol TCP -Action Allow')">
+                                            <i class="fa-solid fa-copy"></i> Copy PowerShell
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Optional Dynamic DNS -->
+                            <div class="guide-step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h3>Optional: Set up Dynamic DNS (DuckDNS / No-IP)</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        Most home ISPs change your public IP periodically. To give players a permanent friendly hostname instead of numbers:
+                                    </p>
+                                    <ol style="color: var(--color-steel-light); padding-left: 20px; line-height: 1.8;">
+                                        <li>Register a free domain at <a href="https://www.duckdns.org/" target="_blank" style="color: var(--color-gold-bright);">DuckDNS.org</a> (e.g. <code>mycampaign.duckdns.org</code>).</li>
+                                        <li>Install the DuckDNS update client or configure DDNS directly in your router settings.</li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            <!-- Player Connection URL -->
+                            <div class="player-url-banner">
+                                <div class="player-url-label"><i class="fa-solid fa-share-nodes"></i> What to Send Your Players</div>
+                                <div class="player-url-display">
+                                    <code>http://&lt;YOUR-PUBLIC-IP&gt;:5050/vtt.html</code>
+                                    <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'http://<YOUR-PUBLIC-IP>:5050/vtt.html')">
+                                        <i class="fa-solid fa-copy"></i> Copy Link Template
+                                    </button>
+                                </div>
+                                <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px; margin-bottom: 0;">
+                                    Find your public IP by visiting <a href="https://icanhazip.com" target="_blank" style="color: var(--color-gold-bright);">icanhazip.com</a>. If using DuckDNS: <code>http://mycampaign.duckdns.org:5050/vtt.html</code>.
+                                </p>
+                            </div>
+
+                            <div class="method-callout warning">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <div>
+                                    <strong>Security Notice:</strong> When exposing port 5050 directly to the internet, always set a strong GM password in the <strong>ForgeDVTT Control Center &rarr; GM Credentials</strong> tab to prevent unauthorized access to your DM screen and campaign editor.
+                                </div>
                             </div>
                         </div>
 
-                        <div class="guide-step" style="margin-bottom: 16px;">
-                            <div class="step-number">3</div>
-                            <div class="step-content">
-                                <h3>Share Player URL</h3>
-                                <p style="color: var(--text-secondary);">Share your unique campaign URL with your party (e.g. <code>https://mygame.forgedvtt.com/vtt.html</code>) so they can connect directly in any web browser with no downloads required!</p>
+                        <!-- ============================================== -->
+                        <!-- METHOD 3 PANEL: MESH VPN (TAILSCALE) -->
+                        <!-- ============================================== -->
+                        <div class="hosting-method-panel" id="method-panel-meshvpn" data-keywords="tailscale zerotier mesh vpn cgnat wireguard private dorm apartment student">
+                            <div class="method-panel-header">
+                                <div class="method-panel-title-wrap">
+                                    <h4><i class="fa-solid fa-shield-halved"></i> Method 3: Peer-to-Peer Mesh VPN (Tailscale & ZeroTier)</h4>
+                                    <p>Connect over an encrypted virtual LAN powered by WireGuard. Perfect for GMs behind strict apartment or student dorm CGNAT where router port forwarding is blocked.</p>
+                                </div>
+                                <div class="method-panel-badges">
+                                    <span class="pill-badge pill-green"><i class="fa-solid fa-shield"></i> CGNAT Bypass</span>
+                                    <span class="pill-badge pill-blue"><i class="fa-solid fa-lock"></i> WireGuard Encrypted</span>
+                                    <span class="pill-badge pill-gold"><i class="fa-solid fa-bolt"></i> No Port Forward</span>
+                                </div>
+                            </div>
+
+                            <div class="method-prereqs-card">
+                                <div class="method-prereqs-title"><i class="fa-solid fa-list-check"></i> Prerequisites</div>
+                                <ul class="method-prereqs-list">
+                                    <li><i class="fa-solid fa-circle-check"></i> Free <a href="https://tailscale.com/" target="_blank" style="color: var(--color-gold-bright);">Tailscale account</a> (supports up to 100 devices free)</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Host PC and player computers install the lightweight Tailscale client</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Works on Windows, macOS, Linux, iOS, and Android</li>
+                                </ul>
+                            </div>
+
+                            <div class="guide-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Install Tailscale on the Host Computer</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        Download and install the free Tailscale app from <a href="https://tailscale.com/download" target="_blank" style="color: var(--color-gold-bright);">tailscale.com/download</a>. Sign in with Google, GitHub, or Microsoft to activate your private encrypted network (Tailnet).
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="guide-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Invite Your Players to Your Tailnet</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        Have your gaming group install Tailscale. Then share access using either:
+                                    </p>
+                                    <ul style="color: var(--color-steel-light); padding-left: 20px; line-height: 1.8;">
+                                        <li><strong>Tailscale Share Node:</strong> In your Tailscale admin console, click your PC &rarr; <em>Share Machine</em> &rarr; generate an invite link for players.</li>
+                                        <li><strong>Shared Gaming Account:</strong> For recurring private groups, players can join under the same free organizational Tailnet.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="guide-step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Copy your Tailscale 100.x.y.z IP</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        Right-click the Tailscale tray icon and copy your machine's <code>100.x.y.z</code> virtual IP address (or run <code>tailscale ip -4</code> in terminal).
+                                    </p>
+                                    <div class="method-code-box">
+                                        <code>tailscale ip -4</code>
+                                        <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'tailscale ip -4')">
+                                            <i class="fa-solid fa-copy"></i> Copy Command
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Player Connection URL -->
+                            <div class="player-url-banner">
+                                <div class="player-url-label"><i class="fa-solid fa-share-nodes"></i> What to Send Your Players</div>
+                                <div class="player-url-display">
+                                    <code>http://100.x.y.z:5050/vtt.html</code>
+                                    <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'http://100.x.y.z:5050/vtt.html')">
+                                        <i class="fa-solid fa-copy"></i> Copy Link Template
+                                    </button>
+                                </div>
+                                <p style="color: var(--text-muted); font-size: 0.82rem; margin-top: 8px; margin-bottom: 0;">
+                                    If MagicDNS is enabled, players can even type your PC's hostname directly, like <code>http://gm-desktop:5050/vtt.html</code>!
+                                </p>
+                            </div>
+
+                            <div class="method-callout tip">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                <div>
+                                    <strong>Why GMs Love Tailscale:</strong> Zero open router ports, complete immunity to internet port scanners, and works through campus firewalls and cellular 5G hotspots without any configuration.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ============================================== -->
+                        <!-- METHOD 4 PANEL: ALTERNATIVE TUNNELS -->
+                        <!-- ============================================== -->
+                        <div class="hosting-method-panel" id="method-panel-alttunnels" data-keywords="ngrok bore localtunnel playit tunnel proxy reverse proxy port 5050">
+                            <div class="method-panel-header">
+                                <div class="method-panel-title-wrap">
+                                    <h4><i class="fa-solid fa-arrows-split-up-and-left"></i> Method 4: Alternative Tunnel Utilities (ngrok, bore, localtunnel)</h4>
+                                    <p>Expose ForgeD VTT's local port (5050) over any third-party reverse proxy service. Great for fast temporary playtests or custom proxies.</p>
+                                </div>
+                                <div class="method-panel-badges">
+                                    <span class="pill-badge pill-blue"><i class="fa-solid fa-globe"></i> Public HTTPS</span>
+                                    <span class="pill-badge pill-gold"><i class="fa-solid fa-bolt"></i> No Port Forward</span>
+                                    <span class="pill-badge pill-neutral"><i class="fa-solid fa-terminal"></i> CLI Based</span>
+                                </div>
+                            </div>
+
+                            <div class="method-prereqs-card">
+                                <div class="method-prereqs-title"><i class="fa-solid fa-list-check"></i> Prerequisites</div>
+                                <ul class="method-prereqs-list">
+                                    <li><i class="fa-solid fa-circle-check"></i> ForgeD VTT Server running locally on port 5050</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> One installed tunneling utility (ngrok, bore, localtunnel, or playit.gg)</li>
+                                </ul>
+                            </div>
+
+                            <!-- Sub-Option A: ngrok -->
+                            <div class="guide-step">
+                                <div class="step-number">A</div>
+                                <div class="step-content">
+                                    <h3>Option A: ngrok (Most Popular)</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        Download <a href="https://ngrok.com/" target="_blank" style="color: var(--color-gold-bright);">ngrok</a>, sign in for a free authtoken, then start ForgeD VTT and run:
+                                    </p>
+                                    <div class="method-code-box">
+                                        <code>ngrok http 5050</code>
+                                        <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'ngrok http 5050')">
+                                            <i class="fa-solid fa-copy"></i> Copy Command
+                                        </button>
+                                    </div>
+                                    <p style="color: var(--text-muted); font-size: 0.85rem;">
+                                        ngrok prints a forwarding address like <code>https://abc1-23.ngrok-free.app</code>. Add <code>/vtt.html</code> to share with players.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Sub-Option B: bore -->
+                            <div class="guide-step">
+                                <div class="step-number">B</div>
+                                <div class="step-content">
+                                    <h3>Option B: bore (Zero-Token / Open Source)</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        <a href="https://github.com/ekzhang/bore" target="_blank" style="color: var(--color-gold-bright);">bore</a> is a lightweight Rust-based open source tunnel that requires <strong>no accounts, no tokens, and no signup</strong>:
+                                    </p>
+                                    <div class="method-code-box">
+                                        <code>bore local 5050 --to bore.pub</code>
+                                        <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'bore local 5050 --to bore.pub')">
+                                            <i class="fa-solid fa-copy"></i> Copy Command
+                                        </button>
+                                    </div>
+                                    <p style="color: var(--text-muted); font-size: 0.85rem;">
+                                        bore outputs an address like <code>bore.pub:38491</code>. Players connect via <code>http://bore.pub:38491/vtt.html</code>.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Sub-Option C: localtunnel -->
+                            <div class="guide-step">
+                                <div class="step-number">C</div>
+                                <div class="step-content">
+                                    <h3>Option C: localtunnel (1-Command via Node / npx)</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        If you already have Node.js installed on your computer, launch a tunnel instantly with zero installation:
+                                    </p>
+                                    <div class="method-code-box">
+                                        <code>npx localtunnel --port 5050</code>
+                                        <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'npx localtunnel --port 5050')">
+                                            <i class="fa-solid fa-copy"></i> Copy Command
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Player Connection URL -->
+                            <div class="player-url-banner">
+                                <div class="player-url-label"><i class="fa-solid fa-share-nodes"></i> What to Send Your Players</div>
+                                <div class="player-url-display">
+                                    <code>https://&lt;your-tunnel-url&gt;/vtt.html</code>
+                                    <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'https://<your-tunnel-url>/vtt.html')">
+                                        <i class="fa-solid fa-copy"></i> Copy Link Template
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="method-callout info">
+                                <i class="fa-solid fa-circle-info"></i>
+                                <div>
+                                    <strong>WebSocket Note:</strong> ForgeD VTT uses WebSocket streaming for token animations, fog of war updates, and 3D physics dice. All three tools above (ngrok, bore, localtunnel) support WebSocket connections out-of-the-box.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ============================================== -->
+                        <!-- METHOD 5 PANEL: LOCAL LAN / IN-PERSON TABLE -->
+                        <!-- ============================================== -->
+                        <div class="hosting-method-panel" id="method-panel-locallan" data-keywords="local lan wifi offline in person tv table battlemap couch tabletop ipconfig">
+                            <div class="method-panel-header">
+                                <div class="method-panel-title-wrap">
+                                    <h4><i class="fa-solid fa-wifi"></i> Method 5: Local Area Network (LAN / In-Person & TV Tables)</h4>
+                                    <p>Play locally around the same table or project maps onto a digital TV display. 100% offline capable with under 1ms local network latency.</p>
+                                </div>
+                                <div class="method-panel-badges">
+                                    <span class="pill-badge pill-green"><i class="fa-solid fa-check"></i> 100% Offline Capable</span>
+                                    <span class="pill-badge pill-blue"><i class="fa-solid fa-bolt"></i> &lt;1ms Latency</span>
+                                    <span class="pill-badge pill-gold"><i class="fa-solid fa-tv"></i> Ideal for TV Tables</span>
+                                </div>
+                            </div>
+
+                            <div class="method-prereqs-card">
+                                <div class="method-prereqs-title"><i class="fa-solid fa-list-check"></i> Prerequisites</div>
+                                <ul class="method-prereqs-list">
+                                    <li><i class="fa-solid fa-circle-check"></i> All devices connected to the same home Wi-Fi network or Ethernet switch</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> No internet connection required (works during broadband outages!)</li>
+                                    <li><i class="fa-solid fa-circle-check"></i> Windows Firewall set to allow Private Network connections</li>
+                                </ul>
+                            </div>
+
+                            <!-- Step 1: Find Local IP -->
+                            <div class="guide-step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h3>Find your Host PC's Local IP Address</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        Open <strong>PowerShell</strong> or <strong>Command Prompt</strong> on the host computer and run:
+                                    </p>
+                                    <div class="method-code-box">
+                                        <code>ipconfig</code>
+                                        <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'ipconfig')">
+                                            <i class="fa-solid fa-copy"></i> Copy Command
+                                        </button>
+                                    </div>
+                                    <p style="color: var(--text-muted); font-size: 0.85rem;">
+                                        Look for your active Wi-Fi or Ethernet adapter and note the <strong>IPv4 Address</strong> (usually looks like <code>192.168.1.50</code> or <code>10.0.0.25</code>).
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Start Server -->
+                            <div class="guide-step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h3>Start ForgeD VTT</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        Launch the <strong>ForgeDVTT Control Center</strong> desktop app (or run <code>node server.js</code>). When Windows asks to allow network access, ensure <strong>Private Networks (home or work)</strong> is checked.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Connect Players -->
+                            <div class="guide-step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h3>Connect In-Person Players via Wi-Fi</h3>
+                                    <p style="color: var(--text-secondary); margin-bottom: 10px;">
+                                        Players at your table connect their phones, iPads, or laptops to your Wi-Fi and open your local IP in their web browser:
+                                    </p>
+                                    <div class="method-code-box">
+                                        <code>http://192.168.1.X:5050/vtt.html</code>
+                                        <button type="button" class="copy-code-btn" onclick="copyHostingCode(this, 'http://192.168.1.X:5050/vtt.html')">
+                                            <i class="fa-solid fa-copy"></i> Copy Link Template
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Player Connection URL -->
+                            <div class="player-url-banner">
+                                <div class="player-url-label"><i class="fa-solid fa-tv"></i> Digital TV Battlemap Table Setup</div>
+                                <p style="color: var(--color-steel-light); font-size: 0.9rem; margin-bottom: 10px;">
+                                    If you built a tabletop TV case or connect an HDMI cable to an external display table:
+                                </p>
+                                <ol style="color: var(--color-steel-light); font-size: 0.88rem; padding-left: 20px; line-height: 1.8;">
+                                    <li>Drag a new browser window onto the TV screen and navigate to <code>http://localhost:5050/vtt.html</code>.</li>
+                                    <li>Join as a <strong>Player</strong> view and press <span class="kbd-badge">F11</span> for full-screen immersive tactical grid.</li>
+                                    <li>Keep your <strong>ForgeD VTT Control Center</strong> and GM view on your private laptop screen!</li>
+                                </ol>
+                            </div>
+
+                            <div class="method-callout tip">
+                                <i class="fa-solid fa-shield-cat"></i>
+                                <div>
+                                    <strong>Offline Convention Friendly:</strong> You can bring a pocket travel Wi-Fi router to a friend's house or a convention center and play ForgeD VTT with all your maps and tokens completely offline with zero internet access!
+                                </div>
                             </div>
                         </div>
                     </section>
@@ -3181,6 +3710,44 @@
             }
         });
 
+        // Hosting Methods Interactive Tab & Matrix Switcher
+        function switchHostingMethod(methodKey) {
+            const validMethods = ['cloudflare', 'portforward', 'meshvpn', 'alttunnels', 'locallan'];
+            if (!validMethods.includes(methodKey)) return;
+
+            // Update Tab Buttons
+            document.querySelectorAll('.hosting-tab-btn').forEach(btn => btn.classList.remove('active'));
+            const activeTab = document.getElementById(`tab-btn-${methodKey}`);
+            if (activeTab) activeTab.classList.add('active');
+
+            // Update Method Panels
+            document.querySelectorAll('.hosting-method-panel').forEach(panel => panel.classList.remove('active'));
+            const activePanel = document.getElementById(`method-panel-${methodKey}`);
+            if (activePanel) activePanel.classList.add('active');
+
+            // Update Matrix Row highlight
+            document.querySelectorAll('.hosting-matrix-table tr').forEach(row => row.classList.remove('active-matrix-row'));
+            const activeRow = document.getElementById(`matrix-row-${methodKey}`);
+            if (activeRow) activeRow.classList.add('active-matrix-row');
+        }
+
+        // 1-Click Code / Link Copier for Hosting Guide
+        function copyHostingCode(btn, text) {
+            if (!text) return;
+            const originalHtml = btn.innerHTML;
+            navigator.clipboard.writeText(text).then(() => {
+                btn.innerHTML = '<i class="fa-solid fa-check" style="color: #85c35b;"></i> Copied!';
+                btn.style.borderColor = 'rgba(111, 162, 71, 0.6)';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.style.borderColor = '';
+                }, 2000);
+            }).catch(() => {
+                // Fallback prompt for older webviews
+                prompt('Copy command to clipboard:', text);
+            });
+        }
+
         // Master Manual Live Search Filter
         function filterManualTopics() {
             const query = document.getElementById('manual-search-input').value.toLowerCase().trim();
@@ -3189,6 +3756,7 @@
             const docCards = document.querySelectorAll('.doc-feature-card');
             const workflowItems = document.querySelectorAll('.doc-workflow-item');
             const sections = document.querySelectorAll('.manual-section');
+            const methodPanels = document.querySelectorAll('.hosting-method-panel');
 
             if (!query) {
                 cards.forEach(c => c.style.display = 'flex');
@@ -3239,6 +3807,18 @@
                 }
             });
 
+            // Automatically activate matching hosting method tab if query matches keywords
+            let matchedHostingMethod = false;
+            methodPanels.forEach(panel => {
+                const text = panel.textContent.toLowerCase();
+                const keywords = panel.getAttribute('data-keywords') || '';
+                if ((text.includes(query) || keywords.includes(query)) && !matchedHostingMethod) {
+                    const methodKey = panel.id.replace('method-panel-', '');
+                    switchHostingMethod(methodKey);
+                    matchedHostingMethod = true;
+                }
+            });
+
             // If a section has no matching cards and text doesn't match query, hide section
             sections.forEach(section => {
                 const text = section.textContent.toLowerCase();
@@ -3248,7 +3828,7 @@
                 const visibleWorkflows = section.querySelectorAll('.doc-workflow-item[style*="display: flex"]');
                 const hasMatchingTable = section.querySelector('table') && text.includes(query);
 
-                if (visibleCards.length > 0 || visibleSubcards.length > 0 || visibleDocCards.length > 0 || visibleWorkflows.length > 0 || hasMatchingTable || text.includes(query)) {
+                if (visibleCards.length > 0 || visibleSubcards.length > 0 || visibleDocCards.length > 0 || visibleWorkflows.length > 0 || hasMatchingTable || matchedHostingMethod || text.includes(query)) {
                     section.style.display = 'block';
                 } else {
                     section.style.display = 'none';

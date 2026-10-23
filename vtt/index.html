@@ -215,6 +215,13 @@
             <button class="mobile-tool-item" data-tool="zoom-out">
                 <i class="fa-solid fa-magnifying-glass-minus"></i> <span>Zoom Out (-10%)</span>
             </button>
+            <div class="mobile-tool-divider"></div>
+            <button class="mobile-tool-item gm-only" id="mobile-tool-pause" data-tool="pause" title="Pause Game">
+                <i class="fa-solid fa-pause"></i> <span>Pause Game</span>
+            </button>
+            <button class="mobile-tool-item player-only mobile-tool-xcard" id="mobile-tool-xcard" data-tool="xcard" title="X-Card: Pause Tabletop">
+                <i class="fa-solid fa-circle-xmark"></i> <span>X-Card (Pause)</span>
+            </button>
         </div>
 
         <!-- Mobile Floating Combat Initiative Pill -->
@@ -264,6 +271,19 @@
         <div id="vtt-connection-status-pill" class="vtt-connection-pill vtt-hidden">
             <i class="fa-solid fa-spinner fa-spin"></i>
             <span id="vtt-connection-status-text">Reconnecting...</span>
+        </div>
+
+        <!-- Central Tabletop Pause & X-Card Watermark Overlay (Pointer-Events: None) -->
+        <div id="vtt-pause-overlay" class="vtt-pause-overlay vtt-hidden" aria-live="polite">
+            <div class="pause-watermark-container">
+                <div id="vtt-pause-icon-wrapper" class="pause-icon-wrapper">
+                    <i id="vtt-pause-icon" class="fa-solid fa-pause"></i>
+                </div>
+                <div id="vtt-pause-badge" class="pause-badge">
+                    <span id="vtt-pause-title">GAME PAUSED BY GM</span>
+                </div>
+                <div id="vtt-pause-subtitle" class="pause-subtitle">Only the GM can move tokens • Players may pan & inspect sheets</div>
+            </div>
         </div>
 
         <!-- Mobile Floating Token Drag Distance Pill -->
@@ -566,6 +586,13 @@
             </div>
 
             <div class="control-divider"></div>
+            <!-- Session Controls: GM Play/Pause & Player X-Card -->
+            <button id="btn-game-pause" class="control-btn gm-only" title="Pause Game (GM)">
+                <i class="fa-solid fa-pause"></i>
+            </button>
+            <button id="btn-game-xcard" class="control-btn player-only btn-xcard" title="X-Card: Pause Tabletop">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </button>
             <button id="btn-logout" class="control-btn" title="Exit Game" style="color: var(--color-danger);">
                 <i class="fa-solid fa-right-from-bracket"></i>
             </button>
@@ -704,8 +731,17 @@
 
             <!-- Asset Gallery Context Menu -->
             <div id="vtt-asset-context-menu" class="glassmorphism context-menu vtt-hidden">
+                <button id="btn-asset-ctx-preview" class="btn btn-ctx-item">
+                    <i class="fa-solid fa-eye"></i> <span>Preview Full Size</span>
+                </button>
                 <button id="btn-asset-ctx-edit" class="btn btn-ctx-item">
                     <i class="fa-solid fa-pencil"></i> <span>Edit Name/URL</span>
+                </button>
+                <button id="btn-asset-ctx-move" class="btn btn-ctx-item">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i> <span>Move to Folder...</span>
+                </button>
+                <button id="btn-asset-ctx-copy-url" class="btn btn-ctx-item">
+                    <i class="fa-solid fa-copy"></i> <span>Copy Asset URL</span>
                 </button>
                 <div class="ctx-divider"></div>
                 <button id="btn-asset-ctx-delete" class="btn btn-ctx-item btn-danger">
@@ -933,37 +969,84 @@
                 <div id="tab-assets" class="tab-panel gm-only">
                     <div class="panel-header">
                         <h3><i class="fa-solid fa-photo-film text-gradient-gold"></i> Asset Gallery</h3>
-                        <div class="header-actions">
+                        <div class="header-actions" style="display: flex; gap: 4px; align-items: center;">
+                            <button id="btn-asset-view-toggle" class="btn btn-xxs btn-secondary" title="Toggle Grid / List View">
+                                <i class="fa-solid fa-list"></i>
+                            </button>
                             <button id="btn-asset-new-folder" class="btn btn-xxs btn-secondary" title="New Folder">
                                 <i class="fa-solid fa-folder-plus"></i>
                             </button>
                         </div>
                     </div>
                     
-                    <div class="panel-body flex-col h-100">
-                        <div class="asset-actions flex-row" style="gap: 8px; margin-bottom: 8px;">
-                            <label for="asset-file-upload" class="btn btn-xs btn-primary" style="flex: 1; text-align: center; cursor: pointer;">
-                                <i class="fa-solid fa-upload"></i> Upload
+                    <div class="panel-body flex-col h-100" style="position: relative;">
+                        <!-- Upload Actions Row -->
+                        <div class="asset-actions flex-row" style="gap: 6px; margin-bottom: 6px;">
+                            <label for="asset-file-upload" class="btn btn-xs btn-primary" style="flex: 1; text-align: center; cursor: pointer; white-space: nowrap; padding: 4px 6px;" title="Upload Multiple Files">
+                                <i class="fa-solid fa-file-arrow-up"></i> Files
                             </label>
-                            <input type="file" id="asset-file-upload" class="vtt-hidden" accept="image/*,video/*,.gif">
+                            <input type="file" id="asset-file-upload" class="vtt-hidden" multiple accept="image/*,video/*,.gif,.webp">
                             
-                            <button id="btn-asset-add-url" class="btn btn-xs btn-secondary" style="flex: 1;">
-                                <i class="fa-solid fa-link"></i> Add URL
+                            <label for="asset-folder-upload" class="btn btn-xs btn-primary" style="flex: 1; text-align: center; cursor: pointer; white-space: nowrap; padding: 4px 6px;" title="Upload Entire Folder Hierarchy">
+                                <i class="fa-solid fa-folder-arrow-up"></i> Folder
+                            </label>
+                            <input type="file" id="asset-folder-upload" class="vtt-hidden" webkitdirectory directory multiple accept="image/*,video/*,.gif,.webp">
+                            
+                            <button id="btn-asset-add-url" class="btn btn-xs btn-secondary" style="flex: 1; white-space: nowrap; padding: 4px 6px;" title="Add External Media URL">
+                                <i class="fa-solid fa-link"></i> URL
                             </button>
                         </div>
-                        
-                        <div class="search-box">
-                            <input type="text" id="asset-search" placeholder="Search assets...">
-                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+
+                        <!-- Search & Zoom Toolbar -->
+                        <div class="flex-row" style="gap: 6px; margin-bottom: 6px; align-items: center;">
+                            <div class="search-box" style="flex: 1;">
+                                <input type="text" id="asset-search" placeholder="Search assets...">
+                                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            </div>
+                            <div class="asset-zoom-wrap flex-row" style="align-items: center; gap: 4px; font-size: 0.7rem; color: var(--color-text-muted); background: rgba(0,0,0,0.25); padding: 4px 6px; border-radius: 4px; border: 1px solid var(--color-border-subtle);" title="Thumbnail Size">
+                                <i class="fa-solid fa-image" style="font-size: 0.65rem;"></i>
+                                <input type="range" id="asset-zoom-slider" min="60" max="140" value="80" step="5" style="width: 50px; height: 3px; accent-color: var(--color-gold-base); cursor: pointer;">
+                            </div>
+                        </div>
+
+                        <!-- Batch Selection Action Bar (Shown when 1+ assets selected) -->
+                        <div id="asset-batch-toolbar" class="asset-batch-bar vtt-hidden flex-row" style="justify-content: space-between; align-items: center; padding: 4px 8px; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--color-gold-base); border-radius: 6px; margin-bottom: 6px; font-size: 0.75rem;">
+                            <span id="asset-batch-count" style="font-weight: 600; color: var(--color-gold-light);">0 selected</span>
+                            <div class="flex-row" style="gap: 4px;">
+                                <button id="btn-asset-batch-move" class="btn btn-xxs btn-secondary" title="Move selected assets"><i class="fa-solid fa-arrow-right-to-bracket"></i> Move</button>
+                                <button id="btn-asset-batch-delete" class="btn btn-xxs btn-danger" title="Delete selected assets"><i class="fa-solid fa-trash"></i> Delete</button>
+                                <button id="btn-asset-batch-clear" class="btn btn-xxs btn-ghost" title="Clear selection"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
                         </div>
                         
-                        <div class="asset-breadcrumbs" id="asset-breadcrumbs" style="font-size: 0.8rem; padding: 4px 0; color: var(--color-gold-light);">
-                            <span class="breadcrumb" data-path="">Root</span>
+                        <!-- Breadcrumbs -->
+                        <div class="asset-breadcrumbs" id="asset-breadcrumbs" style="font-size: 0.75rem; padding: 4px 0; color: var(--color-gold-light); display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
+                            <span class="breadcrumb-link" data-path="">Root</span>
                         </div>
                         
-                        <div id="asset-gallery-list" class="asset-items scroll-styled" style="flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; align-content: start;">
-                            <!-- Assets populate here -->
-                            <div class="init-empty-state" style="grid-column: 1 / -1;">Loading assets...</div>
+                        <!-- Gallery Grid Container with Drop Overlay -->
+                        <div id="asset-gallery-container" class="asset-gallery-container" style="position: relative; flex: 1; display: flex; flex-direction: column; overflow: hidden; min-height: 0;">
+                            <!-- Drop Overlay -->
+                            <div id="asset-drop-overlay" class="asset-drop-overlay vtt-hidden">
+                                <i class="fa-solid fa-cloud-arrow-up asset-drop-icon"></i>
+                                <span id="asset-drop-overlay-text">Drop files or folders to upload</span>
+                            </div>
+
+                            <!-- List / Grid Content -->
+                            <div id="asset-gallery-list" class="asset-items scroll-styled" style="flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; align-content: start; overflow-y: auto;">
+                                <div class="init-empty-state" style="grid-column: 1 / -1;">Loading assets...</div>
+                            </div>
+                        </div>
+
+                        <!-- Upload Progress Bar Toast -->
+                        <div id="asset-upload-progress" class="asset-upload-progress vtt-hidden" style="margin-top: 6px; background: rgba(18, 22, 33, 0.95); border: 1px solid var(--color-gold-base); border-radius: 6px; padding: 6px 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                            <div class="flex-row" style="justify-content: space-between; align-items: center; font-size: 0.75rem; margin-bottom: 4px;">
+                                <span id="asset-progress-label" style="color: var(--color-text-main); font-weight: 500;"><i class="fa-solid fa-spinner fa-spin text-gradient-gold"></i> Uploading...</span>
+                                <span id="asset-progress-percent" style="color: var(--color-gold-light); font-weight: bold;">0%</span>
+                            </div>
+                            <div style="width: 100%; height: 5px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                                <div id="asset-progress-bar-fill" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--color-gold-base), #f0d879); transition: width 0.15s ease;"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1804,6 +1887,44 @@
     </div>
 
     <!-- Modals Layer -->
+    <!-- Asset Full Size Preview Lightbox Modal -->
+    <div id="modal-asset-preview" class="vtt-modal vtt-hidden" style="z-index: 10010;">
+        <div class="modal-content glassmorphism" style="max-width: 85vw; max-height: 85vh; width: 680px; display: flex; flex-direction: column; padding: 16px;">
+            <div class="modal-header-row" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 8px; margin-bottom: 12px;">
+                <h4 id="asset-preview-title" style="margin: 0; color: var(--color-gold-light); font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><i class="fa-solid fa-eye text-gradient-gold"></i> Asset Preview</h4>
+                <button id="btn-asset-preview-close" class="btn btn-icon btn-ghost btn-sm" title="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="asset-preview-media-container" style="flex: 1; min-height: 280px; max-height: 52vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(0,0,0,0.5); border-radius: 6px; padding: 8px;">
+                <!-- Image or Video loaded here -->
+            </div>
+            <div class="modal-footer-row flex-row" style="justify-content: space-between; align-items: center; margin-top: 12px; font-size: 0.8rem; color: var(--color-text-secondary); border-top: 1px solid var(--color-border-subtle); padding-top: 8px;">
+                <span id="asset-preview-info">Dimensions: --</span>
+                <div class="flex-row" style="gap: 8px;">
+                    <button id="btn-asset-preview-copy-url" class="btn btn-xs btn-secondary"><i class="fa-solid fa-copy"></i> Copy Link</button>
+                    <button id="btn-asset-preview-place" class="btn btn-xs btn-primary"><i class="fa-solid fa-plus"></i> Place on Map</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Asset Move Destination Picker Modal -->
+    <div id="modal-asset-move" class="vtt-modal vtt-hidden" style="z-index: 10010;">
+        <div class="modal-content glassmorphism" style="max-width: 420px; width: 90vw; padding: 16px;">
+            <div class="modal-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 1px solid var(--color-border-subtle); padding-bottom: 8px;">
+                <h4 style="margin: 0; color: var(--color-gold-light); font-size: 1rem;"><i class="fa-solid fa-arrow-right-to-bracket text-gradient-gold"></i> Move Assets</h4>
+                <button id="btn-asset-move-close" class="btn btn-icon btn-ghost btn-sm" title="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p id="asset-move-description" style="font-size: 0.85rem; color: var(--color-text-secondary); margin-bottom: 10px;">Select destination folder:</p>
+            <div id="asset-move-folder-list" class="scroll-styled" style="max-height: 240px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px;">
+                <!-- Folder options populated via JS -->
+            </div>
+            <div class="modal-buttons" style="display: flex; justify-content: flex-end; gap: 8px;">
+                <button id="btn-asset-move-cancel" class="btn btn-secondary btn-sm">Cancel</button>
+                <button id="btn-asset-move-confirm" class="btn btn-primary btn-sm">Move Here</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Create Campaign Modal -->
     <div id="modal-create-campaign" class="vtt-modal vtt-hidden">
         <div class="modal-content glassmorphism">
@@ -3180,6 +3301,7 @@
         setupLoginHandlers();
         setupSidebarTabs();
         setupUniversalModalDismissal();
+        setupPauseAndXCardControls();
 
         async function setupLoginHandlers() {
             const btnJoin = document.getElementById('btn-join-game');
@@ -3479,6 +3601,10 @@
                     }
                 });
 
+                socket.on('game:pause_state', (pauseState) => {
+                    updateTabletopPauseUI(pauseState, true);
+                });
+
                 socket.on('joined', async ({ role: serverRole, userRole, campaignState, chatHistory }) => {
                     hasJoinedSession = true;
                     updateConnectionStatus('connected', 'Connected!');
@@ -3508,6 +3634,11 @@
                     }
 
                     renderAllowlist(campaignState.allowedUsers || []);
+
+                    // Synchronize initial pause state on join
+                    if (campaignState && (campaignState.isPaused !== undefined || campaignState.pauseState)) {
+                        updateTabletopPauseUI(campaignState.pauseState || { isPaused: Boolean(campaignState.isPaused), source: 'gm' }, false);
+                    }
 
                     document.getElementById('login-overlay')?.classList.add('vtt-hidden');
                     document.getElementById('vtt-workspace')?.classList.remove('vtt-hidden');
@@ -3721,6 +3852,174 @@
             document.getElementById('btn-logout').addEventListener('click', () => {
                 window.location.reload();
             });
+        }
+
+        function updateTabletopPauseUI(pauseState, showToast = true) {
+            const isPaused = Boolean(pauseState?.isPaused);
+            const source = pauseState?.source || 'gm';
+            const pausedBy = pauseState?.by || (source === 'xcard' ? 'Player' : 'GM');
+
+            window.VTT.isPaused = isPaused;
+            window.VTT.pauseState = pauseState || { isPaused, source, by: pausedBy };
+
+            // 1. Update GM Play/Pause button on desktop toolbar
+            const btnGmPause = document.getElementById('btn-game-pause');
+            if (btnGmPause) {
+                const icon = btnGmPause.querySelector('i');
+                if (isPaused) {
+                    btnGmPause.classList.add('paused');
+                    btnGmPause.title = 'Resume Game (GM)';
+                    if (icon) icon.className = 'fa-solid fa-play';
+                } else {
+                    btnGmPause.classList.remove('paused');
+                    btnGmPause.title = 'Pause Game (GM)';
+                    if (icon) icon.className = 'fa-solid fa-pause';
+                }
+            }
+
+            // 2. Update Mobile Menu items
+            const mobPause = document.getElementById('mobile-tool-pause');
+            if (mobPause) {
+                const mobIcon = mobPause.querySelector('i');
+                const mobLabel = mobPause.querySelector('span');
+                if (isPaused) {
+                    mobPause.classList.add('paused');
+                    if (mobIcon) mobIcon.className = 'fa-solid fa-play';
+                    if (mobLabel) mobLabel.textContent = 'Resume Game';
+                } else {
+                    mobPause.classList.remove('paused');
+                    if (mobIcon) mobIcon.className = 'fa-solid fa-pause';
+                    if (mobLabel) mobLabel.textContent = 'Pause Game';
+                }
+            }
+
+            // 3. Update Player X-Card buttons
+            const btnXcard = document.getElementById('btn-game-xcard');
+            if (btnXcard) {
+                if (isPaused && source === 'xcard') {
+                    btnXcard.classList.add('active-paused');
+                } else {
+                    btnXcard.classList.remove('active-paused');
+                }
+            }
+            const mobXcard = document.getElementById('mobile-tool-xcard');
+            if (mobXcard) {
+                if (isPaused && source === 'xcard') {
+                    mobXcard.classList.add('active-paused');
+                } else {
+                    mobXcard.classList.remove('active-paused');
+                }
+            }
+
+            // 4. Update Central Pause / X-Card Watermark Overlay
+            const overlay = document.getElementById('vtt-pause-overlay');
+            const iconEl = document.getElementById('vtt-pause-icon');
+            const titleEl = document.getElementById('vtt-pause-title');
+            const subEl = document.getElementById('vtt-pause-subtitle');
+
+            if (overlay) {
+                if (isPaused) {
+                    overlay.classList.remove('vtt-hidden', 'fade-out');
+                    overlay.classList.add('active');
+
+                    if (source === 'xcard') {
+                        overlay.classList.remove('theme-gm');
+                        overlay.classList.add('theme-xcard');
+                        if (iconEl) iconEl.className = 'fa-solid fa-xmark';
+                        if (titleEl) titleEl.textContent = 'GAME PAUSED (X-CARD)';
+                        if (subEl) subEl.textContent = 'Token movement paused • Please check in with the table';
+                        if (showToast && typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                            JqueryUtil.doToast({
+                                type: 'danger',
+                                content: `⚠️ X-Card triggered by ${pausedBy} — Game Paused`
+                            });
+                        }
+                    } else {
+                        overlay.classList.remove('theme-xcard');
+                        overlay.classList.add('theme-gm');
+                        if (iconEl) iconEl.className = 'fa-solid fa-pause';
+                        if (titleEl) titleEl.textContent = 'GAME PAUSED BY GM';
+                        if (subEl) subEl.textContent = 'Only the GM can move tokens • Players may pan & inspect sheets';
+                        if (showToast && typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                            JqueryUtil.doToast({
+                                type: 'warning',
+                                content: 'Game Paused by GM'
+                            });
+                        }
+                    }
+                } else {
+                    overlay.classList.remove('active');
+                    overlay.classList.add('fade-out');
+                    setTimeout(() => {
+                        if (!window.VTT.isPaused) {
+                            overlay.classList.add('vtt-hidden');
+                            overlay.classList.remove('fade-out', 'theme-xcard', 'theme-gm');
+                        }
+                    }, 400);
+
+                    if (showToast && typeof JqueryUtil !== 'undefined' && JqueryUtil.doToast) {
+                        JqueryUtil.doToast({
+                            type: 'success',
+                            content: 'Game Resumed by GM'
+                        });
+                    }
+                }
+            }
+
+            // 5. Notify canvas engine
+            if (window.VTT.canvasEngine?.setGamePauseState) {
+                window.VTT.canvasEngine.setGamePauseState(isPaused);
+            }
+        }
+
+        function setupPauseAndXCardControls() {
+            // GM Play/Pause Button (desktop)
+            const btnGmPause = document.getElementById('btn-game-pause');
+            if (btnGmPause) {
+                btnGmPause.addEventListener('click', () => {
+                    if (window.VTT.role !== 'GM') return;
+                    const currentlyPaused = Boolean(window.VTT.isPaused);
+                    const socket = window.VTT.socket;
+                    if (socket) {
+                        socket.emit('game:set_pause', { paused: !currentlyPaused, source: 'gm' });
+                    }
+                });
+            }
+
+            // GM Play/Pause Button (mobile)
+            const mobPause = document.getElementById('mobile-tool-pause');
+            if (mobPause) {
+                mobPause.addEventListener('click', () => {
+                    if (window.VTT.role !== 'GM') return;
+                    const currentlyPaused = Boolean(window.VTT.isPaused);
+                    const socket = window.VTT.socket;
+                    if (socket) {
+                        socket.emit('game:set_pause', { paused: !currentlyPaused, source: 'gm' });
+                    }
+                });
+            }
+
+            // Player X-Card Button (desktop)
+            const btnXcard = document.getElementById('btn-game-xcard');
+            if (btnXcard) {
+                btnXcard.addEventListener('click', () => {
+                    const socket = window.VTT.socket;
+                    if (socket) {
+                        socket.emit('game:set_pause', { paused: true, source: 'xcard' });
+                    }
+                });
+            }
+
+            // Player X-Card Button (mobile)
+            const mobXcard = document.getElementById('mobile-tool-xcard');
+            if (mobXcard) {
+                mobXcard.addEventListener('click', () => {
+                    const socket = window.VTT.socket;
+                    if (socket) {
+                        socket.emit('game:set_pause', { paused: true, source: 'xcard' });
+                    }
+                });
+            }
         }
 
         function setupSidebarTabs() {

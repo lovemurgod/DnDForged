@@ -13103,6 +13103,17 @@ window.emitTokenUpdates = function(currentTokens) {
         isDraggingToken: () => !!dragTargetId,
         openTokenEditModal,
         renderAll,
+        setGamePauseState: (paused) => {
+            if (paused && vtt.role !== 'GM') {
+                if (dragTargetId && cancelTokenDrag) {
+                    cancelTokenDrag();
+                }
+                selectedTokenIds.clear();
+                selectedTokenId = null;
+            }
+            renderAll();
+        },
+        isPaused: () => !!(vtt.isPaused || window.VTT?.isPaused),
         syncCampaignState: (newCampaignState) => {
             if (newCampaignState) {
                 vtt.campaignState = newCampaignState;
@@ -18076,6 +18087,7 @@ window.emitTokenUpdates = function(currentTokens) {
     function isTokenControlledByPlayer(token) {
         if (!token) return false;
         if (vtt.role === 'GM') return true;
+        if (vtt.role !== 'GM' && (vtt.isPaused || window.VTT?.isPaused)) return false;
         const username = vtt.username;
         if (!username) return false;
 
@@ -18099,6 +18111,7 @@ window.emitTokenUpdates = function(currentTokens) {
 
     function getTokenAtPoint(mouse, requireControl = true, matchLayer = true, touchRadius = 0) {
         if (!tokens || !mouse) return null;
+        if (requireControl && vtt.role !== 'GM' && (vtt.isPaused || window.VTT?.isPaused)) return null;
 
         const tokenEntries = Object.entries(tokens).map(([id, t], idx) => ({ id, token: t, originalIndex: idx }));
         // Sort descending by zIndex, then descending by original insertion index (topmost visual element first)

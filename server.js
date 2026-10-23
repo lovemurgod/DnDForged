@@ -255,12 +255,21 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Custom storage for assets to support subfolders
+// Custom storage for assets to support subfolders, nested hierarchies, and batch uploads
 const assetStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     let targetPath = ASSETS_DIR;
-    if (req.body.folderPath) {
-      targetPath = path.join(ASSETS_DIR, req.body.folderPath);
+    const folderPath = req.query.folderPath || (req.body && req.body.folderPath);
+    const relPath = req.query.relativePath || (req.body && req.body.relativePath);
+
+    if (folderPath) {
+      targetPath = path.join(ASSETS_DIR, folderPath);
+    }
+    if (relPath) {
+      const subDir = path.dirname(relPath);
+      if (subDir && subDir !== '.' && subDir !== '/' && subDir !== '\\') {
+        targetPath = path.join(targetPath, subDir);
+      }
     }
     // Prevent directory traversal
     if (!isValidAssetPath(targetPath, ASSETS_DIR)) return cb(new Error("Invalid path"));
@@ -268,10 +277,29 @@ const assetStorage = multer.diskStorage({
     cb(null, targetPath);
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname); // Keep original name
+    const folderPath = req.query.folderPath || (req.body && req.body.folderPath);
+    const relPath = req.query.relativePath || (req.body && req.body.relativePath);
+    let targetFolder = folderPath ? path.join(ASSETS_DIR, folderPath) : ASSETS_DIR;
+    if (relPath) {
+      const subDir = path.dirname(relPath);
+      if (subDir && subDir !== '.' && subDir !== '/' && subDir !== '\\') {
+        targetFolder = path.join(targetFolder, subDir);
+      }
+    }
+
+    const originalName = path.basename(relPath || file.originalname);
+    const parsed = path.parse(originalName);
+    let candidate = originalName;
+    let counter = 1;
+    // Auto-rename on conflict
+    while (fs.existsSync(path.join(targetFolder, candidate))) {
+      candidate = `${parsed.name} (${counter})${parsed.ext}`;
+      counter++;
+    }
+    cb(null, candidate);
   }
 });
-const assetUpload = multer({ storage: assetStorage });
+const assetUpload = multer({ storage: assetStorage, limits: { fileSize: 250 * 1024 * 1024 } });
 
 // Serve custom uploads with per-campaign subdomain isolation & legacy fallbacks
 app.use('/vtt-uploads', (req, res, next) => {
@@ -1875,11 +1903,23 @@ function getAssetTree(dirPath, relativePath = '') {
   return result;
 }
 
-// Asset Gallery APIs
+// Asset Gallery APIs with Caching, Batch Uploads, Moves, and Bulk Management
+let cachedAssetTree = null;
+let assetTreeDirty = true;
+
+function invalidateAssetTree() {
+  assetTreeDirty = true;
+  cachedAssetTree = null;
+}
+
 app.get('/api/assets', (req, res) => {
   try {
-    const tree = getAssetTree(ASSETS_DIR);
-    res.json(tree);
+    if (!assetTreeDirty && cachedAssetTree) {
+      return res.json(cachedAssetTree);
+    }
+    cachedAssetTree = getAssetTree(ASSETS_DIR);
+    assetTreeDirty = false;
+    res.json(cachedAssetTree);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -1893,16 +1933,35 @@ app.post('/api/assets/folder', (req, res) => {
   if (!fs.existsSync(targetPath)) {
     fs.mkdirSync(targetPath, { recursive: true });
   }
+  invalidateAssetTree();
   res.json({ success: true, path: folderPath });
 });
 
-app.post('/api/assets/upload', assetUpload.single('file'), (req, res) => {
-  if (!req.file) return res.status(400).json({ error: "No file provided" });
-  let relPath = req.file.originalname;
-  if (req.body.folderPath) {
-    relPath = path.join(req.body.folderPath, req.file.originalname).replace(/\\/g, '/');
-  }
-  res.json({ url: `/assets/${relPath}`, name: req.file.originalname });
+app.post('/api/assets/upload', assetUpload.any(), (req, res) => {
+  const files = req.files || (req.file ? [req.file] : []);
+  if (files.length === 0) return res.status(400).json({ error: "No file provided" });
+
+  invalidateAssetTree();
+
+  const results = files.map(file => {
+    const relPath = path.relative(ASSETS_DIR, file.path).replace(/\\/g, '/');
+    return {
+      url: `/assets/${relPath}`,
+      name: file.filename,
+      originalName: file.originalname,
+      size: file.size,
+      path: relPath
+    };
+  });
+
+  res.json({
+    success: true,
+    count: results.length,
+    files: results,
+    // Backwards-compatible single file fields
+    url: results[0].url,
+    name: results[0].name
+  });
 });
 
 async function processMediaUrl(url) {
@@ -1938,7 +1997,7 @@ async function processMediaUrl(url) {
     
     // Pinterest specific matching (sometimes lacks extensions or uses contentUrl)
     const pinVideoMatch = html.match(/"contentUrl":"([^"]+\.mp4)"/i);
-    const pinImageMatch = html.match(/"image":"([^"]+)"/i); // removed strict extension check for pin
+    const pinImageMatch = html.match(/"image":"([^"]+)"/i);
 
     // Generic OpenGraph matching
     const ogVideoMatch = html.match(/<meta[^>]+property=["']og:video:secure_url["'][^>]*content=["']([^"']+)["']/i) || 
@@ -1952,7 +2011,6 @@ async function processMediaUrl(url) {
     } else if (ogVideoMatch && ogVideoMatch[1]) {
       finalUrl = ogVideoMatch[1].replace(/\\u002F/g, '/');
     } else if (pinImageMatch && pinImageMatch[1] && !pinImageMatch[1].includes('{')) {
-      // make sure pinImageMatch is actually a URL and not a JSON object
       finalUrl = pinImageMatch[1].replace(/\\u002F/g, '/');
     } else if (ogImageMatch && ogImageMatch[1]) {
       finalUrl = ogImageMatch[1].replace(/\\u002F/g, '/');
@@ -1991,36 +2049,39 @@ app.post('/api/assets/url', async (req, res) => {
   urls.push(newAsset);
   fs.writeFileSync(urlsFile, JSON.stringify(urls, null, 2));
   
+  invalidateAssetTree();
   res.json(newAsset);
 });
 
 app.post('/api/assets/delete', (req, res) => {
-  const { path: relPath, isUrl, folderPath, name } = req.body;
-  if (!relPath && !name) return res.status(400).json({ error: "Path or name required" });
+  const { path: relPath, isUrl, folderPath, name, items } = req.body;
+  const toDelete = Array.isArray(items) ? items : [{ path: relPath, isUrl, folderPath, name }];
 
   try {
-    if (isUrl) {
-      const targetDir = folderPath ? path.join(ASSETS_DIR, folderPath) : ASSETS_DIR;
-      if (!isValidAssetPath(targetDir, ASSETS_DIR)) return res.status(403).json({ error: "Invalid path" });
-      const urlsFile = path.join(targetDir, '_urls.json');
-      if (fs.existsSync(urlsFile)) {
-        let urls = JSON.parse(fs.readFileSync(urlsFile, 'utf8'));
-        urls = urls.filter(u => u.name !== name);
-        fs.writeFileSync(urlsFile, JSON.stringify(urls, null, 2));
-      }
-      return res.json({ success: true });
-    } else {
-      const targetPath = path.join(ASSETS_DIR, relPath);
-      if (!isValidAssetPath(targetPath, ASSETS_DIR)) return res.status(403).json({ error: "Invalid path" });
-      if (fs.existsSync(targetPath)) {
-        if (fs.statSync(targetPath).isDirectory()) {
-          fs.rmSync(targetPath, { recursive: true, force: true });
-        } else {
-          fs.unlinkSync(targetPath);
+    for (const item of toDelete) {
+      if (item.isUrl) {
+        const targetDir = item.folderPath ? path.join(ASSETS_DIR, item.folderPath) : ASSETS_DIR;
+        if (!isValidAssetPath(targetDir, ASSETS_DIR)) continue;
+        const urlsFile = path.join(targetDir, '_urls.json');
+        if (fs.existsSync(urlsFile)) {
+          let urls = JSON.parse(fs.readFileSync(urlsFile, 'utf8'));
+          urls = urls.filter(u => u.name !== item.name && u.url !== item.url);
+          fs.writeFileSync(urlsFile, JSON.stringify(urls, null, 2));
+        }
+      } else if (item.path) {
+        const targetPath = path.join(ASSETS_DIR, item.path);
+        if (!isValidAssetPath(targetPath, ASSETS_DIR)) continue;
+        if (fs.existsSync(targetPath)) {
+          if (fs.statSync(targetPath).isDirectory()) {
+            fs.rmSync(targetPath, { recursive: true, force: true });
+          } else {
+            fs.unlinkSync(targetPath);
+          }
         }
       }
-      return res.json({ success: true });
     }
+    invalidateAssetTree();
+    return res.json({ success: true });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
@@ -2045,6 +2106,7 @@ app.post('/api/assets/edit', (req, res) => {
           fs.writeFileSync(urlsFile, JSON.stringify(urls, null, 2));
         }
       }
+      invalidateAssetTree();
       return res.json({ success: true });
     } else {
       const oldPath = path.join(ASSETS_DIR, oldRelPath);
@@ -2055,10 +2117,81 @@ app.post('/api/assets/edit', (req, res) => {
       if (fs.existsSync(oldPath)) {
         fs.renameSync(oldPath, newPath);
       }
+      invalidateAssetTree();
       return res.json({ success: true });
     }
   } catch (err) {
     return res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/assets/move', (req, res) => {
+  const { items, targetFolder } = req.body;
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: "Items array required" });
+  }
+
+  const destDir = (targetFolder && targetFolder !== 'Root') ? path.join(ASSETS_DIR, targetFolder) : ASSETS_DIR;
+  if (!isValidAssetPath(destDir, ASSETS_DIR)) return res.status(403).json({ error: "Invalid target folder" });
+  if (!fs.existsSync(destDir)) {
+    fs.mkdirSync(destDir, { recursive: true });
+  }
+
+  try {
+    for (const item of items) {
+      if (item.isUrl) {
+        // Remove from source folder's _urls.json
+        const srcDir = item.folderPath ? path.join(ASSETS_DIR, item.folderPath) : ASSETS_DIR;
+        if (isValidAssetPath(srcDir, ASSETS_DIR)) {
+          const srcUrlsFile = path.join(srcDir, '_urls.json');
+          if (fs.existsSync(srcUrlsFile)) {
+            let urls = JSON.parse(fs.readFileSync(srcUrlsFile, 'utf8'));
+            urls = urls.filter(u => u.name !== item.name && u.url !== item.url);
+            fs.writeFileSync(srcUrlsFile, JSON.stringify(urls, null, 2));
+          }
+        }
+        // Add to destDir _urls.json
+        const destUrlsFile = path.join(destDir, '_urls.json');
+        let destUrls = [];
+        if (fs.existsSync(destUrlsFile)) {
+          destUrls = JSON.parse(fs.readFileSync(destUrlsFile, 'utf8'));
+        }
+        destUrls.push({
+          name: item.name,
+          url: item.url,
+          type: 'url',
+          path: targetFolder && targetFolder !== 'Root' ? `${targetFolder}/${item.name}` : item.name
+        });
+        fs.writeFileSync(destUrlsFile, JSON.stringify(destUrls, null, 2));
+      } else if (item.path) {
+        const oldPath = path.join(ASSETS_DIR, item.path);
+        if (!isValidAssetPath(oldPath, ASSETS_DIR) || !fs.existsSync(oldPath)) continue;
+
+        const baseName = path.basename(oldPath);
+        let newPath = path.join(destDir, baseName);
+        if (oldPath === newPath) continue;
+        if (path.resolve(destDir).startsWith(path.resolve(oldPath) + path.sep)) continue; // Can't move folder into itself
+
+        // Auto-rename if destination already contains a file with this name
+        if (fs.existsSync(newPath) && !fs.statSync(oldPath).isDirectory()) {
+          const parsed = path.parse(baseName);
+          let candidate = baseName;
+          let counter = 1;
+          while (fs.existsSync(path.join(destDir, candidate))) {
+            candidate = `${parsed.name} (${counter})${parsed.ext}`;
+            counter++;
+          }
+          newPath = path.join(destDir, candidate);
+        }
+
+        fs.renameSync(oldPath, newPath);
+      }
+    }
+    invalidateAssetTree();
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Asset move error:", err);
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -2346,10 +2479,57 @@ io.on('connection', (socket) => {
     io.to(campaignId).emit('splash:show', data);
   });
 
+  // Tabletop Pause & X-Card Safety Tool synchronizer
+  socket.on('game:set_pause', (data) => {
+    const { campaignId } = socket;
+    if (!campaignId || !campaigns[campaignId]) return;
+    const camp = campaigns[campaignId];
+
+    const requestedPause = !!data?.paused;
+    let source = data?.source || (socket.role === 'GM' ? 'gm' : 'xcard');
+
+    if (!requestedPause) {
+      // Unpausing: ONLY GM can unpause
+      if (socket.role !== 'GM') {
+        console.warn(`[Security] Non-GM player ${socket.username} attempted to unpause campaign ${campaignId}`);
+        return;
+      }
+      camp.isPaused = false;
+      camp.pauseState = {
+        isPaused: false,
+        source: null,
+        by: socket.username || 'GM',
+        at: Date.now()
+      };
+      saveCampaigns();
+      io.to(campaignId).emit('game:pause_state', camp.pauseState);
+      console.log(`[Campaign ${campaignId}] Tabletop RESUMED by GM (${socket.username})`);
+    } else {
+      // Pausing: GM or Player (via X-Card)
+      if (socket.role !== 'GM') {
+        source = 'xcard';
+      }
+      camp.isPaused = true;
+      camp.pauseState = {
+        isPaused: true,
+        source: source,
+        by: socket.username || (socket.role === 'GM' ? 'GM' : 'Player'),
+        at: Date.now()
+      };
+      saveCampaigns();
+      io.to(campaignId).emit('game:pause_state', camp.pauseState);
+      console.log(`[Campaign ${campaignId}] Tabletop PAUSED (${source}) by ${socket.username} (${socket.role})`);
+    }
+  });
+
   // Sync token state changes (legacy - full state)
   socket.on('token:update', (data) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
+    if (socket.role !== 'GM' && campaigns[campaignId].isPaused) {
+      console.warn(`[Pause] Blocked token:update from player ${socket.username} during active pause`);
+      return;
+    }
     
     const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
 
@@ -2412,6 +2592,10 @@ io.on('connection', (socket) => {
   socket.on('token:add', (data) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
+    if (socket.role !== 'GM' && campaigns[campaignId].isPaused) {
+      console.warn(`[Pause] Blocked token:add from player ${socket.username} during active pause`);
+      return;
+    }
 
     // Security check: Players may only add tokens they control (characters or companions)
     if (socket.role !== 'GM') {
@@ -2440,6 +2624,10 @@ io.on('connection', (socket) => {
   socket.on('token:update_delta', (data) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
+    if (socket.role !== 'GM' && campaigns[campaignId].isPaused) {
+      console.warn(`[Pause] Blocked token:update_delta from player ${socket.username} during active pause`);
+      return;
+    }
     
     const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {
@@ -2467,6 +2655,10 @@ io.on('connection', (socket) => {
   socket.on('token:delete', (data) => {
     const { campaignId } = socket;
     if (!campaignId || !campaigns[campaignId]) return;
+    if (socket.role !== 'GM' && campaigns[campaignId].isPaused) {
+      console.warn(`[Pause] Blocked token:delete from player ${socket.username} during active pause`);
+      return;
+    }
     
     const mapId = data.mapId || (socket.role === 'GM' ? (campaigns[campaignId].activeGMMapId || campaigns[campaignId].activeMapId) : (campaigns[campaignId].playerMapOverrides?.[socket.username] || campaigns[campaignId].activeMapId));
     if (campaigns[campaignId].maps && campaigns[campaignId].maps[mapId]) {

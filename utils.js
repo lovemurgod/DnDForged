@@ -40,7 +40,9 @@ export function createCampaignTemplate(id, name) {
     playerMapOverrides: {},
     description: "",
     allowedUsers: [],
-    knownPlayers: []
+    knownPlayers: [],
+    isPaused: false,
+    pauseState: { isPaused: false, source: null, by: null, at: null }
   };
 }
 
@@ -90,6 +92,8 @@ export function updateMapProperty(campaigns, campaignId, mapId, propertyKey, val
   return null;
 }
 
+import path from 'path';
+
 /**
  * Validates that a target path starts with the allowed assets directory.
  * @param {string} targetPath - The resolved target path.
@@ -97,6 +101,9 @@ export function updateMapProperty(campaigns, campaignId, mapId, propertyKey, val
  * @returns {boolean} True if the path is valid, false otherwise.
  */
 export function isValidAssetPath(targetPath, assetsDir) {
-  return targetPath.startsWith(assetsDir);
+  if (!targetPath || !assetsDir) return false;
+  const resolvedTarget = path.resolve(targetPath);
+  const resolvedAssets = path.resolve(assetsDir);
+  return resolvedTarget === resolvedAssets || resolvedTarget.startsWith(resolvedAssets + path.sep);
 }
 

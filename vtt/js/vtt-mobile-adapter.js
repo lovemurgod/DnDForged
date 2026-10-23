@@ -1232,12 +1232,21 @@ export function initVttMobileAdapter(vtt) {
                 el.style.display = 'none';
             }
         });
+        mobileToolsMenu.querySelectorAll('.mobile-tool-item.player-only').forEach(el => {
+            if (!isGM) {
+                el.classList.remove('vtt-hidden');
+                el.style.removeProperty('display');
+            } else {
+                el.classList.add('vtt-hidden');
+                el.style.display = 'none';
+            }
+        });
     }
 
     function activateTool(toolKey) {
         // Enforce player parity: players cannot activate lighting, switch layers, or access GM map tools
         const isGM = (vtt.role || 'Player') === 'GM';
-        if ((toolKey === 'lighting' || toolKey === 'layers' || toolKey === 'map' || toolKey === 'maptools') && !isGM) {
+        if ((toolKey === 'lighting' || toolKey === 'layers' || toolKey === 'map' || toolKey === 'maptools' || toolKey === 'pause') && !isGM) {
             return;
         }
 
@@ -1252,6 +1261,16 @@ export function initVttMobileAdapter(vtt) {
             'layers': 'btn-layers',
             'map': 'btn-change-map'
         };
+
+        if (toolKey === 'pause') {
+            document.getElementById('btn-game-pause')?.click();
+            return;
+        }
+
+        if (toolKey === 'xcard') {
+            document.getElementById('btn-game-xcard')?.click();
+            return;
+        }
 
         if (toolKey === 'eco') {
             toggleEcoMode();
