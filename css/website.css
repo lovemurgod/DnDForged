@@ -973,6 +973,7 @@ body {
 }
 
 .manual-section {
+    min-width: 0;
     background: rgba(14, 19, 32, 0.85);
     border: 1px solid var(--border-gold);
     border-radius: 16px;
@@ -1426,6 +1427,7 @@ body {
 /* Master Manual Tables & Syntax Display */
 .manual-table-wrap {
     width: 100%;
+    min-width: 0;
     overflow-x: auto;
     border: 1px solid var(--border-subtle);
     border-radius: 10px;
@@ -1503,12 +1505,13 @@ body {
 /* Feature deep dive sub-cards */
 .manual-subgrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     gap: 16px;
     margin-top: 16px;
 }
 
 .manual-subcard {
+    min-width: 0;
     background: rgba(6, 9, 15, 0.75);
     border: 1px solid var(--border-subtle);
     border-radius: 12px;
@@ -1557,6 +1560,12 @@ body {
     font-size: 0.75rem;
     margin-top: 4px;
     flex-shrink: 0;
+}
+
+.manual-subcard ul li > span {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 /* Footer */
@@ -2004,8 +2013,6 @@ body {
 .orbit-blue { border-color: rgba(22,136,232,.55); transform: rotate(45deg) scaleX(1.3); }
 .orbit-red { border-color: rgba(237,52,52,.45); transform: rotate(-45deg) scaleX(1.3); }
 .orbit-purple { border-style: dashed; border-color: rgba(168,85,247,.5); transform: rotate(90deg) scaleX(1.15); }
-.crest-caption { position: relative; z-index: 3; margin-top: -9px; padding: 7px 13px; color: #f8d978; background: #101827; border: 1px solid rgba(245,196,83,.45); border-radius: 999px; font-size: .75rem; font-weight: 700; letter-spacing: .04em; }
-
 .role-section, .feature-section, .closing-cta, .start-layout, .player-start, .troubleshooting, .page-intro { margin-top: 58px; }
 .section-intro { max-width: 680px; margin-bottom: 26px; }
 .section-intro h2, .closing-cta h2, .page-intro h1, .page-intro h2, .start-main h2, .player-start h2, .troubleshooting h2 {
@@ -2110,7 +2117,8 @@ body {
     .hero-crest { min-height: 0; padding: 8px 0 0; }
     .hero-crest img { width: min(68vw, 280px); }
     .crest-orbit { width: min(72vw, 300px); }
-    .crest-caption { margin-top: -4px; }
+    .hero-crest { grid-row: 1; }
+    .hero-copy { grid-row: 2; min-width: 0; }
     .hero-actions { align-items: flex-start; flex-direction: column; gap: 14px; }
     .role-section, .feature-section, .closing-cta, .start-layout, .player-start, .troubleshooting { margin-top: 40px; }
     .role-grid { grid-template-columns: 1fr; gap: 4px; }
@@ -2122,6 +2130,14 @@ body {
     .player-mark { width: 42px; height: 42px; }
     .manual-layout { grid-template-columns: 1fr; }
     .manual-sidebar { position: static; max-height: none; }
+    .manual-content, .manual-section, .manual-section-title-wrap,
+    .manual-subgrid, .manual-subcard { min-width: 0; }
+    .manual-section { padding: 22px 16px; }
+    .manual-subgrid { grid-template-columns: minmax(0, 1fr); }
+    .manual-subcard, .manual-section p, .manual-section li,
+    .manual-table th, .manual-table td { overflow-wrap: anywhere; }
+    .manual-table th { white-space: normal; }
+    .syntax-badge, .syntax-example, .syntax-math { white-space: normal; overflow-wrap: anywhere; }
 }
 
 @media (prefers-reduced-motion: reduce) {
